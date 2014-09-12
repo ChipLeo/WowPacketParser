@@ -117,7 +117,7 @@ namespace WowPacketParser.Loading
                     }
 
                     // check for filters
-                    var opcodeName = Opcodes.GetOpcodeName(packet.Opcode);
+                    var opcodeName = Opcodes.GetOpcodeName(packet.Opcode, packet.Direction);
 
                     var add = true;
 
