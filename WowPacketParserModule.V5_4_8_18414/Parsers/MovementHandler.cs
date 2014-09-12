@@ -3875,6 +3875,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_MONSTER_MOVE)]
         public static void HandleMonsterMove(Packet packet)
         {
+          
             var guid3 = new byte[8];
             var target = new byte[8];
             var pos = new Vector3();
@@ -4077,6 +4078,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("GUID", guid);
 
             packet.ReadUInt32("Flags");
+           
         }
 
         [Parser(Opcode.SMSG_SPLINE_MOVE_SET_FLIGHT_SPEED)]
