@@ -63,7 +63,7 @@ namespace WowPacketParser.Loading
                 }
 
                 // check for filters
-                var opcodeName = Opcodes.GetOpcodeName(packet.Opcode);
+                var opcodeName = Opcodes.GetOpcodeName(packet.Opcode, packet.Direction);
 
                 var add = true;
                 if (Settings.Filters.Length > 0)
@@ -71,6 +71,7 @@ namespace WowPacketParser.Loading
                 // check for ignore filters
                 if (add && Settings.IgnoreFilters.Length > 0)
                     add = !opcodeName.MatchesFilters(Settings.IgnoreFilters);
+
 
                 if (add)
                 {
@@ -119,6 +120,8 @@ namespace WowPacketParser.Loading
                     var opcodeName = Opcodes.GetOpcodeName(packet.Opcode);
 
                     var add = true;
+
+
                     if (Settings.Filters.Length > 0)
                         add = opcodeName.MatchesFilters(Settings.Filters);
                     // check for ignore filters
