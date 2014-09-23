@@ -209,7 +209,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_CANCEL_COMBAT)]
         public static void HandleCancelCombat(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadBits("Unk16", 2);
         }
 
         [Parser(Opcode.SMSG_DUEL_INBOUNDS)]

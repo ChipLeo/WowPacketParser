@@ -463,7 +463,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BUY_FAILED,                               0x1563 | 0x20000}, //--
             {Opcode.SMSG_BUY_ITEM,                                 0x101A | 0x20000}, //--
             {Opcode.SMSG_CANCEL_AUTO_REPEAT,                       0x1E0F | 0x20000}, //++
-            {Opcode.SMSG_CANCEL_COMBAT,                            0x0534 | 0x20000}, //--
+            {Opcode.SMSG_CANCEL_COMBAT,                            0x11E1 | 0x20000}, //++
             {Opcode.SMSG_CAST_FAILED,                              0x143A | 0x20000}, //++
             {Opcode.SMSG_CHANNEL_NOTIFY,                           0x0F06 | 0x20000}, //--
             {Opcode.SMSG_CHANNEL_START,                            0x10F9 | 0x20000}, //++
@@ -798,7 +798,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_1134,                                 0x1134 | 0x20000}, //-- pair CMSG 0123
             {Opcode.SMSG_UNK_1160,                                 0x1160 | 0x20000}, //++
             {Opcode.SMSG_UNK_11C2,                                 0x11C2 | 0x20000}, //++
-            {Opcode.SMSG_UNK_11E1,                                 0x11E1 | 0x20000}, //++
             {Opcode.SMSG_UNK_11E3,                                 0x11E3 | 0x20000}, //+-
             {Opcode.SMSG_UNK_1203,                                 0x1203 | 0x20000}, //++
             {Opcode.SMSG_UNK_1206,                                 0x1206 | 0x20000}, //++
