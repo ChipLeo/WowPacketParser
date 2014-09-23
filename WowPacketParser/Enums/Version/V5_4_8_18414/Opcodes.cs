@@ -242,6 +242,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_REQUEST_CEMETERY_LIST,                    0x06E4 | 0x10000}, //++
             {Opcode.CMSG_REQUEST_HOTFIX,                           0x158D | 0x10000}, //--
             {Opcode.CMSG_REQUEST_PARTY_MEMBER_STATS,               0x0806 | 0x10000}, //--
+            {Opcode.CMSG_REQUEST_PVP_OPTIONS_ENABLED,              0x0A22 | 0x10000}, //++
             {Opcode.CMSG_REQUEST_PVP_REWARDS,                      0x0375 | 0x10000}, //+-
             {Opcode.CMSG_RESET_FACTION_CHEAT,                      0x10B6 | 0x10000}, //--
             {Opcode.CMSG_RESET_INSTANCES,                          0x0C69 | 0x10000}, //+-
@@ -615,6 +616,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_POWER_UPDATE,                             0x109F | 0x20000}, //++
             {Opcode.SMSG_PRE_RESURRECT,                            0x19C0 | 0x20000}, //++
             {Opcode.SMSG_PVP_LOG_DATA,                             0x1E8F | 0x20000}, //--
+            {Opcode.SMSG_PVP_OPTIONS_ENABLED,                      0x080A | 0x20000}, //++ pair 0A22
             {Opcode.SMSG_QUERY_TIME_RESPONSE,                      0x100F | 0x20000}, //++
             {Opcode.SMSG_QUESTGIVER_OFFER_REWARD,                  0x074F | 0x20000}, //--
             {Opcode.SMSG_QUESTGIVER_QUEST_COMPLETE,                0x0346 | 0x20000}, //--

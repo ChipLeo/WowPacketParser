@@ -606,7 +606,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_PVP_OPTIONS_ENABLED)]
         public static void HandlePVPOptionsEnabled(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadBit("unk16"); // 16
+            packet.ReadBit("unk18"); // 18
+            packet.ReadBit("unk17"); // 17
+            packet.ReadBit("unk20"); // 20
+            packet.ReadBit("unk19"); // 19
         }
 
         [Parser(Opcode.SMSG_PVP_SEASON)]

@@ -543,16 +543,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadEnum<QuestRequirementType>("Requirement Type", TypeCode.Byte); // 24
         }
 
-        [Parser(Opcode.SMSG_UNK_080A)]
-        public static void HandleSUnk080A(Packet packet)
-        {
-            packet.ReadBit("unk16");
-            packet.ReadBit("unk18");
-            packet.ReadBit("unk17");
-            packet.ReadBit("unk20");
-            packet.ReadBit("unk19");
-        }
-
         [Parser(Opcode.SMSG_UNK_080E)]
         public static void HandleSUnk080E(Packet packet)
         {
@@ -1724,7 +1714,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_NULL_077B)]
         [Parser(Opcode.CMSG_NULL_0813)]
         [Parser(Opcode.CMSG_NULL_0826)]
-        [Parser(Opcode.CMSG_NULL_0A22)]
         [Parser(Opcode.CMSG_NULL_0A23)]
         [Parser(Opcode.CMSG_NULL_0A82)]
         [Parser(Opcode.CMSG_NULL_0A87)]
