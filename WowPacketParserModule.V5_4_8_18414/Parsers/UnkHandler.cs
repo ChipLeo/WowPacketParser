@@ -745,10 +745,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
-        [Parser(Opcode.SMSG_UNK_0C32)]
+        [Parser(Opcode.SMSG_LOOT_RESPONSE_COUNT)]
         public static void HandleSUnk0C32(Packet packet)
         {
-            packet.ReadInt32("unk");
+            packet.ReadInt32("Count"); //value = Count+1
         }
 
         [Parser(Opcode.SMSG_UNK_0CAE)]
