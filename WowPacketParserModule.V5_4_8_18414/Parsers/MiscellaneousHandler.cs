@@ -781,7 +781,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("unk96");
         }
 
-        [Parser(Opcode.SMSG_UNK_001F)]
+        [Parser(Opcode.SMSG_GAMEOBJECT_CUSTOM_ANIM)]
         public static void HandleUnk001F(Packet packet)
         {
             //var guid = packet.StartBitStream(4, 7, 1, 0, 5, 3, 2);

@@ -317,6 +317,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_0247,                                 0x0247 | 0x10000}, //+-
             {Opcode.CMSG_UNK_0264,                                 0x0264 | 0x10000}, //+-
             {Opcode.CMSG_UNK_0265,                                 0x0265 | 0x10000}, //+-
+            {Opcode.CMSG_UNK_028E,                                 0x028E | 0x10000}, //+- Some Addon Info                                                    
             {Opcode.CMSG_UNK_0292,                                 0x0292 | 0x10000}, //++ pair SMSG 18BA
             {Opcode.CMSG_UNK_02A3,                                 0x02A3 | 0x10000}, //++
             {Opcode.CMSG_UNK_02C4,                                 0x02C4 | 0x10000}, //+-
@@ -723,7 +724,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_ZONE_UNDER_ATTACK,                        0x10C2 | 0x20000}, //++
             {Opcode.SMSG_UNK_0002,                                 0x0002 | 0x20000}, //+-
             {Opcode.SMSG_UNK_000F,                                 0x000f | 0x20000}, //++
-            {Opcode.SMSG_UNK_001F,                                 0x001F | 0x20000}, //++
+            {Opcode.SMSG_GAMEOBJECT_CUSTOM_ANIM,                   0x001F | 0x20000}, //++
             {Opcode.SMSG_UNK_003A,                                 0x003A | 0x20000}, //++
             {Opcode.SMSG_UNK_0047,                                 0x0047 | 0x20000}, //++
             {Opcode.SMSG_UNK_0050,                                 0x0050 | 0x20000}, //++
@@ -778,7 +779,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0B22,                                 0x0B22 | 0x20000}, //-- pair 0C1B
             {Opcode.SMSG_UNK_0C13,                                 0x0C13 | 0x20000}, //++
             {Opcode.SMSG_UNK_0C1A,                                 0x0C1A | 0x20000}, //-- pair 17BA
-            {Opcode.SMSG_UNK_0C32,                                 0x0C32 | 0x20000}, //++
+            {Opcode.SMSG_LOOT_RESPONSE_COUNT,                                 0x0C32 | 0x20000}, //++
             {Opcode.SMSG_UNK_0C44,                                 0x0C44 | 0x20000}, //+-
             {Opcode.SMSG_UNK_0CAE,                                 0x0CAE | 0x20000}, //++
             {Opcode.SMSG_UNK_0CAF,                                 0x0CAF | 0x20000}, //++
