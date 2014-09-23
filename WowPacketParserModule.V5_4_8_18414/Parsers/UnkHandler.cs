@@ -938,12 +938,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_UNK_11E1)]
-        public static void HandleSUnk11E1(Packet packet)
-        {
-            packet.ReadBits("Unk16", 2);
-        }
-
         [Parser(Opcode.SMSG_UNK_1203)]
         public static void HandleSUnk1203(Packet packet)
         {

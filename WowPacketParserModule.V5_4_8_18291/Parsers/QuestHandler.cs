@@ -405,7 +405,6 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-
         [Parser(Opcode.SMSG_QUESTGIVER_OFFER_REWARD)]
         public static void HandleQuestOfferReward(Packet packet)
         {
@@ -477,8 +476,6 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
             packet.ReadUInt32("RewardChoiceItemDisplayId(5)");
 
             var guid = new byte[8];
-
-
 
             var questTurnTextWindow = packet.ReadBits(10);
             var questGiverTargetName = packet.ReadBits(8);
