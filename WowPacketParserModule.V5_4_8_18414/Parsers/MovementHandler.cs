@@ -532,6 +532,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             ReadPlayerMovementInfo(ref packet, info.MovementGravityEnableAck);
         }
 
+        [Parser(Opcode.CMSG_MOVE_SET_COLLISION_HEIGHT_ACK)]
+        public static void HandleMoveSetCollisionHeightAck(Packet packet)
+        {
+            ReadPlayerMovementInfo(ref packet, info.MovementSetCollisionHeightAck);
+        }
+
         [Parser(Opcode.CMSG_UNK_00D9)]
         public static void HandleCUnk00D9(Packet packet)
         {
@@ -561,12 +567,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleCUnk09FA(Packet packet)
         {
             ReadPlayerMovementInfo(ref packet, info.CUnk09FA);
-        }
-
-        [Parser(Opcode.CMSG_UNK_09FB)]
-        public static void HandleCUnk09FB(Packet packet)
-        {
-            ReadPlayerMovementInfo(ref packet, info.CUnk09FB);
         }
 
         [Parser(Opcode.CMSG_MOVE_SET_CAN_FLY_ACK)]
@@ -3767,6 +3767,39 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             var guid = packet.StartBitStream(5, 1, 4, 2, 3, 7, 0, 6);
             packet.ParseBitStream(guid, 4, 6, 2, 0, 3, 7, 5, 1);
+            packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_MOVE_SET_COLLISION_HEIGHT)]
+        public static void HandleMoveSetCollisionHeight(Packet packet)
+        {
+            var guid = new byte[8];
+
+            guid[7] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+
+            var unk20 = !packet.ReadBit("skip unk20");
+
+            guid[3] = packet.ReadBit();
+
+            var unk16 = packet.ReadBits("unk16", 2);
+
+            guid[2] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+
+            packet.ReadSingle("Speed");
+            if (unk20)
+                packet.ReadInt32("unk20");
+
+            packet.ParseBitStream(guid, 3, 2, 5, 6);
+
+            packet.ReadInt32("MCounter");
+            packet.ReadSingle("unk32");
+            packet.ParseBitStream(guid, 7, 1, 4, 0);
+
             packet.WriteGuid("Guid", guid);
         }
 

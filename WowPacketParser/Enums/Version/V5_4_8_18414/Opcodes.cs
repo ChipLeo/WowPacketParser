@@ -182,6 +182,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_MOVE_GRAVITY_ENABLE_ACK,                  0x11D8 | 0x10000}, //++
             {Opcode.CMSG_MOVE_SET_CAN_FLY_ACK,                     0x1052 | 0x10000}, //++
             {Opcode.CMSG_MOVE_SET_CAN_TRANSITION_BETWEEN_SWIM_AND_FLY_ACK, 0x11DB | 0x10000}, //++
+            {Opcode.CMSG_MOVE_SET_COLLISION_HEIGHT_ACK,            0x09FB | 0x10000}, //++
             {Opcode.CMSG_MOVE_SPLINE_DONE,                         0x11D9 | 0x10000}, //++
             {Opcode.CMSG_MOVE_TELEPORT_ACK,                        0x0078 | 0x10000}, //++
             {Opcode.CMSG_MOVE_TIME_SKIPPED,                        0x0150 | 0x10000}, //++
@@ -326,7 +327,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_08D3,                                 0x08D3 | 0x10000}, //+-
             {Opcode.CMSG_UNK_09DB,                                 0x09DB | 0x10000}, //++
             {Opcode.CMSG_UNK_09FA,                                 0x09FA | 0x10000}, //++
-            {Opcode.CMSG_UNK_09FB,                                 0x09FB | 0x10000}, //--
             {Opcode.CMSG_UNK_0A16,                                 0x0A16 | 0x10000}, //++
             {Opcode.CMSG_UNK_0CF0,                                 0x0CF0 | 0x10000}, //++
             {Opcode.CMSG_UNK_10A2,                                 0x10A2 | 0x10000}, //+-
@@ -582,6 +582,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_MOVE_SET_RUN_BACK_SPEED,                  0x0A83 | 0x20000}, //++
             {Opcode.SMSG_MOVE_SET_SWIM_SPEED,                      0x0817 | 0x20000}, //++
             {Opcode.SMSG_MOVE_SET_CAN_TRANSITION_BETWEEN_SWIM_AND_FLY, 0x0A03 | 0x20000}, //++
+            {Opcode.SMSG_MOVE_SET_COLLISION_HEIGHT,                0x0250 | 0x20000}, //++
             {Opcode.SMSG_MOVE_SET_WALK_SPEED,                      0x0469 | 0x20000}, //++
             {Opcode.SMSG_MOVE_TELEPORT,                            0x0B39 | 0x20000}, //++
             {Opcode.SMSG_MOVE_WATER_WALK,                          0x1F9A | 0x20000}, //++
@@ -735,7 +736,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_01E2,                                 0x01E2 | 0x20000}, //++
             {Opcode.SMSG_UNK_021A,                                 0x021A | 0x20000}, //++
             {Opcode.SMSG_UNK_023B,                                 0x023B | 0x20000}, //++ SMSG_SPLINE_MOVE_SET_???_SPEED
-            {Opcode.SMSG_UNK_0250,                                 0x0250 | 0x20000}, //++
             {Opcode.SMSG_UNK_0251,                                 0x0251 | 0x20000}, //++ PENDING_STOP
             {Opcode.SMSG_UNK_027D,                                 0x027D | 0x20000}, //++
             {Opcode.SMSG_UNK_02A7,                                 0x02A7 | 0x20000}, //+-
