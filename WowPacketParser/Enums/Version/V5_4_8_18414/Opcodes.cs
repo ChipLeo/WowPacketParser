@@ -309,6 +309,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_0002,                                 0x0002 | 0x10000}, //++
             {Opcode.CMSG_UNK_006B,                                 0x006B | 0x10000}, //++
             {Opcode.CMSG_UNK_0087,                                 0x0087 | 0x10000}, //++
+            {Opcode.CMSG_UNK_009A,                                 0x009A | 0x10000}, //++ like CMSG_MESSAGECHAT_ADDON...
             {Opcode.CMSG_UNK_00D9,                                 0x00D9 | 0x10000}, //++ PENDING_STRAFE_STOP
             {Opcode.CMSG_UNK_00F2,                                 0x00F2 | 0x10000}, //++
             {Opcode.CMSG_UNK_0123,                                 0x0123 | 0x10000}, //++
@@ -775,6 +776,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0A0B,                                 0x0A0B | 0x20000}, //++
             {Opcode.SMSG_UNK_0A3A,                                 0x0A3A | 0x20000}, //++
             {Opcode.SMSG_UNK_0A3F,                                 0x0A3F | 0x20000}, //++
+            {Opcode.SMSG_UNK_0A8A,                                 0x0A8A | 0x20000}, //++ pair 009A
             {Opcode.SMSG_UNK_0A8B,                                 0x0A8B | 0x20000}, //++
             {Opcode.SMSG_UNK_0B22,                                 0x0B22 | 0x20000}, //-- pair 0C1B
             {Opcode.SMSG_UNK_0C13,                                 0x0C13 | 0x20000}, //++
