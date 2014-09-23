@@ -17,6 +17,7 @@ namespace WowPacketParser.Enums
         NeedRollDisabled    = 0x00000100,
         CasterWeapon        = 0x00000200,
         HasNormalPrice      = 0x00004000,
+        Unknown6            = 0x00010000,
         BNetAccountBound    = 0x00020000,
         CannotBeTransmog    = 0x00200000,
         CannotTransmog      = 0x00400000,

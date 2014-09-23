@@ -1312,7 +1312,7 @@ namespace WowPacketParser.Enums.Version.V3_3_5a_12340
             {Opcode.CMSG_DROP_NEW_CONNECTION, 0x513},
             {Opcode.SMSG_COMBAT_LOG_MULTIPLE, 0x514},
             {Opcode.SMSG_OPEN_LFG_DUNGEON_FINDER, 0x515},
-            {Opcode.SMSG_MOVE_SET_COLLISION_HGT, 0x516},
+            {Opcode.SMSG_MOVE_SET_COLLISION_HEIGHT, 0x516},
             {Opcode.CMSG_MOVE_SET_COLLISION_HEIGHT_ACK, 0x517},
             {Opcode.MSG_MOVE_SET_COLLISION_HEIGHT, 0x518},
             {Opcode.CMSG_CLEAR_RANDOM_BG_WIN_TIME, 0x519},
