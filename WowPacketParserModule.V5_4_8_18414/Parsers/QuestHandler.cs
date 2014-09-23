@@ -20,10 +20,23 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadEntry<Int32>(StoreNameType.Quest, "Quest ID", i);
         }
 
+        [Parser(Opcode.CMSG_QUEST_NPC_QUERY)]
+        public static void HandleQuestNpcQuery(Packet packet)
+        {
+            var quest = new int[50];
+            for (var i = 0; i < 50; i++)
+                quest[i] = packet.ReadInt32();
+
+            var count = packet.ReadInt32("Count");
+
+            for (var i = 0; i < count; i++)
+                packet.AddValue("Quest ID", StoreGetters.GetName(StoreNameType.Quest, quest[i]));
+        }
+
         [Parser(Opcode.CMSG_QUEST_QUERY)]
         public static void HandleQuestQuery(Packet packet)
         {
-            packet.ReadInt32("Entry");
+            packet.ReadEntry<Int32>(StoreNameType.Quest, "Quest ID");
             var guid = packet.StartBitStream(0, 5, 2, 7, 6, 4, 1, 3);
             packet.ParseBitStream(guid, 4, 1, 7, 5, 2, 3, 6, 0);
             packet.WriteGuid("Guid", guid);
@@ -32,13 +45,161 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_QUESTGIVER_QUERY_QUEST)]
         public static void HandleQuestgiverQueryQuest(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = new byte[8];
+
+            packet.ReadEntry<Int32>(StoreNameType.Quest, "Quest ID");
+
+            guid[2] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            packet.ReadBit("Unk16(start/end)");
+
+            packet.ParseBitStream(guid, 2, 0, 4, 7, 5, 1, 3, 6);
+
+            packet.WriteGuid("NPC Guid", guid);
         }
 
         [Parser(Opcode.CMSG_QUESTLOG_REMOVE_QUEST)]
         public static void HandleQuestlogRemoveQuest(Packet packet)
         {
             packet.ReadByte("Slot");
+        }
+
+        [Parser(Opcode.CMSG_QUESTGIVER_ACCEPT_QUEST)]
+        public static void HandleQuestgiverAcceptQuest(Packet packet)
+        {
+            var guid = new byte[8];
+
+            packet.ReadEntry<Int32>(StoreNameType.Quest, "Quest ID");
+
+            guid[6] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            packet.ReadBit("Unk");
+            guid[2] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 5, 4, 0, 1, 6, 2, 3, 7);
+
+            packet.WriteGuid("NPC Guid", guid);
+        }
+
+        [Parser(Opcode.CMSG_QUESTGIVER_CHOOSE_REWARD)]
+        public static void HandleQuestChooseReward(Packet packet)
+        {
+            var guid = new byte[8];
+
+            packet.ReadUInt32("Reward Item ID");
+            packet.ReadEntry<Int32>(StoreNameType.Quest, "Quest ID");
+            guid[2] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 1, 2, 5, 7, 0, 3, 6, 4);
+
+            packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.CMSG_QUESTGIVER_COMPLETE_QUEST)]
+        public static void HandleQuestCompleteQuest(Packet packet)
+        {
+            var guid = new byte[8];
+
+            packet.ReadEntry<Int32>(StoreNameType.Quest, "Quest ID");
+            guid[4] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            packet.ReadBit("autoCompleteMode");
+            guid[0] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 0, 2, 1, 4, 3, 6, 7, 5);
+
+            packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.CMSG_QUESTGIVER_HELLO)]
+        public static void HandleQuestgiverHello(Packet packet)
+        {
+            var guid = new byte[8];
+            packet.StartBitStream(guid, 5, 6, 7, 3, 4, 2, 1, 0);
+            packet.ParseBitStream(guid, 4, 1, 7, 3, 6, 0, 5, 2);
+            packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_QUESTGIVER_QUEST_LIST)]
+        public static void HandleQuestgiverQuestList(Packet packet)
+        {
+            packet.ReadUInt32("Emote");
+            packet.ReadUInt32("Delay");
+
+            var guid = new byte[8];
+
+            guid[2] = packet.ReadBit();
+            var titleLen = packet.ReadBits(11);
+            guid[6] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            var count = packet.ReadBits(19);
+
+            var questTitleLen = new uint[count];
+
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadBit("marker", i); // 0: yellow ! mark   1: blue ? mark
+                questTitleLen[i] = packet.ReadBits(9);
+            }
+
+            packet.StartBitStream(guid, 1, 3, 4, 5, 7);
+            packet.ReadXORBytes(guid, 1, 0, 6, 7);
+
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadEnum<QuestFlags>("Quest Flags", TypeCode.UInt32, i);
+                packet.ReadEntry<UInt32>(StoreNameType.Quest, "Quest ID", i);
+                packet.ReadWoWString("Quest Title", questTitleLen[i], i);
+                packet.ReadUInt32("Flags2", i);
+                packet.ReadUInt32("Quest Icon", i);
+                packet.ReadInt32("Quest Level", i);
+            }
+            packet.ReadXORBytes(guid, 5, 3, 2);
+            packet.ReadWoWString("NPC Title", titleLen);
+            packet.ReadXORByte(guid, 4);
+
+            packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_QUESTUPDATE_ADD_KILL)]
+        public static void HandleQuestUpdateAdd(Packet packet)
+        {
+            packet.ReadInt16("Count");
+            packet.ReadEnum<QuestRequirementType>("Quest Requirement Type", TypeCode.Byte);
+            packet.ReadEntry<Int32>(StoreNameType.Quest, "Quest ID");
+            packet.ReadInt16("Required Count");
+
+            var entry = packet.ReadEntry();
+            packet.AddValue("Entry", StoreGetters.GetName(entry.Value ? StoreNameType.GameObject : StoreNameType.Unit, entry.Key));
+
+            var guid = new byte[8];
+
+            packet.StartBitStream(guid, 0, 4, 2, 6, 1, 5, 7, 3);
+            packet.ParseBitStream(guid, 2, 7, 3, 0, 4, 5, 1, 6);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_QUESTGIVER_STATUS_QUERY)]
@@ -48,6 +209,21 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ParseBitStream(guid, 5, 7, 4, 0, 2, 1, 6, 3);
 
             packet.WriteGuid("NPC Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_QUEST_NPC_QUERY_RESPONSE)]
+        public static void HandleQuestNpcQueryResponse(Packet packet)
+        {
+            var count = packet.ReadBits("Quest count", 21);
+            var cnt = new uint[count];
+            for (var i = 0; i < count; i++)
+                cnt[i] = packet.ReadBits("NPC count", 22, i);
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadEntry<Int32>(StoreNameType.Quest, "Quest ID", i);
+                for (var j = 0; j < cnt[i]; j++)
+                    packet.ReadEntry<Int32>(StoreNameType.Unit, "NPC", i, j);
+            }
         }
 
         [Parser(Opcode.SMSG_QUEST_POI_QUERY_RESPONSE)]
@@ -293,6 +469,192 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.CMSG_QUESTGIVER_REQUEST_REWARD)]
+        public static void HandleQuestRequestReward(Packet packet)
+        {
+            var guid = new byte[8];
+
+            packet.ReadEntry<UInt32>(StoreNameType.Quest, "Quest ID");
+
+            packet.StartBitStream(guid, 6, 3, 1, 2, 4, 0, 5, 7);
+            packet.ParseBitStream(guid, 3, 0, 7, 6, 2, 1, 5, 4);
+
+            packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_QUESTGIVER_OFFER_REWARD)]
+        public static void HandleQuestOfferReward(Packet packet)
+        {
+            packet.ReadUInt32("RewardItemIdCount[2]");
+            packet.ReadEntry<UInt32>(StoreNameType.Quest, "Quest ID");
+            packet.ReadUInt32("RewardItemId[3]");
+            packet.ReadUInt32("RewardChoiceItemDisplayId(2)");
+
+            for (var i = 0; i < 5; i++)
+            {
+                packet.ReadUInt32("RewardFactionId", i);
+                packet.ReadUInt32("RewardFactionValueId", i);
+                packet.ReadUInt32("RewardFactionValueIdOverride", i);
+            }
+
+            packet.ReadUInt32("RewardItemIdCount[0]");
+            packet.ReadUInt32("RewardItemIdCount[3]");
+            packet.ReadUInt32("RewardItemDisplayId(3)");
+            packet.ReadUInt32("RewardItemId[1]");
+            packet.ReadUInt32("RewardChoiceItemId[3]");
+            packet.ReadUInt32("RewardChoiceItemDisplayId(3)");
+            packet.ReadUInt32("GetRewChoiceItemsCount()");
+            packet.ReadUInt32("RewSpellCast");
+            packet.ReadUInt32("RewardItemDisplayId(1)");
+            packet.ReadUInt32("RewardChoiceItemCount[5]");
+            packet.ReadUInt32("RewardChoiceItemDisplayId(4)");
+            packet.ReadUInt32("RewardChoiceItemCount[1]");
+            packet.ReadUInt32("RewardChoiceItemDisplayId(0)");
+            packet.ReadUInt32("RewardItemDisplayId(0)");
+            packet.ReadUInt32("ClassRewardId");
+            packet.ReadUInt32("QuestTurnInPortrait");                                      // model Id, usually used in wanted or boss quests
+            packet.ReadUInt32("RewardItemIdCount[1]");
+            packet.ReadUInt32("unk");                                      // unknown
+            packet.ReadUInt32("RewardChoiceItemId[0]");
+            packet.ReadUInt32("RewardChoiceItemCount[3]");
+            packet.ReadUInt32("RewardChoiceItemCount[4]");
+            packet.ReadUInt32("RewardChoiceItemId[1]");
+            packet.ReadUInt32("BonusTalents");
+            packet.ReadUInt32("RewardSkillId");
+
+            for (var i = 0; i < 4; i++)
+            {
+                packet.ReadUInt32("CurrencyId", i);
+                packet.ReadUInt32("CurrencyCount", i);
+            }
+
+            packet.ReadEnum<QuestFlags>("Quest Flags", TypeCode.UInt32);
+            packet.ReadEnum<QuestFlags2>("Quest Flags2", TypeCode.UInt32);
+            packet.ReadUInt32("XPValue");
+            packet.ReadUInt32("CharTitleId");
+            packet.ReadUInt32("RewardChoiceItemId[2]");
+            packet.ReadUInt32("RewItemsCount()");
+            packet.ReadUInt32("unk");                                      // unknown
+            packet.ReadUInt32("RewardChoiceItemId[4]");
+
+            packet.ReadUInt32("Ender NPC or GO Entry");// ender NPC or GO entry
+
+            packet.ReadUInt32("RewardItemId[2]");
+            packet.ReadUInt32("RewardChoiceItemCount[0]");
+            packet.ReadUInt32("RewardSkillPoints");
+            packet.ReadUInt32("unk");                                      // unknown
+            packet.ReadUInt32("RewMoney");
+            packet.ReadUInt32("RewardChoiceItemId[5]");
+            packet.ReadUInt32("RewardChoiceItemDisplayId(1)");
+            packet.ReadUInt32("RewardChoiceItemCount[2]");
+            packet.ReadUInt32("RewardItemDisplayId(2)");
+            packet.ReadUInt32("unk");                                      // unknown
+            packet.ReadUInt32("RewardItemId[0]");
+            packet.ReadUInt32("RewardChoiceItemDisplayId(5)");
+
+            var guid = new byte[8];
+
+            var questTurnTextWindow = packet.ReadBits(10);
+            var questGiverTargetName = packet.ReadBits(8);
+            guid[6] = packet.ReadBit();
+            var emoteCount = packet.ReadBits(21);
+            guid[3] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            var questTitle = packet.ReadBits(9);
+            guid[4] = packet.ReadBit();
+            var questTurnTargetName = packet.ReadBits(8);
+            var questGiverTextWindow = packet.ReadBits(10);
+            var questOfferRewardText = packet.ReadBits(12);
+            guid[1] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            packet.ReadBit("EnableNext");
+
+            packet.ReadWoWString("questGiverTargetName", questGiverTargetName);
+            packet.ReadWoWString("questTitle", questTitle);
+
+            for (var i = 0; i < emoteCount; i++)
+            {
+                packet.ReadUInt32("OfferRewardEmoteDelay", i);
+                packet.ReadUInt32("OfferRewardEmote", i);
+            }
+
+            packet.ParseBitStream(guid, 2);
+            packet.ReadWoWString("questOfferRewardText", questOfferRewardText);
+            packet.ReadWoWString("questTurnTextWindow", questTurnTextWindow);
+            packet.ReadWoWString("questTurnTargetName", questTurnTargetName);
+            packet.ParseBitStream(guid, 5, 1);
+            packet.ReadWoWString("questGiverTextWindow", questGiverTextWindow);
+            packet.ParseBitStream(guid, 0, 7, 6, 4, 3);
+
+            packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_QUESTGIVER_QUEST_COMPLETE)]
+        public static void HandleQuestCompleted510(Packet packet)
+        {
+            packet.ReadBit("Unk Bit 2"); // 17
+            packet.ReadBit("Unk Bit 1"); // 16 if true EVENT_QUEST_FINISHED is fired, target cleared and gossip window is open
+            packet.ReadInt32("BonusTalents"); // 28
+            packet.ReadInt32("Money"); // 32
+            packet.ReadEntry<Int32>(StoreNameType.Quest, "Quest ID"); // 24
+            packet.ReadInt32("RewSkillId"); // 40
+            packet.ReadInt32("XP"); // 36
+            packet.ReadInt32("RewSkillPoints"); // 20
+        }
+
+        [Parser(Opcode.SMSG_QUESTGIVER_REQUEST_ITEMS)]
+        public static void HandleQuestRequestItems(Packet packet)
+        {
+            var guid = new byte[8];
+
+            packet.ReadInt32("unk");
+            packet.ReadEnum<QuestFlags>("Quest Flags", TypeCode.UInt32);
+            packet.ReadInt32("unk");
+            packet.ReadInt32("canComplete?");
+            packet.ReadInt32("Money");
+            packet.ReadEntry("Quest Giver Entry");
+            packet.ReadInt32("unk");
+            packet.ReadInt32("Emote");
+            var entry = packet.ReadEntry<UInt32>(StoreNameType.Quest, "Quest ID");
+            var countCurrencies = packet.ReadBits("Number of Required Currencies", 21);
+            packet.ReadBit("CloseOnCancel?");
+            packet.StartBitStream(guid, 2, 5, 1);
+            var titleLen = packet.ReadBits(9);
+            var textLen = packet.ReadBits(12);
+            packet.StartBitStream(guid, 6, 0);
+            var countItems = packet.ReadBits("Number of Required Items", 20);
+            packet.StartBitStream(guid, 4, 7, 3);
+
+            packet.ReadXORByte(guid, 0);
+            packet.ReadXORByte(guid, 2);
+            packet.ReadWoWString("Title", titleLen);
+
+            for (var i = 0; i < countCurrencies; i++)
+            {
+                packet.ReadUInt32("Required Currency Id", i);
+                packet.ReadUInt32("Required Currency Count", i);
+            }
+
+            for (var i = 0; i < countItems; ++i)
+            {
+                packet.ReadUInt32("Required Item Display Id", i);
+                packet.ReadEntry<UInt32>(StoreNameType.Item, "Required Item Id", i);
+                packet.ReadUInt32("Required Item Count", i);
+            }
+
+            packet.ReadXORByte(guid, 3);
+            packet.ReadXORByte(guid, 1);
+            packet.ReadWoWString("Text", textLen);
+            packet.ReadXORByte(guid, 4);
+            packet.ReadXORByte(guid, 5);
+            packet.ReadXORByte(guid, 7);
+            packet.ReadXORByte(guid, 6);
+
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_QUESTGIVER_STATUS)]
         public static void HandleQuestgiverStatus(Packet packet)
         {
@@ -326,19 +688,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadEntry<Int32>(StoreNameType.Quest, "Quest ID");
         }
 
-        [Parser(Opcode.CMSG_QUESTGIVER_ACCEPT_QUEST)]
-        [Parser(Opcode.CMSG_QUESTGIVER_CHOOSE_REWARD)]
-        [Parser(Opcode.CMSG_QUESTGIVER_COMPLETE_QUEST)]
-        [Parser(Opcode.CMSG_QUESTGIVER_HELLO)]
-        [Parser(Opcode.CMSG_QUESTGIVER_REQUEST_REWARD)]
         [Parser(Opcode.SMSG_QUEST_CONFIRM_ACCEPT)]
-        [Parser(Opcode.SMSG_QUESTGIVER_OFFER_REWARD)]
-        [Parser(Opcode.SMSG_QUESTGIVER_QUEST_COMPLETE)]
         [Parser(Opcode.SMSG_QUESTGIVER_QUEST_DETAILS)]
-        [Parser(Opcode.SMSG_QUESTGIVER_QUEST_LIST)]
-        [Parser(Opcode.SMSG_QUESTGIVER_REQUEST_ITEMS)]
         [Parser(Opcode.SMSG_QUESTLOG_FULL)]
-        [Parser(Opcode.SMSG_QUESTUPDATE_ADD_KILL)]
         public static void HandleQuestNull(Packet packet)
         {
             packet.ReadToEnd();

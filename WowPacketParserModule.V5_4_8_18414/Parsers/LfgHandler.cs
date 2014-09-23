@@ -9,6 +9,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class LfgHandler
     {
+        [Parser(Opcode.CMSG_LFG_PLAYER_LOCK_INFO_REQUEST)]
+        public static void HandleLFGPlayerLockInfoRequest(Packet packet)
+        {
+            packet.ReadByte("Unk17");
+            packet.ReadBit("Unk16");
+        }
+
         [Parser(Opcode.SMSG_LFG_PLAYER_INFO)]
         public static void HandleLfgPlayerLockInfoResponse(Packet packet)
         {

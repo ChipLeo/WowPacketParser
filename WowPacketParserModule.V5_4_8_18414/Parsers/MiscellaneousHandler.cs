@@ -270,14 +270,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.CMSG_UNK_006B)]
-        public static void HandleUnk006B(Packet packet)
-        {
-            packet.ReadByte("unk17");
-            packet.ReadBit("unk16");
-            packet.ResetBitReader();
-        }
-
         [Parser(Opcode.CMSG_UNK_0087)]
         public static void HandleUnk0087(Packet packet)
         {
@@ -356,14 +348,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleUnk19C2(Packet packet)
         {
             packet.ReadBit("unkb");
-        }
-
-        [Parser(Opcode.CMSG_UNK_1DAE)]
-        public static void HandleUnk1DAE(Packet packet)
-        {
-            for (var i = 0; i < 50; i++)
-                packet.ReadInt32("unk20", i);
-            packet.ReadInt32("unk16");
         }
 
         [Parser(Opcode.SMSG_CLIENTCACHE_VERSION)]
@@ -929,22 +913,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var guid = packet.StartBitStream(1, 5, 2, 0, 3, 6, 4, 7);
             packet.ParseBitStream(guid, 2, 7, 1, 3, 5, 0, 4, 6);
             packet.WriteGuid("Guid", guid);
-        }
-
-
-        [Parser(Opcode.SMSG_UNK_036D)]
-        public static void HandleUnk036D(Packet packet)
-        {
-            var count = packet.ReadBits("count", 21);
-            var cnt = new uint[count];
-            for (var i = 0; i < count; i++)
-                cnt[i] = packet.ReadBits("unk36", 22, i);
-            for (var i = 0; i < count; i++)
-            {
-                packet.ReadInt32("unk20", i);
-                for (var j = 0; j < cnt[i]; j++)
-                    packet.ReadInt32("unk56", i, j);
-            }
         }
 
         [Parser(Opcode.SMSG_UNK_043F)]
