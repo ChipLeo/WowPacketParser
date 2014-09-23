@@ -72,7 +72,6 @@ namespace WowPacketParser.Loading
                 if (add && Settings.IgnoreFilters.Length > 0)
                     add = !opcodeName.MatchesFilters(Settings.IgnoreFilters);
 
-
                 if (add)
                 {
                     if (Settings.FilterPacketsNum > 0 && _count++ == Settings.FilterPacketsNum)
@@ -120,8 +119,6 @@ namespace WowPacketParser.Loading
                     var opcodeName = Opcodes.GetOpcodeName(packet.Opcode, packet.Direction);
 
                     var add = true;
-
-
                     if (Settings.Filters.Length > 0)
                         add = opcodeName.MatchesFilters(Settings.Filters);
                     // check for ignore filters
