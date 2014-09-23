@@ -781,7 +781,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("unk96");
         }
 
-        [Parser(Opcode.SMSG_FISHING_GOBBER_ANIMATION)]
+        [Parser(Opcode.SMSG_UNK_001F)]
         public static void HandleUnk001F(Packet packet)
         {
             //var guid = packet.StartBitStream(4, 7, 1, 0, 5, 3, 2);
@@ -793,7 +793,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             guid[5] = packet.ReadBit();
             guid[3] = packet.ReadBit();
             guid[2] = packet.ReadBit();
-            var bit80 = packet.ReadBit("Catch");
+            var bit80 = packet.ReadBit("Byte80");
             guid[6] = packet.ReadBit();
             packet.ReadBit("Byte16");
             if (!bit80)

@@ -2045,7 +2045,7 @@ namespace WowPacketParser.Enums
         SMSG_ZONE_UNDER_ATTACK,
         SMSG_UNK_0002,
         SMSG_UNK_000F,
-        SMSG_FISHING_GOBBER_ANIMATION,
+        SMSG_UNK_001F,
         SMSG_UNK_003A,
         SMSG_UNK_0047,
         SMSG_UNK_0050,
