@@ -373,7 +373,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_NULL_1124,                                0x1124 | 0x10000}, //+-
             {Opcode.CMSG_NULL_1203,                                0x1203 | 0x10000}, //+-
             {Opcode.CMSG_NULL_1207,                                0x1207 | 0x10000}, //+-
-            {Opcode.CMSG_NULL_1272,                                0x1272 | 0x10000}, //+-
+            {Opcode.CMSG_NULL_1272,                                0x1272 | 0x10000}, //+- hunter pet opcode
             {Opcode.CMSG_NULL_135B,                                0x135B | 0x10000}, //+-
             {Opcode.CMSG_NULL_1452,                                0x1452 | 0x10000}, //+-
             {Opcode.CMSG_NULL_14DB,                                0x14DB | 0x10000}, //+-
@@ -831,7 +831,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_1943,                                 0x1943 | 0x20000}, //++
             {Opcode.SMSG_UNK_1A1E,                                 0x1A1E | 0x20000}, //++ pair CMSG 0882
             {Opcode.SMSG_UNK_1A1F,                                 0x1A1F | 0x20000}, //++
-            {Opcode.SMSG_UNK_1A2B,                                 0x1A2B | 0x20000}, //++ pair CMSG 1272
+            {Opcode.SMSG_UNK_1A2B,                                 0x1A2B | 0x20000}, //++ hunter pet opcode
             {Opcode.SMSG_UNK_1ABB,                                 0x1ABB | 0x20000}, //++
             {Opcode.SMSG_UNK_1C0E,                                 0x1C0E | 0x20000}, //++
             {Opcode.SMSG_UNK_1DBE,                                 0x1DBE | 0x20000}, //++
