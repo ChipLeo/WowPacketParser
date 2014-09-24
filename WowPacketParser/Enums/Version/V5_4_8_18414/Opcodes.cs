@@ -504,6 +504,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_FRIEND_STATUS,                            0x0532 | 0x20000}, //--
             {Opcode.SMSG_GAME_SHOP_QUERY_RESPONSE,                 0x1ABF | 0x20000}, //--
             {Opcode.SMSG_GAME_STORE_INGAME_BUY_FAILED,             0x023A | 0x20000}, //++
+            {Opcode.SMSG_GAMEOBJECT_CUSTOM_ANIM,                   0x001F | 0x20000}, //++
             {Opcode.SMSG_GAMEOBJECT_QUERY_RESPONSE,                0x06BF | 0x20000}, //++
             {Opcode.SMSG_GMRESPONSE_RECEIVED,                      0x148E | 0x20000}, //++
             {Opcode.SMSG_GOSSIP_COMPLETE,                          0x034E | 0x20000}, //--
@@ -564,6 +565,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_LOOT_RELEASE_RESPONSE,                    0x123F | 0x20000}, //--
             {Opcode.SMSG_LOOT_REMOVED,                             0x0C3E | 0x20000}, //++
             {Opcode.SMSG_LOOT_RESPONSE,                            0x128A | 0x20000}, //++
+            {Opcode.SMSG_LOOT_RESPONSE_COUNT,                      0x0C32 | 0x20000}, //++
             {Opcode.SMSG_MAIL_LIST_RESULT,                         0x1C0B | 0x20000}, //--
             {Opcode.SMSG_MESSAGECHAT,                              0x1A9A | 0x20000}, //++
             {Opcode.SMSG_MINIMAP_PING,                             0x168F | 0x20000}, //--
@@ -723,7 +725,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_ZONE_UNDER_ATTACK,                        0x10C2 | 0x20000}, //++
             {Opcode.SMSG_UNK_0002,                                 0x0002 | 0x20000}, //+-
             {Opcode.SMSG_UNK_000F,                                 0x000f | 0x20000}, //++
-            {Opcode.SMSG_UNK_001F,                                 0x001F | 0x20000}, //++
             {Opcode.SMSG_UNK_003A,                                 0x003A | 0x20000}, //++
             {Opcode.SMSG_UNK_0047,                                 0x0047 | 0x20000}, //++
             {Opcode.SMSG_UNK_0050,                                 0x0050 | 0x20000}, //++
@@ -778,7 +779,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0B22,                                 0x0B22 | 0x20000}, //-- pair 0C1B
             {Opcode.SMSG_UNK_0C13,                                 0x0C13 | 0x20000}, //++
             {Opcode.SMSG_UNK_0C1A,                                 0x0C1A | 0x20000}, //-- pair 17BA
-            {Opcode.SMSG_UNK_0C32,                                 0x0C32 | 0x20000}, //++
             {Opcode.SMSG_UNK_0C44,                                 0x0C44 | 0x20000}, //+-
             {Opcode.SMSG_UNK_0CAE,                                 0x0CAE | 0x20000}, //++
             {Opcode.SMSG_UNK_0CAF,                                 0x0CAF | 0x20000}, //++

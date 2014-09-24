@@ -41,6 +41,27 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
+        [Parser(Opcode.SMSG_GAMEOBJECT_CUSTOM_ANIM)]
+        public static void HandleGOCustomAnim(Packet packet)
+        {
+            var guid = new byte[8];
+            guid[4] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            var hasAnim = !packet.ReadBit("!hasAnim");
+            guid[6] = packet.ReadBit();
+            packet.ReadBit("Byte16");
+            if (hasAnim)
+                packet.ReadInt32("Anim");
+
+            packet.ParseBitStream(guid, 5, 6, 7, 3, 4, 0, 2, 1);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [HasSniffData]
         [Parser(Opcode.SMSG_GAMEOBJECT_QUERY_RESPONSE)]
         public static void HandleGameObjectQueryResponse(Packet packet)

@@ -247,6 +247,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid2);
         }
 
+        [Parser(Opcode.SMSG_LOOT_RESPONSE_COUNT)]
+        public static void HandleLootResponseCount(Packet packet)
+        {
+            packet.ReadInt32("Count");
+        }
+
         [Parser(Opcode.SMSG_LOOT_ROLL)]
         public static void HandleLootRollResponse(Packet packet)
         {
