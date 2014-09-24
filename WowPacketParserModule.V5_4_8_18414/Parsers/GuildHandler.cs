@@ -116,6 +116,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("Motd", len);
         }
 
+        [Parser(Opcode.CMSG_GUILD_SET_ACHIEVEMENT_TRACKING)]
+        public static void HandleGuildSetAchievementTracking(Packet packet)
+        {
+            var count = packet.ReadBits("Count", 22);
+            for (var i = 0; i < count; ++i)
+                packet.ReadUInt32("Criteria Id", i); // 24
+        }
+
         [Parser(Opcode.CMSG_GUILD_NEWS_UPDATE_STICKY)]
         [Parser(Opcode.CMSG_GUILD_PROMOTE)]
         [Parser(Opcode.CMSG_GUILD_QUERY_NEWS)]

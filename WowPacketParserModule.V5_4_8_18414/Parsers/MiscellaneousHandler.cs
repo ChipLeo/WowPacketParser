@@ -304,14 +304,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk");
         }
 
-        [Parser(Opcode.CMSG_UNK_0CF0)]
-        public static void HandleUnk0CF0(Packet packet)
-        {
-            var count = packet.ReadBits("count", 22);
-            for (var i = 0; i < count; i++)
-                packet.ReadInt32("unk24", i);
-        }
-
         [Parser(Opcode.CMSG_UNK_10A7)]
         public static void HandleUnk10A7(Packet packet)
         {
@@ -328,14 +320,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("unkb");
             packet.ResetBitReader();
             packet.ReadInt32("unk");
-        }
-
-        [Parser(Opcode.CMSG_UNK_15A9)]
-        public static void HandleUnk15A9(Packet packet)
-        {
-            packet.ReadBit("unk16");
-            packet.ReadBit("unk17");
-            packet.ResetBitReader();
         }
 
         [Parser(Opcode.CMSG_UNK_1841)]
@@ -431,6 +415,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleGossipComplete(Packet packet)
         {
             packet.ReadToEnd();
+        }
+
+        [Parser(Opcode.SMSG_LEARNED_DANCE_MOVES)]
+        public static void HandleLearnedDanceMoves(Packet packet)
+        {
+            packet.ReadInt32("Danc Move");
+            packet.ReadBits("unk", 19);
         }
 
         [Parser(Opcode.SMSG_MINIMAP_PING)]
@@ -891,13 +882,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var guid = packet.StartBitStream(1, 5, 2, 0, 3, 6, 4, 7);
             packet.ParseBitStream(guid, 2, 7, 1, 3, 5, 0, 4, 6);
             packet.WriteGuid("Guid", guid);
-        }
-
-        [Parser(Opcode.SMSG_UNK_043F)]
-        public static void HandleUnk043F(Packet packet)
-        {
-            packet.ReadInt32("Dword8");
-            packet.ReadBits("unk", 19);
         }
 
         [Parser(Opcode.SMSG_UNK_0562)]
