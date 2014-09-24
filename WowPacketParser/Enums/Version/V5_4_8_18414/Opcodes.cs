@@ -831,7 +831,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_18C3,                                 0x18C3 | 0x20000}, //++
             {Opcode.SMSG_UNK_1943,                                 0x1943 | 0x20000}, //++
             {Opcode.SMSG_UNK_1A1E,                                 0x1A1E | 0x20000}, //++ pair CMSG 0882
-            {Opcode.SMSG_UNK_1A1F,                                 0x1A1F | 0x20000}, //++
+            {Opcode.SMSG_ROLE_POLL_BEGIN,                          0x1A1F | 0x20000}, //++
             {Opcode.SMSG_UNK_1A2B,                                 0x1A2B | 0x20000}, //++ pair CMSG 1272
             {Opcode.SMSG_UNK_1ABB,                                 0x1ABB | 0x20000}, //++
             {Opcode.SMSG_UNK_1C0E,                                 0x1C0E | 0x20000}, //++

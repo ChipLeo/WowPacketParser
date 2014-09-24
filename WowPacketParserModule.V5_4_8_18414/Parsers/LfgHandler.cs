@@ -16,6 +16,34 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("Unk16");
         }
 
+        [Parser(Opcode.SMSG_ROLE_POLL_BEGIN)]
+        public static void HandleSRolePullBegin(Packet packet)
+        {
+            var guid = new byte[8];
+            guid[6] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            var unk32 = packet.ReadBit("unk32");
+            guid[3] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+
+
+            packet.ParseBitStream(guid, 0, 3, 6);
+            packet.ReadInt32("unk64");
+            packet.ParseBitStream(guid, 5, 1, 4, 2, 7);
+            packet.WriteGuid("Guid", guid);
+        }
+
+
+
+
+
+
+
+
         [Parser(Opcode.SMSG_LFG_PLAYER_INFO)]
         public static void HandleLfgPlayerLockInfoResponse(Packet packet)
         {
