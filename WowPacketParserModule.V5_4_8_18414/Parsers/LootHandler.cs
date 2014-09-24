@@ -14,7 +14,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_LOOT)]
         public static void HandleLoot(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = packet.StartBitStream(4, 5, 2, 7, 0, 1, 3, 6);
+            packet.ParseBitStream(guid, 3, 5, 0, 6, 4, 1, 7, 2);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_LOOT_MASTER_GIVE)]
@@ -245,6 +247,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             packet.WriteGuid("Guid", guid);
             packet.WriteGuid("Guid2", guid2);
+        }
+
+        [Parser(Opcode.SMSG_LOOT_RESPONSE_COUNT)]
+        public static void HandleLootResponseCount(Packet packet)
+        {
+            packet.ReadInt32("Count");
         }
 
         [Parser(Opcode.SMSG_LOOT_ROLL)]

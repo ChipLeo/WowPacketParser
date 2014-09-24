@@ -435,34 +435,148 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandlePartyMemberStats(Packet packet)
         {
             var guid = new byte[8];
-            guid[0] = packet.ReadBit();
-            guid[5] = packet.ReadBit();
 
-            var byte28 = packet.ReadBit("byte28");
+            packet.StartBitStream(guid, 0, 5);
+            packet.ReadBit("unk1"); // Add arena opponent ?
+            packet.StartBitStream(guid, 1, 4);
+            packet.ReadBit("unk2");
+            packet.StartBitStream(guid, 6, 2, 7, 3);
 
-            guid[1] = packet.ReadBit();
-            guid[4] = packet.ReadBit();
-
-            var byte29 = packet.ReadBit("byte29");
-
-            guid[6] = packet.ReadBit();
-            guid[2] = packet.ReadBit();
-            guid[7] = packet.ReadBit();
-            guid[3] = packet.ReadBit();
             packet.ParseBitStream(guid, 3, 2, 6, 7, 5);
-
-            var int24 = packet.ReadInt32("int24");
-
+            var updateFlags = packet.ReadEnum<GroupUpdateFlag548>("Update Flags", TypeCode.UInt32);
             packet.ParseBitStream(guid, 1, 4, 0);
+
             packet.WriteGuid("Guid", guid);
 
-            var count = packet.ReadInt32("count");
-            for (var i = 0; i < count; i++)
+            var size = packet.ReadInt32("Size");
+            var data = packet.ReadBytes(size);
+            var updateFlagPacket = new Packet(data, packet.Opcode, packet.Time, packet.Direction, packet.Number, packet.Writer, packet.FileName);
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.Status)) // 0x1
+                updateFlagPacket.ReadEnum<GroupMemberStatusFlag>("Status", TypeCode.Int16);
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.Unk2)) // 0x2
             {
-                packet.ReadByte("byte", i);
+                for (var i = 0; i < 2; i++)
+                    updateFlagPacket.ReadByte("Unk2", i);
             }
-            packet.ReadWoWString("str", count);
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.CurrentHealth)) // 0x4
+                updateFlagPacket.ReadUInt32("Current Health");
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.MaxHealth)) // 0x8
+                updateFlagPacket.ReadUInt32("Max Health");
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.PowerType)) // 0x10
+                updateFlagPacket.ReadEnum<PowerType>("Power type", TypeCode.Byte);
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.CurrentPower)) // 0x20
+                updateFlagPacket.ReadUInt16("Current Power");
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.Zone)) // 0x40
+                updateFlagPacket.ReadEntry<UInt16>(StoreNameType.Zone, "Zone Id");
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.MaxPower))// 0x80
+                updateFlagPacket.ReadUInt16("Max Power");
+
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.Level))// 0x100
+                updateFlagPacket.ReadUInt16("Level");
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.Unk200)) // 0x200
+                updateFlagPacket.ReadUInt16("Unk200");
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.Unk400)) // 0x400
+                updateFlagPacket.ReadUInt16("Unk400");
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.Position)) // 0x800
+            {
+                updateFlagPacket.ReadInt16("Position X");
+                updateFlagPacket.ReadInt16("Position Y");
+                updateFlagPacket.ReadInt16("Position Z");
+            }
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.Auras)) // 0x1000
+            {
+                updateFlagPacket.ReadByte("unkByte");
+                var mask = updateFlagPacket.ReadUInt64("Aura Mask");
+                var count = updateFlagPacket.ReadInt32("AuraCount");
+
+                for (var i = 0; i < count; ++i)
+                {
+                    if (mask == 0) // bad packet
+                        break;
+
+                    if ((mask & (1ul << i)) == 0)
+                        continue;
+
+                    updateFlagPacket.ReadEntry<UInt32>(StoreNameType.Spell, "Spell Id", i);
+                    var flags = updateFlagPacket.ReadEnum<AuraFlagMoP>("Aura Flags", TypeCode.Byte, i);
+                    var unk = updateFlagPacket.ReadUInt32("unk", i);
+
+                    if (flags.HasFlag(AuraFlagMoP.Scalable))
+                    {
+                        var cnt = updateFlagPacket.ReadByte("Scalings");
+                        for (int j = 0; j < cnt; j++)
+                            updateFlagPacket.ReadSingle("Scale", i, j);
+                    }
+                }
+            }
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.PetGuid)) // 0x2000
+                updateFlagPacket.ReadGuid("Pet GUID");
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.PetName)) // 0x4000
+                updateFlagPacket.ReadCString("Pet Name");
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.PetModelId)) // 0x8000
+                updateFlagPacket.ReadInt16("Pet Modelid");
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.PetCurrentHealth)) // 0x10000
+                updateFlagPacket.ReadInt32("Pet Current Health");
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.PetMaxHealth)) // 0x20000
+                updateFlagPacket.ReadInt32("Pet Max Health");
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.PetPowerType)) // 0x40000
+                updateFlagPacket.ReadEnum<PowerType>("Pet Power type", TypeCode.Byte);
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.PetCurrentPower)) // 0x80000
+                updateFlagPacket.ReadInt16("Pet Current Power");
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.PetMaxPower)) // 0x100000
+                updateFlagPacket.ReadInt16("Pet Max Power");
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.Unk200000)) // 0x200000
+                updateFlagPacket.ReadInt16("Unk200000");
+
+            if (updateFlags.HasFlag(GroupUpdateFlag548.PetAuras)) // 0x400000
+            {
+                updateFlagPacket.ReadByte("unkByte");
+                var mask = updateFlagPacket.ReadUInt64("Aura Mask");
+                var count = updateFlagPacket.ReadInt32("AuraCount");
+
+                for (var i = 0; i < count; ++i)
+                {
+                    if ((mask & (1ul << i)) == 0)
+                        continue;
+
+                    updateFlagPacket.ReadEntry<UInt32>(StoreNameType.Spell, "Spell Id", i);
+                    var flags = updateFlagPacket.ReadEnum<AuraFlagMoP>("Aura Flags", TypeCode.Byte, i);
+                    updateFlagPacket.ReadUInt32("unk", i);
+
+                    if (flags.HasFlag(AuraFlagMoP.Scalable))
+                    {
+                        var cnt = updateFlagPacket.ReadByte("Scalings", i);
+                        for (int j = 0; j < cnt; j++)
+                            updateFlagPacket.ReadSingle("Scale", i, j);
+                    }
+                }
+
+            }
+
         }
+
 
         [Parser(Opcode.SMSG_PARTY_MEMBER_STATS_FULL)]
         public static void HandlePartyMemberStatsFull(Packet packet)
