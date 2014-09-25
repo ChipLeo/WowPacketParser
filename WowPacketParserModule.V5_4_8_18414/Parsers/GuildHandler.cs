@@ -438,5 +438,23 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("Unk 1", i);
             }
         }
+
+        [Parser(Opcode.CMSG_GUILD_SET_RANK_PERMISSIONS)]
+        public static void HandleGuildSetRankPerm(Packet packet)
+        {
+            packet.ReadInt32("OldRankID"); // 92
+            for (var tabId = 0; tabId < 8; ++tabId)
+            {
+                packet.ReadInt32("BankRights", tabId); // 128
+                packet.ReadInt32("Slots", tabId); // 136
+            }
+            packet.ReadInt32("MoneyPerDay"); // 96
+            packet.ReadInt32("NewRights"); // 20
+            packet.ReadInt32("NewRankId"); // 100
+            packet.ReadInt32("OldRights"); // 16
+
+            var len = packet.ReadBits("Len", 7);
+            packet.ReadWoWString("Name", len);
+        }
     }
 }

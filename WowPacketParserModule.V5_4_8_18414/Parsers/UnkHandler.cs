@@ -1175,42 +1175,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid2);
         }
 
-        [Parser(Opcode.SMSG_UNK_1443)]
-        public static void HandleSUnk1443(Packet packet)
-        {
-            var guid = new byte[8];
-            var guid2 = new byte[8];
-
-            guid2[5] = packet.ReadBit();
-            guid[7] = packet.ReadBit();
-            guid[0] = packet.ReadBit();
-            guid[3] = packet.ReadBit();
-            guid2[1] = packet.ReadBit();
-            guid[4] = packet.ReadBit();
-            guid2[7] = packet.ReadBit();
-            guid2[2] = packet.ReadBit();
-            guid2[4] = packet.ReadBit();
-            guid2[3] = packet.ReadBit();
-            guid[5] = packet.ReadBit();
-            guid[1] = packet.ReadBit();
-            guid[6] = packet.ReadBit();
-            guid[2] = packet.ReadBit();
-            guid2[6] = packet.ReadBit();
-            guid2[0] = packet.ReadBit();
-
-            packet.ParseBitStream(guid, 6, 2);
-            packet.ParseBitStream(guid2, 2, 5);
-            packet.ParseBitStream(guid, 7, 5, 3, 1);
-            packet.ParseBitStream(guid2, 3, 1);
-            packet.ReadInt32("unk32"); // 32
-            packet.ParseBitStream(guid, 4);
-            packet.ParseBitStream(guid2, 4, 7, 0, 6);
-            packet.ParseBitStream(guid, 0);
-
-            packet.WriteGuid("Guid", guid);
-            packet.WriteGuid("Guid2", guid2);
-        }
-
         [Parser(Opcode.SMSG_UNK_148F)]
         public static void HandleSUnk148F(Packet packet)
         {

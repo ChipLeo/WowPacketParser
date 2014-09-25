@@ -3,6 +3,7 @@ using WowPacketParser.Enums;
 using WowPacketParser.Enums.Version;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
+using WowPacketParser.Store;
 using WowPacketParserModule.V5_4_8_18414.Enums;
 using CoreParsers = WowPacketParser.Parsing.Parsers;
 
@@ -428,6 +429,46 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleSMimimapPing(Packet packet)
         {
             packet.ReadToEnd();
+        }
+
+        [Parser(Opcode.SMSG_PLAY_OBJECT_SOUND)]
+        public static void HandlePlayObjectSound(Packet packet)
+        {
+            var guid1 = new byte[8];
+            var guid2 = new byte[8];
+
+            guid2[5] = packet.ReadBit();
+            guid1[7] = packet.ReadBit();
+            guid1[0] = packet.ReadBit();
+            guid1[3] = packet.ReadBit();
+            guid2[1] = packet.ReadBit();
+            guid1[4] = packet.ReadBit();
+            guid2[7] = packet.ReadBit();
+            guid2[2] = packet.ReadBit();
+            guid2[4] = packet.ReadBit();
+            guid2[3] = packet.ReadBit();
+            guid1[5] = packet.ReadBit();
+            guid1[1] = packet.ReadBit();
+            guid1[6] = packet.ReadBit();
+            guid1[2] = packet.ReadBit();
+            guid2[6] = packet.ReadBit();
+            guid2[0] = packet.ReadBit();
+
+            packet.ReadXORBytes(guid1, 6, 2);
+            packet.ReadXORBytes(guid2, 2, 5);
+            packet.ReadXORBytes(guid1, 7, 5, 3, 1);
+            packet.ReadXORBytes(guid2, 3, 1);
+
+            var sound = packet.ReadUInt32("Sound Id");
+
+            packet.ReadXORByte(guid1, 4);
+            packet.ReadXORBytes(guid2, 4, 7, 0, 6);
+            packet.ReadXORByte(guid1, 0);
+
+            packet.WriteGuid("Guid 1", guid1);
+            packet.WriteGuid("Guid 2", guid2);
+
+            Storage.Sounds.Add(sound, packet.TimeSpan);
         }
 
         [Parser(Opcode.SMSG_PLAY_SOUND)]
@@ -960,12 +1001,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid2);
         }
 
-        [Parser(Opcode.SMSG_UNK_02A7)]
-        public static void HandleUnk02A7(Packet packet)
-        {
-            packet.ReadBits("unk", 4);
-        }
-
         [Parser(Opcode.SMSG_UNK_0728)] // sub_C8CED2
         public static void HandleUnk0728(Packet packet)
         {
@@ -1110,20 +1145,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     packet.ReadByte("Spell Mask bitpos", i, j);
                 }
             }
-        }
-
-        [Parser(Opcode.SMSG_UNK_11E3)]
-        public static void HandleUnk111E3(Packet packet)
-        {
-            var guid = packet.StartBitStream(4, 2, 6, 5, 1, 3, 0, 7);
-            packet.ParseBitStream(guid, 5, 7);
-            packet.ReadInt32("unk24");
-            packet.ParseBitStream(guid, 1, 0, 6);
-            packet.ReadInt32("unk28");
-            packet.ParseBitStream(guid, 4, 2, 3);
-            packet.ReadInt32("unk32");
-
-            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_UNK_121E)]
@@ -1344,7 +1365,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_UNK_0247)]
         [Parser(Opcode.CMSG_UNK_044E)]
         [Parser(Opcode.CMSG_UNK_0656)]
-        [Parser(Opcode.CMSG_UNK_08C0)]
         [Parser(Opcode.CMSG_UNK_1446)]
         public static void HandleUnk1446(Packet packet)
         {

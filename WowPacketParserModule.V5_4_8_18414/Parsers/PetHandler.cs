@@ -13,6 +13,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class PetHandler
     {
+        [Parser(Opcode.CMSG_PET_ABANDON)]
+        public static void HandlePetMiscGuid(Packet packet)
+        {
+            var guid = packet.StartBitStream(7, 3, 4, 2, 5, 6, 1, 0);
+            packet.ParseBitStream(guid, 0, 2, 5, 6, 7, 1, 4, 3);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.CMSG_PET_ACTION)]
         public static void HandlePetAction(Packet packet)
         {
@@ -383,6 +391,17 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             // Store temporary name from Pet Number GUID (will be retrieved as uint64 in SMSG_PET_NAME_QUERY_RESPONSE)
             StoreGetters.AddName(PetGuid, PetNumber);
+        }
+
+        [Parser(Opcode.CMSG_PET_RENAME)]
+        public static void HandlePetRename(Packet packet)
+        {
+            packet.ReadGuid("Pet Guid");
+            packet.ReadCString("Name");
+            var declined = packet.ReadBoolean("Is Declined");
+            if (declined)
+                for (var i = 0; i < 5; ++i)
+                    packet.ReadCString("Declined Name", i);
         }
 
         [Parser(Opcode.CMSG_PET_SET_ACTION)]

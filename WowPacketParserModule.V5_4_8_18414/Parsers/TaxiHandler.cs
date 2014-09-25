@@ -64,22 +64,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBoolean("Activate");
         }
 
+
         [Parser(Opcode.SMSG_ACTIVATETAXIREPLY)]
         public static void HandleActivateTaxiReply(Packet packet)
         {
-            var guid = new byte[8];
-            guid[2] = packet.ReadBit();
-            guid[7] = packet.ReadBit();
-            packet.ReadBit("unk");
-            guid[0] = packet.ReadBit();
-            guid[3] = packet.ReadBit();
-            guid[6] = packet.ReadBit();
-            guid[5] = packet.ReadBit();
-            guid[1] = packet.ReadBit();
-            guid[4] = packet.ReadBit();
-            packet.ParseBitStream(guid, 1, 5, 7, 4, 2, 6, 3, 0);
-
-            packet.WriteGuid("Guid", guid);
+            packet.ReadEnum<TaxiError>("Result", 4);
         }
 
         [Parser(Opcode.SMSG_SHOWTAXINODES)]
