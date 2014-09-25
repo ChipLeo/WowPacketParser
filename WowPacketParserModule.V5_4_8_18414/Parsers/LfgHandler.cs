@@ -129,6 +129,44 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
+        [Parser(Opcode.SMSG_LFG_ROLE_CHECK_UPDATE)]
+        public static void HandLFGRoleCheckUpdate(Packet packet)
+        {
+            var guid = new byte[8];
+            packet.ReadByte("unk65"); // 65
+            packet.ReadEnum<LfgRoleCheckStatus>("Role Check Status", TypeCode.Byte); // 16
+            var count36 = packet.ReadBits("Member count", 21); // 36
+            var guid40 = new byte[count36][];
+            for (var i = 0; i < count36; i++)
+            {
+                packet.ReadBit("Choosed", i); // 48
+                guid40[i] = packet.StartBitStream(3, 0, 5, 2, 7, 1, 4, 6);
+            }
+            guid[3] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            var count20 = packet.ReadBits("Entry count", 22);
+            guid[0] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            var unk64 = packet.ReadBit("Is Beginning"); // 64
+            packet.ParseBitStream(guid, 0);
+            for (var i = 0; i < count36; i++)
+            {
+                packet.ReadByte("Level", i); // 56
+                packet.ParseBitStream(guid40[i], 3, 6);
+                packet.ReadEnum<LfgRoleFlag>("Roles", TypeCode.Int32, i); // 88
+                packet.ParseBitStream(guid40[i], 2, 4, 0, 1, 5, 7);
+                packet.WriteGuid("Player", guid40[i]);
+            }
+            packet.ParseBitStream(guid, 1, 7, 6, 4, 3, 2, 5);
+            packet.WriteGuid("Guid", guid);
+            for (var i = 0; i < count20; i++)
+                packet.ReadLfgEntry("LFG Entry", i); // 24
+        }
+
         [Parser(Opcode.SMSG_ROLE_POLL_BEGIN)]
         public static void HandleRolePollBegin(Packet packet)
         {

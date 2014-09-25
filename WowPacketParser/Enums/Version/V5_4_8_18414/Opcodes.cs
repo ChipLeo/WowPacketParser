@@ -566,6 +566,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_LFG_JOIN_RESULT,                          0x18E3 | 0x20000}, //--
             {Opcode.SMSG_LFG_PLAYER_INFO,                          0x1861 | 0x20000}, //++
             {Opcode.SMSG_LFG_QUEUE_STATUS,                         0x0C2E | 0x20000}, //--
+            {Opcode.SMSG_LFG_ROLE_CHECK_UPDATE,                    0x12BB | 0x20000}, //++
             {Opcode.SMSG_LIST_INVENTORY,                           0x1AAE | 0x20000}, //-+
             {Opcode.SMSG_LOAD_CUF_PROFILES,                        0x0E32 | 0x20000}, //++
             {Opcode.SMSG_LOG_XPGAIN,                               0x1E9A | 0x20000}, //--
@@ -822,7 +823,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_129B,                                 0x129B | 0x20000}, //++
             {Opcode.SMSG_UNK_129E,                                 0x129E | 0x20000}, //++
             {Opcode.SMSG_UNK_12A3,                                 0x12A3 | 0x20000}, //++
-            {Opcode.SMSG_UNK_12BB,                                 0x12BB | 0x20000}, //++
             {Opcode.SMSG_UNK_12BE,                                 0x12BE | 0x20000}, //++
             {Opcode.SMSG_UNK_148F,                                 0x148F | 0x20000}, //++
             {Opcode.SMSG_UNK_149B,                                 0x149B | 0x20000}, //++
