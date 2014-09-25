@@ -259,7 +259,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_RESET_INSTANCES,                          0x0C69 | 0x10000}, //+-
             {Opcode.CMSG_RETURN_TO_GRAVEYARD,                      0x12EA | 0x10000}, //--
             {Opcode.CMSG_SAVE_CUF_PROFILES,                        0x06E6 | 0x10000}, //++
-            {Opcode.CMSG_SELECT_FACTION,                           0x0027 | 0x10000}, //
+            //{Opcode.CMSG_SELECT_FACTION,                           0x0027 | 0x10000}, //
             {Opcode.CMSG_SELL_ITEM,                                0x1358 | 0x10000}, //--
             {Opcode.CMSG_SEND_MAIL,                                0x1DBA | 0x10000}, //--
             {Opcode.CMSG_SET_ACTIONBAR_TOGGLES,                    0x0672 | 0x10000}, //++
@@ -367,7 +367,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_NULL_0360,                                0x0360 | 0x10000}, //++
             {Opcode.CMSG_NULL_0365,                                0x0365 | 0x10000}, //+-
             {Opcode.CMSG_NULL_03C4,                                0x03C4 | 0x10000}, //+-
-            {Opcode.CMSG_NULL_0558,                                0x0558 | 0x10000}, //+-
+            //{Opcode.CMSG_NULL_0558,                                0x0558 | 0x10000}, //+-
             {Opcode.CMSG_NULL_05E1,                                0x05E1 | 0x10000}, //+-
             {Opcode.CMSG_NULL_0644,                                0x0644 | 0x10000}, //+-
             {Opcode.CMSG_NULL_06D4,                                0x06D4 | 0x10000}, //+-
