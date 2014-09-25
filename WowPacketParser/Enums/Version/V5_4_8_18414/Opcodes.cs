@@ -143,6 +143,10 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_JOIN_CHANNEL,                             0x148E | 0x10000}, //++
             {Opcode.CMSG_LEARN_TALENT,                             0x02A7 | 0x10000}, //+-
             {Opcode.CMSG_LEAVE_CHANNEL,                            0x042A | 0x10000}, //--
+            {Opcode.CMSG_LF_GUILD_ADD_APPLICATION,                 0x0C63 | 0x10000}, //
+            {Opcode.CMSG_LF_GUILD_BROWSE,                          0x159A | 0x10000}, //
+            {Opcode.CMSG_LF_GUILD_GET_APPLICATIONS,                0x0558 | 0x10000}, //
+            {Opcode.CMSG_LF_GUILD_REMOVE_APPLICATION,              0x1C53 | 0x10000}, //
             {Opcode.CMSG_LFG_PLAYER_LOCK_INFO_REQUEST,             0x006B | 0x10000}, //++
             {Opcode.CMSG_LFG_TELEPORT,                             0x1AA6 | 0x10000}, //--
             {Opcode.CMSG_LFG_JOIN,                                 0x046B | 0x10000}, //--
@@ -255,6 +259,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_RESET_INSTANCES,                          0x0C69 | 0x10000}, //+-
             {Opcode.CMSG_RETURN_TO_GRAVEYARD,                      0x12EA | 0x10000}, //--
             {Opcode.CMSG_SAVE_CUF_PROFILES,                        0x06E6 | 0x10000}, //++
+            {Opcode.CMSG_SELECT_FACTION,                           0x0027 | 0x10000}, //
             {Opcode.CMSG_SELL_ITEM,                                0x1358 | 0x10000}, //--
             {Opcode.CMSG_SEND_MAIL,                                0x1DBA | 0x10000}, //--
             {Opcode.CMSG_SET_ACTIONBAR_TOGGLES,                    0x0672 | 0x10000}, //++
@@ -555,6 +560,9 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_LEARNED_DANCE_MOVES,                      0x043F | 0x20000}, //++
             {Opcode.SMSG_LEARNED_SPELL,                            0x129A | 0x20000}, //++
             {Opcode.SMSG_LEVELUP_INFO,                             0x1961 | 0x20000}, //++
+            {Opcode.SMSG_LF_GUILD_APPLICATIONS_LIST_UPDATED,       0x0AE0 | 0x20000}, //
+            {Opcode.SMSG_LF_GUILD_APPLICATIONS_LIST_CHANGED,       0x1A70 | 0x20000}, //
+            {Opcode.SMSG_LF_GUILD_BROWSE_UPDATED,                  0x0F69 | 0x20000}, //
             {Opcode.SMSG_LFG_JOIN_RESULT,                          0x18E3 | 0x20000}, //--
             {Opcode.SMSG_LFG_PLAYER_INFO,                          0x1861 | 0x20000}, //++
             {Opcode.SMSG_LFG_QUEUE_STATUS,                         0x0C2E | 0x20000}, //--
@@ -699,6 +707,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_START_MIRROR_TIMER,                       0x0E12 | 0x20000}, //++
             {Opcode.SMSG_STOP_MIRROR_TIMER,                        0x1026 | 0x20000}, //++
             {Opcode.SMSG_SUSPEND_COMMS,                            0x1D48 | 0x20000}, //--
+            {Opcode.SMSG_TABARDVENDOR_ACTIVATE,                    0x0A3E | 0x20000}, //
             {Opcode.SMSG_TALENTS_INFO,                             0x0A9B | 0x20000}, //++
             {Opcode.SMSG_TAXINODE_STATUS,                          0x169E | 0x20000}, //++ pair CMSG 02E1
             {Opcode.SMSG_TEXT_EMOTE,                               0x002E | 0x20000}, //++
