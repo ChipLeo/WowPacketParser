@@ -33,7 +33,7 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.CMSG_BUY_BANK_SLOT, 0x00FE},
             {Opcode.CMSG_BUYBACK_ITEM, 0x07D7},
             {Opcode.CMSG_CALENDAR_ADD_EVENT, 0x16D0},
-            {Opcode.CMSG_CALENDAR_GET_CALENDAR, 0x0429}, //??
+            {Opcode.CMSG_CALENDAR_GET_CALENDAR, 0x0429 | 0x10000}, //??
             {Opcode.CMSG_CANCEL_AURA, 0x16E1},
             {Opcode.CMSG_CANCEL_CAST, 0x12EB | 0x10000},
             {Opcode.CMSG_CANCEL_TRADE, 0x1D32},
@@ -62,7 +62,8 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.CMSG_GAME_STORE_BUY, 0x1A83 | 0x10000}, // correct name?
             {Opcode.CMSG_GAME_STORE_LIST, 0x1993},
             {Opcode.CMSG_GET_MAIL_LIST, 0x07DD},
-            {Opcode.CMSG_GM_REQUEST_PLAYER_INFO, 0x022F}, //??
+            {Opcode.CMSG_GET_TIMEZONE_INFORMATION, 0x18B2},
+            {Opcode.CMSG_GM_REQUEST_PLAYER_INFO, 0x022F | 0x10000}, //??
             {Opcode.CMSG_GOSSIP_HELLO, 0x05F6},
             {Opcode.CMSG_GOSSIP_SELECT_OPTION, 0x02D7},
             {Opcode.CMSG_GROUP_ASSISTANT_LEADER, 0x0DBB},
@@ -126,16 +127,14 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.CMSG_MESSAGECHAT_SAY, 0x0C41},
             {Opcode.CMSG_MESSAGECHAT_WHISPER, 0x0D60 | 0x10000},
             {Opcode.CMSG_MESSAGECHAT_YELL, 0x0C43 | 0x10000},
-            {Opcode.CMSG_MOVE_CHARM_TELEPORT_CHEAT, 0x00E0}, //??
+            {Opcode.CMSG_MOVE_CHARM_TELEPORT_CHEAT, 0x00E0 | 0x10000}, //??
             {Opcode.CMSG_MOVE_TIME_SKIPPED, 0x0152},
             {Opcode.CMSG_NAME_QUERY, 0x0DB3 | 0x10000},
             {Opcode.CMSG_NPC_TEXT_QUERY, 0x12FA},
             {Opcode.CMSG_OBJECT_UPDATE_FAILED, 0x0882},
-            {Opcode.CMSG_PAGE_TEXT_QUERY, 0x005A}, //??
             {Opcode.CMSG_QUERY_INSPECT_ACHIEVEMENTS, 0x047E},
             {Opcode.CMSG_QUERY_GUILD_REWARDS, 0x171B},
             {Opcode.CMSG_QUERY_GUILD_XP, 0x1D37},
-            {Opcode.CMSG_QUERY_SERVER_BUCK_DATA, 0x041B}, //??
             {Opcode.CMSG_QUERY_TIME, 0x03FD},
             {Opcode.CMSG_QUEST_NPC_QUERY, 0x16B8},
             {Opcode.CMSG_QUEST_POI_QUERY, 0x1DA8},
@@ -179,10 +178,9 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.CMSG_SET_CONTACT_NOTES, 0x03A4},
             {Opcode.CMSG_SET_DUNGEON_DIFFICULTY, 0x1898},
             {Opcode.CMSG_SET_RAID_DIFFICULTY, 0x08A3}, //0274??
-            {Opcode.CMSG_SET_RUNE_COOLDOWN, 0x0459}, //??
             {Opcode.CMSG_SET_SELECTION, 0x10D5},
             {Opcode.CMSG_SET_SPECIALIZATION, 0x04AA},
-            {Opcode.CMSG_STABLE_SWAP_PET, 0x0275}, //??
+            //{Opcode.CMSG_STABLE_SWAP_PET, 0x0275}, //??
             {Opcode.CMSG_STANDSTATECHANGE, 0x157A | 0x10000},
             {Opcode.CMSG_TEXT_EMOTE, 0x037D},
             {Opcode.CMSG_TIME_SYNC_RESP, 0x0413},
@@ -191,10 +189,8 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.CMSG_TRAINER_LIST, 0x075E},
             {Opcode.CMSG_TUTORIAL_FLAG, 0x07A4},
             {Opcode.CMSG_UI_TIME_REQUEST, 0x1CA3},
-            {Opcode.CMSG_UNACCEPT_TRADE, 0x011B}, //??
             {Opcode.CMSG_UNREGISTER_ALL_ADDON_PREFIXES, 0x072B | 0x10000},
             {Opcode.CMSG_USE_ITEM, 0x15E3},
-            {Opcode.CMSG_UPDATE_ACCOUNT_DATA, 0x18B2},
             {Opcode.CMSG_ITEM_UPGRADE, 0x11E9},
             {Opcode.CMSG_VIOLENCE_LEVEL, 0x05A0},
             {Opcode.CMSG_VOID_STORAGE_UNLOCK, 0x13F2},
@@ -233,8 +229,7 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.MSG_MOVE_TELEPORT, 0x00D5 | 0x10000}, // 5.4.7 17956
             {Opcode.MSG_MOVE_TELEPORT_ACK, 0x0978}, // 5.4.7 17956
             {Opcode.MSG_MOVE_WORLDPORT_ACK, 0x18BB},
-            {Opcode.MSG_QUERY_GUILD_BANK_TEXT, 0x040A}, //??
-            {Opcode.MSG_SET_DUNGEON_DIFFICULTY, 0x1898}, //??
+            {Opcode.MSG_QUERY_GUILD_BANK_TEXT, 0x040A | 0x10000}, //??
             {Opcode.MSG_SET_RAID_DIFFICULTY, 0x16A6}, //??
 
             {Opcode.SMSG_ACCOUNT_DATA_TIMES, 0x0F40},
@@ -269,9 +264,9 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.SMSG_BLACK_MARKET_REQUEST_ITEMS_RESULT, 0x165A},
             {Opcode.SMSG_BLACKMARKET_BID_RESULT, 0x64B},
             {Opcode.SMSG_BLACKMARKET_BID_WON, 0x4A9},
-            {Opcode.SMSG_BREAK_TARGET, 0x0152}, //??
+            {Opcode.SMSG_BREAK_TARGET, 0x0152 | 0x20000}, //??
             {Opcode.SMSG_BUY_ITEM, 0x0763},
-            {Opcode.SMSG_CALENDAR_FILTER_GUILD, 0x0438}, //??
+            {Opcode.SMSG_CALENDAR_FILTER_GUILD, 0x0438 | 0x20000}, //??
             {Opcode.SMSG_CANCEL_COMBAT, 0x04E0},
             {Opcode.SMSG_CAST_FAILED, 0x0560},
             {Opcode.SMSG_CHALLENGE_MODE_MAP_STATS_UPDATE, 0x0C9A}, // new in MoP
@@ -308,7 +303,6 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.SMSG_FEATURE_SYSTEM_STATUS, 0x1560},
             {Opcode.SMSG_FRIEND_STATUS, 0x0707},
             {Opcode.SMSG_FLIGHT_SPLINE_SYNC, 0x0992 | 0x20000},
-            {Opcode.SMSG_FORCE_DISPLAY_UPDATE, 0x0403}, //??
             {Opcode.SMSG_FORCE_SEND_QUEUED_PACKETS, 0x01B9},
             {Opcode.SMSG_GROUP_CANCEL, 0x0071},
             {Opcode.SMSG_INITIALIZE_FACTIONS, 0x11E1},
@@ -501,7 +495,6 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.SMSG_VOID_STORAGE_TRANSFER_CHANGES, 0x05A8},
             {Opcode.SMSG_VOID_TRANSFER_RESULT, 0x00E3},
             {Opcode.SMSG_XP_GAIN_ABORTED, 0x1E32},
-            {Opcode.SMSG_ZONE_UNDER_ATTACK, 0x0254}, //??
             {Opcode.CMSG_SWAP_INV_ITEM, 0x150A},
             {Opcode.CMSG_SWAP_ITEM, 0x1403},
             {Opcode.CMSG_AUTOSTORE_BAG_ITEM, 0x162B},
