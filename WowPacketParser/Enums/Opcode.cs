@@ -911,6 +911,7 @@ namespace WowPacketParser.Enums
         CMSG_UNK_115B,
         CMSG_UNK_12B3,
         CMSG_UNK_1341,
+        CMSG_UNK_1370,
         CMSG_UNK_1446,
         CMSG_UNK_15DB,
         CMSG_UNK_17BA,

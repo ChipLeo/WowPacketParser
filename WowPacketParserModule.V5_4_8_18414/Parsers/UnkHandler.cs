@@ -81,6 +81,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBoolean("Unk");
         }
 
+        [Parser(Opcode.CMSG_UNK_1370)]
+        public static void HandleUnk1370(Packet packet)
+        {
+            packet.ReadEntry<UInt32>(StoreNameType.Quest, "Quest ID"); // 24
+            packet.ReadByte("unk28"); // 28
+            var guid = packet.StartBitStream(5, 3, 0, 6, 1, 2, 7, 4);
+            packet.ParseBitStream(guid, 1, 2, 0, 5, 6, 4, 7, 3);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.CMSG_UNK_15DB)]
         public static void HandleUnk15DB(Packet packet)
         {

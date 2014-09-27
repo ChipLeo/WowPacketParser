@@ -346,6 +346,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_115B,                                 0x115B | 0x10000}, //++
             {Opcode.CMSG_UNK_12B3,                                 0x12B3 | 0x10000}, //++
             {Opcode.CMSG_UNK_1341,                                 0x1341 | 0x10000}, //++
+            {Opcode.CMSG_UNK_1370,                                 0x1370 | 0x10000}, //++
             {Opcode.CMSG_UNK_1446,                                 0x1446 | 0x10000}, //+-
             {Opcode.CMSG_VOICE_SESSION_ENABLE,                     0x15A9 | 0x10000}, //++
             {Opcode.CMSG_UNK_15DB,                                 0x15DB | 0x10000}, //++
