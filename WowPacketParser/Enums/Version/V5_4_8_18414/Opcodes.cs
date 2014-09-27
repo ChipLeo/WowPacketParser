@@ -561,7 +561,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_LEARNED_DANCE_MOVES,                      0x043F | 0x20000}, //++
             {Opcode.SMSG_LEARNED_SPELL,                            0x129A | 0x20000}, //++
             {Opcode.SMSG_LEVELUP_INFO,                             0x1961 | 0x20000}, //++
-            {Opcode.SMSG_LF_GUILD_APPLICATIONS_LIST_UPDATED,       0x0AE0 | 0x20000}, //
+            {Opcode.SMSG_LF_GUILD_APPLICATIONS_LIST_UPDATED,       0x0AE0 | 0x20000}, //++
             {Opcode.SMSG_LF_GUILD_APPLICATIONS_LIST_CHANGED,       0x1A70 | 0x20000}, //
             {Opcode.SMSG_LF_GUILD_BROWSE_UPDATED,                  0x0F69 | 0x20000}, //
             {Opcode.SMSG_LFG_JOIN_RESULT,                          0x18E3 | 0x20000}, //--
