@@ -847,6 +847,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_1943,                                 0x1943 | 0x20000}, //++
             {Opcode.SMSG_UNK_1A1E,                                 0x1A1E | 0x20000}, //++ pair CMSG 0882
             {Opcode.SMSG_UNK_1A2B,                                 0x1A2B | 0x20000}, //++ hunter pet opcode
+            {Opcode.SMSG_UNK_1A9F,                                 0x1A9F | 0x20000}, //++
             {Opcode.SMSG_UNK_1ABB,                                 0x1ABB | 0x20000}, //++
             {Opcode.SMSG_UNK_1C0E,                                 0x1C0E | 0x20000}, //++
             {Opcode.SMSG_UNK_1CAF,                                 0x1CAF | 0x20000}, //++
