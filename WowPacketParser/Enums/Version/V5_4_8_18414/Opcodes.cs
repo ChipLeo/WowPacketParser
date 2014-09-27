@@ -384,6 +384,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_NULL_1207,                                0x1207 | 0x10000}, //+-
             {Opcode.CMSG_NULL_1272,                                0x1272 | 0x10000}, //+- hunter pet opcode
             {Opcode.CMSG_NULL_135B,                                0x135B | 0x10000}, //+-
+            {Opcode.CMSG_NULL_1362,                                0x1362 | 0x10000}, //++
             {Opcode.CMSG_NULL_1452,                                0x1452 | 0x10000}, //+-
             {Opcode.CMSG_NULL_14DB,                                0x14DB | 0x10000}, //+-
             {Opcode.CMSG_NULL_14E0,                                0x14E0 | 0x10000}, //+-
