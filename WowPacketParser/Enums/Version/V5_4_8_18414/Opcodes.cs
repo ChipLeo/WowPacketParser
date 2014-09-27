@@ -835,6 +835,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_158E,                                 0x158E | 0x20000}, //++
             {Opcode.SMSG_UNK_15A9,                                 0x15A9 | 0x20000}, //--
             {Opcode.SMSG_UNK_15E2,                                 0x15E2 | 0x20000}, //++
+            {Opcode.SMSG_UNK_15E3,                                 0x15E3 | 0x20000}, //++
             {Opcode.SMSG_UNK_1613,                                 0x1613 | 0x20000}, //++
             {Opcode.SMSG_UNK_163F,                                 0x163F | 0x20000}, //++
             {Opcode.SMSG_UNK_168A,                                 0x168A | 0x20000}, //++ pair 1C5A

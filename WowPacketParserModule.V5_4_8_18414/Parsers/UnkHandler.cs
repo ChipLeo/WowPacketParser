@@ -1217,6 +1217,17 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
+        [Parser(Opcode.SMSG_UNK_15E3)]
+        public static void HandleSUnk15E3(Packet packet)
+        {
+            var count = packet.ReadBits("count", 23);
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadByte("unk21"); // 21
+                packet.ReadByte("unk20"); // 20
+            }
+        }
+
         [Parser(Opcode.SMSG_UNK_163F)]
         public static void HandleSUnk163F(Packet packet)
         {
