@@ -807,6 +807,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0E1B,                                 0x0E1B | 0x20000}, //++
             {Opcode.SMSG_UNK_0E2A,                                 0x0E2A | 0x20000}, //++
             {Opcode.SMSG_UNK_0E3A,                                 0x0E3A | 0x20000}, //++
+            {Opcode.SMSG_UNK_0E70,                                 0x0E70 | 0x20000}, //++ guild
             {Opcode.SMSG_UNK_0EAA,                                 0x0EAA | 0x20000}, //++
             {Opcode.SMSG_UNK_0EAB,                                 0x0EAB | 0x20000}, //++
             {Opcode.SMSG_UNK_0EBA,                                 0x0EBA | 0x20000}, //++

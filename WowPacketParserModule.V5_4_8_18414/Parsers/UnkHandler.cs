@@ -851,6 +851,24 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_UNK_0E70)]
+        public static void HandleSUnk0E70(Packet packet)
+        {
+            var guid120 = new byte[8];
+            guid120[0] = packet.ReadBit();
+            guid120[7] = packet.ReadBit();
+            guid120[3] = packet.ReadBit();
+            guid120[1] = packet.ReadBit();
+            guid120[5] = packet.ReadBit();
+            guid120[6] = packet.ReadBit();
+            var count16 = packet.ReadBits("count16", 7);
+            guid120[2] = packet.ReadBit();
+            guid120[4] = packet.ReadBit();
+            packet.ReadWoWString("str", count16);
+            packet.ParseBitStream(guid120, 3, 2, 6, 7, 5, 0, 1, 4);
+            packet.WriteGuid("Guid", guid120);
+        }
+
         [Parser(Opcode.SMSG_UNK_0EAA)]
         public static void HandleSUnk0EAA(Packet packet)
         {
