@@ -13,14 +13,10 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.CMSG_INSPECT)]
         public static void HandleInspect(Packet packet)
         {
-            if (packet.Direction == Direction.ClientToServer)
-            {
-                var guid = packet.StartBitStream(5, 0, 7, 4, 6, 2, 1, 3);
-                packet.ParseBitStream(guid, 5, 6, 3, 4, 0, 1, 7, 2);
+            var guid = packet.StartBitStream(5, 0, 7, 4, 6, 2, 1, 3);
+            packet.ParseBitStream(guid, 5, 6, 3, 4, 0, 1, 7, 2);
 
-                packet.WriteGuid("Guid", guid);
-            }
-            else packet.Opcode = (int)Opcode.CMSG_INSPECT;
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_LOAD_SCREEN)]
@@ -37,19 +33,10 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.CMSG_LOG_DISCONNECT)]
         public static void HandleLogDisconnect(Packet packet)
         {
-            if (packet.Direction == Direction.ClientToServer)
-            {
-                packet.ReadUInt32("Disconnect Reason");
-                // 4 is inability for client to decrypt RSA
-                // 3 is not receiving "WORLD OF WARCRAFT CONNECTION - SERVER TO CLIENT"
-                // 11 is sent on receiving opcode 0x140 with some specific data
-            }
-            else
-            {
-                packet.WriteLine("              : SMSG_GUILD_COMMAND_RESULT");
-                packet.Opcode = (int)Opcode.SMSG_GUILD_COMMAND_RESULT;
-                packet.ReadToEnd();
-            }
+            packet.ReadUInt32("Disconnect Reason");
+            // 4 is inability for client to decrypt RSA
+            // 3 is not receiving "WORLD OF WARCRAFT CONNECTION - SERVER TO CLIENT"
+            // 11 is sent on receiving opcode 0x140 with some specific data
         }
 
         [Parser(Opcode.CMSG_PING)]
@@ -146,21 +133,16 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_GOSSIP_COMPLETE)]
         public static void HandleGossipComplete(Packet packet)
         {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_UNK_0130)]
         public static void HandleUnk0130(Packet packet)
         {
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_UNK_022F)]
         public static void HandleUnk022F(Packet packet)
         {
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_UNK_04AB)]
@@ -172,8 +154,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_UNK_0851)]
         public static void HandleUnk0851(Packet packet)
         {
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_UNK_10E3)]
@@ -189,15 +169,11 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_UNK_12D8)]
         public static void HandleUnk12D8(Packet packet)
         {
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_UNK_12F9)]
         public static void HandleUnk12F9(Packet packet)
         {
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_UNK_1609)]
@@ -211,8 +187,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_UNK_1725)]
         public static void HandleUnk1725(Packet packet)
         {
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_UNK_1D13)]

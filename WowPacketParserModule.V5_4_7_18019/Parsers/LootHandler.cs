@@ -34,18 +34,9 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.CMSG_LOOT, ClientVersionBuild.V5_1_0_16309)]
         public static void HandleLoot510(Packet packet)
         {
-            if (packet.Direction == Direction.ClientToServer)
-            {
-                var guid = packet.StartBitStream(1, 2, 7, 3, 6, 0, 4, 5);
-                packet.ParseBitStream(guid, 1, 3, 5, 4, 0, 7, 6, 2);
-                packet.WriteGuid("GUID", guid);
-            }
-            else
-            {
-                packet.WriteLine("              : SMSG_???");
-                //packet.Opcode = (int)Opcode.CMSG_MOUNTSPECIAL_ANIM;
-                packet.ReadToEnd();
-            }
+            var guid = packet.StartBitStream(1, 2, 7, 3, 6, 0, 4, 5);
+            packet.ParseBitStream(guid, 1, 3, 5, 4, 0, 7, 6, 2);
+            packet.WriteGuid("GUID", guid);
         }
 
         [Parser(Opcode.CMSG_LOOT_RELEASE, ClientVersionBuild.V5_1_0_16309)]

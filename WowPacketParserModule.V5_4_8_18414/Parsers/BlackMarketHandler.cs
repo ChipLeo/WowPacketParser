@@ -102,7 +102,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_BLACKMARKET_BID_RESULT)]
         public static void HandleBlackMarketBidResult(Packet packet)
         {
-            packet.ReadToEnd();
         }
     }
 }

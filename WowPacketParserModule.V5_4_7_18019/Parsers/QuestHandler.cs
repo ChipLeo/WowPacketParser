@@ -14,7 +14,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.CMSG_QUEST_POI_QUERY)]
         public static void HandleQuestPoiQuery(Packet packet)
         {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.CMSG_QUESTGIVER_ACCEPT_QUEST)]
@@ -107,15 +106,11 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_QUESTGIVER_QUEST_COMPLETE)]
         public static void HandleQuestCompleted(Packet packet)
         {
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_QUESTGIVER_QUEST_DETAILS)]
         public static void HandleQuestgiverDetails510(Packet packet)
         {
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.CMSG_QUESTGIVER_REQUEST_REWARD)]
@@ -152,21 +147,12 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.CMSG_QUEST_QUERY)]
         public static void HandleQuestQuery(Packet packet)
         {
-            if (packet.Direction == Direction.ClientToServer)
-            {
-                packet.ReadInt32("QuestID");
+            packet.ReadInt32("QuestID");
 
-                var guid = packet.StartBitStream(2, 3, 5, 1, 7, 0, 6, 4);
-                packet.ParseBitStream(guid, 4, 2, 1, 3, 5, 7, 0, 6);
+            var guid = packet.StartBitStream(2, 3, 5, 1, 7, 0, 6, 4);
+            packet.ParseBitStream(guid, 4, 2, 1, 3, 5, 7, 0, 6);
 
-                packet.WriteGuid("NPC Guid", guid);
-            }
-            else
-            {
-                packet.WriteLine("              : SMSG_???");
-                //packet.Opcode = (int)Opcode.CMSG_MOUNTSPECIAL_ANIM;
-                packet.ReadToEnd();
-            }
+            packet.WriteGuid("NPC Guid", guid);
         }
 
         [Parser(Opcode.CMSG_REFORGE_ITEM)]

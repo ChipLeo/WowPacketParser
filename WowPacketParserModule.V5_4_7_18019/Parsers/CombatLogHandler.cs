@@ -82,24 +82,18 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         public static void HandlePeriodicAuraLog(Packet packet)
         {
             //ReadPeriodicAuraLog(ref packet);
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_SPELLNONMELEEDAMAGELOG)]
         public static void HandleSpellNonMeleeDmgLog(Packet packet)
         {
             //ReadSpellNonMeleeDamageLog(ref packet);
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_SPELLHEALLOG)]
         public static void HandleSpellHealLog(Packet packet)
         {
             //ReadSpellHealLog(ref packet);
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_SPELLENERGIZELOG)]
@@ -117,7 +111,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_SPELLLOGEXECUTE)]
         public static void HandleSpellLogExecute(Packet packet)
         {
-            packet.ReadToEnd();
         }
 
         // Unknown opcode name(s)

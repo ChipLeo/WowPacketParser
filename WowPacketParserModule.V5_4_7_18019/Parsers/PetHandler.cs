@@ -67,7 +67,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_PET_NAME_QUERY_RESPONSE)]
         public static void HandlePetNameQueryResponse(Packet packet)
         {
-            packet.ReadToEnd();
         }
     }
 }

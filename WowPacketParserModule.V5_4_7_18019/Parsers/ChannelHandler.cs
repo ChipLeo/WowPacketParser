@@ -33,8 +33,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_CHANNEL_LIST)]
         public static void HandleChannelSendList(Packet packet)
         {
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_CHANNEL_MEMBER_COUNT)]

@@ -14,7 +14,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.CMSG_LFG_GET_STATUS)]
         public static void HandleLFGGetStatus(Packet packet)
         {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.CMSG_LFG_JOIN)]
@@ -43,39 +42,20 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         }
 
         [Parser(Opcode.CMSG_MESSAGECHAT_WHISPER)]
-        public static void HandleClientChatMessageWhisper434(Packet packet)
+        public static void HandleClientChatMessageWhisper(Packet packet)
         {
-            if (packet.Direction == Direction.ClientToServer)
-            {
-                packet.ReadEnum<ChatMessageType>("Type", TypeCode.UInt32);
-                var recvName = packet.ReadBits(10);
-                var msgLen = packet.ReadBits(9);
+            packet.ReadEnum<ChatMessageType>("Type", TypeCode.UInt32);
+            var recvName = packet.ReadBits(10);
+            var msgLen = packet.ReadBits(9);
 
-                packet.ReadWoWString("Receivers Name", recvName);
-                packet.ReadWoWString("Message", msgLen);
-            }
-            else
-            {
-                packet.WriteLine("              : SMSG_???");
-                //packet.Opcode = (int)Opcode.CMSG_MOUNTSPECIAL_ANIM;
-                packet.ReadToEnd();
-            }
+            packet.ReadWoWString("Receivers Name", recvName);
+            packet.ReadWoWString("Message", msgLen);
         }
 
         [Parser(Opcode.CMSG_MESSAGECHAT_RAID)]
         [Parser(Opcode.CMSG_MESSAGECHAT_YELL)]
         public static void HandleClientChatMessageYell(Packet packet)
         {
-            if (packet.Direction == Direction.ClientToServer)
-            {
-                packet.ReadToEnd();
-            }
-            else
-            {
-                packet.WriteLine("              : SMSG_???");
-                //packet.Opcode = (int)Opcode.CMSG_MOUNTSPECIAL_ANIM;
-                packet.ReadToEnd();
-            }
         }
 
         [Parser(Opcode.CMSG_TEXT_EMOTE)]
@@ -89,8 +69,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_TEXT_EMOTE)]
         public static void HandleTextEmoteServer(Packet packet)
         {
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
     }

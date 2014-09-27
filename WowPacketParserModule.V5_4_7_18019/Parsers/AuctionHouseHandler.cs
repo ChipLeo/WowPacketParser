@@ -11,19 +11,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         // TODO: Use this in more places
         private static readonly TypeCode _auctionSize = ClientVersion.AddedInVersion(ClientVersionBuild.V4_0_6a_13623) ? TypeCode.UInt64 : TypeCode.UInt32;
 
-        [Parser(Opcode.MSG_AUCTION_HELLO)]
-        public static void HandleAuctionHello(Packet packet)
-        {
-            packet.ReadGuid("GUID");
-            if (packet.Direction == Direction.ClientToServer)
-                return;
-
-            packet.ReadUInt32("AuctionHouse ID");
-
-            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_3_0_10958))
-                packet.ReadBoolean("Enabled");
-        }
-
         [Parser(Opcode.CMSG_AUCTION_SELL_ITEM)]
         public static void HandleAuctionSellItem(Packet packet)
         {
@@ -100,12 +87,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
 
             // I think Blizz got this wrong. Auction Id should be 64 on 4.x, not price.
             packet.ReadValue("Price", _auctionSize);
-        }
-
-        [Parser(Opcode.SMSG_AUCTION_COMMAND_RESULT)]
-        public static void HandleAuctionCommandResult(Packet packet)
-        {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_AUCTION_BIDDER_NOTIFICATION)]
@@ -196,12 +177,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         public static void HandleAuctionListPendingSales(Packet packet)
         {
             packet.ReadGuid("GUID");
-        }
-
-        [Parser(Opcode.SMSG_AUCTION_LIST_PENDING_SALES)]
-        public static void HandleAuctionListPendingSalesResult(Packet packet)
-        {
-            packet.ReadToEnd();
         }
     }
 }

@@ -12,8 +12,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.CMSG_GROUP_INVITE_RESPONSE)]
         public static void HandleGroupInviteResponse(Packet packet)
         {
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.CMSG_GROUP_SET_ROLES, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]

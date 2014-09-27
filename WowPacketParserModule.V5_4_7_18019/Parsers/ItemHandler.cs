@@ -42,48 +42,39 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.CMSG_AUTOSTORE_LOOT_ITEM)]
         public static void HandleAutoStoreLootItem547(Packet packet)
         {
-            if (packet.Direction == Direction.ClientToServer)
+            var counter = packet.ReadBits("Count", 23);
+
+            var guid = new byte[counter][];
+
+            for (var i = 0; i < counter; ++i)
             {
-                var counter = packet.ReadBits("Count", 23);
+                guid[i] = new byte[8];
 
-                var guid = new byte[counter][];
-
-                for (var i = 0; i < counter; ++i)
-                {
-                    guid[i] = new byte[8];
-
-                    guid[i][2] = packet.ReadBit();
-                    guid[i][1] = packet.ReadBit();
-                    guid[i][5] = packet.ReadBit();
-                    guid[i][7] = packet.ReadBit();
-                    guid[i][4] = packet.ReadBit();
-                    guid[i][3] = packet.ReadBit();
-                    guid[i][0] = packet.ReadBit();
-                    guid[i][6] = packet.ReadBit();
-                }
-
-                packet.ResetBitReader();
-
-                for (var i = 0; i < counter; ++i)
-                {
-                    packet.ReadXORByte(guid[i], 0);
-                    packet.ReadXORByte(guid[i], 3);
-                    packet.ReadByte("Slot", i);
-                    packet.ReadXORByte(guid[i], 7);
-                    packet.ReadXORByte(guid[i], 2);
-                    packet.ReadXORByte(guid[i], 4);
-                    packet.ReadXORByte(guid[i], 1);
-                    packet.ReadXORByte(guid[i], 6);
-                    packet.ReadXORByte(guid[i], 5);
-
-                    packet.WriteGuid("Lootee GUID", guid[i], i);
-                }
+                guid[i][2] = packet.ReadBit();
+                guid[i][1] = packet.ReadBit();
+                guid[i][5] = packet.ReadBit();
+                guid[i][7] = packet.ReadBit();
+                guid[i][4] = packet.ReadBit();
+                guid[i][3] = packet.ReadBit();
+                guid[i][0] = packet.ReadBit();
+                guid[i][6] = packet.ReadBit();
             }
-            else
+
+            packet.ResetBitReader();
+
+            for (var i = 0; i < counter; ++i)
             {
-                packet.WriteLine("              : SMSG_???");
-                //packet.Opcode = (int)Opcode.CMSG_MOUNTSPECIAL_ANIM;
-                packet.ReadToEnd();
+                packet.ReadXORByte(guid[i], 0);
+                packet.ReadXORByte(guid[i], 3);
+                packet.ReadByte("Slot", i);
+                packet.ReadXORByte(guid[i], 7);
+                packet.ReadXORByte(guid[i], 2);
+                packet.ReadXORByte(guid[i], 4);
+                packet.ReadXORByte(guid[i], 1);
+                packet.ReadXORByte(guid[i], 6);
+                packet.ReadXORByte(guid[i], 5);
+
+                packet.WriteGuid("Lootee GUID", guid[i], i);
             }
         }
 
@@ -366,7 +357,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.CMSG_USE_ITEM)]
         public static void HandleUseItem2(Packet packet)
         {
-            packet.ReadToEnd();
         }
 
         [HasSniffData]
@@ -565,7 +555,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_INVENTORY_CHANGE_FAILURE)]
         public static void HandleInventoryChangeFailure(Packet packet)
         {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_ITEM_PUSH_RESULT)]

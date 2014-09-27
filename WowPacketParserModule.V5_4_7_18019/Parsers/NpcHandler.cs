@@ -280,8 +280,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_TRAINER_BUY_SUCCEEDED)]
         public static void HandleServerTrainerBuySucceedeed(Packet packet)
         {
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_TRAINER_LIST)]

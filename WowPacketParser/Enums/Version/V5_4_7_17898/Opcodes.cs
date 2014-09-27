@@ -99,7 +99,7 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.CMSG_GUILD_ROSTER, 0x19BC},
             {Opcode.CMSG_GUILD_SET_GUILD_MASTER, 0x189B},
             {Opcode.CMSG_GUILD_SET_RANK_PERMISSIONS, 0x19BD},
-            {Opcode.CMSG_INSPECT, 0x01D4},
+            {Opcode.CMSG_INSPECT, 0x01D4 | 0x10000},
             {Opcode.CMSG_INSPECT_HONOR_STATS, 0x141A},
             {Opcode.CMSG_ITEM_REFUND_INFO, 0x10DC},
             {Opcode.CMSG_JOIN_CHANNEL, 0x1D20},

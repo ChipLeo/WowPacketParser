@@ -16,7 +16,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.CMSG_GUILD_ROSTER)]
         public static void HandleGuildAccept(Packet packet)
         {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.CMSG_GUILD_ADD_RANK)]
@@ -240,15 +239,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_GUILD_ROSTER)]
         public static void HandleGuildRoster(Packet packet)
         {
-            if (packet.Direction == Direction.ServerToClient)
-            {
-                packet.ReadToEnd();
-            }
-            else
-            {
-                packet.WriteLine("              : CMSG_???");
-                packet.ReadToEnd();
-            }
         }
     }
 }

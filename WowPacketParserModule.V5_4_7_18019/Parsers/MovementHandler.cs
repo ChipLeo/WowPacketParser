@@ -17,10 +17,8 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         }
 
         [Parser(Opcode.MSG_MOVE_SET_FACING)]
-        public static void HandleMoveSetFacing434(Packet packet)
+        public static void HandleMoveSetFacing(Packet packet)
         {
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_CLIENT_CONTROL_UPDATE)]
@@ -83,23 +81,11 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_MOVE_SET_SWIM_SPEED)]
         public static void HandleMoveSetSwimSpeed(Packet packet)
         {
-            if (packet.Direction == Direction.ServerToClient)
-            {
-                packet.ReadSingle("Speed");
-                packet.ReadInt32("Counter");
-                var guid = packet.StartBitStream(4, 7, 6, 3, 5, 2, 0, 1);
-                packet.ParseBitStream(guid, 1, 6, 5, 2, 0, 3, 4, 7);
-                packet.WriteGuid("Guid", guid);
-            }
-            else
-            {
-                packet.WriteLine("              : CMSG_INSPECT");
-                packet.Opcode = (int)Opcode.CMSG_INSPECT;
-                var guid = packet.StartBitStream(5, 0, 7, 4, 6, 2, 1, 3);
-                packet.ParseBitStream(guid, 5, 6, 3, 4, 0, 1, 7, 2);
-
-                packet.WriteGuid("Guid", guid);
-            }
+            packet.ReadSingle("Speed");
+            packet.ReadInt32("Counter");
+            var guid = packet.StartBitStream(4, 7, 6, 3, 5, 2, 0, 1);
+            packet.ParseBitStream(guid, 1, 6, 5, 2, 0, 3, 4, 7);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_MOVE_SET_WALK_SPEED)]
@@ -139,8 +125,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_PLAYER_MOVE)]
         public static void HandlePlayerMove(Packet packet)
         {
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_SPLINE_MOVE_SET_PITCH_RATE)] //??? maybe other name

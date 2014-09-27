@@ -13,9 +13,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_CHANNEL_UNSILENCE_ALL)]
         public static void HandleChannelSilencing(Packet packet)
         {
-            /*packet.ReadCString("Channel Name");
-            packet.ReadCString("Player Name");*/
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.CMSG_CHANNEL_ROSTER_INFO)]
@@ -34,23 +31,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_CHANNEL_DISPLAY_LIST)]
         public static void HandleChannelMisc(Packet packet)
         {
-            //packet.ReadCString("Channel Name");
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_CHANNEL_LIST)]
         public static void HandleChannelSendList(Packet packet)
         {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_CHANNEL_MEMBER_COUNT)]
         public static void HandleChannelMemberCount(Packet packet)
         {
-            /*packet.ReadCString("Channel Name");
-            packet.ReadEnum<ChannelFlag>("Flags", TypeCode.Byte);
-            packet.ReadInt32("Unk int32");*/
-            packet.ReadToEnd();
         }
 
         /*[Parser(Opcode.SMSG_CHANNEL_NOTIFY)]
@@ -145,11 +135,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_CHANNEL_BAN)]
         public static void HandleChannelBan(Packet packet)
         {
-            /*var channelLength = packet.ReadBits(8);
-            var nameLength = packet.ReadBits(7);
-            packet.ReadWoWString("Channel", channelLength);
-            packet.ReadWoWString("Player to ban", nameLength);*/
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.CMSG_JOIN_CHANNEL)]
@@ -168,53 +153,27 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_LEAVE_CHANNEL)]
         public static void HandleChannelLeave(Packet packet)
         {
-            /*packet.ReadInt32("Channel Id");
-            packet.ReadCString("Channel Name");*/
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_USERLIST_REMOVE)]
         public static void HandleChannelUserListRemove(Packet packet)
         {
-            /*packet.ReadGuid("GUID");
-            packet.ReadEnum<ChannelFlag>("Flags", TypeCode.Byte);
-            packet.ReadInt32("Counter");
-            packet.ReadCString("Channel Name");*/
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_USERLIST_ADD)]
         [Parser(Opcode.SMSG_USERLIST_UPDATE)]
         public static void HandleChannelUserListAdd(Packet packet)
         {
-            /*packet.ReadGuid("GUID");
-            packet.ReadEnum<ChannelMemberFlag>("Member Flags", TypeCode.Byte);
-            packet.ReadEnum<ChannelFlag>("Flags", TypeCode.Byte);
-            packet.ReadInt32("Counter");
-            packet.ReadCString("Channel Name");*/
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.CMSG_CHANNEL_PASSWORD)]
         public static void HandleChannelPassword(Packet packet)
         {
-            /*var channelLen = packet.ReadBits(8);
-            var passLen = packet.ReadBits(7);
-
-            packet.ReadWoWString("Channel Name", channelLen);
-            packet.ReadWoWString("Password", passLen);*/
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.CMSG_CHANNEL_INVITE)]
         public static void HandleChannelInvite(Packet packet)
         {
-            /*var nameLen = packet.ReadBits(7);
-            var channelLen = packet.ReadBits(8);
-
-            packet.ReadWoWString("Name", nameLen);
-            packet.ReadWoWString("Channel Name", channelLen);*/
-            packet.ReadToEnd();
         }
     }
 }

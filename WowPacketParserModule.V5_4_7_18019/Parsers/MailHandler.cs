@@ -24,8 +24,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.CMSG_GET_MAIL_LIST)]
         public static void HandleGetMailList(Packet packet)
         {
-            packet.AsHex();
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.CMSG_MAIL_TAKE_MONEY)]
@@ -43,22 +41,12 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.CMSG_MAIL_CREATE_TEXT_ITEM)]
         public static void HandleMailCreate(Packet packet)
         {
-            if (packet.Direction == Direction.ClientToServer)
-            {
-                packet.ReadUInt32("Mail Id");
+            packet.ReadUInt32("Mail Id");
 
-                var guid = packet.StartBitStream(3, 1, 0, 7, 4, 5, 2, 6);
-                packet.ParseBitStream(guid, 7, 0, 4, 6, 5, 2, 3, 1);
+            var guid = packet.StartBitStream(3, 1, 0, 7, 4, 5, 2, 6);
+            packet.ParseBitStream(guid, 7, 0, 4, 6, 5, 2, 3, 1);
 
-                packet.WriteGuid("Guid Target", guid);
-            }
-            else
-            {
-                packet.WriteLine("              : SMSG_???");
-                //packet.Opcode = (int)Opcode.CMSG_LOOT_MONEY;
-                packet.ReadToEnd();
-            }
-
+            packet.WriteGuid("Guid Target", guid);
         }
 
         [Parser(Opcode.CMSG_MAIL_MARK_AS_READ)]
@@ -86,18 +74,9 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.CMSG_MAIL_DELETE)]
         public static void HandleMailDelete(Packet packet)
         {
-            if (packet.Direction == Direction.ClientToServer)
-            {
-                //packet.ReadGuid("Mailbox GUID");
-                packet.ReadUInt32("Template Id");
-                packet.ReadUInt32("Mail Id");
-            } 
-            else
-            {
-                packet.WriteLine("              : SMSG_???");
-                //packet.Opcode = (int)Opcode.CMSG_MOUNTSPECIAL_ANIM;
-                packet.ReadToEnd();
-            }
+            //packet.ReadGuid("Mailbox GUID");
+            packet.ReadUInt32("Template Id");
+            packet.ReadUInt32("Mail Id");
         }
 
         [Parser(Opcode.CMSG_MAIL_RETURN_TO_SENDER)]

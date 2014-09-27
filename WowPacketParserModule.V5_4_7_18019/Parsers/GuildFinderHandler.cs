@@ -7,24 +7,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
 {
     public static class GuildFinderHandler
     {
-
-        [Parser(Opcode.CMSG_LF_GUILD_BROWSE)]
-        public static void HandleGuildFinderBrowse(Packet packet)
-        {
-            if (packet.Direction == Direction.ClientToServer)
-            {
-                packet.ReadEnum<GuildFinderOptionsRoles>("Class Roles", TypeCode.UInt32);
-                packet.ReadEnum<GuildFinderOptionsAvailability>("Availability", TypeCode.UInt32);
-                packet.ReadEnum<GuildFinderOptionsInterest>("Guild Interests", TypeCode.UInt32);
-                packet.ReadUInt32("Player Level");
-            }
-            else
-            {
-                packet.WriteLine("              : SMSG_???");
-                packet.ReadToEnd();
-            }
-        }
-
         [Parser(Opcode.CMSG_LF_GUILD_SET_GUILD_POST, ClientVersionBuild.V4_2_2_14545, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleGuildFinderSetGuildPost422(Packet packet)
         {
@@ -370,25 +352,5 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
 
             packet.WriteGuid("Guild GUID", guid);
         }
-
-        [Parser(Opcode.CMSG_LF_GUILD_GET_APPLICATIONS)]
-        [Parser(Opcode.SMSG_LF_GUILD_APPLICANT_LIST_UPDATED)]
-        [Parser(Opcode.SMSG_LF_GUILD_APPLICATIONS_LIST_CHANGED)]
-        public static void HandlerLFGuildZeroLength(Packet packet)
-        {
-        }
-
-        [Parser(Opcode.CMSG_LF_GUILD_POST_REQUEST)]
-        public static void HandlerLFGuildPostRequest(Packet packet)
-        {
-            if (packet.Direction == Direction.ClientToServer)
-            { } 
-            else
-            {
-                packet.WriteLine("              : SMSG_???");
-                packet.ReadToEnd();
-            }
-        }
-
     }
 }

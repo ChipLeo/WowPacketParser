@@ -165,7 +165,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_LFG_QUEUE_STATUS)]
         public static void HandleLfgQueueStatusUpdate(Packet packet)
         {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_LFG_ROLE_CHECK_UPDATE)]

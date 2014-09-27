@@ -41,61 +41,25 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.CMSG_CAST_SPELL)]
         public static void HandleCastSpell(Packet packet)
         {
-            if (packet.Direction == Direction.ClientToServer)
-            {
-                bool hasCastCount = !packet.ReadBit("hasCastCount");
-                bool hasSrcLocation = packet.ReadBit("hasSrcLocation");
-                bool hasTargetString = !packet.ReadBit("hasTargetString");
-                bool hasTargetMask = !packet.ReadBit("hasTargetMask");
-                bool hasSpellId = !packet.ReadBit("hasSpellId");
-                bool hasCastFlags = !packet.ReadBit("hasCastFlags");
-                bool hasDestLocation = packet.ReadBit("hasDestLocation");
-                packet.ReadBit("unk");
-                uint researchDataCount = packet.ReadBits("researchDataCount", 2);
-                bool hasMovement = packet.ReadBit("hasMovement");
-                packet.ReadBit("unk2");
-                bool hasGlyphIndex = !packet.ReadBit("hasGlyphIndex");
+            bool hasCastCount = !packet.ReadBit("hasCastCount");
+            bool hasSrcLocation = packet.ReadBit("hasSrcLocation");
+            bool hasTargetString = !packet.ReadBit("hasTargetString");
+            bool hasTargetMask = !packet.ReadBit("hasTargetMask");
+            bool hasSpellId = !packet.ReadBit("hasSpellId");
+            bool hasCastFlags = !packet.ReadBit("hasCastFlags");
+            bool hasDestLocation = packet.ReadBit("hasDestLocation");
+            packet.ReadBit("unk");
+            uint researchDataCount = packet.ReadBits("researchDataCount", 2);
+            bool hasMovement = packet.ReadBit("hasMovement");
+            packet.ReadBit("unk2");
+            bool hasGlyphIndex = !packet.ReadBit("hasGlyphIndex");
 
-                for (uint i = 0; i < researchDataCount; ++i)
-                    packet.ReadBits(2);
+            for (uint i = 0; i < researchDataCount; ++i)
+                packet.ReadBits(2);
 
-                bool hasElevation = !packet.ReadBit("hasElevation");
-                bool hasMissileSpeed = !packet.ReadBit("hasMissileSpeed");
-                packet.ReadToEnd();
-            }
-            else
-            {
-                packet.WriteLine("              : SMSG_NAME_QUERY_RESPONSE");
-                /*Guid guid;
-                    guid = packet.ReadPackedGuid("GUID");
-                    var end = packet.ReadByte("Result");
-
-                    if (end != 0)
-                        return;
-
-                var name = packet.ReadCString("Name");
-                StoreGetters.AddName(guid, name);
-                packet.ReadCString("Realm Name");
-
-                TypeCode typeCode = ClientVersion.AddedInVersion(ClientVersionBuild.V3_1_0_9767) ? TypeCode.Byte : TypeCode.Int32;
-                packet.ReadEnum<Race>("Race", typeCode);
-                packet.ReadEnum<Gender>("Gender", typeCode);
-                packet.ReadEnum<Class>("Class", typeCode);
-
-                if (!packet.ReadBoolean("Name Declined"))
-                    return;
-
-                for (var i = 0; i < 5; i++)
-                    packet.ReadCString("Declined Name", i);
-
-                var objectName = new ObjectName
-                {
-                    ObjectType = ObjectType.Player,
-                    Name = name,
-                };
-                Storage.ObjectNames.Add((uint)guid.GetLow(), objectName, packet.TimeSpan);*/
-                packet.ReadToEnd();
-            }
+            bool hasElevation = !packet.ReadBit("hasElevation");
+            bool hasMissileSpeed = !packet.ReadBit("hasMissileSpeed");
+            packet.ReadToEnd();
         }
 
         [Parser(Opcode.CMSG_UNLEARN_SKILL)]
@@ -171,34 +135,25 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_INITIAL_SPELLS)]
         public static void HandleInitialSpells547(Packet packet)
         {
-            if (packet.Direction == Direction.ServerToClient)
+            packet.ReadBits("Unk Bits", 1);
+            var count = packet.ReadBits("Spell Count", 22);
+            packet.ResetBitReader();
+
+            var spells = new List<uint>((int)count);
+            for (var i = 0; i < count; i++)
             {
-                packet.ReadBits("Unk Bits", 1);
-                var count = packet.ReadBits("Spell Count", 22);
-                packet.ResetBitReader();
+                var spellId = packet.ReadEntry<UInt32>(StoreNameType.Spell, "Spell ID", i);
+                spells.Add((uint)spellId);
+            }
 
-                var spells = new List<uint>((int)count);
-                for (var i = 0; i < count; i++)
-                {
-                    var spellId = packet.ReadEntry<UInt32>(StoreNameType.Spell, "Spell ID", i);
-                    spells.Add((uint)spellId);
-                }
+            var startSpell = new StartSpell { Spells = spells };
 
-                var startSpell = new StartSpell { Spells = spells };
-
-                WoWObject character;
-                if (Storage.Objects.TryGetValue(SessionHandler.LoginGuid, out character))
-                {
-                    var player = character as Player;
-                    if (player != null && player.FirstLogin)
-                        Storage.StartSpells.Add(new Tuple<Race, Class>(player.Race, player.Class), startSpell, packet.TimeSpan);
-                }
-            } else
+            WoWObject character;
+            if (Storage.Objects.TryGetValue(SessionHandler.LoginGuid, out character))
             {
-                packet.WriteLine("              : CMSG_GUILD_DECLINE");
-                packet.Opcode = (int)Opcode.CMSG_GUILD_DECLINE;
-
-                packet.ReadToEnd();
+                var player = character as Player;
+                if (player != null && player.FirstLogin)
+                    Storage.StartSpells.Add(new Tuple<Race, Class>(player.Race, player.Class), startSpell, packet.TimeSpan);
             }
         }
 
@@ -215,7 +170,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_PLAYERBOUND)]
         public static void HandlePlayerBound(Packet packet)
         {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_SPELL_FAILED_OTHER)]
