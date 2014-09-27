@@ -623,19 +623,26 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_RATED_BG_STATS)]
         public static void HandleRatedBGStats(Packet packet)
         {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_REPORT_PVP_AFK_RESULT)]
         public static void HandleReportPvPAFKResult(Packet packet)
         {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_REQUEST_PVP_REWARDS_RESPONSE)]
         public static void HandlePVPRewardsResponse(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadInt32("unk28"); // 28
+            packet.ReadInt32("unk24"); // 24
+            packet.ReadInt32("unk52"); // 52
+            packet.ReadInt32("unk20"); // 20
+            packet.ReadInt32("unk16"); // 16
+            packet.ReadInt32("unk40"); // 40
+            packet.ReadInt32("unk48"); // 48
+            packet.ReadInt32("unk32"); // 32
+            packet.ReadInt32("unk44"); // 44
+            packet.ReadInt32("unk36"); // 36
         }
 
         [Parser(Opcode.CMSG_REQUEST_PVP_OPTIONS_ENABLED)]

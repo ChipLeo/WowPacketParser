@@ -663,7 +663,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_REFORGE_RESULT,                           0x141E | 0x20000}, //++
             {Opcode.SMSG_REMOVED_SPELL,                            0x14C3 | 0x20000}, //+-
             {Opcode.SMSG_REQUEST_CEMETERY_LIST_RESPONSE,           0x042A | 0x20000}, //++ pair 06E4
-            {Opcode.SMSG_REQUEST_PVP_REWARDS_RESPONSE,             0x08AA | 0x20000}, //--
+            {Opcode.SMSG_REQUEST_PVP_REWARDS_RESPONSE,             0x08AA | 0x20000}, //++
             {Opcode.SMSG_RESPOND_INSPECT_ACHIEVEMENTS,             0x009E | 0x20000}, //++ pair 0373
             {Opcode.SMSG_ROLE_POLL_BEGIN,                          0x1A1F | 0x20000}, //++
             {Opcode.SMSG_SELL_ITEM,                                0x048E | 0x20000}, //--
