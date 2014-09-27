@@ -745,6 +745,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_ZONE_UNDER_ATTACK,                        0x10C2 | 0x20000}, //++
             {Opcode.SMSG_UNK_0002,                                 0x0002 | 0x20000}, //+-
             {Opcode.SMSG_UNK_000F,                                 0x000f | 0x20000}, //++
+            {Opcode.SMSG_UNK_0023,                                 0x0023 | 0x20000}, //++
             {Opcode.SMSG_UNK_003A,                                 0x003A | 0x20000}, //++
             {Opcode.SMSG_UNK_0047,                                 0x0047 | 0x20000}, //++
             {Opcode.SMSG_UNK_0050,                                 0x0050 | 0x20000}, //++
