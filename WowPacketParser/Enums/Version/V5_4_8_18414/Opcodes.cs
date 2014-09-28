@@ -868,6 +868,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_1E1B,                                 0x1E1B | 0x20000}, //++ levelup 90
             {Opcode.SMSG_UNK_1E2E,                                 0x1E2E | 0x20000}, //++
             {Opcode.SMSG_UNK_1E3E,                                 0x1E3E | 0x20000}, //++
+            {Opcode.SMSG_UNK_1E8E,                                 0x1E8E | 0x20000}, //++
             {Opcode.SMSG_UNK_1E9B,                                 0x1E9B | 0x20000}, //++
             {Opcode.SMSG_UNK_1E9E,                                 0x1E9E | 0x20000}, //++
             {Opcode.SMSG_NULL_04BB,                                0x04BB | 0x20000}, //++
