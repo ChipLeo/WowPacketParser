@@ -178,6 +178,28 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_UNK_001B)]
+        public static void HandleSUnk001B(Packet packet)
+        {
+            packet.ReadBit("unk16");
+            var unk20 = packet.ReadBits("unk20", 2);
+            var unk52 = !packet.ReadBit("!unk52");
+            if (unk20==0 && !packet.ReadBit("unk44"))
+            {
+                packet.ReadInt32("unk40"); // 40
+                packet.ReadInt32("Suffix factor"); // 24
+                packet.ReadInt32("unk36"); // 36
+                packet.ReadInt32("unk32"); // 32
+                packet.ReadEntry<UInt32>(StoreNameType.Item, "Entry"); // 48
+                packet.ReadInt32("unk28"); // 28
+            }
+            packet.ReadInt32("unk56"); // 56
+            if (unk52)
+                packet.ReadByte("unk52"); // 52
+            if (unk20 == 2)
+                packet.ReadInt32("unk60"); // 60
+        }
+
         [Parser(Opcode.SMSG_UNK_0023)]
         public static void HandleSUnk0023(Packet packet)
         {
