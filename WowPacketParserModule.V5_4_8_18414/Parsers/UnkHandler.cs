@@ -1529,6 +1529,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid104", guid104);
         }
 
+        [Parser(Opcode.SMSG_UNK_1843)]
+        public static void HandleSUnk1843(Packet packet)
+        {
+            var count16 = packet.ReadBits("count16", 23);
+            for (var i = 0; i < count16; i++)
+                packet.ReadInt16("unkInt16 20"); // 20
+        }
+
         [Parser(Opcode.SMSG_UNK_1943)]
         public static void HandleSUnk1943(Packet packet)
         {
