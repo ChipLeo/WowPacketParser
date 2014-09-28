@@ -61,6 +61,23 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.CMSG_UNK_0E3B)]
+        public static void HandleUnk0E3B(Packet packet)
+        {
+            var len33 = packet.ReadBits(8);
+            var len16 = packet.ReadBits(5);
+            packet.ReadWoWString("Prefix", len16);
+            packet.ReadWoWString("Message", len33);
+        }
+
+        [Parser(Opcode.CMSG_UNK_10C3)]
+        public static void HandleUnk10C3(Packet packet)
+        {
+            var guid = packet.StartBitStream(1, 5, 7, 2, 6, 3, 0, 4);
+            packet.ParseBitStream(guid, 2, 5, 4, 6, 1, 0, 7, 3);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.CMSG_UNK_10D3)]
         public static void HandleUnk10D3(Packet packet)
         {
