@@ -542,7 +542,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GUILD_RANKS_UPDATE,                       0x0A60 | 0x20000}, //--
             {Opcode.SMSG_GUILD_REPUTATION_WEEKLY_CAP,              0x1A71 | 0x20000}, //--
             {Opcode.SMSG_GUILD_REWARDS_LIST,                       0x1A69 | 0x20000}, //--
-            {Opcode.SMSG_GUILD_ROSTER,                             0x0BE0 | 0x20000}, //--
+            {Opcode.SMSG_GUILD_ROSTER,                             0x0BE0 | 0x20000}, //++
             {Opcode.SMSG_GUILD_XP,                                 0x0AF0 | 0x20000}, //--
             {Opcode.SMSG_GUILD_XP_GAIN,                            0x0FE0 | 0x20000}, //--
             {Opcode.SMSG_HEALTH_UPDATE,                            0x148B | 0x20000}, //++

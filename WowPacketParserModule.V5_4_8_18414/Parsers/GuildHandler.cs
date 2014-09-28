@@ -116,6 +116,72 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("Motd", len);
         }
 
+        [Parser(Opcode.SMSG_GUILD_ROSTER)] // sub_6A8B6B
+        public static void HandleGuildRoster(Packet packet)
+        {
+            var count16 = packet.ReadBits("count16", 17);
+            var count2041 = packet.ReadBits("count2041", 10);
+            var guid = new byte[count16][];
+            var unk53 = new uint[count16];
+            var unk238 = new uint[count16];
+            var unk109 = new uint[count16];
+            for (var i = 0; i < count16; i++)
+            {
+                guid[i] = new byte[8];
+                unk238[i] = packet.ReadBits("unk238*4", 8, i); // 238
+                guid[i][5] = packet.ReadBit();
+                packet.ReadBit("unk372*4", i); // 372
+                unk109[i] = packet.ReadBits("unk109*4", 8, i); // 109
+                guid[i][7] = packet.ReadBit();
+                guid[i][0] = packet.ReadBit();
+                guid[i][6] = packet.ReadBit();
+                unk53[i] = packet.ReadBits("unk53*4", 6, i); // 53
+                packet.ReadBit("unk371*4", i); // 371
+                guid[i][3] = packet.ReadBit();
+                guid[i][4] = packet.ReadBit();
+                guid[i][1] = packet.ReadBit();
+                guid[i][2] = packet.ReadBit();
+            }
+            var count40 = packet.ReadBits("count40", 11);
+            for (var i = 0; i < count16; i++)
+            {
+                packet.ReadByte("unk384", i); // 384
+                packet.ReadInt32("unk41*4", i); // 41
+                packet.ReadWoWString("str", unk53[i], i);
+                packet.ParseBitStream(guid[i], 0);
+                for (var j = 0; j < 2; j++)
+                {
+                    packet.ReadInt32("unk381*4", i, j); // 381
+                    packet.ReadInt32("unk373*4", i, j); // 373
+                    packet.ReadInt32("unk377*4", i, j); // 377
+                }
+                packet.ReadByte("unk383", i); // 383
+                packet.ReadByte("unk382", i); // 382
+                packet.ReadInt32("unk33*4", i); // 33
+                packet.ReadInt32("unk45*4", i); // 45
+                packet.ParseBitStream(guid[i], 3);
+                packet.ReadInt64("unk36", i); // 36
+                packet.ReadWoWString("str2", unk238[i], i);
+                packet.ReadSingle("unk2ch", i); // 2ch
+                packet.ReadByte("unk385", i); // 385
+                packet.ReadInt32("unk29", i); // 29
+                packet.ReadInt32("unk105", i); // 105
+                packet.ParseBitStream(guid[i], 5, 7);
+                packet.ReadWoWString("str3", unk109[i], i);
+                packet.ParseBitStream(guid[i], 4);
+                packet.ReadInt64("unk52", i); // 52
+                packet.ReadInt32("unk37*4", i); // 37
+                packet.ParseBitStream(guid[i], 6, 1, 2);
+                packet.WriteGuid("Guid", guid[i], i);
+            }
+            packet.ReadInt32("unk36"); // 36
+            packet.ReadPackedTime("Time");
+            packet.ReadWoWString("str4", count40);
+            packet.ReadInt32("unk647*4"); // 647
+            packet.ReadWoWString("str5", count2041);
+            packet.ReadInt32("unk32"); // 32
+        }
+
         [Parser(Opcode.CMSG_GUILD_SET_ACHIEVEMENT_TRACKING)]
         public static void HandleGuildSetAchievementTracking(Packet packet)
         {
@@ -137,7 +203,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_GUILD_RANKS_UPDATE)]
         [Parser(Opcode.SMSG_GUILD_REPUTATION_WEEKLY_CAP)]
         [Parser(Opcode.SMSG_GUILD_REWARDS_LIST)]
-        [Parser(Opcode.SMSG_GUILD_ROSTER)]
         [Parser(Opcode.SMSG_GUILD_XP)]
         [Parser(Opcode.SMSG_GUILD_XP_GAIN)]
         [Parser(Opcode.SMSG_PETITION_ALREADY_SIGNED)]
