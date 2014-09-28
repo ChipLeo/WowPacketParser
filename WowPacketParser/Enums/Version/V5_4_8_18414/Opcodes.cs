@@ -24,13 +24,13 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_AREATRIGGER,                              0x1C44 | 0x10000}, //++
             {Opcode.CMSG_ATTACKSTOP,                               0x0345 | 0x10000}, //++
             {Opcode.CMSG_ATTACKSWING,                              0x02E7 | 0x10000}, //++
-            {Opcode.CMSG_AUCTION_HELLO,                            0x0379 | 0x10000}, //+-
-            {Opcode.CMSG_AUCTION_LIST_BIDDER_ITEMS,                0x12D0 | 0x10000}, //--
-            {Opcode.CMSG_AUCTION_LIST_ITEMS,                       0x02EA | 0x10000}, //--
-            {Opcode.CMSG_AUCTION_LIST_OWNER_ITEMS,                 0x0361 | 0x10000}, //--
-            {Opcode.CMSG_AUCTION_PLACE_BID,                        0x03C8 | 0x10000}, //--
-            {Opcode.CMSG_AUCTION_REMOVE_ITEM,                      0x0259 | 0x10000}, //--
-            {Opcode.CMSG_AUCTION_SELL_ITEM,                        0x02EB | 0x10000}, //--
+            {Opcode.CMSG_AUCTION_HELLO,                            0x0379 | 0x10000}, //++
+            {Opcode.CMSG_AUCTION_LIST_BIDDER_ITEMS,                0x12D0 | 0x10000}, //++
+            {Opcode.CMSG_AUCTION_LIST_ITEMS,                       0x02EA | 0x10000}, //++
+            {Opcode.CMSG_AUCTION_LIST_OWNER_ITEMS,                 0x0361 | 0x10000}, //++
+            {Opcode.CMSG_AUCTION_PLACE_BID,                        0x03C8 | 0x10000}, //++
+            {Opcode.CMSG_AUCTION_REMOVE_ITEM,                      0x0259 | 0x10000}, //+-
+            {Opcode.CMSG_AUCTION_SELL_ITEM,                        0x02EB | 0x10000}, //+-
             {Opcode.CMSG_AUTH_SESSION,                             0x00B2 | 0x10000}, //+-
             {Opcode.CMSG_AUTOBANK_ITEM,                            0x066D | 0x10000}, //++
             {Opcode.CMSG_AUTOEQUIP_ITEM,                           0x025F | 0x10000}, //++
@@ -443,7 +443,13 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_ATTACKERSTATEUPDATE,                      0x06AA | 0x20000}, //++
             {Opcode.SMSG_ATTACKSTART,                              0x1A9E | 0x20000}, //++
             {Opcode.SMSG_ATTACKSTOP,                               0x12AF | 0x20000}, //++
-            {Opcode.SMSG_AUCTION_HELLO,                            0x10A7 | 0x20000}, //+-
+            {Opcode.SMSG_AUCTION_BIDDER_LIST_RESULT,               0x0B24 | 0x20000}, //++
+            {Opcode.SMSG_AUCTION_BIDDER_NOTIFICATION,              0x11C1 | 0x20000}, //++
+            {Opcode.SMSG_AUCTION_COMMAND_RESULT,                   0x1002 | 0x20000}, //++
+            {Opcode.SMSG_AUCTION_HELLO,                            0x10A7 | 0x20000}, //++
+            {Opcode.SMSG_AUCTION_LIST_RESULT,                      0x0982 | 0x20000}, //++
+            {Opcode.SMSG_AUCTION_OWNER_LIST_RESULT,                0x1785 | 0x20000}, //++
+            {Opcode.SMSG_AUCTION_OWNER_NOTIFICATION,               0x1A8E | 0x20000}, //+-
             {Opcode.SMSG_AURA_UPDATE,                              0x0072 | 0x20000}, //++
             {Opcode.SMSG_AUTH_CHALLENGE,                           0x0949 | 0x20000}, //--+
             {Opcode.SMSG_AUTH_RESPONSE,                            0x0ABA | 0x20000}, //++
