@@ -9,6 +9,22 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class LfgHandler
     {
+        [Parser(Opcode.CMSG_LFG_JOIN)]
+        public static void HandleLFGJoin(Packet packet)
+        {
+            packet.ReadByte("unk1");
+            packet.ReadInt32("unk2");
+            packet.ReadInt32("unk3");
+            packet.ReadInt32("unk4");
+            packet.ReadInt32("Roles");
+            var numDungeons = packet.ReadBits("Num Dungeons", 22);
+            var commentLen = packet.ReadBits("CommentLen", 8);
+            packet.ReadBit("unk5");
+            for (var i = 0; i < numDungeons; i++)
+                packet.ReadInt32("Dungeon", i);
+            packet.ReadWoWString("Comment", commentLen);
+        }
+
         [Parser(Opcode.SMSG_LF_GUILD_APPLICATIONS_LIST_UPDATED)]
         public static void HandleLFGuildApplicationsListUpdated(Packet packet)
         {

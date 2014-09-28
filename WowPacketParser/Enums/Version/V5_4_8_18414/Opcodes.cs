@@ -149,7 +149,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_LF_GUILD_REMOVE_APPLICATION,              0x1C53 | 0x10000}, //
             {Opcode.CMSG_LFG_PLAYER_LOCK_INFO_REQUEST,             0x006B | 0x10000}, //++
             {Opcode.CMSG_LFG_TELEPORT,                             0x1AA6 | 0x10000}, //--
-            {Opcode.CMSG_LFG_JOIN,                                 0x046B | 0x10000}, //--
+            {Opcode.CMSG_LFG_JOIN,                                 0x046B | 0x10000}, //++
             {Opcode.CMSG_LIST_INVENTORY,                           0x02D8 | 0x10000}, //++
             {Opcode.CMSG_LOAD_SCREEN,                              0x1DBD | 0x10000}, //++
             {Opcode.CMSG_LOG_DISCONNECT,                           0x10B3 | 0x10000}, //++
