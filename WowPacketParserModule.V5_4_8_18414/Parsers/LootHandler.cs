@@ -92,7 +92,29 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_LOOT_MASTER_LIST)]
         public static void HandleLootMasterList(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = new byte[8];
+            guid[1] = packet.ReadBit();
+            var count = packet.ReadBits("count", 24);
+            var guids = new byte[count][];
+            guid[5] = packet.ReadBit();
+            for (var i = 0; i < count; i++)
+                guids[i] = packet.StartBitStream(4, 1, 2, 5, 3, 7, 0, 6);
+            guid[2] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 3, 0, 2);
+
+            for (var i = 0; i < count; i++)
+            {
+                packet.ParseBitStream(guids[i], 1, 3, 7, 2, 0, 6, 4, 5);
+                packet.WriteGuid("guids", guids[i]);
+            }
+            packet.ParseBitStream(guid, 7, 1, 6, 4, 5);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_LOOT_MONEY_NOTIFY)]

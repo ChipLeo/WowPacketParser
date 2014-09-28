@@ -584,7 +584,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_LOGOUT_COMPLETE,                          0x142F | 0x20000}, //+-
             {Opcode.SMSG_LOGOUT_RESPONSE,                          0x008F | 0x20000}, //++
             {Opcode.SMSG_LOOT_CLEAR_MONEY,                         0x1632 | 0x20000}, //++
-            {Opcode.SMSG_LOOT_MASTER_LIST,                         0x02BF | 0x20000}, //++
+            {Opcode.SMSG_LOOT_MASTER_LIST,                         0x02BF | 0x20000}, //+-
             {Opcode.SMSG_LOOT_MONEY_NOTIFY,                        0x14C0 | 0x20000}, //++
             {Opcode.SMSG_LOOT_RELEASE_RESPONSE,                    0x123F | 0x20000}, //--
             {Opcode.SMSG_LOOT_REMOVED,                             0x0C3E | 0x20000}, //++
