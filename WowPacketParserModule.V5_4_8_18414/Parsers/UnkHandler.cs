@@ -1621,9 +1621,83 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_UNK_1C3A)]
+        public static void HandleSUnk1C3A(Packet packet)
+        {
+            // target for spell 131057
+            packet.ReadSingle("unk2ch"); // 2ch
+            packet.ReadSingle("unk30h"); // 30h
+            packet.ReadSingle("unk28h"); // 28h
+
+            var unk7 = !packet.ReadBit("!unk7"); // 7
+            var unk8 = !packet.ReadBit("!unk8"); // 8
+
+            var unk34h = !packet.ReadBit("!unk34h"); // 34h
+
+            var unk6 = !packet.ReadBit("!unk6"); // 6
+            var unk9 = !packet.ReadBit("!unk9"); // 9
+            packet.ReadBit("!unk4"); // 4
+
+            var guid = packet.StartBitStream(3, 2, 6, 4, 7, 1, 5, 0);
+            packet.ParseBitStream(guid, 6, 3, 5, 4, 1, 2, 0, 7);
+
+            if (unk7)
+                packet.ReadInt32("unk7");
+
+            if (unk34h)
+                packet.ReadSingle("unk34h");
+
+            if (unk6)
+                packet.ReadInt32("unk6");
+
+            if (unk8)
+                packet.ReadInt32("unk8");
+
+            if (unk9)
+                packet.ReadInt32("unk9");
+
+            packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_UNK_1C3F)]
+        public static void HandleSUnk1C3F(Packet packet)
+        {
+            var guid48 = new byte[8];
+            guid48[5] = packet.ReadBit();
+            var unk24 = packet.ReadBit("unk24"); // 24
+            var guid16 = new byte[8];
+            if (unk24)
+                guid16 = packet.StartBitStream(4, 6, 0, 7, 5, 2, 3, 1);
+            guid48[1] = packet.ReadBit();
+            var unk40 = packet.ReadBit("unk40"); // 40
+            guid48[4] = packet.ReadBit();
+            guid48[3] = packet.ReadBit();
+            guid48[2] = packet.ReadBit();
+            var guid32 = new byte[8];
+            if (unk40)
+                guid32 = packet.StartBitStream(2, 3, 4, 5, 6, 0, 1, 7);
+            guid48[7] = packet.ReadBit();
+            guid48[0] = packet.ReadBit();
+            guid48[6] = packet.ReadBit();
+            if (unk40)
+            {
+                packet.ParseBitStream(guid32, 7, 1, 0, 6, 5, 3, 4, 2);
+                packet.WriteGuid("guid32", guid32);
+            }
+            if (unk24)
+            {
+                packet.ParseBitStream(guid16, 4, 5, 6, 3, 2, 7, 0, 1);
+                packet.WriteGuid("guid16", guid16);
+            }
+            packet.ParseBitStream(guid48, 5, 1, 6, 2, 3, 0, 7, 4);
+
+            packet.WriteGuid("guid48", guid48);
+        }
+
         [Parser(Opcode.SMSG_UNK_1CAF)]
         public static void HandleSUnk1CAF(Packet packet)
         {
+            // unk = spell ID 130321 (The Mission: Teleport Player)
             packet.ReadInt32("unk");
         }
 
