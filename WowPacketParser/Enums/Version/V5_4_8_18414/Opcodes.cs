@@ -573,9 +573,9 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_LF_GUILD_APPLICATIONS_LIST_UPDATED,       0x0AE0 | 0x20000}, //++
             {Opcode.SMSG_LF_GUILD_APPLICATIONS_LIST_CHANGED,       0x1A70 | 0x20000}, //
             {Opcode.SMSG_LF_GUILD_BROWSE_UPDATED,                  0x0F69 | 0x20000}, //
-            {Opcode.SMSG_LFG_JOIN_RESULT,                          0x18E3 | 0x20000}, //--
+            {Opcode.SMSG_LFG_JOIN_RESULT,                          0x18E3 | 0x20000}, //++
             {Opcode.SMSG_LFG_PLAYER_INFO,                          0x1861 | 0x20000}, //++
-            {Opcode.SMSG_LFG_QUEUE_STATUS,                         0x0C2E | 0x20000}, //--
+            {Opcode.SMSG_LFG_QUEUE_STATUS,                         0x0C2E | 0x20000}, //++
             {Opcode.SMSG_LFG_ROLE_CHECK_UPDATE,                    0x12BB | 0x20000}, //++
             {Opcode.SMSG_LIST_INVENTORY,                           0x1AAE | 0x20000}, //-+
             {Opcode.SMSG_LOAD_CUF_PROFILES,                        0x0E32 | 0x20000}, //++

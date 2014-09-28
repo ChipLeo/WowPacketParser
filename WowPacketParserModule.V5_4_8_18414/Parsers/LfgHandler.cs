@@ -71,6 +71,64 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("Unk16");
         }
 
+        [Parser(Opcode.SMSG_LFG_JOIN_RESULT)]
+        public static void HandleLfgJoinResult(Packet packet)
+        {
+            var guid = new byte[8];
+
+            guid[7] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+
+            var count40 = packet.ReadBits("count40", 22);
+            var guids = new byte[count40][];
+            var unk52 = new uint[count40];
+
+            for (var i = 0; i < count40; i++)
+            {
+                guids[i] = new byte[8];
+                guids[i][3] = packet.ReadBit();
+                unk52[i] = packet.ReadBits("unk52", 20, i);
+                guids[i][6] = packet.ReadBit();
+                guids[i][1] = packet.ReadBit();
+                guids[i][4] = packet.ReadBit();
+                guids[i][7] = packet.ReadBit();
+                guids[i][2] = packet.ReadBit();
+                guids[i][0] = packet.ReadBit();
+                guids[i][5] = packet.ReadBit();
+            }
+
+            guid[5] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+
+            packet.ReadByte("unk56"); // 56
+
+            for (var i = 0; i < count40; i++)
+            {
+                packet.ParseBitStream(guids[i], 4);
+                for (var j = 0; j < unk52[i]; j++)
+                {
+                    packet.ReadInt32("unk68", i); // 68
+                    packet.ReadInt32("unk64", i); // 64
+                    packet.ReadInt32("unk60", i); // 60
+                    packet.ReadInt32("unk56", i); // 56
+                }
+                packet.ParseBitStream(guids[i], 1, 0, 5, 7, 3, 6, 2);
+                packet.WriteGuid("Guids", guids[i], i);
+            }
+
+            packet.ReadByte("unk57"); // 57
+            packet.ParseBitStream(guid, 2);
+            packet.ReadInt32("unk32"); // 32
+            packet.ReadInt32("unk24"); // 24
+            packet.ReadInt32("unk28"); // 28
+            packet.ParseBitStream(guid, 6, 4, 1, 0, 5, 7, 3);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_LFG_PLAYER_INFO)]
         public static void HandleLfgPlayerLockInfoResponse(Packet packet)
         {
@@ -181,6 +239,59 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_LFG_QUEUE_STATUS)]
         public static void HandleLfgQueueStatusUpdate(Packet packet)
         {
+            var guid = new byte[8];
+
+            var len24 = packet.ReadBits("len24", 8);
+            packet.ReadBit("unk347");
+            packet.ReadBit("unk345");
+            var count284 = packet.ReadBits("count284", 22);
+
+            guid[2] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            packet.ReadBit("unk16");
+            guid[7] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            packet.ReadBit("unk280");
+            packet.ReadBit("unk344");
+            var count300 = packet.ReadBits("count300", 24);
+            guid[5] = packet.ReadBit();
+
+            var guids = new byte[count300][];
+            for (var i = 0; i < count300; i++)
+                guids[i] = packet.StartBitStream(7, 0, 4, 2, 5, 3, 1, 6);
+            guid[4] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 3);
+
+            for (var i = 0; i < 3; i++)
+                packet.ReadByte("unk348", i);
+
+            packet.ParseBitStream(guid, 4);
+
+            for (var i = 0; i < count300; i++)
+            {
+                packet.ParseBitStream(guids[i], 7, 0, 1, 6, 4, 5, 2, 3);
+                packet.WriteGuid("guids", guids[i]);
+            }
+
+            packet.ParseBitStream(guid, 6);
+            packet.ReadByte("unk346"); // 346
+            packet.ReadInt32("unk20"); // 20
+            packet.ReadInt32("unk328"); // 328
+            packet.ParseBitStream(guid, 5);
+            packet.ReadWoWString("str", len24);
+            packet.ParseBitStream(guid, 2);
+            for (var i = 0; i < count284; i++)
+                packet.ReadInt32("unk288", i);
+            packet.ParseBitStream(guid, 0, 1);
+            packet.ReadInt32("unk336"); // 336
+            packet.ReadByte("unk17"); // 17
+            packet.ReadInt32("unk332"); // 332
+            packet.ParseBitStream(guid, 7);
+
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_LFG_ROLE_CHECK_UPDATE)]
