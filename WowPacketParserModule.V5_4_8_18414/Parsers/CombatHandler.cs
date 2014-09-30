@@ -11,22 +11,20 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_ATTACKSWING)]
         public static void HandleAttackSwing(Packet packet)
         {
-            var guid = new byte[8];
-
-            packet.StartBitStream(guid, 6, 5, 7, 0, 3, 1, 4, 2);
+            var guid = packet.StartBitStream(6, 5, 7, 0, 3, 1, 4, 2);
             packet.ParseBitStream(guid, 6, 7, 1, 3, 2, 0, 4, 5);
 
             packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_TOGGLE_PVP)]
-        public static void HandleCTogglePvp(Packet packet)
+        public static void HandleTogglePvp(Packet packet)
         {
             packet.ReadBit("Value");
         }
 
         [Parser(Opcode.SMSG_AI_REACTION)]
-        public static void HandleSAIReaction(Packet packet)
+        public static void HandleAIReaction(Packet packet)
         {
             var guid = packet.StartBitStream(5, 7, 0, 4, 6, 2, 3, 1);
             packet.ParseBitStream(guid, 4, 6, 5);

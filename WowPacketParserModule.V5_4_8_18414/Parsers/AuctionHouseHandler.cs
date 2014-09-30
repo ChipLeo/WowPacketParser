@@ -54,7 +54,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("unk309"); // 309
             guid[7] = packet.ReadBit();
             guid[0] = packet.ReadBit();
-            var unk52 = packet.ReadBits("unk52", 8); // 54
+            var unk52 = packet.ReadBits("unk52", 8); // 52
             guid[1] = packet.ReadBit();
             guid[6] = packet.ReadBit();
 

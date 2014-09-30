@@ -112,11 +112,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadUInt32("Ping");
         }
 
-        [Parser(Opcode.CMSG_QUESTGIVER_STATUS_MULTIPLE_QUERY)]
-        public static void HandleQuestgiverStatusMultipleQuery(Packet packet)
-        {
-        }
-
         [Parser(Opcode.CMSG_RAID_READY_CHECK_CONFIRM)]
         public static void HandleRaidReadyCheckConfirm(Packet packet)
         {
@@ -431,6 +426,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
+        [HasSniffData]
         [Parser(Opcode.SMSG_PLAY_OBJECT_SOUND)]
         public static void HandlePlayObjectSound(Packet packet)
         {

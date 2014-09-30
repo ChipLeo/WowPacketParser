@@ -95,35 +95,33 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_AUTH_RESPONSE)]
         public static void HandleAuthResponse(Packet packet)
         {
-            if (packet.Direction == Direction.ServerToClient)
+            var hasAccountData = packet.ReadBit("Has Account Data");
+
+            var count = 0u;
+            uint[,] count_1 = new uint[1, 2];
+            var count1 = 0u;
+            uint[,] count1_1 = new uint[1, 3];
+            var ClassCount = 0u;
+            var RaceCount = 0u;
+            bool hasByte78 = false;
+            bool hasByte7C = false;
+
+            if (hasAccountData)
             {
-                var hasAccountData = packet.ReadBit("Has Account Data");
+                count = packet.ReadBits("Realm Names", 21);
+                count_1 = new uint[count, 2];
 
-                var count = 0u;
-                uint[,] count_1 = new uint[1, 2];
-                var count1 = 0u;
-                uint[,] count1_1 = new uint[1, 3];
-                var ClassCount = 0u;
-                var RaceCount = 0u;
-                bool hasByte78 = false;
-                bool hasByte7C = false;
-
-                if (hasAccountData)
+                for (uint i = 0; i < count; ++i)
                 {
-                    count = packet.ReadBits("Realm Names", 21);
-                    count_1 = new uint[count, 2];
+                    count_1[i, 0] = packet.ReadBits("unk count bytes lenght1", 8);
+                    packet.ReadBit("Home realm");
+                    count_1[i, 1] = packet.ReadBits("unk count bytes lenght2", 8);
+                }
 
-                    for (uint i = 0; i < count; ++i)
-                    {
-                        count_1[i, 0] = packet.ReadBits("unk count bytes lenght1", 8);
-                        packet.ReadBit("Home realm");
-                        count_1[i, 1] = packet.ReadBits("unk count bytes lenght2", 8);
-                    }
-
-                    packet.ReadBit("byte74");
-                    RaceCount = packet.ReadBits("RaceCount", 23);
-                    count1 = packet.ReadBits("unk count", 21);
-                    count1_1 = new uint[count1, 3];
+                packet.ReadBit("byte74");
+                RaceCount = packet.ReadBits("RaceCount", 23);
+                count1 = packet.ReadBits("unk count", 21);
+                count1_1 = new uint[count1, 3];
 
                 for (uint i = 0; i < count1; ++i)
                 {
@@ -201,12 +199,6 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
             }
 
             packet.ReadEnum<ResponseCode>("Auth Code", TypeCode.Byte);
-        }
-            else
-            {
-                packet.WriteLine("              : CMSG_LOOT_MONEY");
-                packet.Opcode = (int)Opcode.CMSG_LOOT_MONEY;
-            }
         }
 
         [Parser(Opcode.SMSG_LOGOUT_COMPLETE)]

@@ -13,11 +13,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
-        [Parser(Opcode.CMSG_GUILD_ACCEPT)]
-        public static void HandleGuildAccept(Packet packet)
-        {
-        }
-
         [Parser(Opcode.CMSG_GUILD_ADD_RANK)]
         public static void HandleGuildAddRank(Packet packet)
         {
@@ -414,11 +409,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleServerGuildInvite(Packet packet)
         {
             packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.SMSG_GUILD_INVITE_CANCEL)]
-        public static void HandleServerGuildInviteCancel(Packet packet)
-        {
         }
 
         [Parser(Opcode.SMSG_GUILD_MEMBER_DAILY_RESET)]

@@ -7,7 +7,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class BattlegroundHandler
     {
-
         [Parser(Opcode.CMSG_ARENA_TEAM_CREATE)]
         public static void HandleArenaTeamCreate(Packet packet)
         {

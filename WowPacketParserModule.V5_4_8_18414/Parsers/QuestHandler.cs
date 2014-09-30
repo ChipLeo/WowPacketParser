@@ -226,6 +226,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [HasSniffData]
         [Parser(Opcode.SMSG_QUEST_POI_QUERY_RESPONSE)]
         public static void HandleQuestPoiQueryResponse(Packet packet)
         {

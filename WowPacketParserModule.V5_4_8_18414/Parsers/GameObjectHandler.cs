@@ -35,12 +35,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("GameObject Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_ENABLE_BARBER_SHOP)]
-        public static void HandleEnableBarberShop(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
         [Parser(Opcode.SMSG_GAMEOBJECT_CUSTOM_ANIM)]
         public static void HandleGOCustomAnim(Packet packet)
         {

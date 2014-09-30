@@ -31,11 +31,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
-        [Parser(Opcode.CMSG_LOOT_MONEY)]
-        public static void HandleLootMoney(Packet packet)
-        {
-        }
-
         [Parser(Opcode.CMSG_LOOT_RELEASE)]
         public static void HandleLootRelease(Packet packet)
         {

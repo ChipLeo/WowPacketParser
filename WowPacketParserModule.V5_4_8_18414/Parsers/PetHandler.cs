@@ -342,6 +342,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("PetGuid", petGuid);
         }
 
+        [HasSniffData]
         [Parser(Opcode.CMSG_PET_NAME_QUERY)]
         public static void HandlePetNameQuery(Packet packet)
         {

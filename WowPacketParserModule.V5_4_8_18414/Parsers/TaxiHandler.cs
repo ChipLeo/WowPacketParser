@@ -2,7 +2,6 @@ using System;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
-using CoreParsers = WowPacketParser.Parsing.Parsers;
 
 namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
@@ -113,11 +112,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             packet.ParseBitStream(guid, 0, 5, 2, 1, 4, 6, 7, 3);
             packet.WriteGuid("Guid", guid);
-        }
-
-        [Parser(Opcode.SMSG_NEW_TAXI_PATH)]
-        public static void HandleTaxiNull(Packet packet)
-        {
         }
     }
 }
