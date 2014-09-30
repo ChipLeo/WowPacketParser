@@ -536,6 +536,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GROUP_LIST,                               0x0CBB | 0x20000}, //--
             {Opcode.SMSG_GROUP_SET_LEADER,                         0x18BF | 0x20000}, //--
             {Opcode.SMSG_GROUP_SET_ROLE,                           0x1E1F | 0x20000}, //--
+            {Opcode.SMSG_GUILD_ACHIEVEMENT_DATA,                   0x0EF8 | 0x20000}, //++
             {Opcode.SMSG_GUILD_BANK_LIST,                          0x0B79 | 0x20000}, //--
             {Opcode.SMSG_GUILD_BANK_LOG_QUERY_RESULT,              0x0FF0 | 0x20000}, //--
             {Opcode.SMSG_GUILD_CHALLENGE_UPDATED,                  0x0AE9 | 0x20000}, //--
@@ -823,7 +824,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0EAA,                                 0x0EAA | 0x20000}, //++
             {Opcode.SMSG_UNK_0EAB,                                 0x0EAB | 0x20000}, //++
             {Opcode.SMSG_UNK_0EBA,                                 0x0EBA | 0x20000}, //++
-            {Opcode.SMSG_UNK_0EF8,                                 0x0EF8 | 0x20000}, //++
             {Opcode.SMSG_UNK_0F29,                                 0x0F29 | 0x20000}, //++
             {Opcode.SMSG_UNK_1006,                                 0x1006 | 0x20000}, //++
             {Opcode.SMSG_UNK_102E,                                 0x102E | 0x20000}, //++

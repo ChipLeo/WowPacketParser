@@ -966,26 +966,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_UNK_0EF8)]
-        public static void HandleSUnk0EF8(Packet packet)
-        {
-            var count = packet.ReadBits("count", 20);
-            var guids = new byte[count][];
-            for (var i = 0; i < count; i++)
-                guids[i] = packet.StartBitStream(0, 6, 2, 1, 7, 4, 5, 3);
-            for (var i = 0; i < count; i++)
-            {
-                packet.ReadInt32("unk20", i); // 20
-                packet.ParseBitStream(guids[i], 5, 0);
-                packet.ReadPackedTime("Time", i);
-                packet.ParseBitStream(guids[i], 4, 3, 1, 6, 2);
-                packet.ReadInt32("unk57", i); // 57
-                packet.ReadInt32("unk53", i); // 53
-                packet.ParseBitStream(guids[i], 7);
-                packet.WriteGuid("guids", guids[i], i);
-            }
-        }
-
         [Parser(Opcode.SMSG_UNK_0F29)]
         public static void HandleSUnk0F29(Packet packet)
         {
