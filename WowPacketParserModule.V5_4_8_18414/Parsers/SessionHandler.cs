@@ -40,7 +40,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             sha[12] = packet.ReadByte();
 
             packet.ReadUInt64("Unk, something to do with redirection");
-            packet.ReadUInt32("Billling Plan Flags");
+            packet.ReadUInt32("Billing Plan Flags");
 
             sha[16] = packet.ReadByte();
             sha[5] = packet.ReadByte();

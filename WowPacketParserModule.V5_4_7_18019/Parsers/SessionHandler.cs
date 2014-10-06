@@ -25,7 +25,7 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
             sha[1] = packet.ReadByte();
             sha[16] = packet.ReadByte();
 
-            packet.ReadUInt32("Billling Plan Flags");
+            packet.ReadUInt32("Billing Plan Flags");
 
             sha[10] = packet.ReadByte();
             sha[16] = packet.ReadByte();
