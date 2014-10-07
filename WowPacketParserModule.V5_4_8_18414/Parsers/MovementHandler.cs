@@ -4416,6 +4416,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_SPLINE_MOVE_SET_SWIM_BACK_SPEED)]
         public static void HandleSplineMoveSetSwimBackSpeed(Packet packet)
         {
+            ReadPlayerMovementInfo(ref packet, info.MovementSplineSetSwimBackSpeed);
         }
 
         [Parser(Opcode.SMSG_SPLINE_MOVE_SET_SWIM_SPEED)]
@@ -4432,11 +4433,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_SPLINE_MOVE_SET_TURN_RATE)]
         public static void HandleSplineMoveSetTurnRate(Packet packet)
         {
+            ReadPlayerMovementInfo(ref packet, info.MovementSplineSetTurnRate);
         }
 
         [Parser(Opcode.SMSG_SPLINE_MOVE_SET_WALK_MODE)]
         public static void HandleSplineMoveSetWalkMode(Packet packet)
         {
+            ReadPlayerMovementInfo(ref packet, info.MovementSplineSetWalkMode);
         }
 
         [Parser(Opcode.SMSG_SPLINE_MOVE_SET_WALK_SPEED)]
@@ -4451,16 +4454,19 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_SPLINE_MOVE_SET_WATER_WALK)]
         public static void HandleSplineMoveSetWaterWalk(Packet packet)
         {
+            ReadPlayerMovementInfo(ref packet, info.MovementSplineSetWaterWalk);
         }
 
         [Parser(Opcode.SMSG_SPLINE_MOVE_STOP_SWIM)]
         public static void HandleSplineMoveStopSwim(Packet packet)
         {
+            ReadPlayerMovementInfo(ref packet, info.MovementSplineStopSwim);
         }
 
         [Parser(Opcode.SMSG_SPLINE_MOVE_UNSET_FLYING)]
         public static void HandleSplineMoveUnsetFlying(Packet packet)
         {
+            ReadPlayerMovementInfo(ref packet, info.MovementSplineUnsetFlying);
         }
 
         [Parser(Opcode.SMSG_SPLINE_MOVE_UNSET_HOVER)]

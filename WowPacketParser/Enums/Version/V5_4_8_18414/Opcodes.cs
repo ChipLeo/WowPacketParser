@@ -749,16 +749,16 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_SPLINE_MOVE_SET_RUN_BACK_SPEED,           0x1F9F | 0x20000}, //++
             {Opcode.SMSG_SPLINE_MOVE_SET_RUN_MODE,                 0x0B18 | 0x20000}, //+-
             {Opcode.SMSG_SPLINE_MOVE_SET_RUN_SPEED,                0x02F1 | 0x20000}, //++
-            {Opcode.SMSG_SPLINE_MOVE_SET_SWIM_BACK_SPEED,          0x0046 | 0x20000}, //--
+            {Opcode.SMSG_SPLINE_MOVE_SET_SWIM_BACK_SPEED,          0x0046 | 0x20000}, //+-
             {Opcode.SMSG_SPLINE_MOVE_SET_SWIM_SPEED,               0x1D8E | 0x20000}, //++
-            {Opcode.SMSG_SPLINE_MOVE_SET_TURN_RATE,                0x0832 | 0x20000}, //--
-            {Opcode.SMSG_SPLINE_MOVE_SET_WALK_MODE,                0x1865 | 0x20000}, //--
+            {Opcode.SMSG_SPLINE_MOVE_SET_TURN_RATE,                0x0832 | 0x20000}, //+-
+            {Opcode.SMSG_SPLINE_MOVE_SET_WALK_MODE,                0x1865 | 0x20000}, //+-
             {Opcode.SMSG_SPLINE_MOVE_SET_WALK_SPEED,               0x08B2 | 0x20000}, //++
-            {Opcode.SMSG_SPLINE_MOVE_SET_WATER_WALK,               0x1823 | 0x20000}, //--
+            {Opcode.SMSG_SPLINE_MOVE_SET_WATER_WALK,               0x1823 | 0x20000}, //+-
             {Opcode.SMSG_SPLINE_MOVE_START_SWIM,                   0x0F29 | 0x20000}, //++
-            {Opcode.SMSG_SPLINE_MOVE_STOP_SWIM,                    0x1798 | 0x20000}, //--
+            {Opcode.SMSG_SPLINE_MOVE_STOP_SWIM,                    0x1798 | 0x20000}, //+-
             {Opcode.SMSG_SPLINE_MOVE_UNROOT,                       0x01E1 | 0x20000}, //++
-            {Opcode.SMSG_SPLINE_MOVE_UNSET_FLYING,                 0x0DE2 | 0x20000}, //--
+            {Opcode.SMSG_SPLINE_MOVE_UNSET_FLYING,                 0x0DE2 | 0x20000}, //+-
             {Opcode.SMSG_SPLINE_MOVE_UNSET_HOVER,                  0x0CE1 | 0x20000}, //++
             {Opcode.SMSG_STANDSTATE_UPDATE,                        0x1C12 | 0x20000}, //++
             {Opcode.SMSG_START_TIMER,                              0x0E3F | 0x20000}, //+-

@@ -1955,6 +1955,92 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
             MovementStatusElements.MSEEnd,
         };
 
+        public MovementStatusElements[] MovementSplineSetSwimBackSpeed = // 0046
+        {
+            MovementStatusElements.MSEHasGuidByte2,
+            MovementStatusElements.MSEHasGuidByte6,
+            MovementStatusElements.MSEHasGuidByte5,
+            MovementStatusElements.MSEHasGuidByte0,
+            MovementStatusElements.MSEHasGuidByte4,
+            MovementStatusElements.MSEHasGuidByte3,
+            MovementStatusElements.MSEHasGuidByte1,
+            MovementStatusElements.MSEHasGuidByte7,
+            MovementStatusElements.MSEGuidByte7,
+            MovementStatusElements.MSEGuidByte6,
+            MovementStatusElements.MSEGuidByte5,
+            MovementStatusElements.MSEGuidByte3,
+            MovementStatusElements.MSEGuidByte2,
+            MovementStatusElements.MSEGuidByte4,
+            MovementStatusElements.MSEGuidByte1,
+            MovementStatusElements.MSEGuidByte0,
+            MovementStatusElements.MSEExtraFloat,
+            MovementStatusElements.MSEEnd,
+        };
+
+        public MovementStatusElements[] MovementSplineSetTurnRate = // 0832
+        {
+            MovementStatusElements.MSEHasGuidByte5,
+            MovementStatusElements.MSEHasGuidByte7,
+            MovementStatusElements.MSEHasGuidByte4,
+            MovementStatusElements.MSEHasGuidByte0,
+            MovementStatusElements.MSEHasGuidByte1,
+            MovementStatusElements.MSEHasGuidByte6,
+            MovementStatusElements.MSEHasGuidByte3,
+            MovementStatusElements.MSEHasGuidByte2,
+            MovementStatusElements.MSEGuidByte1,
+            MovementStatusElements.MSEGuidByte7,
+            MovementStatusElements.MSEExtraFloat,
+            MovementStatusElements.MSEGuidByte6,
+            MovementStatusElements.MSEGuidByte0,
+            MovementStatusElements.MSEGuidByte4,
+            MovementStatusElements.MSEGuidByte2,
+            MovementStatusElements.MSEGuidByte5,
+            MovementStatusElements.MSEGuidByte3,
+            MovementStatusElements.MSEEnd,
+        };
+
+        public MovementStatusElements[] MovementSplineSetWalkMode = // 1865
+        {
+            MovementStatusElements.MSEHasGuidByte4,
+            MovementStatusElements.MSEHasGuidByte3,
+            MovementStatusElements.MSEHasGuidByte0,
+            MovementStatusElements.MSEHasGuidByte2,
+            MovementStatusElements.MSEHasGuidByte1,
+            MovementStatusElements.MSEHasGuidByte6,
+            MovementStatusElements.MSEHasGuidByte5,
+            MovementStatusElements.MSEHasGuidByte7,
+            MovementStatusElements.MSEGuidByte1,
+            MovementStatusElements.MSEGuidByte4,
+            MovementStatusElements.MSEGuidByte5,
+            MovementStatusElements.MSEGuidByte6,
+            MovementStatusElements.MSEGuidByte2,
+            MovementStatusElements.MSEGuidByte0,
+            MovementStatusElements.MSEGuidByte3,
+            MovementStatusElements.MSEGuidByte7,
+            MovementStatusElements.MSEEnd,
+        };
+
+        public MovementStatusElements[] MovementSplineSetWaterWalk = // 1823
+        {
+            MovementStatusElements.MSEHasGuidByte3,
+            MovementStatusElements.MSEHasGuidByte1,
+            MovementStatusElements.MSEHasGuidByte5,
+            MovementStatusElements.MSEHasGuidByte6,
+            MovementStatusElements.MSEHasGuidByte4,
+            MovementStatusElements.MSEHasGuidByte0,
+            MovementStatusElements.MSEHasGuidByte7,
+            MovementStatusElements.MSEHasGuidByte2,
+            MovementStatusElements.MSEGuidByte4,
+            MovementStatusElements.MSEGuidByte3,
+            MovementStatusElements.MSEGuidByte6,
+            MovementStatusElements.MSEGuidByte2,
+            MovementStatusElements.MSEGuidByte1,
+            MovementStatusElements.MSEGuidByte5,
+            MovementStatusElements.MSEGuidByte7,
+            MovementStatusElements.MSEGuidByte0,
+            MovementStatusElements.MSEEnd,
+        };
+
         public MovementStatusElements[] MovementSplineStartSwim = // 0F29
         {
             MovementStatusElements.MSEHasGuidByte7,
@@ -1976,6 +2062,27 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
             MovementStatusElements.MSEEnd,
         };
 
+        public MovementStatusElements[] MovementSplineStopSwim = // 1798
+        {
+            MovementStatusElements.MSEHasGuidByte3,
+            MovementStatusElements.MSEHasGuidByte7,
+            MovementStatusElements.MSEHasGuidByte4,
+            MovementStatusElements.MSEHasGuidByte2,
+            MovementStatusElements.MSEHasGuidByte1,
+            MovementStatusElements.MSEHasGuidByte0,
+            MovementStatusElements.MSEHasGuidByte5,
+            MovementStatusElements.MSEHasGuidByte6,
+            MovementStatusElements.MSEGuidByte0,
+            MovementStatusElements.MSEGuidByte5,
+            MovementStatusElements.MSEGuidByte1,
+            MovementStatusElements.MSEGuidByte7,
+            MovementStatusElements.MSEGuidByte3,
+            MovementStatusElements.MSEGuidByte2,
+            MovementStatusElements.MSEGuidByte6,
+            MovementStatusElements.MSEGuidByte4,
+            MovementStatusElements.MSEEnd,
+        };
+
         public MovementStatusElements[] MovementSplineUnRoot = // 01E1
         {
             MovementStatusElements.MSEHasGuidByte1,
@@ -1994,6 +2101,27 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
             MovementStatusElements.MSEGuidByte0,
             MovementStatusElements.MSEGuidByte4,
             MovementStatusElements.MSEGuidByte6,
+            MovementStatusElements.MSEEnd,
+        };
+
+        public MovementStatusElements[] MovementSplineUnsetFlying = // 0DE2
+        {
+            MovementStatusElements.MSEHasGuidByte1,
+            MovementStatusElements.MSEHasGuidByte5,
+            MovementStatusElements.MSEHasGuidByte7,
+            MovementStatusElements.MSEHasGuidByte2,
+            MovementStatusElements.MSEHasGuidByte6,
+            MovementStatusElements.MSEHasGuidByte3,
+            MovementStatusElements.MSEHasGuidByte0,
+            MovementStatusElements.MSEHasGuidByte4,
+            MovementStatusElements.MSEGuidByte2,
+            MovementStatusElements.MSEGuidByte5,
+            MovementStatusElements.MSEGuidByte4,
+            MovementStatusElements.MSEGuidByte6,
+            MovementStatusElements.MSEGuidByte1,
+            MovementStatusElements.MSEGuidByte0,
+            MovementStatusElements.MSEGuidByte7,
+            MovementStatusElements.MSEGuidByte3,
             MovementStatusElements.MSEEnd,
         };
 
