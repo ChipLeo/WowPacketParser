@@ -2,7 +2,7 @@ WowPacketParser
 ========
 
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/2618/badge.svg)](https://scan.coverity.com/projects/2618)  
-[![Build status](https://ci.appveyor.com/api/projects/status/bt2ik2jxevu2hyr3)](https://ci.appveyor.com/project/DDuarte/wowpacketparser-191)
+[![Build status](https://ci.appveyor.com/api/projects/status/ri0232rf4bqtmd7l)](https://ci.appveyor.com/project/ChipLeo/wowpacketparser)
 
 Usage
 -----
