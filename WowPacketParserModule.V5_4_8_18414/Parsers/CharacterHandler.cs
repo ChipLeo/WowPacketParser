@@ -208,7 +208,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_BARBER_SHOP_RESULT)]
         public static void HandleBarberShopResult(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadEnum<BarberShopResult>("Result", TypeCode.Int32);
         }
 
         [Parser(Opcode.SMSG_BINDER_CONFIRM)]

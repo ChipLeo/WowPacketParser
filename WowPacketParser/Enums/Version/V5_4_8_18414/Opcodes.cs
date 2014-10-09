@@ -455,7 +455,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_AURA_UPDATE,                              0x0072 | 0x20000}, //++
             {Opcode.SMSG_AUTH_CHALLENGE,                           0x0949 | 0x20000}, //--+
             {Opcode.SMSG_AUTH_RESPONSE,                            0x0ABA | 0x20000}, //++
-            {Opcode.SMSG_BARBER_SHOP_RESULT,                       0x0C3F | 0x20000}, //--
+            {Opcode.SMSG_BARBER_SHOP_RESULT,                       0x0C3F | 0x20000}, //+-
             {Opcode.SMSG_BATTLEFIELD_LIST,                         0x160E | 0x20000}, //++
             {Opcode.SMSG_BATTLEFIELD_MGR_EJECTED,                  0x18C2 | 0x20000}, //--
             {Opcode.SMSG_BATTLEFIELD_MGR_ENTERED,                  0x081B | 0x20000}, //--
