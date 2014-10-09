@@ -626,5 +626,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.WriteGuid("Guid", guids[i], i);
             }
         }
+
+        [Parser(Opcode.SMSG_TABARDVENDOR_ACTIVATE)]
+        public static void HandleTabardVendorActivate(Packet packet)
+        {
+            var guid = packet.StartBitStream(1, 5, 0, 7, 4, 6, 3, 2);
+            packet.ParseBitStream(guid, 5, 4, 2, 3, 6, 0, 1, 7);
+            packet.WriteGuid("Guid", guid);
+        }
     }
 }

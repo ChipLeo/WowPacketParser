@@ -765,7 +765,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_START_MIRROR_TIMER,                       0x0E12 | 0x20000}, //++
             {Opcode.SMSG_STOP_MIRROR_TIMER,                        0x1026 | 0x20000}, //++
             {Opcode.SMSG_SUSPEND_COMMS,                            0x1D48 | 0x20000}, //--
-            {Opcode.SMSG_TABARDVENDOR_ACTIVATE,                    0x0A3E | 0x20000}, //
+            {Opcode.SMSG_TABARDVENDOR_ACTIVATE,                    0x0A3E | 0x20000}, //+-
             {Opcode.SMSG_TALENTS_INFO,                             0x0A9B | 0x20000}, //++
             {Opcode.SMSG_TAXINODE_STATUS,                          0x169E | 0x20000}, //++ pair CMSG 02E1
             {Opcode.SMSG_TEXT_EMOTE,                               0x002E | 0x20000}, //++
