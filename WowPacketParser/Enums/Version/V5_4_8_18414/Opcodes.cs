@@ -496,7 +496,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_CONVERT_RUNE,                             0x1A1B | 0x20000}, //+-
             {Opcode.SMSG_COOLDOWN_EVENT,                           0x1163 | 0x20000}, //++
             {Opcode.SMSG_CORPSE_MAP_POSITION_QUERY_RESPONSE,       0x1A3A | 0x20000}, //+-
-            {Opcode.SMSG_CORPSE_NOT_IN_INSTANCE,                   0x089E | 0x20000}, //--
+            {Opcode.SMSG_CORPSE_NOT_IN_INSTANCE,                   0x089E | 0x20000}, //+-
             {Opcode.SMSG_CORPSE_QUERY_RESPONSE,                    0x0E0B | 0x20000}, //++
             {Opcode.SMSG_CORPSE_RECLAIM_DELAY,                     0x022A | 0x20000}, //++
             {Opcode.SMSG_CREATURE_QUERY_RESPONSE,                  0x048B | 0x20000}, //--
@@ -562,7 +562,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_INITIAL_SPELLS,                           0x045A | 0x20000}, //++
             {Opcode.SMSG_INITIALIZE_FACTIONS,                      0x0AAA | 0x20000}, //++
             {Opcode.SMSG_INSPECT_TALENT,                           0x1842 | 0x20000}, //++
-            {Opcode.SMSG_INSTANCE_RESET,                           0x160F | 0x20000}, //--
+            {Opcode.SMSG_INSTANCE_RESET,                           0x160F | 0x20000}, //+-
             {Opcode.SMSG_INVENTORY_CHANGE_FAILURE,                 0x0C1E | 0x20000}, //--
             {Opcode.SMSG_ITEM_ENCHANT_TIME_UPDATE,                 0x10A2 | 0x20000}, //++
             {Opcode.SMSG_ITEM_PUSH_RESULT,                         0x0E0A | 0x20000}, //++
@@ -784,7 +784,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_TUTORIAL_FLAGS,                           0x1B90 | 0x20000}, //++
             {Opcode.SMSG_UPDATE_ACCOUNT_DATA,                      0x0AAE | 0x20000}, //++
             {Opcode.SMSG_UPDATE_COMBO_POINTS,                      0x082F | 0x20000}, //++
-            {Opcode.SMSG_UPDATE_LAST_INSTANCE,                     0x189B | 0x20000}, //--
+            {Opcode.SMSG_UPDATE_LAST_INSTANCE,                     0x189B | 0x20000}, //+-
             {Opcode.SMSG_UPDATE_OBJECT,                            0x1792 | 0x20000}, //--
             {Opcode.SMSG_UPDATE_WORLD_STATE,                       0x121B | 0x20000}, //++
             {Opcode.SMSG_VOID_ITEM_SWAP_RESPONSE,                  0x1EBF | 0x20000}, //--

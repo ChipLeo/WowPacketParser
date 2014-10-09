@@ -68,12 +68,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_CORPSE_NOT_IN_INSTANCE)]
-        public static void HandleCorpseNotInInstance(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
         [Parser(Opcode.SMSG_LOAD_CUF_PROFILES)]
         public static void HandleLoadCUFProfiles(Packet packet)
         {
@@ -135,16 +129,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.CMSG_RESET_INSTANCES)]
+        [Parser(Opcode.SMSG_CORPSE_NOT_IN_INSTANCE)]
         [Parser(Opcode.SMSG_UPDATE_DUNGEON_ENCOUNTER_FOR_LOOT)]
         public static void HandleInstanceNull(Packet packet)
         {
-        }
-
-        [Parser(Opcode.SMSG_INSTANCE_RESET)]
-        [Parser(Opcode.SMSG_UPDATE_LAST_INSTANCE)]
-        public static void HandleServerSetDifficulty(Packet packet)
-        {
-            packet.ReadToEnd();
         }
     }
 }
