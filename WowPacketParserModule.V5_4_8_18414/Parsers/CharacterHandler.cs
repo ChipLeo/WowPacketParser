@@ -23,13 +23,48 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_CHAR_CREATE)]
         public static void HandleClientCharCreate(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadByte("Outfit Id");
+            packet.ReadByte("Facial Hair");
+            packet.ReadByte("Skin");
+            packet.ReadEnum<Race>("Race", TypeCode.Byte);
+            packet.ReadByte("Hair Style");
+            packet.ReadEnum<Class>("Class", TypeCode.Byte);
+            packet.ReadByte("Face");
+            packet.ReadEnum<Gender>("Gender", TypeCode.Byte);
+            packet.ReadByte("Hair Color");
+
+            var NameLenght = packet.ReadBits(6);
+            var hasDword = packet.ReadBit();
+
+            packet.ReadWoWString("Name", NameLenght);
+
+            if (hasDword)
+                packet.ReadUInt32("dword4C");
         }
 
         [Parser(Opcode.CMSG_CHAR_CUSTOMIZE)]
         public static void HandleClientCharCustomize(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadByte("unk80"); // 80
+            packet.ReadByte("unk82"); // 82
+            packet.ReadByte("unk66"); // 66
+            packet.ReadByte("unk16"); // 16
+            packet.ReadByte("unk81"); // 81
+            packet.ReadByte("unk83"); // 83
+            var guid = new byte[8];
+            guid[2] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            var len = packet.ReadBits("len", 6);
+            guid[4] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            packet.ParseBitStream(guid, 4);
+            packet.ReadWoWString("Name", len);
+            packet.ParseBitStream(guid, 0, 2, 6, 5, 3, 1, 7);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_CHAR_DELETE)]
@@ -43,13 +78,61 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_CHAR_FACTION_CHANGE)]
         public static void HandleClientCharFactionChange(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadByte("unk18"); // 18
+            packet.ReadByte("unk21"); // 21
+            var guid80 = new byte[8];
+            guid80[3] = packet.ReadBit();
+            guid80[2] = packet.ReadBit();
+            var unk27 = packet.ReadBit();
+            var unk23 = packet.ReadBit();
+            guid80[6] = packet.ReadBit();
+            var len = packet.ReadBits("len", 6);
+            var unk25 = packet.ReadBit();
+            var unk20 = packet.ReadBit();
+            guid80[4] = packet.ReadBit();
+            guid80[1] = packet.ReadBit();
+            guid80[0] = packet.ReadBit();
+            guid80[5] = packet.ReadBit();
+            var unk17 = packet.ReadBit();
+            var unk28 = packet.ReadBit();
+            guid80[7] = packet.ReadBit();
+
+            packet.ParseBitStream(guid80, 2, 1, 4, 5, 0);
+            packet.ReadWoWString("Name", len);
+            packet.ParseBitStream(guid80, 6, 3, 7);
+
+            if (unk17)
+                packet.ReadByte("unk16"); // 16
+            if (unk20)
+                packet.ReadByte("unk19"); // 19
+            if (unk27)
+                packet.ReadByte("unk26"); // 26
+            if (unk23)
+                packet.ReadByte("unk22"); // 22
+            if (unk25)
+                packet.ReadByte("unk24"); // 24
+
+            packet.WriteGuid("Guid", guid80);
         }
 
         [Parser(Opcode.CMSG_CHAR_RENAME)]
         public static void HandleClientCharRename(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = new byte[8];
+            guid[6] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            var len = packet.ReadBits("len", 6);
+            guid[1] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 1, 6, 5);
+            packet.ReadWoWString("Name", len);
+            packet.ParseBitStream(guid, 2, 4, 3, 7, 0);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_EMOTE)]
@@ -67,7 +150,22 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_REORDER_CHARACTERS)]
         public static void HandleReorderCharacters(Packet packet)
         {
-            packet.ReadToEnd();
+            var count = packet.ReadBits("Count", 9);
+
+            var guids = new byte[count][];
+
+            for (int i = 0; i < count; i++)
+            {
+                guids[i] = new byte[8];
+                packet.StartBitStream(guids[i], 4, 2, 7, 6, 0, 5, 3, 1);
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                packet.ParseBitStream(guids[i], 1, 2, 7, 5, 4, 0, 3, 6);
+                packet.ReadByte("Slot", i);
+                packet.WriteGuid("Character Guid", guids[i], i);
+            }
         }
 
         [Parser(Opcode.CMSG_SET_PLAYER_DECLINED_NAMES)]
@@ -116,19 +214,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_BINDER_CONFIRM)]
         public static void HandleBinderConfirm(Packet packet)
         {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.SMSG_CHAR_CREATE)]
-        public static void HandleCharCreate(Packet packet)
-        {
-            packet.ReadEnum<ResponseCode>("Response", TypeCode.Byte);
-        }
-
-        [Parser(Opcode.SMSG_CHAR_DELETE)]
-        public static void HandleCharDelete(Packet packet)
-        {
-            packet.ReadToEnd();
+            var guid = packet.StartBitStream(4, 6, 2, 1, 5, 3, 0, 7);
+            packet.ParseBitStream(guid, 6, 2, 5, 0, 4, 7, 1, 3);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_CHAR_ENUM)]
