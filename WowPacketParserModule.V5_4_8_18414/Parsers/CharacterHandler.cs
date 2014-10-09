@@ -389,7 +389,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_EXPLORATION_EXPERIENCE)]
         public static void HandleExplorationExpirience(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadEntry<UInt32>(StoreNameType.Area, "Area ID");
+            packet.ReadUInt32("Experience");
         }
 
         [Parser(Opcode.SMSG_INIT_CURRENCY)]
