@@ -576,5 +576,55 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_LF_GUILD_BROWSE_UPDATED)]
+        public static void HandlerLFGuildBrowseUpdated(Packet packet)
+        {
+            var count = packet.ReadBits("count", 18);
+            var guids = new byte[count][];
+            var lens20 = new uint[count];
+            var lens169 = new uint[count];
+            for (var i = 0; i < count; i++)
+            {
+                guids[i] = new byte[8];
+                guids[i][6] = packet.ReadBit();
+                guids[i][5] = packet.ReadBit();
+                guids[i][4] = packet.ReadBit();
+                guids[i][0] = packet.ReadBit();
+                guids[i][1] = packet.ReadBit();
+                lens169[i] = packet.ReadBits("unk169", 10, i); // 169*4
+                guids[i][3] = packet.ReadBit();
+                lens20[i] = packet.ReadBits("unk20", 7, i); // 20
+                guids[i][7] = packet.ReadBit();
+                guids[i][2] = packet.ReadBit();
+            }
+            for (var i = 0; i < count; i++)
+            {
+                packet.ParseBitStream(guids[i], 3);
+                packet.ReadInt32("unk149", i); // 149*4
+                packet.ReadByte("unk1194", i); // 1194
+                packet.ParseBitStream(guids[i], 0);
+                packet.ReadInt32("unk129", i); // 129
+                packet.ParseBitStream(guids[i], 2);
+                packet.ReadInt32("unk133", i); // 133
+                packet.ReadInt32("unk165", i); // 165
+                packet.ReadInt32("unk121", i); // 121
+                packet.ReadInt32("unk137", i); // 137
+                packet.ReadInt32("unk141", i); // 141
+                packet.ParseBitStream(guids[i], 5);
+                packet.ReadInt32("unk117", i); // 117
+                packet.ReadWoWString("str", lens20[i], i);
+                packet.ReadInt32("unk157", i); // 157
+                packet.ReadByte("unk1208", i); // 1208
+                packet.ParseBitStream(guids[i], 7);
+                packet.ReadInt32("unk153", i); // 153
+                packet.ParseBitStream(guids[i], 6);
+                packet.ReadInt32("unk145", i); // 145
+                packet.ReadWoWString("str2", lens169[i]);
+                packet.ReadInt32("unk161", i); // 161
+                packet.ReadInt32("unk125", i); // 125
+                packet.ParseBitStream(guids[i], 1, 4);
+                packet.WriteGuid("Guid", guids[i], i);
+            }
+        }
     }
 }
