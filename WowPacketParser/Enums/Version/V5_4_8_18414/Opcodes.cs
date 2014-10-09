@@ -60,7 +60,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_BLACK_MARKET_REQUEST_ITEMS,               0x127A | 0x10000}, //++
             {Opcode.CMSG_BUYBACK_ITEM,                             0x0661 | 0x10000}, //+-
             {Opcode.CMSG_BUY_BANK_SLOT,                            0x12F2 | 0x10000}, //+-
-            {Opcode.CMSG_BUY_ITEM,                                 0x02E2 | 0x10000}, //--
+            {Opcode.CMSG_BUY_ITEM,                                 0x02E2 | 0x10000}, //++
             {Opcode.CMSG_CANCEL_AURA,                              0x1861 | 0x10000}, //++
             {Opcode.CMSG_CANCEL_CAST,                              0x18C0 | 0x10000}, //++
             {Opcode.CMSG_CANCEL_CHANNELLING,                       0x08C0 | 0x10000}, //+-
@@ -478,8 +478,8 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BLACK_MARKET_HELLO,                       0x00AE | 0x20000}, //++
             {Opcode.SMSG_BLACK_MARKET_REQUEST_ITEMS_RESULT,        0x128B | 0x20000}, //++
             //{Opcode.SMSG_BLACKMARKET_BID_RESULT,                   0x18BA | 0x20000}, //-- bad id
-            {Opcode.SMSG_BUY_FAILED,                               0x1563 | 0x20000}, //--
-            {Opcode.SMSG_BUY_ITEM,                                 0x101A | 0x20000}, //--
+            {Opcode.SMSG_BUY_FAILED,                               0x1563 | 0x20000}, //+-
+            {Opcode.SMSG_BUY_ITEM,                                 0x101A | 0x20000}, //++
             {Opcode.SMSG_CANCEL_AUTO_REPEAT,                       0x1E0F | 0x20000}, //++
             {Opcode.SMSG_CANCEL_COMBAT,                            0x11E1 | 0x20000}, //++
             {Opcode.SMSG_CAST_FAILED,                              0x143A | 0x20000}, //++

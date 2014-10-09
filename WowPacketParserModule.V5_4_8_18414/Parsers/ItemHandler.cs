@@ -131,7 +131,53 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_BUY_ITEM)]
         public static void HandleBuyItem(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadUInt32("Bag Slot"); // 44
+            packet.ReadUInt32("Item Count"); // 40
+            packet.ReadEntry<UInt32>(StoreNameType.Item, "Entry"); // 36
+            packet.ReadUInt32("Vendor Slot"); // 32
+
+            var guid1 = new byte[8];
+            var guid2 = new byte[8];
+
+            guid2[6] = packet.ReadBit();
+            guid1[6] = packet.ReadBit();
+            guid1[4] = packet.ReadBit();
+            guid2[4] = packet.ReadBit();
+
+            packet.ReadBits("Item Type", 2);
+
+            guid2[0] = packet.ReadBit();
+            guid2[3] = packet.ReadBit();
+            guid1[3] = packet.ReadBit();
+            guid2[7] = packet.ReadBit();
+            guid2[5] = packet.ReadBit();
+            guid1[2] = packet.ReadBit();
+            guid2[1] = packet.ReadBit();
+            guid1[7] = packet.ReadBit();
+            guid2[2] = packet.ReadBit();
+            guid1[1] = packet.ReadBit();
+            guid1[0] = packet.ReadBit();
+            guid1[5] = packet.ReadBit();
+
+            packet.ReadXORByte(guid2, 5);
+            packet.ReadXORByte(guid2, 0);
+            packet.ReadXORByte(guid1, 3);
+            packet.ReadXORByte(guid1, 1);
+            packet.ReadXORByte(guid1, 6);
+            packet.ReadXORByte(guid2, 2);
+            packet.ReadXORByte(guid2, 7);
+            packet.ReadXORByte(guid2, 6);
+            packet.ReadXORByte(guid1, 0);
+            packet.ReadXORByte(guid1, 5);
+            packet.ReadXORByte(guid2, 4);
+            packet.ReadXORByte(guid1, 2);
+            packet.ReadXORByte(guid2, 3);
+            packet.ReadXORByte(guid1, 7);
+            packet.ReadXORByte(guid2, 1);
+            packet.ReadXORByte(guid1, 4);
+
+            packet.WriteGuid("Bag Guid", guid1);
+            packet.WriteGuid("Vendor Guid", guid2);
         }
 
         [Parser(Opcode.CMSG_BUYBACK_ITEM)]
@@ -389,13 +435,25 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_BUY_FAILED)]
         public static void HandleBuyFailed(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = packet.StartBitStream(6, 3, 1, 2, 4, 5, 0, 7);
+            packet.ReadEnum<BuyResult>("Result", TypeCode.Byte);
+            packet.ParseBitStream(guid, 2, 7);
+            packet.ReadEntry<UInt32>(StoreNameType.Item, "Entry");
+            packet.ParseBitStream(guid, 4, 5, 1, 3, 6, 0);
+            packet.WriteGuid("Vendor", guid);
         }
 
         [Parser(Opcode.SMSG_BUY_ITEM)]
         public static void HandleBuyItemResponse(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = packet.StartBitStream(3, 4, 7, 6, 0, 2, 1, 5);
+            packet.ParseBitStream(guid, 6, 7);
+            packet.ReadInt32("Count"); // 24
+            packet.ParseBitStream(guid, 1, 3, 5, 2);
+            packet.ReadInt32("MaxCount"); // 32
+            packet.ParseBitStream(guid, 0, 4);
+            packet.ReadInt32("VendorSlot"); // 28
+            packet.WriteGuid("GUID", guid);
         }
 
         [HasSniffData]
