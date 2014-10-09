@@ -84,7 +84,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_DEL_IGNORE,                               0x0737 | 0x10000}, //+-
             {Opcode.CMSG_DESTROY_ITEM,                             0x0026 | 0x10000}, //+-
             {Opcode.CMSG_DUEL_PROPOSED,                            0x1A26 | 0x10000}, //--
-            {Opcode.CMSG_DUEL_RESPONSE,                            0x03E2 | 0x10000}, //--
+            {Opcode.CMSG_DUEL_RESPONSE,                            0x03E2 | 0x10000}, //+-
             {Opcode.CMSG_EMOTE,                                    0x1924 | 0x10000}, //++
             {Opcode.CMSG_ENABLETAXI,                               0x0741 | 0x10000}, //++
             {Opcode.CMSG_EQUIPMENT_SET_DELETE,                     0x02E8 | 0x10000}, //--

@@ -21,7 +21,18 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_DUEL_RESPONSE)]
         public static void HandleClientDuelResponse(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = new byte[8];
+            guid[7] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            packet.ReadBit("unk16");
+            guid[5] = packet.ReadBit();
+            packet.ParseBitStream(guid, 6, 4, 5, 0, 1, 2, 7, 3);
+            packet.WriteGuid("Guid", guid);
         }
     }
 }
