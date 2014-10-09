@@ -143,10 +143,10 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_JOIN_CHANNEL,                             0x148E | 0x10000}, //++
             {Opcode.CMSG_LEARN_TALENT,                             0x02A7 | 0x10000}, //+-
             {Opcode.CMSG_LEAVE_CHANNEL,                            0x042A | 0x10000}, //--
-            {Opcode.CMSG_LF_GUILD_ADD_APPLICATION,                 0x0C63 | 0x10000}, //
-            {Opcode.CMSG_LF_GUILD_BROWSE,                          0x159A | 0x10000}, //
-            {Opcode.CMSG_LF_GUILD_GET_APPLICATIONS,                0x0558 | 0x10000}, //
-            {Opcode.CMSG_LF_GUILD_REMOVE_APPLICATION,              0x1C53 | 0x10000}, //
+            {Opcode.CMSG_LF_GUILD_ADD_APPLICATION,                 0x0C63 | 0x10000}, //+-
+            {Opcode.CMSG_LF_GUILD_BROWSE,                          0x159A | 0x10000}, //+-
+            {Opcode.CMSG_LF_GUILD_GET_APPLICATIONS,                0x0558 | 0x10000}, //+-
+            {Opcode.CMSG_LF_GUILD_REMOVE_APPLICATION,              0x1C53 | 0x10000}, //+-
             {Opcode.CMSG_LFG_PLAYER_LOCK_INFO_REQUEST,             0x006B | 0x10000}, //++
             {Opcode.CMSG_LFG_TELEPORT,                             0x1AA6 | 0x10000}, //--
             {Opcode.CMSG_LFG_JOIN,                                 0x046B | 0x10000}, //++

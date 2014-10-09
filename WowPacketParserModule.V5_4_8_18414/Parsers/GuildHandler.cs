@@ -531,5 +531,50 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var len = packet.ReadBits("Len", 7);
             packet.ReadWoWString("Name", len);
         }
+
+        [Parser(Opcode.CMSG_LF_GUILD_ADD_APPLICATION)]
+        public static void HandleLFGuildAddApplication(Packet packet)
+        {
+            packet.ReadInt32("unk20"); // 20
+            packet.ReadInt32("unk16"); // 16
+            packet.ReadInt32("unk1056"); // 1056
+            var guid1048 = new byte[8];
+            guid1048[7] = packet.ReadBit();
+            guid1048[5] = packet.ReadBit();
+            guid1048[2] = packet.ReadBit();
+            guid1048[6] = packet.ReadBit();
+            guid1048[1] = packet.ReadBit();
+            guid1048[0] = packet.ReadBit();
+            var len24 = packet.ReadBits("len24", 10); // 24
+            guid1048[3] = packet.ReadBit();
+            guid1048[4] = packet.ReadBit();
+            packet.ParseBitStream(guid1048, 4, 0, 2);
+            packet.ReadWoWString("str", len24);
+            packet.ParseBitStream(guid1048, 6, 1, 5, 7, 3);
+            packet.WriteGuid("Guid", guid1048);
+        }
+
+        [Parser(Opcode.CMSG_LF_GUILD_BROWSE)]
+        public static void HandleLFGuildBrowse(Packet packet)
+        {
+            packet.ReadEnum<GuildFinderOptionsRoles>("Class Roles", TypeCode.UInt32); // 16
+            packet.ReadEnum<GuildFinderOptionsAvailability>("Availability", TypeCode.UInt32); // 24
+            packet.ReadEnum<GuildFinderOptionsInterest>("Guild Interests", TypeCode.UInt32); // 28
+            packet.ReadUInt32("Player Level"); // 20
+        }
+
+        [Parser(Opcode.CMSG_LF_GUILD_GET_APPLICATIONS)]
+        public static void HandlerLFGuildGetApplications(Packet packet)
+        {
+        }
+
+        [Parser(Opcode.CMSG_LF_GUILD_REMOVE_APPLICATION)]
+        public static void HandlerLFGuildRemoveApplication(Packet packet)
+        {
+            var guid = packet.StartBitStream(7, 5, 4, 1, 6, 3, 2, 0);
+            packet.ParseBitStream(guid, 6, 3, 7, 1, 2, 0, 5, 4);
+            packet.WriteGuid("Guid", guid);
+        }
+
     }
 }
