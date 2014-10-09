@@ -109,7 +109,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_TRAINER_BUY_SPELL)]
         public static void HandleTrainerBuySpell(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadInt32("unk24"); // 24
+            packet.ReadInt32("unk28"); // 28
+
+            var guid = packet.StartBitStream(1, 4, 0, 6, 3, 2, 5, 7);
+            packet.ParseBitStream(guid, 3, 1, 4, 7, 0, 5, 6, 2);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_TRAINER_LIST)]
