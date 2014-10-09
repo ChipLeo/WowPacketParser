@@ -18,7 +18,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_OBJECT_UPDATE_FAILED)]
         public static void HandleObjectUpdateFailed(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = packet.StartBitStream(3, 5, 6, 0, 1, 2, 7, 4);
+            packet.ParseBitStream(guid, 0, 6, 5, 7, 2, 1, 3, 4);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_DESTROY_OBJECT)]
