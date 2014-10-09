@@ -127,7 +127,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
             MovementStatusElements.MSEEnd,
         };
 
-        public MovementStatusElements [] MovementFallLand = // 5.4.8 18291
+        public MovementStatusElements [] MovementFallLand = // 08FA
         {
             MovementStatusElements.MSEPositionY,              // 40
             MovementStatusElements.MSEPositionZ,              // 44
@@ -1021,7 +1021,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
             MovementStatusElements.MSEEnd
         };
 
-        public MovementStatusElements [] MovementHeartBeat = // 5.4.8 18291
+        public MovementStatusElements [] MovementHeartBeat = // 01F2
         {
             MovementStatusElements.MSEPositionZ,              // 44
             MovementStatusElements.MSEPositionX,              // 36
@@ -1098,7 +1098,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
             MovementStatusElements.MSEEnd
         };
 
-        public MovementStatusElements [] MovementJump = // 5.4.8 18291
+        public MovementStatusElements [] MovementJump = // 1153
         {
             MovementStatusElements.MSEPositionY,              // 40
             MovementStatusElements.MSEPositionX,              // 36
@@ -1459,7 +1459,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
             MovementStatusElements.MSEEnd
         };
 
-        public MovementStatusElements [] MovementSetFacing = // 5.4.8 18291
+        public MovementStatusElements [] MovementSetFacing = // 1050
         {
             MovementStatusElements.MSEPositionY,              // 40
             MovementStatusElements.MSEPositionX,              // 36
@@ -1604,7 +1604,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
             MovementStatusElements.MSEEnd,
         };
 
-        public MovementStatusElements [] MovementSetPitch = // 5.4.8 18291
+        public MovementStatusElements [] MovementSetPitch = // 017A
         {
             MovementStatusElements.MSEPositionZ,              // 44
             MovementStatusElements.MSEPositionX,              // 36
