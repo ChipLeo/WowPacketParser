@@ -781,6 +781,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_TOTEM_CREATED,                            0x1C8F | 0x20000}, //++
             {Opcode.SMSG_TRADE_STATUS,                             0x1963 | 0x20000}, //++
             {Opcode.SMSG_TRADE_STATUS_EXTENDED,                    0x181E | 0x20000}, //++
+            {Opcode.SMSG_TRAINER_BUY_FAILED,                       0x042E | 0x20000}, //++
             {Opcode.SMSG_TRAINER_LIST,                             0x189F | 0x20000}, //--
             {Opcode.SMSG_TRANSFER_PENDING,                         0x061B | 0x20000}, //++
             {Opcode.SMSG_TRIGGER_CINEMATIC,                        0x0B01 | 0x20000}, //--
@@ -820,7 +821,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0354,                                 0x0354 | 0x20000}, //++
             {Opcode.SMSG_UNK_0364,                                 0x0364 | 0x20000}, //++
             {Opcode.SMSG_UNK_041F,                                 0x041F | 0x20000}, //++ pair 19C3
-            {Opcode.SMSG_UNK_042E,                                 0x042E | 0x20000}, //++
             {Opcode.SMSG_UNK_043E,                                 0x043E | 0x20000}, //++
             {Opcode.SMSG_UNK_04AA,                                 0x04AA | 0x20000}, //+-
             {Opcode.SMSG_UNK_048A,                                 0x048A | 0x20000}, //++

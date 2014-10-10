@@ -525,6 +525,23 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_TRAINER_BUY_FAILED)]
+        public static void HandleTrainerBuyFailed(Packet packet)
+        {
+            /*
+             ServerToClient: SMSG_UNK_042E (0x042E) Length: 15
+             unk24: 0 (0x0000)
+             Spell ID: 41536 (0xA240)
+             Guid: Full: 0xF13044CD00000FA8 Type: Unit Entry: 17613 Low: 4008
+             */
+            var guid = packet.StartBitStream(3, 0, 4, 7, 6, 1, 5, 2);
+            packet.ParseBitStream(guid, 1, 2, 0, 3, 4);
+            packet.ReadInt32("Reason"); // 24
+            packet.ParseBitStream(guid, 5, 6, 7);
+            packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 28
+            packet.WriteGuid("Guid", guid);
+        }
+
         [HasSniffData]
         [Parser(Opcode.SMSG_TRAINER_LIST)]
         public static void HandleServerTrainerList(Packet packet)
