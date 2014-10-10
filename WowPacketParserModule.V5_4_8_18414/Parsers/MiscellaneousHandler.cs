@@ -47,6 +47,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.CMSG_CHANGE_SEATS_ON_CONTROLLED_VEHICLE)]
+        public static void HandleChangeSeatsOnControlledVehicle(Packet packet)
+        {
+        }
+
         [Parser(Opcode.CMSG_DEL_FRIEND)]
         public static void HandleDelFriend(Packet packet)
         {

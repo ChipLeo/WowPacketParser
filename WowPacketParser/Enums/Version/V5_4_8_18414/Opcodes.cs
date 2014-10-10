@@ -67,7 +67,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_CANCEL_MOUNT_AURA,                        0x10E3 | 0x10000}, //++
             {Opcode.CMSG_CANCEL_TRADE,                             0x1941 | 0x10000}, //++
             {Opcode.CMSG_CAST_SPELL,                               0x0206 | 0x10000}, //++
-            {Opcode.CMSG_CHANGE_SEATS_ON_CONTROLLED_VEHICLE        0x08F8 | 0x10000}, //--
+            {Opcode.CMSG_CHANGE_SEATS_ON_CONTROLLED_VEHICLE,       0x08F8 | 0x10000}, //--
             {Opcode.CMSG_CHANNEL_ROSTER_INFO,                      0x0C1B | 0x10000}, //++
             {Opcode.CMSG_CHAR_CREATE,                              0x0F1D | 0x10000}, //+-
             {Opcode.CMSG_CHAR_CUSTOMIZE,                           0x0A13 | 0x10000}, //+-
