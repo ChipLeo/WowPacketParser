@@ -515,5 +515,19 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             packet.ReadByte("Standstate");
         }
+
+        [Parser(Opcode.SMSG_XP_GAIN_ABORTED)]
+        public static void HandleXPGainAborted(Packet packet)
+        {
+            var guid = packet.StartBitStream(2, 3, 0, 5, 7, 6, 1, 4);
+            packet.ParseBitStream(guid, 6, 5, 4);
+            packet.ReadInt32("XP"); // 32
+            packet.ParseBitStream(guid, 7, 1);
+            packet.ReadInt32("unk24"); // 24
+            packet.ParseBitStream(guid, 3);
+            packet.ReadInt32("unk28"); // 28
+            packet.ParseBitStream(guid, 2, 0);
+            packet.WriteGuid("Guid", guid);
+        }
     }
 }
