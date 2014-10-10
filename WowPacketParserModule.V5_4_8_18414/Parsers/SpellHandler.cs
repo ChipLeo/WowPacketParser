@@ -549,6 +549,20 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID");
         }
 
+        [Parser(Opcode.SMSG_PET_CAST_FAILED)]
+        public static void HandlePetCastFailed(Packet packet)
+        {
+            packet.ReadEnum<SpellCastFailureReason>("Reason", TypeCode.Int32); // 28
+            packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 20
+            packet.ReadByte("Cast count"); // 32
+            var unk24 = !packet.ReadBit("!unk24"); // 24
+            var unk16 = !packet.ReadBit("!unk16"); // 16
+            if (unk16)
+                packet.ReadInt32("unk16"); // 16
+            if (unk24)
+                packet.ReadInt32("unk24"); // 24
+        }
+
         [Parser(Opcode.SMSG_PLAY_SPELL_VISUAL_KIT)]
         public static void HandleCastVisualKit(Packet packet)
         {
