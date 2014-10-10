@@ -418,6 +418,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_PET_ACTION_FEEDBACK)]
+        public static void HandlePetActionFeedback(Packet packet)
+        {
+            var hasData = !packet.ReadBit("!hasData"); // 16
+            var state = packet.ReadEnum<PetFeedback>("Pet state", TypeCode.Byte); // 20
+            if (hasData)
+                packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 16
+        }
+
         [Parser(Opcode.SMSG_PET_GUIDS)]
         public static void HandlePetGuids(Packet packet)
         {

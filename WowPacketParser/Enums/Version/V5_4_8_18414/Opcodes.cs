@@ -650,6 +650,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_PARTY_COMMAND_RESULT,                     0x0F86 | 0x20000}, //--
             {Opcode.SMSG_PARTY_MEMBER_STATS,                       0x0A9A | 0x20000}, //+-
             {Opcode.SMSG_PERIODICAURALOG,                          0x0CF2 | 0x20000}, //++
+            {Opcode.SMSG_PET_ACTION_FEEDBACK,                      0x080E | 0x20000}, //++
             {Opcode.SMSG_PET_GUIDS,                                0x1227 | 0x20000}, //++
             {Opcode.SMSG_PET_NAME_QUERY_RESPONSE,                  0x0ABE | 0x20000}, //-+
             {Opcode.SMSG_PET_SPELLS,                               0x095A | 0x20000}, //-+
@@ -830,7 +831,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_068E,                                 0x068E | 0x20000}, //++
             {Opcode.SMSG_UNK_069F,                                 0x069F | 0x20000}, //++
             {Opcode.SMSG_UNK_07F5,                                 0x07F5 | 0x20000}, //++
-            {Opcode.SMSG_UNK_080E,                                 0x080E | 0x20000}, //++
             {Opcode.SMSG_UNK_0861,                                 0x0861 | 0x20000}, //++
             {Opcode.SMSG_UNK_089B,                                 0x089B | 0x20000}, //++ pair 077B
             {Opcode.SMSG_UNK_08FB,                                 0x08FB | 0x20000}, //++
