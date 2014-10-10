@@ -698,6 +698,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_REMOVED_SPELL,                            0x14C3 | 0x20000}, //+-
             {Opcode.SMSG_REQUEST_CEMETERY_LIST_RESPONSE,           0x042A | 0x20000}, //++ pair 06E4
             {Opcode.SMSG_REQUEST_PVP_REWARDS_RESPONSE,             0x08AA | 0x20000}, //++
+            {Opcode.SMSG_RESET_RANGED_COMBAT_TIMER,                0x0002 | 0x20000}, //++
             {Opcode.SMSG_RESPOND_INSPECT_ACHIEVEMENTS,             0x009E | 0x20000}, //++ pair 0373
             {Opcode.SMSG_ROLE_POLL_BEGIN,                          0x1A1F | 0x20000}, //++
             {Opcode.SMSG_SELL_ITEM,                                0x048E | 0x20000}, //--
@@ -799,7 +800,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_WORLD_SERVER_INFO,                        0x0082 | 0x20000}, //++
             {Opcode.SMSG_WORLD_STATE_UI_TIMER_UPDATE,              0x0027 | 0x20000}, //--
             {Opcode.SMSG_ZONE_UNDER_ATTACK,                        0x10C2 | 0x20000}, //++
-            {Opcode.SMSG_UNK_0002,                                 0x0002 | 0x20000}, //+-
             {Opcode.SMSG_UNK_000F,                                 0x000f | 0x20000}, //++
             {Opcode.SMSG_UNK_001B,                                 0x001B | 0x20000}, //++
             {Opcode.SMSG_UNK_0023,                                 0x0023 | 0x20000}, //++
