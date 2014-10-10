@@ -149,6 +149,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
+        [Parser(Opcode.CMSG_RESUME_TOKEN_ACK)]
+        public static void HandleResumeTokenAck(Packet packet)
+        {
+            packet.ReadInt32("unk20"); // 20
+        }
+
         [Parser(Opcode.CMSG_RETURN_TO_GRAVEYARD)]
         public static void HandleClientreturnToGraveyard(Packet packet)
         {
@@ -283,12 +289,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleUnk0264(Packet packet)
         {
             packet.ReadInt16("unk16");
-        }
-
-        [Parser(Opcode.CMSG_UNK_0292)]
-        public static void HandleUnk0292(Packet packet)
-        {
-            packet.ReadInt32("unk20");
         }
 
         [Parser(Opcode.CMSG_UNK_0265)]
@@ -528,6 +528,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("Is MicroDungeon"); // Named in WorldMapFrame.lua
             for (int i = 0; i < count; i++)
                 packet.ReadInt32("Cemetery Id", i); // 6
+        }
+
+        [Parser(Opcode.SMSG_RESUME_TOKEN)]
+        public static void HandleResumeToken(Packet packet)
+        {
+            packet.ReadInt32("unk20"); // 20
+            packet.ReadBits("unk16", 2); // 16
         }
 
         [Parser(Opcode.SMSG_SERVER_MESSAGE)]
@@ -1238,13 +1245,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             packet.ReadBits("unk16", 2);
             packet.ReadInt32("unk20");
-        }
-
-        [Parser(Opcode.SMSG_UNK_18BA)]
-        public static void HandleUnk18BA(Packet packet)
-        {
-            packet.ReadInt32("unk20");
-            packet.ReadBits("unk16", 2);
         }
 
         [Parser(Opcode.SMSG_UNK_18C3)]
