@@ -437,6 +437,26 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_PET_DISMISS_SOUND)]
+        public static void HandlePetDismissSound(Packet packet)
+        {
+            /* пакет з€вл€Їтьс€ при рухов≥ паровим танком новолун≥€.
+             якщо unk28=110, п≥сл€ нього йде пакет
+             ServerToClient: SMSG_DESTROY_OBJECT (0x14C2) Length: 9
+             Despawn Animation: False
+             Object Guid: Full: 0xF141743FAE000E1D Type: Pet Low: 2919239197 Name: 0
+             якщо unk28=2201,  п≥сл€ нього йде пакет
+             ServerToClient: SMSG_CANCEL_AUTO_REPEAT (0x1E0F) Length: 8
+             Guid: Full: 0xF150D53C000573CC Type: Vehicle Entry: 54588 Low: 357324
+             */
+            var point = new Vector3();
+            packet.ReadInt32("Sound ID"); // CreatureSoundData.dbc - iRefID_soundPetDismissID // 28  110 / 2201
+            point.X = packet.ReadSingle(); // 16
+            point.Z = packet.ReadSingle(); // 24
+            point.Y = packet.ReadSingle(); // 20
+            packet.AddValue("Position", point);
+        }
+
         [Parser(Opcode.SMSG_PET_GUIDS)]
         public static void HandlePetGuids(Packet packet)
         {

@@ -1316,24 +1316,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_UNK_1ABB)]
-        public static void HandleSUnk1ABB(Packet packet)
-        {
-            /* пакет з€вл€Їтьс€ при рухов≥ паровим танком новолун≥€.
-             якщо unk28=110, п≥сл€ нього йде пакет
-             ServerToClient: SMSG_DESTROY_OBJECT (0x14C2) Length: 9
-             Despawn Animation: False
-             Object Guid: Full: 0xF141743FAE000E1D Type: Pet Low: 2919239197 Name: 0
-             якщо unk28=2201,  п≥сл€ нього йде пакет
-             ServerToClient: SMSG_CANCEL_AUTO_REPEAT (0x1E0F) Length: 8
-             Guid: Full: 0xF150D53C000573CC Type: Vehicle Entry: 54588 Low: 357324
-             */
-            packet.ReadInt32("unk28"); // 28  110 / 2201
-            packet.ReadSingle("X"); // 16
-            packet.ReadSingle("Z"); // 24
-            packet.ReadSingle("Y"); // 20
-        }
-
         [Parser(Opcode.SMSG_UNK_1C0E)]
         public static void HandleSUnk1C0E(Packet packet)
         {
