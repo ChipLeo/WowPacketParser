@@ -523,6 +523,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_DURABILITY_DAMAGE_DEATH,                  0x1E3E | 0x20000}, //++
             {Opcode.SMSG_EMOTE,                                    0x0987 | 0x20000}, //--
             {Opcode.SMSG_ENABLE_BARBER_SHOP,                       0x1222 | 0x20000}, //--
+            {Opcode.SMSG_ENCHANTMENTLOG,                           0x12A3 | 0x20000}, //++
             {Opcode.SMSG_ENVIRONMENTALDAMAGELOG,                   0x0DF1 | 0x20000}, //--
             {Opcode.SMSG_EQUIPMENT_SET_LIST,                       0x18E2 | 0x20000}, //++
             {Opcode.SMSG_EXPLORATION_EXPERIENCE,                   0x189A | 0x20000}, //+-
@@ -887,7 +888,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_1223,                                 0x1223 | 0x20000}, //++
             {Opcode.SMSG_UNK_129B,                                 0x129B | 0x20000}, //++
             {Opcode.SMSG_UNK_129E,                                 0x129E | 0x20000}, //++
-            {Opcode.SMSG_UNK_12A3,                                 0x12A3 | 0x20000}, //++
             {Opcode.SMSG_UNK_14E2,                                 0x14E2 | 0x20000}, //++ pair+ 1886
             {Opcode.SMSG_UNK_1553,                                 0x1553 | 0x20000}, //++
             {Opcode.SMSG_UNK_15E3,                                 0x15E3 | 0x20000}, //++

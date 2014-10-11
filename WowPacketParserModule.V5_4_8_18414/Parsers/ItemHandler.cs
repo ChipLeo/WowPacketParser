@@ -649,6 +649,72 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
+        [Parser(Opcode.SMSG_ENCHANTMENTLOG)]
+        public static void HandleEnchantementLog(Packet packet)
+        {
+            packet.ReadInt32("unk40"); // 40
+            packet.ReadInt32("unk48"); // 48
+            packet.ReadInt32("unk44"); // 44
+
+            var guid16 = new byte[8];
+            var guid24 = new byte[8];
+            var guid32 = new byte[8];
+
+            guid24[6] = packet.ReadBit();
+            guid24[7] = packet.ReadBit();
+            guid16[6] = packet.ReadBit();
+            guid16[4] = packet.ReadBit();
+            guid24[5] = packet.ReadBit();
+            guid32[7] = packet.ReadBit();
+            guid32[2] = packet.ReadBit();
+            guid32[3] = packet.ReadBit();
+            guid24[4] = packet.ReadBit();
+            guid24[3] = packet.ReadBit();
+            guid32[6] = packet.ReadBit();
+            guid16[1] = packet.ReadBit();
+            guid24[2] = packet.ReadBit();
+            guid16[5] = packet.ReadBit();
+            guid32[4] = packet.ReadBit();
+            guid16[0] = packet.ReadBit();
+            guid32[1] = packet.ReadBit();
+            guid24[0] = packet.ReadBit();
+            guid16[3] = packet.ReadBit();
+            guid16[7] = packet.ReadBit();
+            guid32[5] = packet.ReadBit();
+            guid32[0] = packet.ReadBit();
+            guid16[2] = packet.ReadBit();
+            guid24[1] = packet.ReadBit();
+
+            packet.ReadXORByte(guid24, 0);
+            packet.ReadXORByte(guid16, 2);
+            packet.ReadXORByte(guid32, 7);
+            packet.ReadXORByte(guid24, 1);
+            packet.ReadXORByte(guid16, 4);
+            packet.ReadXORByte(guid32, 5);
+            packet.ReadXORByte(guid24, 4);
+            packet.ReadXORByte(guid32, 2);
+            packet.ReadXORByte(guid16, 6);
+            packet.ReadXORByte(guid16, 0);
+            packet.ReadXORByte(guid32, 0);
+            packet.ReadXORByte(guid32, 4);
+            packet.ReadXORByte(guid24, 3);
+            packet.ReadXORByte(guid16, 5);
+            packet.ReadXORByte(guid32, 1);
+            packet.ReadXORByte(guid16, 3);
+            packet.ReadXORByte(guid16, 7);
+            packet.ReadXORByte(guid24, 7);
+            packet.ReadXORByte(guid32, 3);
+            packet.ReadXORByte(guid24, 6);
+            packet.ReadXORByte(guid24, 2);
+            packet.ReadXORByte(guid24, 5);
+            packet.ReadXORByte(guid32, 6);
+            packet.ReadXORByte(guid16, 1);
+
+            packet.WriteGuid("Guid16", guid16);
+            packet.WriteGuid("Guid24", guid24);
+            packet.WriteGuid("Guid32", guid32);
+        }
+
         [Parser(Opcode.SMSG_INVENTORY_CHANGE_FAILURE)]
         public static void HandleInventoryChangeFailure(Packet packet)
         {
