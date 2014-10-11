@@ -803,6 +803,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_THREAT_REMOVE,                            0x1960 | 0x20000}, //++
             {Opcode.SMSG_THREAT_UPDATE,                            0x0632 | 0x20000}, //++
             {Opcode.SMSG_TIME_SYNC_REQ,                            0x1A8F | 0x20000}, //++
+            {Opcode.SMSG_TITLE_EARNED,                             0x068E | 0x20000}, //++
             {Opcode.SMSG_TOTEM_CREATED,                            0x1C8F | 0x20000}, //++
             {Opcode.SMSG_TRADE_STATUS,                             0x1963 | 0x20000}, //++
             {Opcode.SMSG_TRADE_STATUS_EXTENDED,                    0x181E | 0x20000}, //++
@@ -849,7 +850,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_05F3,                                 0x05F3 | 0x20000}, //++
             {Opcode.SMSG_UNK_060A,                                 0x060A | 0x20000}, //++
             {Opcode.SMSG_UNK_0612,                                 0x0612 | 0x20000}, //++ pair 1886
-            {Opcode.SMSG_UNK_068E,                                 0x068E | 0x20000}, //++
             {Opcode.SMSG_UNK_07F5,                                 0x07F5 | 0x20000}, //++
             {Opcode.SMSG_UNK_0861,                                 0x0861 | 0x20000}, //++
             {Opcode.SMSG_UNK_0A3A,                                 0x0A3A | 0x20000}, //++

@@ -516,6 +516,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadByte("Standstate");
         }
 
+        [Parser(Opcode.SMSG_TITLE_EARNED)]
+        public static void HandleTitleEarned(Packet packet)
+        {
+            packet.ReadInt32("Title");
+        }
+
         [Parser(Opcode.SMSG_XP_GAIN_ABORTED)]
         public static void HandleXPGainAborted(Packet packet)
         {
