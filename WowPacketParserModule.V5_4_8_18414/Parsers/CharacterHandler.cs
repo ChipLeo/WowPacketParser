@@ -551,6 +551,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("unk36"); // 36
         }
 
+        [Parser(Opcode.SMSG_UPDATE_CURRENCY_WEEK_LIMIT)]
+        public static void HandleUpdateCurrencyWeekLimit(Packet packet)
+        {
+            packet.ReadInt32("Int20"); // 20
+            packet.ReadInt32("Int16"); // 15
+        }
+
         [Parser(Opcode.SMSG_XP_GAIN_ABORTED)]
         public static void HandleXPGainAborted(Packet packet)
         {
