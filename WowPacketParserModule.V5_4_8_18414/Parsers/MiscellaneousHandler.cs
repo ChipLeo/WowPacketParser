@@ -381,6 +381,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("Spell");
         }
 
+        [Parser(Opcode.SMSG_DISPLAY_PROMOTION)]
+        public static void HandleDisplayPromotion(Packet packet)
+        {
+            packet.ReadInt32("Dword4");
+        }
+
         [Parser(Opcode.SMSG_FACTION_BONUS_INFO)]
         public static void HandleFactionBonusInfo(Packet packet)
         {
@@ -872,12 +878,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             if (unk28)
                 packet.ReadInt32("unk96");
-        }
-
-        [Parser(Opcode.SMSG_UNK_00A3)]
-        public static void HandleUnk00A3(Packet packet)
-        {
-            packet.ReadInt32("Dword4");
         }
 
         [Parser(Opcode.SMSG_UNK_00F9)]

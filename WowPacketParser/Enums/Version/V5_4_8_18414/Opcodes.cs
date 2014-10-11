@@ -512,6 +512,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_DEFENSE_MESSAGE,                          0x0A1F | 0x20000}, //--
             {Opcode.SMSG_DESTROY_OBJECT,                           0x14C2 | 0x20000}, //++
             {Opcode.SMSG_DISMOUNT,                                 0x0E3A | 0x20000}, //++
+            {Opcode.SMSG_DISPLAY_PROMOTION,                        0x00A3 | 0x20000}, //++
             {Opcode.SMSG_DUEL_COMPLETE,                            0x1C0A | 0x20000}, //--
             {Opcode.SMSG_DUEL_COUNTDOWN,                           0x129F | 0x20000}, //--
             {Opcode.SMSG_DUEL_INBOUNDS,                            0x163A | 0x20000}, //+-
@@ -832,7 +833,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_001B,                                 0x001B | 0x20000}, //++
             {Opcode.SMSG_UNK_0023,                                 0x0023 | 0x20000}, //++
             {Opcode.SMSG_UNK_003A,                                 0x003A | 0x20000}, //++
-            {Opcode.SMSG_UNK_00A3,                                 0x00A3 | 0x20000}, //++
             {Opcode.SMSG_UNK_00F9,                                 0x00F9 | 0x20000}, //++
             {Opcode.SMSG_UNK_0170,                                 0x0170 | 0x20000}, //++
             {Opcode.SMSG_UNK_021A,                                 0x021A | 0x20000}, //++
