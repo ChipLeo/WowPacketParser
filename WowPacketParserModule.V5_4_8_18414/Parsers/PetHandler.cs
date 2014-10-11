@@ -427,6 +427,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 16
         }
 
+        [Parser(Opcode.SMSG_PET_ACTION_SOUND)]
+        public static void HandlePetActionSound(Packet packet)
+        {
+            var guid = packet.StartBitStream(2, 7, 6, 0, 5, 1, 3, 4);
+            packet.ParseBitStream(guid, 7, 4, 6, 1);
+            packet.ReadEnum<PetTalk>("Talk Type", TypeCode.UInt32); // 24
+            packet.ParseBitStream(guid, 2, 3, 5, 0);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_PET_GUIDS)]
         public static void HandlePetGuids(Packet packet)
         {
