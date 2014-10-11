@@ -3760,6 +3760,24 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadUInt32("Flags");
         }
 
+        [Parser(Opcode.SMSG_SET_PLAY_HOVER_ANIM)]
+        public static void HandleSetPlayHoverAnim(Packet packet)
+        {
+            var guid = new byte[8];
+            guid[3] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            packet.ReadBit("unk24"); // 24
+            guid[2] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 5, 1, 6, 2, 3, 0, 4, 7);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_SPLINE_MOVE_SET_FEATHER_FALL)]
         public static void HandleSplineMoveSetFeatherFall(Packet packet)
         {

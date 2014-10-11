@@ -733,6 +733,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_SET_FORCED_REACTIONS,                     0x068F | 0x20000}, //++
             {Opcode.SMSG_SET_PCT_SPELL_MODIFIER,                   0x09D3 | 0x20000}, //++
             {Opcode.SMSG_SET_PHASE_SHIFT,                          0x02A2 | 0x20000}, //++
+            {Opcode.SMSG_SET_PLAY_HOVER_ANIM,                      0x069F | 0x20000}, //++
             {Opcode.SMSG_SET_PLAYER_DECLINED_NAMES_RESULT,         0x180E | 0x20000}, //++
             {Opcode.SMSG_SET_PROFICIENCY,                          0x1440 | 0x20000}, //+-
             {Opcode.SMSG_SET_RAID_DIFFICULTY,                      0x0591 | 0x20000}, //--
@@ -845,7 +846,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_060A,                                 0x060A | 0x20000}, //++
             {Opcode.SMSG_UNK_0612,                                 0x0612 | 0x20000}, //++ pair 1886
             {Opcode.SMSG_UNK_068E,                                 0x068E | 0x20000}, //++
-            {Opcode.SMSG_UNK_069F,                                 0x069F | 0x20000}, //++
             {Opcode.SMSG_UNK_07F5,                                 0x07F5 | 0x20000}, //++
             {Opcode.SMSG_UNK_0861,                                 0x0861 | 0x20000}, //++
             {Opcode.SMSG_UNK_09F8,                                 0x09F8 | 0x20000}, //++
