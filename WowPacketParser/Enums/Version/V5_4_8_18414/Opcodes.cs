@@ -515,6 +515,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_DUEL_OUTOFBOUNDS,                         0x001A | 0x20000}, //--
             {Opcode.SMSG_DUEL_REQUESTED,                           0x0022 | 0x20000}, //--
             {Opcode.SMSG_DUEL_WINNER,                              0x10E1 | 0x20000}, //--
+            {Opcode.SMSG_DURABILITY_DAMAGE_DEATH,                  0x1E3E | 0x20000}, //++
             {Opcode.SMSG_EMOTE,                                    0x0987 | 0x20000}, //--
             {Opcode.SMSG_ENABLE_BARBER_SHOP,                       0x1222 | 0x20000}, //--
             {Opcode.SMSG_ENVIRONMENTALDAMAGELOG,                   0x0DF1 | 0x20000}, //--
@@ -904,7 +905,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_1C3F,                                 0x1C3F | 0x20000}, //++
             {Opcode.SMSG_UNK_1DBE,                                 0x1DBE | 0x20000}, //++
             {Opcode.SMSG_UNK_1E1B,                                 0x1E1B | 0x20000}, //++ levelup 90
-            {Opcode.SMSG_UNK_1E3E,                                 0x1E3E | 0x20000}, //++
             {Opcode.SMSG_UNK_1E9B,                                 0x1E9B | 0x20000}, //++
             {Opcode.SMSG_UNK_1E9E,                                 0x1E9E | 0x20000}, //++
             {Opcode.SMSG_NULL_04BB,                                0x04BB | 0x20000}, //++
