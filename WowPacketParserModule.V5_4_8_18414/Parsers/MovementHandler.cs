@@ -3916,11 +3916,5 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             ReadPlayerMovementInfo(ref packet, info.MovementSplineUnsetHover);
         }
-
-        [Parser(Opcode.SMSG_UNK_0861)]
-        public static void HandleUnk0861(Packet packet)
-        {
-            ReadPlayerMovementInfo(ref packet, info.SUnk0861);
-        }
     }
 }

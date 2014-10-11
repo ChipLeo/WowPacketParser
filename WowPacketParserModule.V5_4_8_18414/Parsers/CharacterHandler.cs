@@ -341,6 +341,20 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_PLAYER_VEHICLE_DATA)]
+        public static void HandlePlayerVehicleData(Packet packet)
+        {
+            var guid = new byte[8];
+
+            packet.StartBitStream(guid, 0, 6, 1, 3, 7, 4, 5, 2);
+            packet.ParseBitStream(guid, 6, 7, 0, 3);
+            packet.ReadInt32("Vehicle Id");
+            packet.ReadInt32("MCounter");
+            packet.ParseBitStream(guid, 1, 5, 2, 4);
+
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_TEXT_EMOTE)]
         public static void HandleSTextEmote(Packet packet)
         {

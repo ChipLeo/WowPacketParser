@@ -673,6 +673,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_NEW_WORLD,                                0x1C3B | 0x20000}, //++
             {Opcode.SMSG_NOTIFICATION,                             0x0C2A | 0x20000}, //--
             {Opcode.SMSG_NPC_TEXT_UPDATE,                          0x140A | 0x20000}, //-+
+            {Opcode.SMSG_ON_CANCEL_EXPECTED_RIDE_VEHICLE_AURA,     0x1A2A | 0x20000}, //++
             {Opcode.SMSG_PAGE_TEXT_QUERY_RESPONSE,                 0x081E | 0x20000}, //--
             {Opcode.SMSG_PARTY_COMMAND_RESULT,                     0x0F86 | 0x20000}, //--
             {Opcode.SMSG_PARTY_MEMBER_STATS,                       0x0A9A | 0x20000}, //+-
@@ -697,6 +698,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_PLAY_SPELL_VISUAL_KIT,                    0x11E3 | 0x20000}, //++
             {Opcode.SMSG_PLAYED_TIME,                              0x11E2 | 0x20000}, //+-
             {Opcode.SMSG_PLAYER_MOVE,                              0x1A32 | 0x20000}, //++
+            {Opcode.SMSG_PLAYER_VEHICLE_DATA,                      0x0861 | 0x20000}, //++
             {Opcode.SMSG_PLAYERBOUND,                              0x1B60 | 0x20000}, //--
             {Opcode.SMSG_PONG,                                     0x1969 | 0x20000}, //--
             {Opcode.SMSG_POWER_UPDATE,                             0x109F | 0x20000}, //++
@@ -863,7 +865,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_048A,                                 0x048A | 0x20000}, //++
             {Opcode.SMSG_UNK_0612,                                 0x0612 | 0x20000}, //++ pair 1886
             {Opcode.SMSG_UNK_07F5,                                 0x07F5 | 0x20000}, //++
-            {Opcode.SMSG_UNK_0861,                                 0x0861 | 0x20000}, //++
             {Opcode.SMSG_UNK_0A3A,                                 0x0A3A | 0x20000}, //++
             {Opcode.SMSG_UNK_0A3F,                                 0x0A3F | 0x20000}, //++
             {Opcode.SMSG_UNK_0A78,                                 0x0A78 | 0x20000}, //++
@@ -912,7 +913,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_NULL_0C9A,                                0x0C9A | 0x20000}, //++
             {Opcode.SMSG_NULL_0E2B,                                0x0E2B | 0x20000}, //++
             {Opcode.SMSG_NULL_0E8B,                                0x0E8B | 0x20000}, //++
-            {Opcode.SMSG_NULL_1A2A,                                0x1A2A | 0x20000}, //++
         };
     }
 }

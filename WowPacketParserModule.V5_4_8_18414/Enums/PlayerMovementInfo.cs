@@ -4204,29 +4204,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
             MovementStatusElements.MSEEnd
         };
 
-        public MovementStatusElements[] SUnk0861 = // 5.4.8 18414 0861
-        {
-            MovementStatusElements.MSEHasGuidByte0,
-            MovementStatusElements.MSEHasGuidByte6,
-            MovementStatusElements.MSEHasGuidByte1,
-            MovementStatusElements.MSEHasGuidByte3,
-            MovementStatusElements.MSEHasGuidByte7,
-            MovementStatusElements.MSEHasGuidByte4,
-            MovementStatusElements.MSEHasGuidByte5,
-            MovementStatusElements.MSEHasGuidByte2,
-            MovementStatusElements.MSEGuidByte6,
-            MovementStatusElements.MSEGuidByte7,
-            MovementStatusElements.MSEGuidByte0,
-            MovementStatusElements.MSEGuidByte3,
-            MovementStatusElements.MSEExtraInt32,
-            MovementStatusElements.MSECount,
-            MovementStatusElements.MSEGuidByte1,
-            MovementStatusElements.MSEGuidByte5,
-            MovementStatusElements.MSEGuidByte2,
-            MovementStatusElements.MSEGuidByte4,
-            MovementStatusElements.MSEEnd,
-        };
-
         public MovementStatusElements[] Unk09DB = // 09DB
         {
             MovementStatusElements.MSEPositionX,              // 36
