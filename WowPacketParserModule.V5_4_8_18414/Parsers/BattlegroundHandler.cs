@@ -535,6 +535,21 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_BATTLEGROUND_PLAYER_POSITIONS)]
         public static void HandleBattlegroundPlayerPositions(Packet packet)
         {
+            var count16 = packet.ReadBits("count16", 20);
+            var guid = new byte[count16][];
+            for (var i = 0; i < count16; i++)
+                guid[i] = packet.StartBitStream(1, 5, 0, 4, 6, 3, 7, 2);
+            for (var i = 0; i < count16; i++)
+            {
+                packet.ParseBitStream(guid[i], 0, 3, 7);
+                packet.ReadByte("unk36", i);
+                packet.ReadSingle("unk32", i);
+                packet.ParseBitStream(guid[i], 4, 2, 1, 5);
+                packet.ReadSingle("unk28", i);
+                packet.ReadByte("unk37", i);
+                packet.ParseBitStream(guid[i], 6);
+                packet.WriteGuid("Guid", guid[i], i);
+            }
         }
 
         [Parser(Opcode.SMSG_BATTLEGROUND_WAIT_JOIN)]

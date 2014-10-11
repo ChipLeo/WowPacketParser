@@ -471,6 +471,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BATTLEFIELD_STATUS_FAILED,                0x1140 | 0x20000}, //+-
             {Opcode.SMSG_BATTLEGROUND_PLAYER_JOINED,               0x1E2F | 0x20000}, //--
             {Opcode.SMSG_BATTLEGROUND_PLAYER_LEFT,                 0x0206 | 0x20000}, //+-
+            {Opcode.SMSG_BATTLEGROUND_PLAYER_POSITIONS,            0x060A | 0x20000}, //++
             {Opcode.SMSG_BATTLE_PET_DELETED,                       0x18AB | 0x20000}, //+-
             {Opcode.SMSG_BATTLE_PET_JOURNAL,                       0x1542 | 0x20000}, //++
             {Opcode.SMSG_BATTLE_PET_JOURNAL_LOCK_ACQUIRED,         0x1A0F | 0x20000}, //++
@@ -860,7 +861,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0354,                                 0x0354 | 0x20000}, //++
             {Opcode.SMSG_UNK_0364,                                 0x0364 | 0x20000}, //++
             {Opcode.SMSG_UNK_048A,                                 0x048A | 0x20000}, //++
-            {Opcode.SMSG_UNK_060A,                                 0x060A | 0x20000}, //++
             {Opcode.SMSG_UNK_0612,                                 0x0612 | 0x20000}, //++ pair 1886
             {Opcode.SMSG_UNK_07F5,                                 0x07F5 | 0x20000}, //++
             {Opcode.SMSG_UNK_0861,                                 0x0861 | 0x20000}, //++
