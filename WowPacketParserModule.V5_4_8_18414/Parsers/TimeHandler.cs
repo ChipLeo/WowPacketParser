@@ -39,5 +39,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk24");
             packet.ReadInt32("unk16");
         }
+
+        [Parser(Opcode.SMSG_TIME_ADJUSTMENT)]
+        public static void HandleTimeAdjustement(Packet packet)
+        {
+            packet.ReadSingle("unk1");
+            packet.ReadInt32("unk2");
+        }
     }
 }

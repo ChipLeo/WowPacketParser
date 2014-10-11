@@ -821,6 +821,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_THREAT_CLEAR,                             0x180B | 0x20000}, //++
             {Opcode.SMSG_THREAT_REMOVE,                            0x1960 | 0x20000}, //++
             {Opcode.SMSG_THREAT_UPDATE,                            0x0632 | 0x20000}, //++
+            {Opcode.SMSG_TIME_ADJUSTMENT,                          0x04AA | 0x20000}, //+-
             {Opcode.SMSG_TIME_SYNC_REQ,                            0x1A8F | 0x20000}, //++
             {Opcode.SMSG_TITLE_EARNED,                             0x068E | 0x20000}, //++
             {Opcode.SMSG_TOTEM_CREATED,                            0x1C8F | 0x20000}, //++
@@ -858,7 +859,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0332,                                 0x0332 | 0x20000}, //-- coded
             {Opcode.SMSG_UNK_0354,                                 0x0354 | 0x20000}, //++
             {Opcode.SMSG_UNK_0364,                                 0x0364 | 0x20000}, //++
-            {Opcode.SMSG_UNK_04AA,                                 0x04AA | 0x20000}, //+-
             {Opcode.SMSG_UNK_048A,                                 0x048A | 0x20000}, //++
             {Opcode.SMSG_UNK_060A,                                 0x060A | 0x20000}, //++
             {Opcode.SMSG_UNK_0612,                                 0x0612 | 0x20000}, //++ pair 1886
