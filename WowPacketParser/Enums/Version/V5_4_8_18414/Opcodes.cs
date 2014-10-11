@@ -782,6 +782,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_SPLINE_MOVE_UNSET_HOVER,                  0x0CE1 | 0x20000}, //++
             {Opcode.SMSG_STANDSTATE_UPDATE,                        0x1C12 | 0x20000}, //++
             {Opcode.SMSG_START_TIMER,                              0x0E3F | 0x20000}, //+-
+            {Opcode.SMSG_START_ELAPSED_TIMERS,                     0x00AB | 0x20000}, //++
             {Opcode.SMSG_START_MIRROR_TIMER,                       0x0E12 | 0x20000}, //++
             {Opcode.SMSG_STOP_MIRROR_TIMER,                        0x1026 | 0x20000}, //++
             {Opcode.SMSG_SUSPEND_COMMS,                            0x1D48 | 0x20000}, //--
@@ -826,7 +827,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_003A,                                 0x003A | 0x20000}, //++
             {Opcode.SMSG_UNK_0050,                                 0x0050 | 0x20000}, //++
             {Opcode.SMSG_UNK_00A3,                                 0x00A3 | 0x20000}, //++
-            {Opcode.SMSG_UNK_00AB,                                 0x00AB | 0x20000}, //++
             {Opcode.SMSG_UNK_00F9,                                 0x00F9 | 0x20000}, //++
             {Opcode.SMSG_UNK_0170,                                 0x0170 | 0x20000}, //++
             {Opcode.SMSG_UNK_01D2,                                 0x01D2 | 0x20000}, //++

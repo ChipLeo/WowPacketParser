@@ -688,6 +688,17 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_START_ELAPSED_TIMERS)]
+        public static void HandleStartElapsedTimers(Packet packet)
+        {
+            var count = packet.ReadBits("count", 21);
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadInt32("unk20", i); // 20
+                packet.ReadInt32("unk24", i); // 24
+            }
+        }
+
         [Parser(Opcode.SMSG_START_MIRROR_TIMER)]
         public static void HandleStartMirrorTimer(Packet packet)
         {
@@ -867,17 +878,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleUnk00A3(Packet packet)
         {
             packet.ReadInt32("Dword4");
-        }
-
-        [Parser(Opcode.SMSG_UNK_00AB)]
-        public static void HandleUnk00AB(Packet packet)
-        {
-            var count = packet.ReadBits("count", 21);
-            for (var i = 0; i < count; i++)
-            {
-                packet.ReadInt32("unk20", i);
-                packet.ReadInt32("unk24", i);
-            }
         }
 
         [Parser(Opcode.SMSG_UNK_00F9)]
