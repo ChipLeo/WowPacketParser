@@ -943,6 +943,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadEnum<MirrorTimerType>("Timer Type", TypeCode.UInt32);
         }
 
+        [Parser(Opcode.SMSG_STREAMING_MOVIE)]
+        public static void HandleStreamingMovie(Packet packet)
+        {
+            var count16 = packet.ReadBits("count16", 23);
+            for (var i = 0; i < count16; i++)
+                packet.ReadInt16("File Data ID"); // 20
+        }
+
         [Parser(Opcode.SMSG_TIME_SYNC_REQ)]
         public static void HandleTimeSyncReq(Packet packet)
         {

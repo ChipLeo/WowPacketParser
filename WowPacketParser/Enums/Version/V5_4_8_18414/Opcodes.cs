@@ -817,6 +817,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_START_ELAPSED_TIMERS,                     0x00AB | 0x20000}, //++
             {Opcode.SMSG_START_MIRROR_TIMER,                       0x0E12 | 0x20000}, //++
             {Opcode.SMSG_STOP_MIRROR_TIMER,                        0x1026 | 0x20000}, //++
+            {Opcode.SMSG_STREAMING_MOVIE,                          0x1843 | 0x20000}, //++
             {Opcode.SMSG_SUPERCEDED_SPELL,                         0x1943 | 0x20000}, //++
             {Opcode.SMSG_SUSPEND_COMMS,                            0x1D48 | 0x20000}, //--
             {Opcode.SMSG_TABARDVENDOR_ACTIVATE,                    0x0A3E | 0x20000}, //+-
@@ -900,7 +901,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_16BF,                                 0x16BF | 0x20000}, //++
             {Opcode.SMSG_UNK_182E,                                 0x182E | 0x20000}, //++ pair CMSG 15DB
             {Opcode.SMSG_UNK_1840,                                 0x1840 | 0x20000}, //++
-            {Opcode.SMSG_UNK_1843,                                 0x1843 | 0x20000}, //++
             {Opcode.SMSG_UNK_188F,                                 0x188F | 0x20000}, //++
             {Opcode.SMSG_UNK_1C3A,                                 0x1C3A | 0x20000}, //++
             {Opcode.SMSG_UNK_1C3F,                                 0x1C3F | 0x20000}, //++
