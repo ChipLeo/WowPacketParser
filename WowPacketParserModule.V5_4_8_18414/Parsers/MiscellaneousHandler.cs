@@ -463,6 +463,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
+        [Parser(Opcode.SMSG_INVALIDATE_PLAYER)]
+        public static void HandleInvalidatePlayer(Packet packet)
+        {
+            var guid = packet.StartBitStream(6, 3, 1, 2, 7, 5, 0, 4);
+            packet.ParseBitStream(guid, 7, 1, 2, 3, 6, 0, 4, 5);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_LEARNED_DANCE_MOVES)]
         public static void HandleLearnedDanceMoves(Packet packet)
         {
@@ -1069,14 +1077,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadSingle("unk28");
             packet.ReadInt32("unk16");
             packet.ReadSingle("unk");
-        }
-
-        [Parser(Opcode.SMSG_UNK_102E)]
-        public static void HandleUnk102E(Packet packet)
-        {
-            var guid = packet.StartBitStream(6, 3, 1, 2, 7, 5, 0, 4);
-            packet.ParseBitStream(guid, 7, 1, 2, 3, 6, 0, 4, 5);
-            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_SET_FLAT_SPELL_MODIFIER)]

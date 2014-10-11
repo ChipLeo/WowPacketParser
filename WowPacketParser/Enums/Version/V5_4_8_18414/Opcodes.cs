@@ -576,6 +576,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_INITIALIZE_FACTIONS,                      0x0AAA | 0x20000}, //++
             {Opcode.SMSG_INSPECT_TALENT,                           0x1842 | 0x20000}, //++
             {Opcode.SMSG_INSTANCE_RESET,                           0x160F | 0x20000}, //+-
+            {Opcode.SMSG_INVALIDATE_PLAYER,                        0x102E | 0x20000}, //++
             {Opcode.SMSG_INVENTORY_CHANGE_FAILURE,                 0x0C1E | 0x20000}, //--
             {Opcode.SMSG_ITEM_ENCHANT_TIME_UPDATE,                 0x10A2 | 0x20000}, //++
             {Opcode.SMSG_ITEM_PUSH_RESULT,                         0x0E0A | 0x20000}, //++
@@ -876,7 +877,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0EAB,                                 0x0EAB | 0x20000}, //++
             {Opcode.SMSG_UNK_0EBA,                                 0x0EBA | 0x20000}, //++
             {Opcode.SMSG_UNK_1006,                                 0x1006 | 0x20000}, //++
-            {Opcode.SMSG_UNK_102E,                                 0x102E | 0x20000}, //++
             {Opcode.SMSG_UNK_103E,                                 0x103E | 0x20000}, //++
             {Opcode.SMSG_UNK_109A,                                 0x109A | 0x20000}, //++
             {Opcode.SMSG_UNK_1134,                                 0x1134 | 0x20000}, //-- pair CMSG 0123
