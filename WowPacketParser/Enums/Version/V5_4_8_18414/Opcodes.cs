@@ -708,6 +708,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_POWER_UPDATE,                             0x109F | 0x20000}, //++
             {Opcode.SMSG_PRE_RESURRECT,                            0x19C0 | 0x20000}, //++
             {Opcode.SMSG_PROCRESIST,                               0x12BE | 0x20000}, //++
+            {Opcode.SMSG_PROPOSE_LEVEL_GRANT,                      0x109A | 0x20000}, //++
             {Opcode.SMSG_PVP_LOG_DATA,                             0x1E8F | 0x20000}, //--
             {Opcode.SMSG_PVP_OPTIONS_ENABLED,                      0x080A | 0x20000}, //++ pair 0A22
             {Opcode.SMSG_QUERY_NEXT_MAIL_TIME,                     0x089B | 0x20000}, //++ pair 077B
@@ -886,7 +887,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0EBA,                                 0x0EBA | 0x20000}, //++
             {Opcode.SMSG_UNK_1006,                                 0x1006 | 0x20000}, //++
             {Opcode.SMSG_UNK_103E,                                 0x103E | 0x20000}, //++
-            {Opcode.SMSG_UNK_109A,                                 0x109A | 0x20000}, //++
             {Opcode.SMSG_UNK_1134,                                 0x1134 | 0x20000}, //-- pair CMSG 0123
             {Opcode.SMSG_UNK_1160,                                 0x1160 | 0x20000}, //++
             {Opcode.SMSG_UNK_1206,                                 0x1206 | 0x20000}, //++

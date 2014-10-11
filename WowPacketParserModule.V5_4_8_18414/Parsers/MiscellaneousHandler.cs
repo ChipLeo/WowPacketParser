@@ -743,6 +743,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_PROPOSE_LEVEL_GRANT)]
+        public static void HandleProposeLevelGrant(Packet packet)
+        {
+            var guid = packet.StartBitStream(6, 7, 2, 5, 3, 0, 1, 4);
+            packet.ParseBitStream(guid, 2, 5, 6, 7, 1, 4, 3, 0);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_RAID_READY_CHECK)]
         [Parser(Opcode.SMSG_RAID_READY_CHECK_COMPLETED)]
         [Parser(Opcode.SMSG_RAID_READY_CHECK_CONFIRM)]
