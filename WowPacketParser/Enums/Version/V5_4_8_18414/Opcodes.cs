@@ -487,6 +487,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_CANCEL_AUTO_REPEAT,                       0x1E0F | 0x20000}, //++
             {Opcode.SMSG_CANCEL_COMBAT,                            0x11E1 | 0x20000}, //++
             {Opcode.SMSG_CAST_FAILED,                              0x143A | 0x20000}, //++
+            {Opcode.SMSG_CHALLENGE_MODE_REWARDS,                   0x168A | 0x20000}, //++ pair 1C5A
             {Opcode.SMSG_CHANNEL_NOTIFY,                           0x0F06 | 0x20000}, //--
             {Opcode.SMSG_CHANNEL_START,                            0x10F9 | 0x20000}, //++
             {Opcode.SMSG_CHANNEL_UPDATE,                           0x11D9 | 0x20000}, //+-
@@ -892,7 +893,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_1553,                                 0x1553 | 0x20000}, //++
             {Opcode.SMSG_UNK_15E3,                                 0x15E3 | 0x20000}, //++
             {Opcode.SMSG_UNK_163F,                                 0x163F | 0x20000}, //++
-            {Opcode.SMSG_UNK_168A,                                 0x168A | 0x20000}, //++ pair 1C5A
             {Opcode.SMSG_UNK_16BF,                                 0x16BF | 0x20000}, //++
             {Opcode.SMSG_UNK_182E,                                 0x182E | 0x20000}, //++ pair CMSG 15DB
             {Opcode.SMSG_UNK_1840,                                 0x1840 | 0x20000}, //++

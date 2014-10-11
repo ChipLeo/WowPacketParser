@@ -351,6 +351,52 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("unk16");
         }
 
+        [Parser(Opcode.SMSG_CHALLENGE_MODE_REWARDS)]
+        public static void HandleChallengeModeRewards(Packet packet)
+        {
+            var count16 = packet.ReadBits("count16", 21);
+            var count24 = new uint[count16];
+            var unk68 = new uint[count16][];
+            var unk28 = new uint[count16][];
+            for (var i = 0; i < count16; i++)
+            {
+                count24[i] = packet.ReadBits("count24", 20, i);
+                unk68[i] = new uint[count24[i]];
+                unk28[i] = new uint[count24[i]];
+                for (var j = 0; j < count24[i]; j++)
+                {
+                    unk68[i][j] = packet.ReadBits("unk68", 21, i, j); // 68
+                    unk28[i][j] = packet.ReadBits("unk28", 20, i, j); // 28
+                }
+            }
+            var unk32 = packet.ReadBits("unk32", 20); // 32
+            for (var i = 0; i < count16; i++)
+            {
+                for (var j = 0; j < count24[i]; j++)
+                {
+                    for (var k = 0; k < unk28[i][j]; k++)
+                    {
+                        packet.ReadInt32("unk72", i, j, k); // 72
+                        packet.ReadInt32("unk76", i, j, k); // 76
+                        packet.ReadInt32("unk68", i, j, k); // 68
+                    }
+                    packet.ReadInt32("unk84", i, j); // 84
+                    for (var k = 0; k < unk68[i][j]; k++)
+                    {
+                        packet.ReadInt32("unk132", i, j, k); // 132
+                        packet.ReadInt32("unk136", i, j, k); // 136
+                    }
+                }
+                packet.ReadInt32("unk20", i); // 20
+            }
+            for (var i = 0; i < unk32; i++)
+            {
+                packet.ReadInt32("unk40", i); // 40
+                packet.ReadInt32("unk36", i); // 36
+                packet.ReadInt32("unk44", i); // 44
+            }
+        }
+
         [Parser(Opcode.SMSG_CLIENTCACHE_VERSION)]
         public static void HandleClientCacheVersion(Packet packet)
         {
