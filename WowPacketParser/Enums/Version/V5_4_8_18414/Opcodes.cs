@@ -438,6 +438,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_ACHIEVEMENT_EARNED,                       0x080B | 0x20000}, //--
             {Opcode.SMSG_ACTION_BUTTONS,                           0x081A | 0x20000}, //++
             {Opcode.SMSG_ACTIVATETAXIREPLY,                        0x02A7 | 0x20000}, //++
+            {Opcode.SMSG_ADD_LOSS_OF_CONTROL,                      0x0C13 | 0x20000}, //++
             {Opcode.SMSG_ADDON_INFO,                               0x160A | 0x20000}, //--
             {Opcode.SMSG_ADJUST_SPLINE_DURATION,                   0x023B | 0x20000}, //++
             {Opcode.SMSG_AI_REACTION,                              0x06AF | 0x20000}, //++
@@ -864,7 +865,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0A8A,                                 0x0A8A | 0x20000}, //++ pair 009A
             {Opcode.SMSG_UNK_0A8B,                                 0x0A8B | 0x20000}, //++
             {Opcode.SMSG_UNK_0B22,                                 0x0B22 | 0x20000}, //-- pair 0C1B
-            {Opcode.SMSG_UNK_0C13,                                 0x0C13 | 0x20000}, //++
             {Opcode.SMSG_UNK_0C1A,                                 0x0C1A | 0x20000}, //-- pair 17BA
             {Opcode.SMSG_UNK_0C44,                                 0x0C44 | 0x20000}, //+-
             {Opcode.SMSG_UNK_0CAE,                                 0x0CAE | 0x20000}, //++

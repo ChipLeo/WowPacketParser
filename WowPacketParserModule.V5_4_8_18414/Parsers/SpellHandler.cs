@@ -368,6 +368,32 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("SkillID");
         }
 
+        [Parser(Opcode.SMSG_ADD_LOSS_OF_CONTROL)]
+        public static void HandleAddLossOfControl(Packet packet)
+        {
+            packet.ReadEntry<UInt32>(StoreNameType.Spell, "Spell ID"); // 36
+            packet.ReadInt32("unk32"); // 32
+            packet.ReadInt32("Cooldown1"); // 24
+            packet.ReadInt32("Cooldown2"); // 28
+
+            var guid = new byte[8];
+
+            guid[5] = packet.ReadBit();
+            packet.ReadBits("unk44", 8); // 44
+            guid[7] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            packet.ReadBits("unk40", 8); // 40
+            guid[0] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 4, 2, 5, 6, 0, 7, 1, 3);
+
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_AURA_UPDATE)]
         public static void HandleAuraUpdate(Packet packet)
         {
