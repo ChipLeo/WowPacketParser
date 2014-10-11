@@ -566,6 +566,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GUILD_INVITE_CANCEL,                      0x0FE1 | 0x20000}, //++
             {Opcode.SMSG_GUILD_MEMBER_DAILY_RESET,                 0x1BE8 | 0x20000}, //--
             {Opcode.SMSG_GUILD_NEWS_UPDATE,                        0x0AE8 | 0x20000}, //--
+            {Opcode.SMSG_GUILD_PARTY_STATE_RESPONSE,               0x0A78 | 0x20000}, //++
             {Opcode.SMSG_GUILD_QUERY_RESPONSE,                     0x1B79 | 0x20000}, //++
             {Opcode.SMSG_GUILD_RANK,                               0x0A79 | 0x20000}, //--
             {Opcode.SMSG_GUILD_RANKS_UPDATE,                       0x0A60 | 0x20000}, //--
@@ -872,7 +873,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_048A,                                 0x048A | 0x20000}, //++
             {Opcode.SMSG_UNK_0612,                                 0x0612 | 0x20000}, //++ pair 1886
             {Opcode.SMSG_UNK_07F5,                                 0x07F5 | 0x20000}, //++
-            {Opcode.SMSG_UNK_0A78,                                 0x0A78 | 0x20000}, //++
             {Opcode.SMSG_UNK_0A8A,                                 0x0A8A | 0x20000}, //++ pair 009A
             {Opcode.SMSG_UNK_0A8B,                                 0x0A8B | 0x20000}, //++
             {Opcode.SMSG_UNK_0B22,                                 0x0B22 | 0x20000}, //-- pair 0C1B

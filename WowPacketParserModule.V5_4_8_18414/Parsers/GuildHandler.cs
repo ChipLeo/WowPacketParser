@@ -417,6 +417,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
+        [Parser(Opcode.SMSG_GUILD_PARTY_STATE_RESPONSE)]
+        public static void HandleGuildPartyStateResponse(Packet packet)
+        {
+            packet.ReadInt32("Unk20"); // 20
+            packet.ReadSingle("unk24"); // 24
+            packet.ReadInt32("unk28"); // 28
+            packet.ReadBit("unk16"); // 16
+        }
+
         [Parser(Opcode.SMSG_GUILD_NEWS_TEXT)]
         public static void HandleNewText(Packet packet)
         {
