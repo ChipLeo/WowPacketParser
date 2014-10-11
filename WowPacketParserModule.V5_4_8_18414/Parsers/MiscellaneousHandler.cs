@@ -381,6 +381,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("Spell");
         }
 
+        [Parser(Opcode.SMSG_FORCE_SET_VEHICLE_REC_ID)]
+        public static void HandleForceSetVehicleRecId(Packet packet)
+        {
+            var guid = packet.StartBitStream(5, 7, 2, 1, 4, 0, 3, 6);
+            packet.ParseBitStream(guid, 5, 7, 4, 6, 2, 1, 3, 0);
+            packet.ReadInt32("unk24"); // 24
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_GMRESPONSE_RECEIVED)]
         public static void HandleSGMResponseReceived(Packet packet)
         {

@@ -526,6 +526,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_FEATURE_SYSTEM_STATUS,                    0x16BB | 0x20000}, //++
             {Opcode.SMSG_FLIGHT_SPLINE_SYNC,                       0x0063 | 0x20000}, //++
             {Opcode.SMSG_FORCE_SEND_QUEUED_PACKETS,                0x0969 | 0x20000}, //--
+            {Opcode.SMSG_FORCE_SET_VEHICLE_REC_ID,                 0x149F | 0x20000}, //++
             {Opcode.SMSG_FRIEND_STATUS,                            0x0532 | 0x20000}, //--
             {Opcode.SMSG_GAME_SHOP_QUERY_RESPONSE,                 0x1ABF | 0x20000}, //--
             {Opcode.SMSG_GAME_STORE_INGAME_BUY_FAILED,             0x023A | 0x20000}, //++
@@ -885,7 +886,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_12A3,                                 0x12A3 | 0x20000}, //++
             {Opcode.SMSG_UNK_12BE,                                 0x12BE | 0x20000}, //++
             {Opcode.SMSG_UNK_148F,                                 0x148F | 0x20000}, //++
-            {Opcode.SMSG_UNK_149F,                                 0x149F | 0x20000}, //++
             {Opcode.SMSG_UNK_14E2,                                 0x14E2 | 0x20000}, //++ pair+ 1886
             {Opcode.SMSG_UNK_1553,                                 0x1553 | 0x20000}, //++
             {Opcode.SMSG_UNK_15E3,                                 0x15E3 | 0x20000}, //++
