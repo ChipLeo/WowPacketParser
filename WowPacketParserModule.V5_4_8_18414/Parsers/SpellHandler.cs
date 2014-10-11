@@ -1422,6 +1422,44 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Caster", guid2);
         }
 
+        [Parser(Opcode.SMSG_SPELLORDAMAGE_IMMUNE)]
+        public static void HandleSpellOrDamageImmune(Packet packet)
+        {
+            var guid = new byte[8];
+            var guid2 = new byte[8];
+
+            guid2[5] = packet.ReadBit();
+            guid2[0] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            packet.ReadBit("Debug Log"); // 40
+            guid2[7] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid2[2] = packet.ReadBit();
+            guid2[1] = packet.ReadBit();
+            guid2[3] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid2[4] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid2[6] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 4, 3);
+            packet.ParseBitStream(guid2, 2);
+            packet.ParseBitStream(guid, 6, 5);
+            packet.ParseBitStream(guid2, 3);
+            packet.ParseBitStream(guid, 7, 2, 0);
+            packet.ParseBitStream(guid2, 7, 5, 0, 1, 4);
+            packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 16
+            packet.ParseBitStream(guid, 1);
+            packet.ParseBitStream(guid2, 6);
+
+            packet.WriteGuid("Guid", guid);
+            packet.WriteGuid("Guid2", guid2);
+        }
+
         [Parser(Opcode.SMSG_SPIRIT_HEALER_CONFIRM)]
         public static void HandleSpiritHealerConfirm(Packet packet)
         {
