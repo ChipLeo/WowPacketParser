@@ -487,6 +487,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BREAK_TARGET,                             0x021A | 0x20000}, //++
             {Opcode.SMSG_BUY_FAILED,                               0x1563 | 0x20000}, //+-
             {Opcode.SMSG_BUY_ITEM,                                 0x101A | 0x20000}, //++
+            {Opcode.SMSG_CALENDAR_SEND_NUM_PENDING,                0x0A3F | 0x20000}, //++
             {Opcode.SMSG_CANCEL_AUTO_REPEAT,                       0x1E0F | 0x20000}, //++
             {Opcode.SMSG_CANCEL_COMBAT,                            0x11E1 | 0x20000}, //++
             {Opcode.SMSG_CAST_FAILED,                              0x143A | 0x20000}, //++
@@ -871,7 +872,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_048A,                                 0x048A | 0x20000}, //++
             {Opcode.SMSG_UNK_0612,                                 0x0612 | 0x20000}, //++ pair 1886
             {Opcode.SMSG_UNK_07F5,                                 0x07F5 | 0x20000}, //++
-            {Opcode.SMSG_UNK_0A3F,                                 0x0A3F | 0x20000}, //++
             {Opcode.SMSG_UNK_0A78,                                 0x0A78 | 0x20000}, //++
             {Opcode.SMSG_UNK_0A8A,                                 0x0A8A | 0x20000}, //++ pair 009A
             {Opcode.SMSG_UNK_0A8B,                                 0x0A8B | 0x20000}, //++

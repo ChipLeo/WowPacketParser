@@ -1093,12 +1093,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("unk96");
         }
 
-        [Parser(Opcode.SMSG_UNK_0A3F)]
-        public static void HandleUnk0A3F(Packet packet)
-        {
-            packet.ReadInt32("unk");
-        }
-
         [Parser(Opcode.SMSG_UNK_0A8B)]
         public static void HandleUnk0A8B(Packet packet)
         {
