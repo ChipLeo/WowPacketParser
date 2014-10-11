@@ -714,6 +714,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_REQUEST_PVP_REWARDS_RESPONSE,             0x08AA | 0x20000}, //++
             {Opcode.SMSG_RESET_RANGED_COMBAT_TIMER,                0x0002 | 0x20000}, //++
             {Opcode.SMSG_RESPOND_INSPECT_ACHIEVEMENTS,             0x009E | 0x20000}, //++ pair 0373
+            {Opcode.SMSG_RESUME_CAST_BAR,                          0x01D2 | 0x20000}, //++
             {Opcode.SMSG_RESUME_TOKEN,                             0x18BA | 0x20000}, //++
             {Opcode.SMSG_ROLE_POLL_BEGIN,                          0x1A1F | 0x20000}, //++
             {Opcode.SMSG_SELL_ITEM,                                0x048E | 0x20000}, //--
@@ -829,7 +830,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_00A3,                                 0x00A3 | 0x20000}, //++
             {Opcode.SMSG_UNK_00F9,                                 0x00F9 | 0x20000}, //++
             {Opcode.SMSG_UNK_0170,                                 0x0170 | 0x20000}, //++
-            {Opcode.SMSG_UNK_01D2,                                 0x01D2 | 0x20000}, //++
             {Opcode.SMSG_UNK_021A,                                 0x021A | 0x20000}, //++
             {Opcode.SMSG_UNK_0332,                                 0x0332 | 0x20000}, //-- coded
             {Opcode.SMSG_UNK_0354,                                 0x0354 | 0x20000}, //++
