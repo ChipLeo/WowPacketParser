@@ -483,6 +483,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BLACK_MARKET_HELLO,                       0x00AE | 0x20000}, //++
             {Opcode.SMSG_BLACK_MARKET_REQUEST_ITEMS_RESULT,        0x128B | 0x20000}, //++
             //{Opcode.SMSG_BLACKMARKET_BID_RESULT,                   0x18BA | 0x20000}, //-- bad id
+            {Opcode.SMSG_BREAK_TARGET,                             0x021A | 0x20000}, //++
             {Opcode.SMSG_BUY_FAILED,                               0x1563 | 0x20000}, //+-
             {Opcode.SMSG_BUY_ITEM,                                 0x101A | 0x20000}, //++
             {Opcode.SMSG_CANCEL_AUTO_REPEAT,                       0x1E0F | 0x20000}, //++
@@ -851,7 +852,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_001B,                                 0x001B | 0x20000}, //++
             {Opcode.SMSG_UNK_0023,                                 0x0023 | 0x20000}, //++
             {Opcode.SMSG_UNK_0170,                                 0x0170 | 0x20000}, //++
-            {Opcode.SMSG_UNK_021A,                                 0x021A | 0x20000}, //++
             {Opcode.SMSG_UNK_0332,                                 0x0332 | 0x20000}, //-- coded
             {Opcode.SMSG_UNK_0354,                                 0x0354 | 0x20000}, //++
             {Opcode.SMSG_UNK_0364,                                 0x0364 | 0x20000}, //++
