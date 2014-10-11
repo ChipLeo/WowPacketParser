@@ -128,6 +128,17 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadEnum<MapDifficulty>("Difficulty", TypeCode.Int32);
         }
 
+        [Parser(Opcode.SMSG_RAID_INSTANCE_MESSAGE)]
+        public static void HandleRaidInstanceMessage(Packet packet)
+        {
+            packet.ReadBit("unk16"); // 16
+            packet.ReadBit("unk17"); // 17
+            packet.ReadInt32("unk24"); // 24
+            packet.ReadByte("unk28"); // 28
+            packet.ReadInt32("unk20"); // 20
+            packet.ReadInt32("unk32"); // 32
+        }
+
         [Parser(Opcode.CMSG_RESET_INSTANCES)]
         [Parser(Opcode.SMSG_CORPSE_NOT_IN_INSTANCE)]
         [Parser(Opcode.SMSG_UPDATE_DUNGEON_ENCOUNTER_FOR_LOOT)]

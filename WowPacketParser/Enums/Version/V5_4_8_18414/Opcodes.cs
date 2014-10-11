@@ -727,6 +727,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_QUEST_NPC_QUERY_RESPONSE,                 0x036D | 0x20000}, //++
             {Opcode.SMSG_QUEST_POI_QUERY_RESPONSE,                 0x067F | 0x20000}, //++
             {Opcode.SMSG_QUEST_QUERY_RESPONSE,                     0x0276 | 0x20000}, //--
+            {Opcode.SMSG_RAID_INSTANCE_MESSAGE,                    0x0CAF | 0x20000}, //++
             {Opcode.SMSG_RAID_READY_CHECK,                         0x1C8E | 0x20000}, //--
             {Opcode.SMSG_RAID_READY_CHECK_COMPLETED,               0x15C2 | 0x20000}, //--
             {Opcode.SMSG_RAID_READY_CHECK_CONFIRM,                 0x02AF | 0x20000}, //--
@@ -878,7 +879,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0B22,                                 0x0B22 | 0x20000}, //-- pair 0C1B
             {Opcode.SMSG_UNK_0C1A,                                 0x0C1A | 0x20000}, //-- pair 17BA
             {Opcode.SMSG_UNK_0C44,                                 0x0C44 | 0x20000}, //+-
-            {Opcode.SMSG_UNK_0CAF,                                 0x0CAF | 0x20000}, //++
             {Opcode.SMSG_UNK_0D51,                                 0x0D51 | 0x20000}, //++
             {Opcode.SMSG_UNK_0D52,                                 0x0D52 | 0x20000}, //++
             {Opcode.SMSG_UNK_0EAA,                                 0x0EAA | 0x20000}, //++

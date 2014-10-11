@@ -266,18 +266,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             packet.ReadToEnd();
         }
-
-        [Parser(Opcode.SMSG_UNK_0CAF)]
-        public static void HandleSUnk0CAF(Packet packet)
-        {
-            packet.ReadBit("unk16"); // 16
-            packet.ReadBit("unk17"); // 17
-            packet.ReadInt32("unk24"); // 24
-            packet.ReadByte("unk28"); // 28
-            packet.ReadInt32("unk20"); // 20
-            packet.ReadInt32("unk32"); // 32
-        }
-
         [Parser(Opcode.SMSG_UNK_0D51)]
         public static void HandleSUnk0D51(Packet packet)
         {
