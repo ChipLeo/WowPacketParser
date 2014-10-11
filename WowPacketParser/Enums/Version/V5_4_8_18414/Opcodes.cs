@@ -529,6 +529,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GAME_SHOP_QUERY_RESPONSE,                 0x1ABF | 0x20000}, //--
             {Opcode.SMSG_GAME_STORE_INGAME_BUY_FAILED,             0x023A | 0x20000}, //++
             {Opcode.SMSG_GAMEOBJECT_CUSTOM_ANIM,                   0x001F | 0x20000}, //++
+            {Opcode.SMSG_GAMEOBJECT_DESPAWN_ANIM,                  0x108B | 0x20000}, //++
             {Opcode.SMSG_GAMEOBJECT_QUERY_RESPONSE,                0x06BF | 0x20000}, //++
             {Opcode.SMSG_GMRESPONSE_RECEIVED,                      0x148E | 0x20000}, //++
             {Opcode.SMSG_GOSSIP_COMPLETE,                          0x034E | 0x20000}, //--
@@ -868,7 +869,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_1006,                                 0x1006 | 0x20000}, //++
             {Opcode.SMSG_UNK_102E,                                 0x102E | 0x20000}, //++
             {Opcode.SMSG_UNK_103E,                                 0x103E | 0x20000}, //++
-            {Opcode.SMSG_UNK_108B,                                 0x108B | 0x20000}, //++
             {Opcode.SMSG_UNK_109A,                                 0x109A | 0x20000}, //++
             {Opcode.SMSG_UNK_1134,                                 0x1134 | 0x20000}, //-- pair CMSG 0123
             {Opcode.SMSG_UNK_1160,                                 0x1160 | 0x20000}, //++
