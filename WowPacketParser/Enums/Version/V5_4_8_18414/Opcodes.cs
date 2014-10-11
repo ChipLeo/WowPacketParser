@@ -443,6 +443,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_AI_REACTION,                              0x06AF | 0x20000}, //++
             {Opcode.SMSG_ALL_ACHIEVEMENT_DATA_ACCOUNT,             0x0A9E | 0x20000}, //++
             {Opcode.SMSG_ALL_ACHIEVEMENT_DATA_PLAYER,              0x180A | 0x20000}, //++
+            {Opcode.SMSG_AREA_TRIGGER_DENIED,                      0x148F | 0x20000}, //++ pair 1C44
             {Opcode.SMSG_ARENA_SEASON_WORLD_STATE,                 0x069B | 0x20000}, //++
             {Opcode.SMSG_ATTACKERSTATEUPDATE,                      0x06AA | 0x20000}, //++
             {Opcode.SMSG_ATTACKSTART,                              0x1A9E | 0x20000}, //++
@@ -886,7 +887,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_129E,                                 0x129E | 0x20000}, //++
             {Opcode.SMSG_UNK_12A3,                                 0x12A3 | 0x20000}, //++
             {Opcode.SMSG_UNK_12BE,                                 0x12BE | 0x20000}, //++
-            {Opcode.SMSG_UNK_148F,                                 0x148F | 0x20000}, //++
             {Opcode.SMSG_UNK_14E2,                                 0x14E2 | 0x20000}, //++ pair+ 1886
             {Opcode.SMSG_UNK_1553,                                 0x1553 | 0x20000}, //++
             {Opcode.SMSG_UNK_15E3,                                 0x15E3 | 0x20000}, //++

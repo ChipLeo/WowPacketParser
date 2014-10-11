@@ -935,13 +935,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid2);
         }
 
-        [Parser(Opcode.SMSG_UNK_148F)]
-        public static void HandleSUnk148F(Packet packet)
-        {
-            packet.ReadInt32("unk20");
-            packet.ReadBit("unk16");
-        }
-
         [Parser(Opcode.SMSG_UNK_14E2)]
         public static void HandleSUnk14E2(Packet packet)
         {

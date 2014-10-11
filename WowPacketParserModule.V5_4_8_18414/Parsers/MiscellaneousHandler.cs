@@ -335,6 +335,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("unkb");
         }
 
+        [Parser(Opcode.SMSG_AREA_TRIGGER_DENIED)]
+        public static void HandleAreaTriggerDenied(Packet packet)
+        {
+            packet.ReadInt32("AreaTrigger");
+            packet.ReadBit("unk16");
+        }
+
         [Parser(Opcode.SMSG_CLIENTCACHE_VERSION)]
         public static void HandleClientCacheVersion(Packet packet)
         {
