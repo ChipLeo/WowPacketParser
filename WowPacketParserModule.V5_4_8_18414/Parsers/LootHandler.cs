@@ -281,7 +281,59 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_LOOT_ROLL_WON)]
         public static void HandleLootWon(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = new byte[8];
+            var guid104 = new byte[8];
+
+            guid[0] = packet.ReadBit();
+            guid104[3] = packet.ReadBit();
+            packet.ReadBits("unk48", 2); // 48
+            guid[3] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            var unk44 = !packet.ReadBit("!unk44"); // 44
+            guid104[7] = packet.ReadBit();
+            guid104[1] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid104[4] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            packet.ReadBits("unk52", 3); // 52
+            guid104[0] = packet.ReadBit();
+            guid104[2] = packet.ReadBit();
+            var unk45 = !packet.ReadBit("!unk45"); // 45
+            packet.ReadBit("unk56"); // 56
+            guid104[6] = packet.ReadBit();
+            guid104[5] = packet.ReadBit();
+
+            packet.ReadBytes("unk", packet.ReadInt32());
+            packet.ReadInt32("unk28"); // 28
+            packet.ParseBitStream(guid, 2);
+            packet.ParseBitStream(guid104, 7);
+            packet.ReadInt32("unk40"); // 40
+            packet.ParseBitStream(guid, 5);
+            packet.ParseBitStream(guid104, 3);
+            packet.ParseBitStream(guid, 7);
+            packet.ParseBitStream(guid104, 1, 2, 0);
+            packet.ParseBitStream(guid, 3);
+            packet.ReadInt32("unk100"); // 100
+            packet.ReadInt32("Suffix factor"); // 36
+            packet.ParseBitStream(guid104, 6);
+            packet.ParseBitStream(guid, 1, 4);
+            packet.ReadByte("unk96"); // 96
+            packet.ParseBitStream(guid, 6);
+            if (unk45)
+                packet.ReadByte("unk45"); // 45
+            packet.ParseBitStream(guid104, 4);
+            packet.ReadInt32("Item"); // 24
+            packet.ParseBitStream(guid104, 5);
+            packet.ParseBitStream(guid, 0);
+            packet.ReadInt32("unk32"); // 32
+            if (unk44)
+                packet.ReadByte("unk44"); // 44
+
+            packet.WriteGuid("Guid", guid);
+            packet.WriteGuid("Guid104", guid104);
         }
 
         [Parser(Opcode.SMSG_LOOT_SLOT_CHANGED)]
