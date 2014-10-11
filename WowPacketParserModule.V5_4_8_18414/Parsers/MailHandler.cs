@@ -60,14 +60,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
-        [Parser(Opcode.CMSG_SEND_MAIL)]
-        public static void HandleSendMail(Packet packet)
+        [Parser(Opcode.CMSG_QUERY_NEXT_MAIL_TIME)]
+        public static void HandleCQueryNextMailTime(Packet packet)
         {
-            packet.ReadToEnd();
         }
 
-        [Parser(Opcode.MSG_QUERY_NEXT_MAIL_TIME)]
-        public static void HandleNullMail(Packet packet)
+        [Parser(Opcode.CMSG_SEND_MAIL)]
+        public static void HandleSendMail(Packet packet)
         {
             packet.ReadToEnd();
         }
@@ -168,6 +167,46 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     packet.ReadInt32("RealmId2", i);
 
             }
+        }
+
+        [Parser(Opcode.SMSG_QUERY_NEXT_MAIL_TIME)]
+        public static void HandleSQueryNextMailTime(Packet packet)
+        {
+            var cnt20 = packet.ReadBits("cnt20", 20);
+            var guid = new byte[cnt20][];
+            var unk12 = new bool[cnt20];
+            var unk20 = new bool[cnt20];
+            for (var i = 0; i < cnt20; i++)
+            {
+                guid[i] = new byte[8];
+                guid[i][3] = packet.ReadBit();
+                unk12[i] = packet.ReadBit("unk12", i);
+                guid[i][2] = packet.ReadBit();
+                unk20[i] = packet.ReadBit("unk20", i);
+                guid[i][6] = packet.ReadBit();
+                guid[i][1] = packet.ReadBit();
+                guid[i][4] = packet.ReadBit();
+                guid[i][0] = packet.ReadBit();
+                guid[i][5] = packet.ReadBit();
+                guid[i][7] = packet.ReadBit();
+            }
+
+            for (var i = 0; i < cnt20; i++)
+            {
+                packet.ReadInt32("unk52", i);
+                packet.ParseBitStream(guid[i], 5, 4, 6, 1);
+                packet.ReadByte("unk56");
+                packet.ParseBitStream(guid[i], 0);
+                packet.ReadSingle("unk24");
+                if (unk20[i])
+                    packet.ReadInt32("unk88");
+                packet.ReadInt32("unk176");
+                packet.ParseBitStream(guid[i], 3, 2);
+                if (unk12[i])
+                    packet.ReadInt32("unk56");
+                packet.ParseBitStream(guid[i], 7);
+            }
+            packet.ReadSingle("unk16");
         }
 
         [Parser(Opcode.SMSG_RECEIVED_MAIL)]
