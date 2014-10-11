@@ -842,6 +842,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_TUTORIAL_FLAGS,                           0x1B90 | 0x20000}, //++
             {Opcode.SMSG_UPDATE_ACCOUNT_DATA,                      0x0AAE | 0x20000}, //++
             {Opcode.SMSG_UPDATE_COMBO_POINTS,                      0x082F | 0x20000}, //++
+            {Opcode.SMSG_UPDATE_CURRENCY,                          0x129E | 0x20000}, //++
             {Opcode.SMSG_UPDATE_LAST_INSTANCE,                     0x189B | 0x20000}, //+-
             {Opcode.SMSG_UPDATE_OBJECT,                            0x1792 | 0x20000}, //--
             {Opcode.SMSG_UPDATE_WORLD_STATE,                       0x121B | 0x20000}, //++
@@ -893,7 +894,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_121E,                                 0x121E | 0x20000}, //++
             {Opcode.SMSG_UNK_1223,                                 0x1223 | 0x20000}, //++
             {Opcode.SMSG_UNK_129B,                                 0x129B | 0x20000}, //++
-            {Opcode.SMSG_UNK_129E,                                 0x129E | 0x20000}, //++
             {Opcode.SMSG_UNK_14E2,                                 0x14E2 | 0x20000}, //++ pair+ 1886
             {Opcode.SMSG_UNK_1553,                                 0x1553 | 0x20000}, //++
             {Opcode.SMSG_UNK_15E3,                                 0x15E3 | 0x20000}, //++

@@ -501,21 +501,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk");
         }
 
-        [Parser(Opcode.SMSG_UNK_129E)]
-        public static void HandleSUnk129E(Packet packet)
-        {
-            packet.ReadInt32("unk44"); // 44
-            packet.ReadInt32("unk16"); // 16
-            packet.ReadInt32("unk24"); // 24
-            var unk32 = packet.ReadBit("unk32"); // 32
-            var unk20 = packet.ReadBit("unk20"); // 20
-            var unk40 = packet.ReadBit("unk40"); // 40
-            if (unk32)
-                packet.ReadInt32("unk28"); // 28
-            if (unk40)
-                packet.ReadInt32("unk36"); // 36
-        }
-
         [Parser(Opcode.SMSG_UNK_14E2)]
         public static void HandleSUnk14E2(Packet packet)
         {
