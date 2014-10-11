@@ -524,6 +524,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_ENVIRONMENTALDAMAGELOG,                   0x0DF1 | 0x20000}, //--
             {Opcode.SMSG_EQUIPMENT_SET_LIST,                       0x18E2 | 0x20000}, //++
             {Opcode.SMSG_EXPLORATION_EXPERIENCE,                   0x189A | 0x20000}, //+-
+            {Opcode.SMSG_FACTION_BONUS_INFO,                       0x0A0B | 0x20000}, //++
             {Opcode.SMSG_FEATURE_SYSTEM_STATUS,                    0x16BB | 0x20000}, //++
             {Opcode.SMSG_FLIGHT_SPLINE_SYNC,                       0x0063 | 0x20000}, //++
             {Opcode.SMSG_FORCE_SEND_QUEUED_PACKETS,                0x0969 | 0x20000}, //--
@@ -851,7 +852,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_07F5,                                 0x07F5 | 0x20000}, //++
             {Opcode.SMSG_UNK_0861,                                 0x0861 | 0x20000}, //++
             {Opcode.SMSG_UNK_09F8,                                 0x09F8 | 0x20000}, //++
-            {Opcode.SMSG_UNK_0A0B,                                 0x0A0B | 0x20000}, //++
             {Opcode.SMSG_UNK_0A3A,                                 0x0A3A | 0x20000}, //++
             {Opcode.SMSG_UNK_0A3F,                                 0x0A3F | 0x20000}, //++
             {Opcode.SMSG_UNK_0A78,                                 0x0A78 | 0x20000}, //++

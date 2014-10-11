@@ -381,6 +381,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("Spell");
         }
 
+        [Parser(Opcode.SMSG_FACTION_BONUS_INFO)]
+        public static void HandleFactionBonusInfo(Packet packet)
+        {
+            for (var i = 0; i < 256; i++)
+                packet.ReadBitVisible("Byte16", i);
+        }
+
         [Parser(Opcode.SMSG_FORCE_SET_VEHICLE_REC_ID)]
         public static void HandleForceSetVehicleRecId(Packet packet)
         {
@@ -944,13 +951,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             packet.WriteGuid("Guid", guid);
             packet.WriteGuid("Guid2", guid2);
-        }
-
-        [Parser(Opcode.SMSG_UNK_0A0B)]
-        public static void HandleUnk0A0B(Packet packet)
-        {
-            for (var i = 0; i < 256; i++)
-                packet.ReadBitVisible("Byte16", i);
         }
 
         [Parser(Opcode.SMSG_UNK_0A3F)]
