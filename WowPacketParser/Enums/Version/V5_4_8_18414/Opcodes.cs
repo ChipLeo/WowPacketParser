@@ -714,6 +714,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_SET_DUNGEON_DIFFICULTY,                   0x1283 | 0x20000}, //--
             {Opcode.SMSG_SET_FACTION_ATWAR,                        0x0C9B | 0x20000}, //--
             {Opcode.SMSG_SET_FACTION_STANDING,                     0x10AA | 0x20000}, //--
+            {Opcode.SMSG_SET_FACTION_VISIBLE,                      0x1E8E | 0x20000}, //++
             {Opcode.SMSG_SET_FLAT_SPELL_MODIFIER,                  0x10F2 | 0x20000}, //++
             {Opcode.SMSG_SET_FORCED_REACTIONS,                     0x068F | 0x20000}, //++
             {Opcode.SMSG_SET_PCT_SPELL_MODIFIER,                   0x09D3 | 0x20000}, //++
@@ -904,7 +905,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_1E1B,                                 0x1E1B | 0x20000}, //++ levelup 90
             {Opcode.SMSG_UNK_1E2E,                                 0x1E2E | 0x20000}, //++
             {Opcode.SMSG_UNK_1E3E,                                 0x1E3E | 0x20000}, //++
-            {Opcode.SMSG_UNK_1E8E,                                 0x1E8E | 0x20000}, //++
             {Opcode.SMSG_UNK_1E9B,                                 0x1E9B | 0x20000}, //++
             {Opcode.SMSG_UNK_1E9E,                                 0x1E9E | 0x20000}, //++
             {Opcode.SMSG_NULL_04BB,                                0x04BB | 0x20000}, //++
