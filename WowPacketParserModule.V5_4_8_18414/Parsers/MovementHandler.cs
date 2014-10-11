@@ -3268,6 +3268,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteLine("Position: {0}", pos);
         }
 
+        [Parser(Opcode.SMSG_ADJUST_SPLINE_DURATION)]
+        public static void HandleAdjustSplineDuration(Packet packet)
+        {
+            ReadPlayerMovementInfo(ref packet, info.SAdjustSplineDuration);
+        }
+
         [Parser(Opcode.SMSG_FLIGHT_SPLINE_SYNC)]
         public static void HandleFlightSplineSync(Packet packet)
         {
@@ -3883,12 +3889,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleSplineMoveUnsetHover(Packet packet)
         {
             ReadPlayerMovementInfo(ref packet, info.MovementSplineUnsetHover);
-        }
-
-        [Parser(Opcode.SMSG_UNK_023B)]
-        public static void HandleUnk023B(Packet packet)
-        {
-            ReadPlayerMovementInfo(ref packet, info.Unk023B);
         }
 
         [Parser(Opcode.SMSG_UNK_0861)]

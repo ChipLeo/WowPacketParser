@@ -4204,28 +4204,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
             MovementStatusElements.MSEEnd
         };
 
-        public MovementStatusElements[] Unk023B =
-        {
-            MovementStatusElements.MSEHasGuidByte5,
-            MovementStatusElements.MSEHasGuidByte6,
-            MovementStatusElements.MSEHasGuidByte4,
-            MovementStatusElements.MSEHasGuidByte1,
-            MovementStatusElements.MSEHasGuidByte3,
-            MovementStatusElements.MSEHasGuidByte2,
-            MovementStatusElements.MSEHasGuidByte7,
-            MovementStatusElements.MSEHasGuidByte0,
-            MovementStatusElements.MSEGuidByte1,
-            MovementStatusElements.MSEGuidByte7,
-            MovementStatusElements.MSEGuidByte3,
-            MovementStatusElements.MSEExtraFloat,
-            MovementStatusElements.MSEGuidByte6,
-            MovementStatusElements.MSEGuidByte0,
-            MovementStatusElements.MSEGuidByte4,
-            MovementStatusElements.MSEGuidByte2,
-            MovementStatusElements.MSEGuidByte5,
-            MovementStatusElements.MSEEnd,
-        };
-
         public MovementStatusElements[] SUnk0861 = // 5.4.8 18414 0861
         {
             MovementStatusElements.MSEHasGuidByte0,
@@ -4880,6 +4858,28 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
             MovementStatusElements.MSETimestamp,              // 40
             MovementStatusElements.MSEPitch,                  // 120 78h
             MovementStatusElements.MSEEnd
+        };
+
+        public MovementStatusElements[] SAdjustSplineDuration = // 023B
+        {
+            MovementStatusElements.MSEHasGuidByte5,
+            MovementStatusElements.MSEHasGuidByte6,
+            MovementStatusElements.MSEHasGuidByte4,
+            MovementStatusElements.MSEHasGuidByte1,
+            MovementStatusElements.MSEHasGuidByte3,
+            MovementStatusElements.MSEHasGuidByte2,
+            MovementStatusElements.MSEHasGuidByte7,
+            MovementStatusElements.MSEHasGuidByte0,
+            MovementStatusElements.MSEGuidByte1,
+            MovementStatusElements.MSEGuidByte7,
+            MovementStatusElements.MSEGuidByte3,
+            MovementStatusElements.MSEExtraFloat,
+            MovementStatusElements.MSEGuidByte6,
+            MovementStatusElements.MSEGuidByte0,
+            MovementStatusElements.MSEGuidByte4,
+            MovementStatusElements.MSEGuidByte2,
+            MovementStatusElements.MSEGuidByte5,
+            MovementStatusElements.MSEEnd,
         };
 
         public MovementStatusElements[] SMovementSplineSetFeatherFall = // 1893
