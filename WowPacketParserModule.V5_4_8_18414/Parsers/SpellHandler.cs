@@ -549,6 +549,18 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID");
         }
 
+        [Parser(Opcode.SMSG_MODIFY_COOLDOWN)]
+        public static void HandleModifyCooldown(Packet packet)
+        {
+            var guid = packet.StartBitStream(2, 1, 0, 4, 7, 3, 6, 5);
+            packet.ParseBitStream(guid, 4, 1);
+            packet.ReadInt32("Cooldown Mod"); // 24
+            packet.ParseBitStream(guid, 3, 6, 7, 5, 0);
+            packet.ReadEntry<UInt32>(StoreNameType.Spell, "Spell ID"); // 28
+            packet.ParseBitStream(guid, 2);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_PET_CAST_FAILED)]
         public static void HandlePetCastFailed(Packet packet)
         {

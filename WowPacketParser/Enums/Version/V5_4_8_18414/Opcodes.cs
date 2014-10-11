@@ -598,6 +598,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_MAIL_LIST_RESULT,                         0x1C0B | 0x20000}, //--
             {Opcode.SMSG_MESSAGECHAT,                              0x1A9A | 0x20000}, //++
             {Opcode.SMSG_MINIMAP_PING,                             0x168F | 0x20000}, //--
+            {Opcode.SMSG_MODIFY_COOLDOWN,                          0x1E2E | 0x20000}, //++
             {Opcode.SMSG_MONSTER_MOVE,                             0x1A07 | 0x20000}, //++
             {Opcode.SMSG_MOTD,                                     0x183B | 0x20000}, //++
             {Opcode.SMSG_MOVE_COLLISION_DISABLE,                   0x15B8 | 0x20000}, //+-
@@ -903,7 +904,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_1DBE,                                 0x1DBE | 0x20000}, //++
             {Opcode.SMSG_UNK_1E12,                                 0x1E12 | 0x20000}, //++
             {Opcode.SMSG_UNK_1E1B,                                 0x1E1B | 0x20000}, //++ levelup 90
-            {Opcode.SMSG_UNK_1E2E,                                 0x1E2E | 0x20000}, //++
             {Opcode.SMSG_UNK_1E3E,                                 0x1E3E | 0x20000}, //++
             {Opcode.SMSG_UNK_1E9B,                                 0x1E9B | 0x20000}, //++
             {Opcode.SMSG_UNK_1E9E,                                 0x1E9E | 0x20000}, //++
