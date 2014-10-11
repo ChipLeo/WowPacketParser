@@ -575,6 +575,56 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("unk24"); // 24
         }
 
+        [Parser(Opcode.SMSG_PLAY_SPELL_VISUAL)]
+        public static void HandlePlaySpellVisual(Packet packet)
+        {
+            var pos = new Vector4();
+            var guid = new byte[8];
+            var guid2 = new byte[8];
+
+            guid[4] = packet.ReadBit();
+            guid2[6] = packet.ReadBit();
+            guid2[4] = packet.ReadBit();
+            guid2[7] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid2[2] = packet.ReadBit();
+            guid2[0] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            var unk50 = packet.ReadBit("unk50");
+            guid[7] = packet.ReadBit();
+            guid2[3] = packet.ReadBit();
+            guid2[1] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid2[5] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+
+            pos.Z = packet.ReadSingle(); // 28h
+            packet.ParseBitStream(guid, 2, 6, 5);
+            packet.ParseBitStream(guid2, 2);
+            packet.ParseBitStream(guid, 1);
+            pos.X = packet.ReadSingle(); // 20h
+            packet.ParseBitStream(guid, 3);
+            packet.ReadInt16("unk56"); // 56
+            packet.ParseBitStream(guid2, 4, 7);
+            pos.O = packet.ReadSingle(); // 2ch
+            pos.Y = packet.ReadSingle(); // 24h
+            packet.ParseBitStream(guid, 4);
+            packet.ParseBitStream(guid2, 5);
+            packet.ReadInt32("SpellVisualKit ID"); // 24
+            packet.ParseBitStream(guid2, 1);
+            packet.ParseBitStream(guid, 7);
+            packet.ReadInt16("unk48"); // 48
+            packet.ParseBitStream(guid2, 0, 6);
+            packet.ParseBitStream(guid, 0);
+            packet.ParseBitStream(guid2, 3);
+
+            packet.WriteGuid("Guid", guid);
+            packet.WriteGuid("Guid2", guid2);
+            packet.AddValue("Position", pos);
+        }
+
         [Parser(Opcode.SMSG_PLAY_SPELL_VISUAL_KIT)]
         public static void HandleCastVisualKit(Packet packet)
         {

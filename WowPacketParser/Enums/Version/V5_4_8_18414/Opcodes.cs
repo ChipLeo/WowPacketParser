@@ -665,6 +665,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_PETITION_SIGN_RESULTS,                    0x06AE | 0x20000}, //--
             {Opcode.SMSG_PLAY_OBJECT_SOUND,                        0x1443 | 0x20000}, //++
             {Opcode.SMSG_PLAY_SOUND,                               0x102A | 0x20000}, //++
+            {Opcode.SMSG_PLAY_SPELL_VISUAL,                        0x061E | 0x20000}, //++
             {Opcode.SMSG_PLAY_SPELL_VISUAL_KIT,                    0x11E3 | 0x20000}, //++
             {Opcode.SMSG_PLAYED_TIME,                              0x11E2 | 0x20000}, //+-
             {Opcode.SMSG_PLAYER_MOVE,                              0x1A32 | 0x20000}, //++
@@ -834,7 +835,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_05F3,                                 0x05F3 | 0x20000}, //++
             {Opcode.SMSG_UNK_060A,                                 0x060A | 0x20000}, //++
             {Opcode.SMSG_UNK_0612,                                 0x0612 | 0x20000}, //++ pair 1886
-            {Opcode.SMSG_UNK_061E,                                 0x061E | 0x20000}, //++
             {Opcode.SMSG_UNK_068E,                                 0x068E | 0x20000}, //++
             {Opcode.SMSG_UNK_069F,                                 0x069F | 0x20000}, //++
             {Opcode.SMSG_UNK_07F5,                                 0x07F5 | 0x20000}, //++

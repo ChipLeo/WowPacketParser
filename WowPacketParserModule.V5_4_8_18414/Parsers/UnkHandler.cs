@@ -429,54 +429,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk24");
         }
 
-        [Parser(Opcode.SMSG_UNK_061E)]
-        public static void HandleSUnk061E(Packet packet)
-        {
-            var guid = new byte[8];
-            var guid2 = new byte[8];
-
-            guid[4] = packet.ReadBit();
-            guid2[6] = packet.ReadBit();
-            guid2[4] = packet.ReadBit();
-            guid2[7] = packet.ReadBit();
-            guid[6] = packet.ReadBit();
-            guid2[2] = packet.ReadBit();
-            guid2[0] = packet.ReadBit();
-            guid[2] = packet.ReadBit();
-            var unk50 = packet.ReadBit("unk50");
-            guid[7] = packet.ReadBit();
-            guid2[3] = packet.ReadBit();
-            guid2[1] = packet.ReadBit();
-            guid[0] = packet.ReadBit();
-            guid[1] = packet.ReadBit();
-            guid2[5] = packet.ReadBit();
-            guid[5] = packet.ReadBit();
-            guid[3] = packet.ReadBit();
-
-            packet.ReadSingle("unk28h");
-            packet.ParseBitStream(guid, 2, 6, 5);
-            packet.ParseBitStream(guid2, 2);
-            packet.ParseBitStream(guid, 1);
-            packet.ReadSingle("unk20h");
-            packet.ParseBitStream(guid, 3);
-            packet.ReadInt16("unk56");
-            packet.ParseBitStream(guid2, 4, 7);
-            packet.ReadSingle("unk2ch");
-            packet.ReadSingle("unk24h");
-            packet.ParseBitStream(guid, 4);
-            packet.ParseBitStream(guid2, 5);
-            packet.ReadInt32("unk24");
-            packet.ParseBitStream(guid2, 1);
-            packet.ParseBitStream(guid, 7);
-            packet.ReadInt16("unk48");
-            packet.ParseBitStream(guid2, 0, 6);
-            packet.ParseBitStream(guid, 0);
-            packet.ParseBitStream(guid2, 3);
-
-            packet.WriteGuid("Guid", guid);
-            packet.WriteGuid("Guid2", guid2);
-        }
-
         [Parser(Opcode.SMSG_UNK_068E)]
         public static void HandleSUnk068E(Packet packet)
         {
