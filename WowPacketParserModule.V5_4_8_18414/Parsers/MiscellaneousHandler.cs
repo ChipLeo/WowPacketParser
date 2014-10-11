@@ -691,6 +691,21 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             Storage.Sounds.Add(sound, packet.TimeSpan);
         }
 
+        [Parser(Opcode.SMSG_PLAY_ONE_SHOT_ANIM_KIT)]
+        public static void HandlePlayOneShotAnimKit(Packet packet)
+        {
+            /*
+             ServerToClient: SMSG_UNK_043E (0x043E) Length: 9
+             unk24: 1575 (0x0627)
+             Guid: Full: 0xF130D54400000251 Type: Unit Entry: 54596 Low: 593
+             */
+            var guid = packet.StartBitStream(3, 1, 7, 6, 0, 4, 5, 2);
+            packet.ParseBitStream(guid, 3, 6, 1, 4);
+            packet.ReadInt16("AnimKit.dbc Id"); // 24
+            packet.ParseBitStream(guid, 2, 7, 5, 0);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_PLAY_SOUND)]
         public static void HandlePlaySound(Packet packet)
         {

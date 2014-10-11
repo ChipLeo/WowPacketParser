@@ -204,21 +204,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32Visible("Unk20", i);
         }
 
-        [Parser(Opcode.SMSG_UNK_043E)]
-        public static void HandleSUnk043E(Packet packet)
-        {
-            /*
-             ServerToClient: SMSG_UNK_043E (0x043E) Length: 9
-             unk24: 1575 (0x0627)
-             Guid: Full: 0xF130D54400000251 Type: Unit Entry: 54596 Low: 593
-             */
-            var guid = packet.StartBitStream(3, 1, 7, 6, 0, 4, 5, 2);
-            packet.ParseBitStream(guid, 3, 6, 1, 4);
-            packet.ReadInt16("unk24"); // 24
-            packet.ParseBitStream(guid, 2, 7, 5, 0);
-            packet.WriteGuid("Guid", guid);
-        }
-
         [Parser(Opcode.SMSG_UNK_048A)]
         public static void HandleSUnk048A(Packet packet)
         {
