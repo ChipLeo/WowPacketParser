@@ -723,14 +723,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("Int16");
         }
 
-        [Parser(Opcode.SMSG_UNK_0E3A)]
-        public static void HandleSUnk0E3A(Packet packet)
-        {
-            var guid = packet.StartBitStream(6, 3, 0, 7, 1, 2, 5, 4);
-            packet.ParseBitStream(guid, 3, 6, 7, 5, 1, 4, 2, 0);
-            packet.WriteGuid("Guid", guid);
-        }
-
         [Parser(Opcode.SMSG_UNK_0E70)]
         public static void HandleSUnk0E70(Packet packet)
         {

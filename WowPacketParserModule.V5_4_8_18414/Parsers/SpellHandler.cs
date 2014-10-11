@@ -528,6 +528,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_DISMOUNT)]
+        public static void HandleDismount(Packet packet)
+        {
+            var guid = packet.StartBitStream(6, 3, 0, 7, 1, 2, 5, 4);
+            packet.ParseBitStream(guid, 3, 6, 7, 5, 1, 4, 2, 0);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_INITIAL_SPELLS)]
         public static void HandleInitialSpells(Packet packet)
         {

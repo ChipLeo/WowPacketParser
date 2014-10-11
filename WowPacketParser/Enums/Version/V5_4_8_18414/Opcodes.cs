@@ -509,6 +509,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_DEATH_RELEASE_LOC,                        0x1063 | 0x20000}, //+-
             {Opcode.SMSG_DEFENSE_MESSAGE,                          0x0A1F | 0x20000}, //--
             {Opcode.SMSG_DESTROY_OBJECT,                           0x14C2 | 0x20000}, //++
+            {Opcode.SMSG_DISMOUNT,                                 0x0E3A | 0x20000}, //++
             {Opcode.SMSG_DUEL_COMPLETE,                            0x1C0A | 0x20000}, //--
             {Opcode.SMSG_DUEL_COUNTDOWN,                           0x129F | 0x20000}, //--
             {Opcode.SMSG_DUEL_INBOUNDS,                            0x163A | 0x20000}, //+-
@@ -859,7 +860,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0D52,                                 0x0D52 | 0x20000}, //++
             {Opcode.SMSG_UNK_0E1B,                                 0x0E1B | 0x20000}, //++
             {Opcode.SMSG_UNK_0E2A,                                 0x0E2A | 0x20000}, //++
-            {Opcode.SMSG_UNK_0E3A,                                 0x0E3A | 0x20000}, //++
             {Opcode.SMSG_UNK_0E70,                                 0x0E70 | 0x20000}, //++ guild
             {Opcode.SMSG_UNK_0EAA,                                 0x0EAA | 0x20000}, //++
             {Opcode.SMSG_UNK_0EAB,                                 0x0EAB | 0x20000}, //++
