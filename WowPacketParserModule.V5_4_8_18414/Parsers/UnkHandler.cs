@@ -282,14 +282,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
-        [Parser(Opcode.SMSG_UNK_0CAE)]
-        public static void HandleSUnk0CAE(Packet packet)
-        {
-            var guid = packet.StartBitStream(4, 3, 0, 2, 1, 6, 5, 7);
-            packet.ParseBitStream(guid, 1, 4, 5, 6, 2, 0, 3, 7);
-            packet.WriteGuid("Guid", guid);
-        }
-
         [Parser(Opcode.SMSG_UNK_0CAF)]
         public static void HandleSUnk0CAF(Packet packet)
         {

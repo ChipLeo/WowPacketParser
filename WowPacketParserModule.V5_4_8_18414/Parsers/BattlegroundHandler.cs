@@ -619,6 +619,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk36"); // 36
         }
 
+        [Parser(Opcode.SMSG_WARGAME_REQUEST_SENT)]
+        public static void HandleWarGameRequestSent(Packet packet)
+        {
+            var guid = packet.StartBitStream(4, 3, 0, 2, 1, 6, 5, 7);
+            packet.ParseBitStream(guid, 1, 4, 5, 6, 2, 0, 3, 7);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.CMSG_REQUEST_PVP_OPTIONS_ENABLED)]
         [Parser(Opcode.CMSG_BATTLEGROUND_PLAYER_POSITIONS)]
         [Parser(Opcode.SMSG_BATTLEGROUND_INFO_THROTTLED)]

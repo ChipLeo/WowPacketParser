@@ -852,6 +852,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_VOID_STORAGE_FAILED,                      0x1569 | 0x20000}, //--
             {Opcode.SMSG_VOID_STORAGE_TRANSFER_CHANGES,            0x14BA | 0x20000}, //--
             {Opcode.SMSG_VOID_TRANSFER_RESULT,                     0x1C9E | 0x20000}, //+-
+            {Opcode.SMSG_WARGAME_REQUEST_SENT,                     0x0CAE | 0x20000}, //++
             {Opcode.SMSG_WARDEN_DATA,                              0x0C0A | 0x20000}, //-- ??
             {Opcode.SMSG_WEATHER,                                  0x06AB | 0x20000}, //++
             {Opcode.SMSG_WEEKLY_SPELL_USAGE,                       0x00F9 | 0x20000}, //++
@@ -877,7 +878,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0B22,                                 0x0B22 | 0x20000}, //-- pair 0C1B
             {Opcode.SMSG_UNK_0C1A,                                 0x0C1A | 0x20000}, //-- pair 17BA
             {Opcode.SMSG_UNK_0C44,                                 0x0C44 | 0x20000}, //+-
-            {Opcode.SMSG_UNK_0CAE,                                 0x0CAE | 0x20000}, //++
             {Opcode.SMSG_UNK_0CAF,                                 0x0CAF | 0x20000}, //++
             {Opcode.SMSG_UNK_0D51,                                 0x0D51 | 0x20000}, //++
             {Opcode.SMSG_UNK_0D52,                                 0x0D52 | 0x20000}, //++
