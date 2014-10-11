@@ -564,6 +564,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GUILD_QUERY_RESPONSE,                     0x1B79 | 0x20000}, //++
             {Opcode.SMSG_GUILD_RANK,                               0x0A79 | 0x20000}, //--
             {Opcode.SMSG_GUILD_RANKS_UPDATE,                       0x0A60 | 0x20000}, //--
+            {Opcode.SMSG_GUILD_RENAMED,                            0x0E70 | 0x20000}, //++
             {Opcode.SMSG_GUILD_REPUTATION_WEEKLY_CAP,              0x1A71 | 0x20000}, //--
             {Opcode.SMSG_GUILD_REWARDS_LIST,                       0x1A69 | 0x20000}, //--
             {Opcode.SMSG_GUILD_ROSTER,                             0x0BE0 | 0x20000}, //++
@@ -873,7 +874,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0D51,                                 0x0D51 | 0x20000}, //++
             {Opcode.SMSG_UNK_0D52,                                 0x0D52 | 0x20000}, //++
             {Opcode.SMSG_UNK_0E2A,                                 0x0E2A | 0x20000}, //++
-            {Opcode.SMSG_UNK_0E70,                                 0x0E70 | 0x20000}, //++ guild
             {Opcode.SMSG_UNK_0EAA,                                 0x0EAA | 0x20000}, //++
             {Opcode.SMSG_UNK_0EAB,                                 0x0EAB | 0x20000}, //++
             {Opcode.SMSG_UNK_0EBA,                                 0x0EBA | 0x20000}, //++
