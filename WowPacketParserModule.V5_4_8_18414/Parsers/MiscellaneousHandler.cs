@@ -81,6 +81,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.CMSG_INSPECT_HONOR_STATS)]
+        public static void HandleInspectHonorStats(Packet packet)
+        {
+            var guid = packet.StartBitStream(4, 3, 6, 1, 0, 2, 5, 7);
+            packet.ParseBitStream(guid, 0, 5, 1, 4, 2, 6, 7, 3);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.CMSG_LOAD_SCREEN)]
         public static void HandleClientEnterWorld(Packet packet)
         {
@@ -525,6 +533,39 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleGossipComplete(Packet packet)
         {
             packet.ReadToEnd();
+        }
+
+        [Parser(Opcode.SMSG_INSPECT_HONOR_STATS)]
+        public static void HandleInspectHonorStatsResponse(Packet packet)
+        {
+            packet.ReadInt32("Life Time Kills"); // 24
+            packet.ReadInt16("Yesterday Honorable Kills"); // 28
+            packet.ReadInt16("Today Honorable Kills"); // 30
+            packet.ReadByte("Lifetime Max Rank"); // 32
+
+            var guid = packet.StartBitStream(2, 1, 6, 4, 5, 3, 7, 0);
+            packet.ParseBitStream(guid, 1, 3, 6, 7, 2, 4, 5, 0);
+            packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_INSPECT_RATED_BG_STATS)]
+        public static void HandleInspectRatedBGStatsResponse(Packet packet)
+        {
+            var guid = packet.StartBitStream(4, 2, 3, 6, 0, 5, 7, 1);
+            var count = packet.ReadBits("count", 3);
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadInt32("unk48", i); // 48
+                packet.ReadInt32("unk28", i); // 28
+                packet.ReadInt32("unk44", i); // 44
+                packet.ReadInt32("unk32", i); // 32
+                packet.ReadInt32("unk36", i); // 36
+                packet.ReadInt32("unk40", i); // 40
+                packet.ReadInt32("unk52", i); // 52
+                packet.ReadByte("unk28", i); // 28
+            }
+            packet.ParseBitStream(guid, 1, 7, 3, 2, 0, 5, 6, 4);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_INVALIDATE_PLAYER)]

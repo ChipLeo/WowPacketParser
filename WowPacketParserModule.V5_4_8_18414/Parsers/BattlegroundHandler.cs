@@ -127,6 +127,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_REQUEST_INSPECT_RATED_BG_STATS)]
         public static void HandleRequestInspectRBGStats(Packet packet)
         {
+            packet.ReadInt32("RealmID");
+            var guid = packet.StartBitStream(0, 2, 5, 1, 6, 4, 3, 7);
+            packet.ParseBitStream(guid, 7, 3, 1, 5, 4, 0, 2, 6);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_REQUEST_RATED_BG_INFO)]
