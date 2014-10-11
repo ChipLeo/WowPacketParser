@@ -3722,6 +3722,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_MOUNTSPECIAL_ANIM)]
+        public static void HandleMountSpecialAnim(Packet packet)
+        {
+            var guid = packet.StartBitStream(5, 7, 0, 3, 2, 1, 4, 6);
+            packet.ParseBitStream(guid, 7, 2, 0, 4, 5, 6, 1, 3);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_SET_PHASE_SHIFT)]
         public static void HandleSetPhaseShift(Packet packet)
         {

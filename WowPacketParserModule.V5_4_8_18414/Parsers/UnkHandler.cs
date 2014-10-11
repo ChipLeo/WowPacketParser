@@ -191,14 +191,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk");
         }
 
-        [Parser(Opcode.SMSG_UNK_003A)]
-        public static void HandleSUnk003A(Packet packet)
-        {
-            var guid = packet.StartBitStream(5, 7, 0, 3, 2, 1, 4, 6);
-            packet.ParseBitStream(guid, 7, 2, 0, 4, 5, 6, 1, 3);
-            packet.WriteGuid("Guid", guid);
-        }
-
         [Parser(Opcode.SMSG_UNK_0170)]
         public static void HandleSUnk0170(Packet packet)
         {

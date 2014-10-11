@@ -663,6 +663,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_MOVE_UPDATE_TURN_RATE,                    0x0D62 | 0x20000}, //--
             {Opcode.SMSG_MOVE_UPDATE_WALK_SPEED,                   0x0047 | 0x20000}, //++
             {Opcode.SMSG_MOVE_WATER_WALK,                          0x1F9A | 0x20000}, //++
+            {Opcode.SMSG_MOUNTSPECIAL_ANIM,                        0x003A | 0x20000}, //++
             {Opcode.SMSG_NAME_QUERY_RESPONSE,                      0x169B | 0x20000}, //++
             {Opcode.SMSG_NEW_TAXI_PATH,                            0x141B | 0x20000}, //++
             {Opcode.SMSG_NEW_WORLD,                                0x1C3B | 0x20000}, //++
@@ -847,7 +848,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_000F,                                 0x000f | 0x20000}, //++
             {Opcode.SMSG_UNK_001B,                                 0x001B | 0x20000}, //++
             {Opcode.SMSG_UNK_0023,                                 0x0023 | 0x20000}, //++
-            {Opcode.SMSG_UNK_003A,                                 0x003A | 0x20000}, //++
             {Opcode.SMSG_UNK_00F9,                                 0x00F9 | 0x20000}, //++
             {Opcode.SMSG_UNK_0170,                                 0x0170 | 0x20000}, //++
             {Opcode.SMSG_UNK_021A,                                 0x021A | 0x20000}, //++
