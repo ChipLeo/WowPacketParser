@@ -374,6 +374,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_CUSTOM_LOAD_SCREEN)]
+        public static void HandleCustomLoadScreen(Packet packet)
+        {
+            // unk = spell ID 130321 (The Mission: Teleport Player)
+            packet.ReadInt32("Spell");
+        }
+
         [Parser(Opcode.SMSG_GMRESPONSE_RECEIVED)]
         public static void HandleSGMResponseReceived(Packet packet)
         {

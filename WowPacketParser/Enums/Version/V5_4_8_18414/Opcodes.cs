@@ -504,6 +504,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_CRITERIA_DELETED,                         0x1C33 | 0x20000}, //++
             {Opcode.SMSG_CRITERIA_UPDATE_ACCOUNT,                  0x189E | 0x20000}, //++
             {Opcode.SMSG_CRITERIA_UPDATE_PLAYER,                   0x0E9B | 0x20000}, //++
+            {Opcode.SMSG_CUSTOM_LOAD_SCREEN,                       0x1CAF | 0x20000}, //++
             {Opcode.SMSG_DB_REPLY,                                 0x103B | 0x20000}, //++
             {Opcode.SMSG_DEATH_RELEASE_LOC,                        0x1063 | 0x20000}, //+-
             {Opcode.SMSG_DEFENSE_MESSAGE,                          0x0A1F | 0x20000}, //--
@@ -899,7 +900,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_1C0E,                                 0x1C0E | 0x20000}, //++
             {Opcode.SMSG_UNK_1C3A,                                 0x1C3A | 0x20000}, //++
             {Opcode.SMSG_UNK_1C3F,                                 0x1C3F | 0x20000}, //++
-            {Opcode.SMSG_UNK_1CAF,                                 0x1CAF | 0x20000}, //++
             {Opcode.SMSG_UNK_1DBE,                                 0x1DBE | 0x20000}, //++
             {Opcode.SMSG_UNK_1E12,                                 0x1E12 | 0x20000}, //++
             {Opcode.SMSG_UNK_1E1B,                                 0x1E1B | 0x20000}, //++ levelup 90

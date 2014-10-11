@@ -1504,13 +1504,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("guid48", guid48);
         }
 
-        [Parser(Opcode.SMSG_UNK_1CAF)]
-        public static void HandleSUnk1CAF(Packet packet)
-        {
-            // unk = spell ID 130321 (The Mission: Teleport Player)
-            packet.ReadInt32("unk");
-        }
-
         [Parser(Opcode.SMSG_UNK_1DBE)]
         public static void HandleSUnk1DBE(Packet packet)
         {
