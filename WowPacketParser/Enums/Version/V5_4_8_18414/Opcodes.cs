@@ -790,6 +790,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_SPLINE_MOVE_UNROOT,                       0x01E1 | 0x20000}, //++
             {Opcode.SMSG_SPLINE_MOVE_UNSET_FLYING,                 0x0DE2 | 0x20000}, //+-
             {Opcode.SMSG_SPLINE_MOVE_UNSET_HOVER,                  0x0CE1 | 0x20000}, //++
+            {Opcode.SMSG_STABLE_RESULT,                            0x1613 | 0x20000}, //++
             {Opcode.SMSG_STANDSTATE_UPDATE,                        0x1C12 | 0x20000}, //++
             {Opcode.SMSG_START_TIMER,                              0x0E3F | 0x20000}, //+-
             {Opcode.SMSG_START_ELAPSED_TIMERS,                     0x00AB | 0x20000}, //++
@@ -890,7 +891,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_14E2,                                 0x14E2 | 0x20000}, //++ pair+ 1886
             {Opcode.SMSG_UNK_1553,                                 0x1553 | 0x20000}, //++
             {Opcode.SMSG_UNK_15E3,                                 0x15E3 | 0x20000}, //++
-            {Opcode.SMSG_UNK_1613,                                 0x1613 | 0x20000}, //++
             {Opcode.SMSG_UNK_163F,                                 0x163F | 0x20000}, //++
             {Opcode.SMSG_UNK_168A,                                 0x168A | 0x20000}, //++ pair 1C5A
             {Opcode.SMSG_UNK_16BF,                                 0x16BF | 0x20000}, //++

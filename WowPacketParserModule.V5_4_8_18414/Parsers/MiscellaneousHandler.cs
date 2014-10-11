@@ -1089,30 +1089,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_UNK_1613)]
-        public static void HandleUnk1613(Packet packet)
-        {
-            var guid = packet.StartBitStream(3, 0, 4, 7, 2, 1, 6, 5);
-            var count = packet.ReadBits("count", 19);
-            var cnt = new uint[count];
-            for (var i = 0; i < count; i++)
-            {
-                cnt[i] = packet.ReadBits("unk192", 8, i);
-            }
-            for (var i = 0; i < count; i++)
-            {
-                packet.ReadInt32("unk144", i);
-                packet.ReadInt32("unk176", i);
-                packet.ReadByte("unk261", i);
-                packet.ReadInt32("unk160", i);
-                packet.ReadWoWString("PetName", cnt[i], i);
-                packet.ReadInt32("PetNumber", i);
-                packet.ReadInt32("unk112", i);
-            }
-            packet.ParseBitStream(guid, 3, 5, 7, 2, 0, 4, 1, 6);
-            packet.WriteGuid("Guid", guid);
-        }
-
         [Parser(Opcode.SMSG_UNK_16BF)]
         public static void HandleUnk16BF(Packet packet)
         {
