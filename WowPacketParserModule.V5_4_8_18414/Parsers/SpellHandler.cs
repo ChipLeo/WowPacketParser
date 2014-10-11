@@ -1600,6 +1600,20 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_SUPERCEDED_SPELL)]
+        public static void HandleSupercededSpell(Packet packet)
+        {
+            /*
+             Зявляється при підвищенні рангу бонус спела (53040 - 74496)
+             */
+            var count16 = packet.ReadBits("count16", 22);
+            var count32 = packet.ReadBits("count32", 22);
+            for (var i = 0; i < count32; i++)
+                packet.ReadEntry<UInt32>(StoreNameType.Spell, "New Spell ID", i); // 36
+            for (var i = 0; i < count16; i++)
+                packet.ReadEntry<UInt32>(StoreNameType.Spell, "Old Spell ID", i); // 20
+        }
+
         [Parser(Opcode.SMSG_TOTEM_CREATED)]
         public static void HandleTotemCreated(Packet packet)
         {

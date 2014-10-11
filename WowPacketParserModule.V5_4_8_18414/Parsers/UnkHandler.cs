@@ -691,20 +691,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt16("unkInt16 20"); // 20
         }
 
-        [Parser(Opcode.SMSG_UNK_1943)]
-        public static void HandleSUnk1943(Packet packet)
-        {
-            /*
-             Зявляється при підвищенні рангу бонус спела (53040 - 74496)
-             */
-            var count16 = packet.ReadBits("count16", 22);
-            var count32 = packet.ReadBits("count32", 22);
-            for (var i = 0; i < count32; i++)
-                packet.ReadEntry<UInt32>(StoreNameType.Spell, "New Spell ID", i); // 36
-            for (var i = 0; i < count16; i++)
-                packet.ReadEntry<UInt32>(StoreNameType.Spell, "Old Spell ID", i); // 20
-        }
-
         [Parser(Opcode.SMSG_UNK_1C3A)]
         public static void HandleSUnk1C3A(Packet packet)
         {
