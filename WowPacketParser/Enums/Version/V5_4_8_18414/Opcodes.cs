@@ -494,6 +494,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_CHAT_PLAYER_NOT_FOUND,                    0x1082 | 0x20000}, //++
             {Opcode.SMSG_CLIENT_CONTROL_UPDATE,                    0x1043 | 0x20000}, //++
             {Opcode.SMSG_CLIENTCACHE_VERSION,                      0x002A | 0x20000}, //++
+            {Opcode.SMSG_COMBAT_EVENT_FAILED,                      0x18C3 | 0x20000}, //++
             {Opcode.SMSG_CONTACT_LIST,                             0x1F22 | 0x20000}, //++
             {Opcode.SMSG_CONVERT_RUNE,                             0x1A1B | 0x20000}, //+-
             {Opcode.SMSG_COOLDOWN_EVENT,                           0x1163 | 0x20000}, //++
@@ -897,7 +898,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_1840,                                 0x1840 | 0x20000}, //++
             {Opcode.SMSG_UNK_1843,                                 0x1843 | 0x20000}, //++
             {Opcode.SMSG_UNK_188F,                                 0x188F | 0x20000}, //++
-            {Opcode.SMSG_UNK_18C3,                                 0x18C3 | 0x20000}, //++
             {Opcode.SMSG_UNK_1943,                                 0x1943 | 0x20000}, //++
             {Opcode.SMSG_UNK_1A1E,                                 0x1A1E | 0x20000}, //++ pair CMSG 0882
             {Opcode.SMSG_UNK_1A9F,                                 0x1A9F | 0x20000}, //++
