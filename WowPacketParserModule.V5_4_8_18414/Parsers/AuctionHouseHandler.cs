@@ -240,6 +240,22 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadUInt32("Desired delay time");
         }
 
+        [Parser(Opcode.SMSG_AUCTION_OUTBID_NOTIFICATION)]
+        public static void HandleAuctionOutbidNotification(Packet packet)
+        {
+            packet.ReadInt32("Auction ID"); // 44
+            packet.ReadInt32("unk40"); // 40
+            packet.ReadInt32("unk56"); // 56
+            packet.ReadInt64("unk16"); // 16
+            packet.ReadInt32("Item ID"); // 48
+            packet.ReadInt32("unk52"); // 52
+            packet.ReadInt64("unk24"); // 24
+
+            var guid = packet.StartBitStream(2, 5, 0, 1, 4, 6, 3, 7);
+            packet.ParseBitStream(guid, 4, 7, 3, 0, 1, 6, 2, 5);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_AUCTION_OWNER_NOTIFICATION)]
         public static void HandleAuctionOwnerNotification(Packet packet)
         {
