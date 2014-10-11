@@ -551,6 +551,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadCString("Message");
         }
 
+        [Parser(Opcode.SMSG_SET_AI_ANIM_KIT)]
+        public static void HandleSetAIAnimKit(Packet packet)
+        {
+            var guid = packet.StartBitStream(5, 4, 1, 3, 0, 2, 6, 7);
+            packet.ParseBitStream(guid, 0, 1, 3, 7, 2, 4, 5);
+            packet.ReadInt16("AnimKit.dbc Id"); // 48
+            packet.ParseBitStream(guid, 6);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_SET_FACTION_ATWAR)]
         public static void HandleSetFactionAtWar(Packet packet)
         {
@@ -579,12 +589,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 }
                 packet.ReadEnum<SpellModOp>("Spell Mod", TypeCode.Byte, i);
             }
-        }
-
-        [Parser(Opcode.SMSG_TIME_SYNC_REQ)]
-        public static void HandleTimeSyncReq(Packet packet)
-        {
-            packet.ReadUInt32("MCounter");
         }
 
         [Parser(Opcode.SMSG_SET_TIMEZONE_INFORMATION)]
@@ -690,6 +694,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleStopMirrorTimer(Packet packet)
         {
             packet.ReadEnum<MirrorTimerType>("Timer Type", TypeCode.UInt32);
+        }
+
+        [Parser(Opcode.SMSG_TIME_SYNC_REQ)]
+        public static void HandleTimeSyncReq(Packet packet)
+        {
+            packet.ReadUInt32("MCounter");
         }
 
         [Parser(Opcode.SMSG_WEATHER)]
@@ -1256,16 +1266,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             packet.WriteGuid("Guid", guid);
             packet.WriteGuid("Guid2", guid2);
-        }
-
-        [Parser(Opcode.SMSG_UNK_1E12)]
-        public static void HandleUnk1E12(Packet packet)
-        {
-            var guid = packet.StartBitStream(5, 4, 1, 3, 0, 2, 6, 7);
-            packet.ParseBitStream(guid, 0, 1, 3, 7, 2, 4, 5);
-            packet.ReadInt16("unk48");
-            packet.ParseBitStream(guid, 6);
-            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_UNK_1E9B)]
