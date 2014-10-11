@@ -557,6 +557,38 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID");
         }
 
+        [Parser(Opcode.SMSG_MISSILE_CANCEL)]
+        public static void HandleMissileCancel(Packet packet)
+        {
+            /*
+             Після
+             ServerToClient: SMSG_CHANNEL_START (0x10F9) Length: 16
+             Spell ID: 115175 (0x1C1E7)
+             йде
+             ServerToClient: SMSG_UNK_1203 (0x1203) Length: 12
+             unk20: False
+             Spell ID: 117899 (0x1CC8B)
+             */
+
+            var guid = new byte[8];
+            guid[6] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            packet.ReadBit("Cancel"); // 20
+            guid[3] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 4, 1);
+
+            packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 64
+
+            packet.ParseBitStream(guid, 2, 3, 7, 5, 0, 6);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_MODIFY_COOLDOWN)]
         public static void HandleModifyCooldown(Packet packet)
         {
