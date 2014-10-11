@@ -470,6 +470,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_QUESTGIVER_QUEST_INVALID)]
+        public static void HandleQuestInvalid(Packet packet)
+        {
+            var hasData = !packet.ReadBit("!hasData");
+            if (hasData)
+                packet.ReadWoWString("str", packet.ReadBits(9));
+            packet.ReadEnum<QuestReasonType>("Reason", TypeCode.UInt32); // 528
+        }
+
         [Parser(Opcode.CMSG_QUESTGIVER_REQUEST_REWARD)]
         public static void HandleQuestRequestReward(Packet packet)
         {

@@ -676,6 +676,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_QUESTGIVER_OFFER_REWARD,                  0x074F | 0x20000}, //++
             {Opcode.SMSG_QUESTGIVER_QUEST_COMPLETE,                0x0346 | 0x20000}, //++
             {Opcode.SMSG_QUESTGIVER_QUEST_DETAILS,                 0x134C | 0x20000}, //--
+            {Opcode.SMSG_QUESTGIVER_QUEST_INVALID,                 0x027D | 0x20000}, //++ pair 12F0 or 1DAE
             {Opcode.SMSG_QUESTGIVER_QUEST_LIST,                    0x02D4 | 0x20000}, //+-
             {Opcode.SMSG_QUESTGIVER_REQUEST_ITEMS,                 0x0277 | 0x20000}, //++
             {Opcode.SMSG_QUESTGIVER_STATUS,                        0x1275 | 0x20000}, //++
@@ -817,7 +818,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_01D2,                                 0x01D2 | 0x20000}, //++
             {Opcode.SMSG_UNK_021A,                                 0x021A | 0x20000}, //++
             {Opcode.SMSG_UNK_023B,                                 0x023B | 0x20000}, //++ SMSG_SPLINE_MOVE_SET_???_SPEED
-            {Opcode.SMSG_UNK_027D,                                 0x027D | 0x20000}, //++
             {Opcode.SMSG_UNK_0332,                                 0x0332 | 0x20000}, //-- coded
             {Opcode.SMSG_UNK_0354,                                 0x0354 | 0x20000}, //++
             {Opcode.SMSG_UNK_0364,                                 0x0364 | 0x20000}, //++
