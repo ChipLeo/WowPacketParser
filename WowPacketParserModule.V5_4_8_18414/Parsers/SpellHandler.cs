@@ -557,6 +557,23 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID");
         }
 
+        [Parser(Opcode.SMSG_LOSS_OF_CONTROL_AURA_UPDATE)]
+        public static void HandleLossOfControlAuraUpdate(Packet packet)
+        {
+            // after SMSG_ACTIVATETAXIREPLY
+            var count = packet.ReadBits("count", 22);
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadBits("unk24", 8, i); // 24
+                packet.ReadBits("unk28", 8, i); // 28
+            }
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadByte("unk21", i);
+                packet.ReadByte("unk20", i);
+            }
+        }
+
         [Parser(Opcode.SMSG_MISSILE_CANCEL)]
         public static void HandleMissileCancel(Packet packet)
         {

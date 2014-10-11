@@ -607,6 +607,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_LOOT_REMOVED,                             0x0C3E | 0x20000}, //++
             {Opcode.SMSG_LOOT_RESPONSE,                            0x128A | 0x20000}, //++
             {Opcode.SMSG_LOOT_RESPONSE_COUNT,                      0x0C32 | 0x20000}, //++
+            {Opcode.SMSG_LOSS_OF_CONTROL_AURA_UPDATE,              0x049A | 0x20000}, //++
             {Opcode.SMSG_MAIL_LIST_RESULT,                         0x1C0B | 0x20000}, //--
             {Opcode.SMSG_MESSAGECHAT,                              0x1A9A | 0x20000}, //++
             {Opcode.SMSG_MINIMAP_PING,                             0x168F | 0x20000}, //--
@@ -852,7 +853,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_043E,                                 0x043E | 0x20000}, //++
             {Opcode.SMSG_UNK_04AA,                                 0x04AA | 0x20000}, //+-
             {Opcode.SMSG_UNK_048A,                                 0x048A | 0x20000}, //++
-            {Opcode.SMSG_UNK_049A,                                 0x049A | 0x20000}, //++
             {Opcode.SMSG_UNK_05F3,                                 0x05F3 | 0x20000}, //++
             {Opcode.SMSG_UNK_060A,                                 0x060A | 0x20000}, //++
             {Opcode.SMSG_UNK_0612,                                 0x0612 | 0x20000}, //++ pair 1886

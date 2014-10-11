@@ -307,23 +307,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid2);
         }
 
-        [Parser(Opcode.SMSG_UNK_049A)]
-        public static void HandleSUnk049A(Packet packet)
-        {
-            // after SMSG_ACTIVATETAXIREPLY
-            var count = packet.ReadBits("count", 22);
-            for (var i = 0; i < count; i++)
-            {
-                packet.ReadBits("unk24", 8, i); // 24
-                packet.ReadBits("unk28", 8, i); // 28
-            }
-            for (var i = 0; i < count; i++)
-            {
-                packet.ReadByte("unk21", i);
-                packet.ReadByte("unk20", i);
-            }
-        }
-
         [Parser(Opcode.SMSG_UNK_04AA)]
         public static void HandleSUnk04AA(Packet packet)
         {
