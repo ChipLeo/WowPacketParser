@@ -1854,6 +1854,7 @@ namespace WowPacketParser.Enums
         SMSG_SERVER_MESSAGE,
         SMSG_SERVER_PERF,
         SMSG_SET_AI_ANIM_KIT, // 4.x
+        SMSG_SET_ANIM_TIER,
         SMSG_SET_DF_FAST_LAUNCH_RESULT,
         SMSG_SET_DUNGEON_DIFFICULTY,
         SMSG_SET_EXTRA_AURA_INFO_NEED_UPDATE_OBSOLETE,
@@ -2148,7 +2149,6 @@ namespace WowPacketParser.Enums
         SMSG_UNK_1943,
         SMSG_UNK_1A1E,
         SMSG_UNK_1A9F,
-        SMSG_UNK_1C0E,
         SMSG_UNK_1C3A,
         SMSG_UNK_1C3F,
         SMSG_UNK_1D13,
