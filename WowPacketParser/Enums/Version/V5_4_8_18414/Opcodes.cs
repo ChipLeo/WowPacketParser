@@ -499,6 +499,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_CHAR_CREATE,                              0x1CAA | 0x20000}, //++
             {Opcode.SMSG_CHAR_DELETE,                              0x0C9F | 0x20000}, //+-
             {Opcode.SMSG_CHAR_ENUM,                                0x11C3 | 0x20000}, //++
+            {Opcode.SMSG_CHAT_NOT_IN_PARTY,                        0x0A8A | 0x20000}, //++ pair 009A
             {Opcode.SMSG_CHAT_PLAYER_NOT_FOUND,                    0x1082 | 0x20000}, //++
             {Opcode.SMSG_CLIENT_CONTROL_UPDATE,                    0x1043 | 0x20000}, //++
             {Opcode.SMSG_CLIENTCACHE_VERSION,                      0x002A | 0x20000}, //++
@@ -873,7 +874,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_048A,                                 0x048A | 0x20000}, //++
             {Opcode.SMSG_UNK_0612,                                 0x0612 | 0x20000}, //++ pair 1886
             {Opcode.SMSG_UNK_07F5,                                 0x07F5 | 0x20000}, //++
-            {Opcode.SMSG_UNK_0A8A,                                 0x0A8A | 0x20000}, //++ pair 009A
             {Opcode.SMSG_UNK_0A8B,                                 0x0A8B | 0x20000}, //++
             {Opcode.SMSG_UNK_0B22,                                 0x0B22 | 0x20000}, //-- pair 0C1B
             {Opcode.SMSG_UNK_0C1A,                                 0x0C1A | 0x20000}, //-- pair 17BA

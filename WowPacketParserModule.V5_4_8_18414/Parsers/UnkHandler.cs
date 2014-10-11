@@ -255,12 +255,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadEnum<QuestRequirementType>("Requirement Type", TypeCode.Byte); // 24
         }
 
-        [Parser(Opcode.SMSG_UNK_0A8A)]
-        public static void HandleSUnk0A8A(Packet packet)
-        {
-            packet.ReadInt32("Unk");
-        }
-
         [Parser(Opcode.SMSG_UNK_0B22)]
         public static void HandleSUnk0B22(Packet packet)
         {
