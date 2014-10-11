@@ -858,22 +858,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("unk96");
         }
 
-        [Parser(Opcode.SMSG_UNK_0050)]
-        public static void HandleUnk0050(Packet packet)
-        {
-            var count = packet.ReadBits("count", 19);
-            for (var i = 0 ; i < count; i++)
-                packet.ReadBit("unk40", i);
-            for (var i = 0 ; i < count; i++)
-            {
-                packet.ReadInt32("unk84", i);
-                packet.ReadInt32("unk36", i);
-                packet.ReadInt32("unk68", i);
-                packet.ReadInt32("unk52", i);
-                packet.ReadInt32("unk20", i);
-            }
-        }
-
         [Parser(Opcode.SMSG_UNK_00A3)]
         public static void HandleUnk00A3(Packet packet)
         {

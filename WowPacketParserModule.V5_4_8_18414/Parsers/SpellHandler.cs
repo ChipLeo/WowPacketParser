@@ -694,6 +694,22 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID");
         }
 
+        [Parser(Opcode.SMSG_SEND_SPELL_HISTORY)]
+        public static void HandleSendSpellHistory(Packet packet)
+        {
+            var count = packet.ReadBits("count", 19);
+            for (var i = 0; i < count; i++)
+                packet.ReadBit("unk40", i);
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadInt32("unk84", i);
+                packet.ReadInt32("unk36", i);
+                packet.ReadInt32("unk68", i);
+                packet.ReadInt32("unk52", i);
+                packet.ReadInt32("unk20", i);
+            }
+        }
+
         [Parser(Opcode.SMSG_SEND_UNLEARN_SPELLS)]
         public static void HandleSendUnlearnSpells(Packet packet)
         {

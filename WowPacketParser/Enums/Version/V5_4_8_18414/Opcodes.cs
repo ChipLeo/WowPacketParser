@@ -719,6 +719,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_SELL_ITEM,                                0x048E | 0x20000}, //--
             {Opcode.SMSG_SEND_ITEM_UPGRADE,                        0x0E33 | 0x20000}, //++
             {Opcode.SMSG_SEND_MAIL_RESULT,                         0x1A9B | 0x20000}, //--
+            {Opcode.SMSG_SEND_SPELL_HISTORY,                       0x0050 | 0x20000}, //++
             {Opcode.SMSG_SEND_UNLEARN_SPELLS,                      0x10F1 | 0x20000}, //++
             {Opcode.SMSG_SERVER_MESSAGE,                           0x0302 | 0x20000}, //--
             {Opcode.SMSG_SET_AI_ANIM_KIT,                          0x1E12 | 0x20000}, //++
@@ -825,7 +826,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_001B,                                 0x001B | 0x20000}, //++
             {Opcode.SMSG_UNK_0023,                                 0x0023 | 0x20000}, //++
             {Opcode.SMSG_UNK_003A,                                 0x003A | 0x20000}, //++
-            {Opcode.SMSG_UNK_0050,                                 0x0050 | 0x20000}, //++
             {Opcode.SMSG_UNK_00A3,                                 0x00A3 | 0x20000}, //++
             {Opcode.SMSG_UNK_00F9,                                 0x00F9 | 0x20000}, //++
             {Opcode.SMSG_UNK_0170,                                 0x0170 | 0x20000}, //++
