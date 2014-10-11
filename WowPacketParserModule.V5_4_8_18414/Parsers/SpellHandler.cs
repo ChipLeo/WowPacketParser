@@ -1603,5 +1603,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ParseBitStream(guid, 1, 7);
             packet.WriteGuid("Guid", guid);
         }
+
+        [Parser(Opcode.SMSG_WEEKLY_SPELL_USAGE)]
+        public static void HandleWeeklySpellUsage(Packet packet)
+        {
+            var count = packet.ReadBits("count", 21);
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadInt32("unk20", i);
+                packet.ReadByte("unk24", i);
+            }
+        }
     }
 }

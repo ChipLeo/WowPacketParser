@@ -1029,17 +1029,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("unk96");
         }
 
-        [Parser(Opcode.SMSG_UNK_00F9)]
-        public static void HandleUnk00F9(Packet packet)
-        {
-            var count = packet.ReadBits("count", 21);
-            for (var i = 0; i < count; i++)
-            {
-                packet.ReadInt32("unk20", i);
-                packet.ReadByte("unk24", i);
-            }
-        }
-
         [Parser(Opcode.SMSG_UNK_0A3F)]
         public static void HandleUnk0A3F(Packet packet)
         {
