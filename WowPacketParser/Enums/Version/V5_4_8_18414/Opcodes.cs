@@ -766,6 +766,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_SPELL_FAILURE,                            0x04AF | 0x20000}, //++
             {Opcode.SMSG_SPELL_GO,                                 0x09D8 | 0x20000}, //++
             {Opcode.SMSG_SPELL_START,                              0x107A | 0x20000}, //++
+            {Opcode.SMSG_SPELLDAMAGESHIELD,                        0x05F3 | 0x20000}, //++
             {Opcode.SMSG_SPELLDISPELLOG,                           0x0DF9 | 0x20000}, //--
             {Opcode.SMSG_SPELLENERGIZELOG,                         0x0D79 | 0x20000}, //--
             {Opcode.SMSG_SPELLHEALLOG,                             0x09FB | 0x20000}, //--
@@ -858,7 +859,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_043E,                                 0x043E | 0x20000}, //++
             {Opcode.SMSG_UNK_04AA,                                 0x04AA | 0x20000}, //+-
             {Opcode.SMSG_UNK_048A,                                 0x048A | 0x20000}, //++
-            {Opcode.SMSG_UNK_05F3,                                 0x05F3 | 0x20000}, //++
             {Opcode.SMSG_UNK_060A,                                 0x060A | 0x20000}, //++
             {Opcode.SMSG_UNK_0612,                                 0x0612 | 0x20000}, //++ pair 1886
             {Opcode.SMSG_UNK_07F5,                                 0x07F5 | 0x20000}, //++

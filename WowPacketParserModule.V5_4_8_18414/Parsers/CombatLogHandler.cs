@@ -121,7 +121,63 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_SPELLDAMAGESHIELD)]
         public static void HandleSpellDamageShield(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = new byte[8];
+            var guid2 = new byte[8];
+            guid2[1] = packet.ReadBit(); // 81
+            guid[2] = packet.ReadBit(); // 34
+            var unk72 = packet.ReadBit("unk72"); // 72
+            guid[6] = packet.ReadBit(); // 38
+            guid2[3] = packet.ReadBit(); // 83
+            guid[4] = packet.ReadBit(); // 36
+            guid2[2] = packet.ReadBit(); // 82
+            guid2[5] = packet.ReadBit(); // 85
+            guid2[6] = packet.ReadBit(); // 86
+            guid[3] = packet.ReadBit(); // 35
+            guid2[0] = packet.ReadBit(); // 80
+            guid[5] = packet.ReadBit(); // 37
+            guid[1] = packet.ReadBit(); // 33
+            guid[0] = packet.ReadBit(); // 32
+            guid2[7] = packet.ReadBit(); // 87
+            guid2[4] = packet.ReadBit(); // 84
+            guid[7] = packet.ReadBit(); // 39
+
+            if (unk72)
+            {
+                var unk56 = packet.ReadBits("unk56", 21); // 56
+                packet.ReadInt32("unk48"); // 48
+                for (var i = 0; i < unk56; i++)
+                {
+                    packet.ReadInt32("unk64", i); // 64
+                    packet.ReadInt32("unk60", i); // 60
+                }
+                packet.ReadInt32("unk44"); // 44
+                packet.ReadInt32("unk52"); // 52
+            }
+
+            packet.ReadXORByte(guid2, 2); // 82
+            packet.ReadXORByte(guid, 6); // 38
+            packet.ReadXORByte(guid2, 6); // 86
+            packet.ReadXORByte(guid2, 4); // 84
+            packet.ReadXORByte(guid, 3); // 35
+            packet.ReadXORByte(guid2, 7); // 87
+            packet.ReadInt32("unk40"); // 40
+            packet.ReadXORByte(guid, 4); // 36
+            packet.ReadXORByte(guid2, 1); // 81
+            packet.ReadInt32("unk24"); // 24
+            packet.ReadXORByte(guid, 7); // 39
+            packet.ReadInt32("unk16"); // 16
+            packet.ReadInt32("unk20"); // 20
+            packet.ReadXORByte(guid2, 5); // 85
+            packet.ReadXORByte(guid, 5); // 37
+            packet.ReadXORByte(guid2, 0); // 80
+            packet.ReadXORByte(guid, 1); // 33
+            packet.ReadXORByte(guid, 0); // 32
+            packet.ReadXORByte(guid, 2); // 34
+            packet.ReadInt32("unk88"); // 88
+            packet.ReadXORByte(guid2, 3); // 83
+
+            packet.WriteGuid("Guid", guid);
+            packet.WriteGuid("Guid2", guid2);
         }
 
         [Parser(Opcode.SMSG_SPELLDISPELLOG)]
