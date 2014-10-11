@@ -537,6 +537,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GAMEOBJECT_CUSTOM_ANIM,                   0x001F | 0x20000}, //++
             {Opcode.SMSG_GAMEOBJECT_DESPAWN_ANIM,                  0x108B | 0x20000}, //++
             {Opcode.SMSG_GAMEOBJECT_QUERY_RESPONSE,                0x06BF | 0x20000}, //++
+            {Opcode.SMSG_GAMETIME_UPDATE,                          0x0E1B | 0x20000}, //++
             {Opcode.SMSG_GMRESPONSE_RECEIVED,                      0x148E | 0x20000}, //++
             {Opcode.SMSG_GOSSIP_COMPLETE,                          0x034E | 0x20000}, //--
             {Opcode.SMSG_GOSSIP_MESSAGE,                           0x0244 | 0x20000}, //--
@@ -867,7 +868,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0CAF,                                 0x0CAF | 0x20000}, //++
             {Opcode.SMSG_UNK_0D51,                                 0x0D51 | 0x20000}, //++
             {Opcode.SMSG_UNK_0D52,                                 0x0D52 | 0x20000}, //++
-            {Opcode.SMSG_UNK_0E1B,                                 0x0E1B | 0x20000}, //++
             {Opcode.SMSG_UNK_0E2A,                                 0x0E2A | 0x20000}, //++
             {Opcode.SMSG_UNK_0E70,                                 0x0E70 | 0x20000}, //++ guild
             {Opcode.SMSG_UNK_0EAA,                                 0x0EAA | 0x20000}, //++
