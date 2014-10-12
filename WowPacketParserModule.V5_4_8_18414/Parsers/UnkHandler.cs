@@ -442,6 +442,30 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_UNK_162A)]
+        public static void HandleSUnk162A(Packet packet)
+        {
+            /*
+            unk16: False
+            Spell ID: 8177
+            Guid: Type: Player
+             */
+            var guid = new byte[8];
+            guid[3] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            var unk16 = packet.ReadBit("unk16"); // 16
+            guid[7] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            packet.ParseBitStream(guid, 0, 1, 2, 7, 3, 6, 5);
+            packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 20
+            packet.ParseBitStream(guid, 4);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_UNK_182E)]
         public static void HandleSUnk182E(Packet packet)
         {
