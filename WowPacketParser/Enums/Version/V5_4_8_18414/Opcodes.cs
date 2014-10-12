@@ -749,6 +749,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_RESPOND_INSPECT_ACHIEVEMENTS,             0x009E | 0x20000}, //++ pair 0373
             {Opcode.SMSG_RESUME_CAST_BAR,                          0x01D2 | 0x20000}, //++
             {Opcode.SMSG_RESUME_TOKEN,                             0x18BA | 0x20000}, //++
+            {Opcode.SMSG_RESYNC_RUNES,                             0x15E3 | 0x20000}, //++
             {Opcode.SMSG_ROLE_POLL_BEGIN,                          0x1A1F | 0x20000}, //++
             {Opcode.SMSG_SELL_ITEM,                                0x048E | 0x20000}, //--
             {Opcode.SMSG_SEND_ITEM_UPGRADE,                        0x0E33 | 0x20000}, //++
@@ -898,7 +899,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_129B,                                 0x129B | 0x20000}, //++
             {Opcode.SMSG_UNK_14E2,                                 0x14E2 | 0x20000}, //++ pair+ 1886
             {Opcode.SMSG_UNK_1553,                                 0x1553 | 0x20000}, //++
-            {Opcode.SMSG_UNK_15E3,                                 0x15E3 | 0x20000}, //++
             {Opcode.SMSG_UNK_16BF,                                 0x16BF | 0x20000}, //++
             {Opcode.SMSG_UNK_182E,                                 0x182E | 0x20000}, //++ pair CMSG 15DB
             {Opcode.SMSG_UNK_188F,                                 0x188F | 0x20000}, //++

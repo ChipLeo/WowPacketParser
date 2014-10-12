@@ -847,6 +847,17 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid2);
         }
 
+        [Parser(Opcode.SMSG_RESYNC_RUNES)]
+        public static void HandleResyncRunes(Packet packet)
+        {
+            var count = packet.ReadBits("count", 23);
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadByte("unk21"); // 21
+                packet.ReadByte("unk20"); // 20
+            }
+        }
+
         [Parser(Opcode.SMSG_SEND_SPELL_HISTORY)]
         public static void HandleSendSpellHistory(Packet packet)
         {
