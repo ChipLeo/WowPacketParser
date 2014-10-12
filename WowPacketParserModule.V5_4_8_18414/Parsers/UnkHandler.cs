@@ -414,12 +414,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("Data");
         }
 
-        [Parser(Opcode.SMSG_UNK_1223)]
-        public static void HandleSUnk1223(Packet packet)
-        {
-            packet.ReadInt32("unk");
-        }
-
         [Parser(Opcode.SMSG_UNK_14E2)]
         public static void HandleSUnk14E2(Packet packet)
         {
