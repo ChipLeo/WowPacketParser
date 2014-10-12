@@ -688,6 +688,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_PET_CAST_FAILED,                          0x149B | 0x20000}, //++
             {Opcode.SMSG_PET_DISMISS_SOUND,                        0x1ABB | 0x20000}, //++
             {Opcode.SMSG_PET_GUIDS,                                0x1227 | 0x20000}, //++
+            {Opcode.SMSG_PET_MODE,                                 0x163F | 0x20000}, //++
             {Opcode.SMSG_PET_NAME_QUERY_RESPONSE,                  0x0ABE | 0x20000}, //-+
             {Opcode.SMSG_PET_SPELLS,                               0x095A | 0x20000}, //-+
             {Opcode.SMSG_PETITION_ALREADY_SIGNED,                  0x0286 | 0x20000}, //--
@@ -897,7 +898,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_14E2,                                 0x14E2 | 0x20000}, //++ pair+ 1886
             {Opcode.SMSG_UNK_1553,                                 0x1553 | 0x20000}, //++
             {Opcode.SMSG_UNK_15E3,                                 0x15E3 | 0x20000}, //++
-            {Opcode.SMSG_UNK_163F,                                 0x163F | 0x20000}, //++
             {Opcode.SMSG_UNK_16BF,                                 0x16BF | 0x20000}, //++
             {Opcode.SMSG_UNK_182E,                                 0x182E | 0x20000}, //++ pair CMSG 15DB
             {Opcode.SMSG_UNK_1840,                                 0x1840 | 0x20000}, //++

@@ -13,6 +13,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class PetHandler
     {
+        public static void ReadPetFlags(ref Packet packet)
+        {
+            var petModeFlag = packet.ReadUInt32();
+            packet.AddValue("React state", (ReactState)((petModeFlag >> 8) & 0xFF));
+            packet.AddValue("Command state", (CommandState)((petModeFlag >> 16) & 0xFF));
+            packet.AddValue("Flag", (PetModeFlags)(petModeFlag & 0xFFFF0000));
+        }
+
         [Parser(Opcode.CMSG_PET_ABANDON)]
         public static void HandlePetMiscGuid(Packet packet)
         {
@@ -472,6 +480,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ParseBitStream(guid[i], 5, 2, 3, 0, 6, 1, 4, 7);
                 packet.WriteGuid("Guid", guid[i], i);
             }
+        }
+
+        [Parser(Opcode.SMSG_PET_MODE)]
+        public static void HandlePetMode(Packet packet)
+        {
+            var guid = packet.StartBitStream(5, 0, 6, 3, 7, 2, 4, 1);
+            ReadPetFlags(ref packet); // 24
+            packet.ParseBitStream(guid, 2, 5, 4, 0, 1, 7, 3, 6);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_PET_NAME_QUERY_RESPONSE)]
