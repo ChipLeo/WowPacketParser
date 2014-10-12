@@ -570,6 +570,21 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_INSPECT_RATED_BG_STATS)]
         public static void HandleInspectRatedBGStats(Packet packet)
         {
+            var guid = packet.StartBitStream(4, 2, 3, 6, 0, 5, 7, 1);
+            var count = packet.ReadBits("count", 3);
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadInt32("unk48", i); // 48
+                packet.ReadInt32("unk28", i); // 28
+                packet.ReadInt32("unk44", i); // 44
+                packet.ReadInt32("unk32", i); // 32
+                packet.ReadInt32("unk36", i); // 36
+                packet.ReadInt32("unk40", i); // 40
+                packet.ReadInt32("unk52", i); // 52
+                packet.ReadByte("unk28", i); // 28
+            }
+            packet.ParseBitStream(guid, 1, 7, 3, 2, 0, 5, 6, 4);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_PVP_LOG_DATA)]
