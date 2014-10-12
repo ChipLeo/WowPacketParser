@@ -516,62 +516,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_UNK_1840)]
-        public static void HandleSUnk1840(Packet packet)
-        {
-            var guid = new byte[8];
-            var guid104 = new byte[8];
-            guid[6] = packet.ReadBit();
-            guid104[6] = packet.ReadBit();
-            guid[5] = packet.ReadBit();
-            guid[7] = packet.ReadBit();
-            var unk48 = !packet.ReadBit("!unk48"); // 48
-            guid104[3] = packet.ReadBit();
-            guid104[7] = packet.ReadBit();
-            guid[4] = packet.ReadBit();
-            var unk49 = !packet.ReadBit("!unk49"); // 49
-            guid[0] = packet.ReadBit();
-            guid[2] = packet.ReadBit();
-            guid104[1] = packet.ReadBit();
-            guid104[0] = packet.ReadBit();
-            var unk60 = packet.ReadBit("unk60"); // 60
-            var unk52 = packet.ReadBits("unk52", 2); // 52
-            guid[3] = packet.ReadBit();
-            var unk100 = packet.ReadBit("unk100"); // 100
-            guid104[5] = packet.ReadBit();
-            var unk56 = packet.ReadBits("unk56", 3); // 56
-            guid104[4] = packet.ReadBit();
-            guid104[2] = packet.ReadBit();
-            guid[1] = packet.ReadBit();
-
-            packet.ParseBitStream(guid, 7);
-            packet.ParseBitStream(guid104, 6);
-            packet.ParseBitStream(guid, 0, 5, 3);
-            if (unk49)
-                packet.ReadByte("unk49");
-            packet.ReadInt32("unk32"); // 32
-            packet.ReadInt32("unk44"); // 44
-            packet.ReadInt32("Suffix Factor"); // 40
-            packet.ReadBytes("unk", packet.ReadInt32());
-            packet.ParseBitStream(guid, 1, 4);
-            packet.ParseBitStream(guid104, 2);
-            packet.ParseBitStream(guid, 2);
-            packet.ReadInt32("Item"); // 28
-            packet.ParseBitStream(guid104, 4);
-            packet.ReadInt32("unk24"); // 24
-            if (unk48)
-                packet.ReadByte("unk48");
-            packet.ParseBitStream(guid, 6);
-            packet.ParseBitStream(guid104, 1, 0);
-            packet.ReadByte("unk101"); // 101
-            packet.ParseBitStream(guid104, 7);
-            packet.ReadInt32("unk36");
-            packet.ParseBitStream(guid104, 5, 3);
-
-            packet.WriteGuid("Guid", guid);
-            packet.WriteGuid("Guid104", guid104);
-        }
-
         [Parser(Opcode.SMSG_UNK_1C3A)]
         public static void HandleSUnk1C3A(Packet packet)
         {

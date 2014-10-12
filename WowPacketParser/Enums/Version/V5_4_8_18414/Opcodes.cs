@@ -620,6 +620,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_LOOT_REMOVED,                             0x0C3E | 0x20000}, //++
             {Opcode.SMSG_LOOT_RESPONSE,                            0x128A | 0x20000}, //++
             {Opcode.SMSG_LOOT_RESPONSE_COUNT,                      0x0C32 | 0x20000}, //++
+            {Opcode.SMSG_LOOT_ROLL,                                0x1840 | 0x20000}, //++
             {Opcode.SMSG_LOOT_ROLL_WON,                            0x0A3A | 0x20000}, //++
             {Opcode.SMSG_LOSS_OF_CONTROL_AURA_UPDATE,              0x049A | 0x20000}, //++
             {Opcode.SMSG_MAIL_LIST_RESULT,                         0x1C0B | 0x20000}, //--
@@ -900,7 +901,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_15E3,                                 0x15E3 | 0x20000}, //++
             {Opcode.SMSG_UNK_16BF,                                 0x16BF | 0x20000}, //++
             {Opcode.SMSG_UNK_182E,                                 0x182E | 0x20000}, //++ pair CMSG 15DB
-            {Opcode.SMSG_UNK_1840,                                 0x1840 | 0x20000}, //++
             {Opcode.SMSG_UNK_188F,                                 0x188F | 0x20000}, //++
             {Opcode.SMSG_UNK_1C3A,                                 0x1C3A | 0x20000}, //++
             {Opcode.SMSG_UNK_1C3F,                                 0x1C3F | 0x20000}, //++
