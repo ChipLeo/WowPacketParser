@@ -63,7 +63,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_BUY_ITEM,                                 0x02E2 | 0x10000}, //++
             {Opcode.CMSG_CANCEL_AURA,                              0x1861 | 0x10000}, //++
             {Opcode.CMSG_CANCEL_CAST,                              0x18C0 | 0x10000}, //++
-            {Opcode.CMSG_CANCEL_CHANNELLING,                       0x08C0 | 0x10000}, //+-
+            {Opcode.CMSG_CANCEL_CHANNELLING,                       0x08C0 | 0x10000}, //++
             {Opcode.CMSG_CANCEL_MOUNT_AURA,                        0x10E3 | 0x10000}, //++
             {Opcode.CMSG_CANCEL_TRADE,                             0x1941 | 0x10000}, //++
             {Opcode.CMSG_CAST_SPELL,                               0x0206 | 0x10000}, //++
@@ -267,6 +267,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_RETURN_TO_GRAVEYARD,                      0x12EA | 0x10000}, //--
             {Opcode.CMSG_SAVE_CUF_PROFILES,                        0x06E6 | 0x10000}, //++
             //{Opcode.CMSG_SELECT_FACTION,                           0x0027 | 0x10000}, //
+            {Opcode.CMSG_SELECT_LOOT_SPEC,                         0x1260 | 0x10000}, //--
             {Opcode.CMSG_SELL_ITEM,                                0x1358 | 0x10000}, //--
             {Opcode.CMSG_SEND_MAIL,                                0x1DBA | 0x10000}, //--
             {Opcode.CMSG_SET_ACTIONBAR_TOGGLES,                    0x0672 | 0x10000}, //++
@@ -278,7 +279,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_SET_PLAYER_DECLINED_NAMES,                0x09E2 | 0x10000}, //++
             {Opcode.CMSG_SET_PRIMARY_TALENT_TREE,                  0x06C6 | 0x10000}, //+-
             {Opcode.CMSG_SET_PVP,                                  0x02C5 | 0x10000}, //--
-            {Opcode.CMSG_SELECT_LOOT_SPEC,                         0x1260 | 0x10000}, //--
             {Opcode.CMSG_SET_RAID_DIFFICULTY,                      0x1093 | 0x10000}, //--
             {Opcode.CMSG_SET_SELECTION,                            0x0740 | 0x10000}, //++
             {Opcode.CMSG_SET_TAXI_BENCHMARK_MODE,                  0x0762 | 0x10000}, //--

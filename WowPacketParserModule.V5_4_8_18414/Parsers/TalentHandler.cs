@@ -30,89 +30,89 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleSInspectTalent(Packet packet)
         {
             var guid = new byte[8];
-            var unk40 = packet.ReadBit("unk40");
+            var hasGuild = packet.ReadBit("hasGuild"); // 40
             guid[2] = packet.ReadBit();
             var guid40 = new byte[8];
-            if (unk40)
+            if (hasGuild)
                 guid40 = packet.StartBitStream(7, 0, 5, 3, 2, 4, 6, 1);
             guid[4] = packet.ReadBit();
             guid[3] = packet.ReadBit();
             guid[5] = packet.ReadBit();
             guid[7] = packet.ReadBit();
-            var unk64 = packet.ReadBits("unk64", 20);
+            var slotCount = packet.ReadBits("slotCount", 20); // 64
             guid[0] = packet.ReadBit();
-            var guid64 = new byte[unk64][];
-            var unk82 = new bool[unk64];
-            var unk96 = new uint[unk64];
-            var unk88 = new bool[unk64];
-            for (var i = 0; i < unk64; i++)
+            var guid64 = new byte[slotCount][];
+            var unk82 = new bool[slotCount];
+            var enchCount = new uint[slotCount];
+            var unk88 = new bool[slotCount];
+            for (var i = 0; i < slotCount; i++)
             {
                 guid64[i] = new byte[8];
                 guid64[i][1] = packet.ReadBit();
-                unk88[i] = packet.ReadBit("unk88", i);
-                packet.ReadBit("unk112", i);
+                unk88[i] = packet.ReadBit("unk88", i); // 88
+                packet.ReadBit("unk112", i); // 112
                 guid64[i][3] = packet.ReadBit();
-                unk96[i] = packet.ReadBits("unk96", 21, i);
+                enchCount[i] = packet.ReadBits("enchCount", 21, i); // 96
                 guid64[i][2] = packet.ReadBit();
                 guid64[i][6] = packet.ReadBit();
                 guid64[i][4] = packet.ReadBit();
-                unk82[i] = packet.ReadBit("unk82");
+                unk82[i] = packet.ReadBit("unk82", i); // 82
                 guid64[i][0] = packet.ReadBit();
                 guid64[i][5] = packet.ReadBit();
                 guid64[i][7] = packet.ReadBit();
             }
-            var count48 = packet.ReadBits("unk48", 23);
-            var count96 = packet.ReadBits("unk96", 23);
+            var glyphCount = packet.ReadBits("glyphCount", 23); // 48
+            var talentCount = packet.ReadBits("talentCount", 23); // 96
             guid[6] = packet.ReadBit();
             guid[1] = packet.ReadBit();
 
             packet.ParseBitStream(guid, 1, 4, 2);
             var unkv42 = 0;
-            for (var i = 0; i < unk64; i++)
+            for (var i = 0; i < slotCount; i++)
             {
                 if (unk82[i])
-                    packet.ReadInt16("unk80", i);
+                    packet.ReadInt16("unk80", i); // 80
 
                 packet.ParseBitStream(guid64[i], 3);
 
-                unkv42 = packet.ReadInt32("unkv42", i);
+                unkv42 = packet.ReadInt32("unkv42", i); // 42
                 packet.WriteLine("[{0}] {1}", i, Utilities.ByteArrayToHexString(packet.ReadBytes(unkv42)));
-                for (var j = 0; j < unk96[i]; j++)
+                for (var j = 0; j < enchCount[i]; j++)
                 {
-                    packet.ReadInt32("unk100", i, j);
-                    packet.ReadByte("unk104", i, j);
+                    packet.ReadInt32("unk100", i, j); // 100
+                    packet.ReadByte("unk104", i, j); // 104
                 }
-                packet.ReadInt32("unk76", i);
+                packet.ReadEntry<UInt32>(StoreNameType.Item, "Item Entry", i); // 76
                 packet.ParseBitStream(guid64[i], 6, 4, 7, 2);
                 if (unk88[i])
-                    packet.ReadInt32("unk84", i);
+                    packet.ReadInt32("unk84", i); // 84
                 packet.ParseBitStream(guid64[i], 5);
-                packet.ReadByte("unk92", i);
+                packet.ReadEnum<EquipmentSlotType>("Slot", TypeCode.Byte, i); // 92
                 packet.ParseBitStream(guid64[i], 0, 1);
-                packet.WriteGuid("Guid64", guid64[i]);
+                packet.WriteGuid("Creator GUID", guid64[i], i); // 64
             }
-            if (unk40)
+            if (hasGuild)
             {
                 packet.ParseBitStream(guid40, 6, 2, 5, 0);
-                packet.ReadInt32("unk36");
+                packet.ReadInt32("Guild Members"); // 36
                 packet.ParseBitStream(guid40, 4, 7);
-                packet.ReadInt64("unk24");
+                packet.ReadInt64("Guild Xp"); // 24
                 packet.ParseBitStream(guid40, 1);
-                packet.ReadInt32("unk32");
+                packet.ReadInt32("Guild Level"); // 32
                 packet.ParseBitStream(guid40, 3);
-                packet.WriteGuid("Guid40", guid40);
+                packet.WriteGuid("Guild Guid", guid40);
             }
 
             packet.ParseBitStream(guid, 5);
 
-            for (var i = 0; i < count48; i++)
-                packet.ReadInt16("unk52", i);
+            for (var i = 0; i < glyphCount; i++)
+                packet.ReadInt16("GlyphID", i); // 52
 
             packet.ParseBitStream(guid, 0);
             packet.ReadInt32("unk80");
 
-            for (var i = 0; i < count96; i++)
-                packet.ReadInt16("unk100", i);
+            for (var i = 0; i < talentCount; i++)
+                packet.ReadInt16("TalentID", i); // 100
 
             packet.ParseBitStream(guid, 7, 3, 6);
             packet.WriteGuid("Guid", guid);

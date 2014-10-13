@@ -3618,6 +3618,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_MOVE_SET_HOVER)]
+        public static void HandleMoveSetHover(Packet packet)
+        {
+            ReadPlayerMovementInfo(ref packet, info.MovementSetHover);
+        }
+
         [Parser(Opcode.SMSG_MOVE_SET_RUN_SPEED)]
         public static void HandleMoveSetRunSpeed(Packet packet)
         {
@@ -3711,6 +3717,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             pos.O = packet.ReadSingle();
             packet.WriteLine("Pos: {0}", pos);
             packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_MOVE_UNSET_HOVER)]
+        public static void HandleMoveUnSetHover(Packet packet)
+        {
+            ReadPlayerMovementInfo(ref packet, info.MovementUnSetHover);
         }
 
         [Parser(Opcode.SMSG_MOVE_WATER_WALK)]
