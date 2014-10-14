@@ -8,6 +8,9 @@ using WowPacketParser.Parsing;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 using Guid = WowPacketParser.Misc.WowGuid;
+using PetModeFlags = WowPacketParserModule.V5_4_8_18414.Enums.PetModeFlags;
+using ReactState = WowPacketParserModule.V5_4_8_18414.Enums.ReactState;
+using CommandState = WowPacketParserModule.V5_4_8_18414.Enums.CommandState;
 
 namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
@@ -16,9 +19,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void ReadPetFlags(ref Packet packet)
         {
             var petModeFlag = packet.ReadUInt32();
-            packet.AddValue("React state", (ReactState)((petModeFlag >> 8) & 0xFF));
-            packet.AddValue("Command state", (CommandState)((petModeFlag >> 16) & 0xFF));
-            packet.AddValue("Flag", (PetModeFlags)(petModeFlag & 0xFFFF0000));
+            packet.AddValue("React state", (ReactState)((petModeFlag) & 0xFF));
+            packet.AddValue("Command state", (CommandState)((petModeFlag >> 8) & 0xFF));
+            packet.AddValue("Flag", (PetModeFlags)((petModeFlag >> 16) & 0xFFFF));
         }
 
         [Parser(Opcode.CMSG_PET_ABANDON)]
