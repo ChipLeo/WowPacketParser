@@ -300,7 +300,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_SWAP_ITEM,                                0x035D | 0x10000}, //--
             {Opcode.CMSG_TAXINODE_STATUS_QUERY,                    0x02E1 | 0x10000}, //++
             {Opcode.CMSG_TAXIQUERYAVAILABLENODES,                  0x02E3 | 0x10000}, //++
-            {Opcode.CMSG_TEXT_EMOTE,                               0x07E9 | 0x10000}, //+-
+            {Opcode.CMSG_TEXT_EMOTE,                               0x07E9 | 0x10000}, //++
             {Opcode.CMSG_TIME_SYNC_RESP,                           0x01DB | 0x10000}, //+-
             {Opcode.CMSG_TIME_SYNC_RESP_FAILED,                    0x0058 | 0x10000}, //--
             {Opcode.CMSG_TOTEM_DESTROYED,                          0x1263 | 0x10000}, //++
