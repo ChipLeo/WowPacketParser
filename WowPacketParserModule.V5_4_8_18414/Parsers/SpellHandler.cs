@@ -853,8 +853,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var count = packet.ReadBits("count", 23);
             for (var i = 0; i < count; i++)
             {
-                packet.ReadByte("unk21"); // 21
-                packet.ReadByte("unk20"); // 20
+                packet.ReadByte("Rune Type"); // 21
+                packet.ReadByte("Cooldown Time"); // 20
             }
         }
 
