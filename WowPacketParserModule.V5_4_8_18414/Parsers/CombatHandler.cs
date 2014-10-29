@@ -210,6 +210,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBits("Unk16", 2);
         }
 
+        [Parser(Opcode.SMSG_CLEAR_TARGET)]
+        public static void HandleSClearTarget(Packet packet)
+        {
+            var guid = packet.StartBitStream(6, 2, 0, 4, 7, 1, 3, 5);
+            packet.ParseBitStream(guid, 4, 0, 3, 5, 2, 7, 6, 1);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_COMBAT_EVENT_FAILED)]
         public static void HandleCombatEventFailed(Packet packet)
         {
