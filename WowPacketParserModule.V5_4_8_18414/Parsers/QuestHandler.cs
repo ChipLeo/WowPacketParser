@@ -642,6 +642,134 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("RewSkillPoints"); // 20
         }
 
+        [Parser(Opcode.SMSG_QUESTGIVER_QUEST_DETAILS)]
+        public static void HandleQuestgiverDetails(Packet packet) // 6B3FE6
+        {
+            packet.ReadInt32("unk2330"); // 2330
+            packet.ReadInt32("unk2319"); // 2319
+            packet.ReadInt32("unk2311"); // 2311
+            for (var i = 0; i < 4; i++)
+            {
+                packet.ReadInt32("unk9404", i); // 9404
+                packet.ReadInt32("unk9400", i); // 9400
+            }
+            packet.ReadInt32("unk2294"); // 2294
+            packet.ReadInt32("unk2312"); // 2312
+            packet.ReadInt32("unk2328"); // 2328
+            packet.ReadInt32("unk3222"); // 2322
+            packet.ReadInt32("unk2327"); // 2327
+            packet.ReadInt32("unk2334"); // 2334
+            packet.ReadInt32("unk2305"); // 2305
+            packet.ReadInt32("unk2315"); // 2315
+            packet.ReadInt32("unk2293"); // 2293
+            packet.ReadInt32("unk2316"); // 2316
+            packet.ReadInt32("unk2323"); // 2323
+            packet.ReadInt32("unk2360"); // 2360
+            packet.ReadInt32("unk2287"); // 2287
+            packet.ReadInt32("unk2307"); // 2307
+            packet.ReadInt32("unk2318"); // 2318
+            packet.ReadInt32("unk2321"); // 2321
+            packet.ReadInt32("unk2299"); // 2299
+            packet.ReadInt32("unk2309"); // 2309
+            packet.ReadInt32("unk2313"); // 2313
+            for (var i = 0; i < 5; i++)
+            {
+                packet.ReadInt32("unk9375", i); // 9375
+                packet.ReadInt32("unk9380", i); // 9380
+                packet.ReadInt32("unk9340", i); // 9340
+            }
+            packet.ReadInt32("unk2326"); // 2326
+            packet.ReadInt32("unk2303"); // 2303
+            packet.ReadInt32("unk2297"); // 2297
+            packet.ReadInt32("unk2300"); // 2300
+            packet.ReadInt32("unk2333"); // 2333
+            packet.ReadInt32("unk2324"); // 2324
+            packet.ReadInt32("unk2308"); // 2308
+            packet.ReadInt32("unk2320"); // 2320
+            packet.ReadInt32("unk2302"); // 2302
+            packet.ReadInt32("unk2361"); // 2361
+            packet.ReadInt32("unk2298"); // 2298
+            packet.ReadInt32("unk2325"); // 2325
+            packet.ReadInt32("unk2296"); // 2296
+            packet.ReadInt32("unk2329"); // 2329
+            packet.ReadInt32("unk2362"); // 2362
+            packet.ReadInt32("unk2301"); // 2301
+            packet.ReadInt32("unk2314"); // 2314
+            packet.ReadInt32("unk2295"); // 2295
+            packet.ReadInt32("unk2304"); // 2304
+            packet.ReadInt32("unk2331"); // 2331
+            packet.ReadInt32("unk2317"); // 2317
+            packet.ReadInt32("unk8"); // 8
+            packet.ReadInt32("unk2306"); // 2306
+            packet.ReadInt32("unk2332"); // 2332
+            packet.ReadInt32("unk2310"); // 2310
+            packet.ReadInt32("unk1020"); // 1020
+            var guid9160 = new byte[8];
+            var guid9432 = new byte[8];
+            guid9160[7] = packet.ReadBit();
+            guid9432[1] = packet.ReadBit();
+            var unk2223 = packet.ReadBits("unk2223", 8); // 2223
+            guid9432[2] = packet.ReadBit();
+            var unk14 = packet.ReadBits("unk14", 10); // 14
+            var unk9168 = packet.ReadBit("unk9168"); // 9168
+            guid9160[2] = packet.ReadBit();
+            var unk1345 = packet.ReadBits("unk1345", 9); // 1345
+            var unk5364 = packet.ReadBits("unk5364", 21); // 5364
+            guid9160[0] = packet.ReadBit();
+            guid9432[6] = packet.ReadBit();
+            guid9432[5] = packet.ReadBit();
+            var unk1021 = packet.ReadBits("unk1021", 8); // 1021
+            guid9432[3] = packet.ReadBit();
+            guid9160[1] = packet.ReadBit();
+            guid9432[0] = packet.ReadBit();
+            var unk9152 = packet.ReadBit("unk9152"); // 9152
+            guid9432[4] = packet.ReadBit();
+            guid9160[3] = packet.ReadBit();
+            guid9160[5] = packet.ReadBit();
+            guid9160[4] = packet.ReadBit();
+            var unk1085 = packet.ReadBits("unk1085", 10); // 1085
+            var unk36 = packet.ReadBit("unk36"); // 36
+            guid9160[6] = packet.ReadBit();
+            guid9432[7] = packet.ReadBit();
+            var unk1473 = packet.ReadBits("unk1473", 12); // 1473
+            var unk40 = packet.ReadBits("unk40", 22); // 40
+            var unk16 = packet.ReadBits("unk16", 20); // 16
+            var unk270 = packet.ReadBits("unk270", 12); // 270
+            packet.ParseBitStream(guid9160, 0);
+            packet.ReadWoWString("str4084", unk1021);
+            packet.ReadWoWString("str4340", unk1085);
+            packet.ReadWoWString("str5380", unk1345);
+            packet.ParseBitStream(guid9432, 6);
+            packet.ReadWoWString("str1080", unk270);
+            packet.ParseBitStream(guid9160, 2);
+            packet.ReadWoWString("str56", unk14);
+            for (var i = 0; i < unk16; i++)
+            {
+                packet.ReadByte("unk3", i);
+                packet.ReadInt32("unk5", i);
+                packet.ReadInt32("unk13", i);
+                packet.ReadInt32("unk9", i);
+            }
+            packet.ReadWoWString("str8892", unk2223);
+            packet.ReadWoWString("str5892", unk1473);
+            packet.ParseBitStream(guid9160, 5, 7);
+            packet.ParseBitStream(guid9432, 7, 3, 0);
+            for (var i = 0; i < unk5364; i++)
+            {
+                packet.ReadInt32("unk1346", i);
+                packet.ReadInt32("unk1342", i);
+            }
+            packet.ParseBitStream(guid9160, 4, 3);
+            packet.ParseBitStream(guid9432, 5, 1, 2);
+            packet.ParseBitStream(guid9160, 1, 6);
+            packet.ParseBitStream(guid9432, 4);
+            for (var i = 0; i < unk40; i++)
+                packet.ReadInt32("unk11", i);
+
+            packet.WriteGuid("Guid1", guid9432);
+            packet.WriteGuid("Guid2", guid9160);
+        }
+
         [Parser(Opcode.SMSG_QUESTGIVER_REQUEST_ITEMS)]
         public static void HandleQuestRequestItems(Packet packet)
         {
@@ -726,12 +854,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadEntry<Int32>(StoreNameType.Quest, "Quest ID");
         }
 
-        [Parser(Opcode.SMSG_QUEST_CONFIRM_ACCEPT)]
-        [Parser(Opcode.SMSG_QUESTGIVER_QUEST_DETAILS)]
         [Parser(Opcode.SMSG_QUESTLOG_FULL)]
         public static void HandleQuestNull(Packet packet)
         {
-            packet.ReadToEnd();
         }
     }
 }

@@ -719,13 +719,13 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_QUERY_TIME_RESPONSE,                      0x100F | 0x20000}, //++
             {Opcode.SMSG_QUESTGIVER_OFFER_REWARD,                  0x074F | 0x20000}, //++
             {Opcode.SMSG_QUESTGIVER_QUEST_COMPLETE,                0x0346 | 0x20000}, //++
-            {Opcode.SMSG_QUESTGIVER_QUEST_DETAILS,                 0x134C | 0x20000}, //--
+            {Opcode.SMSG_QUESTGIVER_QUEST_DETAILS,                 0x134C | 0x20000}, //++
             {Opcode.SMSG_QUESTGIVER_QUEST_INVALID,                 0x027D | 0x20000}, //++ pair 12F0 or 1DAE
             {Opcode.SMSG_QUESTGIVER_QUEST_LIST,                    0x02D4 | 0x20000}, //+-
             {Opcode.SMSG_QUESTGIVER_REQUEST_ITEMS,                 0x0277 | 0x20000}, //++
             {Opcode.SMSG_QUESTGIVER_STATUS,                        0x1275 | 0x20000}, //++
             {Opcode.SMSG_QUESTGIVER_STATUS_MULTIPLE,               0x06CE | 0x20000}, //++
-            {Opcode.SMSG_QUESTLOG_FULL,                            0x07FD | 0x20000}, //--
+            {Opcode.SMSG_QUESTLOG_FULL,                            0x07FD | 0x20000}, //+-
             {Opcode.SMSG_QUESTUPDATE_ADD_KILL,                     0x1645 | 0x20000}, //++
             {Opcode.SMSG_QUESTUPDATE_COMPLETE,                     0x0776 | 0x20000}, //++
             {Opcode.SMSG_QUEST_CONFIRM_ACCEPT,                     0x13C7 | 0x20000}, //+-
