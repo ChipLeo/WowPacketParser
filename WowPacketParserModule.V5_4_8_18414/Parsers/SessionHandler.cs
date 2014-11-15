@@ -69,14 +69,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_PLAYER_LOGIN)]
         public static void HandlePlayerLogin(Packet packet)
         {
+            var guid = new byte[8];
+
             packet.ReadSingle("Unk Float");
 
-            var guid = packet.StartBitStream(7, 6, 3, 2, 1, 5, 4, 0); //???
-            packet.ParseBitStream(guid, 1, 4, 0, 2, 7, 5, 6, 3); //???
+            packet.StartBitStream(guid, 1, 4, 7, 3, 2, 6, 5, 0);
+            packet.ParseBitStream(guid, 5, 1, 0, 6, 2, 4, 7, 3);
 
+            CoreParsers.SessionHandler.LoginGuid = new WowGuid(BitConverter.ToUInt64(guid, 0));
             packet.WriteGuid("Guid", guid);
-
-            LoginGuid = new Guid(BitConverter.ToUInt64(guid, 0));
         }
 
         [Parser(Opcode.CMSG_REDIRECT_AUTH_PROOF)]
