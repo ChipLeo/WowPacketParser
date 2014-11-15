@@ -316,9 +316,9 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_USE_ITEM,                                 0x1CC1 | 0x10000}, //--
             {Opcode.CMSG_USED_FOLLOW,                              0x0374 | 0x10000}, //++
             {Opcode.CMSG_VIOLENCE_LEVEL,                           0x0040 | 0x10000}, //+-
-            {Opcode.CMSG_VOID_STORAGE_QUERY,                       0x0140 | 0x10000}, //--
+            {Opcode.CMSG_VOID_STORAGE_QUERY,                       0x0140 | 0x10000}, //+-
             {Opcode.CMSG_VOID_STORAGE_TRANSFER,                    0x1440 | 0x10000}, //+-
-            {Opcode.CMSG_VOID_STORAGE_UNLOCK,                      0x0444 | 0x10000}, //--
+            {Opcode.CMSG_VOID_STORAGE_UNLOCK,                      0x0444 | 0x10000}, //+-
             {Opcode.CMSG_VOID_SWAP_ITEM,                           0x0655 | 0x10000}, //--
             {Opcode.CMSG_WARDEN_DATA,                              0x1816 | 0x10000}, //+-
             {Opcode.CMSG_WRAP_ITEM,                                0x02DF | 0x10000}, //+-

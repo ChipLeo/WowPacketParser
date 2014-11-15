@@ -10,7 +10,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_VOID_STORAGE_QUERY)]
         public static void HandleVoidStorageQuery(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = packet.StartBitStream(1, 5, 6, 0, 7, 2, 3, 4);
+            packet.ParseBitStream(guid, 1, 6, 4, 3, 7, 0, 2, 5);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_VOID_STORAGE_TRANSFER)]
@@ -59,7 +61,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_VOID_STORAGE_UNLOCK)]
         public static void HandleVoidStorageUnlock(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = packet.StartBitStream(3, 1, 5, 6, 4, 0, 7, 2);
+            packet.ParseBitStream(guid, 4, 3, 6, 2, 1, 5, 7, 0);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_VOID_SWAP_ITEM)]
@@ -193,12 +197,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.WriteLine("[{1}] Item Id: {0}", BitConverter.ToUInt64(itemId[i], 0), i);
                 packet.WriteGuid("Item Player Creator Guid", creatorGuid[i], i);
             }
-        }
-
-        [Parser(Opcode.SMSG_VOID_STORAGE_FAILED)]
-        public static void HandleVoidStorageFailed(Packet packet)
-        {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_VOID_STORAGE_TRANSFER_CHANGES)]
