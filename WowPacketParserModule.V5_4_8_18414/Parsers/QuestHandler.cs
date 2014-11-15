@@ -211,6 +211,34 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("NPC Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_QUEST_CONFIRM_ACCEPT)]
+        public static void HandleQuestConfirAccept(Packet packet)
+        {
+            var guid = new byte[8];
+
+            guid[0] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            var hasTitle = !packet.ReadBit("!HasTitle");
+            guid[2] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            uint len = 0;
+            if (hasTitle)
+                len = packet.ReadBits("Len", 10);
+            guid[7] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 6);
+
+            if (hasTitle)
+                packet.ReadWoWString("Title", len);
+
+            packet.ParseBitStream(guid, 0, 5, 3, 1, 4, 2, 7);
+            packet.ReadEntry<Int32>(StoreNameType.Quest, "Quest ID");
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_QUEST_NPC_QUERY_RESPONSE)]
         public static void HandleQuestNpcQueryResponse(Packet packet)
         {
