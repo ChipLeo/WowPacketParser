@@ -117,7 +117,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             packet.ReadBit("Has Dest Item id (Inv)");
 
-            byte[] itemId1 = itemId1 = packet.StartBitStream(6, 0, 3, 2, 1, 5, 7, 4);
+            byte[] itemId1 = packet.StartBitStream(6, 0, 3, 2, 1, 5, 7, 4);
 
             var usedSrcSlot = !packet.ReadBit("Used Src Slot (Inv)"); // always set?
             var usedDestSlot = !packet.ReadBit("Used Dest Slot (Inv)");

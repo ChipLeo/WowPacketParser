@@ -578,7 +578,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                         packet.ParseBitStream(guid880[i][j], 1);
                         packet.ReadWoWString("str", unk284[i][j], index, i, j);
                         packet.ReadInt32("unk3544", index, i, j);
-                        if (unk136[i][j]==0)
+                        if (unk136[i][j] == 0)
                             packet.ReadByte("unk136", index, i, j);
                         packet.ReadInt32("unk3528", index, i, j);
                         if (unk180[i][j])
@@ -931,6 +931,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     if (bit336) // 336
                         if (splineType == SplineType.FacingTarget)
                         {
+                            packet.ResetBitReader();
                             SplineFacingTargetGuid = packet.StartBitStream(4, 7, 0, 5, 1, 2, 3, 6);
                             packet.ParseBitStream(SplineFacingTargetGuid, 4, 2, 0, 5, 6, 3, 1, 7);
                             packet.WriteGuid("Spline Facing Target GUID", SplineFacingTargetGuid, index);
