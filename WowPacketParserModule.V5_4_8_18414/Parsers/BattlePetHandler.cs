@@ -67,7 +67,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             petGuid[7] = packet.ReadBit(); // 31
             petGuid[5] = packet.ReadBit(); // 29
             petGuid[6] = packet.ReadBit(); // 30
-            petName[1] = packet.ReadBit(); // 17 
+            petName[1] = packet.ReadBit(); // 17
             petName[2] = packet.ReadBit(); // 18
             petName[5] = packet.ReadBit(); // 21
             petName[4] = packet.ReadBit(); // 20

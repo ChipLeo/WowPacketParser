@@ -16,8 +16,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_REQUEST_ACCOUNT_DATA)]
         public static void HandleRequestAccountData(Packet packet)
         {
-            var t = packet.ReadBits(3);
-            packet.WriteLine("Data Type: " + (AccountDataType)t);
+            packet.ReadEnum<AccountDataType>("Data Type", 3);
         }
 
         [Parser(Opcode.CMSG_UPDATE_ACCOUNT_DATA)]
@@ -51,8 +50,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             var guid = new byte[8];
 
-            var t = packet.ReadBits(3);
-            packet.WriteLine("Data Type: " + (AccountDataType)t);
+            packet.ReadEnum<AccountDataType>("Data Type", 3);
 
             packet.StartBitStream(guid, 5, 1, 3, 7, 0, 4, 2, 6);
 
@@ -63,8 +61,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             var pkt = packet.Inflate(compCount, decompCount, false);
             var data = pkt.ReadWoWString(decompCount);
+            pkt.ClosePacket(false);
 
-            packet.WriteLine("Account Data {0}", data);
+            packet.AddValue("Account Data", data);
 
             packet.ReadXORBytes(guid, 7, 4, 0, 6, 2);
 
