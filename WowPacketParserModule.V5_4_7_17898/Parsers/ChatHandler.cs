@@ -11,6 +11,24 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
 {
     public static class ChatHandler
     {
+        [Parser(Opcode.CMSG_LFG_JOIN)]
+        public static void HandleLFGJoin(Packet packet)
+        {
+            packet.ReadByte("unk1");
+            packet.ReadInt32("unk2");
+            packet.ReadInt32("unk3");
+            packet.ReadInt32("unk4");
+            packet.ReadInt32("Roles");
+            var numDungeons = packet.ReadBits("Num Dungeons", 22);
+            var commentLen = packet.ReadBits("CommentLen", 8);
+            packet.ReadBit("unk5");
+            packet.ReadWoWString("Comment", commentLen);
+            for (var i = 0; i < numDungeons; ++i)
+            {
+                packet.ReadInt32("Dungeon", i);
+            }
+        }
+
         [Parser(Opcode.CMSG_MESSAGECHAT_GUILD)]
         [Parser(Opcode.CMSG_MESSAGECHAT_INSTANCE)]
         [Parser(Opcode.CMSG_MESSAGECHAT_OFFICER)]

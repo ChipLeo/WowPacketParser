@@ -7,6 +7,67 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
 {
     public static class GuildHandler
     {
+        [Parser(Opcode.CMSG_GUILD_ADD_RANK)]
+        public static void HandleGuildAddRank(Packet packet)
+        {
+            packet.ReadInt32("Rank");
+            var len = packet.ReadBits("Len", 7);
+            packet.ReadWoWString("Name", len);
+        }
+
+        [Parser(Opcode.CMSG_GUILD_BANK_BUY_TAB)]
+        public static void HandleGuildBankBuyTab(Packet packet)
+        {
+            packet.ReadByte("TabID");
+
+            var guid = packet.StartBitStream(7, 6, 1, 2, 5, 3, 0, 4);
+            packet.ParseBitStream(guid, 0, 7, 3, 4, 1, 6, 5, 2);
+
+            packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.CMSG_GUILD_DEL_RANK)]
+        public static void HandleGuildDelRank(Packet packet)
+        {
+            packet.ReadInt32("Rank");
+        }
+
+        [Parser(Opcode.CMSG_GUILD_INVITE)]
+        public static void HandleGuildInvite(Packet packet)
+        {
+            var len = packet.ReadBits("Len", 9);
+            packet.ReadWoWString("Name", len);
+        }
+
+        [Parser(Opcode.CMSG_GUILD_MOTD)]
+        public static void HandleGuildMotd(Packet packet)
+        {
+            var len = packet.ReadBits("Len", 10);
+            packet.ReadWoWString("Motd", len);
+        }
+
+        [Parser(Opcode.CMSG_GUILD_NEWS_UPDATE_STICKY)]
+        public static void HandleGuildNewsUpdateSticky(Packet packet)
+        {
+            var guid = new byte[8];
+
+            packet.ReadInt32("NewsID");
+
+            guid[3] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            packet.ReadBit("Sticky");
+            guid[5] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 3, 4, 7, 2, 5, 1, 6, 0);
+
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.CMSG_GUILD_QUERY)]
         public static void HandleGuildQuery(Packet packet)
         {
@@ -49,6 +110,12 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
 
             packet.WriteGuid("PlayerGUID", playerGUID);
             packet.WriteGuid("GuildGUID", guildGUID);
+        }
+
+        [Parser(Opcode.CMSG_QUERY_GUILD_REWARDS)]
+        public static void HandleQueryGuildRewards(Packet packet)
+        {
+            packet.ReadInt32("Unk");
         }
 
         [Parser(Opcode.SMSG_GUILD_QUERY_RESPONSE)]
@@ -134,28 +201,6 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
         public static void HandleNewText(Packet packet)
         {
             packet.ReadWoWString("Text", (int)packet.ReadBits(10));
-        }
-
-        [Parser(Opcode.CMSG_GUILD_NEWS_UPDATE_STICKY)]
-        public static void HandleGuildNewsUpdateSticky(Packet packet)
-        {
-            var guid = new byte[8];
-
-            packet.ReadInt32("Int1C");
-            guid[3] = packet.ReadBit();
-            guid[2] = packet.ReadBit();
-            guid[7] = packet.ReadBit();
-            packet.ReadBit("Sticky");
-            guid[5] = packet.ReadBit();
-            guid[0] = packet.ReadBit();
-            guid[6] = packet.ReadBit();
-            guid[1] = packet.ReadBit();
-            guid[4] = packet.ReadBit();
-
-            packet.ParseBitStream(guid, 3, 4, 7, 2, 5, 1, 6, 0);
-
-            packet.WriteGuid("Guid2", guid);
-
         }
 
         [Parser(Opcode.SMSG_GUILD_ACHIEVEMENT_DATA)]

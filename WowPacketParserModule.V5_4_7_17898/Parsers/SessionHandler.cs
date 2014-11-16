@@ -80,7 +80,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
         {
             packet.ReadUInt64("Unk Long");
             packet.ReadBytes("RSA Hash", 0x100);
-            packet.ReadByte("Unk Byte");
+            packet.ReadByte("Future connection offset in WowConnections array");
             packet.ReadUInt32("Token");
         }
 
