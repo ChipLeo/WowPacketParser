@@ -202,7 +202,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_NPC_TEXT_QUERY,                           0x0287 | 0x10000}, //++
             {Opcode.CMSG_OBJECT_UPDATE_FAILED,                     0x1061 | 0x10000}, //+-
             {Opcode.CMSG_OFFER_PETITION,                           0x15BE | 0x10000}, //+-
-            {Opcode.CMSG_OPENING_CINEMATIC,                        0x0130 | 0x10000}, //--
+            {Opcode.CMSG_OPENING_CINEMATIC,                        0x0130 | 0x10000}, //+-
             {Opcode.CMSG_OPEN_ITEM,                                0x1D10 | 0x10000}, //--
             {Opcode.CMSG_PAGE_TEXT_QUERY,                          0x1022 | 0x10000}, //--
             {Opcode.CMSG_PET_ABANDON,                              0x07D0 | 0x10000}, //+-

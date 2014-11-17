@@ -112,7 +112,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_OPENING_CINEMATIC)]
         public static void HandleOpeningCinematic(Packet packet)
         {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.CMSG_PING)]
