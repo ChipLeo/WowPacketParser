@@ -14,7 +14,7 @@ namespace WowPacketParserModule.V5_4_0_17359.Parsers
             packet.ReadSingle("Unk Float");
             var guid = packet.StartBitStream(2, 3, 7, 4, 0, 1, 5, 6);
             packet.ParseBitStream(guid, 0, 1, 3, 4, 7, 6, 2, 5);
-            CoreParsers.SessionHandler.LoginGuid = new WowGuid(BitConverter.ToUInt64(guid, 0));
+            CoreParsers.SessionHandler.LoginGuid = new WowGuid64(BitConverter.ToUInt64(guid, 0));
             packet.WriteGuid("Guid", guid);
         }
 
@@ -205,12 +205,12 @@ namespace WowPacketParserModule.V5_4_0_17359.Parsers
             packet.ReadBytes("RSA Hash", 0x100);
         }
 
-        [Parser(Opcode.CMSG_REDIRECT_AUTH_PROOF)]
+        [Parser(Opcode.CMSG_AUTH_CONTINUED_SESSION)]
         public static void HandleRedirectAuthProof(Packet packet)
         {
             var sha = new byte[20];
-            packet.ReadInt64("Int64 Unk1");
-            packet.ReadInt64("Int64 Unk2");
+            packet.ReadInt64("Int64 Unk1"); // Key or DosResponse
+            packet.ReadInt64("Int64 Unk2"); // Key or DosResponse
             sha[0] = packet.ReadByte();
             sha[12] = packet.ReadByte();
             sha[1] = packet.ReadByte();

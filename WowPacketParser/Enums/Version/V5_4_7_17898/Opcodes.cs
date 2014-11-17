@@ -151,7 +151,7 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.CMSG_RAID_READY_CHECK_CONFIRM, 0x13D9},
             {Opcode.CMSG_RANDOMIZE_CHAR_NAME, 0x1DB9},
             {Opcode.CMSG_REALM_NAME_QUERY, 0x1899},
-            {Opcode.CMSG_REDIRECT_AUTH_PROOF, 0x1A5B},
+            {Opcode.CMSG_AUTH_CONTINUED_SESSION, 0x1A5B},
             {Opcode.CMSG_REFORGE_ITEM, 0x1632},
             {Opcode.CMSG_RECLAIM_CORPSE, 0x065C},
             {Opcode.CMSG_REORDER_CHARACTERS, 0x1892},
@@ -420,6 +420,7 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.SMSG_PERIODICAURALOG, 0x051B | 0x20000},
             {Opcode.SMSG_RESPOND_INSPECT_ACHIEVEMENTS, 0x04E1},
             {Opcode.SMSG_RESURRECT_REQUEST, 0x015B}, //??
+            {Opcode.SMSG_RESUME_COMMS, 0x01B9},
             {Opcode.SMSG_PLAYER_MOVE, 0x1CB2},
             {Opcode.SMSG_PLAYER_VEHICLE_DATA, 0x1F29},
             {Opcode.SMSG_PONG, 0x15B1},
@@ -437,7 +438,7 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.SMSG_SCENARIO_POI, 0x10E9},
             {Opcode.SMSG_SCENARIO_PROGRESS_UPDATE, 0x167B},
             {Opcode.SMSG_SCENARIO_STATE, 0x1E20},
-            {Opcode.SMSG_SEND_SERVER_LOCATION, 0x0C2B},
+            {Opcode.SMSG_SET_TIME_ZONE_INFORMATION, 0x0C2B},
             {Opcode.SMSG_SEND_UNLEARN_SPELLS, 0x1B3E | 0x20000},
             {Opcode.SMSG_SHOW_BANK, 0x060B},
             {Opcode.SMSG_SET_FLAT_SPELL_MODIFIER, 0x0179},
@@ -506,4 +507,3 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
         };
     }
 }
-         

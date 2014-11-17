@@ -14,8 +14,8 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
         [Parser(Opcode.CMSG_LOAD_SCREEN)]
         public static void HandleClientEnterWorld(Packet packet)
         {
-            var mapId = packet.ReadEntry<Int32>(StoreNameType.Map, "Map");
-            packet.ReadBit("Loading");
+            var mapId = packet.ReadEntry<Int32>(StoreNameType.Map, "MapID");
+            packet.ReadBit("Showing");
 
             packet.AddSniffData(StoreNameType.Map, mapId, "LOAD_SCREEN");
         }
@@ -263,7 +263,7 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
 
             packet.WriteGuid("Guid", guidBytes);
 
-            var guid = new WowGuid(BitConverter.ToUInt64(guidBytes, 0));
+            var guid = new WowGuid64(BitConverter.ToUInt64(guidBytes, 0));
             if (guid.GetObjectType() == ObjectType.Unit)
                 Storage.NpcSpellClicks.Add(guid, packet.TimeSpan);
         }

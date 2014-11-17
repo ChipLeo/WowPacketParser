@@ -12,7 +12,7 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_LOG_DISCONNECT)]
         public static void HandleLogDisconnect(Packet packet)
         {
-            packet.ReadUInt32("Unk");
+            packet.ReadUInt32("Reason");
             // 4 is inability for client to decrypt RSA
             // 3 is not receiving "WORLD OF WARCRAFT CONNECTION - SERVER TO CLIENT"
             // 11 is sent on receiving opcode 0x140 with some specific data
@@ -58,13 +58,13 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadUInt32("Enable");
         }
 
-        [Parser(Opcode.CMSG_SUSPEND_TOKEN)]
+        [Parser(Opcode.CMSG_SUSPEND_TOKEN_RESPONSE)]
         public static void HandleSuspendToken(Packet packet)
         {
             packet.ReadUInt32("Count");
         }
 
-        [Parser(Opcode.SMSG_SUSPEND_TOKEN_RESPONSE)]
+        [Parser(Opcode.SMSG_SUSPEND_TOKEN)]
         public static void HandleSuspendTokenResponse(Packet packet)
         {
             packet.ReadBit("Unk");
@@ -474,7 +474,7 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_SUSPEND_COMMS_ACK)]
         public static void HandleSuspendCommsPackets(Packet packet)
         {
-            packet.ReadInt32("Unk Int32");
+            packet.ReadInt32("Serial");
         }
 
         [Parser(Opcode.CMSG_SET_ALLOW_LOW_LEVEL_RAID1)]
@@ -735,8 +735,8 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_LOAD_SCREEN, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)] // Also named CMSG_LOADING_SCREEN_NOTIFY
         public static void HandleClientEnterWorld(Packet packet)
         {
-            packet.ReadBitBoolean("Loading");
-            var mapId = packet.ReadEntry<UInt32>(StoreNameType.Map, "Map");
+            packet.ReadBitBoolean("Showing");
+            var mapId = packet.ReadEntry<UInt32>(StoreNameType.Map, "MapID");
             MovementHandler.CurrentMapId = mapId;
 
             if (mapId < 1000) // Getting some weird results in a couple of packets
@@ -747,8 +747,8 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_LOAD_SCREEN, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleClientEnterWorld434(Packet packet)
         {
-            var mapId = packet.ReadEntry<UInt32>(StoreNameType.Map, "Map");
-            packet.ReadBitBoolean("Loading");
+            var mapId = packet.ReadEntry<UInt32>(StoreNameType.Map, "MapID");
+            packet.ReadBitBoolean("Showing");
             MovementHandler.CurrentMapId = mapId;
 
             if (mapId < 1000) // Getting some weird results in a couple of packets
@@ -1116,7 +1116,7 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_COMSAT_DISCONNECT)]
         [Parser(Opcode.SMSG_VOICESESSION_FULL)] // 61 bytes in 2.4.1
         [Parser(Opcode.SMSG_DEBUG_SERVER_GEO)] // Was unknown
-        [Parser(Opcode.SMSG_FORCE_SEND_QUEUED_PACKETS)]
+        [Parser(Opcode.SMSG_RESUME_COMMS)]
         [Parser(Opcode.SMSG_GOSSIP_COMPLETE)]
         [Parser(Opcode.SMSG_INVALID_PROMOTION_CODE)]
         [Parser(Opcode.CMSG_COMPLETE_CINEMATIC)]

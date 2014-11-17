@@ -21,8 +21,8 @@ namespace WowPacketParserModule.V5_4_0_17359.Parsers
         [Parser(Opcode.CMSG_LOAD_SCREEN)]
         public static void HandleClientEnterWorld(Packet packet)
         {
-            var mapId = packet.ReadEntry<UInt32>(StoreNameType.Map, "Map");
-            packet.ReadBit("Loading");
+            var mapId = packet.ReadEntry<UInt32>(StoreNameType.Map, "MapID");
+            packet.ReadBit("Showing");
         }
 
         [Parser(Opcode.CMSG_SET_SELECTION)]
@@ -39,14 +39,8 @@ namespace WowPacketParserModule.V5_4_0_17359.Parsers
             packet.ReadEnum<ClientSplitState>("Client State", TypeCode.Int32);
         }
 
-        [Parser(Opcode.CMSG_VIOLENCE_LEVEL)]
-        public static void HandleSetViolenceLevel(Packet packet)
-        {
-            packet.ReadByte("Level");
-        }
-
-        [Parser(Opcode.SMSG_SEND_SERVER_LOCATION)]
-        public static void HandleSendServerLocation(Packet packet)
+        [Parser(Opcode.SMSG_SET_TIME_ZONE_INFORMATION)]
+        public static void HandleSetTimeZoneInformation(Packet packet)
         {
             var len1 = packet.ReadBits(7);
             var len2 = packet.ReadBits(7);

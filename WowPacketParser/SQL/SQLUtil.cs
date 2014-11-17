@@ -42,7 +42,10 @@ namespace WowPacketParser.SQL
         /// <returns>Modified string</returns>
         public static string EscapeString(string str)
         {
-            return MySqlHelper.DoubleQuoteString(str);
+            str = MySqlHelper.DoubleQuoteString(str);
+
+            // prevent double escaping
+            return str.Replace("\"\"", "\"");
         }
 
         /// <summary>
@@ -232,7 +235,11 @@ namespace WowPacketParser.SQL
                             continue;
                         }
 
-                        row.AddValue(field.Item2.Name, field.Item1.GetValue(elem1.Value.Item1));
+                        var val = field.Item1.GetValue(elem1.Value.Item1);
+                        if (val == null && field.Item1.FieldType == typeof (string))
+                            val = string.Empty;
+
+                        row.AddValue(field.Item2.Name, val);
                     }
                     rowsIns.Add(row);
                 }
@@ -355,7 +362,11 @@ namespace WowPacketParser.SQL
                             continue;
                         }
 
-                        row.AddValue(field.Item2.Name, field.Item1.GetValue(elem1.Value.Item1));
+                        var val = field.Item1.GetValue(elem1.Value.Item1);
+                        if (val == null && field.Item1.FieldType == typeof(string))
+                            val = string.Empty;
+
+                        row.AddValue(field.Item2.Name, val);
                     }
                     rowsIns.Add(row);
                 }

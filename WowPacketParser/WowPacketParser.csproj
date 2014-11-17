@@ -107,6 +107,7 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Numerics" />
     <Reference Include="Tamir.SharpSSH, Version=1.1.1.13, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Tamir.SharpSSH.1.1.1.13\lib\Tamir.SharpSSH.dll</HintPath>
@@ -359,6 +360,8 @@
     <Compile Include="Enums\Version\V5_4_8_18291\Opcodes.cs" />
     <Compile Include="Enums\Version\V5_4_8_18414\Opcodes.cs" />
     <Compile Include="Enums\Version\V5_4_8_18414\UpdateFields.cs" />
+    <Compile Include="Enums\Version\V6_0_2_19033\Opcodes.cs" />
+    <Compile Include="Enums\Version\V6_0_3_19103\Opcodes.cs" />
     <Compile Include="Enums\VictimStates.cs" />
     <Compile Include="Enums\VoidTransferError.cs" />
     <Compile Include="Enums\WardenCheckType.cs" />

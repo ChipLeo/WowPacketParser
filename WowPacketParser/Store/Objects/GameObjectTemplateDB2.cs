@@ -53,6 +53,12 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("rotation3")]
         public float rotationW;
 
+        [DBFieldName("PhaseID", ClientVersionBuild.V6_0_2_19033)]
+        public int PhaseId;
+
+        [DBFieldName("PhaseGroupID", ClientVersionBuild.V6_0_2_19033)]
+        public int PhaseGroupId;
+
         [DBFieldName("VerifiedBuild")]
         public int VerifiedBuild = ClientVersion.BuildInt;
     }

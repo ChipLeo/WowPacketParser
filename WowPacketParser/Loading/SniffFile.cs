@@ -107,8 +107,10 @@ namespace WowPacketParser.Loading
                 case DumpFormatType.SniffDataOnly:
                 case DumpFormatType.SqlOnly:
                 case DumpFormatType.Text:
+                case DumpFormatType.HexOnly:
                 {
-                    var outFileName = Path.ChangeExtension(_originalFileName, null) + "_parsed.txt";
+                    var outFileName = string.Format("{0}_{1}_parsed.txt", Path.GetFileNameWithoutExtension(_originalFileName),
+                        Utilities.FormattedDateTimeForFiles());
 
                     if (Utilities.FileIsInUse(outFileName) && Settings.DumpFormat != DumpFormatType.SqlOnly)
                     {
@@ -146,7 +148,7 @@ namespace WowPacketParser.Loading
 
                             if (first)
                             {
-                                Trace.WriteLine(string.Format("{0}: Parsing {1} packets. Detected version {2}",
+                                Trace.WriteLine(string.Format("{0}: Parsing {1} of packets. Detected version {2}",
                                     _logPrefix, Utilities.BytesToString(reader.PacketReader.GetTotalSize()), ClientVersion.VersionString));
 
 // ReSharper disable AccessToDisposedClosure
@@ -185,7 +187,7 @@ namespace WowPacketParser.Loading
                             }
 
 // ReSharper disable AccessToDisposedClosure
-                            if (writer != null)
+                            if (writer != null && packet.Status.HasAnyFlag(Settings.OutputFlag))
                             {
                                 // Write to file
                                 writer.WriteLine(packet.Writer);
@@ -392,7 +394,7 @@ namespace WowPacketParser.Loading
             string sqlFileName;
             if (String.IsNullOrWhiteSpace(Settings.SQLFileName))
                 sqlFileName = string.Format("{0}_{1}.sql",
-                    Utilities.FormattedDateTimeForFiles(), Path.GetFileName(_originalFileName));
+                    Path.GetFileNameWithoutExtension(_originalFileName), Utilities.FormattedDateTimeForFiles());
             else
                 sqlFileName = Settings.SQLFileName;
 
@@ -408,7 +410,8 @@ namespace WowPacketParser.Loading
             if (_withErrorHeaders.Count == 0 && _skippedHeaders.Count == 0)
                 return;
 
-            var fileName = Path.GetFileNameWithoutExtension(_originalFileName) + "_errors.txt";
+            var fileName = string.Format("{0}_{1}_errors.txt", Path.GetFileNameWithoutExtension(_originalFileName),
+                Utilities.FormattedDateTimeForFiles());
 
             using (var file = new StreamWriter(fileName))
             {

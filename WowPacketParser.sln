@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowPacketParser", "WowPacketParser\WowPacketParser.csproj", "{0BF6F270-0B6F-4705-8E1A-F57DB76DB407}"
 EndProject
@@ -26,6 +26,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowPacketParserModule.V5_4_8_18291", "WowPacketParserModule.V5_4_8_18291\WowPacketParserModule.V5_4_8_18291.csproj", "{B53A76DC-BA47-4364-AE96-6BEA96E3DF0F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowPacketParserModule.V5_4_8_18414", "WowPacketParserModule.V5_4_8_18414\WowPacketParserModule.V5_4_8_18414.csproj", "{44804391-9951-4143-ACFF-1B2F65E61D53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowPacketParserModule.V6_0_2_19033", "WowPacketParserModule.V6_0_2_19033\WowPacketParserModule.V6_0_2_19033.csproj", "{63484313-34D2-4133-B157-A19D12B69D9B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{597FD2F5-3A4F-4F31-A58A-485444126C1F}"
 	ProjectSection(SolutionItems) = preProject
@@ -88,6 +90,10 @@ Global
 		{44804391-9951-4143-ACFF-1B2F65E61D53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44804391-9951-4143-ACFF-1B2F65E61D53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44804391-9951-4143-ACFF-1B2F65E61D53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63484313-34D2-4133-B157-A19D12B69D9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63484313-34D2-4133-B157-A19D12B69D9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63484313-34D2-4133-B157-A19D12B69D9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63484313-34D2-4133-B157-A19D12B69D9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

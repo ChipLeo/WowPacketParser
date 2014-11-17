@@ -119,7 +119,7 @@ namespace WowPacketParser.Parsing
                 hasHandler = VersionHandlers.TryGetValue(key, out handler);
             }
 
-            if (hasHandler)
+            if (hasHandler && Settings.DumpFormat != DumpFormatType.HexOnly)
             {
                 if (Settings.DumpFormat == DumpFormatType.SniffDataOnly)
                 {
@@ -216,14 +216,6 @@ namespace WowPacketParser.Parsing
                     packet.AsHex();
                     packet.Status = ParsedStatus.NotParsed;
                 }
-            }
-            catch (EndOfStreamException)
-            {
-                // Processes the packet until it has all data to read - packet appears multiple times in the sniff file
-                // but only the last copy is complete
-                packet.Writer.Clear();
-                packet.AsHex();
-                packet.Status = ParsedStatus.WithErrors;
             }
             catch (Exception ex)
             {

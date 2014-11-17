@@ -115,7 +115,7 @@ namespace WowPacketParser.Parsing.Parsers
         public static void ProcessExistingObject(ref WoWObject obj, WoWObject newObj, WowGuid guid)
         {
             obj.PhaseMask |= newObj.PhaseMask;
-            if (guid.GetHighType() == HighGuidType.Unit) // skip if not an unit
+            if (guid.GetHighType() == HighGuidType.Creature) // skip if not an unit
             {
                 if (!obj.Movement.HasWpsOrRandMov)
                     if (obj.Movement.Position != newObj.Movement.Position)
@@ -218,6 +218,11 @@ namespace WowPacketParser.Parsing.Parsers
                             key = UpdateFields.GetUpdateFieldName<SceneObjectField>(i);
                             break;
                         }
+                        case ObjectType.Conversation:
+                        {
+                            key = UpdateFields.GetUpdateFieldName<ConversationField>(i);
+                            break;
+                        }
                     }
                 }
 
@@ -225,7 +230,7 @@ namespace WowPacketParser.Parsing.Parsers
                 dict.Add(i, blockVal);
             }
 
-            // Dynamic fields - NYI
+            objectEnd = UpdateFields.GetUpdateField(ObjectDynamicField.OBJECT_DYNAMIC_END);
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V5_0_4_16016))
             {
                 maskSize = packet.ReadByte();
@@ -245,24 +250,86 @@ namespace WowPacketParser.Parsing.Parsers
                         packet.ReadUInt16();
 
                     var cnt = flag & 0x7F;
-                    var vals = new uint[cnt];
+                    var vals = new int[cnt];
                     for (var j = 0; j < cnt; ++j)
-                        vals[j] = packet.ReadUInt32();
+                        vals[j] = packet.ReadInt32();
 
-                    for (var j = 0; j < cnt; ++j)
+
+                    string key = "Dynamic Block Value " + i;
+                    if (i < objectEnd)
+                        key = UpdateFields.GetUpdateFieldName<ObjectDynamicField>(i);
+                    else
                     {
-                        if (vals[j] != 0)
+                        switch (type)
                         {
-                            for (var k = 0; k < 32; ++k)
+                            case ObjectType.Container:
                             {
-                                if (((1 << k) & vals[j]) != 0)
-                                {
-                                    var blockVal = packet.ReadUpdateField();
-                                    string value = blockVal.UInt32Value + "/" + blockVal.SingleValue;
-                                    packet.AddValue("Dynamic block Value " + index, value, i, j, k);
-                                }
+                                if (i < UpdateFields.GetUpdateField(ItemDynamicField.ITEM_DYNAMIC_END))
+                                    goto case ObjectType.Item;
+
+                                key = UpdateFields.GetUpdateFieldName<ContainerDynamicField>(i);
+                                break;
+                            }
+                            case ObjectType.Item:
+                            {
+                                key = UpdateFields.GetUpdateFieldName<ItemDynamicField>(i);
+                                break;
+                            }
+                            case ObjectType.Player:
+                            {
+                                if (i < UpdateFields.GetUpdateField(UnitDynamicField.UNIT_DYNAMIC_END))
+                                    goto case ObjectType.Unit;
+
+                                key = UpdateFields.GetUpdateFieldName<PlayerDynamicField>(i);
+                                break;
+                            }
+                            case ObjectType.Unit:
+                            {
+                                key = UpdateFields.GetUpdateFieldName<UnitDynamicField>(i);
+                                break;
+                            }
+                            case ObjectType.GameObject:
+                            {
+                                key = UpdateFields.GetUpdateFieldName<GameObjectDynamicField>(i);
+                                break;
+                            }
+                            case ObjectType.DynamicObject:
+                            {
+                                key = UpdateFields.GetUpdateFieldName<DynamicObjectDynamicField>(i);
+                                break;
+                            }
+                            case ObjectType.Corpse:
+                            {
+                                key = UpdateFields.GetUpdateFieldName<CorpseDynamicField>(i);
+                                break;
+                            }
+                            case ObjectType.AreaTrigger:
+                            {
+                                key = UpdateFields.GetUpdateFieldName<AreaTriggerDynamicField>(i);
+                                break;
+                            }
+                            case ObjectType.SceneObject:
+                            {
+                                key = UpdateFields.GetUpdateFieldName<SceneObjectDynamicField>(i);
+                                break;
+                            }
+                            case ObjectType.Conversation:
+                            {
+                                key = UpdateFields.GetUpdateFieldName<ConversationDynamicField>(i);
+                                break;
                             }
                         }
+                    }
+
+                    var fieldMask = new BitArray(vals);
+                    for (var j = 0; j < fieldMask.Count; ++j)
+                    {
+                        if (!fieldMask[j])
+                            continue;
+
+                        var blockVal = packet.ReadUpdateField();
+                        string value = blockVal.UInt32Value + "/" + blockVal.SingleValue;
+                        packet.AddValue(key, value, index, j);
                     }
                 }
             }
@@ -609,7 +676,7 @@ namespace WowPacketParser.Parsing.Parsers
                     packet.AddValue("Transport Position", moveInfo.TransportOffset, index);
 
                     if (moveInfo.TransportGuid.HasEntry() && moveInfo.TransportGuid.GetHighType() == HighGuidType.Vehicle &&
-                        guid.HasEntry() && guid.GetHighType() == HighGuidType.Unit)
+                        guid.HasEntry() && guid.GetHighType() == HighGuidType.Creature)
                     {
                         var vehicleAccessory = new VehicleTemplateAccessory();
                         vehicleAccessory.AccessoryEntry = guid.GetEntry();
@@ -749,7 +816,7 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadXORByte(goTransportGuid, 5);
                 moveInfo.TransportOffset.O = packet.ReadSingle();
 
-                moveInfo.TransportGuid = new WowGuid(BitConverter.ToUInt64(goTransportGuid, 0));
+                moveInfo.TransportGuid = new WowGuid64(BitConverter.ToUInt64(goTransportGuid, 0));
                 packet.AddValue("GO Transport GUID", moveInfo.TransportGuid, index);
                 packet.AddValue("GO Transport Position", moveInfo.TransportOffset, index);
             }
@@ -1094,12 +1161,12 @@ namespace WowPacketParser.Parsing.Parsers
                     if (hasTransportTime2)
                         packet.ReadUInt32("Transport Time 2", index);
 
-                    moveInfo.TransportGuid = new WowGuid(BitConverter.ToUInt64(transportGuid, 0));
+                    moveInfo.TransportGuid = new WowGuid64(BitConverter.ToUInt64(transportGuid, 0));
                     packet.AddValue("Transport GUID",  moveInfo.TransportGuid, index);
                     packet.AddValue("Transport Position", moveInfo.TransportOffset, index);
 
                     if (moveInfo.TransportGuid.HasEntry() && moveInfo.TransportGuid.GetHighType() == HighGuidType.Vehicle &&
-                        guid.HasEntry() && guid.GetHighType() == HighGuidType.Unit)
+                        guid.HasEntry() && guid.GetHighType() == HighGuidType.Creature)
                     {
                         var vehicleAccessory = new VehicleTemplateAccessory();
                         vehicleAccessory.AccessoryEntry = guid.GetEntry();
@@ -1232,7 +1299,7 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadXORByte(goTransportGuid, 4);
                 moveInfo.TransportOffset.Y = packet.ReadSingle();
 
-                moveInfo.TransportGuid = new WowGuid(BitConverter.ToUInt64(goTransportGuid, 0));
+                moveInfo.TransportGuid = new WowGuid64(BitConverter.ToUInt64(goTransportGuid, 0));
                 packet.AddValue("GO Transport GUID", moveInfo.TransportGuid, index);
                 packet.AddValue("GO Transport Position", moveInfo.TransportOffset, index);
             }
@@ -1513,14 +1580,14 @@ namespace WowPacketParser.Parsing.Parsers
                     packet.ReadXORByte(transportGuid, 0);
 
                     moveInfo.TransportOffset.Y = packet.ReadSingle();
-                    moveInfo.TransportGuid = new WowGuid(BitConverter.ToUInt64(transportGuid, 0));
+                    moveInfo.TransportGuid = new WowGuid64(BitConverter.ToUInt64(transportGuid, 0));
                     packet.AddValue("Transport GUID", moveInfo.TransportGuid, index);
                     packet.AddValue("Transport Position", moveInfo.TransportOffset, index);
                     var seat = packet.ReadByte("Transport Seat", index);
                     packet.ReadInt32("Transport Time", index);
 
                     if (moveInfo.TransportGuid.HasEntry() && moveInfo.TransportGuid.GetHighType() == HighGuidType.Vehicle &&
-                        guid.HasEntry() && guid.GetHighType() == HighGuidType.Unit)
+                        guid.HasEntry() && guid.GetHighType() == HighGuidType.Creature)
                     {
                         var vehicleAccessory = new VehicleTemplateAccessory();
                         vehicleAccessory.AccessoryEntry = guid.GetEntry();
@@ -1939,12 +2006,12 @@ namespace WowPacketParser.Parsing.Parsers
                     packet.ReadXORByte(transportGuid, 5);
                     packet.ReadXORByte(transportGuid, 2);
 
-                    moveInfo.TransportGuid = new WowGuid(BitConverter.ToUInt64(transportGuid, 0));
+                    moveInfo.TransportGuid = new WowGuid64(BitConverter.ToUInt64(transportGuid, 0));
                     packet.AddValue("Transport GUID", moveInfo.TransportGuid, index);
                     packet.AddValue("Transport Position", moveInfo.TransportOffset, index);
 
                     if (moveInfo.TransportGuid.HasEntry() && moveInfo.TransportGuid.GetHighType() == HighGuidType.Vehicle &&
-                        guid.HasEntry() && guid.GetHighType() == HighGuidType.Unit)
+                        guid.HasEntry() && guid.GetHighType() == HighGuidType.Creature)
                     {
                         var vehicleAccessory = new VehicleTemplateAccessory();
                         vehicleAccessory.AccessoryEntry = guid.GetEntry();
@@ -2336,12 +2403,12 @@ namespace WowPacketParser.Parsing.Parsers
                     packet.ReadInt32("Transport Time", index);
                     packet.ReadXORByte(transportGuid, 0);
 
-                    moveInfo.TransportGuid = new WowGuid(BitConverter.ToUInt64(transportGuid, 0));
+                    moveInfo.TransportGuid = new WowGuid64(BitConverter.ToUInt64(transportGuid, 0));
                     packet.AddValue("Transport GUID", moveInfo.TransportGuid, index);
                     packet.AddValue("Transport Position", moveInfo.TransportOffset, index);
 
                     if (moveInfo.TransportGuid.HasEntry() && moveInfo.TransportGuid.GetHighType() == HighGuidType.Vehicle &&
-                        guid.HasEntry() && guid.GetHighType() == HighGuidType.Unit)
+                        guid.HasEntry() && guid.GetHighType() == HighGuidType.Creature)
                     {
                         var vehicleAccessory = new VehicleTemplateAccessory();
                         vehicleAccessory.AccessoryEntry = guid.GetEntry();

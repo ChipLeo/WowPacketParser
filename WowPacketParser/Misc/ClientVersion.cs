@@ -104,6 +104,10 @@ namespace WowPacketParser.Misc
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V5_4_7_18019,  new DateTime(2014, 03, 10)),
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V5_4_8_18291,  new DateTime(2014, 05, 19)),
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V5_4_8_18414,  new DateTime(2014, 06, 13)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_0_2_19033,  new DateTime(2014, 10, 14)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_0_2_19034,  new DateTime(2014, 10, 14)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_0_3_19103,  new DateTime(2014, 10, 28)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_0_3_19116,  new DateTime(2014, 10, 29))
         };
 
         private static ClientType _expansion;
@@ -207,6 +211,11 @@ namespace WowPacketParser.Misc
                     case ClientVersionBuild.V5_4_8_18291:
                     case ClientVersionBuild.V5_4_8_18414:
                         return ClientVersionBuild.V5_4_8_18414;
+                    case ClientVersionBuild.V6_0_2_19033:
+                    case ClientVersionBuild.V6_0_2_19034:
+                    case ClientVersionBuild.V6_0_3_19103:
+                    case ClientVersionBuild.V6_0_3_19116:
+                        return ClientVersionBuild.V6_0_2_19033;
                     default:
                         return Build;
                 }
@@ -225,6 +234,8 @@ namespace WowPacketParser.Misc
 
         private static ClientType GetExpansion(ClientVersionBuild build)
         {
+            if (build >= ClientVersionBuild.V6_0_2_19033)
+                return ClientType.WarlordsOfDraenor;
             if (build >= ClientVersionBuild.V5_0_4_16016)
                 return ClientType.MistsOfPandaria;
             if (build >= ClientVersionBuild.V4_0_3_13329)

@@ -24,7 +24,7 @@ namespace WowPacketParser.Parsing.Parsers
         {
             var guid = packet.ReadGuid("GUID");
             // Equal to "Clear spells" pre cataclysm
-            if (guid.Full == 0)
+            if (guid.IsEmpty())
                 return;
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_1_0_9767))
@@ -39,7 +39,7 @@ namespace WowPacketParser.Parsing.Parsers
 
             var isPet = guid.GetHighType() == HighGuidType.Pet;
             var isVehicle = guid.GetHighType() == HighGuidType.Vehicle;
-            var isMinion = guid.GetHighType() == HighGuidType.Unit;
+            var isMinion = guid.GetHighType() == HighGuidType.Creature;
             const int maxCreatureSpells = 10;
             var spells = new List<uint>(maxCreatureSpells);
             for (var i = 0; i < maxCreatureSpells; i++) // Read pet/vehicle spell ids

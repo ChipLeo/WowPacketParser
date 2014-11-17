@@ -408,7 +408,7 @@ namespace WowPacketParser.Parsing.Parsers
             var guid = packet.StartBitStream(0, 4, 7, 1, 3, 2, 5, 6);
             packet.ParseBitStream(guid, 5, 0, 3, 4, 7, 2, 6, 1);
             packet.WriteGuid("Guid", guid);
-            LoginGuid = new WowGuid(BitConverter.ToUInt64(guid, 0));
+            LoginGuid = new WowGuid64(BitConverter.ToUInt64(guid, 0));
         }
 
         [Parser(Opcode.CMSG_PLAYER_LOGIN, ClientVersionBuild.V4_3_0_15005, ClientVersionBuild.V4_3_3_15354)]
@@ -418,7 +418,7 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ParseBitStream(guid, 4, 1, 7, 2, 6, 5, 3, 0);
 
             packet.WriteGuid("Guid", guid);
-            LoginGuid = new WowGuid(BitConverter.ToUInt64(guid, 0));
+            LoginGuid = new WowGuid64(BitConverter.ToUInt64(guid, 0));
         }
 
         [Parser(Opcode.CMSG_PLAYER_LOGIN, ClientVersionBuild.V4_3_3_15354, ClientVersionBuild.V4_3_4_15595)]
@@ -427,7 +427,7 @@ namespace WowPacketParser.Parsing.Parsers
             var guid = packet.StartBitStream(6, 7, 4, 5, 0, 1, 3, 2);
             packet.ParseBitStream(guid, 1, 4, 7, 2, 3, 6, 0, 5);
             packet.WriteGuid("Guid", guid);
-            LoginGuid = new WowGuid(BitConverter.ToUInt64(guid, 0));
+            LoginGuid = new WowGuid64(BitConverter.ToUInt64(guid, 0));
         }
 
         [Parser(Opcode.CMSG_PLAYER_LOGIN, ClientVersionBuild.V5_1_0_16309)]
@@ -437,7 +437,7 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ParseBitStream(guid, 6, 4, 3, 5, 0, 2, 7, 1);
             packet.WriteGuid("Guid", guid);
             packet.ReadSingle("Unk Float");
-            LoginGuid = new WowGuid(BitConverter.ToUInt64(guid, 0));
+            LoginGuid = new WowGuid64(BitConverter.ToUInt64(guid, 0));
         }
 
         [Parser(Opcode.SMSG_CHARACTER_LOGIN_FAILED)]
@@ -460,14 +460,7 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_LOGOUT_COMPLETE)]
         public static void HandleLogoutComplete(Packet packet)
         {
-            LoginGuid = new WowGuid(0);
-        }
-
-        [Parser(Opcode.CMSG_CONNECT_TO_FAILED)]
-        public static void HandleConnectToFailed(Packet packet)
-        {
-            packet.ReadIPAddress("IP Address");
-            packet.ReadByte("Reason?");
+            LoginGuid = new WowGuid64(0);
         }
 
         [Parser(Opcode.SMSG_REDIRECT_CLIENT, ClientVersionBuild.Zero, ClientVersionBuild.V4_0_6a_13623)]
@@ -497,21 +490,23 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadInt64("Int 64");
         }
 
-        [Parser(Opcode.CMSG_REDIRECTION_FAILED)]
+        [Parser(Opcode.CMSG_CONNECT_TO_FAILED, ClientVersionBuild.Zero, ClientVersionBuild.V4_0_1_13164)]
         public static void HandleRedirectFailed(Packet packet)
         {
-            packet.ReadInt32("Token");
+            packet.ReadInt32("Serial");
+            if (ClientVersion.AddedInVersion(ClientType.Cataclysm))
+                packet.ReadByte("Con");
         }
 
-        [Parser(Opcode.CMSG_REDIRECTION_AUTH_PROOF, ClientVersionBuild.Zero, ClientVersionBuild.V4_2_2_14545)]
+        [Parser(Opcode.CMSG_AUTH_CONTINUED_SESSION, ClientVersionBuild.Zero, ClientVersionBuild.V4_2_2_14545)]
         public static void HandleRedirectionAuthProof(Packet packet)
         {
             packet.ReadCString("Account");
-            packet.ReadInt64("Unk Int64");
+            packet.ReadInt64("Unk Int64"); // Key or DosResponse
             packet.ReadBytes("Proof SHA-1 Hash", 20);
         }
 
-        [Parser(Opcode.CMSG_REDIRECTION_AUTH_PROOF, ClientVersionBuild.V4_2_2_14545, ClientVersionBuild.V4_3_4_15595)]
+        [Parser(Opcode.CMSG_AUTH_CONTINUED_SESSION, ClientVersionBuild.V4_2_2_14545, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleRedirectionAuthProof422(Packet packet)
         {
             var bytes = new byte[20];
@@ -528,10 +523,10 @@ namespace WowPacketParser.Parsing.Parsers
             bytes[15] = packet.ReadByte();
             bytes[18] = packet.ReadByte();
             bytes[8] = packet.ReadByte();
-            packet.ReadInt64("Unk long 1");
+            packet.ReadInt64("Unk long 1"); // Key or DosResponse
             bytes[2] = packet.ReadByte();
             bytes[1] = packet.ReadByte();
-            packet.ReadInt64("Unk long 2");
+            packet.ReadInt64("Unk long 2"); // Key or DosResponse
             bytes[7] = packet.ReadByte();
             bytes[4] = packet.ReadByte();
             bytes[16] = packet.ReadByte();

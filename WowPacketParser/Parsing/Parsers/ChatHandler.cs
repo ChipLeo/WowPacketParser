@@ -124,7 +124,7 @@ namespace WowPacketParser.Parsing.Parsers
                     var target = packet.ReadGuid("Sender GUID");
                     switch (target.GetHighType())
                     {
-                        case HighGuidType.Unit:
+                        case HighGuidType.Creature:
                         case HighGuidType.Vehicle:
                         case HighGuidType.GameObject:
                         case HighGuidType.Transport:
@@ -149,7 +149,7 @@ namespace WowPacketParser.Parsing.Parsers
                     text.ReceiverGUID = packet.ReadGuid("Receiver GUID");
                     switch (text.ReceiverGUID.GetHighType())
                     {
-                        case HighGuidType.Unit:
+                        case HighGuidType.Creature:
                         case HighGuidType.Vehicle:
                         case HighGuidType.GameObject:
                         case HighGuidType.Transport:
@@ -183,7 +183,7 @@ namespace WowPacketParser.Parsing.Parsers
             uint entry = 0;
             if (text.SenderGUID.GetObjectType() == ObjectType.Unit)
                 entry = text.SenderGUID.GetEntry();
-            else if (text.ReceiverGUID.GetObjectType() == ObjectType.Unit)
+            else if (text.ReceiverGUID != null && text.ReceiverGUID.GetObjectType() == ObjectType.Unit)
                 entry = text.ReceiverGUID.GetEntry();
 
             if (entry != 0)

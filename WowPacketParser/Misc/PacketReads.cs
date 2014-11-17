@@ -12,7 +12,7 @@ namespace WowPacketParser.Misc
     {
         public WowGuid ReadGuid()
         {
-            var guid = new WowGuid(ReadUInt64());
+            var guid = new WowGuid64(ReadUInt64());
             if (WriteToFile)
                 WriteToFile = Filters.CheckFilter(guid);
             return guid;
@@ -20,18 +20,46 @@ namespace WowPacketParser.Misc
 
         public WowGuid ReadPackedGuid()
         {
-            var guid = new WowGuid(ReadPackedUInt64());
+            var guid = new WowGuid64(ReadPackedUInt64());
 
-            if (guid.Full != 0 && WriteToFile)
+            if (!guid.IsEmpty() && WriteToFile)
                 WriteToFile = Filters.CheckFilter(guid);
 
             return guid;
         }
 
+        public ulong unkfunc1(ulong v3, byte v7)
+        {
+            ulong v2 = 0;
+            
+            if (v7 > 0x40)
+                v2 = 0;
+            else
+            {
+                if (v7 > 0x20)
+                    v2 = 0;
+                else
+                    v2 = v3 << (int)(v7 & 0x1F);
+            }
+
+            return v2;
+        }
+
+        public WowGuid ReadPackedGuid128()
+        {
+            var guidLowMask = ReadByte();
+            var guidHighMask = ReadByte();
+
+            return new WowGuid128(ReadPackedUInt64(guidLowMask), ReadPackedUInt64(guidHighMask));
+        }
+
         public ulong ReadPackedUInt64()
         {
-            byte mask = ReadByte();
+            return ReadPackedUInt64(ReadByte());
+        }
 
+        private ulong ReadPackedUInt64(byte mask)
+        {
             if (mask == 0)
                 return 0;
 
@@ -153,7 +181,6 @@ namespace WowPacketParser.Misc
 
         public UpdateField ReadUpdateField()
         {
-            long pos = Position;
             uint val = ReadUInt32();
 
             var field = new UpdateField(val);
@@ -340,6 +367,11 @@ namespace WowPacketParser.Misc
         public WowGuid ReadPackedGuid(string name, params object[] indexes)
         {
             return AddValue(name, ReadPackedGuid(), indexes);
+        }
+
+        public WowGuid ReadPackedGuid128(string name, params object[] indexes)
+        {
+            return AddValue(name, ReadPackedGuid128(), indexes);
         }
 
         public byte[] ReadBytesString(string name, int length, params object[] indexes)
@@ -603,7 +635,7 @@ namespace WowPacketParser.Misc
 
         public WowGuid WriteGuid(string name, byte[] stream, params object[] indexes)
         {
-            return AddValue(name, new WowGuid(BitConverter.ToUInt64(stream, 0)), indexes);
+            return AddValue(name, new WowGuid64(BitConverter.ToUInt64(stream, 0)), indexes);
         }
     }
 }

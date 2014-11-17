@@ -451,9 +451,9 @@ namespace WowPacketParser.Enums.Version.V4_0_6_13596
             {Opcode.CMSG_READ_ITEM, 0x0F3C0},
             {Opcode.CMSG_REALM_SPLIT, 0x060AC},
             {Opcode.CMSG_RECLAIM_CORPSE, 0x07CC8},
-            {Opcode.CMSG_REDIRECTION_AUTH_PROOF, 0x00E4C},
-            {Opcode.CMSG_REDIRECTION_FAILED, 0x10007}, //UnknownopcodeID
-            //{Opcode.CMSG_REDIRECT_AUTH_PROOF, 0x00100},
+            {Opcode.CMSG_AUTH_CONTINUED_SESSION, 0x00E4C},
+            {Opcode.CMSG_CONNECT_TO_FAILED, 0x10007}, //UnknownopcodeID
+            //{Opcode.CMSG_AUTH_CONTINUED_SESSION, 0x00100},
             {Opcode.CMSG_REFER_A_FRIEND, 0x030C4},
             {Opcode.CMSG_REFORGE_ITEM, 0x00313},
             {Opcode.CMSG_REMOVE_GLYPH, 0x101EC}, //UnknownopcodeID
@@ -892,7 +892,6 @@ namespace WowPacketParser.Enums.Version.V4_0_6_13596
             {Opcode.SMSG_FORCE_PITCH_RATE_CHANGE, 0x0BF8C},
             //{Opcode.SMSG_FORCE_RUN_BACK_SPEED_CHANGE, 0x068E8},
             {Opcode.SMSG_FORCE_RUN_SPEED_CHANGE, 0x0F1CC},
-            {Opcode.SMSG_FORCE_SEND_QUEUED_PACKETS, 0x02880},
             {Opcode.SMSG_FORCE_SWIM_BACK_SPEED_CHANGE, 0x0AE88},
             {Opcode.SMSG_FORCE_SWIM_SPEED_CHANGE, 0x0F5A0},
             {Opcode.SMSG_FORCE_TURN_RATE_CHANGE, 0x0708C},
@@ -1168,6 +1167,7 @@ namespace WowPacketParser.Enums.Version.V4_0_6_13596
             {Opcode.SMSG_RESPOND_INSPECT_ACHIEVEMENTS, 0x0041C},
             {Opcode.SMSG_RESURRECT_FAILED, 0x0D557}, //4.0.3a13329-403
             {Opcode.SMSG_RESURRECT_REQUEST, 0x0F3A0},
+            {Opcode.SMSG_RESUME_COMMS, 0x02880},
             {Opcode.SMSG_RESYNC_RUNES, 0x0F8E4},
             {Opcode.SMSG_RWHOIS, 0x071C8},
             {Opcode.SMSG_SCRIPT_MESSAGE, 0x100E0}, //UnknownopcodeID

@@ -18,7 +18,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.StartBitStream(guid, 7, 6, 0, 4, 5, 2, 3, 1);
             packet.ParseBitStream(guid, 5, 0, 1, 6, 7, 2, 3, 4);
 
-            CoreParsers.SessionHandler.LoginGuid = new WowGuid(BitConverter.ToUInt64(guid, 0));
+            CoreParsers.SessionHandler.LoginGuid = new WowGuid64(BitConverter.ToUInt64(guid, 0));
             packet.WriteGuid("Guid", guid);
         }
 
@@ -35,8 +35,8 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
                 packet.ReadWoWString("Line", lineLength[i], i);
         }
 
-        [Parser(Opcode.SMSG_SEND_SERVER_LOCATION)]
-        public static void HandleSendServerLocation(Packet packet)
+        [Parser(Opcode.SMSG_SET_TIME_ZONE_INFORMATION)]
+        public static void HandleSetTimeZoneInformation(Packet packet)
         {
             var len1 = packet.ReadBits(7);
             var len2 = packet.ReadBits(7);
@@ -44,12 +44,12 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.ReadWoWString("Server Location", len1);
         }
 
-        [Parser(Opcode.CMSG_REDIRECT_AUTH_PROOF)]
+        [Parser(Opcode.CMSG_AUTH_CONTINUED_SESSION)]
         public static void HandleRedirectAuthProof(Packet packet)
         {
             var sha = new byte[20];
-            packet.ReadInt64("Int64 Unk1");
-            packet.ReadInt64("Int64 Unk2");
+            packet.ReadInt64("Int64 Unk1"); // Key or DosResponse
+            packet.ReadInt64("Int64 Unk2"); // Key or DosResponse
             sha[1] = packet.ReadByte();
             sha[14] = packet.ReadByte();
             sha[9] = packet.ReadByte();
@@ -212,7 +212,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
 
             packet.WriteGuid("Guid", guid);
 
-            CoreParsers.SessionHandler.LoginGuid = new WowGuid(BitConverter.ToUInt64(guid, 0));
+            CoreParsers.SessionHandler.LoginGuid = new WowGuid64(BitConverter.ToUInt64(guid, 0));
         }
 
         [Parser(Opcode.CMSG_AUTH_SESSION)]
