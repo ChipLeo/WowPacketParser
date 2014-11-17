@@ -16,21 +16,20 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var Size = packet.ReadInt32();
             byte[] WardenDataBuffer = packet.ReadBytes(Size);
 
-            Packet WardenData = new Packet(WardenDataBuffer, packet.Opcode, packet.Time, packet.Direction, packet.Number, packet.Writer, packet.FileName);
+           /* Packet WardenData = new Packet(WardenDataBuffer, packet.Opcode, packet.Time, packet.Direction, packet.Number, packet.Writer, packet.FileName);
 
-            CoreParsers.WardenHandler.HandleClientWardenData(WardenData);
+            CoreParsers.WardenHandler.HandleClientWardenData(WardenData);*/
         }
 
         [Parser(Opcode.SMSG_WARDEN_DATA)]
         public static void HandleServerWardenData(Packet packet)
         {
-            /*var Size = packet.ReadInt32();
+            var Size = packet.ReadInt32();
             byte[] WardenDataBuffer = packet.ReadBytes(Size);
 
-            Packet WardenData = new Packet(WardenDataBuffer, packet.Opcode, packet.Time, packet.Direction, packet.Number, packet.Writer, packet.FileName);
+            /*Packet WardenData = new Packet(WardenDataBuffer, packet.Opcode, packet.Time, packet.Direction, packet.Number, packet.Writer, packet.FileName);
 
             CoreParsers.WardenHandler.HandleServerWardenData(WardenData);*/
-            packet.ReadToEnd();
         }
     }
 }
