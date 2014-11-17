@@ -565,7 +565,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_MINIMAP_PING)]
         public static void HandleSMimimapPing(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadSingle("Y");
+            packet.ReadSingle("X");
+            var guid = packet.StartBitStream(0, 5, 2, 7, 1, 3, 6, 4);
+            packet.ParseBitStream(guid, 6, 5, 7, 2, 0, 3, 1, 4);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_MIRRORIMAGE_DATA)]
