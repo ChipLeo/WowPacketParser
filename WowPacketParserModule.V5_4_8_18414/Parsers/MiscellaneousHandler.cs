@@ -19,18 +19,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_ADD_FRIEND)]
-        public static void HandleAddFriend(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.CMSG_ADD_IGNORE)]
-        public static void HandleAddIgnore(Packet packet)
-        {
-            packet.ReadCString("Str");
-        }
-
         [Parser(Opcode.CMSG_AREATRIGGER)]
         public static void HandleClientAreaTrigger(Packet packet)
         {
