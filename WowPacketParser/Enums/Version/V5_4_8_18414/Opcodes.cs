@@ -707,7 +707,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_PLAYED_TIME,                              0x11E2 | 0x20000}, //+-
             {Opcode.SMSG_PLAYER_MOVE,                              0x1A32 | 0x20000}, //++
             {Opcode.SMSG_PLAYER_VEHICLE_DATA,                      0x0861 | 0x20000}, //++
-            {Opcode.SMSG_PLAYERBOUND,                              0x1B60 | 0x20000}, //--
+            {Opcode.SMSG_PLAYERBOUND,                              0x1B60 | 0x20000}, //+-
             {Opcode.SMSG_PONG,                                     0x1969 | 0x20000}, //--
             {Opcode.SMSG_POWER_UPDATE,                             0x109F | 0x20000}, //++
             {Opcode.SMSG_PRE_RESURRECT,                            0x19C0 | 0x20000}, //++

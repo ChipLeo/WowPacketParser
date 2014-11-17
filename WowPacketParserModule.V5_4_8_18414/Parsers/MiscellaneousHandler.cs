@@ -696,7 +696,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_PLAYERBOUND)]
         public static void HandlePlayerBound(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = packet.StartBitStream(2, 4, 0, 3, 6, 7, 5, 1);
+            packet.ParseBitStream(guid, 6, 1, 2, 3, 4, 5, 7, 0);
+            packet.ReadEntry<UInt32>(StoreNameType.Area, "Area ID");
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_PONG)]
