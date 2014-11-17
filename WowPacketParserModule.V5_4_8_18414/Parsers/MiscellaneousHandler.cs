@@ -215,7 +215,17 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_SPELLCLICK)]
         public static void HandleSpellClick(Packet packet)
         {
-            packet.ReadToEnd();
+            var guidBytes = new byte[8];
+            packet.StartBitStream(guidBytes, 7, 4, 0, 3, 6, 5);
+            packet.ReadBit("unk");
+            packet.StartBitStream(guidBytes, 1, 2);
+            packet.ParseBitStream(guidBytes, 6, 1, 5, 4, 7, 2, 3, 0);
+
+            packet.WriteGuid("Guid", guidBytes);
+
+            var guid = new WowGuid(BitConverter.ToUInt64(guidBytes, 0));
+            if (guid.GetObjectType() == ObjectType.Unit)
+                Storage.NpcSpellClicks.Add(guid, packet.TimeSpan);
         }
 
         [Parser(Opcode.CMSG_SUBMIT_BUG)]
