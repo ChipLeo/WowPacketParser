@@ -143,7 +143,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_RANDOM_ROLL)]
         public static void HandleRandomRoll(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadInt32("unk20"); // 20
+            packet.ReadInt32("unk16"); // 16
+            packet.ReadByte("unk24"); // 24
         }
 
         [Parser(Opcode.CMSG_REALM_SPLIT)]
