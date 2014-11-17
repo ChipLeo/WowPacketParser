@@ -124,7 +124,20 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_RAID_READY_CHECK_CONFIRM)]
         public static void HandleRaidReadyCheckConfirm(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadByte("unk16"); // 16
+            var guid = new byte[8];
+            guid[2] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            packet.ReadBit("unk17"); // 17
+            guid[7] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 1, 0, 3, 2, 4, 5, 7, 6);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_RANDOM_ROLL)]
@@ -725,6 +738,45 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.SMSG_RAID_READY_CHECK)]
+        public static void HandleRaidReadyCheck(Packet packet)
+        {
+            var guid16 = new byte[8];
+            var guid32 = new byte[8];
+            guid16[4] = packet.ReadBit();
+            guid16[2] = packet.ReadBit();
+            guid32[4] = packet.ReadBit();
+            guid16[3] = packet.ReadBit();
+            guid16[7] = packet.ReadBit();
+            guid16[1] = packet.ReadBit();
+            guid16[0] = packet.ReadBit();
+            guid32[6] = packet.ReadBit();
+            guid32[5] = packet.ReadBit();
+            guid16[6] = packet.ReadBit();
+            guid16[5] = packet.ReadBit();
+            guid32[0] = packet.ReadBit();
+            guid32[1] = packet.ReadBit();
+            guid32[2] = packet.ReadBit();
+            guid32[7] = packet.ReadBit();
+            guid32[3] = packet.ReadBit();
+
+            packet.ReadInt32("unk24"); // 24
+
+            packet.ParseBitStream(guid16, 2, 7, 3);
+            packet.ParseBitStream(guid32, 4);
+            packet.ParseBitStream(guid16, 1, 0);
+            packet.ParseBitStream(guid32, 1, 2, 6, 5);
+            packet.ParseBitStream(guid16, 6);
+            packet.ParseBitStream(guid32, 0);
+            packet.ReadByte("unk3"); // 3
+            packet.ParseBitStream(guid32, 7);
+            packet.ParseBitStream(guid16, 4);
+            packet.ParseBitStream(guid32, 3);
+            packet.ParseBitStream(guid16, 5);
+            packet.WriteGuid("Guid16", guid16);
+            packet.WriteGuid("Guid32", guid32);
+
+        }
+
         [Parser(Opcode.SMSG_RAID_READY_CHECK_COMPLETED)]
         [Parser(Opcode.SMSG_RAID_READY_CHECK_CONFIRM)]
         [Parser(Opcode.SMSG_RANDOM_ROLL)]

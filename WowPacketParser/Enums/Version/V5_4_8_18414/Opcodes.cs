@@ -240,7 +240,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_QUEST_QUERY,                              0x02D5 | 0x10000}, //++
             {Opcode.CMSG_QUESTLOG_REMOVE_QUEST,                    0x0779 | 0x10000}, //--
             {Opcode.CMSG_RAID_READY_CHECK,                         0x0817 | 0x10000}, //--
-            {Opcode.CMSG_RAID_READY_CHECK_CONFIRM,                 0x158B | 0x10000}, //--
+            {Opcode.CMSG_RAID_READY_CHECK_CONFIRM,                 0x158B | 0x10000}, //+-
             {Opcode.CMSG_RANDOM_ROLL,                              0x08A3 | 0x10000}, //--
             {Opcode.CMSG_RANDOMIZE_CHAR_NAME,                      0x0B1C | 0x10000}, //--
             {Opcode.CMSG_READ_ITEM,                                0x0D00 | 0x10000}, //++
@@ -733,7 +733,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_QUEST_POI_QUERY_RESPONSE,                 0x067F | 0x20000}, //++
             {Opcode.SMSG_QUEST_QUERY_RESPONSE,                     0x0276 | 0x20000}, //--
             {Opcode.SMSG_RAID_INSTANCE_MESSAGE,                    0x0CAF | 0x20000}, //++
-            {Opcode.SMSG_RAID_READY_CHECK,                         0x1C8E | 0x20000}, //--
+            {Opcode.SMSG_RAID_READY_CHECK,                         0x1C8E | 0x20000}, //+-
             {Opcode.SMSG_RAID_READY_CHECK_COMPLETED,               0x15C2 | 0x20000}, //--
             {Opcode.SMSG_RAID_READY_CHECK_CONFIRM,                 0x02AF | 0x20000}, //--
             {Opcode.SMSG_RANDOM_ROLL,                              0x141A | 0x20000}, //--
