@@ -161,28 +161,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_REPOP_REQUEST)]
-        public static void HandleClientRepopRequest(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
         [Parser(Opcode.CMSG_RESUME_TOKEN_ACK)]
         public static void HandleResumeTokenAck(Packet packet)
         {
             packet.ReadInt32("unk20"); // 20
-        }
-
-        [Parser(Opcode.CMSG_RETURN_TO_GRAVEYARD)]
-        public static void HandleClientreturnToGraveyard(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.CMSG_SET_CONTACT_NOTES)]
-        public static void HandleSetContactNotes(Packet packet)
-        {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.CMSG_SET_PVP)]
@@ -231,19 +213,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_SUBMIT_BUG)]
         public static void HandleSubmitBug(Packet packet)
         {
-            packet.ReadToEnd();
-        }
+            var pos = new Vector4();
 
-        [Parser(Opcode.CMSG_SUBMIT_COMPLAIN)]
-        public static void HandleSubmitComplain(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.CMSG_SUGGESTION_SUBMIT)]
-        public static void HandleSuggestionSubmit(Packet packet)
-        {
-            packet.ReadToEnd();
+            pos.Y = packet.ReadSingle();
+            pos.X = packet.ReadSingle();
+            pos.Z = packet.ReadSingle();
+            pos.O = packet.ReadSingle();
+            packet.ReadInt32("Map ID");
+            var length = packet.ReadBits(10);
+            packet.ReadWoWString("Text", length);
+            packet.AddValue("Position", pos);
         }
 
         [Parser(Opcode.CMSG_TIME_SYNC_RESP)]
@@ -538,12 +517,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
             packet.ReadInt32("unk32");
             packet.ReadInt32("unk36");
-        }
-
-        [Parser(Opcode.SMSG_GOSSIP_COMPLETE)]
-        public static void HandleGossipComplete(Packet packet)
-        {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_INSPECT_HONOR_STATS)]

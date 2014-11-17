@@ -252,7 +252,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_REFORGE_ITEM,                             0x0C4F | 0x10000}, //++
             {Opcode.CMSG_REORDER_CHARACTERS,                       0x08A7 | 0x10000}, //+-
             {Opcode.CMSG_REPAIR_ITEM,                              0x02C1 | 0x10000}, //--
-            {Opcode.CMSG_REPOP_REQUEST,                            0x134A | 0x10000}, //--
+            {Opcode.CMSG_REPOP_REQUEST,                            0x134A | 0x10000}, //+-
             {Opcode.CMSG_REQUEST_ACCOUNT_DATA,                     0x1D8A | 0x10000}, //++
             {Opcode.CMSG_REQUEST_CATEGORY_COOLDOWNS,               0x1203 | 0x10000}, //++
             {Opcode.CMSG_REQUEST_CEMETERY_LIST,                    0x06E4 | 0x10000}, //++
@@ -264,7 +264,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_RESET_FACTION_CHEAT,                      0x10B6 | 0x10000}, //--
             {Opcode.CMSG_RESET_INSTANCES,                          0x0C69 | 0x10000}, //+-
             {Opcode.CMSG_RESUME_TOKEN_ACK,                         0x0292 | 0x10000}, //++ pair SMSG 18BA
-            {Opcode.CMSG_RETURN_TO_GRAVEYARD,                      0x12EA | 0x10000}, //--
+            {Opcode.CMSG_RETURN_TO_GRAVEYARD,                      0x12EA | 0x10000}, //+-
             {Opcode.CMSG_SAVE_CUF_PROFILES,                        0x06E6 | 0x10000}, //++
             //{Opcode.CMSG_SELECT_FACTION,                           0x0027 | 0x10000}, //
             {Opcode.CMSG_SELECT_LOOT_SPEC,                         0x1260 | 0x10000}, //--
@@ -273,7 +273,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_SET_ACTIONBAR_TOGGLES,                    0x0672 | 0x10000}, //++
             {Opcode.CMSG_SET_ACTION_BUTTON,                        0x1F8C | 0x10000}, //++
             {Opcode.CMSG_SET_ACTIVE_MOVER,                         0x09F0 | 0x10000}, //++
-            {Opcode.CMSG_SET_CONTACT_NOTES,                        0x0937 | 0x10000}, //--
+            {Opcode.CMSG_SET_CONTACT_NOTES,                        0x0937 | 0x10000}, //+-
             {Opcode.CMSG_SET_DUNGEON_DIFFICULTY,                   0x1A36 | 0x10000}, //--
             {Opcode.CMSG_SET_EVERYONE_IS_ASSISTANT,                0x01E1 | 0x10000}, //--
             {Opcode.CMSG_SET_PLAYER_DECLINED_NAMES,                0x09E2 | 0x10000}, //++
@@ -293,7 +293,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_SPIRIT_HEALER_ACTIVATE,                   0x0340 | 0x10000}, //++
             {Opcode.CMSG_SPLIT_ITEM,                               0x02EC | 0x10000}, //--
             {Opcode.CMSG_STANDSTATECHANGE,                         0x03E6 | 0x10000}, //+-
-            {Opcode.CMSG_SUBMIT_BUG,                               0x0861 | 0x10000}, //--
+            {Opcode.CMSG_SUBMIT_BUG,                               0x0861 | 0x10000}, //+-
             {Opcode.CMSG_SUBMIT_COMPLAIN,                          0x030D | 0x10000}, //--
             {Opcode.CMSG_SUGGESTION_SUBMIT,                        0x0A12 | 0x10000}, //--
             {Opcode.CMSG_SWAP_INV_ITEM,                            0x03DF | 0x10000}, //--
@@ -550,7 +550,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GAMEOBJECT_QUERY_RESPONSE,                0x06BF | 0x20000}, //++
             {Opcode.SMSG_GAMETIME_UPDATE,                          0x0E1B | 0x20000}, //++
             {Opcode.SMSG_GMRESPONSE_RECEIVED,                      0x148E | 0x20000}, //++
-            {Opcode.SMSG_GOSSIP_COMPLETE,                          0x034E | 0x20000}, //--
+            {Opcode.SMSG_GOSSIP_COMPLETE,                          0x034E | 0x20000}, //+-
             {Opcode.SMSG_GOSSIP_MESSAGE,                           0x0244 | 0x20000}, //--
             {Opcode.SMSG_GOSSIP_POI,                               0x0785 | 0x20000}, //-- +
             {Opcode.SMSG_GROUP_DECLINE,                            0x17A3 | 0x20000}, //--
