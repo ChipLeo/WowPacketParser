@@ -40,43 +40,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.CMSG_MESSAGECHAT_GUILD)]
+        [Parser(Opcode.CMSG_MESSAGECHAT_OFFICER)]
+        [Parser(Opcode.CMSG_MESSAGECHAT_PARTY)]
+        [Parser(Opcode.CMSG_MESSAGECHAT_RAID)]
+        [Parser(Opcode.CMSG_MESSAGECHAT_RAID_WARNING)]
+        [Parser(Opcode.CMSG_MESSAGECHAT_SAY)]
         public static void HandleClientChatMessageGuild(Packet packet)
         {
             packet.ReadEnum<Language>("Language", TypeCode.Int32);
             packet.ReadWoWString("Message", packet.ReadBits(8));
-        }
-
-        [Parser(Opcode.CMSG_MESSAGECHAT_OFFICER)]
-        public static void HandleClientChatMessageOfficer(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.CMSG_MESSAGECHAT_PARTY)]
-        public static void HandleMessageChatParty(Packet packet)
-        {
-            packet.ReadEnum<Language>("Language", TypeCode.Int32);
-            packet.ReadWoWString("Message", packet.ReadBits(8));
-        }
-
-        [Parser(Opcode.CMSG_MESSAGECHAT_RAID)]
-        public static void HandleClientChatMessageRaid(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.CMSG_MESSAGECHAT_RAID_WARNING)]
-        public static void HandleClientChatMessageRaidWarning(Packet packet)
-        {
-            packet.ReadEnum<Language>("Language", TypeCode.Int32);
-            packet.ReadWoWString("Message", packet.ReadBits(8));
-        }
-
-        [Parser(Opcode.CMSG_MESSAGECHAT_SAY)]
-        public static void HandleClientChatMessageSay(Packet packet)
-        {
-                packet.ReadEnum<Language>("Language", TypeCode.Int32);
-                packet.ReadWoWString("Message", packet.ReadBits(8));
         }
 
         [Parser(Opcode.CMSG_MESSAGECHAT_WHISPER)]

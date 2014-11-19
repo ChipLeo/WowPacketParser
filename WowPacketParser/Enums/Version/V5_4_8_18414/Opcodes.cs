@@ -174,9 +174,9 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_MESSAGECHAT_DND,                          0x002E | 0x10000}, //++
             {Opcode.CMSG_MESSAGECHAT_EMOTE,                        0x103E | 0x10000}, //+-
             {Opcode.CMSG_MESSAGECHAT_GUILD,                        0x0CAE | 0x10000}, //+-
-            {Opcode.CMSG_MESSAGECHAT_OFFICER,                      0x0ABF | 0x10000}, //--
+            {Opcode.CMSG_MESSAGECHAT_OFFICER,                      0x0ABF | 0x10000}, //+-
             {Opcode.CMSG_MESSAGECHAT_PARTY,                        0x109A | 0x10000}, //++
-            {Opcode.CMSG_MESSAGECHAT_RAID,                         0x083E | 0x10000}, //--
+            {Opcode.CMSG_MESSAGECHAT_RAID,                         0x083E | 0x10000}, //+-
             {Opcode.CMSG_MESSAGECHAT_RAID_WARNING,                 0x16AB | 0x10000}, //++
             {Opcode.CMSG_MESSAGECHAT_SAY,                          0x0A9A | 0x10000}, //++
             {Opcode.CMSG_MESSAGECHAT_WHISPER,                      0x123E | 0x10000}, //++
