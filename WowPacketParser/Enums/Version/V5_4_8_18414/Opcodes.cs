@@ -75,7 +75,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_CHAR_ENUM,                                0x00E0 | 0x10000}, //++
             {Opcode.CMSG_CHAR_FACTION_CHANGE,                      0x0329 | 0x10000}, //+-
             {Opcode.CMSG_CHAR_RENAME,                              0x0963 | 0x10000}, //+-
-            {Opcode.CMSG_CHAT_IGNORED,                             0x048A | 0x10000}, //--
+            {Opcode.CMSG_CHAT_IGNORED,                             0x048A | 0x10000}, //+-
             {Opcode.CMSG_CLEAR_TRADE_ITEM,                         0x00A7 | 0x10000}, //++
             {Opcode.CMSG_CONTACT_LIST,                             0x0BB4 | 0x10000}, //--
             //{Opcode.CMSG_CORPSE_MAP_POSITION_QUERY,                0x0150 | 0x10000}, //-- ??
