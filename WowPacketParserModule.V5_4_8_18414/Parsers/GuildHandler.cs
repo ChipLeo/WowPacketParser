@@ -340,7 +340,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_PETITION_SIGN)]
         public static void HandlePetitionSign(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = packet.StartBitStream(4, 2, 0, 1, 5, 3, 6, 7);
+            packet.ParseBitStream(guid, 6, 1, 7, 2, 5, 3, 0, 4);
+            packet.WriteGuid("GUID", guid);
         }
 
         [Parser(Opcode.CMSG_QUERY_GUILD_REWARDS)]
