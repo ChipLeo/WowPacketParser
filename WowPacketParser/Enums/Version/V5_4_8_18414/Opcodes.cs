@@ -761,8 +761,8 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_SET_AI_ANIM_KIT,                          0x1E12 | 0x20000}, //++
             {Opcode.SMSG_SET_ANIM_TIER,                            0x1C0E | 0x20000}, //++
             {Opcode.SMSG_SET_DUNGEON_DIFFICULTY,                   0x1283 | 0x20000}, //--
-            {Opcode.SMSG_SET_FACTION_ATWAR,                        0x0C9B | 0x20000}, //--
-            {Opcode.SMSG_SET_FACTION_STANDING,                     0x10AA | 0x20000}, //--
+            {Opcode.SMSG_SET_FACTION_ATWAR,                        0x0C9B | 0x20000}, //+-
+            {Opcode.SMSG_SET_FACTION_STANDING,                     0x10AA | 0x20000}, //+-
             {Opcode.SMSG_SET_FACTION_VISIBLE,                      0x1E8E | 0x20000}, //++
             {Opcode.SMSG_SET_FLAT_SPELL_MODIFIER,                  0x10F2 | 0x20000}, //++
             {Opcode.SMSG_SET_FORCED_REACTIONS,                     0x068F | 0x20000}, //++

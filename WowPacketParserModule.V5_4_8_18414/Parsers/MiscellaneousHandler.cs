@@ -816,13 +816,22 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_SET_FACTION_ATWAR)]
         public static void HandleSetFactionAtWar(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadByte("unk16"); // 16
+            packet.ReadBits("unk17", 10); // 17
         }
 
         [Parser(Opcode.SMSG_SET_FACTION_STANDING)]
         public static void HandleSetFactionStanding(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadBit("unk16"); // 16
+            var count = packet.ReadBits("Count", 21);
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadInt32("unk28", i); // 28
+                packet.ReadInt32("unk24", i); // 24
+            }
+            packet.ReadSingle("unk28h"); // 28h
+            packet.ReadSingle("unk24h"); // 24h
         }
 
         [Parser(Opcode.SMSG_SET_PCT_SPELL_MODIFIER)]
