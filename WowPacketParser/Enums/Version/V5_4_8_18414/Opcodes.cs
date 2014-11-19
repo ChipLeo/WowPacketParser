@@ -212,12 +212,12 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_PET_RENAME,                               0x0A32 | 0x10000}, //--
             {Opcode.CMSG_PET_SET_ACTION,                           0x12E9 | 0x10000}, //+-
             {Opcode.CMSG_PETITION_BUY,                             0x12D9 | 0x10000}, //--
-            {Opcode.CMSG_PETITION_DECLINE,                         0x1279 | 0x10000}, //--
-            {Opcode.CMSG_PETITION_QUERY,                           0x0255 | 0x10000}, //--
+            {Opcode.CMSG_PETITION_DECLINE,                         0x1279 | 0x10000}, //+-
+            {Opcode.CMSG_PETITION_QUERY,                           0x0255 | 0x10000}, //+-
             {Opcode.CMSG_PETITION_RENAME,                          0x1F9A | 0x10000}, //--
             {Opcode.CMSG_PETITION_SHOW_SIGNATURES,                 0x136B | 0x10000}, //--
             {Opcode.CMSG_PETITION_SHOWLIST,                        0x037B | 0x10000}, //+-
-            {Opcode.CMSG_PETITION_SIGN,                            0x06DA | 0x10000}, //
+            {Opcode.CMSG_PETITION_SIGN,                            0x06DA | 0x10000}, //+-
             {Opcode.CMSG_PING,                                     0x0012 | 0x10000}, //++
             {Opcode.CMSG_PLAYED_TIME,                              0x03F6 | 0x10000}, //++
             {Opcode.CMSG_PLAYER_LOGIN,                             0x158F | 0x10000}, //++

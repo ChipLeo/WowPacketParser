@@ -316,6 +316,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_PETITION_QUERY)]
         public static void HandlePetitionQuery(Packet packet)
         {
+            packet.ReadInt32("unk24"); // 24
             var guid = packet.StartBitStream(2, 3, 1, 0, 4, 7, 6, 5);
             packet.ParseBitStream(guid, 0, 4, 7, 5, 1, 6, 3, 2);
             packet.WriteGuid("GUID", guid);
@@ -344,6 +345,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_PETITION_SIGN)]
         public static void HandlePetitionSign(Packet packet)
         {
+            packet.ReadByte("unk24"); // 24
             var guid = packet.StartBitStream(4, 2, 0, 1, 5, 3, 6, 7);
             packet.ParseBitStream(guid, 6, 1, 7, 2, 5, 3, 0, 4);
             packet.WriteGuid("GUID", guid);
