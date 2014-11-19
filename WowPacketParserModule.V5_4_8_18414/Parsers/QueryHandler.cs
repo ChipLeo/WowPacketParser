@@ -247,7 +247,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadXORByte(guid3, 0);
 
             var name = packet.ReadWoWString("Name", len56);
-            var playerGuid = new Guid(BitConverter.ToUInt64(guid, 0));
+            var playerGuid = new WowGuid64(BitConverter.ToUInt64(guid, 0));
             StoreGetters.AddName(playerGuid, name);
 
             packet.ReadXORByte(guid2, 5);
@@ -292,7 +292,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             var textLen = packet.ReadBits(12);
 
-            pageText.NextPageId = packet.ReadUInt32("Next Page");
+            pageText.NextPageID = packet.ReadUInt32("Next Page");
             packet.ReadUInt32("Entry");
 
             pageText.Text = packet.ReadWoWString("Page Text", textLen);

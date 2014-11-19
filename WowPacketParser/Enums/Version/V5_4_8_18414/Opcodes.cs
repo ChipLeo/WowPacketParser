@@ -248,7 +248,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_REALM_NAME_QUERY,                         0x1A16 | 0x10000}, //--
             //{Opcode.CMSG_REALM_SPLIT,                              0x18B2 | 0x10000}, //++
             {Opcode.CMSG_RECLAIM_CORPSE,                           0x03D3 | 0x10000}, //++
-            {Opcode.CMSG_REDIRECT_AUTH_PROOF,                      0x0F49 | 0x10000}, //--
+            {Opcode.CMSG_AUTH_CONTINUED_SESSION,                   0x0F49 | 0x10000}, //--
             {Opcode.CMSG_REFORGE_ITEM,                             0x0C4F | 0x10000}, //++
             {Opcode.CMSG_REORDER_CHARACTERS,                       0x08A7 | 0x10000}, //+-
             {Opcode.CMSG_REPAIR_ITEM,                              0x02C1 | 0x10000}, //--
@@ -540,7 +540,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_FAILED_PLAYER_CONDITION,                  0x1223 | 0x20000}, //++
             {Opcode.SMSG_FEATURE_SYSTEM_STATUS,                    0x16BB | 0x20000}, //++
             {Opcode.SMSG_FLIGHT_SPLINE_SYNC,                       0x0063 | 0x20000}, //++
-            {Opcode.SMSG_FORCE_SEND_QUEUED_PACKETS,                0x0969 | 0x20000}, //--
+            {Opcode.SMSG_RESUME_COMMS,                             0x0969 | 0x20000}, //--
             {Opcode.SMSG_FORCE_SET_VEHICLE_REC_ID,                 0x149F | 0x20000}, //++
             {Opcode.SMSG_FRIEND_STATUS,                            0x0532 | 0x20000}, //--
             {Opcode.SMSG_GAME_SHOP_QUERY_RESPONSE,                 0x1ABF | 0x20000}, //--

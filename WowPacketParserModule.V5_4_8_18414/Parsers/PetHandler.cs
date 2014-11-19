@@ -397,8 +397,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Pet Guid", guid1);
             packet.WriteGuid("Pet Number", guid2);
 
-            var PetGuid = new WowGuid(BitConverter.ToUInt64(guid1, 0));
-            var PetNumberGuid = new WowGuid(BitConverter.ToUInt64(guid2, 0));
+            var PetGuid = new WowGuid64(BitConverter.ToUInt64(guid1, 0));
+            var PetNumberGuid = new WowGuid64(BitConverter.ToUInt64(guid2, 0));
             var PetNumber = PetNumberGuid.GetEntry().ToString(CultureInfo.InvariantCulture); // Not sure about this.
 
             // Store temporary name from Pet Number GUID (will be retrieved as uint64 in SMSG_PET_NAME_QUERY_RESPONSE)

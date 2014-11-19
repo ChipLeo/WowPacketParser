@@ -243,6 +243,18 @@ namespace WowPacketParser.Misc
                     return HighGuidType.Pet;
                 case HighGuidTypeLegacy.Vehicle:
                     return HighGuidType.Vehicle;
+                case HighGuidTypeLegacy.Account:
+                    return HighGuidType.BNetAccount;
+                case HighGuidTypeLegacy.AreaTrigger:
+                    return HighGuidType.AreaTrigger;
+                case HighGuidTypeLegacy.Loot:
+                    return HighGuidType.LootObject;
+                case HighGuidTypeLegacy.Corpse:
+                    return HighGuidType.Corpse;
+                case HighGuidTypeLegacy.Player2:
+                    return HighGuidType.Player;
+                case HighGuidTypeLegacy.Toy:
+                    return HighGuidType.Item;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

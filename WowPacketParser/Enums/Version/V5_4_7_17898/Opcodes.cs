@@ -303,7 +303,6 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.SMSG_FEATURE_SYSTEM_STATUS, 0x1560},
             {Opcode.SMSG_FRIEND_STATUS, 0x0707},
             {Opcode.SMSG_FLIGHT_SPLINE_SYNC, 0x0992 | 0x20000},
-            {Opcode.SMSG_FORCE_SEND_QUEUED_PACKETS, 0x01B9},
             {Opcode.SMSG_GROUP_CANCEL, 0x0071},
             {Opcode.SMSG_INITIALIZE_FACTIONS, 0x11E1},
             {Opcode.SMSG_INITIAL_SPELLS, 0x1B05 | 0x20000},

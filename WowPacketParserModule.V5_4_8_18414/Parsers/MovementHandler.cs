@@ -3475,7 +3475,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             packet.WriteGuid("Unit", guid3);
 
-            var guidUnit = new Guid(BitConverter.ToUInt64(guid3, 0));
+            var guidUnit = new WowGuid64(BitConverter.ToUInt64(guid3, 0));
 
             if (Storage.Objects != null && Storage.Objects.ContainsKey(guidUnit))
             {

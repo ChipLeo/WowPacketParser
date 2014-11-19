@@ -649,7 +649,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     packet.ReadXORByte(transportGuid, 2); // 50
                     packet.ReadUInt32("Transport Time", index); // 76
 
-                    moveInfo.TransportGuid = new Guid(BitConverter.ToUInt64(transportGuid, 0));
+                    moveInfo.TransportGuid = new WowGuid64(BitConverter.ToUInt64(transportGuid, 0));
                     packet.WriteLine("[{0}] Transport GUID {1}", index, moveInfo.TransportGuid);
                     packet.WriteLine("[{0}] Transport Position: {1}", index, moveInfo.TransportOffset);
                 }
@@ -791,7 +791,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadSingle("Swim Speed", index); // 180
                 moveInfo.Position.Z = packet.ReadSingle(); // 36
 
-                packet.WriteLine("[{0}] GUID 1: {1}", index, new Guid(BitConverter.ToUInt64(guid1, 0)));
+                packet.WriteLine("[{0}] GUID 1: {1}", index, new WowGuid64(BitConverter.ToUInt64(guid1, 0)));
                 packet.WriteLine("[{0}] Position: {1}", index, moveInfo.Position);
                 packet.WriteLine("[{0}] Orientation: {1}", index, moveInfo.Orientation);
             }
@@ -872,7 +872,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadXORByte(goTransportGuid, 3); // 379
                 packet.ReadXORByte(goTransportGuid, 7); // 383
 
-                moveInfo.TransportGuid = new Guid(BitConverter.ToUInt64(goTransportGuid, 0));
+                moveInfo.TransportGuid = new WowGuid64(BitConverter.ToUInt64(goTransportGuid, 0));
                 packet.WriteLine("[{0}] GO Transport GUID {1}", index, moveInfo.TransportGuid);
                 packet.WriteLine("[{0}] GO Transport Position: {1}", index, moveInfo.TransportOffset);
             }

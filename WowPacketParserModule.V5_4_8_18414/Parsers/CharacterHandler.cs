@@ -222,7 +222,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_CHAR_ENUM)]
         public static void HandleCharEnum(Packet packet)
         {
-            // С–РјРµРЅР° РЅРµ РїРµСЂРµРІС–СЂРµРЅРѕ, Р»РёС€Рµ РїРѕСЃР»С–РґРѕРІРЅС–СЃС‚СЊ С‚РёРїС–РІ РґР°РЅРЅРёС…
+            // імена не перевірено, лише послідовність типів данних
             var unkCounter = packet.ReadBits("Unk Counter", 21);//[DW5]
             var count = packet.ReadBits("Char count", 16);//[DW9]
 
@@ -311,7 +311,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadXORByte(guildGuids[c], 7); //95
                 var z = packet.ReadSingle("Position Z", c); //54h
 
-                var playerGuid = new Guid(BitConverter.ToUInt64(charGuids[c], 0));
+                var playerGuid = new WowGuid64(BitConverter.ToUInt64(charGuids[c], 0));
 
                 packet.WriteGuid("Character GUID", charGuids[c], c);
                 packet.WriteGuid("Guild GUID", guildGuids[c], c);

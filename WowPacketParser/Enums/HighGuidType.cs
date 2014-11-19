@@ -56,10 +56,12 @@ namespace WowPacketParser.Enums
         BattleGround1 = 0x101,
         InstanceSave  = 0x104,
         Group         = 0x105,
+        Account       = 0x108,
         BattleGround2 = 0x109,
         MOTransport   = 0x10C,
         Guild         = 0x10F,
         Item          = 0x400, // Container
+        Toy           = 0x408,
         DynObject     = 0xF00, // Corpses
         GameObject    = 0xF01,
         Transport     = 0xF02,
@@ -68,6 +70,7 @@ namespace WowPacketParser.Enums
         Vehicle       = 0xF05,
         SceneObject   = 0xF06,
         Loot          = 0xF09,
+        AreaTrigger   = 0xF0B,
         Corpse        = 0xF0C,
     }
 }

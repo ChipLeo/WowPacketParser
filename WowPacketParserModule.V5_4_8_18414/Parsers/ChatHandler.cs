@@ -191,7 +191,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ParseBitStream(guid, 4, 7, 1, 5, 0, 6, 2, 3);
             packet.WriteGuid("Sender", guid);
 
-            var unitGuid = new Guid(BitConverter.ToUInt64(guid, 0));
+            var unitGuid = new WowGuid64(BitConverter.ToUInt64(guid, 0));
 
             if (unitGuid.GetObjectType() == ObjectType.Unit)
                 entry = unitGuid.GetEntry();

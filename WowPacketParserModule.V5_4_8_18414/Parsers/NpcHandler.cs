@@ -231,7 +231,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             packet.WriteGuid("Guid", guid);
 
-            var GUID = new Guid(BitConverter.ToUInt64(guid, 0));
+            var GUID = new WowGuid64(BitConverter.ToUInt64(guid, 0));
             gossip.ObjectType = GUID.GetObjectType();
             gossip.ObjectEntry = GUID.GetEntry();
 
@@ -264,11 +264,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             gossipPOI.Flags = (uint)packet.ReadEnum<UnknownFlags>("Flags", TypeCode.Int32);
             var pos = packet.ReadVector2("Coordinates");
             gossipPOI.Icon = packet.ReadEnum<GossipPOIIcon>("Icon", TypeCode.UInt32);
-            gossipPOI.Data = packet.ReadUInt32("Data");
-            gossipPOI.IconName = packet.ReadCString("Icon Name");
+            /*gossipPOI.Data= */packet.ReadUInt32("Data");
+            /*gossipPOI.IconName = */packet.ReadCString("Icon Name");
 
-            gossipPOI.XPos = pos.X;
-            gossipPOI.YPos = pos.Y;
+            gossipPOI.PositionX = pos.X;
+            gossipPOI.PositionY = pos.Y;
 
             Storage.GossipPOIs.Add(LastGossipPOIEntry, gossipPOI, packet.TimeSpan);
         }
@@ -399,7 +399,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             packet.WriteGuid("Guid", guid);
 
-            var vendorGUID = new WowGuid(BitConverter.ToUInt64(guid, 0));
+            var vendorGUID = new WowGuid64(BitConverter.ToUInt64(guid, 0));
             Storage.NpcVendors.Add(vendorGUID.GetEntry(), npcVendor, packet.TimeSpan);
         }
 
@@ -591,7 +591,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             npcTrainer.Type = packet.ReadEnum<TrainerType>("Type", TypeCode.Int32);
 
             packet.WriteGuid("Guid", guid);
-            var GUID = new WowGuid(BitConverter.ToUInt64(guid, 0));
+            var GUID = new WowGuid64(BitConverter.ToUInt64(guid, 0));
 
             if (Storage.NpcTrainers.ContainsKey(GUID.GetEntry()))
             {
