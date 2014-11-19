@@ -291,7 +291,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_SOCKET_GEMS,                              0x02CB | 0x10000}, //+-
             {Opcode.CMSG_SPELLCLICK,                               0x067A | 0x10000}, //+-
             {Opcode.CMSG_SPIRIT_HEALER_ACTIVATE,                   0x0340 | 0x10000}, //++
-            {Opcode.CMSG_SPLIT_ITEM,                               0x02EC | 0x10000}, //--
+            {Opcode.CMSG_SPLIT_ITEM,                               0x02EC | 0x10000}, //+-
             {Opcode.CMSG_STANDSTATECHANGE,                         0x03E6 | 0x10000}, //+-
             {Opcode.CMSG_SUBMIT_BUG,                               0x0861 | 0x10000}, //+-
             {Opcode.CMSG_SUBMIT_COMPLAIN,                          0x030D | 0x10000}, //--

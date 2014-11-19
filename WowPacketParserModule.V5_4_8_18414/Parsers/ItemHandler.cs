@@ -401,7 +401,26 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_SPLIT_ITEM)]
         public static void HandleSplitItem(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadByte("unk21"); // 21
+            packet.ReadInt32("unk16"); // 16
+            packet.ReadByte("unk23"); // 23
+            packet.ReadByte("unk22"); // 22
+            packet.ReadByte("unk20"); // 20
+
+            var unk24 = packet.ReadBits("unk24", 2); // 24
+            var unk28 = new bool[unk24, 2];
+            for (var i = 0; i < unk24; i++)
+            {
+                unk28[i, 0] = !packet.ReadBit("!unk28", i);
+                unk28[i, 1] = !packet.ReadBit("!unk29", i);
+            }
+            for (var i = 0; i < unk24; i++)
+            {
+                if (unk28[i, 1])
+                    packet.ReadByte("unk29", i);
+                if (unk28[i, 0])
+                    packet.ReadByte("unk28", i);
+            }
         }
 
         [Parser(Opcode.CMSG_SWAP_INV_ITEM)]
