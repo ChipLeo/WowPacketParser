@@ -236,7 +236,38 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_REPAIR_ITEM)]
         public static void HandleRepairItem(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid24 = new byte[8];
+            var guid32 = new byte[8];
+            guid24[2] = packet.ReadBit();
+            guid24[5] = packet.ReadBit();
+            guid32[3] = packet.ReadBit();
+            packet.ReadBit("unk16"); // 16
+            guid32[7] = packet.ReadBit();
+            guid24[4] = packet.ReadBit();
+            guid32[2] = packet.ReadBit();
+            guid24[0] = packet.ReadBit();
+            guid24[3] = packet.ReadBit();
+            guid32[6] = packet.ReadBit();
+            guid32[1] = packet.ReadBit();
+            guid32[4] = packet.ReadBit();
+            guid24[6] = packet.ReadBit();
+            guid32[5] = packet.ReadBit();
+            guid32[0] = packet.ReadBit();
+            guid24[7] = packet.ReadBit();
+            guid24[1] = packet.ReadBit();
+
+            packet.ParseBitStream(guid24, 2);
+            packet.ParseBitStream(guid32, 1);
+            packet.ParseBitStream(guid24, 1);
+            packet.ParseBitStream(guid32, 4, 7, 3, 2);
+            packet.ParseBitStream(guid24, 7);
+            packet.ParseBitStream(guid32, 5, 0);
+            packet.ParseBitStream(guid24, 5, 3, 4, 6);
+            packet.ParseBitStream(guid32, 6);
+            packet.ParseBitStream(guid24, 0);
+
+            packet.WriteGuid("Guid24", guid24);
+            packet.WriteGuid("Guid32", guid32);
         }
 
         [Parser(Opcode.CMSG_REQUEST_HOTFIX)]
