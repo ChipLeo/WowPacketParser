@@ -57,6 +57,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_MAIL_TAKE_MONEY)]
         public static void HandleTakeMoney(Packet packet)
         {
+            packet.ReadInt32("Mail ID");
+            packet.ReadInt64("Money");
             var guid = packet.StartBitStream(7, 6, 3, 2, 4, 5, 0, 1);
             packet.ParseBitStream(guid, 7, 1, 4, 0, 3, 2, 6, 5);
             packet.WriteGuid("GUID", guid);

@@ -167,7 +167,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_MAIL_MARK_AS_READ,                        0x0241 | 0x10000}, //--
             {Opcode.CMSG_MAIL_RETURN_TO_SENDER,                    0x1FA8 | 0x10000}, //--
             {Opcode.CMSG_MAIL_TAKE_ITEM,                           0x1371 | 0x10000}, //--
-            {Opcode.CMSG_MAIL_TAKE_MONEY,                          0x06FA | 0x10000}, //--
+            {Opcode.CMSG_MAIL_TAKE_MONEY,                          0x06FA | 0x10000}, //+-
             {Opcode.CMSG_MESSAGECHAT_ADDON_WHISPER,                0x0EBB | 0x10000}, //++
             {Opcode.CMSG_MESSAGECHAT_AFK,                          0x0EAB | 0x10000}, //++
             {Opcode.CMSG_MESSAGECHAT_CHANNEL,                      0x00BB | 0x10000}, //--
