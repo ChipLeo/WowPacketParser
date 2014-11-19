@@ -355,6 +355,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_RANDOMIZE_CHAR_NAME)]
+        public static void HandleGenerateRandomCharacterNameResponse(Packet packet)
+        {
+            packet.ReadBit("Success");
+            packet.ReadWoWString("Name", packet.ReadBits(6));
+        }
         [Parser(Opcode.SMSG_TEXT_EMOTE)]
         public static void HandleSTextEmote(Packet packet)
         {
