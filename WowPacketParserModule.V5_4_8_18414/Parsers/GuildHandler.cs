@@ -316,7 +316,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_PETITION_QUERY)]
         public static void HandlePetitionQuery(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = packet.StartBitStream(2, 3, 1, 0, 4, 7, 6, 5);
+            packet.ParseBitStream(guid, 0, 4, 7, 5, 1, 6, 3, 2);
+            packet.WriteGuid("GUID", guid);
         }
 
         [Parser(Opcode.CMSG_PETITION_RENAME)]
