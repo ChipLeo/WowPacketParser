@@ -209,7 +209,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_OPEN_ITEM)]
         public static void HandleOpenItem(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadByte("Bag");
+            packet.ReadByte("Slot");
         }
 
         [Parser(Opcode.CMSG_READ_ITEM)]
