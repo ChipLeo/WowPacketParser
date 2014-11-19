@@ -765,10 +765,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_RAID_READY_CHECK_COMPLETED)]
         [Parser(Opcode.SMSG_RAID_READY_CHECK_CONFIRM)]
         [Parser(Opcode.SMSG_RANDOM_ROLL)]
-        [Parser(Opcode.SMSG_RANDOMIZE_CHAR_NAME)]
-        public static void HandleRaidreadycheck(Packet packet)
+        public static void HandleSRandomRoll(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadInt32("unk6"); // 6
+            packet.ReadInt32("unk7"); // 7
+            packet.ReadInt32("unk8"); // 8
+            var guid = packet.StartBitStream(0, 6, 7, 1, 4, 5, 2, 3);
+            packet.ParseBitStream(guid, 5, 4, 2, 0, 3, 1, 6, 7);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_REQUEST_CEMETERY_LIST_RESPONSE)]
