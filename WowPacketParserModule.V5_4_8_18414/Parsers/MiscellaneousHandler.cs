@@ -763,7 +763,52 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.SMSG_RAID_READY_CHECK_COMPLETED)]
+        public static void HandleRaidreadycheck(Packet packet)
+        {
+            var guid = packet.StartBitStream(4, 2, 5, 7, 1, 0, 3, 6);
+            packet.ParseBitStream(guid, 6, 0, 3, 1, 5);
+            packet.ReadByte("unk3"); // 3
+            packet.ParseBitStream(guid, 7, 2, 4);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_RAID_READY_CHECK_CONFIRM)]
+        public static void HandleSRaidReadyCheckConfirm(Packet packet)
+        {
+            var guid16 = new byte[8];
+            var guid24 = new byte[8];
+
+            guid16[4] = packet.ReadBit();
+            guid24[5] = packet.ReadBit();
+            guid24[3] = packet.ReadBit();
+            packet.ReadBit("unk32"); // 32
+            guid16[2] = packet.ReadBit();
+            guid24[6] = packet.ReadBit();
+            guid16[3] = packet.ReadBit();
+            guid24[0] = packet.ReadBit();
+            guid24[1] = packet.ReadBit();
+            guid16[1] = packet.ReadBit();
+            guid16[5] = packet.ReadBit();
+            guid24[7] = packet.ReadBit();
+            guid24[4] = packet.ReadBit();
+            guid16[6] = packet.ReadBit();
+            guid24[2] = packet.ReadBit();
+            guid16[0] = packet.ReadBit();
+            guid16[7] = packet.ReadBit();
+
+            packet.ParseBitStream(guid24, 4, 2, 1);
+            packet.ParseBitStream(guid16, 4, 2);
+            packet.ParseBitStream(guid24, 0);
+            packet.ParseBitStream(guid16, 5, 3);
+            packet.ParseBitStream(guid24, 7);
+            packet.ParseBitStream(guid16, 6, 1);
+            packet.ParseBitStream(guid24, 6, 3, 5);
+            packet.ParseBitStream(guid16, 0, 7);
+
+            packet.WriteGuid("Guid16", guid16);
+            packet.WriteGuid("Guid24", guid24);
+        }
+
         [Parser(Opcode.SMSG_RANDOM_ROLL)]
         public static void HandleSRandomRoll(Packet packet)
         {
