@@ -308,7 +308,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_PETITION_DECLINE)]
         public static void HandlePetitionDecline(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = packet.StartBitStream(5, 6, 4, 3, 1, 7, 0, 2);
+            packet.ParseBitStream(guid, 6, 2, 1, 5, 0, 7, 4, 3);
+            packet.WriteGuid("GUID", guid);
         }
 
         [Parser(Opcode.CMSG_PETITION_QUERY)]
