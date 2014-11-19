@@ -947,7 +947,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_ITEM_TIME_UPDATE)]
         public static void HandleItemTimeUpdate(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = packet.StartBitStream(5, 3, 4, 1, 2, 6, 0, 7);
+            packet.ParseBitStream(guid, 2, 6, 7, 4, 0, 3, 5, 1);
+            packet.ReadInt32("Duration");
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_READ_ITEM_OK)]

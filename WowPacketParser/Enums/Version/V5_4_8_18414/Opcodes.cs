@@ -594,7 +594,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_INVENTORY_CHANGE_FAILURE,                 0x0C1E | 0x20000}, //--
             {Opcode.SMSG_ITEM_ENCHANT_TIME_UPDATE,                 0x10A2 | 0x20000}, //++
             {Opcode.SMSG_ITEM_PUSH_RESULT,                         0x0E0A | 0x20000}, //++
-            {Opcode.SMSG_ITEM_TIME_UPDATE,                         0x18C1 | 0x20000}, //--
+            {Opcode.SMSG_ITEM_TIME_UPDATE,                         0x18C1 | 0x20000}, //+-
             {Opcode.SMSG_ITEM_UPGRADE_RESULT,                      0x0222 | 0x20000}, //++
             {Opcode.SMSG_LEARNED_DANCE_MOVES,                      0x043F | 0x20000}, //++
             {Opcode.SMSG_LEARNED_SPELL,                            0x129A | 0x20000}, //++
