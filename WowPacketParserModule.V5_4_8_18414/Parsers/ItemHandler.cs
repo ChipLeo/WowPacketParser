@@ -426,13 +426,49 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_SWAP_INV_ITEM)]
         public static void HandleSwapInventoryItem(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadByte("Slot 2"); // 17
+            packet.ReadByte("Slot 1"); // 16
+
+            var count = packet.ReadBits("Count", 2); // 20
+            var hasBag = new bool[count];
+            var hasSlot = new bool[count];
+            for (var i = 0; i < count; i++)
+            {
+                hasSlot[i] = !packet.ReadBit("!hasSlot", i); // 25
+                hasBag[i] = !packet.ReadBit("!hasBag", i); // 24
+            }
+            for (var i = 0; i < count; i++)
+            {
+                if (hasSlot[i])
+                    packet.ReadByte("Slot", i);
+                if (hasBag[i])
+                    packet.ReadByte("Bag", i);
+            }
         }
 
         [Parser(Opcode.CMSG_SWAP_ITEM)]
         public static void HandleSwapItem(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadByte("Slot 1"); // 34
+            packet.ReadByte("Bag 2"); // 33
+            packet.ReadByte("Slot 2"); // 35
+            packet.ReadByte("Bag 1"); // 32
+
+            var count = packet.ReadBits("Count", 2); // 16
+            var hasBag = new bool[count];
+            var hasSlot = new bool[count];
+            for (var i = 0; i < count; i++)
+            {
+                hasSlot[i] = !packet.ReadBit("!hasSlot", i); // 21
+                hasBag[i] = !packet.ReadBit("!hasBag", i); // 20
+            }
+            for (var i = 0; i < count; i++)
+            {
+                if (hasBag[i])
+                    packet.ReadByte("Bag", i);
+                if (hasSlot[i])
+                    packet.ReadByte("Slot", i);
+            }
         }
 
         [Parser(Opcode.CMSG_TRANSMOGRIFY_ITEMS)]
