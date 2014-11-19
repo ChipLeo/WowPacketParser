@@ -296,7 +296,39 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_SELL_ITEM)]
         public static void HandleSellItem(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadInt32("Count"); // 32
+            var guid16 = new byte[8];
+            var guid24 = new byte[8];
+            guid16[4] = packet.ReadBit();
+            guid16[3] = packet.ReadBit();
+            guid16[7] = packet.ReadBit();
+            guid24[6] = packet.ReadBit();
+            guid24[5] = packet.ReadBit();
+            guid24[1] = packet.ReadBit();
+            guid16[5] = packet.ReadBit();
+            guid16[2] = packet.ReadBit();
+            guid16[1] = packet.ReadBit();
+            guid24[2] = packet.ReadBit();
+            guid16[6] = packet.ReadBit();
+            guid24[4] = packet.ReadBit();
+            guid24[0] = packet.ReadBit();
+            guid24[7] = packet.ReadBit();
+            guid24[3] = packet.ReadBit();
+            guid16[0] = packet.ReadBit();
+
+            packet.ParseBitStream(guid24, 6, 3, 1);
+            packet.ParseBitStream(guid16, 1);
+            packet.ParseBitStream(guid24, 2);
+            packet.ParseBitStream(guid16, 7, 5);
+            packet.ParseBitStream(guid24, 7);
+            packet.ParseBitStream(guid16, 2);
+            packet.ParseBitStream(guid24, 0, 5);
+            packet.ParseBitStream(guid16, 3, 6);
+            packet.ParseBitStream(guid24, 4);
+            packet.ParseBitStream(guid16, 4, 0);
+
+            packet.WriteGuid("Guid16", guid16);
+            packet.WriteGuid("Guid24", guid24);
         }
 
         [Parser(Opcode.CMSG_SOCKET_GEMS)]

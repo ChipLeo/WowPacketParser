@@ -268,7 +268,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_SAVE_CUF_PROFILES,                        0x06E6 | 0x10000}, //++
             //{Opcode.CMSG_SELECT_FACTION,                           0x0027 | 0x10000}, //
             {Opcode.CMSG_SELECT_LOOT_SPEC,                         0x1260 | 0x10000}, //--
-            {Opcode.CMSG_SELL_ITEM,                                0x1358 | 0x10000}, //--
+            {Opcode.CMSG_SELL_ITEM,                                0x1358 | 0x10000}, //+-
             {Opcode.CMSG_SEND_MAIL,                                0x1DBA | 0x10000}, //--
             {Opcode.CMSG_SET_ACTIONBAR_TOGGLES,                    0x0672 | 0x10000}, //++
             {Opcode.CMSG_SET_ACTION_BUTTON,                        0x1F8C | 0x10000}, //++
