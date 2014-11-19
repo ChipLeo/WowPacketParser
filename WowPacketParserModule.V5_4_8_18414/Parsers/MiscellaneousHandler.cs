@@ -766,8 +766,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_RAID_READY_CHECK_CONFIRM)]
         [Parser(Opcode.SMSG_RANDOM_ROLL)]
         [Parser(Opcode.SMSG_RANDOMIZE_CHAR_NAME)]
-        [Parser(Opcode.SMSG_TRIGGER_CINEMATIC)]
-        [Parser(Opcode.SMSG_TRIGGER_MOVIE)]
         public static void HandleRaidreadycheck(Packet packet)
         {
             packet.ReadToEnd();
