@@ -102,14 +102,14 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_GET_TIMEZONE_INFORMATION,                 0x18B2 | 0x10000}, //++
             {Opcode.CMSG_GOSSIP_HELLO,                             0x12F3 | 0x10000}, //++
             {Opcode.CMSG_GOSSIP_SELECT_OPTION,                     0x0748 | 0x10000}, //++
-            {Opcode.CMSG_GROUP_ASSISTANT_LEADER,                   0x1897 | 0x10000}, //--
+            {Opcode.CMSG_GROUP_ASSISTANT_LEADER,                   0x1897 | 0x10000}, //+-
             {Opcode.CMSG_GROUP_DISBAND,                            0x1798 | 0x10000}, //++
-            {Opcode.CMSG_GROUP_INVITE,                             0x072D | 0x10000}, //--
-            {Opcode.CMSG_GROUP_INVITE_RESPONSE,                    0x0D61 | 0x10000}, //--
-            {Opcode.CMSG_GROUP_RAID_CONVERT,                       0x032C | 0x10000}, //--
-            {Opcode.CMSG_GROUP_SET_LEADER,                         0x15BB | 0x10000}, //--
-            {Opcode.CMSG_GROUP_SET_ROLES,                          0x1A92 | 0x10000}, //--
-            {Opcode.CMSG_GROUP_UNINVITE_GUID,                      0x0CE1 | 0x10000}, //--
+            {Opcode.CMSG_GROUP_INVITE,                             0x072D | 0x10000}, //+-
+            {Opcode.CMSG_GROUP_INVITE_RESPONSE,                    0x0D61 | 0x10000}, //+-
+            {Opcode.CMSG_GROUP_RAID_CONVERT,                       0x032C | 0x10000}, //+-
+            {Opcode.CMSG_GROUP_SET_LEADER,                         0x15BB | 0x10000}, //+-
+            {Opcode.CMSG_GROUP_SET_ROLES,                          0x1A92 | 0x10000}, //+-
+            {Opcode.CMSG_GROUP_UNINVITE_GUID,                      0x0CE1 | 0x10000}, //+-
             {Opcode.CMSG_GUILD_ACCEPT,                             0x18A2 | 0x10000}, //+-
             {Opcode.CMSG_GUILD_ADD_RANK,                           0x047A | 0x10000}, //--
             {Opcode.CMSG_GUILD_ASSIGN_MEMBER_RANK,                 0x05D0 | 0x10000}, //--
@@ -151,7 +151,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_LF_GUILD_GET_APPLICATIONS,                0x0558 | 0x10000}, //+-
             {Opcode.CMSG_LF_GUILD_REMOVE_APPLICATION,              0x1C53 | 0x10000}, //+-
             {Opcode.CMSG_LFG_PLAYER_LOCK_INFO_REQUEST,             0x006B | 0x10000}, //++
-            {Opcode.CMSG_LFG_TELEPORT,                             0x1AA6 | 0x10000}, //--
+            {Opcode.CMSG_LFG_TELEPORT,                             0x1AA6 | 0x10000}, //+-
             {Opcode.CMSG_LFG_JOIN,                                 0x046B | 0x10000}, //++
             {Opcode.CMSG_LIST_INVENTORY,                           0x02D8 | 0x10000}, //++
             {Opcode.CMSG_LOAD_SCREEN,                              0x1DBD | 0x10000}, //++
@@ -275,7 +275,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_SET_ACTIVE_MOVER,                         0x09F0 | 0x10000}, //++
             {Opcode.CMSG_SET_CONTACT_NOTES,                        0x0937 | 0x10000}, //+-
             {Opcode.CMSG_SET_DUNGEON_DIFFICULTY,                   0x1A36 | 0x10000}, //--
-            {Opcode.CMSG_SET_EVERYONE_IS_ASSISTANT,                0x01E1 | 0x10000}, //--
+            {Opcode.CMSG_SET_EVERYONE_IS_ASSISTANT,                0x01E1 | 0x10000}, //+-
             {Opcode.CMSG_SET_PLAYER_DECLINED_NAMES,                0x09E2 | 0x10000}, //++
             {Opcode.CMSG_SET_PRIMARY_TALENT_TREE,                  0x06C6 | 0x10000}, //+-
             {Opcode.CMSG_SET_PVP,                                  0x02C5 | 0x10000}, //--

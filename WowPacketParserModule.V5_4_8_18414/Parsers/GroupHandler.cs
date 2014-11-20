@@ -11,13 +11,22 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_GROUP_ASSISTANT_LEADER)]
         public static void HandleGroupAssistantLeader(Packet packet)
         {
-            packet.ReadToEnd();
-        }
+            var guid = new byte[8];
 
-        [Parser(Opcode.CMSG_GROUP_CHANGE_SUB_GROUP)]
-        public static void HandleGroupChangesubgroup(Packet packet)
-        {
-            packet.ReadToEnd();
+            packet.ReadByte("unk25"); // 25
+            guid[2] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            var bit24 = packet.ReadBit("unk24"); // 24
+            guid[4] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 5, 1, 0, 7, 3, 6, 2, 4);
+
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_GROUP_DISBAND)]
@@ -31,9 +40,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             var crossRealmGuid = new byte[8];
 
-            packet.ReadInt32("Int114");
-            packet.ReadByte("Byte118");
-            packet.ReadInt32("Int128");
+            packet.ReadInt32("unk592"); // 592
+            packet.ReadByte("unk285"); // 285
+            packet.ReadInt32("unk24"); // 24
             crossRealmGuid[7] = packet.ReadBit();
             var realmNameLen = packet.ReadBits(9);
             crossRealmGuid[3] = packet.ReadBit();
@@ -72,37 +81,41 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_GROUP_RAID_CONVERT)]
         public static void HandleGroupRaidConvert(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadBit("Convert");
         }
 
         [Parser(Opcode.CMSG_GROUP_SET_LEADER)]
         public static void HandleCGroupSetLeader(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadByte("unk24"); // 24
+            var guid = packet.StartBitStream(1, 7, 0, 2, 5, 3, 4, 6);
+            packet.ParseBitStream(guid, 1, 5, 7, 6, 0, 2, 4, 3);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_GROUP_SET_ROLES)]
         public static void HandleGroupSetRoles(Packet packet)
         {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.CMSG_GROUP_SWAP_SUB_GROUP)]
-        public static void HandleGroupSwapSubGroup(Packet packet)
-        {
-            packet.ReadToEnd();
+            packet.ReadByte("unk28"); // 28
+            packet.ReadInt32("unk24"); // 24
+            var guid = packet.StartBitStream(2, 0, 7, 4, 1, 3, 6, 5);
+            packet.ParseBitStream(guid, 1, 5, 2, 6, 7, 0, 4, 3);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_GROUP_UNINVITE_GUID)]
         public static void HandleGroupUninviteGuid(Packet packet)
         {
-            packet.ReadToEnd();
-        }
+            var guid = new byte[8];
 
-        [Parser(Opcode.CMSG_LFG_TELEPORT)]
-        public static void HandleLFGTeleport(Packet packet)
-        {
-            packet.ReadToEnd();
+            packet.ReadByte("unk16"); // 16
+            guid = packet.StartBitStream(6, 4, 3, 2, 0, 1, 7, 5);
+            var reasonLen = packet.ReadBits(8);
+            packet.ReadWoWString("Reason", reasonLen);
+
+            packet.ParseBitStream(guid, 5, 6, 1, 4, 3, 2, 7, 0);
+
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_REQUEST_PARTY_MEMBER_STATS)]
@@ -118,13 +131,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_SET_EVERYONE_IS_ASSISTANT)]
         public static void HandleEveryoneIsAssistant(Packet packet)
         {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.MSG_RANDOM_ROLL)]
-        public static void HandleRandomRollPackets(Packet packet)
-        {
-            packet.ReadToEnd();
+            packet.ReadByte("unk17"); // 17
+            packet.ReadBit("Active"); // 16
         }
 
         [Parser(Opcode.SMSG_GROUP_DECLINE)]
