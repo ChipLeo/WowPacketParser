@@ -837,7 +837,90 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_INVENTORY_CHANGE_FAILURE)]
         public static void HandleInventoryChangeFailure(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid48 = new byte[8];
+            var guid56 = new byte[8];
+
+            guid56[4] = packet.ReadBit();
+            guid48[3] = packet.ReadBit();
+            guid56[6] = packet.ReadBit();
+            guid56[2] = packet.ReadBit();
+            guid48[4] = packet.ReadBit();
+            guid56[5] = packet.ReadBit();
+            guid48[1] = packet.ReadBit();
+            guid48[6] = packet.ReadBit();
+            guid56[0] = packet.ReadBit();
+            guid56[3] = packet.ReadBit();
+            guid56[1] = packet.ReadBit();
+            guid48[2] = packet.ReadBit();
+            guid48[0] = packet.ReadBit();
+            guid48[5] = packet.ReadBit();
+            guid48[7] = packet.ReadBit();
+            guid56[7] = packet.ReadBit();
+
+            packet.ParseBitStream(guid56, 0);
+            packet.ReadByte("Bag"); // 16
+            packet.ParseBitStream(guid56, 6);
+            packet.ParseBitStream(guid48, 4, 0, 7, 3);
+            packet.ParseBitStream(guid56, 1, 5);
+            packet.ParseBitStream(guid48, 5);
+            packet.ParseBitStream(guid56, 7, 2);
+            packet.ParseBitStream(guid48, 1, 6, 2);
+            packet.ParseBitStream(guid56, 3, 4);
+
+            var result = packet.ReadEnum<InventoryResult>("Result", TypeCode.Byte); // 17
+
+            if (result == InventoryResult.ItemMaxLimitCategoryCountExceeded ||
+                result == InventoryResult.ItemMaxLimitCategorySocketedExceeded ||
+                result == InventoryResult.ItemMaxLimitCategoryEquippedExceeded)
+                packet.ReadUInt32("Limit Category"); // 20
+
+            if (result == InventoryResult.EventAutoEquipBindConfirm)
+                packet.ReadInt32("unk40"); // 40
+
+            if (result == InventoryResult.PurchaseLevelTooLow ||
+                result == InventoryResult.CantEquipLevel)
+                packet.ReadInt32("unk44"); // 44
+
+            if (result == InventoryResult.EventAutoEquipBindConfirm)
+            {
+                var guid24 = new byte[8];
+                var guid32 = new byte[8];
+
+                guid24[5] = packet.ReadBit();
+                guid32[2] = packet.ReadBit();
+                guid32[0] = packet.ReadBit();
+                guid32[3] = packet.ReadBit();
+                guid24[3] = packet.ReadBit();
+                guid32[5] = packet.ReadBit();
+                guid24[0] = packet.ReadBit();
+                guid32[6] = packet.ReadBit();
+                guid32[7] = packet.ReadBit();
+                guid24[1] = packet.ReadBit();
+                guid32[1] = packet.ReadBit();
+                guid24[4] = packet.ReadBit();
+                guid24[2] = packet.ReadBit();
+                guid24[7] = packet.ReadBit();
+                guid32[4] = packet.ReadBit();
+                guid24[6] = packet.ReadBit();
+
+                packet.ParseBitStream(guid32, 7);
+                packet.ParseBitStream(guid24, 3, 1, 4);
+                packet.ParseBitStream(guid32, 1);
+                packet.ParseBitStream(guid24, 7);
+                packet.ParseBitStream(guid32, 6, 2);
+                packet.ParseBitStream(guid24, 6);
+                packet.ParseBitStream(guid32, 0);
+                packet.ParseBitStream(guid24, 2);
+                packet.ParseBitStream(guid32, 4);
+                packet.ParseBitStream(guid24, 0, 5);
+                packet.ParseBitStream(guid32, 5, 3);
+
+                packet.WriteGuid("Guid24", guid24);
+                packet.WriteGuid("Guid32", guid32);
+            }
+
+            packet.WriteGuid("Guid48", guid48);
+            packet.WriteGuid("Guid56", guid56);
         }
 
         [Parser(Opcode.SMSG_ITEM_ENCHANT_TIME_UPDATE)]
