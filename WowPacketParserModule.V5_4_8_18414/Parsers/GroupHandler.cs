@@ -372,7 +372,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_GROUP_SET_LEADER)]
         public static void HandleSGroupSetLeader(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadByte("unk65"); // 65
+            packet.ReadWoWString("Name", packet.ReadBits(6));
         }
 
         [Parser(Opcode.SMSG_GROUP_SET_ROLE)]

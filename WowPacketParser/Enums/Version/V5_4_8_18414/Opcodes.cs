@@ -557,7 +557,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GROUP_DESTROYED,                          0x1B27 | 0x20000}, //--
             {Opcode.SMSG_GROUP_INVITE,                             0x0A8F | 0x20000}, //--
             {Opcode.SMSG_GROUP_LIST,                               0x0CBB | 0x20000}, //--
-            {Opcode.SMSG_GROUP_SET_LEADER,                         0x18BF | 0x20000}, //--
+            {Opcode.SMSG_GROUP_SET_LEADER,                         0x18BF | 0x20000}, //+-
             {Opcode.SMSG_GROUP_SET_ROLE,                           0x1E1F | 0x20000}, //--
             {Opcode.SMSG_GUILD_ACHIEVEMENT_DATA,                   0x0EF8 | 0x20000}, //++
             {Opcode.SMSG_GUILD_BANK_LIST,                          0x0B79 | 0x20000}, //--
