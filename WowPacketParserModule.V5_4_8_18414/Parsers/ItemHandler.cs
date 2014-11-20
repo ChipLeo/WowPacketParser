@@ -524,7 +524,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_USE_ITEM)]
+        [Parser(Opcode.CMSG_USE_ITEM)] // sub_696A02
         public static void HandleUseItem2(Packet packet)
         {
             packet.ReadToEnd();

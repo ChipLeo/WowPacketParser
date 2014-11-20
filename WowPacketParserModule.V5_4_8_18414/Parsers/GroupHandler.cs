@@ -8,18 +8,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class GroupHandler
     {
-        [Parser(Opcode.CMSG_GROUP_ACCEPT)]
-        public static void HandleGroupAccept(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.CMSG_GROUP_ACCEPT_DECLINE)]
-        public static void HandleGroupAcceptDecline(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
         [Parser(Opcode.CMSG_GROUP_ASSISTANT_LEADER)]
         public static void HandleGroupAssistantLeader(Packet packet)
         {
@@ -129,30 +117,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
         [Parser(Opcode.CMSG_SET_EVERYONE_IS_ASSISTANT)]
         public static void HandleEveryoneIsAssistant(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.MSG_MINIMAP_PING)]
-        public static void HandleServerMinimapPing(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.MSG_PARTY_ASSIGNMENT)]
-        public static void HandlePartyAssigment(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.MSG_RAID_READY_CHECK)]
-        public static void HandleRaidReadyCheck(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.MSG_RAID_READY_CHECK_CONFIRM)]
-        public static void HandleRaidReadyCheckConfirm(Packet packet)
         {
             packet.ReadToEnd();
         }
@@ -463,36 +427,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadByte("byte", i);
             }
             packet.ReadWoWString("str", count);
-        }
-
-        [Parser(Opcode.SMSG_PARTY_MEMBER_STATS_FULL)]
-        public static void HandlePartyMemberStatsFull(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.SMSG_RAID_GROUP_ONLY)]
-        public static void HandleRaidGroupOnly(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.SMSG_RAID_MARKERS_CHANGED)]
-        public static void HandleRaidMarkersChanged(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.SMSG_RAID_SUMMON_FAILED)]
-        public static void HandleRaidSummonFailed(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.SMSG_REAL_GROUP_UPDATE)]
-        public static void HandleRealGroupUpdate(Packet packet)
-        {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_GROUP_DESTROYED)]
