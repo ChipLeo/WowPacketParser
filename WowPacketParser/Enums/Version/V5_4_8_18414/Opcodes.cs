@@ -80,14 +80,14 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_CHAT_IGNORED,                             0x048A | 0x10000}, //+-
             {Opcode.CMSG_CLEAR_RAID_MARKER,                        0x1443 | 0x10000}, //+-
             {Opcode.CMSG_CLEAR_TRADE_ITEM,                         0x00A7 | 0x10000}, //++
-            {Opcode.CMSG_CONTACT_LIST,                             0x0BB4 | 0x10000}, //--
+            {Opcode.CMSG_CONTACT_LIST,                             0x0BB4 | 0x10000}, //+-
             //{Opcode.CMSG_CORPSE_MAP_POSITION_QUERY,                0x0150 | 0x10000}, //-- ??
             {Opcode.CMSG_CORPSE_QUERY,                             0x1FBE | 0x10000}, //++
             {Opcode.CMSG_CREATURE_QUERY,                           0x0842 | 0x10000}, //++
             {Opcode.CMSG_DEL_FRIEND,                               0x1103 | 0x10000}, //+-
             {Opcode.CMSG_DEL_IGNORE,                               0x0737 | 0x10000}, //+-
             {Opcode.CMSG_DESTROY_ITEM,                             0x0026 | 0x10000}, //+-
-            {Opcode.CMSG_DUEL_PROPOSED,                            0x1A26 | 0x10000}, //--
+            {Opcode.CMSG_DUEL_PROPOSED,                            0x1A26 | 0x10000}, //+-
             {Opcode.CMSG_DUEL_RESPONSE,                            0x03E2 | 0x10000}, //+-
             {Opcode.CMSG_EMOTE,                                    0x1924 | 0x10000}, //++
             {Opcode.CMSG_ENABLETAXI,                               0x0741 | 0x10000}, //++
@@ -885,7 +885,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0612,                                 0x0612 | 0x20000}, //++ pair 1886
             {Opcode.SMSG_UNK_07F5,                                 0x07F5 | 0x20000}, //++
             {Opcode.SMSG_UNK_0A8B,                                 0x0A8B | 0x20000}, //++
-            {Opcode.SMSG_UNK_0B22,                                 0x0B22 | 0x20000}, //-- pair 0C1B
+            {Opcode.SMSG_UNK_0B22,                                 0x0B22 | 0x20000}, //-- pair 0C1B coded
             {Opcode.SMSG_UNK_0C1A,                                 0x0C1A | 0x20000}, //-- pair 17BA
             {Opcode.SMSG_UNK_0C44,                                 0x0C44 | 0x20000}, //+-
             {Opcode.SMSG_UNK_0D51,                                 0x0D51 | 0x20000}, //++
