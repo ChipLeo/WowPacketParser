@@ -227,7 +227,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_PLAYER_LOGIN,                             0x158F | 0x10000}, //++
             {Opcode.CMSG_PVP_LOG_DATA,                             0x14C2 | 0x10000}, //+-
             {Opcode.CMSG_QUERY_GUILD_REWARDS,                      0x06C4 | 0x10000}, //+-
-            {Opcode.CMSG_QUERY_GUILD_XP,                           0x05F8 | 0x10000}, //--
+            {Opcode.CMSG_QUERY_GUILD_XP,                           0x05F8 | 0x10000}, //+-
             {Opcode.CMSG_QUERY_INSPECT_ACHIEVEMENTS,               0x0373 | 0x10000}, //++
             {Opcode.CMSG_QUERY_NEXT_MAIL_TIME,                     0x077B | 0x10000}, //++
             {Opcode.CMSG_QUERY_TIME,                               0x0640 | 0x10000}, //++

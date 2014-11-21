@@ -374,7 +374,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_QUERY_GUILD_XP)]
         public static void HandleQueryGuildXp(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = packet.StartBitStream(5, 6, 0, 1, 3, 7, 4, 2);
+            packet.ParseBitStream(guid, 4, 6, 3, 0, 7, 5, 2, 1);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_TURN_IN_PETITION)]
