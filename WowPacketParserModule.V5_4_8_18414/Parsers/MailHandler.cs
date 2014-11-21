@@ -72,7 +72,44 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_SEND_MAIL)]
         public static void HandleSendMail(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadInt32("unk2588"); // always 41
+            packet.ReadInt32("unk2592");
+            packet.ReadInt64("COD");
+            packet.ReadInt64("Money");
+            var guid = new byte[8];
+            guid[0] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+
+            var unk587 = packet.ReadBits(11);
+
+            guid[3] = packet.ReadBit();
+
+            var unk24 = packet.ReadBits(9);
+            guid[7] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            var unk2596 = packet.ReadBits("Item count", 5);
+
+            var guid2600 = new byte[unk2596][];
+            for (var i = 0; i < unk2596; i++)
+                guid2600[i] = packet.StartBitStream(1, 7, 2, 5, 0, 6, 3, 4);
+
+            var unk330 = packet.ReadBits(9);
+            guid[2] = packet.ReadBit();
+            for (var i = 0; i < unk2596; i++)
+            {
+                packet.ReadByte("Slot", i);
+                packet.ParseBitStream(guid2600[i], 3, 0, 2, 1, 6, 5, 7, 4);
+                packet.WriteGuid("Item Guid", guid2600[i], i);
+            }
+            packet.ParseBitStream(guid, 1);
+            packet.ReadWoWString("Body", unk587);
+            packet.ParseBitStream(guid, 0);
+            packet.ReadWoWString("Subject", unk330);
+            packet.ParseBitStream(guid, 2, 6, 5, 7, 3, 4);
+            packet.ReadWoWString("Receiver", unk24);
+            packet.WriteGuid("Mailbox Guid", guid);
         }
 
         [Parser(Opcode.SMSG_MAIL_LIST_RESULT)]
