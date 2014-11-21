@@ -158,7 +158,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_LOG_DISCONNECT,                           0x10B3 | 0x10000}, //++
             {Opcode.CMSG_LOGOUT_CANCEL,                            0x06C1 | 0x10000}, //--
             {Opcode.CMSG_LOGOUT_REQUEST,                           0x1349 | 0x10000}, //+-
-            {Opcode.CMSG_LOOT,                                     0x1CE2 | 0x10000}, //--
+            {Opcode.CMSG_LOOT,                                     0x1CE2 | 0x10000}, //+-
             {Opcode.CMSG_LOOT_METHOD,                              0x0DE1 | 0x10000}, //+- ??
             {Opcode.CMSG_LOOT_MONEY,                               0x02F6 | 0x10000}, //+-
             {Opcode.CMSG_LOOT_RELEASE,                             0x0840 | 0x10000}, //++
@@ -170,7 +170,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_MAIL_TAKE_MONEY,                          0x06FA | 0x10000}, //++
             {Opcode.CMSG_MESSAGECHAT_ADDON_WHISPER,                0x0EBB | 0x10000}, //++
             {Opcode.CMSG_MESSAGECHAT_AFK,                          0x0EAB | 0x10000}, //++
-            {Opcode.CMSG_MESSAGECHAT_CHANNEL,                      0x00BB | 0x10000}, //--
+            {Opcode.CMSG_MESSAGECHAT_CHANNEL,                      0x00BB | 0x10000}, //+-
             {Opcode.CMSG_MESSAGECHAT_DND,                          0x002E | 0x10000}, //++
             {Opcode.CMSG_MESSAGECHAT_EMOTE,                        0x103E | 0x10000}, //+-
             {Opcode.CMSG_MESSAGECHAT_GUILD,                        0x0CAE | 0x10000}, //+-

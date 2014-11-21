@@ -19,12 +19,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_LOOT_MASTER_GIVE)]
-        public static void HandleLootMasterGive(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
         [Parser(Opcode.CMSG_LOOT_METHOD)]
         public static void HandleLootMethod(Packet packet)
         {
@@ -44,49 +38,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_LOOT_ROLL)]
-        public static void HandleLootRoll(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.CMSG_OPT_OUT_OF_LOOT)]
-        public static void HandleOptOutOfLoot(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.CMSG_LOOT_CURRENCY)]
-        [Parser(Opcode.SMSG_CURRENCY_LOOT_REMOVED)]
-        public static void HandleLootCurrency(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.SMSG_LOOT_ALL_PASSED)]
-        public static void HandleLootAllPassed(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
         [Parser(Opcode.SMSG_LOOT_CLEAR_MONEY)]
         public static void HandleLootClearMoney(Packet packet)
         {
             var guid = packet.StartBitStream(6, 0, 4, 1, 3, 5, 2, 7);
             packet.ParseBitStream(guid, 0, 4, 2, 7, 1, 5, 3, 6);
             packet.WriteGuid("Guid", guid);
-        }
-
-        [Parser(Opcode.SMSG_LOOT_CONTENTS)]
-        public static void HandleLootContents(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.SMSG_LOOT_LIST)]
-        public static void Handle(Packet packet)
-        {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_LOOT_MASTER_LIST)]
@@ -422,18 +379,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             packet.WriteGuid("Guid", guid);
             packet.WriteGuid("Guid104", guid104);
-        }
-
-        [Parser(Opcode.SMSG_LOOT_SLOT_CHANGED)]
-        public static void HandleLootSlotChanged(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
-        [Parser(Opcode.SMSG_LOOT_START_ROLL)]
-        public static void HandleStartLoot(Packet packet)
-        {
-            packet.ReadToEnd();
         }
     }
 }
