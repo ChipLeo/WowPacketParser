@@ -408,12 +408,19 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_PET_RENAME)]
         public static void HandlePetRename(Packet packet)
         {
-            packet.ReadGuid("Pet Guid");
-            packet.ReadCString("Name");
-            var declined = packet.ReadBoolean("Is Declined");
-            if (declined)
-                for (var i = 0; i < 5; ++i)
-                    packet.ReadCString("Declined Name", i);
+            packet.ReadInt32("unk16"); // 16
+            var unk20 = packet.ReadBit("unk20"); // 20
+            var unk149 = packet.ReadBit("unk149"); // 149
+            uint unk150 = 0;
+            uint unk22 = 0;
+            if (unk149 == 1)
+                unk150 = packet.ReadBits(7);
+            if (unk20)
+                unk22 = packet.ReadBits(8);
+            if (unk20)
+                packet.ReadWoWString("str1", unk22);
+            if (unk149==1)
+                packet.ReadWoWString("str2", unk150);
         }
 
         [Parser(Opcode.CMSG_PET_SET_ACTION)]
