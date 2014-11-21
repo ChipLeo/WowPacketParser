@@ -8,6 +8,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class GroupHandler
     {
+        [Parser(Opcode.CMSG_CLEAR_RAID_MARKER)]
+        public static void ClearRaidMarker(Packet packet)
+        {
+            packet.ReadByte("Slot ID");
+        }
+
         [Parser(Opcode.CMSG_GROUP_ASSISTANT_LEADER)]
         public static void HandleGroupAssistantLeader(Packet packet)
         {
