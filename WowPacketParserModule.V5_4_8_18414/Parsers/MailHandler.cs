@@ -82,7 +82,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt64("Money");
             var guid = packet.StartBitStream(7, 6, 3, 2, 4, 5, 0, 1);
             packet.ParseBitStream(guid, 7, 1, 4, 0, 3, 2, 6, 5);
-            packet.WriteGuid("GUID", guid);
+            packet.WriteGuid("Mailbox GUID", guid);
         }
 
         [Parser(Opcode.CMSG_QUERY_NEXT_MAIL_TIME)]
@@ -280,12 +280,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var action = packet.ReadEnum<MailActionType>("Mail Action", TypeCode.UInt32);
             packet.ReadUInt32("Item Low GUID");
             packet.ReadUInt32("Item count");
-        }
-
-        [Parser(Opcode.SMSG_SHOW_MAILBOX)]
-        public static void HandleSShowMailbox(Packet packet)
-        {
-            packet.ReadToEnd();
         }
     }
 }
