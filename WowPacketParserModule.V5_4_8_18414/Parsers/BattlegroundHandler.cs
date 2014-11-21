@@ -53,6 +53,19 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_BATTLEFIELD_MGR_ENTRY_INVITE_RESPONSE)]
         public static void HandleBattlefieldMgrEntryInviteResponse(Packet packet)
         {
+            var guid = new byte[8];
+
+            guid[0] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            packet.ReadBoolean("Accepted");
+            guid[4] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            packet.ParseBitStream(guid, 1, 6, 2, 5, 3, 4, 7, 0);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_BATTLEFIELD_MGR_EXIT_REQUEST)]
