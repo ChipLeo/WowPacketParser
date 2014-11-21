@@ -64,12 +64,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("NPC Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_QUESTLOG_REMOVE_QUEST)]
-        public static void HandleQuestlogRemoveQuest(Packet packet)
-        {
-            packet.ReadByte("Slot");
-        }
-
         [Parser(Opcode.CMSG_QUESTGIVER_ACCEPT_QUEST)]
         public static void HandleQuestgiverAcceptQuest(Packet packet)
         {
