@@ -82,8 +82,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             packet.ReadInt32("Entry");
 
-            packet.StartBitStream(guid, 1, 5, 2, 3, 6, 4, 0, 7);
-            packet.ParseBitStream(guid, 6, 4, 0, 3, 7, 5, 2, 1);
+            packet.StartBitStream(guid, 2, 1, 3, 7, 6, 4, 0, 5);
+            packet.ParseBitStream(guid, 0, 6, 3, 5, 1, 7, 4, 2);
 
             packet.WriteGuid("GUID", guid);
         }
