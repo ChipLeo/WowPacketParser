@@ -740,7 +740,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_RANDOMIZE_CHAR_NAME,                      0x169F | 0x20000}, //+-
             {Opcode.SMSG_READ_ITEM_OK,                             0x0305 | 0x20000}, //++
             {Opcode.SMSG_REALM_QUERY_RESPONSE,                     0x063E | 0x20000}, //++
-            {Opcode.SMSG_RECEIVED_MAIL,                            0x182B | 0x20000}, //--
+            {Opcode.SMSG_RECEIVED_MAIL,                            0x182B | 0x20000}, //+-
             {Opcode.SMSG_REDIRECT_CLIENT,                          0x1149 | 0x20000}, //--
             {Opcode.SMSG_REFORGE_RESULT,                           0x141E | 0x20000}, //++
             {Opcode.SMSG_REMOVED_SPELL,                            0x14C3 | 0x20000}, //+-

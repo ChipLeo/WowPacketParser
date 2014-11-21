@@ -213,12 +213,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadSingle("unk16");
         }
 
-        [Parser(Opcode.SMSG_RECEIVED_MAIL)]
-        public static void HandleSReceivedMail(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
         [Parser(Opcode.SMSG_SEND_MAIL_RESULT)]
         public static void HandleSSendMailResult(Packet packet)
         {
