@@ -28,7 +28,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_LOOT_METHOD)]
         public static void HandleLootMethod(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadByte("unk29"); // 29
+            packet.ReadByte("unk28"); // 28
+            packet.ReadInt32("unk24"); // 24
+            var guid = packet.StartBitStream(7, 1, 2, 0, 4, 5, 6, 3);
+            packet.ParseBitStream(guid, 7, 1, 3, 4, 6, 5, 0, 2);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_LOOT_RELEASE)]
