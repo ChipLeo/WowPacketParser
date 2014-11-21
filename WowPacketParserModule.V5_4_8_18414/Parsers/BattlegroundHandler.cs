@@ -522,6 +522,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_BATTLEGROUND_PLAYER_JOINED)]
         public static void HandleBattlegroundPlayerJoined(Packet packet)
         {
+            var guid = packet.StartBitStream(7, 1, 0, 4, 2, 5, 6, 3);
+            packet.ParseBitStream(guid, 0, 3, 7, 5, 2, 6, 4, 1);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_BATTLEGROUND_PLAYER_LEFT)]

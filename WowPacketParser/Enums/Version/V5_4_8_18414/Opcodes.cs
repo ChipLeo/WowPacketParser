@@ -469,7 +469,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BATTLEFIELD_STATUS_ACTIVE,                0x1AAF | 0x20000}, //++
             {Opcode.SMSG_BATTLEFIELD_STATUS_NEEDCONFIRMATION,      0x1EAF | 0x20000}, //++
             {Opcode.SMSG_BATTLEFIELD_STATUS_FAILED,                0x1140 | 0x20000}, //+-
-            {Opcode.SMSG_BATTLEGROUND_PLAYER_JOINED,               0x1E2F | 0x20000}, //--
+            {Opcode.SMSG_BATTLEGROUND_PLAYER_JOINED,               0x1E2F | 0x20000}, //++
             {Opcode.SMSG_BATTLEGROUND_PLAYER_LEFT,                 0x0206 | 0x20000}, //+-
             {Opcode.SMSG_BATTLEGROUND_PLAYER_POSITIONS,            0x060A | 0x20000}, //++
             {Opcode.SMSG_BATTLE_PET_DELETED,                       0x18AB | 0x20000}, //+-
