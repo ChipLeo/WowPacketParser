@@ -296,7 +296,20 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_PETITION_BUY)]
         public static void HandlePetitionBuy(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid144 = new byte[8];
+            guid144[5] = packet.ReadBit();
+            guid144[2] = packet.ReadBit();
+            guid144[3] = packet.ReadBit();
+            var len16 = packet.ReadBits(7);
+            guid144[4] = packet.ReadBit();
+            guid144[1] = packet.ReadBit();
+            guid144[7] = packet.ReadBit();
+            guid144[0] = packet.ReadBit();
+            guid144[6] = packet.ReadBit();
+
+            packet.ReadWoWString("str", len16);
+            packet.ParseBitStream(guid144, 1, 7, 4, 6, 0, 5, 2, 3);
+            packet.WriteGuid("Guid", guid144);
         }
 
         [Parser(Opcode.CMSG_PETITION_DECLINE)]
@@ -319,13 +332,20 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_PETITION_RENAME)]
         public static void HandlePetitionRename(Packet packet)
         {
-            packet.ReadToEnd();
+            var len24 = packet.ReadBits(7);
+            var guid = packet.StartBitStream(7, 4, 6, 2, 0, 5, 3, 1);
+            packet.ParseBitStream(guid, 4, 1, 7);
+            packet.ReadWoWString("str", len24);
+            packet.ParseBitStream(guid, 0, 3, 2, 6, 5);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_PETITION_SHOW_SIGNATURES)]
         public static void HandlePetitionShowSignatures(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = packet.StartBitStream(3, 7, 2, 4, 5, 6, 0, 1);
+            packet.ParseBitStream(guid, 2, 4, 5, 7, 1, 0, 3, 6);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_PETITION_SHOWLIST)]
