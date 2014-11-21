@@ -36,7 +36,21 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_MAIL_MARK_AS_READ)]
         public static void HandleMarkMail(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadInt32("Mail ID");
+            var guid = new byte[8];
+            guid[0] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            packet.ReadBit("unk16"); // 16
+            guid[4] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 1, 7, 2, 5, 6, 3, 4, 0);
+
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_MAIL_RETURN_TO_SENDER)]
