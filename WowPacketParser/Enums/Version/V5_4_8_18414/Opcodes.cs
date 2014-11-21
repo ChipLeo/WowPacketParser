@@ -149,7 +149,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_ITEM_REFUND_INFO,                         0x1258 | 0x10000}, //+-
             {Opcode.CMSG_JOIN_CHANNEL,                             0x148E | 0x10000}, //++
             {Opcode.CMSG_LEARN_TALENT,                             0x02A7 | 0x10000}, //+-
-            {Opcode.CMSG_LEAVE_CHANNEL,                            0x042A | 0x10000}, //--
+            {Opcode.CMSG_LEAVE_CHANNEL,                            0x042A | 0x10000}, //+-
             {Opcode.CMSG_LF_GUILD_ADD_APPLICATION,                 0x0C63 | 0x10000}, //+-
             {Opcode.CMSG_LF_GUILD_BROWSE,                          0x159A | 0x10000}, //+-
             {Opcode.CMSG_LF_GUILD_GET_APPLICATIONS,                0x0558 | 0x10000}, //+-

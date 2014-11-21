@@ -64,6 +64,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_LEAVE_CHANNEL)]
         public static void HandleChannelLeave(Packet packet)
         {
+            packet.ReadInt32("Channel Id");
+            packet.ReadWoWString("Channel Name", packet.ReadBits(7));
         }
 
         [Parser(Opcode.SMSG_USERLIST_REMOVE)]
