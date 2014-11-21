@@ -542,7 +542,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_FLIGHT_SPLINE_SYNC,                       0x0063 | 0x20000}, //++
             {Opcode.SMSG_RESUME_COMMS,                             0x0969 | 0x20000}, //--
             {Opcode.SMSG_FORCE_SET_VEHICLE_REC_ID,                 0x149F | 0x20000}, //++
-            {Opcode.SMSG_FRIEND_STATUS,                            0x0532 | 0x20000}, //--
+            {Opcode.SMSG_FRIEND_STATUS,                            0x0532 | 0x20000}, //++
             {Opcode.SMSG_GAME_SHOP_QUERY_RESPONSE,                 0x1ABF | 0x20000}, //--
             {Opcode.SMSG_GAME_STORE_INGAME_BUY_FAILED,             0x023A | 0x20000}, //++
             {Opcode.SMSG_GAMEOBJECT_CUSTOM_ANIM,                   0x001F | 0x20000}, //++
