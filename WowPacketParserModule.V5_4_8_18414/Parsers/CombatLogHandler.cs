@@ -12,12 +12,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class CombatLogHandler
     {
-        [Parser(Opcode.SMSG_COMBAT_LOG_MULTIPLE)]
-        public static void HandleCombatLogMultiple(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
         [Parser(Opcode.SMSG_PERIODICAURALOG)]
         public static void HandlePeriodicAuraLog(Packet packet)
         {
@@ -110,12 +104,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             packet.WriteGuid("Caster Guid", casterGUID);
             packet.WriteGuid("Target Guid", targetGUID);
-        }
-
-        [Parser(Opcode.SMSG_SPELLBREAKLOG)]
-        public static void HandleSpellBreakLog(Packet packet)
-        {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_SPELLDAMAGESHIELD)]
@@ -552,22 +540,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_SPELLLOGMISS)]
-        public static void HandleSpellLogMiss(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
         [Parser(Opcode.SMSG_SPELLNONMELEEDAMAGELOG)]
         public static void HandleSpellNonMeleeDmgLog(Packet packet)
         {
             ReadSpellNonMeleeDamageLog(ref packet);
-        }
-
-        [Parser(Opcode.SMSG_SPELLSTEALLOG)]
-        public static void HandleSpellStealLog(Packet packet)
-        {
-            packet.ReadToEnd();
         }
 
         private static void ReadSpellNonMeleeDamageLog(ref Packet packet, int index = -1)

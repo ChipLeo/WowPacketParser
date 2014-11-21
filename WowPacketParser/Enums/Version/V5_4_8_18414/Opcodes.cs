@@ -786,12 +786,12 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_SPELL_START,                              0x107A | 0x20000}, //++
             {Opcode.SMSG_SPELL_UPDATE_CHAIN_TARGETS,               0x0D52 | 0x20000}, //++
             {Opcode.SMSG_SPELLDAMAGESHIELD,                        0x05F3 | 0x20000}, //++
-            {Opcode.SMSG_SPELLDISPELLOG,                           0x0DF9 | 0x20000}, //--
-            {Opcode.SMSG_SPELLENERGIZELOG,                         0x0D79 | 0x20000}, //--
-            {Opcode.SMSG_SPELLHEALLOG,                             0x09FB | 0x20000}, //--
+            {Opcode.SMSG_SPELLDISPELLOG,                           0x0DF9 | 0x20000}, //+-
+            {Opcode.SMSG_SPELLENERGIZELOG,                         0x0D79 | 0x20000}, //+-
+            {Opcode.SMSG_SPELLHEALLOG,                             0x09FB | 0x20000}, //+-
             {Opcode.SMSG_SPELLINSTAKILLLOG,                        0x09F8 | 0x20000}, //++
             {Opcode.SMSG_SPELLINTERRUPTLOG,                        0x1851 | 0x20000}, //++
-            {Opcode.SMSG_SPELLLOGEXECUTE,                          0x00D8 | 0x20000}, //--
+            {Opcode.SMSG_SPELLLOGEXECUTE,                          0x00D8 | 0x20000}, //+-
             {Opcode.SMSG_SPELLNONMELEEDAMAGELOG,                   0x1450 | 0x20000}, //++
             {Opcode.SMSG_SPELLORDAMAGE_IMMUNE,                     0x08FB | 0x20000}, //++
             {Opcode.SMSG_SPIRIT_HEALER_CONFIRM,                    0x1EAA | 0x20000}, //++
