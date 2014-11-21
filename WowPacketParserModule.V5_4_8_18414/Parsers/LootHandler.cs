@@ -122,7 +122,40 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_LOOT_RELEASE_RESPONSE)]
         public static void HandleLootReleaseResponse(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid16 = new byte[8];
+            var guid24 = new byte[8];
+
+            guid24[0] = packet.ReadBit();
+            guid24[7] = packet.ReadBit();
+            guid24[5] = packet.ReadBit();
+            guid16[0] = packet.ReadBit();
+            guid24[4] = packet.ReadBit();
+            guid24[6] = packet.ReadBit();
+            guid16[1] = packet.ReadBit();
+            guid24[2] = packet.ReadBit();
+            guid16[5] = packet.ReadBit();
+            guid24[3] = packet.ReadBit();
+            guid16[3] = packet.ReadBit();
+            guid16[2] = packet.ReadBit();
+            guid16[4] = packet.ReadBit();
+            guid24[1] = packet.ReadBit();
+            guid16[6] = packet.ReadBit();
+            guid16[7] = packet.ReadBit();
+
+            packet.ParseBitStream(guid16, 1);
+            packet.ParseBitStream(guid24, 1);
+            packet.ParseBitStream(guid16, 2, 5);
+            packet.ParseBitStream(guid24, 5, 7, 3);
+            packet.ParseBitStream(guid16, 0);
+            packet.ParseBitStream(guid24, 2, 0);
+            packet.ParseBitStream(guid16, 3, 6);
+            packet.ParseBitStream(guid24, 6);
+            packet.ParseBitStream(guid16, 4);
+            packet.ParseBitStream(guid24, 4);
+            packet.ParseBitStream(guid16, 7);
+
+            packet.WriteGuid("Guid16", guid16);
+            packet.WriteGuid("Guid24", guid24);
         }
 
         [Parser(Opcode.SMSG_LOOT_REMOVED)]
