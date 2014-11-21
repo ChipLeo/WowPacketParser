@@ -20,7 +20,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_MAIL_CREATE_TEXT_ITEM)]
         public static void HandleMailCreate(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadInt32("Mail ID");
+            var guid = packet.StartBitStream(4, 1, 6, 2, 5, 3, 0, 7);
+            packet.ParseBitStream(guid, 6, 5, 4, 3, 0, 7, 2, 1);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_MAIL_DELETE)]
