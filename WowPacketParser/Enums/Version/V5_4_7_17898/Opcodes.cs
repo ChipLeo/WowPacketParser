@@ -62,7 +62,7 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.CMSG_GAME_STORE_BUY, 0x1A83 | 0x10000}, // correct name?
             {Opcode.CMSG_GAME_STORE_LIST, 0x1993},
             {Opcode.CMSG_GET_MAIL_LIST, 0x07DD},
-            {Opcode.CMSG_GET_TIMEZONE_INFORMATION, 0x18B2},
+            {Opcode.CMSG_GET_TIMEZONE_INFORMATION, 0x1282},
             {Opcode.CMSG_GM_REQUEST_PLAYER_INFO, 0x022F | 0x10000}, //??
             {Opcode.CMSG_GOSSIP_HELLO, 0x05F6},
             {Opcode.CMSG_GOSSIP_SELECT_OPTION, 0x02D7},

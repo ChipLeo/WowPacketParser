@@ -1104,6 +1104,7 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadUInt16("AnimKit.dbc Id");
         }
 
+        [Parser(Opcode.CMSG_GET_TIMEZONE_INFORMATION)]
         [Parser(Opcode.SMSG_MINIGAME_STATE)]
         [Parser(Opcode.CMSG_KEEP_ALIVE)]
         [Parser(Opcode.CMSG_TUTORIAL_RESET)]
