@@ -68,7 +68,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_MAIL_TAKE_ITEM)]
         public static void HandleMailTakeItem(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadInt32("Mail ID"); // 24
+            packet.ReadInt32("Item low Guid"); // 28
+            var guid = packet.StartBitStream(6, 5, 2, 3, 0, 1, 4, 7);
+            packet.ParseBitStream(guid, 0, 1, 4, 2, 5, 6, 3, 7);
+            packet.WriteGuid("Mailbox Guid", guid);
         }
 
         [Parser(Opcode.CMSG_MAIL_TAKE_MONEY)]
