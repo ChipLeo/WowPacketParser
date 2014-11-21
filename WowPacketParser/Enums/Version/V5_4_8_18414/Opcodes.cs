@@ -61,6 +61,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_BUYBACK_ITEM,                             0x0661 | 0x10000}, //+-
             {Opcode.CMSG_BUY_BANK_SLOT,                            0x12F2 | 0x10000}, //+-
             {Opcode.CMSG_BUY_ITEM,                                 0x02E2 | 0x10000}, //++
+            {Opcode.CMSG_CALENDAR_ADD_EVENT,                       0x0A37 | 0x10000}, //+-
             {Opcode.CMSG_CANCEL_AURA,                              0x1861 | 0x10000}, //++
             {Opcode.CMSG_CANCEL_AUTO_REPEAT_SPELL,                 0x1272 | 0x10000}, //+- hunter pet opcode
             {Opcode.CMSG_CANCEL_CAST,                              0x18C0 | 0x10000}, //++
