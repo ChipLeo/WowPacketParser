@@ -47,6 +47,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_BATTLEFIELD_PORT,                         0x1379 | 0x10000}, //+-
             {Opcode.CMSG_BATTLEMASTER_JOIN,                        0x0769 | 0x10000}, //+-
             {Opcode.CMSG_BATTLEMASTER_JOIN_ARENA,                  0x02D2 | 0x10000}, //++
+            {Opcode.CMSG_BATTLE_CHAR_BOOST,                        0x08E3 | 0x10000}, //+-
             {Opcode.CMSG_BATTLE_PET_DELETE_PET,                    0x18B6 | 0x10000}, //+-
             {Opcode.CMSG_BATTLE_PET_MODIFY_NAME,                   0x1887 | 0x10000}, //+-
             {Opcode.CMSG_BATTLE_PET_NAME_QUERY,                    0x1CE0 | 0x10000}, //+-

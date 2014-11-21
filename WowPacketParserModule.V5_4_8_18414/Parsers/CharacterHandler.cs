@@ -20,6 +20,49 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("Skin Color");
         }
 
+        [Parser(Opcode.CMSG_BATTLE_CHAR_BOOST)]
+        public static void HandleBattleCharBoostClient(Packet packet)
+        {
+            byte[] guid = new byte[8];
+            byte[] guid2 = new byte[8];
+
+            packet.ReadInt32("unk int32");
+            guid2[1] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid2[5] = packet.ReadBit();
+            guid2[4] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid2[6] = packet.ReadBit();
+            guid2[0] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid2[3] = packet.ReadBit();
+            guid2[7] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid2[2] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            var charInfo = !packet.ReadBit("Not Contains Char Info");
+            guid[7] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+
+            packet.ReadXORByte(guid, 2);
+            packet.ReadXORByte(guid2, 0);
+            packet.ParseBitStream(guid, 0, 7);
+            packet.ReadXORByte(guid2, 7);
+            packet.ReadXORByte(guid, 3);
+            packet.ParseBitStream(guid2, 6, 4, 5);
+            packet.ParseBitStream(guid, 1, 6, 4);
+            packet.ParseBitStream(guid2, 1, 2, 3);
+            packet.ReadXORByte(guid, 5);
+            if (charInfo)
+            {
+                int hexOutput = packet.ReadInt32("Char Info");
+                packet.WriteLine(string.Format("Hex Output {0:X}", hexOutput));
+            }
+            packet.WriteGuid("Player GUID", guid);
+            packet.WriteGuid(guid2);
+        }
+
         [Parser(Opcode.CMSG_CHAR_CREATE)]
         public static void HandleClientCharCreate(Packet packet)
         {
