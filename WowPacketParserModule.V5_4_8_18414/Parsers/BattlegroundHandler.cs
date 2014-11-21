@@ -71,6 +71,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_BATTLEFIELD_MGR_EXIT_REQUEST)]
         public static void HandleBattlefieldMgrExitRequest(Packet packet)
         {
+            var guid = packet.StartBitStream(3, 2, 4, 1, 7, 0, 5, 6);
+            packet.ParseBitStream(guid, 5, 6, 2, 3, 0, 4, 7, 1);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_BATTLEFIELD_MGR_QUEUE_INVITE_RESPONSE)]
