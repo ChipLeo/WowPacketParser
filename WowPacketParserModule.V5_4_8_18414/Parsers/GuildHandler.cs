@@ -7,12 +7,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class GuildHandler
     {
-        [Parser(Opcode.CMSG_AUTO_DECLINE_GUILD_INVITES)]
-        public static void HandleAutodeclineGuildInvites(Packet packet)
-        {
-            packet.ReadToEnd();
-        }
-
         [Parser(Opcode.CMSG_GUILD_ADD_RANK)]
         public static void HandleGuildAddRank(Packet packet)
         {
