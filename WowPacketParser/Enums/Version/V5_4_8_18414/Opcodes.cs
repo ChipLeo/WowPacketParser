@@ -567,7 +567,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GUILD_EVENT_LOG_QUERY_RESULT,             0x1AF1 | 0x20000}, //--
             {Opcode.SMSG_GUILD_INVITE,                             0x0F71 | 0x20000}, //--
             {Opcode.SMSG_GUILD_INVITE_CANCEL,                      0x0FE1 | 0x20000}, //++
-            {Opcode.SMSG_GUILD_MEMBER_DAILY_RESET,                 0x1BE8 | 0x20000}, //--
+            {Opcode.SMSG_GUILD_MEMBER_DAILY_RESET,                 0x1BE8 | 0x20000}, //+-
             {Opcode.SMSG_GUILD_NEWS_UPDATE,                        0x0AE8 | 0x20000}, //--
             {Opcode.SMSG_GUILD_PARTY_STATE_RESPONSE,               0x0A78 | 0x20000}, //++
             {Opcode.SMSG_GUILD_QUERY_RESPONSE,                     0x1B79 | 0x20000}, //++

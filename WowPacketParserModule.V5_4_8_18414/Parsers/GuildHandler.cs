@@ -422,7 +422,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_GUILD_MEMBER_DAILY_RESET)]
         public static void HandleServerGuildMemberDailyReset(Packet packet)
         {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.SMSG_GUILD_PARTY_STATE_RESPONSE)]
