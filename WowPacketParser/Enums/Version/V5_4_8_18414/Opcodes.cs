@@ -160,7 +160,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_LIST_INVENTORY,                           0x02D8 | 0x10000}, //++
             {Opcode.CMSG_LOAD_SCREEN,                              0x1DBD | 0x10000}, //++
             {Opcode.CMSG_LOG_DISCONNECT,                           0x10B3 | 0x10000}, //++
-            {Opcode.CMSG_LOGOUT_CANCEL,                            0x06C1 | 0x10000}, //--
+            {Opcode.CMSG_LOGOUT_CANCEL,                            0x06C1 | 0x10000}, //++
             {Opcode.CMSG_LOGOUT_REQUEST,                           0x1349 | 0x10000}, //+-
             {Opcode.CMSG_LOOT,                                     0x1CE2 | 0x10000}, //+-
             {Opcode.CMSG_LOOT_METHOD,                              0x0DE1 | 0x10000}, //+- ??

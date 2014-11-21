@@ -72,7 +72,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("GUID", guid);
         }
 
-        [Parser(Opcode.CMSG_LOGOUT_CANCEL)]
         [Parser(Opcode.CMSG_LOGOUT_REQUEST)]
         [Parser(Opcode.SMSG_LOGOUT_CANCEL_ACK)]
         public static void HandleAccountNull(Packet packet)
