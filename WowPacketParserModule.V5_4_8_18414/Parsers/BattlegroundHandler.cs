@@ -130,7 +130,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             guid[3] = packet.ReadBit();
             packet.ReadBit("As Group");
             guid[4] = packet.ReadBit();
-            var hasRoleMask = !packet.ReadBit("!HasRoleMask");
+            var hasRoleMask = !packet.ReadBit("!(HasRoleMask==8)");
             guid[6] = packet.ReadBit();
             guid[2] = packet.ReadBit();
             guid[5] = packet.ReadBit();
