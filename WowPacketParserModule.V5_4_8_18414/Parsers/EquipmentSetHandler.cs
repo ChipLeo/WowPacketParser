@@ -52,5 +52,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.WriteGuid("Guid", guid[i], i);
             }
         }
+
+        [Parser(Opcode.CMSG_EQUIPMENT_SET_DELETE)]
+        public static void HandleEquipmentSetDelete(Packet packet)
+        {
+            var guid = packet.StartBitStream(4, 2, 6, 0, 5, 1, 7, 3);
+            packet.ParseBitStream(guid, 2, 0, 1, 6, 3, 4, 5, 7);
+            packet.WriteGuid("Guid", guid);
+        }
     }
 }

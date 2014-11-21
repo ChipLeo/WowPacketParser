@@ -92,7 +92,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_DUEL_RESPONSE,                            0x03E2 | 0x10000}, //+-
             {Opcode.CMSG_EMOTE,                                    0x1924 | 0x10000}, //++
             {Opcode.CMSG_ENABLETAXI,                               0x0741 | 0x10000}, //++
-            {Opcode.CMSG_EQUIPMENT_SET_DELETE,                     0x02E8 | 0x10000}, //--
+            {Opcode.CMSG_EQUIPMENT_SET_DELETE,                     0x02E8 | 0x10000}, //+-
             {Opcode.CMSG_EQUIPMENT_SET_SAVE,                       0x0669 | 0x10000}, //--
             {Opcode.CMSG_EQUIPMENT_SET_USE,                        0x036E | 0x10000}, //--
             {Opcode.CMSG_FORCE_MOVE_ROOT_ACK,                      0x107A | 0x10000}, //++
