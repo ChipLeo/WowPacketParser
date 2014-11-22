@@ -38,6 +38,49 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("str16", len16);
         }
 
+        [Parser(Opcode.CMSG_UNK_0377)]
+        public static void HandleUnk0377(Packet packet)
+        {
+        }
+
+        [Parser(Opcode.CMSG_UNK_06C5)]
+        public static void HandleUnk06C5(Packet packet)
+        {
+            for (var i = 0; i < 2; i++)
+            {
+                var poz = new Vector3();
+                poz.X = packet.ReadSingle();
+                poz.Z = packet.ReadSingle();
+                poz.Y = packet.ReadSingle();
+                packet.AddValue("Poz", poz, i);
+            }
+            var pos = new Vector4();
+            pos.Z = packet.ReadSingle();
+            pos.Y = packet.ReadSingle();
+            pos.X = packet.ReadSingle();
+
+            var guid = new byte[8];
+            guid[0] = packet.ReadBit();
+            var hasO = !packet.ReadBit("!hasO");
+            guid[6] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            var unk24 = !packet.ReadBit("unk24!=-1");
+
+            packet.ParseBitStream(guid, 3, 6, 5, 2, 7, 1, 0, 4);
+            if (hasO)
+                pos.O = packet.ReadSingle();
+            if (unk24)
+                packet.ReadInt32("unk24");
+
+            packet.AddValue("Position", pos);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.CMSG_UNK_06C9)]
         public static void HandleUnk06C9(Packet packet)
         {
