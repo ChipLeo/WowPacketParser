@@ -291,6 +291,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_SET_TRADE_GOLD,                           0x14E3 | 0x10000}, //++
             {Opcode.CMSG_SET_TRADE_ITEM,                           0x03D5 | 0x10000}, //++
             {Opcode.CMSG_SETSHEATHED,                              0x0249 | 0x10000}, //++
+            {Opcode.CMSG_SHOW_TRADESKILL,                          0x179F | 0x10000}, //++
             {Opcode.CMSG_SHOWING_CLOAK,                            0x02F2 | 0x10000}, //--
             {Opcode.CMSG_SHOWING_HELM,                             0x126B | 0x10000}, //--
             {Opcode.CMSG_SOCKET_GEMS,                              0x02CB | 0x10000}, //+-
@@ -793,6 +794,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_SHOW_BANK,                                0x0007 | 0x20000}, //++
             {Opcode.SMSG_SHOW_NEUTRAL_PLAYER_FACTION_SELECT_UI,    0x15E0 | 0x20000}, //--
             {Opcode.SMSG_SHOWTAXINODES,                            0x1E1A | 0x20000}, //++
+            {Opcode.SMSG_SHOW_TRADESKILL_RESPONSE,                 0x00BA | 0x20000}, //++
             {Opcode.SMSG_SPELL_CATEGORY_COOLDOWN,                  0x01DB | 0x20000}, //++
             {Opcode.SMSG_SPELL_COOLDOWN,                           0x0452 | 0x20000}, //++
             {Opcode.SMSG_SPELL_DELAYED,                            0x087A | 0x20000}, //++

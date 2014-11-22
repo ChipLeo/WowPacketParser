@@ -52,6 +52,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadSByte("Bag"); // 16
         }
 
+        [Parser(Opcode.CMSG_SHOW_TRADESKILL)]
+        public static void HandleShowTradeskill(Packet packet)
+        {
+            packet.ReadInt32("unk24"); // 24
+            packet.ReadInt32("unk28"); // 28
+            var guid = packet.StartBitStream(0, 4, 1, 5, 2, 6, 7, 3);
+            packet.ParseBitStream(guid, 5, 2, 7, 3, 4, 0, 1, 6);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_GAME_STORE_INGAME_BUY_FAILED)]
         public static void HandleGameStoreIngameBuyFailed(Packet packet)
         {
@@ -68,6 +78,47 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("unk72", i);
             }
             packet.ReadInt32("unk16");
+        }
+
+        [Parser(Opcode.SMSG_SHOW_TRADESKILL_RESPONSE)]
+        public static void HandleShowTradeskillResponse(Packet packet)
+        {
+            packet.ReadInt32("unk24"); // 24
+            var count28 = packet.ReadBits("Count28", 22);
+            var count60 = packet.ReadBits("count60", 22);
+            var guid = new byte[8];
+            guid[5] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            var count44 = packet.ReadBits("count44", 22);
+            guid[4] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            var count76 = packet.ReadBits("count76", 22);
+            guid[7] = packet.ReadBit();
+
+            for (var i = 0; i < count44; i++)
+                packet.ReadInt32("unk12", i);
+
+            packet.ParseBitStream(guid, 3);
+
+            for (var i = 0; i < count28; i++)
+                packet.ReadInt32("unk8", i);
+
+            packet.ParseBitStream(guid, 0, 1);
+
+            for (var i = 0; i < count60; i++)
+                packet.ReadInt32("unk16", i);
+
+            packet.ParseBitStream(guid, 6, 7, 5, 4);
+
+            for (var i = 0; i < count76; i++)
+                packet.ReadInt32("unk20", i);
+
+            packet.ParseBitStream(guid, 2);
+
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_TRADE_STATUS)]
