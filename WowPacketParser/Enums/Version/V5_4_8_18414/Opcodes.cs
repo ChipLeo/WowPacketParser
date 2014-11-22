@@ -396,7 +396,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_NULL_1452,                                0x1452 | 0x10000}, //+-
             {Opcode.CMSG_NULL_14DB,                                0x14DB | 0x10000}, //+-
             {Opcode.CMSG_NULL_14E0,                                0x14E0 | 0x10000}, //+-
-            {Opcode.CMSG_NULL_15A8,                                0x15A8 | 0x10000}, //+-
+            {Opcode.CMSG_NULL_15A8,                                0x15A8 | 0x10000}, //++ gmticket
             {Opcode.CMSG_NULL_15E2,                                0x15E2 | 0x10000}, //+-
             {Opcode.CMSG_NULL_1A23,                                0x1A23 | 0x10000}, //+-
             {Opcode.CMSG_NULL_1A87,                                0x1A87 | 0x10000}, //+-
