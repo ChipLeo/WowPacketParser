@@ -116,6 +116,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadUInt32("Ping");
         }
 
+        [Parser(Opcode.CMSG_RAID_READY_CHECK)]
+        public static void HandleRaidReadyCheck(Packet packet)
+        {
+            packet.ReadByte("unk16"); // 16
+        }
+
         [Parser(Opcode.CMSG_RAID_READY_CHECK_CONFIRM)]
         public static void HandleRaidReadyCheckConfirm(Packet packet)
         {
