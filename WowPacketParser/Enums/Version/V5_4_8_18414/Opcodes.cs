@@ -718,7 +718,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_NEW_TAXI_PATH,                            0x141B | 0x20000}, //++
             {Opcode.SMSG_NEW_WORLD,                                0x1C3B | 0x20000}, //++
             {Opcode.SMSG_NEW_WORLD_ABORT,                          0x0C1B | 0x20000}, //++
-            {Opcode.SMSG_NOTIFICATION,                             0x0C2A | 0x20000}, //--
+            {Opcode.SMSG_NOTIFICATION,                             0x0C2A | 0x20000}, //+-
             {Opcode.SMSG_NPC_TEXT_UPDATE,                          0x140A | 0x20000}, //-+
             {Opcode.SMSG_ON_CANCEL_EXPECTED_RIDE_VEHICLE_AURA,     0x1A2A | 0x20000}, //++
             {Opcode.SMSG_PAGE_TEXT_QUERY_RESPONSE,                 0x081E | 0x20000}, //--

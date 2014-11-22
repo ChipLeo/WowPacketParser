@@ -207,8 +207,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_NOTIFICATION)]
         public static void HandleNotification(Packet packet)
         {
-            var length = packet.ReadBits(12);
-            packet.ReadWoWString("Message", length);
+            packet.ReadWoWString("Message", packet.ReadBits(12));
         }
 
         [Parser(Opcode.SMSG_ZONE_UNDER_ATTACK)]
