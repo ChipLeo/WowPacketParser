@@ -190,6 +190,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBoolean("Print in chat");
         }
 
+        [Parser(Opcode.CMSG_RANDOMIZE_CHAR_NAME)]
+        public static void HandleGenerateRandomCharacterNameQuery(Packet packet)
+        {
+            packet.ReadEnum<Race>("Race", TypeCode.Byte);
+            packet.ReadEnum<Gender>("Sex", TypeCode.Byte);
+        }
+
         [Parser(Opcode.CMSG_REORDER_CHARACTERS)]
         public static void HandleReorderCharacters(Packet packet)
         {

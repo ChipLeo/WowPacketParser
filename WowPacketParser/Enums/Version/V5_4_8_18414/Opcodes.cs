@@ -250,7 +250,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_RAID_READY_CHECK,                         0x0817 | 0x10000}, //--
             {Opcode.CMSG_RAID_READY_CHECK_CONFIRM,                 0x158B | 0x10000}, //+-
             {Opcode.CMSG_RANDOM_ROLL,                              0x08A3 | 0x10000}, //+-
-            {Opcode.CMSG_RANDOMIZE_CHAR_NAME,                      0x0B1C | 0x10000}, //--
+            {Opcode.CMSG_RANDOMIZE_CHAR_NAME,                      0x0B1C | 0x10000}, //+-
             {Opcode.CMSG_READ_ITEM,                                0x0D00 | 0x10000}, //++
             {Opcode.CMSG_READY_FOR_ACCOUNT_DATA_TIMES,             0x031C | 0x10000}, //++
             {Opcode.CMSG_REALM_NAME_QUERY,                         0x1A16 | 0x10000}, //--
