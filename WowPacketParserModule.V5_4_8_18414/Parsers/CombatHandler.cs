@@ -369,6 +369,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_PVP_CREDIT)]
+        public static void HandlePvPCredit(Packet packet)
+        {
+            packet.ReadInt32("Rank");
+            packet.ReadUInt32("Honor");
+            var guid = packet.StartBitStream(4, 2, 5, 3, 0, 6, 1, 7);
+            packet.ParseBitStream(guid, 6, 7, 5, 0, 1, 3, 4, 2);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_UPDATE_COMBO_POINTS)]
         public static void HandleUpdateComboPoints(Packet packet)
         {

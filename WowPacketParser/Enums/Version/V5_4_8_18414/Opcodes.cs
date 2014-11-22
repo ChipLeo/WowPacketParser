@@ -726,6 +726,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_PRE_RESURRECT,                            0x19C0 | 0x20000}, //++
             {Opcode.SMSG_PROCRESIST,                               0x12BE | 0x20000}, //++
             {Opcode.SMSG_PROPOSE_LEVEL_GRANT,                      0x109A | 0x20000}, //++
+            {Opcode.SMSG_PVP_CREDIT,                               0x100A | 0x20000}, //++
             {Opcode.SMSG_PVP_LOG_DATA,                             0x1E8F | 0x20000}, //--
             {Opcode.SMSG_PVP_OPTIONS_ENABLED,                      0x080A | 0x20000}, //++ pair 0A22
             {Opcode.SMSG_QUERY_NEXT_MAIL_TIME,                     0x089B | 0x20000}, //++ pair 077B
