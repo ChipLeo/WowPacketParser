@@ -867,6 +867,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_TRADE_STATUS_EXTENDED,                    0x181E | 0x20000}, //++
             {Opcode.SMSG_TRAINER_BUY_FAILED,                       0x042E | 0x20000}, //++
             {Opcode.SMSG_TRAINER_LIST,                             0x189F | 0x20000}, //--
+            {Opcode.SMSG_TRANSFER_ABORTED,                         0x0C8F | 0x20000}, //++
             {Opcode.SMSG_TRANSFER_PENDING,                         0x061B | 0x20000}, //++
             {Opcode.SMSG_TRIGGER_CINEMATIC,                        0x0B01 | 0x20000}, //+-
             {Opcode.SMSG_TRIGGER_MOVIE,                            0x1C2E | 0x20000}, //+-

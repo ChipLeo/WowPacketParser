@@ -4068,5 +4068,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             ReadPlayerMovementInfo(ref packet, info.MovementSplineUnsetHover);
         }
+
+        [Parser(Opcode.SMSG_TRANSFER_ABORTED)]
+        public static void HandleTransferAborted(Packet packet)
+        {
+            var unk16 = !packet.ReadBit("!unk16"); // 16
+            packet.ReadEnum<TransferAbortReason>("TransfertAbort", 5);
+            if (unk16)
+                packet.ReadByte("Arg");
+            packet.ReadEntry<Int32>(StoreNameType.Map, "MapID");
+        }
     }
 }
