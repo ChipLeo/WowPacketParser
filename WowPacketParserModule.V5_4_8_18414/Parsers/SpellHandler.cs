@@ -552,6 +552,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_CLEAR_ALL_SPELL_CHARGES)]
+        public static void HandleclearAllSpellCharges(Packet packet)
+        {
+            var guid = packet.StartBitStream(0, 2, 5, 4, 3, 7, 6, 1);
+            packet.ParseBitStream(guid, 6, 0, 1, 7, 3, 2, 5, 4);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_COOLDOWN_EVENT)]
         public static void HandleCooldownEvent(Packet packet)
         {

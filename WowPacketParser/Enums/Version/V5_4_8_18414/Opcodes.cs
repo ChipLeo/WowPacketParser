@@ -511,6 +511,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_CHAR_ENUM,                                0x11C3 | 0x20000}, //++
             {Opcode.SMSG_CHAT_NOT_IN_PARTY,                        0x0A8A | 0x20000}, //++ pair 009A
             {Opcode.SMSG_CHAT_PLAYER_NOT_FOUND,                    0x1082 | 0x20000}, //++
+            {Opcode.SMSG_CLEAR_ALL_SPELL_CHARGES,                  0x0C5B | 0x20000}, //++
             {Opcode.SMSG_CLEAR_TARGET,                             0x1061 | 0x20000}, //++
             {Opcode.SMSG_CLIENT_CONTROL_UPDATE,                    0x1043 | 0x20000}, //++
             {Opcode.SMSG_CLIENTCACHE_VERSION,                      0x002A | 0x20000}, //++
