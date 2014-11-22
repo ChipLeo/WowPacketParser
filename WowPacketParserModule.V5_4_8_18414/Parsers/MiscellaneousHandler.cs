@@ -734,7 +734,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.SMSG_RAID_READY_CHECK)]
-        public static void HandleRaidReadyCheck(Packet packet)
+        public static void HandleSRaidReadyCheck(Packet packet)
         {
             var guid16 = new byte[8];
             var guid32 = new byte[8];

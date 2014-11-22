@@ -434,7 +434,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.AddSniffData(StoreNameType.NpcText, entry.Key, "QUERY_RESPONSE");
 
             Storage.NpcTextsMop.Add((uint)entry.Key, npcText, packet.TimeSpan);
-
         }
 
         [Parser(Opcode.SMSG_SHOW_BANK)]
