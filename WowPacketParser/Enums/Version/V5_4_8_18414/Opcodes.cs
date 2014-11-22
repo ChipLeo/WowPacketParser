@@ -321,6 +321,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_USE_ITEM,                                 0x1CC1 | 0x10000}, //--
             {Opcode.CMSG_USED_FOLLOW,                              0x0374 | 0x10000}, //++
             {Opcode.CMSG_VIOLENCE_LEVEL,                           0x0040 | 0x10000}, //+-
+            {Opcode.CMSG_VOICE_SESSION_ENABLE,                     0x15A9 | 0x10000}, //++
             {Opcode.CMSG_VOID_STORAGE_QUERY,                       0x0140 | 0x10000}, //+-
             {Opcode.CMSG_VOID_STORAGE_TRANSFER,                    0x1440 | 0x10000}, //+-
             {Opcode.CMSG_VOID_STORAGE_UNLOCK,                      0x0444 | 0x10000}, //+-
@@ -359,7 +360,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_1341,                                 0x1341 | 0x10000}, //++
             {Opcode.CMSG_UNK_1370,                                 0x1370 | 0x10000}, //++
             {Opcode.CMSG_UNK_1446,                                 0x1446 | 0x10000}, //+-
-            {Opcode.CMSG_VOICE_SESSION_ENABLE,                     0x15A9 | 0x10000}, //++
             {Opcode.CMSG_UNK_15DB,                                 0x15DB | 0x10000}, //++
             {Opcode.CMSG_UNK_17BA,                                 0x17BA | 0x10000}, //++
             {Opcode.CMSG_UNK_1841,                                 0x1841 | 0x10000}, //+-
