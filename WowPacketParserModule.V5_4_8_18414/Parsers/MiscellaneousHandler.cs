@@ -804,6 +804,30 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid24", guid24);
         }
 
+        [Parser(Opcode.SMSG_RAID_TARGET_UPDATE)]
+        public static void HandleSRaidTargetUpdate(Packet packet)
+        {
+            packet.ReadByte("unk16"); // 16
+            packet.ReadInt32("unk5"); // 5
+            var count = packet.ReadBits("count", 3); // 24
+            var guid7 = new byte[count][];
+            for (var i = 0; i < count; i++)
+                guid7[i] = packet.StartBitStream(6, 2, 7, 1, 4, 3, 5, 0);
+
+            for (var i = 0; i < count; i++)
+            {
+                packet.ParseBitStream(guid7[i], 6);
+                packet.ReadSingle("unk10h", i); // 10h
+                packet.ParseBitStream(guid7[i], 2);
+                packet.ReadSingle("unk0Ch", i); // 0Ch
+                packet.ParseBitStream(guid7[i], 7, 5, 0, 4);
+                packet.ReadSingle("unk14h", i); // 14h
+                packet.ParseBitStream(guid7[i], 3, 1);
+                packet.ReadInt32("unk8"); // 8
+                packet.WriteGuid("Guid", guid7[i]);
+            }
+        }
+
         [Parser(Opcode.SMSG_RANDOM_ROLL)]
         public static void HandleSRandomRoll(Packet packet)
         {

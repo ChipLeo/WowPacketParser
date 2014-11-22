@@ -743,6 +743,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_RAID_READY_CHECK,                         0x1C8E | 0x20000}, //+-
             {Opcode.SMSG_RAID_READY_CHECK_COMPLETED,               0x15C2 | 0x20000}, //+-
             {Opcode.SMSG_RAID_READY_CHECK_CONFIRM,                 0x02AF | 0x20000}, //+-
+            {Opcode.SMSG_RAID_TARGET_UPDATE,                       0x008A | 0x20000}, //++
             {Opcode.SMSG_RANDOM_ROLL,                              0x141A | 0x20000}, //+-
             {Opcode.SMSG_RANDOMIZE_CHAR_NAME,                      0x169F | 0x20000}, //+-
             {Opcode.SMSG_READ_ITEM_OK,                             0x0305 | 0x20000}, //++
