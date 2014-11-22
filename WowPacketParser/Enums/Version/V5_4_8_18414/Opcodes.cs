@@ -805,7 +805,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_SEND_MAIL_RESULT,                         0x1A9B | 0x20000}, //--
             {Opcode.SMSG_SEND_SPELL_HISTORY,                       0x0050 | 0x20000}, //++
             {Opcode.SMSG_SEND_UNLEARN_SPELLS,                      0x10F1 | 0x20000}, //++
-            {Opcode.SMSG_SERVER_MESSAGE,                           0x0302 | 0x20000}, //--
+            {Opcode.SMSG_SERVER_MESSAGE,                           0x0302 | 0x20000}, //+-
             {Opcode.SMSG_SET_AI_ANIM_KIT,                          0x1E12 | 0x20000}, //++
             {Opcode.SMSG_SET_ANIM_TIER,                            0x1C0E | 0x20000}, //++
             {Opcode.SMSG_SET_DUNGEON_DIFFICULTY,                   0x1283 | 0x20000}, //--
