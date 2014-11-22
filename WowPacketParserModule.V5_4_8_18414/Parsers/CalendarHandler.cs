@@ -46,5 +46,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("Title", titleLen);
             packet.ReadWoWString("Description", descLen);
         }
+
+        [Parser(Opcode.SMSG_CALENDAR_SEND_CALENDAR)]
+        public static void HandleSendCalendar(Packet packet)
+        {
+        }
     }
 }
