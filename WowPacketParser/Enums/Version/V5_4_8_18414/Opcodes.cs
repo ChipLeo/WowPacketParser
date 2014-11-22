@@ -256,7 +256,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_REALM_NAME_QUERY,                         0x1A16 | 0x10000}, //--
             //{Opcode.CMSG_REALM_SPLIT,                              0x18B2 | 0x10000}, //++
             {Opcode.CMSG_RECLAIM_CORPSE,                           0x03D3 | 0x10000}, //++
-            {Opcode.CMSG_AUTH_CONTINUED_SESSION,                   0x0F49 | 0x10000}, //--
+            {Opcode.CMSG_AUTH_CONTINUED_SESSION,                   0x0F49 | 0x10000}, //+-
             {Opcode.CMSG_REFORGE_ITEM,                             0x0C4F | 0x10000}, //++
             {Opcode.CMSG_REORDER_CHARACTERS,                       0x08A7 | 0x10000}, //+-
             {Opcode.CMSG_REPAIR_ITEM,                              0x02C1 | 0x10000}, //+-
