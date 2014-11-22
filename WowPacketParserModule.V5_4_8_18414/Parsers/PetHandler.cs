@@ -455,6 +455,19 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_PET_ADDED)]
+        public static void HandlePetAdded(Packet packet)
+        {
+            packet.ReadByte("Stable Type"); // 168 0
+            packet.ReadInt32("Pet Level"); // 41 1
+            packet.ReadEntry<UInt32>(StoreNameType.Unit, "Entry"); // 5
+            packet.ReadInt32("Display ID"); // 4
+            packet.ReadInt32("Pet Slot"); // 7 0
+            packet.ReadInt32("Pet number"); // 6
+
+            packet.ReadWoWString("Pet Name", packet.ReadBits(8));
+        }
+
         [Parser(Opcode.SMSG_PET_DISMISS_SOUND)]
         public static void HandlePetDismissSound(Packet packet)
         {

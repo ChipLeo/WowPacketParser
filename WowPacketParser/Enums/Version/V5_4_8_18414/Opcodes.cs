@@ -691,6 +691,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_PERIODICAURALOG,                          0x0CF2 | 0x20000}, //++
             {Opcode.SMSG_PET_ACTION_FEEDBACK,                      0x080E | 0x20000}, //++
             {Opcode.SMSG_PET_ACTION_SOUND,                         0x15E2 | 0x20000}, //++
+            {Opcode.SMSG_PET_ADDED,                                0x123A | 0x20000}, //+-
             {Opcode.SMSG_PET_CAST_FAILED,                          0x149B | 0x20000}, //++
             {Opcode.SMSG_PET_DISMISS_SOUND,                        0x1ABB | 0x20000}, //++
             {Opcode.SMSG_PET_GUIDS,                                0x1227 | 0x20000}, //++
