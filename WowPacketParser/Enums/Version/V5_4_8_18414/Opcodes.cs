@@ -391,6 +391,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_NULL_0A82,                                0x0A82 | 0x10000}, //+-
             {Opcode.CMSG_NULL_0A87,                                0x0A87 | 0x10000}, //+-
             {Opcode.CMSG_NULL_0C62,                                0x0C62 | 0x10000}, //+-
+            {Opcode.CMSG_NULL_1063,                                0x1063 | 0x10000}, //++ battle pet
             {Opcode.CMSG_NULL_1124,                                0x1124 | 0x10000}, //+-
             {Opcode.CMSG_NULL_1207,                                0x1207 | 0x10000}, //+-
             {Opcode.CMSG_NULL_135B,                                0x135B | 0x10000}, //+-
