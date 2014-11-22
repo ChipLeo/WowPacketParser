@@ -514,6 +514,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_UNK_1904)]
+        public static void HandleSUnk1904(Packet packet)
+        {
+        }
+
         [Parser(Opcode.SMSG_UNK_1C3A)]
         public static void HandleSUnk1C3A(Packet packet)
         {
