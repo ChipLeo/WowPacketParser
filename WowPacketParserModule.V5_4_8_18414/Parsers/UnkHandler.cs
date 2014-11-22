@@ -240,14 +240,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk24");
         }
 
-        [Parser(Opcode.SMSG_UNK_07F5)]
-        public static void HandleSUnk07F5(Packet packet)
-        {
-            packet.ReadInt32("unk16"); // 16
-            packet.ReadEntry<Int32>(StoreNameType.Quest, "Quest ID"); // 20
-            packet.ReadEnum<QuestRequirementType>("Requirement Type", TypeCode.Byte); // 24
-        }
-
         [Parser(Opcode.SMSG_UNK_0B22)]
         public static void HandleSUnk0B22(Packet packet)
         {

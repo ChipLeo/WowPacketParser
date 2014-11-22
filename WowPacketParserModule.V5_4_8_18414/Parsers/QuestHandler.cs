@@ -848,6 +848,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadEntry<Int32>(StoreNameType.Quest, "Quest ID");
         }
 
+        [Parser(Opcode.SMSG_QUEST_UPDATE_ADD_CREDIT_SIMPLE)]
+        public static void HandleQuestUpdateAddCreditSimple(Packet packet)
+        {
+            packet.ReadInt32("unk16"); // 16
+            packet.ReadEntry<Int32>(StoreNameType.Quest, "Quest ID"); // 20
+            packet.ReadEnum<QuestRequirementType>("Requirement Type", TypeCode.Byte); // 24
+        }
+
         [Parser(Opcode.SMSG_QUESTLOG_FULL)]
         public static void HandleQuestNull(Packet packet)
         {
