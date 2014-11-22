@@ -200,7 +200,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_PETITION_SHOWLIST)]
         [Parser(Opcode.SMSG_PETITION_SHOW_SIGNATURES)]
         [Parser(Opcode.SMSG_PETITION_SIGN_RESULTS)]
-        [Parser(Opcode.SMSG_TURN_IN_PETITION_RESULTS)]
         public static void HandleGuild(Packet packet)
         {
             packet.ReadToEnd();
@@ -685,6 +684,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var guid = packet.StartBitStream(1, 5, 0, 7, 4, 6, 3, 2);
             packet.ParseBitStream(guid, 5, 4, 2, 3, 6, 0, 1, 7);
             packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_TURN_IN_PETITION_RESULTS)]
+        public static void HandlePetitionTurnInResults(Packet packet)
+        {
+            packet.ReadEnum<PetitionResultType>("Result", 4);
         }
     }
 }
