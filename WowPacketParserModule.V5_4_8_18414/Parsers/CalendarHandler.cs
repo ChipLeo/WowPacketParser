@@ -47,6 +47,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("Description", descLen);
         }
 
+        [Parser(Opcode.SMSG_CALENDAR_RAID_LOCKOUT_ADDED)]
+        public static void HandleRaidLockoutAdded(Packet packet)
+        {
+        }
+
         [Parser(Opcode.SMSG_CALENDAR_SEND_CALENDAR)]
         public static void HandleSendCalendar(Packet packet)
         {

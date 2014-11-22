@@ -519,6 +519,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BREAK_TARGET,                             0x021A | 0x20000}, //++
             {Opcode.SMSG_BUY_FAILED,                               0x1563 | 0x20000}, //+-
             {Opcode.SMSG_BUY_ITEM,                                 0x101A | 0x20000}, //++
+            {Opcode.SMSG_CALENDAR_RAID_LOCKOUT_ADDED,              0x0CAB | 0x20000}, //--
             {Opcode.SMSG_CALENDAR_SEND_CALENDAR,                   0x1A0A | 0x20000}, //--
             {Opcode.SMSG_CALENDAR_SEND_NUM_PENDING,                0x0A3F | 0x20000}, //++
             {Opcode.SMSG_CANCEL_AUTO_REPEAT,                       0x1E0F | 0x20000}, //++
