@@ -338,6 +338,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_0247,                                 0x0247 | 0x10000}, //+-
             {Opcode.CMSG_UNK_0264,                                 0x0264 | 0x10000}, //+-
             {Opcode.CMSG_UNK_0265,                                 0x0265 | 0x10000}, //+-
+            {Opcode.CMSG_UNK_028E,                                 0x028E | 0x10000}, //++ addon
             {Opcode.CMSG_UNK_02C4,                                 0x02C4 | 0x10000}, //+-
             {Opcode.CMSG_UNK_03E4,                                 0x03E4 | 0x10000}, //+-
             {Opcode.CMSG_UNK_044E,                                 0x044E | 0x10000}, //+-

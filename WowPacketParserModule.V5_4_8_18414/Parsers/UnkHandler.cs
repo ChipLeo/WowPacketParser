@@ -29,6 +29,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadGuid("Item");
         }
 
+        [Parser(Opcode.CMSG_UNK_028E)]
+        public static void HandleUnk028E(Packet packet)
+        {
+            var len33 = packet.ReadBits("len33", 8);
+            var len16 = packet.ReadBits("len16", 5);
+            packet.ReadWoWString("str33", len33);
+            packet.ReadWoWString("str16", len16);
+        }
+
         [Parser(Opcode.CMSG_UNK_06C9)]
         public static void HandleUnk06C9(Packet packet)
         {
