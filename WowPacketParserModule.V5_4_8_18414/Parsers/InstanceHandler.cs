@@ -68,6 +68,23 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_ENCOUNTER_END)]
+        public static void HandleEncounterEnd(Packet packet)
+        {
+            packet.ReadBit("unk28"); // 28
+            packet.ReadInt32("unk5"); // 5
+            packet.ReadInt32("unk6"); // 6
+            packet.ReadInt32("unk4"); // 4
+        }
+
+        [Parser(Opcode.SMSG_ENCOUNTER_START)]
+        public static void HandleEncounterStart(Packet packet)
+        {
+            packet.ReadInt32("unk5"); // 5
+            packet.ReadInt32("unk6"); // 6
+            packet.ReadInt32("unk4"); // 4
+        }
+
         [Parser(Opcode.SMSG_LOAD_CUF_PROFILES)]
         public static void HandleLoadCUFProfiles(Packet packet)
         {

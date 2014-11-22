@@ -565,6 +565,8 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_DURABILITY_DAMAGE_DEATH,                  0x1E3E | 0x20000}, //++
             {Opcode.SMSG_EMOTE,                                    0x0987 | 0x20000}, //--
             {Opcode.SMSG_ENABLE_BARBER_SHOP,                       0x1222 | 0x20000}, //--
+            {Opcode.SMSG_ENCOUNTER_END,                            0x120F | 0x20000}, //++
+            {Opcode.SMSG_ENCOUNTER_START,                          0x1E8A | 0x20000}, //++
             {Opcode.SMSG_ENCHANTMENTLOG,                           0x12A3 | 0x20000}, //++
             {Opcode.SMSG_ENVIRONMENTALDAMAGELOG,                   0x0DF1 | 0x20000}, //--
             {Opcode.SMSG_EQUIPMENT_SET_LIST,                       0x18E2 | 0x20000}, //++
