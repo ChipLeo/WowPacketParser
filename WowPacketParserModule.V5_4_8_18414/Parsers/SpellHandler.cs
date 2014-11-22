@@ -779,6 +779,22 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid2);
         }
 
+        [Parser(Opcode.SMSG_REFRESH_SPELL_HISTORY)]
+        public static void HandleRefreshSpellHistory(Packet packet)
+        {
+            var count = packet.ReadBits("Count", 19);
+            for (var i = 0; i < count; i++)
+                packet.ReadBitVisible("unk20", i);
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadInt32Visible("unk28", i);
+                packet.ReadInt32Visible("unk36", i);
+                packet.ReadInt32Visible("unk24", i);
+                packet.ReadInt32Visible("unk20", i);
+                packet.ReadInt32Visible("unk32", i);
+            }
+        }
+
         [Parser(Opcode.SMSG_REMOVED_SPELL)]
         public static void HandleRemovedSpell(Packet packet)
         {
