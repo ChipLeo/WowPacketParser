@@ -1395,6 +1395,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_GET_TIMEZONE_INFORMATION)]
         [Parser(Opcode.CMSG_WORLD_STATE_UI_TIMER_UPDATE)]
         [Parser(Opcode.MSG_MOVE_WORLDPORT_ACK)]  //0
+        [Parser(Opcode.SMSG_SHOW_NEUTRAL_PLAYER_FACTION_SELECT_UI)]
         public static void HandleCNullMisc(Packet packet)
         {
         }

@@ -823,7 +823,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_SET_TIMEZONE_INFORMATION,                 0x19C1 | 0x20000}, //++
             {Opcode.SMSG_SET_VIGNETTE,                             0x0CBE | 0x20000}, //++
             {Opcode.SMSG_SHOW_BANK,                                0x0007 | 0x20000}, //++
-            {Opcode.SMSG_SHOW_NEUTRAL_PLAYER_FACTION_SELECT_UI,    0x15E0 | 0x20000}, //--
+            {Opcode.SMSG_SHOW_NEUTRAL_PLAYER_FACTION_SELECT_UI,    0x15E0 | 0x20000}, //++
             {Opcode.SMSG_SHOWTAXINODES,                            0x1E1A | 0x20000}, //++
             {Opcode.SMSG_SHOW_TRADESKILL_RESPONSE,                 0x00BA | 0x20000}, //++
             {Opcode.SMSG_SPELL_CATEGORY_COOLDOWN,                  0x01DB | 0x20000}, //++
