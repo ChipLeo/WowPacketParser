@@ -829,6 +829,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
+        [Parser(Opcode.SMSG_UNK_1EAE)]
+        public static void HandleSUnk1EAE(Packet packet)
+        {
+            packet.ReadBoolean("unk");
+        }
+
         [Parser(Opcode.CMSG_NULL_0060)]
         [Parser(Opcode.CMSG_NULL_0082)]
         [Parser(Opcode.CMSG_NULL_0141)]
