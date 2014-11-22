@@ -382,7 +382,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_TURN_IN_PETITION)]
         public static void HandlePetitionTurnIn(Packet packet)
         {
-            packet.ReadToEnd();
+            var guid = packet.StartBitStream(1, 2, 3, 0, 5, 7, 4, 6);
+            packet.ParseBitStream(guid, 2, 1, 4, 6, 0, 7, 5, 3);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_GUILD_ACHIEVEMENT_DATA)]

@@ -316,7 +316,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_TRAINER_BUY_SPELL,                        0x0352 | 0x10000}, //+-
             {Opcode.CMSG_TRAINER_LIST,                             0x034B | 0x10000}, //--
             {Opcode.CMSG_TRANSMOGRIFY_ITEMS,                       0x06D7 | 0x10000}, //+-
-            {Opcode.CMSG_TURN_IN_PETITION,                         0x0673 | 0x10000}, //--
+            {Opcode.CMSG_TURN_IN_PETITION,                         0x0673 | 0x10000}, //+-
             {Opcode.CMSG_UNACCEPT_TRADE,                           0x0023 | 0x10000}, //++
             {Opcode.CMSG_UNLEARN_SKILL,                            0x0268 | 0x10000}, //++
             {Opcode.CMSG_UNREGISTER_ALL_ADDON_PREFIXES,            0x029F | 0x10000}, //++
