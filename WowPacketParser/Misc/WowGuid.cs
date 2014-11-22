@@ -255,8 +255,10 @@ namespace WowPacketParser.Misc
                     return HighGuidType.Player;
                 case HighGuidTypeLegacy.Toy:
                     return HighGuidType.Item;
+                case HighGuidTypeLegacy.SceneObject:
+                    return HighGuidType.SceneObject;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("Guid", "Unknown Guid " + Low.ToString("X16") + " " + High.ToString("X16"));
             }
         }
 
