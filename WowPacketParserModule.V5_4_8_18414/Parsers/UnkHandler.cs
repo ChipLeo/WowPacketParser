@@ -43,6 +43,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
         }
 
+        [Parser(Opcode.CMSG_UNK_03F1)]
+        public static void HandleUnk03F1(Packet packet)
+        {
+            var guid = packet.StartBitStream(5, 6, 0, 4, 1, 2, 7, 3);
+            packet.ParseBitStream(guid, 0, 2, 6, 7, 1, 5, 3, 4);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.CMSG_UNK_06C5)]
         public static void HandleUnk06C5(Packet packet)
         {
@@ -85,6 +93,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleUnk06C9(Packet packet)
         {
             packet.ReadInt32("unk16"); // 16
+        }
+
+        [Parser(Opcode.CMSG_UNK_08AF)]
+        public static void HandleUnk08AF(Packet packet)
+        {
+            var len272 = packet.ReadBits(5);
+            var len16 = packet.ReadBits(8);
+            packet.ReadWoWString("Message", len16);
+            packet.ReadWoWString("Addon", len272);
         }
 
         [Parser(Opcode.CMSG_UNK_0A16)]
