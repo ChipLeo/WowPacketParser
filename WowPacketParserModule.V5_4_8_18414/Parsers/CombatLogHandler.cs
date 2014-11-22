@@ -540,10 +540,47 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_SPELLLOGMISS)]
+        public static void HandleSpellLogMiss(Packet packet)
+        {
+            ReadSpellMissLog(ref packet);
+        }
+
         [Parser(Opcode.SMSG_SPELLNONMELEEDAMAGELOG)]
         public static void HandleSpellNonMeleeDmgLog(Packet packet)
         {
             ReadSpellNonMeleeDamageLog(ref packet);
+        }
+
+        private static void ReadSpellMissLog(ref Packet packet, object index = null)
+        {
+            var guid = packet.StartBitStream(5, 1, 4, 0, 7, 3, 2, 6);
+            var count = packet.ReadBits("Count", 23, index); // 16
+            var guid20 = new byte[count][];
+            var debug = new bool[count];
+            for (var i = 0; i < count; i++)
+            {
+                guid20[i] = packet.StartBitStream(0, 1, 6, 2, 5, 3, 4, 7);
+                debug[i] = packet.ReadBit("debug", index, i); // 40
+            }
+
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadEnum<SpellMissType>("Miss Info", TypeCode.Byte, index, i);
+                packet.ParseBitStream(guid20[i], 7, 5, 0, 6, 3, 2);
+                if (debug[i])
+                {
+                    packet.ReadSingle("unk10h", index, i); // 10h
+                    packet.ReadSingle("unk0Ch", index, i); // 0Ch
+                }
+                packet.ParseBitStream(guid20[i], 1, 4);
+                packet.WriteGuid("Guid20", guid20[i], index, i);
+            }
+
+            packet.ParseBitStream(guid, 6, 4, 2, 0, 1);
+            packet.ReadEntry<UInt32>(StoreNameType.Spell, "Spell ID", index);
+            packet.ParseBitStream(guid, 3, 7, 5);
+            packet.WriteGuid("Guid", guid, index);
         }
 
         private static void ReadSpellNonMeleeDamageLog(ref Packet packet, int index = -1)
