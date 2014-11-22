@@ -556,6 +556,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GAMEOBJECT_QUERY_RESPONSE,                0x06BF | 0x20000}, //++
             {Opcode.SMSG_GAMETIME_UPDATE,                          0x0E1B | 0x20000}, //++
             {Opcode.SMSG_GMRESPONSE_RECEIVED,                      0x148E | 0x20000}, //++
+            {Opcode.SMSG_GMTICKET_SYSTEMSTATUS,                    0x163B | 0x20000}, //++
             {Opcode.SMSG_GOSSIP_COMPLETE,                          0x034E | 0x20000}, //+-
             {Opcode.SMSG_GOSSIP_MESSAGE,                           0x0244 | 0x20000}, //--
             {Opcode.SMSG_GOSSIP_POI,                               0x0785 | 0x20000}, //-- +
