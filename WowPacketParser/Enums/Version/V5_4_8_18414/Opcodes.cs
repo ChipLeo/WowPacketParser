@@ -304,14 +304,14 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_STANDSTATECHANGE,                         0x03E6 | 0x10000}, //+-
             {Opcode.CMSG_SUBMIT_BUG,                               0x0861 | 0x10000}, //+-
             {Opcode.CMSG_SUBMIT_COMPLAIN,                          0x030D | 0x10000}, //--
-            {Opcode.CMSG_SUGGESTION_SUBMIT,                        0x0A12 | 0x10000}, //--
+            {Opcode.CMSG_SUGGESTION_SUBMIT,                        0x0A12 | 0x10000}, //+-
             {Opcode.CMSG_SWAP_INV_ITEM,                            0x03DF | 0x10000}, //++
             {Opcode.CMSG_SWAP_ITEM,                                0x035D | 0x10000}, //++
             {Opcode.CMSG_TAXINODE_STATUS_QUERY,                    0x02E1 | 0x10000}, //++
             {Opcode.CMSG_TAXIQUERYAVAILABLENODES,                  0x02E3 | 0x10000}, //++
             {Opcode.CMSG_TEXT_EMOTE,                               0x07E9 | 0x10000}, //++
             {Opcode.CMSG_TIME_SYNC_RESP,                           0x01DB | 0x10000}, //+-
-            {Opcode.CMSG_TIME_SYNC_RESP_FAILED,                    0x0058 | 0x10000}, //--
+            {Opcode.CMSG_TIME_SYNC_RESP_FAILED,                    0x0058 | 0x10000}, //+-
             {Opcode.CMSG_TOTEM_DESTROYED,                          0x1263 | 0x10000}, //++
             {Opcode.CMSG_TRAINER_BUY_SPELL,                        0x0352 | 0x10000}, //+-
             {Opcode.CMSG_TRAINER_LIST,                             0x034B | 0x10000}, //--

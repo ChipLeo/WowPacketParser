@@ -211,6 +211,17 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 Storage.NpcSpellClicks.Add(guid, packet.TimeSpan);
         }
 
+        [Parser(Opcode.CMSG_SUGGESTION_SUBMIT)]
+        public static void HandleSuggestionSubmit(Packet packet)
+        {
+            packet.ReadSingle("unk28"); // 28
+            packet.ReadSingle("unk32"); // 32
+            packet.ReadSingle("unk24"); // 24
+            packet.ReadInt32("unk16"); // 16
+            packet.ReadSingle("unk20"); // 20
+            packet.ReadWoWString("str", packet.ReadBits(10));
+        }
+
         [Parser(Opcode.CMSG_SUBMIT_BUG)]
         public static void HandleSubmitBug(Packet packet)
         {
@@ -231,12 +242,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             packet.ReadUInt32("MCounter");
             packet.ReadUInt32("Client Ticks");
-        }
-
-        [Parser(Opcode.CMSG_TIME_SYNC_RESP_FAILED)]
-        public static void HandleTimeSyncRespFailed(Packet packet)
-        {
-            packet.ReadUInt32("Unk Uint32");
         }
 
         [Parser(Opcode.CMSG_WHO)]
