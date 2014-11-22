@@ -233,11 +233,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_LOGIN_VERIFY_WORLD)]
         public static void HandleLoginVerifyWorld(Packet packet)
         {
-            packet.ReadSingle("X");
-            packet.ReadSingle("O");
-            packet.ReadSingle("Y");
-            packet.ReadUInt32("Map");
-            packet.ReadSingle("Z");
+            var pos = new Vector4();
+
+            pos.X = packet.ReadSingle();
+            pos.O = packet.ReadSingle();
+            pos.Y = packet.ReadSingle();
+            CoreParsers.MovementHandler.CurrentMapId = (uint)packet.ReadEntry<Int32>(StoreNameType.Map, "Map");
+            pos.Z = packet.ReadSingle();
+
+            packet.AddValue("Position", pos);
+            packet.AddSniffData(StoreNameType.Map, (int)CoreParsers.MovementHandler.CurrentMapId, "NEW_WORLD");
         }
 
         [Parser(Opcode.SMSG_LOGOUT_COMPLETE)]

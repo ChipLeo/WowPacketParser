@@ -648,7 +648,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_LOAD_CUF_PROFILES,                        0x0E32 | 0x20000}, //++
             {Opcode.SMSG_LOG_XPGAIN,                               0x1E9A | 0x20000}, //--
             {Opcode.SMSG_LOGIN_SETTIMESPEED,                       0x082B | 0x20000}, //++
-            {Opcode.SMSG_LOGIN_VERIFY_WORLD,                       0x1C0F | 0x20000}, //--
+            {Opcode.SMSG_LOGIN_VERIFY_WORLD,                       0x1C0F | 0x20000}, //+-
             {Opcode.SMSG_LOGOUT_CANCEL_ACK,                        0x0AAF | 0x20000}, //++
             {Opcode.SMSG_LOGOUT_COMPLETE,                          0x142F | 0x20000}, //+-
             {Opcode.SMSG_LOGOUT_RESPONSE,                          0x008F | 0x20000}, //++
