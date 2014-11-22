@@ -941,6 +941,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_NULL_0C9A,                                0x0C9A | 0x20000}, //++
             {Opcode.SMSG_NULL_0E2B,                                0x0E2B | 0x20000}, //++
             {Opcode.SMSG_NULL_0E8B,                                0x0E8B | 0x20000}, //++
+            {Opcode.SMSG_NULL_1313,                                0x1313 | 0x20000}, //++
         };
     }
 }
