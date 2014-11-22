@@ -104,6 +104,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_GET_MAIL_LIST,                            0x077A | 0x10000}, //++
             {Opcode.CMSG_GET_MIRRORIMAGE_DATA,                     0x02A3 | 0x10000}, //++
             {Opcode.CMSG_GET_TIMEZONE_INFORMATION,                 0x18B2 | 0x10000}, //++
+            {Opcode.CMSG_GMTICKET_GETTICKET,                       0x0AB6 | 0x10000}, //++
             {Opcode.CMSG_GOSSIP_HELLO,                             0x12F3 | 0x10000}, //++
             {Opcode.CMSG_GOSSIP_SELECT_OPTION,                     0x0748 | 0x10000}, //++
             {Opcode.CMSG_GROUP_ASSISTANT_LEADER,                   0x1897 | 0x10000}, //+-
