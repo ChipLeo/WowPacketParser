@@ -506,6 +506,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BATTLE_PET_REPLACEMENTS_MADE,             0x1A1A | 0x20000}, //--
             {Opcode.SMSG_BATTLE_PET_REQUEST_FAILED,                0x022F | 0x20000}, //--
             {Opcode.SMSG_BATTLE_PET_ROUND_RESULT,                  0x0C1A | 0x20000}, //-- pair 17BA
+            {Opcode.SMSG_BATTLE_PET_SCENE_OBJECT_FINAL_ROUND,      0x161F | 0x20000}, //--
             {Opcode.SMSG_BATTLE_PET_SCENE_OBJECT_FINISHED,         0x18E1 | 0x20000}, //--
             {Opcode.SMSG_BATTLE_PET_SCENE_OBJECT_ROUND_RESULT,     0x109B | 0x20000}, //--
             {Opcode.SMSG_BATTLE_PET_SLOT_UPDATE,                   0x16AF | 0x20000}, //+-

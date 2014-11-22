@@ -352,6 +352,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
         }
 
+        [Parser(Opcode.SMSG_BATTLE_PET_SCENE_OBJECT_FINAL_ROUND)]
+        public static void HandleBattlePetSceneObjectFinalRound(Packet packet)
+        {
+        }
+
         [Parser(Opcode.SMSG_BATTLE_PET_SCENE_OBJECT_ROUND_RESULT)]
         public static void HandleBattlePetSceneObjectRoundresult(Packet packet)
         {
