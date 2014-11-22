@@ -367,7 +367,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_1370,                                 0x1370 | 0x10000}, //++
             {Opcode.CMSG_UNK_1446,                                 0x1446 | 0x10000}, //+-
             {Opcode.CMSG_UNK_15DB,                                 0x15DB | 0x10000}, //++
-            {Opcode.CMSG_UNK_17BA,                                 0x17BA | 0x10000}, //++
+            {Opcode.CMSG_UNK_178A,                                 0x178A | 0x10000}, //++ raid
             {Opcode.CMSG_UNK_1841,                                 0x1841 | 0x10000}, //+-
             {Opcode.CMSG_UNK_185B,                                 0x185B | 0x10000}, //++
             {Opcode.CMSG_UNK_1886,                                 0x1886 | 0x10000}, //++
