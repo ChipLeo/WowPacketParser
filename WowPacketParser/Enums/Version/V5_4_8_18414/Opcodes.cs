@@ -634,6 +634,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_MAIL_LIST_RESULT,                         0x1C0B | 0x20000}, //--
             {Opcode.SMSG_MESSAGECHAT,                              0x1A9A | 0x20000}, //++
             {Opcode.SMSG_MINIMAP_PING,                             0x168F | 0x20000}, //+-
+            {Opcode.SMSG_MIRRORIMAGE_CREATURE_DATA,                0x04D0 | 0x20000}, //--
             {Opcode.SMSG_MIRRORIMAGE_DATA,                         0x04D9 | 0x20000}, //++ pair CMSG 02A3
             {Opcode.SMSG_MISSILE_CANCEL,                           0x1203 | 0x20000}, //++
             {Opcode.SMSG_MODIFY_COOLDOWN,                          0x1E2E | 0x20000}, //++

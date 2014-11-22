@@ -552,6 +552,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_MIRRORIMAGE_CREATURE_DATA)]
+        public static void HandleSMirrorimageCreatureData(Packet packet)
+        {
+        }
+
         [Parser(Opcode.SMSG_MIRRORIMAGE_DATA)]
         public static void HandleMirrorImageData(Packet packet)
         {
