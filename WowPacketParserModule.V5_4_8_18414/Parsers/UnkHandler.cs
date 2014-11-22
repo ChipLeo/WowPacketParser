@@ -167,28 +167,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk24"); // 24
         }
 
-        [Parser(Opcode.CMSG_UNK_17BA)]
-        public static void HandleUnk17BA(Packet packet)
+        [Parser(Opcode.CMSG_UNK_178A)]
+        public static void HandleUnk178A(Packet packet)
         {
-            var unk24 = packet.ReadBit("unk24==0"); // 24
-            var unk17 = packet.ReadBit("unk17==-1"); // 17
-            var unk19 = packet.ReadBit("unk19==0"); // 19
-            packet.ReadBit("unk20"); // 20
-            var unk18 = packet.ReadBit("unk18==0"); // 18
-            var unk28 = packet.ReadBit("unk28==-1"); // 28
-            var unk16 = packet.ReadBit("unk16==6"); // 16
-            if (!unk16)
-                packet.ReadByte("unk16");
-            if (!unk19)
-                packet.ReadByte("unk19");
-            if (!unk28)
-                packet.ReadInt32("unk28");
-            if (!unk18)
-                packet.ReadByte("unk18");
-            if (!unk24)
-                packet.ReadInt32("unk24");
-            if (!unk17)
-                packet.ReadByte("unk17");
+            packet.ReadByte("unk");
         }
 
         [Parser(Opcode.CMSG_UNK_1886)]
@@ -306,11 +288,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
-        [Parser(Opcode.SMSG_UNK_0C1A)]
-        public static void HandleSUnk0C1A(Packet packet)
+        [Parser(Opcode.SMSG_UNK_0B81)]
+        public static void HandleSUnk0B81(Packet packet)
         {
             packet.ReadToEnd();
         }
+
         [Parser(Opcode.SMSG_UNK_0D51)]
         public static void HandleSUnk0D51(Packet packet)
         {
@@ -891,7 +874,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_NULL_1F8E)]
         [Parser(Opcode.CMSG_NULL_1F9E)]
         [Parser(Opcode.CMSG_NULL_1F9F)]
-        [Parser(Opcode.SMSG_NULL_04BB)]
         [Parser(Opcode.SMSG_NULL_0C59)]
         [Parser(Opcode.SMSG_NULL_0C9A)]
         [Parser(Opcode.SMSG_NULL_0E2B)]

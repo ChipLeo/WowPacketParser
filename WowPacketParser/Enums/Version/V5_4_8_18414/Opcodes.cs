@@ -50,8 +50,10 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_BATTLEMASTER_JOIN_ARENA,                  0x02D2 | 0x10000}, //++
             {Opcode.CMSG_BATTLE_CHAR_BOOST,                        0x08E3 | 0x10000}, //+-
             {Opcode.CMSG_BATTLE_PET_DELETE_PET,                    0x18B6 | 0x10000}, //+-
+            {Opcode.CMSG_BATTLE_PET_INITIAL_UPDATE_RESPONSE,       0x1A07 | 0x10000}, //+-
             {Opcode.CMSG_BATTLE_PET_MODIFY_NAME,                   0x1887 | 0x10000}, //+-
             {Opcode.CMSG_BATTLE_PET_NAME_QUERY,                    0x1CE0 | 0x10000}, //+-
+            {Opcode.CMSG_BATTLE_PET_ROUND,                         0x17BA | 0x10000}, //++
             {Opcode.CMSG_BATTLE_PET_SET_BATTLE_SLOT,               0x0163 | 0x10000}, //+-
             {Opcode.CMSG_BATTLE_PET_SET_FLAGS,                     0x17AC | 0x10000}, //+-
             {Opcode.CMSG_BATTLE_PET_SUMMON_COMPANION,              0x1896 | 0x10000}, //+-
@@ -485,11 +487,27 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BATTLEGROUND_PLAYER_JOINED,               0x1E2F | 0x20000}, //++
             {Opcode.SMSG_BATTLEGROUND_PLAYER_LEFT,                 0x0206 | 0x20000}, //+-
             {Opcode.SMSG_BATTLEGROUND_PLAYER_POSITIONS,            0x060A | 0x20000}, //++
+            {Opcode.SMSG_BATTLE_PET_CHAT_RESTRICTED,               0x06BE | 0x20000}, //--
+            {Opcode.SMSG_BATTLE_PET_DEBUG_QUEUE_DUMP_RESPONSE,     0x001E | 0x20000}, //--
             {Opcode.SMSG_BATTLE_PET_DELETED,                       0x18AB | 0x20000}, //+-
+            {Opcode.SMSG_BATTLE_PET_FINAL_ROUND,                   0x1C2F | 0x20000}, //--
+            {Opcode.SMSG_BATTLE_PET_FINALIZE_LOCATION,             0x082E | 0x20000}, //++
+            {Opcode.SMSG_BATTLE_PET_FINISHED,                      0x04BB | 0x20000}, //++
+            {Opcode.SMSG_BATTLE_PET_FIRST_ROUND,                   0x0613 | 0x20000}, //--
+            {Opcode.SMSG_BATTLE_PET_INITIAL_UPDATE,                0x0E1E | 0x20000}, //--
             {Opcode.SMSG_BATTLE_PET_JOURNAL,                       0x1542 | 0x20000}, //++
             {Opcode.SMSG_BATTLE_PET_JOURNAL_LOCK_ACQUIRED,         0x1A0F | 0x20000}, //++
             {Opcode.SMSG_BATTLE_PET_JOURNAL_LOCK_DENIED,           0x0203 | 0x20000}, //+-
+            {Opcode.SMSG_BATTLE_PET_MAX_GAME_LENGTH_WARNING,       0x022B | 0x20000}, //--
+            {Opcode.SMSG_BATTLE_PET_PVP_CHALLENGE,                 0x1E0B | 0x20000}, //--
             {Opcode.SMSG_BATTLE_PET_QUERY_NAME_RESPONSE,           0x1540 | 0x20000}, //++
+            {Opcode.SMSG_BATTLE_PET_QUEUE_PROPOSE_MATCH,           0x1202 | 0x20000}, //--
+            {Opcode.SMSG_BATTLE_PET_QUEUE_STATUS,                  0x00A6 | 0x20000}, //--
+            {Opcode.SMSG_BATTLE_PET_REPLACEMENTS_MADE,             0x1A1A | 0x20000}, //--
+            {Opcode.SMSG_BATTLE_PET_REQUEST_FAILED,                0x022F | 0x20000}, //--
+            {Opcode.SMSG_BATTLE_PET_ROUND_RESULT,                  0x0C1A | 0x20000}, //-- pair 17BA
+            {Opcode.SMSG_BATTLE_PET_SCENE_OBJECT_FINISHED,         0x18E1 | 0x20000}, //--
+            {Opcode.SMSG_BATTLE_PET_SCENE_OBJECT_ROUND_RESULT,     0x109B | 0x20000}, //--
             {Opcode.SMSG_BATTLE_PET_SLOT_UPDATE,                   0x16AF | 0x20000}, //+-
             {Opcode.SMSG_BATTLE_PET_UPDATES,                       0x041A | 0x20000}, //+-
             {Opcode.SMSG_BINDER_CONFIRM,                           0x1287 | 0x20000}, //+-
@@ -695,6 +713,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_NAME_QUERY_RESPONSE,                      0x169B | 0x20000}, //++
             {Opcode.SMSG_NEW_TAXI_PATH,                            0x141B | 0x20000}, //++
             {Opcode.SMSG_NEW_WORLD,                                0x1C3B | 0x20000}, //++
+            {Opcode.SMSG_NEW_WORLD_ABORT,                          0x0C1B | 0x20000}, //++
             {Opcode.SMSG_NOTIFICATION,                             0x0C2A | 0x20000}, //--
             {Opcode.SMSG_NPC_TEXT_UPDATE,                          0x140A | 0x20000}, //-+
             {Opcode.SMSG_ON_CANCEL_EXPECTED_RIDE_VEHICLE_AURA,     0x1A2A | 0x20000}, //++
@@ -910,7 +929,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0612,                                 0x0612 | 0x20000}, //++ pair 1886
             {Opcode.SMSG_UNK_0A8B,                                 0x0A8B | 0x20000}, //++
             {Opcode.SMSG_UNK_0B22,                                 0x0B22 | 0x20000}, //-- pair 0C1B coded
-            {Opcode.SMSG_UNK_0C1A,                                 0x0C1A | 0x20000}, //-- pair 17BA
+            {Opcode.SMSG_UNK_0B81,                                 0x0B81 | 0x20000}, //-- coded
             {Opcode.SMSG_UNK_0C44,                                 0x0C44 | 0x20000}, //+-
             {Opcode.SMSG_UNK_0D51,                                 0x0D51 | 0x20000}, //++
             {Opcode.SMSG_UNK_0EAA,                                 0x0EAA | 0x20000}, //++
@@ -937,7 +956,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_1E1B,                                 0x1E1B | 0x20000}, //++ levelup 90
             {Opcode.SMSG_UNK_1E9B,                                 0x1E9B | 0x20000}, //++
             {Opcode.SMSG_UNK_1E9E,                                 0x1E9E | 0x20000}, //++
-            {Opcode.SMSG_NULL_04BB,                                0x04BB | 0x20000}, //++
             {Opcode.SMSG_NULL_0C59,                                0x0C59 | 0x20000}, //++
             {Opcode.SMSG_NULL_0C9A,                                0x0C9A | 0x20000}, //++
             {Opcode.SMSG_NULL_0E2B,                                0x0E2B | 0x20000}, //++

@@ -16,6 +16,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.CMSG_BATTLE_PET_INITIAL_UPDATE_RESPONSE)]
+        public static void HandleBattlePetInitialUpdateResponse(Packet packet)
+        {
+            packet.ReadByte("unk");
+        }
+
         [Parser(Opcode.CMSG_BATTLE_PET_MODIFY_NAME)]
         public static void HandleBattlePetModifyName(Packet packet)
         {
@@ -95,6 +101,30 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("petGuid", petGuid);
         }
 
+        [Parser(Opcode.CMSG_BATTLE_PET_ROUND)]
+        public static void HandleBattlePetRound(Packet packet)
+        {
+            var unk24 = packet.ReadBit("unk24==0"); // 24
+            var unk17 = packet.ReadBit("unk17==-1"); // 17
+            var unk19 = packet.ReadBit("unk19==0"); // 19
+            packet.ReadBit("unk20"); // 20
+            var unk18 = packet.ReadBit("unk18==0"); // 18
+            var unk28 = packet.ReadBit("unk28==-1"); // 28
+            var unk16 = packet.ReadBit("unk16==6"); // 16
+            if (!unk16)
+                packet.ReadByte("unk16");
+            if (!unk19)
+                packet.ReadByte("unk19");
+            if (!unk28)
+                packet.ReadInt32("unk28");
+            if (!unk18)
+                packet.ReadByte("unk18");
+            if (!unk24)
+                packet.ReadInt32("unk24");
+            if (!unk17)
+                packet.ReadByte("unk17");
+        }
+
         [Parser(Opcode.CMSG_BATTLE_PET_SET_BATTLE_SLOT)]
         public static void HandleBattlePetSetBattleSlot(Packet packet)
         {
@@ -139,6 +169,47 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var guid = packet.StartBitStream(0, 4, 7, 6, 1, 5, 2, 3);
             packet.ParseBitStream(guid, 6, 1, 7, 0, 4, 3, 5, 2);
             packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_BATTLE_PET_FINALIZE_LOCATION)]
+        public static void HandleBattlePetFinalizeLocation(Packet packet)
+        {
+            var pos = new Vector4();
+            pos.X = packet.ReadSingle();
+            pos.Y = packet.ReadSingle();
+            for (var i = 0; i < 2; i++)
+            {
+                var poz = new Vector3();
+                poz.Y = packet.ReadSingle();
+                poz.Z = packet.ReadSingle();
+                poz.X = packet.ReadSingle();
+                packet.AddValue("Poz", poz, i);
+            }
+            pos.Z = packet.ReadSingle();
+
+            var hasO = !packet.ReadBit("!hasO");
+            var unk24 = !packet.ReadBit("unk24!=-1");
+            if (unk24)
+                packet.ReadInt32("unk24");
+            if (hasO)
+                pos.O = packet.ReadSingle();
+
+            packet.AddValue("Position", pos);
+        }
+
+        [Parser(Opcode.SMSG_BATTLE_PET_FINAL_ROUND)]
+        public static void HandleBattlePetFinalRound(Packet packet)
+        {
+        }
+
+        [Parser(Opcode.SMSG_BATTLE_PET_FIRST_ROUND)]
+        public static void HandleBattlePetFirstRound(Packet packet)
+        {
+        }
+
+        [Parser(Opcode.SMSG_BATTLE_PET_INITIAL_UPDATE)]
+        public static void HandleBattlePetInitialUpdate(Packet packet)
+        {
         }
 
         [Parser(Opcode.SMSG_BATTLE_PET_JOURNAL)]
@@ -266,6 +337,26 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_BATTLE_PET_REPLACEMENTS_MADE)]
+        public static void HandleBattlePetReplacementMade(Packet packet)
+        {
+        }
+
+        [Parser(Opcode.SMSG_BATTLE_PET_REQUEST_FAILED)]
+        public static void HandleBattlePetRequestFailed(Packet packet)
+        {
+        }
+
+        [Parser(Opcode.SMSG_BATTLE_PET_ROUND_RESULT)]
+        public static void HandleBattlePetRoundResult(Packet packet)
+        {
+        }
+
+        [Parser(Opcode.SMSG_BATTLE_PET_SCENE_OBJECT_ROUND_RESULT)]
+        public static void HandleBattlePetSceneObjectRoundresult(Packet packet)
+        {
+        }
+
         [Parser(Opcode.SMSG_BATTLE_PET_SLOT_UPDATE)]
         public static void HandleBattlePetSlotUpdate(Packet packet)
         {
@@ -361,6 +452,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt16("unk66", i);
                 packet.WriteGuid("Guid", guid[i], i);
             }
+        }
+
+        [Parser(Opcode.SMSG_BATTLE_PET_FINISHED)]
+        public static void HandleBattlePetNull(Packet packet)
+        {
         }
     }
 }
