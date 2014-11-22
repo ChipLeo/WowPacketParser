@@ -281,6 +281,23 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadBit("MountIsFavorite", i);
         }
 
+        [Parser(Opcode.SMSG_ACCOUNT_TOYS_UPDATE)]
+        public static void HandleAccountToysUpdate(Packet packet)
+        {
+            packet.ReadBit("IsFullUpdate");
+
+            var int32 = packet.ReadInt32("ToySpellIDsCount");
+            var int16 = packet.ReadInt32("ToyIsFavoriteCount");
+
+            for (int i = 0; i < int32; i++)
+                packet.ReadInt32("ToySpellIDs", i);
+
+            packet.ResetBitReader();
+
+            for (int i = 0; i < int16; i++)
+                packet.ReadBit("ToyIsFavorite", i);
+        }
+
         [Parser(Opcode.SMSG_PLAY_SOUND)]
         public static void HandlePlaySound(Packet packet)
         {
@@ -344,6 +361,43 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void HandleDisplayPromotion(Packet packet)
         {
             packet.ReadUInt32("PromotionID");
+        }
+
+        [Parser(Opcode.SMSG_SET_ALL_TASK_PROGRESS)]
+        [Parser(Opcode.SMSG_UPDATE_TASK_PROGRESS)]
+        public static void HandleSetAllTaskProgress(Packet packet)
+        {
+            var int4 = packet.ReadInt32("TaskProgressCount");
+            for (int i = 0; i < int4; i++)
+            {
+                packet.ReadUInt32("TaskID", i);
+                packet.ReadUInt32("FailureTime", i);
+                packet.ReadUInt32("Flags", i);
+
+                var int3 = packet.ReadInt32("ProgressCounts", i);
+                for (int j = 0; j < int3; j++)
+                    packet.ReadInt16("Counts", i, j);
+            }
+        }
+
+        [Parser(Opcode.CMSG_TUTORIAL_FLAG)]
+        public static void HandleTutorialFlag(Packet packet)
+        {
+            var bits16 = packet.ReadBits("TutorialAction", 2); // 0 == Update, 1 == Clear?, 2 == Reset
+
+            if (bits16 == 0)
+                packet.ReadInt32("TutorialBit");
+        }
+
+        [Parser(Opcode.SMSG_START_ELAPSED_TIMERS)]
+        public static void HandleStartElapsedTimers(Packet packet)
+        {
+            var int3 = packet.ReadInt32("ElaspedTimerCounts");
+            for (int i = 0; i < int3; i++)
+            {
+                packet.ReadUInt32("TimerID", i);
+                packet.ReadTime("CurrentDuration", i);
+            }
         }
     }
 }

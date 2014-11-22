@@ -237,10 +237,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBits("Unk Bit", 2);
 
             // Calculate mid pos
-            var mid = new Vector3();
-            mid.X = (pos.X + endpos.X) * 0.5f;
-            mid.Y = (pos.Y + endpos.Y) * 0.5f;
-            mid.Z = (pos.Z + endpos.Z) * 0.5f;
+            var mid = new Vector3
+            {
+                X = (pos.X + endpos.X)*0.5f,
+                Y = (pos.Y + endpos.Y)*0.5f,
+                Z = (pos.Z + endpos.Z)*0.5f
+            };
             for (var i = 0; i < packedDeltas; ++i)
             {
                 var vec = new Vector3
@@ -352,7 +354,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             if (hasShipTransferPending)
             {
-                packet.ReadInt32("ID");
+                packet.ReadEntry<UInt32>(StoreNameType.GameObject, "ID");
                 packet.ReadEntry<Int32>(StoreNameType.Map, "OriginMapID");
             }
 
@@ -545,6 +547,13 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
             ReadMovementStats(ref packet);
             packet.ReadSingle("Speed");
+        }
+
+        [Parser(Opcode.SMSG_ADJUST_SPLINE_DURATION)]
+        public static void HandleAdjustSplineDuration(Packet packet)
+        {
+            packet.ReadPackedGuid128("Unit");
+            packet.ReadSingle("Scale");
         }
     }
 }
