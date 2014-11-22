@@ -21,6 +21,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_ADD_IGNORE,                               0x0D20 | 0x10000}, //+-
             {Opcode.CMSG_ADDON_REGISTERED_PREFIXES,                0x040E | 0x10000}, //++
             {Opcode.CMSG_ALTER_APPEARANCE,                         0x07F0 | 0x10000}, //+-
+            {Opcode.CMSG_AREA_SPIRIT_HEALER_QUEUE,                 0x12D8 | 0x10000}, //++
             {Opcode.CMSG_AREATRIGGER,                              0x1C44 | 0x10000}, //++
             {Opcode.CMSG_ATTACKSTOP,                               0x0345 | 0x10000}, //++
             {Opcode.CMSG_ATTACKSWING,                              0x02E7 | 0x10000}, //++
@@ -453,6 +454,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_AI_REACTION,                              0x06AF | 0x20000}, //++
             {Opcode.SMSG_ALL_ACHIEVEMENT_DATA_ACCOUNT,             0x0A9E | 0x20000}, //++
             {Opcode.SMSG_ALL_ACHIEVEMENT_DATA_PLAYER,              0x180A | 0x20000}, //++
+            {Opcode.SMSG_AREA_SPIRIT_HEALER_TIME,                  0x188E | 0x20000}, //++
             {Opcode.SMSG_AREA_TRIGGER_DENIED,                      0x148F | 0x20000}, //++ pair 1C44
             {Opcode.SMSG_ARENA_SEASON_WORLD_STATE,                 0x069B | 0x20000}, //++
             {Opcode.SMSG_ATTACKERSTATEUPDATE,                      0x06AA | 0x20000}, //++
@@ -763,6 +765,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_REFORGE_RESULT,                           0x141E | 0x20000}, //++
             {Opcode.SMSG_REFRESH_SPELL_HISTORY,                    0x0170 | 0x20000}, //++
             {Opcode.SMSG_REMOVED_SPELL,                            0x14C3 | 0x20000}, //+-
+            {Opcode.SMSG_REPORT_PVP_AFK_RESULT,                    0x18BE | 0x20000}, //++
             {Opcode.SMSG_REQUEST_CEMETERY_LIST_RESPONSE,           0x042A | 0x20000}, //++ pair 06E4
             {Opcode.SMSG_REQUEST_PVP_REWARDS_RESPONSE,             0x08AA | 0x20000}, //++
             {Opcode.SMSG_RESET_RANGED_COMBAT_TIMER,                0x0002 | 0x20000}, //++

@@ -32,11 +32,18 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.CMSG_AREA_SPIRIT_HEALER_QUERY)]
-        [Parser(Opcode.CMSG_AREA_SPIRIT_HEALER_QUEUE)]
         [Parser(Opcode.CMSG_BATTLEMASTER_HELLO)]
         [Parser(Opcode.CMSG_REPORT_PVP_AFK)]
         public static void HandleBattlemasterHello(Packet packet)
         {
+        }
+
+        [Parser(Opcode.CMSG_AREA_SPIRIT_HEALER_QUEUE)]
+        public static void HandleAreaSpiritHealerQueue(Packet packet)
+        {
+            var guid = packet.StartBitStream(5, 4, 0, 2, 7, 1, 6, 3);
+            packet.ParseBitStream(guid, 1, 7, 6, 2, 4, 3, 0, 5);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_BATTLEFIELD_JOIN)]
@@ -185,6 +192,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_AREA_SPIRIT_HEALER_TIME)]
         public static void HandleAreaSpiritHealerTime(Packet packet)
         {
+            var guid = packet.StartBitStream(5, 2, 7, 6, 1, 0, 3, 4);
+            packet.ParseBitStream(guid, 2, 3, 5, 4, 6);
+            packet.ReadInt32("Time");
+            packet.ParseBitStream(guid, 7, 0, 1);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_ARENA_OPPONENT_UPDATE)]
@@ -649,6 +661,21 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_REPORT_PVP_AFK_RESULT)]
         public static void HandleReportPvPAFKResult(Packet packet)
         {
+            var unk26 = !packet.ReadBit("!unk26"); // 26
+            var unk25 = !packet.ReadBit("!unk25"); // 25
+            var unk24 = 5 - packet.ReadBit("unk24"); // 24
+
+            var unk64 = !packet.ReadBit("!unk64"); // 64
+
+            var guid = packet.StartBitStream(1, 5, 7, 2, 6, 4, 3, 0);
+            packet.ParseBitStream(guid, 0, 6, 2, 4, 5, 1, 3, 7);
+            if (unk25)
+                packet.ReadByte("unk25"); // 25
+            if (unk26)
+                packet.ReadByte("unk26"); // 26
+            if (unk24 != 4)
+                packet.ReadByte("unk24"); // 24
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_REQUEST_PVP_REWARDS_RESPONSE)]
