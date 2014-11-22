@@ -920,7 +920,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_WEEKLY_SPELL_USAGE,                       0x00F9 | 0x20000}, //++
             {Opcode.SMSG_WHO,                                      0x161B | 0x20000}, //--
             {Opcode.SMSG_WORLD_SERVER_INFO,                        0x0082 | 0x20000}, //++
-            {Opcode.SMSG_WORLD_STATE_UI_TIMER_UPDATE,              0x0027 | 0x20000}, //--
+            {Opcode.SMSG_WORLD_STATE_UI_TIMER_UPDATE,              0x0027 | 0x20000}, //+-
             {Opcode.SMSG_XP_GAIN_ABORTED,                          0x1A2B | 0x20000}, //++ hunter pet opcode
             {Opcode.SMSG_ZONE_UNDER_ATTACK,                        0x10C2 | 0x20000}, //++
             {Opcode.SMSG_UNK_000F,                                 0x000f | 0x20000}, //++

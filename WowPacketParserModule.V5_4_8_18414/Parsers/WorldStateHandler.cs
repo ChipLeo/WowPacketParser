@@ -36,11 +36,5 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var field = packet.ReadInt32();
             packet.AddValue("Field", field + " - Value: " + val);
         }
-
-        [Parser(Opcode.SMSG_WORLD_STATE_UI_TIMER_UPDATE)]
-        public static void HandleUpdateUITimer(Packet packet)
-        {
-            packet.ReadTime("Time");
-        }
     }
 }
