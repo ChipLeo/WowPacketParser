@@ -369,6 +369,41 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_PARTYKILLLOG)]
+        public static void HandleSPartyKillLog(Packet packet)
+        {
+            var guid = new byte[8];
+            var guid2 = new byte[8];
+
+            guid2[7] = packet.ReadBit();
+            guid2[2] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid2[4] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid2[3] = packet.ReadBit();
+            guid2[1] = packet.ReadBit();
+            guid2[0] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid2[6] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid2[5] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+
+            packet.ParseBitStream(guid2, 0, 5);
+            packet.ParseBitStream(guid, 0, 2);
+            packet.ParseBitStream(guid2, 7, 6, 1, 4);
+            packet.ParseBitStream(guid, 4, 1);
+            packet.ParseBitStream(guid2, 2);
+            packet.ParseBitStream(guid, 6, 3, 5, 7);
+            packet.ParseBitStream(guid2, 3);
+
+            packet.WriteGuid("Target", guid);
+            packet.WriteGuid("Player", guid2);
+        }
+
         [Parser(Opcode.SMSG_PVP_CREDIT)]
         public static void HandlePvPCredit(Packet packet)
         {

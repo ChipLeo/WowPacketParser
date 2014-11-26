@@ -724,6 +724,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_PAGE_TEXT_QUERY_RESPONSE,                 0x081E | 0x20000}, //+-
             {Opcode.SMSG_PARTY_COMMAND_RESULT,                     0x0F86 | 0x20000}, //+-
             {Opcode.SMSG_PARTY_MEMBER_STATS,                       0x0A9A | 0x20000}, //+-
+            {Opcode.SMSG_PARTYKILLLOG,                             0x048A | 0x20000}, //++
             {Opcode.SMSG_PERIODICAURALOG,                          0x0CF2 | 0x20000}, //++
             {Opcode.SMSG_PET_ACTION_FEEDBACK,                      0x080E | 0x20000}, //++
             {Opcode.SMSG_PET_ACTION_SOUND,                         0x15E2 | 0x20000}, //++
