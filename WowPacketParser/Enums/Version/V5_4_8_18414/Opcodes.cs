@@ -622,6 +622,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_HOTFIX_INFO,                              0x1EBA | 0x20000}, //--
             {Opcode.SMSG_INIT_CURRENCY,                            0x1A8B | 0x20000}, //++
             {Opcode.SMSG_INIT_WORLD_STATES,                        0x1560 | 0x20000}, //--
+            {Opcode.SMSG_INITIAL_SETUP,                            0x0A8B | 0x20000}, //++
             {Opcode.SMSG_INITIAL_SPELLS,                           0x045A | 0x20000}, //++
             {Opcode.SMSG_INITIALIZE_FACTIONS,                      0x0AAA | 0x20000}, //++
             {Opcode.SMSG_INSPECT_HONOR_STATS,                      0x1A1E | 0x20000}, //++ pair 19C3
@@ -927,13 +928,10 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_ZONE_UNDER_ATTACK,                        0x10C2 | 0x20000}, //++
             {Opcode.SMSG_UNK_000F,                                 0x000f | 0x20000}, //++
             {Opcode.SMSG_UNK_001B,                                 0x001B | 0x20000}, //++
-            {Opcode.SMSG_UNK_0023,                                 0x0023 | 0x20000}, //++
             {Opcode.SMSG_UNK_0332,                                 0x0332 | 0x20000}, //-- coded
             {Opcode.SMSG_UNK_0354,                                 0x0354 | 0x20000}, //++
             {Opcode.SMSG_UNK_0364,                                 0x0364 | 0x20000}, //++
-            {Opcode.SMSG_UNK_048A,                                 0x048A | 0x20000}, //++
             {Opcode.SMSG_UNK_0612,                                 0x0612 | 0x20000}, //++ pair 1886
-            {Opcode.SMSG_UNK_0A8B,                                 0x0A8B | 0x20000}, //++
             {Opcode.SMSG_UNK_0B22,                                 0x0B22 | 0x20000}, //-- pair 0C1B coded
             {Opcode.SMSG_UNK_0B81,                                 0x0B81 | 0x20000}, //-- coded
             {Opcode.SMSG_UNK_0C44,                                 0x0C44 | 0x20000}, //+-

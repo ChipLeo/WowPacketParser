@@ -525,6 +525,24 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk36");
         }
 
+        [Parser(Opcode.SMSG_INITIAL_SETUP)]
+        public static void HandleInitialsetup(Packet packet)
+        {
+            var hasData = !packet.ReadBit("!hasData");
+            var count = packet.ReadBits("count", 24);
+            packet.ReadInt32("unk20");
+            packet.ReadByte("unk40");
+            if (hasData)
+            {
+                packet.ReadInt32Visible("unk16");
+            }
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadByteVisible("unkb28", i);
+            }
+            packet.ReadByte("unk41");
+        }
+
         [Parser(Opcode.SMSG_INSPECT_HONOR_STATS)]
         public static void HandleInspectHonorStatsResponse(Packet packet)
         {
@@ -1200,24 +1218,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             if (unk28)
                 packet.ReadInt32("unk96");
-        }
-
-        [Parser(Opcode.SMSG_UNK_0A8B)]
-        public static void HandleUnk0A8B(Packet packet)
-        {
-            var hasData = !packet.ReadBit("!hasData");
-            var count = packet.ReadBits("count", 24);
-            packet.ReadInt32("unk20");
-            packet.ReadByte("unk40");
-            if (hasData)
-            {
-                packet.ReadInt32Visible("unk16");
-            }
-            for (var i = 0; i < count; i++)
-            {
-                packet.ReadByteVisible("unkb28", i);
-            }
-            packet.ReadByte("unk41");
         }
 
         [Parser(Opcode.SMSG_UNK_0C44)]
