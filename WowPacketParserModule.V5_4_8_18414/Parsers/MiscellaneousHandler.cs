@@ -505,6 +505,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadUInt32("Version");
         }
 
+        [Parser(Opcode.SMSG_DANCE_STUDIO_CREATE_RESULT)]
+        public static void HandleDanceStudioCreateResult(Packet packet)
+        {
+            packet.ReadUInt32("Dword8"); // 8
+            packet.ReadUInt32("Dword5"); // 5
+            packet.ReadUInt32("Dword6"); // 6
+            packet.ReadUInt32("Dword7"); // 7
+            packet.ReadBit("Bit in Byte16");
+        }
+
         [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS)]
         public static void HandleFeatureSystemStatus(Packet packet)
         {
@@ -1440,16 +1450,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             packet.ReadBits("unk16", 2);
             packet.ReadInt32("unk20");
-        }
-
-        [Parser(Opcode.SMSG_UNK_1E9B)]
-        public static void HandleUnk1E9B(Packet packet)
-        {
-            packet.ReadUInt32("Dword8");
-            packet.ReadUInt32("Dword5");
-            packet.ReadUInt32("Dword6");
-            packet.ReadUInt32("Dword7");
-            packet.ReadBit("Bit in Byte16");
         }
 
         [Parser(Opcode.CMSG_UNK_10A2)]
