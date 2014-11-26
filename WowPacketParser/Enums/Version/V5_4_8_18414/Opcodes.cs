@@ -473,6 +473,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_AUCTION_OUTBID_NOTIFICATION,              0x1A9F | 0x20000}, //++
             {Opcode.SMSG_AUCTION_OWNER_LIST_RESULT,                0x1785 | 0x20000}, //++
             {Opcode.SMSG_AUCTION_OWNER_NOTIFICATION,               0x1A8E | 0x20000}, //+-
+            {Opcode.SMSG_AURA_POINTS_DEPLETED,                     0x1553 | 0x20000}, //++
             {Opcode.SMSG_AURA_UPDATE,                              0x0072 | 0x20000}, //++
             {Opcode.SMSG_AUTH_CHALLENGE,                           0x0949 | 0x20000}, //--+
             {Opcode.SMSG_AUTH_RESPONSE,                            0x0ABA | 0x20000}, //++
@@ -949,7 +950,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_1206,                                 0x1206 | 0x20000}, //++
             {Opcode.SMSG_UNK_129B,                                 0x129B | 0x20000}, //++
             {Opcode.SMSG_UNK_14E2,                                 0x14E2 | 0x20000}, //++ pair+ 1886
-            {Opcode.SMSG_UNK_1553,                                 0x1553 | 0x20000}, //++
             {Opcode.SMSG_UNK_162A,                                 0x162A | 0x20000}, //++
             {Opcode.SMSG_UNK_16BF,                                 0x16BF | 0x20000}, //++
             {Opcode.SMSG_UNK_182E,                                 0x182E | 0x20000}, //++ pair CMSG 15DB

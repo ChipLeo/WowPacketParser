@@ -394,6 +394,17 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_AURA_POINTS_DEPLETED)]
+        public static void HandleAuraPointsDepleted(Packet packet)
+        {
+            var guid = packet.StartBitStream(2, 4, 0, 3, 6, 7, 5, 1);
+            packet.ParseBitStream(guid, 1, 3, 5);
+            packet.ReadByte("unk24"); // 24
+            packet.ParseBitStream(guid, 0, 2, 7, 6, 4);
+            packet.ReadByte("unk25"); // 25
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_AURA_UPDATE)]
         public static void HandleAuraUpdate(Packet packet)
         {
