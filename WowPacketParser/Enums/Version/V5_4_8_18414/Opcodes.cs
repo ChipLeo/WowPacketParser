@@ -750,6 +750,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_PLAY_MUSIC,                               0x0023 | 0x20000}, //++
             {Opcode.SMSG_PLAY_OBJECT_SOUND,                        0x1443 | 0x20000}, //++
             {Opcode.SMSG_PLAY_ONE_SHOT_ANIM_KIT,                   0x043E | 0x20000}, //++
+            {Opcode.SMSG_PLAY_SCENE,                               0x1C3A | 0x20000}, //++
             {Opcode.SMSG_PLAY_SOUND,                               0x102A | 0x20000}, //++
             {Opcode.SMSG_PLAY_SPELL_VISUAL,                        0x061E | 0x20000}, //++
             {Opcode.SMSG_PLAY_SPELL_VISUAL_KIT,                    0x11E3 | 0x20000}, //++
@@ -954,7 +955,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_182E,                                 0x182E | 0x20000}, //++ pair CMSG 15DB
             {Opcode.SMSG_UNK_188F,                                 0x188F | 0x20000}, //++
             {Opcode.SMSG_UNK_1904,                                 0x1904 | 0x20000}, //++
-            {Opcode.SMSG_UNK_1C3A,                                 0x1C3A | 0x20000}, //++
             {Opcode.SMSG_UNK_1C3F,                                 0x1C3F | 0x20000}, //++
             {Opcode.SMSG_UNK_1DBE,                                 0x1DBE | 0x20000}, //++
             {Opcode.SMSG_UNK_1E1B,                                 0x1E1B | 0x20000}, //++ levelup 90
