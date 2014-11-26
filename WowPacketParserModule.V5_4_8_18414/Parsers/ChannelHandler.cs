@@ -15,13 +15,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
         }
 
-        [Parser(Opcode.CMSG_CHANNEL_ROSTER_INFO)]
-        public static void HandleChannelrosterInfo(Packet packet)
+        [Parser(Opcode.CMSG_CHANNEL_LIST)]
+        public static void HandleChannelList(Packet packet)
         {
             packet.ReadWoWString("Channel", packet.ReadBits(7));
         }
 
-        [Parser(Opcode.CMSG_CHANNEL_LIST)]
         [Parser(Opcode.CMSG_CHANNEL_OWNER)]
         [Parser(Opcode.CMSG_CHANNEL_ANNOUNCEMENTS)]
         [Parser(Opcode.CMSG_CHANNEL_VOICE_ON)]
@@ -36,6 +35,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_CHANNEL_LIST)]
         public static void HandleChannelSendList(Packet packet)
         {
+            packet.ReadByte("Type");
+            packet.ReadCString("Channel Name");
+            packet.ReadEnum<ChannelFlag>("Flags", TypeCode.Byte);
+            var count = packet.ReadInt32("Counter");
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadGuid("Player GUID " + i);
+                packet.ReadUInt32("Realm ID");
+                packet.ReadEnum<ChannelMemberFlag>("Player Flags " + i, TypeCode.Byte);
+            }
         }
 
         [Parser(Opcode.SMSG_CHANNEL_MEMBER_COUNT)]

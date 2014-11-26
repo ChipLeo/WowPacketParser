@@ -74,7 +74,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_CANCEL_TRADE,                             0x1941 | 0x10000}, //++
             {Opcode.CMSG_CAST_SPELL,                               0x0206 | 0x10000}, //++
             {Opcode.CMSG_CHANGE_SEATS_ON_CONTROLLED_VEHICLE,       0x08F8 | 0x10000}, //+-
-            {Opcode.CMSG_CHANNEL_ROSTER_INFO,                      0x0C1B | 0x10000}, //++
+            {Opcode.CMSG_CHANNEL_LIST,                             0x0C1B | 0x10000}, //++
             {Opcode.CMSG_CHAR_CREATE,                              0x0F1D | 0x10000}, //+-
             {Opcode.CMSG_CHAR_CUSTOMIZE,                           0x0A13 | 0x10000}, //+-
             {Opcode.CMSG_CHAR_DELETE,                              0x04E2 | 0x10000}, //+-
@@ -527,6 +527,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_CAST_FAILED,                              0x143A | 0x20000}, //++
             {Opcode.SMSG_CHALLENGE_MODE_ALL_MAP_STATS,             0x11C2 | 0x20000}, //++ pair 1452
             {Opcode.SMSG_CHALLENGE_MODE_REWARDS,                   0x168A | 0x20000}, //++ pair 1C5A
+            {Opcode.SMSG_CHANNEL_LIST,                             0x0B22 | 0x20000}, //++ pair 0C1B
             {Opcode.SMSG_CHANNEL_NOTIFY,                           0x0F06 | 0x20000}, //--
             {Opcode.SMSG_CHANNEL_START,                            0x10F9 | 0x20000}, //++
             {Opcode.SMSG_CHANNEL_UPDATE,                           0x11D9 | 0x20000}, //+-
@@ -932,7 +933,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0354,                                 0x0354 | 0x20000}, //++
             {Opcode.SMSG_UNK_0364,                                 0x0364 | 0x20000}, //++
             {Opcode.SMSG_UNK_0612,                                 0x0612 | 0x20000}, //++ pair 1886
-            {Opcode.SMSG_UNK_0B22,                                 0x0B22 | 0x20000}, //-- pair 0C1B coded
             {Opcode.SMSG_UNK_0B81,                                 0x0B81 | 0x20000}, //-- coded
             {Opcode.SMSG_UNK_0C44,                                 0x0C44 | 0x20000}, //+-
             {Opcode.SMSG_UNK_0D51,                                 0x0D51 | 0x20000}, //++
