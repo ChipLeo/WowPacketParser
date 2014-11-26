@@ -882,6 +882,19 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_SEND_SPELL_CHARGES)]
+        public static void HandleSendSpellCharges(Packet packet)
+        {
+            var count = packet.ReadBits("Count", 21);
+
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadInt32("Unk Int32", i);
+                packet.ReadByte("Unk Byte", i);
+                packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID", i);
+            }
+        }
+
         [Parser(Opcode.SMSG_SEND_SPELL_HISTORY)]
         public static void HandleSendSpellHistory(Packet packet)
         {
@@ -901,14 +914,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_SEND_UNLEARN_SPELLS)]
         public static void HandleSendUnlearnSpells(Packet packet)
         {
-            var count = packet.ReadBits("Count", 21);
-
+            var count = packet.ReadBits("count", 22);
             for (var i = 0; i < count; i++)
-            {
-                packet.ReadInt32("Unk Int32", i);
-                packet.ReadByte("Unk Byte", i);
                 packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID", i);
-            }
         }
 
         [Parser(Opcode.SMSG_SPELL_CATEGORY_COOLDOWN)]

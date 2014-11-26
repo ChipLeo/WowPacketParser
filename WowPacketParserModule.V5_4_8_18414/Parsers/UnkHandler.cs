@@ -241,14 +241,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
-        [Parser(Opcode.SMSG_UNK_0D51)]
-        public static void HandleSUnk0D51(Packet packet)
-        {
-            var count = packet.ReadBits("count", 22);
-            for (var i = 0; i < count; i++)
-                packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID", i);
-        }
-
         [Parser(Opcode.SMSG_UNK_0EAA)]
         public static void HandleSUnk0EAA(Packet packet)
         {
