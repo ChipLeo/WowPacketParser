@@ -479,6 +479,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BATTLEFIELD_LIST,                         0x160E | 0x20000}, //++
             {Opcode.SMSG_BATTLEFIELD_MGR_EJECTED,                  0x18C2 | 0x20000}, //--
             {Opcode.SMSG_BATTLEFIELD_MGR_ENTERED,                  0x081B | 0x20000}, //--
+            {Opcode.SMSG_BATTLEFIELD_RATED_INFO,                   0x0EBA | 0x20000}, //++
             {Opcode.SMSG_BATTLEFIELD_STATUS,                       0x0433 | 0x20000}, //++
             {Opcode.SMSG_BATTLEFIELD_STATUS_QUEUED,                0x122E | 0x20000}, //++
             {Opcode.SMSG_BATTLEFIELD_STATUS_ACTIVE,                0x1AAF | 0x20000}, //++
@@ -938,7 +939,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0D51,                                 0x0D51 | 0x20000}, //++
             {Opcode.SMSG_UNK_0EAA,                                 0x0EAA | 0x20000}, //++
             {Opcode.SMSG_UNK_0EAB,                                 0x0EAB | 0x20000}, //++
-            {Opcode.SMSG_UNK_0EBA,                                 0x0EBA | 0x20000}, //++
             {Opcode.SMSG_UNK_1006,                                 0x1006 | 0x20000}, //++
             {Opcode.SMSG_UNK_103E,                                 0x103E | 0x20000}, //++
             {Opcode.SMSG_UNK_1134,                                 0x1134 | 0x20000}, //-- pair CMSG 0123 coded

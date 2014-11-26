@@ -282,22 +282,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_UNK_0EBA)]
-        public static void HandleSUnk0EBA(Packet packet)
-        {
-            for (var i = 0; i < 4; i++)
-            {
-                packet.ReadInt32("unk20", i);
-                packet.ReadInt32("unk36", i);
-                packet.ReadInt32("unk24", i);
-                packet.ReadInt32("unk16", i);
-                packet.ReadInt32("unk28", i);
-                packet.ReadInt32("unk40", i);
-                packet.ReadInt32("unk32", i);
-                packet.ReadInt32("unk44", i);
-            }
-        }
-
         [Parser(Opcode.SMSG_UNK_1006)]
         public static void HandleSUnk1006(Packet packet)
         {

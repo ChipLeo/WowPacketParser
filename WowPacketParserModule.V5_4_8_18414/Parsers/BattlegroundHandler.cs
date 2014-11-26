@@ -312,6 +312,17 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_BATTLEFIELD_RATED_INFO)]
         public static void HandleBattlefieldRatedInfo(Packet packet)
         {
+            for (var i = 0; i < 4; i++)
+            {
+                packet.ReadInt32("unk20", i);
+                packet.ReadInt32("unk36", i);
+                packet.ReadInt32("unk24", i);
+                packet.ReadInt32("unk16", i);
+                packet.ReadInt32("unk28", i);
+                packet.ReadInt32("unk40", i);
+                packet.ReadInt32("unk32", i);
+                packet.ReadInt32("unk44", i);
+            }
         }
 
         [Parser(Opcode.SMSG_BATTLEFIELD_STATUS)]
