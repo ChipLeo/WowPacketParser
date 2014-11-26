@@ -2188,7 +2188,6 @@ namespace WowPacketParser.Enums
         SMSG_UNK_1DAB,
         SMSG_UNK_1DBE,
         SMSG_UNK_1E1B,
-        SMSG_UNK_1E9E,
         SMSG_UNK_1EAE,
         SMSG_UNK_1F9F,
         SMSG_NULL_0C59,

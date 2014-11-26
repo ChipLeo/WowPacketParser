@@ -505,6 +505,17 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadUInt32("Version");
         }
 
+        [Parser(Opcode.SMSG_CROSSED_INEBRIATION_THRESHOLD)]
+        public static void HandleCrossedInerbriationThreshold(Packet packet)
+        {
+            var guid = packet.StartBitStream(0, 4, 2, 6, 5, 1, 3, 7);
+            packet.ParseBitStream(guid, 3);
+            packet.ReadEntry<UInt32>(StoreNameType.Item, "Entry"); // 24
+            packet.ReadEnum<DrunkenState>("Drunken State", TypeCode.UInt32); // 28
+            packet.ParseBitStream(guid, 4, 6, 7, 0, 2, 5, 1);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_DANCE_STUDIO_CREATE_RESULT)]
         public static void HandleDanceStudioCreateResult(Packet packet)
         {
