@@ -975,7 +975,6 @@ namespace WowPacketParser.Enums
         CMSG_NULL_0365,
         CMSG_NULL_0375,
         CMSG_NULL_03C4,
-        CMSG_NULL_0558,
         CMSG_NULL_05E1,
         CMSG_NULL_0644,
         CMSG_NULL_06D4,
