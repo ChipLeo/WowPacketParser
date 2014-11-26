@@ -2148,7 +2148,6 @@ namespace WowPacketParser.Enums
         SMSG_ZONE_UNDER_ATTACK,
         SMSG_UNK_000F,
         SMSG_UNK_001B,
-        SMSG_UNK_0023,
         SMSG_UNK_0130,
         SMSG_UNK_022F,
         SMSG_UNK_0332,

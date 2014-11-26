@@ -740,6 +740,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_PETITION_SHOWLIST,                        0x10A3 | 0x20000}, //--
             {Opcode.SMSG_PETITION_SHOW_SIGNATURES,                 0x00AA | 0x20000}, //--
             {Opcode.SMSG_PETITION_SIGN_RESULTS,                    0x06AE | 0x20000}, //--
+            {Opcode.SMSG_PLAY_MUSIC,                               0x0023 | 0x20000}, //++
             {Opcode.SMSG_PLAY_OBJECT_SOUND,                        0x1443 | 0x20000}, //++
             {Opcode.SMSG_PLAY_ONE_SHOT_ANIM_KIT,                   0x043E | 0x20000}, //++
             {Opcode.SMSG_PLAY_SOUND,                               0x102A | 0x20000}, //++

@@ -629,6 +629,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guild Guid", guid64);
         }
 
+        [Parser(Opcode.SMSG_PLAY_MUSIC)]
+        public static void HandleSoundMessages(Packet packet)
+        {
+            var music = packet.ReadUInt32("Music ID");
+            Storage.Sounds.Add(music, packet.TimeSpan);
+        }
+
         [HasSniffData]
         [Parser(Opcode.SMSG_PLAY_OBJECT_SOUND)]
         public static void HandlePlayObjectSound(Packet packet)
