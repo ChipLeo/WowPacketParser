@@ -486,6 +486,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadBitVisible("Byte16", i);
         }
 
+        [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS_GLUE_SCREEN)]
+        public static void HandleUnk121E(Packet packet)
+        {
+            packet.ReadBit("Bit in Byte16"); // 16
+            packet.ReadBit("Bit in Byte18"); // 18
+            packet.ReadBit("Bit in Byte17"); // 17
+        }
+
         [Parser(Opcode.SMSG_FORCE_SET_VEHICLE_REC_ID)]
         public static void HandleForceSetVehicleRecId(Packet packet)
         {
@@ -1299,14 +1307,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     packet.ReadByte("Spell Mask bitpos", i, j);
                 }
             }
-        }
-
-        [Parser(Opcode.SMSG_UNK_121E)]
-        public static void HandleUnk121E(Packet packet)
-        {
-            packet.ReadBit("Bit in Byte16");
-            packet.ReadBit("Bit in Byte18");
-            packet.ReadBit("Bit in Byte17");
         }
 
         [Parser(Opcode.SMSG_UNK_129B)]

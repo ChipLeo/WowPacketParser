@@ -580,6 +580,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_FACTION_BONUS_INFO,                       0x0A0B | 0x20000}, //++
             {Opcode.SMSG_FAILED_PLAYER_CONDITION,                  0x1223 | 0x20000}, //++
             {Opcode.SMSG_FEATURE_SYSTEM_STATUS,                    0x16BB | 0x20000}, //++
+            {Opcode.SMSG_FEATURE_SYSTEM_STATUS_GLUE_SCREEN,        0x121E | 0x20000}, //++
             {Opcode.SMSG_FLIGHT_SPLINE_SYNC,                       0x0063 | 0x20000}, //++
             {Opcode.SMSG_RESUME_COMMS,                             0x0969 | 0x20000}, //--
             {Opcode.SMSG_FORCE_SET_VEHICLE_REC_ID,                 0x149F | 0x20000}, //++
@@ -946,7 +947,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_1006,                                 0x1006 | 0x20000}, //++
             {Opcode.SMSG_UNK_103E,                                 0x103E | 0x20000}, //++
             {Opcode.SMSG_UNK_1206,                                 0x1206 | 0x20000}, //++
-            {Opcode.SMSG_UNK_121E,                                 0x121E | 0x20000}, //++
             {Opcode.SMSG_UNK_129B,                                 0x129B | 0x20000}, //++
             {Opcode.SMSG_UNK_14E2,                                 0x14E2 | 0x20000}, //++ pair+ 1886
             {Opcode.SMSG_UNK_1553,                                 0x1553 | 0x20000}, //++
