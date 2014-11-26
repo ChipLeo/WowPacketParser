@@ -925,7 +925,6 @@ namespace WowPacketParser.Enums
         CMSG_UNK_0087,
         CMSG_UNK_009A,
         CMSG_UNK_00D9,
-        CMSG_UNK_0123,
         CMSG_UNK_0150,
         CMSG_UNK_01F1,
         CMSG_UNK_0247,

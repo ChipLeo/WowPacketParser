@@ -151,6 +151,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_INSPECT,                                  0x1259 | 0x10000}, //++
             {Opcode.CMSG_INSPECT_HONOR_STATS,                      0x19C3 | 0x10000}, //++
             {Opcode.CMSG_ITEM_REFUND_INFO,                         0x1258 | 0x10000}, //+-
+            {Opcode.CMSG_ITEM_TEXT_QUERY,                          0x0123 | 0x10000}, //++
             {Opcode.CMSG_JOIN_CHANNEL,                             0x148E | 0x10000}, //++
             {Opcode.CMSG_LEARN_TALENT,                             0x02A7 | 0x10000}, //+-
             {Opcode.CMSG_LEAVE_CHANNEL,                            0x042A | 0x10000}, //+-
@@ -339,7 +340,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_0087,                                 0x0087 | 0x10000}, //++
             {Opcode.CMSG_UNK_009A,                                 0x009A | 0x10000}, //++ like CMSG_MESSAGECHAT_ADDON...
             {Opcode.CMSG_UNK_00D9,                                 0x00D9 | 0x10000}, //++ PENDING_STRAFE_STOP
-            {Opcode.CMSG_UNK_0123,                                 0x0123 | 0x10000}, //++
             {Opcode.CMSG_UNK_01F1,                                 0x01F1 | 0x10000}, //++
             {Opcode.CMSG_UNK_0247,                                 0x0247 | 0x10000}, //+-
             {Opcode.CMSG_UNK_0264,                                 0x0264 | 0x10000}, //+-

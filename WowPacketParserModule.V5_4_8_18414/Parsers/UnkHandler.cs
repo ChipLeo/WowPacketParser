@@ -23,12 +23,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("Addon", len1);
         }
 
-        [Parser(Opcode.CMSG_UNK_0123)]
-        public static void HandleUnk0123(Packet packet)
-        {
-            packet.ReadGuid("Item");
-        }
-
         [Parser(Opcode.CMSG_UNK_028E)]
         public static void HandleUnk028E(Packet packet)
         {
