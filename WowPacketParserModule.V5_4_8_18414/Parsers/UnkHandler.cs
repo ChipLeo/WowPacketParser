@@ -308,16 +308,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt64("QW16");
         }
 
-        [Parser(Opcode.SMSG_UNK_1160)]
-        public static void HandleSUnk1160(Packet packet)
-        {
-            packet.ReadInt32("unk24"); // 24
-            packet.ReadInt32("unk20"); // 20
-            packet.ReadInt32("unk16"); // 16
-            packet.ReadBit("unk28"); // 28
-        }
-
-
         [Parser(Opcode.SMSG_UNK_1206)]
         public static void HandleSUnk1206(Packet packet)
         {

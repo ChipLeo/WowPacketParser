@@ -461,6 +461,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_AREA_SPIRIT_HEALER_TIME,                  0x188E | 0x20000}, //++
             {Opcode.SMSG_AREA_TRIGGER_DENIED,                      0x148F | 0x20000}, //++ pair 1C44
             {Opcode.SMSG_ARENA_SEASON_WORLD_STATE,                 0x069B | 0x20000}, //++
+            {Opcode.SMSG_ARCHAEOLOGY_SURVERY_CAST,                 0x1160 | 0x20000}, //++
             {Opcode.SMSG_ATTACKERSTATEUPDATE,                      0x06AA | 0x20000}, //++
             {Opcode.SMSG_ATTACKSTART,                              0x1A9E | 0x20000}, //++
             {Opcode.SMSG_ATTACKSTOP,                               0x12AF | 0x20000}, //++
@@ -942,7 +943,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0EAB,                                 0x0EAB | 0x20000}, //++
             {Opcode.SMSG_UNK_1006,                                 0x1006 | 0x20000}, //++
             {Opcode.SMSG_UNK_103E,                                 0x103E | 0x20000}, //++
-            {Opcode.SMSG_UNK_1160,                                 0x1160 | 0x20000}, //++
             {Opcode.SMSG_UNK_1206,                                 0x1206 | 0x20000}, //++
             {Opcode.SMSG_UNK_120E,                                 0x120E | 0x20000}, //++
             {Opcode.SMSG_UNK_121E,                                 0x121E | 0x20000}, //++
