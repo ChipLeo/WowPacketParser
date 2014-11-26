@@ -35,6 +35,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.CMSG_CHALLENGE_MODE_REQUEST_LEADERS)]
+        public static void HandleChallengeModeRequestLeaders(Packet packet)
+        {
+            packet.ReadInt32("unk16"); // 16
+            packet.ReadInt32("unk20"); // 20
+            packet.ReadInt32("unk24"); // 24
+        }
+
         [Parser(Opcode.CMSG_DEL_FRIEND)]
         public static void HandleDelFriend(Packet packet)
         {
@@ -381,6 +389,70 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("unk24", i); // 24
             }
         }
+
+        [Parser(Opcode.SMSG_CHALLENGE_MODE_REQUEST_LEADERS_RESULT)]
+        public static void HandleChallengeModeRequestLeadersResult(Packet packet)
+        {
+            packet.ReadInt32("unk36"); // 36
+            packet.ReadInt32("unk32"); // 32
+            packet.ReadInt32("unk40"); // 40
+            var count44 = packet.ReadBits("count44", 19); // 44
+            var count240 = new uint[count44];
+            var guids44 = new byte[count44][][];
+            for (var i = 0; i < count44; i++)
+            {
+                count240[i] = packet.ReadBits("unk240", 20, i); // 240
+                guids44[i] = new byte[count240[i]][];
+                for (var j = 0; j < count240[i]; j++)
+                    guids44[i][j] = packet.StartBitStream(5, 2, 3, 0, 7, 1, 4, 6);
+            }
+            var count16 = packet.ReadBits("count16", 19); // 16
+            var count212 = new uint[count16];
+            var guids16 = new byte[count16][][];
+            for (var i = 0; i < count16; i++)
+            {
+                count212[i] = packet.ReadBits("count212", 20, i); // 212
+                guids16[i] = new byte[count212[i]][];
+                for (var j = 0; j < count212[i]; j++)
+                    guids16[i][j] = packet.StartBitStream(5, 3, 0, 1, 2, 4, 6, 7);
+            }
+            for (var i = 0; i < count16; i++)
+            {
+                for (var j = 0; j < count212[i]; j++)
+                {
+                    packet.ParseBitStream(guids16[i][j], 4, 3, 6, 7, 2, 1);
+                    packet.ReadInt32("RealmID", i, j); // 276
+                    packet.ReadInt32("unk292", i, j); // 292
+                    packet.ReadInt32("RealmID", i, j); // 260
+                    packet.ParseBitStream(guids16[i][j], 0, 5);
+                    packet.WriteGuid("Guids16", guids16[i][j], i, j);
+                }
+                packet.ReadPackedTime("Time", i);
+                packet.ReadInt32("unk20", i); // 20
+                packet.ReadInt32("unk36", i); // 36
+                packet.ReadInt32("unk52", i); // 52
+                packet.ReadInt32("unk196", i); // 196
+            }
+            for (var i = 0; i < count44; i++)
+            {
+                for (var j = 0; j < count240[i]; j++)
+                {
+                    packet.ParseBitStream(guids44[i][j], 3);
+                    packet.ReadInt32("unk320", i, j); // 320
+                    packet.ReadInt32("unk304", i, j); // 304
+                    packet.ParseBitStream(guids44[i][j], 1, 5, 0);
+                    packet.ReadInt32("unk288", i, j); // 288
+                    packet.ParseBitStream(guids44[i][j], 4, 7, 6, 2);
+                    packet.WriteGuid("Guids44", guids44[i][j], i, j);
+                }
+                packet.ReadInt32("unk64", i); // 64
+                packet.ReadInt32("unk224", i); // 224
+                packet.ReadInt32("unk48", i); // 48
+                packet.ReadInt32("unk80", i); // 80
+                packet.ReadPackedTime("Time", i);
+            }
+        }
+
         [Parser(Opcode.SMSG_CHALLENGE_MODE_REWARDS)]
         public static void HandleChallengeModeRewards(Packet packet)
         {
