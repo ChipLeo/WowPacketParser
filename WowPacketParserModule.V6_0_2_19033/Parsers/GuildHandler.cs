@@ -319,5 +319,145 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                     packet.ReadInt32("AchievementsRequired", i, j);
             }
         }
+
+        [Parser(Opcode.SMSG_GUILD_EVENT_BANK_MONEY_CHANGED)]
+        public static void HandleGuildEventBankMoneyChanged(Packet packet)
+        {
+            packet.ReadUInt64("Money");
+        }
+
+        [Parser(Opcode.SMSG_GUILD_INVITE)]
+        public static void HandleGuildInvite(Packet packet)
+        {
+            var bits149 = packet.ReadBits(6);
+            var bits216 = packet.ReadBits(7);
+            var bits52 = packet.ReadBits(7);
+
+            packet.ReadInt32("InviterVirtualRealmAddress");
+            packet.ReadUInt32("GuildVirtualRealmAddress");
+            packet.ReadPackedGuid128("GuildGUID");
+            packet.ReadUInt32("OldGuildVirtualRealmAddress");
+            packet.ReadPackedGuid128("OldGuildGUID");
+            packet.ReadUInt32("EmblemStyle");
+            packet.ReadUInt32("EmblemColor");
+            packet.ReadUInt32("BorderStyle");
+            packet.ReadUInt32("BorderColor");
+            packet.ReadUInt32("BackgroundColor");
+            packet.ReadInt32("Level");
+
+            packet.ReadWoWString("InviterName", bits149);
+            packet.ReadWoWString("OldGuildName", bits216);
+            packet.ReadWoWString("GuildName", bits52);
+        }
+
+        [Parser(Opcode.SMSG_GUILD_BANK_LIST)]
+        public static void HandleGuildBankList(Packet packet)
+        {
+            packet.ReadUInt64("Money");
+            packet.ReadInt32("WithdrawalsRemaining");
+            packet.ReadInt32("Tab");
+
+            var int36 = packet.ReadInt32("TabInfoCount");
+            var int16 = packet.ReadInt32("ItemInfoCount");
+
+            for (int i = 0; i < int36; i++)
+            {
+                packet.ReadInt32("TabIndex", i);
+
+                packet.ResetBitReader();
+
+                var bits1 = packet.ReadBits(8);
+                var bits69 = packet.ReadBits(7);
+
+                packet.ReadWoWString("Name", bits1, i);
+                packet.ReadWoWString("Icon", bits69, i);
+            }
+
+            for (int i = 0; i < int16; i++)
+            {
+                packet.ReadInt32("Slot", i);
+                ItemHandler.ReadItemInstance(ref packet, i);
+                packet.ReadInt32("Count", i);
+                packet.ReadInt32("EnchantmentID", i);
+                packet.ReadInt32("Charges", i);
+                var int76 = packet.ReadInt32("SocketEnchant", i);
+                packet.ReadInt32("OnUseEnchantmentID", i);
+
+                for (int j = 0; j < int76; j++)
+                {
+                    packet.ReadInt32("SocketIndex", i, j);
+                    packet.ReadInt32("SocketEnchantID", i, j);
+                }
+
+                packet.ResetBitReader();
+                packet.ReadBit("Locked");
+            }
+
+            packet.ResetBitReader();
+            packet.ReadBit("FullUpdate");
+        }
+
+        [Parser(Opcode.SMSG_GUILD_BANK_LOG_QUERY_RESULT)]
+        public static void HandleGuildBankLogQueryResult(Packet packet)
+        {
+            packet.ReadInt32("Tab");
+            var int32 = packet.ReadInt32("GuildBankLogEntryCount");
+            for (int i = 0; i < int32; i++)
+            {
+                packet.ReadPackedGuid128("PlayerGUID", i);
+                packet.ReadInt32("TimeOffset", i);
+                packet.ReadSByte("EntryType", i);
+
+                packet.ResetBitReader();
+
+                var bit33 = packet.ReadBit("HasMoney", i);
+                var bit44 = packet.ReadBit("HasItemID", i);
+                var bit52 = packet.ReadBit("HasCount", i);
+                var bit57 = packet.ReadBit("HasOtherTab", i);
+
+                if (bit33)
+                    packet.ReadInt64("Money", i);
+
+                if (bit44)
+                    packet.ReadInt32("ItemID", i);
+
+                if (bit52)
+                    packet.ReadInt32("Count", i);
+
+                if (bit57)
+                    packet.ReadSByte("OtherTab", i);
+
+            }
+
+            packet.ResetBitReader();
+            var bit24 = packet.ReadBit("HasWeeklyBonusMoney");
+            if (bit24)
+                packet.ReadInt64("WeeklyBonusMoney");
+        }
+
+        [Parser(Opcode.SMSG_GUILD_CHALLENGE_UPDATED)]
+        public static void HandleGuildChallengeUpdated(Packet packet)
+        {
+            for (int i = 0; i < 6; ++i)
+                packet.ReadInt32("Gold", i);
+
+            for (int i = 0; i < 6; ++i)
+                packet.ReadInt32("MaxCount", i);
+            
+            for (int i = 0; i < 6; ++i)
+                packet.ReadInt32("CurrentCount", i);
+
+            for (int i = 0; i < 6; ++i)
+                packet.ReadInt32("MaxLevelGold", i);
+        }
+
+        [Parser(Opcode.SMSG_GUILD_RANKS_UPDATE)]
+        public static void HandleGuildRanksUpdate(Packet packet)
+        {
+            packet.ReadPackedGuid128("Officer");
+            packet.ReadPackedGuid128("Other");
+            packet.ReadInt32("RankID");
+            packet.ReadBit("Promote");
+        }
     }
 }

@@ -30,5 +30,40 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadWoWString("WaitTimeOverrideMessage", bits262, i);
             }
         }
+
+        [Parser(Opcode.SMSG_GM_TICKET_SYSTEM_STATUS)]
+        public static void HandleGMTicketSystemStatus(Packet packet)
+        {
+            packet.ReadInt32("Status");
+        }
+
+        [Parser(Opcode.SMSG_GM_TICKET_GET_TICKET_RESPONSE)]
+        public static void HandleGMTicketGetTicketResponse(Packet packet)
+        {
+            packet.ReadInt32("Result");
+
+            var bit3068 = packet.ReadBit("HasInfo");
+
+            // ClientGMTicketInfo
+            if (bit3068)
+            {
+                packet.ReadInt32("TicketID");
+                packet.ReadByte("Category");
+                packet.ReadTime("TicketOpenTime");
+                packet.ReadTime("OldestTicketTime");
+                packet.ReadTime("UpdateTime");
+                packet.ReadByte("AssignedToGM");
+                packet.ReadByte("OpenedByGM");
+                packet.ReadInt32("WaitTimeOverrideMinutes");
+
+                packet.ResetBitReader();
+
+                var bits1 = packet.ReadBits(11);
+                var bits2022 = packet.ReadBits(10);
+
+                packet.ReadWoWString("TicketDescription", bits1);
+                packet.ReadWoWString("WaitTimeOverrideMessage", bits2022);
+            }
+        }
     }
 }
