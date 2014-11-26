@@ -238,7 +238,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_UNK_0B81)]
         public static void HandleSUnk0B81(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.ReadInt32("unk");
         }
 
         [Parser(Opcode.SMSG_UNK_0EAA)]
@@ -483,6 +483,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_UNK_1904)]
         public static void HandleSUnk1904(Packet packet)
         {
+            packet.ReadGuid("unk");
+            packet.ReadInt32("unk4");
         }
 
         [Parser(Opcode.SMSG_UNK_1C3A)]
@@ -749,7 +751,31 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_UNK_0332)]
         public static void HandleCoded(Packet packet)
         {
-            packet.ReadToEnd();
+            packet.AsHex();
+            var select = packet.ReadInt32("select");
+            switch(select)
+            {
+                case 2:
+                case 3:
+                case 4:
+                    packet.ReadPackedGuid("Guid");
+                    packet.ReadByte("unk");
+                    break;
+                case 1:
+                case 9:
+                case 10:
+                    break;
+                case 7:
+                    packet.ReadByte("unk1");
+                    packet.ReadByte("unk2");
+                    break;
+                case 0:
+                case 5:
+                case 6:
+                case 8:
+                    packet.ReadByte("unk");
+                    break;
+            }
         }
 
         [Parser(Opcode.SMSG_UNK_1EAE)]

@@ -932,11 +932,11 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_ZONE_UNDER_ATTACK,                        0x10C2 | 0x20000}, //++
             {Opcode.SMSG_UNK_000F,                                 0x000f | 0x20000}, //++
             {Opcode.SMSG_UNK_001B,                                 0x001B | 0x20000}, //++
-            {Opcode.SMSG_UNK_0332,                                 0x0332 | 0x20000}, //-- coded
+            {Opcode.SMSG_UNK_0332,                                 0x0332 | 0x20000}, //++
             {Opcode.SMSG_UNK_0354,                                 0x0354 | 0x20000}, //++
             {Opcode.SMSG_UNK_0364,                                 0x0364 | 0x20000}, //++
             {Opcode.SMSG_UNK_0612,                                 0x0612 | 0x20000}, //++ pair 1886
-            {Opcode.SMSG_UNK_0B81,                                 0x0B81 | 0x20000}, //-- coded
+            {Opcode.SMSG_UNK_0B81,                                 0x0B81 | 0x20000}, //++ pair 02DA auction
             {Opcode.SMSG_UNK_0C44,                                 0x0C44 | 0x20000}, //+-
             {Opcode.SMSG_UNK_0EAA,                                 0x0EAA | 0x20000}, //++
             {Opcode.SMSG_UNK_0EAB,                                 0x0EAB | 0x20000}, //++
@@ -953,7 +953,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_16BF,                                 0x16BF | 0x20000}, //++
             {Opcode.SMSG_UNK_182E,                                 0x182E | 0x20000}, //++ pair CMSG 15DB
             {Opcode.SMSG_UNK_188F,                                 0x188F | 0x20000}, //++
-            {Opcode.SMSG_UNK_1904,                                 0x1904 | 0x20000}, //-- coded
+            {Opcode.SMSG_UNK_1904,                                 0x1904 | 0x20000}, //++
             {Opcode.SMSG_UNK_1C3A,                                 0x1C3A | 0x20000}, //++
             {Opcode.SMSG_UNK_1C3F,                                 0x1C3F | 0x20000}, //++
             {Opcode.SMSG_UNK_1DBE,                                 0x1DBE | 0x20000}, //++
