@@ -634,6 +634,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_INSPECT_HONOR_STATS,                      0x1A1E | 0x20000}, //++ pair 19C3
             {Opcode.SMSG_INSPECT_RATED_BG_STATS,                   0x041F | 0x20000}, //++ pair 0882
             {Opcode.SMSG_INSPECT_TALENT,                           0x1842 | 0x20000}, //++
+            {Opcode.SMSG_INSTANCE_INFO,                            0x16BF | 0x20000}, //++
             {Opcode.SMSG_INSTANCE_RESET,                           0x160F | 0x20000}, //+-
             {Opcode.SMSG_INVALIDATE_PLAYER,                        0x102E | 0x20000}, //++
             {Opcode.SMSG_INVENTORY_CHANGE_FAILURE,                 0x0C1E | 0x20000}, //+-
@@ -951,7 +952,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_129B,                                 0x129B | 0x20000}, //++
             {Opcode.SMSG_UNK_14E2,                                 0x14E2 | 0x20000}, //++ pair+ 1886
             {Opcode.SMSG_UNK_162A,                                 0x162A | 0x20000}, //++
-            {Opcode.SMSG_UNK_16BF,                                 0x16BF | 0x20000}, //++
             {Opcode.SMSG_UNK_182E,                                 0x182E | 0x20000}, //++ pair CMSG 15DB
             {Opcode.SMSG_UNK_188F,                                 0x188F | 0x20000}, //++
             {Opcode.SMSG_UNK_1904,                                 0x1904 | 0x20000}, //++
