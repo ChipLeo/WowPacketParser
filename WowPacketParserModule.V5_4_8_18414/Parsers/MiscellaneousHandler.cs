@@ -355,6 +355,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("unk16");
         }
 
+        [Parser(Opcode.SMSG_CANCEL_SCENE)]
+        public static void HandleCancelScene(Packet packet)
+        {
+            var hasData = !packet.ReadBit("!hasData");
+            if (hasData)
+                packet.ReadInt32("Data");
+        }
+
         [Parser(Opcode.SMSG_CHALLENGE_MODE_ALL_MAP_STATS)]
         public static void HandleChallengeModeallMapStats(Packet packet)
         {

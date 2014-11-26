@@ -526,6 +526,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_CALENDAR_SEND_NUM_PENDING,                0x0A3F | 0x20000}, //++
             {Opcode.SMSG_CANCEL_AUTO_REPEAT,                       0x1E0F | 0x20000}, //++
             {Opcode.SMSG_CANCEL_COMBAT,                            0x11E1 | 0x20000}, //++
+            {Opcode.SMSG_CANCEL_SCENE,                             0x120E | 0x20000}, //++
             {Opcode.SMSG_CAST_FAILED,                              0x143A | 0x20000}, //++
             {Opcode.SMSG_CHALLENGE_MODE_ALL_MAP_STATS,             0x11C2 | 0x20000}, //++ pair 1452
             {Opcode.SMSG_CHALLENGE_MODE_REWARDS,                   0x168A | 0x20000}, //++ pair 1C5A
@@ -944,7 +945,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_1006,                                 0x1006 | 0x20000}, //++
             {Opcode.SMSG_UNK_103E,                                 0x103E | 0x20000}, //++
             {Opcode.SMSG_UNK_1206,                                 0x1206 | 0x20000}, //++
-            {Opcode.SMSG_UNK_120E,                                 0x120E | 0x20000}, //++
             {Opcode.SMSG_UNK_121E,                                 0x121E | 0x20000}, //++
             {Opcode.SMSG_UNK_129B,                                 0x129B | 0x20000}, //++
             {Opcode.SMSG_UNK_14E2,                                 0x14E2 | 0x20000}, //++ pair+ 1886
