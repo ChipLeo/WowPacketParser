@@ -81,7 +81,7 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
             packet.ReadUInt32("Node 2 ID");
         }
 
-        [Parser(Opcode.SMSG_ACTIVATETAXIREPLY)]
+        [Parser(Opcode.SMSG_ACTIVATE_TAXI_REPLY)]
         public static void HandleActivateTaxiReply(Packet packet)
         {
             packet.ReadEnum<TaxiError>("Result", TypeCode.UInt32);
