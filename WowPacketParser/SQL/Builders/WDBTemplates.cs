@@ -17,7 +17,7 @@ namespace WowPacketParser.SQL.Builders
                 return String.Empty;
 
             if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
-                return string.Empty;
+                return String.Empty;
 
             var entries = Storage.QuestTemplates.Keys();
             var templatesDb = SQLDatabase.GetDict<uint, QuestTemplate>(entries, "Id");
@@ -32,12 +32,94 @@ namespace WowPacketParser.SQL.Builders
                 return String.Empty;
 
             if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
-                return string.Empty;
+                return String.Empty;
 
             var entries = Storage.QuestTemplatesWod.Keys();
             var templatesDb = SQLDatabase.GetDict<uint, QuestTemplateWod>(entries, "Id");
 
             return SQLUtil.CompareDicts(Storage.QuestTemplatesWod, templatesDb, StoreNameType.Quest, "Id");
+        }
+
+        [BuilderMethod]
+        public static string QuestObjective()
+        {
+            var result = "";
+            if (Storage.QuestObjectives.IsEmpty())
+                return String.Empty;
+
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
+                return String.Empty;
+
+            var entries = Storage.QuestObjectives.Keys();
+            var templatesDb = SQLDatabase.GetDict<uint, QuestInfoObjective>(entries, "Id");
+
+            result += SQLUtil.CompareDicts(Storage.QuestObjectives, templatesDb, StoreNameType.QuestObjective, "Id");
+
+            var rowsIns = new List<QueryBuilder.SQLInsertRow>();
+            var rowsUpd = new List<QueryBuilder.SQLUpdateRow>();
+
+            foreach (var questObjectives in Storage.QuestObjectives)
+            {
+                foreach (var visualEffectIds in questObjectives.Value.Item1.VisualEffectIds)
+                {
+                    if (SQLConnector.Enabled)
+                    {
+                        var query = string.Format("SELECT `VisualEffect`, `VerifiedBuild` FROM {0}.quest_visual_effect WHERE `Id`={1} AND `Index`={2};",
+                            Settings.TDBDatabase, questObjectives.Key, visualEffectIds.Index);
+
+                        using (var reader = SQLConnector.ExecuteQuery(query))
+                        {
+                            if (reader.HasRows) // possible update
+                            {
+                                while (reader.Read())
+                                {
+                                    var row = new QueryBuilder.SQLUpdateRow();
+
+                                    if (!Utilities.EqualValues(reader.GetValue(0), visualEffectIds.VisualEffect))
+                                        row.AddValue("VisualEffect", visualEffectIds.VisualEffect);
+
+                                    if (!Utilities.EqualValues(reader.GetValue(1), questObjectives.Value.Item1.VerifiedBuild))
+                                        row.AddValue("VerifiedBuild", questObjectives.Value.Item1.VerifiedBuild);
+
+                                    row.AddWhere("Id", questObjectives.Key);
+                                    row.AddWhere("Index", visualEffectIds.Index);
+
+                                    row.Table = "quest_visual_effect";
+
+                                    if (row.ValueCount != 0)
+                                        rowsUpd.Add(row);
+                                }
+                            }
+                            else // insert
+                            {
+                                var row = new QueryBuilder.SQLInsertRow();
+
+                                row.AddValue("Id", questObjectives.Key);
+                                row.AddValue("Index", visualEffectIds.Index);
+                                row.AddValue("VisualEffect", visualEffectIds.VisualEffect);
+                                row.AddValue("VerifiedBuild", questObjectives.Value.Item1.VerifiedBuild);
+
+                                rowsIns.Add(row);
+                            }
+                        }
+                    }
+                    else // insert
+                    {
+                        var row = new QueryBuilder.SQLInsertRow();
+
+                        row.AddValue("Id", questObjectives.Key);
+                        row.AddValue("Index", visualEffectIds.Index);
+                        row.AddValue("VisualEffect", visualEffectIds.VisualEffect);
+                        row.AddValue("VerifiedBuild", questObjectives.Value.Item1.VerifiedBuild);
+
+                        rowsIns.Add(row);
+                    }
+                }
+             }
+
+            result += new QueryBuilder.SQLInsert("quest_visual_effect", rowsIns, 2).Build() + new QueryBuilder.SQLUpdate(rowsUpd).Build();
+
+            return result;
         }
 
         [BuilderMethod]
@@ -47,7 +129,7 @@ namespace WowPacketParser.SQL.Builders
                 return String.Empty;
 
             if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.creature_template))
-                return string.Empty;
+                return String.Empty;
 
             var entries = Storage.UnitTemplates.Keys();
             var templatesDb = SQLDatabase.GetDict<uint, UnitTemplate>(entries);

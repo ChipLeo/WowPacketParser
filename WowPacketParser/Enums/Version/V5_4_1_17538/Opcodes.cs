@@ -4,12 +4,16 @@ namespace WowPacketParser.Enums.Version.V5_4_1_17538
 {
     public static class Opcodes_5_4_1
     {
-        public static BiDictionary<Opcode, int> Opcodes()
+        public static BiDictionary<Opcode, int> Opcodes(Direction direction)
         {
-            return Opcs;
+            if (direction == Direction.ClientToServer || direction == Direction.BNClientToServer)
+                return ClientOpcodes;
+            if (direction == Direction.ServerToClient || direction == Direction.BNServerToClient)
+                return ServerOpcodes;
+            return MiscOpcodes;
         }
 
-        private static readonly BiDictionary<Opcode, int> Opcs = new BiDictionary<Opcode, int>
+        private static readonly BiDictionary<Opcode, int> ClientOpcodes = new BiDictionary<Opcode, int>
         {
             {Opcode.CMSG_ADD_FRIEND, 0x0112},
             {Opcode.CMSG_ADD_IGNORE, 0x0922},
@@ -28,7 +32,6 @@ namespace WowPacketParser.Enums.Version.V5_4_1_17538
             {Opcode.CMSG_GOSSIP_SELECT_OPTION, 0x03EE},
             {Opcode.CMSG_GROUP_INVITE, 0x0144},
             {Opcode.CMSG_LEARN_TALENT, 0x1776},
-            {Opcode.SMSG_LIST_INVENTORY, 0x08BD},
             {Opcode.CMSG_LOAD_SCREEN, 0x1148},
             {Opcode.CMSG_LOG_DISCONNECT, 0x14FA},
             {Opcode.CMSG_LOGOUT_REQUEST, 0x03EC},
@@ -50,23 +53,11 @@ namespace WowPacketParser.Enums.Version.V5_4_1_17538
             {Opcode.CMSG_SET_SPECIALIZATION, 0x17DF},
             {Opcode.CMSG_VIOLENCE_LEVEL, 0x13CD},
             {Opcode.CMSG_WHO, 0x1568},
-            {Opcode.MSG_MOVE_JUMP, 0x07C9},
-            {Opcode.MSG_MOVE_START_BACKWARD, 0x12C0},
-            {Opcode.MSG_MOVE_START_FORWARD, 0x13C9},
-            {Opcode.MSG_MOVE_START_PITCH_UP, 0x0FE1},
-            {Opcode.MSG_MOVE_START_PITCH_DOWN, 0x16E8},
-            {Opcode.MSG_MOVE_START_STRAFE_LEFT, 0x0EC8},
-            {Opcode.MSG_MOVE_START_STRAFE_RIGHT, 0x0269},
-            {Opcode.MSG_MOVE_START_TURN_LEFT, 0x0760},
-            {Opcode.MSG_MOVE_START_TURN_RIGHT, 0x17C9},
-            {Opcode.MSG_MOVE_SET_WALK_SPEED, 0x0716},
-            {Opcode.MSG_MOVE_SET_RUN_SPEED, 0x06A5},
-            {Opcode.MSG_MOVE_SET_SWIM_SPEED, 0x0A0D},
-            {Opcode.MSG_MOVE_SET_FLIGHT_SPEED, 0x02B2},
-            {Opcode.MSG_MOVE_STOP, 0x0649},
-            {Opcode.MSG_MOVE_STOP_STRAFE, 0x12C9},
-            {Opcode.MSG_MOVE_STOP_TURN, 0x1749},
-            {Opcode.MSG_MOVE_TELEPORT, 0x0A2E},
+        };
+
+        private static readonly BiDictionary<Opcode, int> ServerOpcodes = new BiDictionary<Opcode, int>
+        {
+            {Opcode.SMSG_LIST_INVENTORY, 0x08BD},
             {Opcode.SMSG_ACCOUNT_DATA_TIMES, 0x1486},
             {Opcode.SMSG_ACTION_BUTTONS, 0x0406},
             {Opcode.SMSG_ADDON_INFO, 0x1136},
@@ -118,5 +109,27 @@ namespace WowPacketParser.Enums.Version.V5_4_1_17538
             {Opcode.SMSG_WHO, 0x053C},
             {Opcode.SMSG_ZONE_UNDER_ATTACK, 0x148D},
         };
+
+        private static readonly BiDictionary<Opcode, int> MiscOpcodes = new BiDictionary<Opcode, int>
+        {
+            {Opcode.MSG_MOVE_JUMP, 0x07C9},
+            {Opcode.MSG_MOVE_START_BACKWARD, 0x12C0},
+            {Opcode.MSG_MOVE_START_FORWARD, 0x13C9},
+            {Opcode.MSG_MOVE_START_PITCH_UP, 0x0FE1},
+            {Opcode.MSG_MOVE_START_PITCH_DOWN, 0x16E8},
+            {Opcode.MSG_MOVE_START_STRAFE_LEFT, 0x0EC8},
+            {Opcode.MSG_MOVE_START_STRAFE_RIGHT, 0x0269},
+            {Opcode.MSG_MOVE_START_TURN_LEFT, 0x0760},
+            {Opcode.MSG_MOVE_START_TURN_RIGHT, 0x17C9},
+            {Opcode.MSG_MOVE_SET_WALK_SPEED, 0x0716},
+            {Opcode.MSG_MOVE_SET_RUN_SPEED, 0x06A5},
+            {Opcode.MSG_MOVE_SET_SWIM_SPEED, 0x0A0D},
+            {Opcode.MSG_MOVE_SET_FLIGHT_SPEED, 0x02B2},
+            {Opcode.MSG_MOVE_STOP, 0x0649},
+            {Opcode.MSG_MOVE_STOP_STRAFE, 0x12C9},
+            {Opcode.MSG_MOVE_STOP_TURN, 0x1749},
+            {Opcode.MSG_MOVE_TELEPORT, 0x0A2E},
+        };
+
     }
 }

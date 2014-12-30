@@ -305,7 +305,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
         [HasSniffData]
         [Parser(Opcode.SMSG_QUEST_QUERY_RESPONSE)]
-        public static void HandleQuestQueryResp(Packet packet)
+        public static void HandleQuestQueryResponse(Packet packet)
         {
             var id = packet.ReadEntry("Quest ID"); // +4
             if (id.Value) // entry is masked
@@ -332,8 +332,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
                 for (var i = 0; i < questObjectivesCount; ++i)
                 {
-                    objectivesCounts[i, 1] = packet.ReadBits(8); // +2949 + 20
-                    objectivesCounts[i, 0] = packet.ReadBits(22); // +2949 + 0
+                    objectivesCounts[i, 1] = packet.ReadBits(8); // +2949 + 20 objectives texts
+                    objectivesCounts[i, 0] = packet.ReadBits(22); // +2949 + 0 objectives visuals
                 }
 
                 packet.ResetBitReader();
@@ -341,7 +341,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 for (var i = 0; i < questObjectivesCount; ++i)
                 {
                     packet.ReadUInt32("Requirement Count ", i); // +2949 + 12
-                    packet.ReadUInt32("Unk UInt32", i); // +2949 + 0
+                    packet.ReadUInt32("Objective ID", i); // +2949 + 0
                     packet.ReadWoWString("Objective Text", objectivesCounts[i, 1], i); // +2949 + 20
                     packet.ReadUInt32("Unk2 UInt32", i); // +2949 + 16
                     packet.ReadByte("Objective", i); // +2949 + 5
@@ -350,8 +350,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     // +2949 + 8
                     switch (reqType)
                     {
-                        case QuestRequirementType.Creature:
-                        case QuestRequirementType.Unknown3:
+                        case QuestRequirementType.CreatureKill:
+                        case QuestRequirementType.CreatureInteract:
+                        case QuestRequirementType.PetBattleDefeatCreature:
                             packet.ReadEntry<Int32>(StoreNameType.Unit, "Required Creature ID", i);
                             break;
                         case QuestRequirementType.Item:
@@ -366,8 +367,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                         case QuestRequirementType.Spell:
                             packet.ReadEntry<Int32>(StoreNameType.Spell, "Required Spell ID", i);
                             break;
-                        case QuestRequirementType.Faction:
+                        case QuestRequirementType.FactionRepHigher:
+                        case QuestRequirementType.FactionRepLower:
                             packet.ReadUInt32("Required Faction ID", i);
+                            break;
+                        case QuestRequirementType.PetBattleDefeatSpecies:
+                            packet.ReadUInt32("Required Species ID", i);
                             break;
                         default:
                             packet.ReadInt32("Required ID", i);
@@ -375,7 +380,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     }
 
                     for (var j = 0; j < objectivesCounts[i, 0]; j++)
-                        packet.ReadUInt32("Unk Looped DWROD", i, j);
+                        packet.ReadUInt32("Objective Visual ID", i, j);
                 }
 
                 packet.ReadUInt32("Required Source Item ID 1"); // +2960

@@ -369,7 +369,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_PARTYKILLLOG)]
+        [Parser(Opcode.SMSG_PARTY_KILL_LOG)]
         public static void HandleSPartyKillLog(Packet packet)
         {
             var guid = new byte[8];

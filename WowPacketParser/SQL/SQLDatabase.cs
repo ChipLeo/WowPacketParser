@@ -15,6 +15,7 @@ namespace WowPacketParser.SQL
     {
         public static readonly Dictionary<StoreNameType, Dictionary<int, string>> NameStores = new Dictionary<StoreNameType, Dictionary<int, string>>();
         public static readonly ICollection<Tuple<uint, BroadcastText>> BroadcastTextStores = new List<Tuple<uint, BroadcastText>>();
+        public static readonly Dictionary<uint, CreatureDifficulty> CreatureDifficultyStores = new Dictionary<uint, CreatureDifficulty>();
 
 
         private static readonly StoreNameType[] ObjectTypes =
@@ -49,7 +50,17 @@ namespace WowPacketParser.SQL
 
             var startTime = DateTime.Now;
 
-            var query = new StringBuilder(string.Format("SELECT ID, Language, MaleText, FemaleText, EmoteID0, EmoteID1, EmoteID2, EmoteDelay0, EmoteDelay1, EmoteDelay2, SoundId, Unk1, Unk2 FROM {0}.broadcast_text;", Settings.TDBDatabase));
+            LoadBroadcastText();
+            LoadCreatureDifficulty();
+
+            var endTime = DateTime.Now;
+            var span = endTime.Subtract(startTime);
+            Trace.WriteLine(String.Format("SQL loaded in {0}.", span.ToFormattedString()));
+        }
+
+        private static void LoadBroadcastText()
+        {
+            var query = new StringBuilder(string.Format("SELECT ID, Language, MaleText, FemaleText, EmoteID0, EmoteID1, EmoteID2, EmoteDelay0, EmoteDelay1, EmoteDelay2, SoundId, UnkMoP1, UnkMoP2 FROM {0}.broadcast_text;", Settings.HotfixesDatabase));
             using (var reader = SQLConnector.ExecuteQuery(query.ToString()))
             {
                 if (reader == null)
@@ -74,17 +85,44 @@ namespace WowPacketParser.SQL
                     broadcastText.emoteDelay2 = Convert.ToUInt32(reader["EmoteDelay2"]);
 
                     broadcastText.soundId = Convert.ToUInt32(reader["SoundId"]);
-                    broadcastText.unk1 = Convert.ToUInt32(reader["Unk1"]);
-                    broadcastText.unk2 = Convert.ToUInt32(reader["Unk2"]);
+                    broadcastText.unk1 = Convert.ToUInt32(reader["UnkMoP1"]);
+                    broadcastText.unk2 = Convert.ToUInt32(reader["UnkMoP2"]);
 
                     var tuple = Tuple.Create(Id, broadcastText);
                     BroadcastTextStores.Add(tuple);
                 }
             }
+        }
 
-            var endTime = DateTime.Now;
-            var span = endTime.Subtract(startTime);
-            Trace.WriteLine(String.Format("SQL loaded in {0}.", span.ToFormattedString()));
+        private static void LoadCreatureDifficulty()
+        {
+            //                                                  0       1           2           3       4           5       6       7       8       9       10
+            var query = new StringBuilder(string.Format("SELECT ID, CreatureID, FactionID, Expansion, MinLevel, MaxLevel, Flags1, Flags2, Flags3, Flags4, Flags5 FROM {0}.creature_difficulty;", Settings.HotfixesDatabase));
+            using (var reader = SQLConnector.ExecuteQuery(query.ToString()))
+            {
+                if (reader == null)
+                    return;
+
+                while (reader.Read())
+                {
+                    var creatureDifficulty = new CreatureDifficulty();
+
+                    uint Id = (uint)reader.GetValue(0);
+
+                    creatureDifficulty.CreatureID = (uint)reader.GetValue(1);
+                    creatureDifficulty.FactionID = (uint)reader.GetValue(2);
+
+                    creatureDifficulty.Expansion = (int)reader.GetValue(3);
+                    creatureDifficulty.MinLevel = (int)reader.GetValue(4);
+                    creatureDifficulty.MaxLevel = (int)reader.GetValue(5);
+
+                    creatureDifficulty.Flags = new uint[5];
+                    for (int i = 0; i < 5; i++)
+                        creatureDifficulty.Flags[i] = (uint)reader.GetValue(i + 6);
+
+                    CreatureDifficultyStores.Add(Id, creatureDifficulty);
+                }
+            }
         }
 
         // Returns a dictionary from a DB query with two parameters (e.g <creature_entry, creature_name>)
@@ -115,7 +153,7 @@ namespace WowPacketParser.SQL
         /// <param name="entries">List of entries to select from DB</param>
         /// <param name="primaryKeyName"> </param>
         /// <returns>Dictionary of structs of type TK</returns>
-        public static StoreDictionary<T, TK> GetDict<T, TK>(List<T> entries, string primaryKeyName = "entry")
+        public static StoreDictionary<T, TK> GetDict<T, TK>(List<T> entries, string primaryKeyName = "entry", string database = null)
         {
             if (entries.Count == 0)
                 return null;
@@ -143,7 +181,7 @@ namespace WowPacketParser.SQL
             }
 
             var query = string.Format("SELECT {0} FROM {1}.{2} WHERE {3} IN ({4})",
-                fieldNames.ToString().TrimEnd(','), Settings.TDBDatabase, tableName, primaryKeyName, String.Join(",", entries));
+                fieldNames.ToString().TrimEnd(','), database ?? Settings.TDBDatabase, tableName, primaryKeyName, String.Join(",", entries));
 
             var dict = new Dictionary<T, TK>(entries.Count);
 

@@ -1,4 +1,5 @@
-﻿using WowPacketParser.Enums;
+﻿using System.Collections.Generic;
+using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.SQL;
 
@@ -197,7 +198,6 @@ namespace WowPacketParser.Store.Objects
         public int VerifiedBuild = ClientVersion.BuildInt;
     }
 
-
     [DBTableName("quest_template")]
     public sealed class QuestTemplateWod
     {
@@ -207,11 +207,8 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("QuestLevel")]
         public int QuestLevel;
 
-        [DBFieldName("QuestLevel")]
-        public int Level;
-
         [DBFieldName("QuestPackageID")]
-        public int QuestPackageID;
+        public uint QuestPackageID;
 
         [DBFieldName("MinLevel")]
         public int MinLevel;
@@ -223,73 +220,73 @@ namespace WowPacketParser.Store.Objects
         public QuestType QuestInfoID;
 
         [DBFieldName("SuggestedGroupNum")]
-        public int SuggestedGroupNum;
+        public uint SuggestedGroupNum;
 
         [DBFieldName("RewardNextQuest")]
-        public int RewardNextQuest;
+        public uint RewardNextQuest;
 
         [DBFieldName("RewardXPDifficulty")]
-        public int RewardXPDifficulty;
+        public uint RewardXPDifficulty;
 
         [DBFieldName("Float10")]
         public float Float10;
 
-        [DBFieldName("RewardOrRequiredMoney")]
-        public int RewardOrRequiredMoney;
+        [DBFieldName("RewardMoney")]
+        public int RewardMoney;
 
-        [DBFieldName("RewardMoneyMaxLevel")]
-        public int RewardMoneyMaxLevel;
+        [DBFieldName("RewardMoneyDifficulty")]
+        public uint RewardMoneyDifficulty;
 
         [DBFieldName("Float13")]
         public float Float13;
 
         [DBFieldName("RewardBonusMoney")]
-        public int RewardBonusMoney;
+        public uint RewardBonusMoney;
 
         [DBFieldName("RewardDisplaySpell")]
-        public int RewardDisplaySpell;
+        public uint RewardDisplaySpell;
 
         [DBFieldName("RewardSpell")]
-        public int RewardSpell;
+        public uint RewardSpell;
 
         [DBFieldName("RewardHonor")]
-        public int RewardHonor;
+        public uint RewardHonor;
 
         [DBFieldName("RewardKillHonor")]
         public float RewardKillHonor;
 
         [DBFieldName("StartItem")]
-        public int StartItem;
+        public uint StartItem;
 
         [DBFieldName("Flags")]
         public QuestFlags Flags;
 
         [DBFieldName("FlagsEx")]
-        public int FlagsEx;
+        public uint FlagsEx;
 
-        [DBFieldName("RewardItems", 4)]
-        public int[] RewardItems;
+        [DBFieldName("RewardItem", 4)]
+        public uint[] RewardItems;
 
         [DBFieldName("RewardAmount", 4)]
-        public int[] RewardAmount;
+        public uint[] RewardAmount;
 
         [DBFieldName("ItemDrop", 4)]
-        public int[] ItemDrop;
+        public uint[] ItemDrop;
 
         [DBFieldName("ItemDropQuantity", 4)]
-        public int[] ItemDropQuantity;
+        public uint[] ItemDropQuantity;
 
-        [DBFieldName("ItemID", 6)]
-        public int[] ItemID;
+        [DBFieldName("RewardChoiceItemID", 6)]
+        public uint[] RewardChoiceItemID;
 
-        [DBFieldName("Quantity", 6)]
-        public int[] Quantity;
+        [DBFieldName("RewardChoiceItemQuantity", 6)]
+        public uint[] RewardChoiceItemQuantity;
 
-        [DBFieldName("DisplayID", 6)]
-        public int[] DisplayID;
+        [DBFieldName("RewardChoiceItemDisplayID", 6)]
+        public uint[] RewardChoiceItemDisplayID;
 
         [DBFieldName("POIContinent")]
-        public int POIContinent;
+        public uint POIContinent;
 
         [DBFieldName("POIx")]
         public float POIx;
@@ -301,28 +298,28 @@ namespace WowPacketParser.Store.Objects
         public int POIPriority;
 
         [DBFieldName("RewardTitle")]
-        public int RewardTitle;
+        public uint RewardTitle;
 
         [DBFieldName("RewardTalents")]
-        public int RewardTalents;
+        public uint RewardTalents;
 
         [DBFieldName("RewardArenaPoints")]
-        public int RewardArenaPoints;
+        public uint RewardArenaPoints;
 
         [DBFieldName("RewardSkillLineID")]
-        public int RewardSkillLineID;
+        public uint RewardSkillLineID;
 
         [DBFieldName("RewardNumSkillUps")]
-        public int RewardNumSkillUps;
+        public uint RewardNumSkillUps;
 
         [DBFieldName("PortraitGiver")]
-        public int PortraitGiver;
+        public uint PortraitGiver;
 
         [DBFieldName("PortraitTurnIn")]
-        public int PortraitTurnIn;
+        public uint PortraitTurnIn;
 
         [DBFieldName("RewardFactionID", 5)]
-        public int[] RewardFactionID;
+        public uint[] RewardFactionID;
 
         [DBFieldName("RewardFactionValue", 5)]
         public int[] RewardFactionValue;
@@ -331,28 +328,28 @@ namespace WowPacketParser.Store.Objects
         public int[] RewardFactionOverride;
 
         [DBFieldName("RewardFactionFlags")]
-        public int RewardFactionFlags;
+        public uint RewardFactionFlags;
 
         [DBFieldName("RewardCurrencyID", 4)]
-        public int[] RewardCurrencyID;
+        public uint[] RewardCurrencyID;
 
         [DBFieldName("RewardCurrencyQty", 4)]
-        public int[] RewardCurrencyQty;
+        public uint[] RewardCurrencyQty;
 
         [DBFieldName("AcceptedSoundKitID")]
-        public int AcceptedSoundKitID;
+        public uint AcceptedSoundKitID;
 
         [DBFieldName("CompleteSoundKitID")]
-        public int CompleteSoundKitID;
+        public uint CompleteSoundKitID;
 
         [DBFieldName("AreaGroupID")]
-        public int AreaGroupID;
+        public uint AreaGroupID;
 
         [DBFieldName("TimeAllowed")]
-        public int TimeAllowed;
+        public uint TimeAllowed;
 
-        [DBFieldName("Int2950")]
-        public int Int2950;
+        [DBFieldName("AllowableRaces")]
+        public int AllowableRaces;
 
         [DBFieldName("LogTitle")]
         public string LogTitle;
@@ -380,6 +377,52 @@ namespace WowPacketParser.Store.Objects
 
         [DBFieldName("QuestCompletionLog")]
         public string QuestCompletionLog;
+
+        [DBFieldName("VerifiedBuild")]
+        public int VerifiedBuild = ClientVersion.BuildInt;
+    }
+
+    [DBTableName("quest_objectives")]
+    public sealed class QuestInfoObjective
+    {
+        [DBFieldName("QuestId")]
+        public uint QuestId;
+
+        [DBFieldName("Type")]
+        public QuestRequirementType Type;
+
+        [DBFieldName("StorageIndex")]
+        public int StorageIndex;
+
+        [DBFieldName("ObjectID")]
+        public int ObjectID;
+
+        [DBFieldName("Amount")]
+        public int Amount;
+
+        [DBFieldName("Flags")]
+        public uint Flags;
+
+        [DBFieldName("UnkFloat")]
+        public float UnkFloat;
+
+        public List<QuestVisualEffect> VisualEffectIds;
+
+        [DBFieldName("Description")]
+        public string Description;
+
+        [DBFieldName("VerifiedBuild")]
+        public int VerifiedBuild = ClientVersion.BuildInt;
+    }
+
+    [DBTableName("quest_visual_effect")]
+    public sealed class QuestVisualEffect
+    {
+        [DBFieldName("Index")]
+        public uint Index;
+
+        [DBFieldName("VisualEffect")]
+        public int VisualEffect;
 
         [DBFieldName("VerifiedBuild")]
         public int VerifiedBuild = ClientVersion.BuildInt;

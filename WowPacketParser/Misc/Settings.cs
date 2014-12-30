@@ -45,6 +45,7 @@ namespace WowPacketParser.Misc
         public static readonly string Password = GetString("Password", string.Empty);
         public static readonly string WPPDatabase = GetString("WPPDatabase", "WPP");
         public static readonly string TDBDatabase = GetString("TDBDatabase", "world");
+        public static readonly string HotfixesDatabase = GetString("HotfixesDatabase", "hotfixes");
         public static readonly string CharacterSet = GetString("CharacterSet", "utf8");
 
         private static KeyValueConfigurationCollection GetConfiguration()
@@ -128,41 +129,50 @@ namespace WowPacketParser.Misc
 
         private static bool GetBoolean(string key, bool defValue)
         {
-            bool aux;
             var s = SettingsCollection[key];
-            if ((s == null || s.Value == null) || !bool.TryParse(s.Value, out aux))
-                aux = defValue;
+            if (s == null || s.Value == null)
+                return defValue;
 
-            return aux;
+            bool aux;
+            if (bool.TryParse(s.Value, out aux))
+                return aux;
+
+            Console.WriteLine("Warning: \"{0}\" is not a valid boolean value for key \"{1}\"", s.Value, key);
+            return defValue;
         }
 
         private static int GetInt32(string key, int defValue)
         {
-            int aux;
             var s = SettingsCollection[key];
-            if ((s == null || s.Value == null) || !int.TryParse(s.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out aux))
-                aux = defValue;
+            if (s == null || s.Value == null || s.Value == string.Empty)
+                return defValue;
 
-            return aux;
+            int aux;
+            if (int.TryParse(s.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out aux))
+                return aux;
+
+            Console.WriteLine("Warning: \"{0}\" is not a valid integer value for key \"{1}\"", s.Value, key);
+            return defValue;
         }
 
         private static T GetEnum<T>(string key, T defValue)
         {
-            object aux;
-
             var s = SettingsCollection[key];
-            if ((s == null || s.Value == null))
-                aux = defValue;
-            else
+            if (s == null || s.Value == null || s.Value == string.Empty)
+                return defValue;
+
+            int value;
+            if (!int.TryParse(s.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
             {
-                int value;
-                if (!int.TryParse(s.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
-                    aux = defValue;
-                else
-                    aux = value;
+                Console.WriteLine("Warning: \"{0}\" is not a valid integer value for key \"{1}\"", s.Value, key);
+                return defValue;
             }
 
-            return (T)aux;
+            if (Enum.IsDefined(typeof (T), value))
+                return (T) (object) value;
+
+            Console.WriteLine("Warning: \"{0}\" is not a valid enum value for key \"{1}\", enum \"{2}\"", s.Value, key, typeof(T).Name);
+            return defValue;
         }
 
         private static UInt64 GetSQLOutputFlag()

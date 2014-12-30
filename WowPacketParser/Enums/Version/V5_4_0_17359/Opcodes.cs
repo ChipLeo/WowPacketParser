@@ -4,12 +4,16 @@ namespace WowPacketParser.Enums.Version.V5_4_0_17359
 {
     public static class Opcodes_5_4_0
     {
-        public static BiDictionary<Opcode, int> Opcodes()
+        public static BiDictionary<Opcode, int> Opcodes(Direction direction)
         {
-            return Opcs;
+            if (direction == Direction.ClientToServer || direction == Direction.BNClientToServer)
+                return ClientOpcodes;
+            if (direction == Direction.ServerToClient || direction == Direction.BNServerToClient)
+                return ServerOpcodes;
+            return MiscOpcodes;
         }
 
-        private static readonly BiDictionary<Opcode, int> Opcs = new BiDictionary<Opcode, int>
+        private static readonly BiDictionary<Opcode, int> ClientOpcodes = new BiDictionary<Opcode, int>
         {
             {Opcode.CMSG_AREATRIGGER, 0x1907},
             {Opcode.CMSG_AUTH_SESSION, 0x0790},
@@ -71,15 +75,10 @@ namespace WowPacketParser.Enums.Version.V5_4_0_17359
             {Opcode.CMSG_UNKNOWN_6774, 0x1A76},
             {Opcode.CMSG_UNKNOWN_6910, 0x1AFE},
             {Opcode.CMSG_WARDEN_DATA, 0x1702},
-            {Opcode.MSG_MULTIPLE_PACKETS, 0x10BD}, // CMSG_ADDON_REGISTERED_PREFIXES and SMSG_QUESTGIVER_QUEST_COMPLETE
-            {Opcode.MSG_MULTIPLE_PACKETS1, 0x10B6 | 0x10000}, // SMSG_SPELL_START and ???
-            {Opcode.MSG_QUERY_NEXT_MAIL_TIME, 0x1F61},
-            {Opcode.MSG_UNKNOWN_4262, 0x10A6},
-            {Opcode.MSG_UNKNOWN_5125, 0x1405},
-            {Opcode.MSG_UNKNOWN_5750, 0x1676},
-            {Opcode.MSG_UNKNOWN_5383, 0x1507},
-            {Opcode.MSG_UNKNOWN_6127, 0x17EF},
-            {Opcode.MSG_UNKNOWN_6315, 0x18AB},
+        };
+
+        private static readonly BiDictionary<Opcode, int> ServerOpcodes = new BiDictionary<Opcode, int>
+        {
             {Opcode.SMSG_ACCOUNT_DATA_TIMES, 0x0890},
             {Opcode.SMSG_ACTION_BUTTONS, 0x0096},
             {Opcode.SMSG_ADDON_INFO, 0x0128},
@@ -176,7 +175,7 @@ namespace WowPacketParser.Enums.Version.V5_4_0_17359
             {Opcode.SMSG_SPELLHEALLOG, 0x1594},
             {Opcode.SMSG_SPELLNONMELEEDAMAGELOG, 0x1085},
             {Opcode.SMSG_SPELL_GO, 0x1C17},
-            {Opcode.SMSG_SPELL_START, 0x10B6 | 0x20000},
+            {Opcode.SMSG_SPELL_START, 0x10B6},
             {Opcode.SMSG_SPLINE_MOVE_SET_SWIM_SPEED, 0x1662},
             {Opcode.SMSG_SPLINE_MOVE_SET_WALK_SPEED, 0x16FB},
             {Opcode.SMSG_SPLINE_MOVE_ROOT, 0x177B},
@@ -363,6 +362,19 @@ namespace WowPacketParser.Enums.Version.V5_4_0_17359
             {Opcode.SMSG_WEATHER, 0x04A7},
             {Opcode.SMSG_WEEKLY_SPELL_USAGE, 0x1124},
             {Opcode.SMSG_WORLD_SERVER_INFO, 0x052E},
+        };
+
+        private static readonly BiDictionary<Opcode, int> MiscOpcodes = new BiDictionary<Opcode, int>
+        {
+            {Opcode.MSG_MULTIPLE_PACKETS, 0x10BD}, // CMSG_ADDON_REGISTERED_PREFIXES and SMSG_QUESTGIVER_QUEST_COMPLETE
+            {Opcode.MSG_MULTIPLE_PACKETS1, 0x10B6}, // SMSG_SPELL_START and ???
+            {Opcode.MSG_QUERY_NEXT_MAIL_TIME, 0x1F61},
+            {Opcode.MSG_UNKNOWN_4262, 0x10A6},
+            {Opcode.MSG_UNKNOWN_5125, 0x1405},
+            {Opcode.MSG_UNKNOWN_5750, 0x1676},
+            {Opcode.MSG_UNKNOWN_5383, 0x1507},
+            {Opcode.MSG_UNKNOWN_6127, 0x17EF},
+            {Opcode.MSG_UNKNOWN_6315, 0x18AB},
         };
     }
 }

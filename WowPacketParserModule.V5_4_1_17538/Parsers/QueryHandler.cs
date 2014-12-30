@@ -209,39 +209,37 @@ namespace WowPacketParserModule.V5_4_1_17538.Parsers
                 {
                     var creatureDifficulty = new CreatureDifficulty();
 
-                    db2File.ReadUInt32("Id");
-                    var Id = db2File.ReadEntry("Creature Id");
-                    creatureDifficulty.Faction = db2File.ReadUInt32("Faction Template Id");
+                    var Id = db2File.ReadEntry("Id");
+                    creatureDifficulty.CreatureID = db2File.ReadUInt32("Creature Id");
+                    creatureDifficulty.FactionID = db2File.ReadUInt32("Faction Template Id");
                     creatureDifficulty.Expansion = db2File.ReadInt32("Expansion");
                     creatureDifficulty.MinLevel = db2File.ReadInt32("Min Level");
                     creatureDifficulty.MaxLevel = db2File.ReadInt32("Max Level");
-                    db2File.ReadUInt32("Unk MoP 1");
-                    db2File.ReadUInt32("Unk MoP 2");
-                    db2File.ReadUInt32("Unk MoP 3");
-                    db2File.ReadUInt32("Unk MoP 4");
-                    db2File.ReadUInt32("Unk MoP 5");
 
-                    Storage.CreatureDifficultys.Add((uint) Id.Key, creatureDifficulty, packet.TimeSpan);
+                    creatureDifficulty.Flags = new uint[5];
+                    for (var i = 0; i < 5; ++i)
+                        creatureDifficulty.Flags[i] = db2File.ReadUInt32("Flags", i);
+
+                    Storage.CreatureDifficultys.Add((uint)Id.Key, creatureDifficulty, packet.TimeSpan);
                     break;
                 }
                 case DB2Hash.GameObjects:
                 {
                     var gameObjectTemplateDB2 = new GameObjectTemplateDB2();
-                    var gameObjectTemplatePositionDB2 = new GameObjectTemplatePositionDB2();
 
                     var Id = db2File.ReadEntry("GameObject Id");
 
-                    gameObjectTemplatePositionDB2.map = db2File.ReadUInt32("Map");
+                    gameObjectTemplateDB2.MapID = db2File.ReadUInt32("Map");
 
                     gameObjectTemplateDB2.DisplayId = db2File.ReadUInt32("Display Id");
 
-                    gameObjectTemplatePositionDB2.positionX = db2File.ReadSingle("Position X");
-                    gameObjectTemplatePositionDB2.positionY = db2File.ReadSingle("Position Y");
-                    gameObjectTemplatePositionDB2.positionZ = db2File.ReadSingle("Position Z");
-                    gameObjectTemplatePositionDB2.rotationX = db2File.ReadSingle("Rotation X");
-                    gameObjectTemplatePositionDB2.rotationY = db2File.ReadSingle("Rotation Y");
-                    gameObjectTemplatePositionDB2.rotationZ = db2File.ReadSingle("Rotation Z");
-                    gameObjectTemplatePositionDB2.rotationW = db2File.ReadSingle("Rotation W");
+                    gameObjectTemplateDB2.PositionX = db2File.ReadSingle("Position X");
+                    gameObjectTemplateDB2.PositionY = db2File.ReadSingle("Position Y");
+                    gameObjectTemplateDB2.PositionZ = db2File.ReadSingle("Position Z");
+                    gameObjectTemplateDB2.RotationX = db2File.ReadSingle("Rotation X");
+                    gameObjectTemplateDB2.RotationY = db2File.ReadSingle("Rotation Y");
+                    gameObjectTemplateDB2.RotationZ = db2File.ReadSingle("Rotation Z");
+                    gameObjectTemplateDB2.RotationW = db2File.ReadSingle("Rotation W");
 
                     gameObjectTemplateDB2.Size = db2File.ReadSingle("Size");
                     gameObjectTemplateDB2.Type = db2File.ReadEnum<GameObjectType>("Type", TypeCode.Int32);
@@ -253,12 +251,7 @@ namespace WowPacketParserModule.V5_4_1_17538.Parsers
                     if (db2File.ReadUInt16() > 0)
                         gameObjectTemplateDB2.Name = db2File.ReadCString("Name");
 
-                    Storage.GameObjectTemplateDB2s.Add((uint) Id.Key, gameObjectTemplateDB2, packet.TimeSpan);
-                    if (gameObjectTemplatePositionDB2.positionX != 0.0f &&
-                        gameObjectTemplatePositionDB2.positionY != 0.0f &&
-                        gameObjectTemplatePositionDB2.positionZ != 0.0f)
-                        Storage.GameObjectTemplatePositionDB2s.Add((uint) Id.Key, gameObjectTemplatePositionDB2,
-                            packet.TimeSpan);
+                    Storage.GameObjectTemplateDB2s.Add((uint)Id.Key, gameObjectTemplateDB2, packet.TimeSpan);
                     break;
                 }
                 case DB2Hash.Item:

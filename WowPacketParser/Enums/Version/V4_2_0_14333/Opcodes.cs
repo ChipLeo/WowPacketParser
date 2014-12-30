@@ -4,12 +4,16 @@ namespace WowPacketParser.Enums.Version.V4_2_0_14333
 {
     public static class Opcodes_4_2_0
     {
-        public static BiDictionary<Opcode, int> Opcodes()
+        public static BiDictionary<Opcode, int> Opcodes(Direction direction)
         {
-            return Opcs;
+            if (direction == Direction.ClientToServer || direction == Direction.BNClientToServer)
+                return ClientOpcodes;
+            if (direction == Direction.ServerToClient || direction == Direction.BNServerToClient)
+                return ServerOpcodes;
+            return MiscOpcodes;
         }
 
-        private static readonly BiDictionary<Opcode, int> Opcs = new BiDictionary<Opcode, int>
+        private static readonly BiDictionary<Opcode, int> ClientOpcodes = new BiDictionary<Opcode, int>
         {
             {Opcode.CMSG_ACCEPT_LEVEL_GRANT, 0xE2A2},
             {Opcode.CMSG_ACCEPT_TRADE, 0x8C0},
@@ -378,57 +382,10 @@ namespace WowPacketParser.Enums.Version.V4_2_0_14333
             {Opcode.CMSG_WORLD_STATE_UI_TIMER_UPDATE, 0x6222},
             {Opcode.CMSG_WORLD_TELEPORT, 0x80},
             {Opcode.CMSG_ZONEUPDATE, 0xAEB7},
-            {Opcode.MSG_AUCTION_HELLO, 0x6EAF},
-            {Opcode.MSG_CORPSE_QUERY, 0x3232},
-            {Opcode.MSG_GUILD_BANK_LOG_QUERY, 0x72EA},
-            {Opcode.MSG_GUILD_BANK_MONEY_WITHDRAWN, 0x36F6},
-            {Opcode.MSG_GUILD_EVENT_LOG_QUERY, 0xAEBE},
-            {Opcode.MSG_GUILD_PERMISSIONS, 0xE22E},
-            {Opcode.MSG_INSPECT_ARENA_TEAMS, 0x72A3},
-            {Opcode.MSG_LIST_STABLED_PETS, 0xB272},
-            {Opcode.MSG_MOVE_FALL_LAND, 0x88E1},
-            {Opcode.MSG_MOVE_HEARTBEAT, 0x28E3},
-            {Opcode.MSG_MOVE_JUMP, 0x386A},
-            {Opcode.MSG_MOVE_ROOT, 0x8EB},
-            {Opcode.MSG_MOVE_SET_FACING, 0x9848},
-            {Opcode.MSG_MOVE_SET_PITCH, 0xB861},
-            {Opcode.MSG_MOVE_SET_PITCH_RATE, 0xCB27},
-            {Opcode.MSG_MOVE_SET_RUN_MODE, 0x38CB},
-            {Opcode.MSG_MOVE_SET_RUN_SPEED, 0xB21},
-            {Opcode.MSG_MOVE_SET_TURN_RATE, 0x5703},
-            {Opcode.MSG_MOVE_SET_WALK_MODE, 0x88E9},
-            {Opcode.MSG_MOVE_START_ASCEND, 0x18EA},
-            {Opcode.MSG_MOVE_START_BACKWARD, 0x863},
-            {Opcode.MSG_MOVE_START_DESCEND, 0x849},
-            {Opcode.MSG_MOVE_START_FORWARD, 0x18E1},
-            {Opcode.MSG_MOVE_START_STRAFE_LEFT, 0x88C2},
-            {Opcode.MSG_MOVE_START_STRAFE_RIGHT, 0xB843},
-            {Opcode.MSG_MOVE_START_SWIM, 0xB841},
-            {Opcode.MSG_MOVE_START_TURN_LEFT, 0x84A},
-            {Opcode.MSG_MOVE_START_TURN_RIGHT, 0x88E0},
-            {Opcode.MSG_MOVE_STOP, 0x286A},
-            {Opcode.MSG_MOVE_STOP_ASCEND, 0x1869},
-            {Opcode.MSG_MOVE_STOP_STRAFE, 0xA8E0},
-            {Opcode.MSG_MOVE_STOP_TURN, 0x3862},
-            {Opcode.MSG_MOVE_WORLDPORT_ACK, 0x5050},
-            {Opcode.MSG_NOTIFY_PARTY_SQUELCH, 0x766B},
-            {Opcode.MSG_PARTY_ASSIGNMENT, 0xA22A},
-            {Opcode.MSG_PETITION_DECLINE, 0xAE2F},
-            {Opcode.MSG_PETITION_RENAME, 0xFAFA},
-            {Opcode.MSG_PVP_LOG_DATA, 0x5365},
-            {Opcode.MSG_QUERY_GUILD_BANK_TEXT, 0xA236},
-            {Opcode.MSG_QUERY_NEXT_MAIL_TIME, 0xFA62},
-            {Opcode.MSG_QUEST_PUSH_RESULT, 0xBE3A},
-            {Opcode.MSG_RAID_READY_CHECK, 0xA63A},
-            {Opcode.MSG_RAID_READY_CHECK_CONFIRM, 0xAE76},
-            {Opcode.MSG_RAID_READY_CHECK_FINISHED, 0x36E6},
-            {Opcode.MSG_RAID_TARGET_UPDATE, 0x66FA},
-            {Opcode.MSG_RANDOM_ROLL, 0xFEFB},
-            {Opcode.MSG_SAVE_GUILD_EMBLEM, 0x6A36},
-            {Opcode.MSG_SET_DUNGEON_DIFFICULTY, 0xA23E},
-            {Opcode.MSG_SET_RAID_DIFFICULTY, 0xFA73},
-            {Opcode.MSG_TABARDVENDOR_ACTIVATE, 0xEAEF},
-            {Opcode.MSG_TALENT_WIPE_CONFIRM, 0x2EA7},
+        };
+
+        private static readonly BiDictionary<Opcode, int> ServerOpcodes = new BiDictionary<Opcode, int>
+        {
             {Opcode.SMSG_ACCOUNT_DATA_TIMES, 0x2E3E},
             {Opcode.SMSG_ACHIEVEMENT_DELETED, 0xEAFE},
             {Opcode.SMSG_ACHIEVEMENT_EARNED, 0xBAFA},
@@ -718,7 +675,7 @@ namespace WowPacketParser.Enums.Version.V4_2_0_14333
             {Opcode.SMSG_OVERRIDE_LIGHT, 0x3A36},
             {Opcode.SMSG_PAGE_TEXT_QUERY_RESPONSE, 0x762F},
             {Opcode.SMSG_PARTY_COMMAND_RESULT, 0xF2EF},
-            {Opcode.SMSG_PARTYKILLLOG, 0x3276},
+            {Opcode.SMSG_PARTY_KILL_LOG, 0x3276},
             {Opcode.SMSG_PARTY_MEMBER_STATS, 0xB2BB},
             {Opcode.SMSG_PARTY_MEMBER_STATS_FULL, 0x2ABA},
             {Opcode.SMSG_PAUSE_MIRROR_TIMER, 0xA2EF},
@@ -875,6 +832,61 @@ namespace WowPacketParser.Enums.Version.V4_2_0_14333
             {Opcode.SMSG_WHO, 0x223B},
             {Opcode.SMSG_WHOIS, 0xAA76},
             {Opcode.SMSG_ZONE_UNDER_ATTACK, 0xFE72},
+        };
+
+        private static readonly BiDictionary<Opcode, int> MiscOpcodes = new BiDictionary<Opcode, int>
+        {
+            {Opcode.MSG_AUCTION_HELLO, 0x6EAF},
+            {Opcode.MSG_CORPSE_QUERY, 0x3232},
+            {Opcode.MSG_GUILD_BANK_LOG_QUERY, 0x72EA},
+            {Opcode.MSG_GUILD_BANK_MONEY_WITHDRAWN, 0x36F6},
+            {Opcode.MSG_GUILD_EVENT_LOG_QUERY, 0xAEBE},
+            {Opcode.MSG_GUILD_PERMISSIONS, 0xE22E},
+            {Opcode.MSG_INSPECT_ARENA_TEAMS, 0x72A3},
+            {Opcode.MSG_LIST_STABLED_PETS, 0xB272},
+            {Opcode.MSG_MOVE_FALL_LAND, 0x88E1},
+            {Opcode.MSG_MOVE_HEARTBEAT, 0x28E3},
+            {Opcode.MSG_MOVE_JUMP, 0x386A},
+            {Opcode.MSG_MOVE_ROOT, 0x8EB},
+            {Opcode.MSG_MOVE_SET_FACING, 0x9848},
+            {Opcode.MSG_MOVE_SET_PITCH, 0xB861},
+            {Opcode.MSG_MOVE_SET_PITCH_RATE, 0xCB27},
+            {Opcode.MSG_MOVE_SET_RUN_MODE, 0x38CB},
+            {Opcode.MSG_MOVE_SET_RUN_SPEED, 0xB21},
+            {Opcode.MSG_MOVE_SET_TURN_RATE, 0x5703},
+            {Opcode.MSG_MOVE_SET_WALK_MODE, 0x88E9},
+            {Opcode.MSG_MOVE_START_ASCEND, 0x18EA},
+            {Opcode.MSG_MOVE_START_BACKWARD, 0x863},
+            {Opcode.MSG_MOVE_START_DESCEND, 0x849},
+            {Opcode.MSG_MOVE_START_FORWARD, 0x18E1},
+            {Opcode.MSG_MOVE_START_STRAFE_LEFT, 0x88C2},
+            {Opcode.MSG_MOVE_START_STRAFE_RIGHT, 0xB843},
+            {Opcode.MSG_MOVE_START_SWIM, 0xB841},
+            {Opcode.MSG_MOVE_START_TURN_LEFT, 0x84A},
+            {Opcode.MSG_MOVE_START_TURN_RIGHT, 0x88E0},
+            {Opcode.MSG_MOVE_STOP, 0x286A},
+            {Opcode.MSG_MOVE_STOP_ASCEND, 0x1869},
+            {Opcode.MSG_MOVE_STOP_STRAFE, 0xA8E0},
+            {Opcode.MSG_MOVE_STOP_TURN, 0x3862},
+            {Opcode.MSG_MOVE_WORLDPORT_ACK, 0x5050},
+            {Opcode.MSG_NOTIFY_PARTY_SQUELCH, 0x766B},
+            {Opcode.MSG_PARTY_ASSIGNMENT, 0xA22A},
+            {Opcode.MSG_PETITION_DECLINE, 0xAE2F},
+            {Opcode.MSG_PETITION_RENAME, 0xFAFA},
+            {Opcode.MSG_PVP_LOG_DATA, 0x5365},
+            {Opcode.MSG_QUERY_GUILD_BANK_TEXT, 0xA236},
+            {Opcode.MSG_QUERY_NEXT_MAIL_TIME, 0xFA62},
+            {Opcode.MSG_QUEST_PUSH_RESULT, 0xBE3A},
+            {Opcode.MSG_RAID_READY_CHECK, 0xA63A},
+            {Opcode.MSG_RAID_READY_CHECK_CONFIRM, 0xAE76},
+            {Opcode.MSG_RAID_READY_CHECK_FINISHED, 0x36E6},
+            {Opcode.MSG_RAID_TARGET_UPDATE, 0x66FA},
+            {Opcode.MSG_RANDOM_ROLL, 0xFEFB},
+            {Opcode.MSG_SAVE_GUILD_EMBLEM, 0x6A36},
+            {Opcode.MSG_SET_DUNGEON_DIFFICULTY, 0xA23E},
+            {Opcode.MSG_SET_RAID_DIFFICULTY, 0xFA73},
+            {Opcode.MSG_TABARDVENDOR_ACTIVATE, 0xEAEF},
+            {Opcode.MSG_TALENT_WIPE_CONFIRM, 0x2EA7},
         };
     }
 }

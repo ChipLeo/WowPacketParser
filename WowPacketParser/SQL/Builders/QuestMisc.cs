@@ -98,5 +98,65 @@ namespace WowPacketParser.SQL.Builders
 
             return sql;
         }
+
+        [BuilderMethod]
+        public static string QuestGreeting()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
+                return String.Empty;
+
+            if (Storage.QuestGreetings.IsEmpty())
+                return String.Empty;
+
+            var entries = Storage.QuestGreetings.Keys();
+            var templatesDb = SQLDatabase.GetDict<uint, QuestGreeting>(entries, "ID");
+
+            return SQLUtil.CompareDicts(Storage.QuestGreetings, templatesDb, StoreNameType.QuestGreeting, "ID");
+        }
+
+        [BuilderMethod]
+        public static string QuestOfferReward()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
+                return String.Empty;
+
+            if (Storage.QuestOfferRewards.IsEmpty())
+                return String.Empty;
+
+            var entries = Storage.QuestOfferRewards.Keys();
+            var templatesDb = SQLDatabase.GetDict<uint, QuestOfferReward>(entries, "ID");
+
+            return SQLUtil.CompareDicts(Storage.QuestOfferRewards, templatesDb, StoreNameType.QuestGreeting, "ID");
+        }
+
+        [BuilderMethod]
+        public static string QuestDetails()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
+                return String.Empty;
+
+            if (Storage.QuestDetails.IsEmpty())
+                return String.Empty;
+
+            var entries = Storage.QuestDetails.Keys();
+            var templatesDb = SQLDatabase.GetDict<uint, QuestDetails>(entries, "ID");
+
+            return SQLUtil.CompareDicts(Storage.QuestDetails, templatesDb, StoreNameType.Quest, "ID");
+        }
+
+        [BuilderMethod]
+        public static string QuestRequestItems()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
+                return String.Empty;
+
+            if (Storage.QuestRequestItems.IsEmpty())
+                return String.Empty;
+
+            var entries = Storage.QuestRequestItems.Keys();
+            var templatesDb = SQLDatabase.GetDict<uint, QuestRequestItems>(entries, "ID");
+
+            return SQLUtil.CompareDicts(Storage.QuestRequestItems, templatesDb, StoreNameType.Quest, "ID");
+         }
     }
 }

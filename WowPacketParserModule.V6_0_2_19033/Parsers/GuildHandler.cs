@@ -366,8 +366,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
                 packet.ResetBitReader();
 
-                var bits1 = packet.ReadBits(8);
-                var bits69 = packet.ReadBits(7);
+                var bits1 = packet.ReadBits(7);
+                var bits69 = packet.ReadBits(9);
 
                 packet.ReadWoWString("Name", bits1, i);
                 packet.ReadWoWString("Icon", bits69, i);
@@ -377,11 +377,13 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             {
                 packet.ReadInt32("Slot", i);
                 ItemHandler.ReadItemInstance(ref packet, i);
+
                 packet.ReadInt32("Count", i);
                 packet.ReadInt32("EnchantmentID", i);
                 packet.ReadInt32("Charges", i);
-                var int76 = packet.ReadInt32("SocketEnchant", i);
                 packet.ReadInt32("OnUseEnchantmentID", i);
+                var int76 = packet.ReadInt32("SocketEnchant", i);
+                packet.ReadInt32("Flags", i);
 
                 for (int j = 0; j < int76; j++)
                 {
@@ -439,13 +441,13 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void HandleGuildChallengeUpdated(Packet packet)
         {
             for (int i = 0; i < 6; ++i)
-                packet.ReadInt32("Gold", i);
+                packet.ReadInt32("CurrentCount", i);
 
             for (int i = 0; i < 6; ++i)
                 packet.ReadInt32("MaxCount", i);
-            
+
             for (int i = 0; i < 6; ++i)
-                packet.ReadInt32("CurrentCount", i);
+                packet.ReadInt32("Gold", i);
 
             for (int i = 0; i < 6; ++i)
                 packet.ReadInt32("MaxLevelGold", i);
@@ -458,6 +460,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadPackedGuid128("Other");
             packet.ReadInt32("RankID");
             packet.ReadBit("Promote");
+        }
+
+        [Parser(Opcode.SMSG_GUILD_EVENT_RANK_CHANGED)]
+        public static void HandleGuildEventRankChanged(Packet packet)
+        {
+            packet.ReadInt32("RankID");
         }
     }
 }

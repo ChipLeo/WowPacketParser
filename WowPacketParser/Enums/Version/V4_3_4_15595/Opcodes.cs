@@ -4,12 +4,16 @@ namespace WowPacketParser.Enums.Version.V4_3_4_15595
 {
     public static class Opcodes_4_3_4
     {
-        public static BiDictionary<Opcode, int> Opcodes()
+        public static BiDictionary<Opcode, int> Opcodes(Direction direction)
         {
-            return Opcs;
+            if (direction == Direction.ClientToServer || direction == Direction.BNClientToServer)
+                return ClientOpcodes;
+            if (direction == Direction.ServerToClient || direction == Direction.BNServerToClient)
+                return ServerOpcodes;
+            return MiscOpcodes;
         }
 
-        private static readonly BiDictionary<Opcode, int> Opcs = new BiDictionary<Opcode, int>
+        private static readonly BiDictionary<Opcode, int> ClientOpcodes = new BiDictionary<Opcode, int>
         {
             {Opcode.CMSG_ACCEPT_LEVEL_GRANT, 0x0205},
             {Opcode.CMSG_ACCEPT_TRADE, 0x7110},
@@ -515,61 +519,10 @@ namespace WowPacketParser.Enums.Version.V4_3_4_15595
             {Opcode.CMSG_WORLD_TELEPORT, 0x24B2},
             {Opcode.CMSG_WRAP_ITEM, 0x4F06},
             {Opcode.CMSG_ZONEUPDATE, 0x4F37},
-            {Opcode.MSG_AUCTION_HELLO, 0x2307},
-            {Opcode.MSG_CHANNEL_START, 0x0A15},
-            {Opcode.MSG_CHANNEL_UPDATE, 0x2417},
-            {Opcode.MSG_CORPSE_QUERY, 0x4336},
-            {Opcode.MSG_INSPECT_ARENA_TEAMS, 0x2704},
-            {Opcode.MSG_LIST_STABLED_PETS, 0x0834},
-            {Opcode.MSG_MINIMAP_PING, 0x6635},
-            {Opcode.MSG_MOVE_CHARM_TELEPORT_CHEAT, 0x7A08},
-            {Opcode.MSG_MOVE_FALL_LAND, 0x380A},
-            {Opcode.MSG_MOVE_HEARTBEAT, 0x3914},
-            {Opcode.MSG_MOVE_JUMP, 0x7A06},
-            {Opcode.MSG_MOVE_SET_FACING, 0x7914},
-            {Opcode.MSG_MOVE_SET_PITCH, 0x7312},
-            {Opcode.MSG_MOVE_SET_RUN_MODE, 0x791A},
-            {Opcode.MSG_MOVE_SET_WALK_MODE, 0x7002},
-            {Opcode.MSG_MOVE_START_ASCEND, 0x390A},
-            {Opcode.MSG_MOVE_START_BACKWARD, 0x330A},
-            {Opcode.MSG_MOVE_START_DESCEND, 0x3800},
-            {Opcode.MSG_MOVE_START_FORWARD, 0x7814},
-            {Opcode.MSG_MOVE_START_PITCH_DOWN, 0x3908},
-            {Opcode.MSG_MOVE_START_PITCH_UP, 0x3304},
-            {Opcode.MSG_MOVE_START_STRAFE_LEFT, 0x3A16},
-            {Opcode.MSG_MOVE_START_STRAFE_RIGHT, 0x3A02},
-            {Opcode.MSG_MOVE_START_SWIM, 0x3206},
-            {Opcode.MSG_MOVE_START_TURN_LEFT, 0x700C},
-            {Opcode.MSG_MOVE_START_TURN_RIGHT, 0x7000},
-            {Opcode.MSG_MOVE_STOP, 0x320A},
-            {Opcode.MSG_MOVE_STOP_ASCEND, 0x7B00},
-            {Opcode.MSG_MOVE_STOP_PITCH, 0x7216},
-            {Opcode.MSG_MOVE_STOP_STRAFE, 0x3002},
-            {Opcode.MSG_MOVE_STOP_SWIM, 0x3802},
-            {Opcode.MSG_MOVE_STOP_TURN, 0x331E},
-            {Opcode.MSG_MOVE_TELEPORT, 0x55A0},
-            {Opcode.MSG_MOVE_TELEPORT_ACK, 0x390C},
-            {Opcode.MSG_MOVE_TELEPORT_CHEAT, 0x3A10},
-            {Opcode.MSG_MOVE_TIME_SKIPPED, 0x19B3},
-            {Opcode.MSG_MOVE_TOGGLE_COLLISION_CHEAT, 0x7B04},
-            {Opcode.MSG_MOVE_WORLDPORT_ACK, 0x2411},
-            {Opcode.MSG_NOTIFY_PARTY_SQUELCH, 0x4D06},
-            {Opcode.MSG_PARTY_ASSIGNMENT, 0x0424}, // found CMSG
-            {Opcode.MSG_PETITION_DECLINE, 0x4905},
-            {Opcode.MSG_PETITION_RENAME, 0x4005},
-            {Opcode.MSG_QUERY_NEXT_MAIL_TIME, 0x0F04},
-            {Opcode.MSG_QUEST_PUSH_RESULT, 0x4515},
-            {Opcode.MSG_RAID_READY_CHECK, 0x2304},
-            {Opcode.MSG_RAID_READY_CHECK_CONFIRM, 0x4F05},
-            {Opcode.MSG_RAID_READY_CHECK_FINISHED, 0x2E15},
-            {Opcode.MSG_RAID_TARGET_UPDATE, 0x2C36},
-            {Opcode.MSG_RANDOM_ROLL, 0x0905},
-            {Opcode.MSG_SAVE_GUILD_EMBLEM, 0x2404},
-            {Opcode.MSG_SET_DUNGEON_DIFFICULTY, 0x4925},
-            {Opcode.MSG_SET_RAID_DIFFICULTY, 0x0614},
-            {Opcode.MSG_TABARDVENDOR_ACTIVATE, 0x6926},
-            {Opcode.MSG_TALENT_WIPE_CONFIRM, 0x0107},
-            {Opcode.MSG_VERIFY_CONNECTIVITY, 0x4F57},
+        };
+
+        private static readonly BiDictionary<Opcode, int> ServerOpcodes = new BiDictionary<Opcode, int>
+        {
             {Opcode.SMSG_ACCOUNT_DATA_TIMES, 0x4B05},
             {Opcode.SMSG_ACCOUNT_INFO_RESPONSE, 0x10A7},
             {Opcode.SMSG_ACCOUNT_RESTRICTED_WARNING, 0x51A7},
@@ -1003,7 +956,7 @@ namespace WowPacketParser.Enums.Version.V4_3_4_15595
             {Opcode.SMSG_OPEN_LFG_DUNGEON_FINDER, 0x2C37},
             {Opcode.SMSG_OVERRIDE_LIGHT, 0x4225},
             {Opcode.SMSG_PAGE_TEXT_QUERY_RESPONSE, 0x2B14},
-            {Opcode.SMSG_PARTYKILLLOG, 0x4937},
+            {Opcode.SMSG_PARTY_KILL_LOG, 0x4937},
             {Opcode.SMSG_PARTY_COMMAND_RESULT, 0x6E07},
             {Opcode.SMSG_PARTY_MEMBER_STATS, 0x2104},
             {Opcode.SMSG_PARTY_MEMBER_STATS_FULL, 0x0215},
@@ -1271,6 +1224,65 @@ namespace WowPacketParser.Enums.Version.V4_3_4_15595
             {Opcode.SMSG_WORLD_STATE_UI_TIMER_UPDATE, 0x4A14},
             {Opcode.SMSG_XP_GAIN_ABORTED, 0x50B4},
             {Opcode.SMSG_ZONE_UNDER_ATTACK, 0x0A06}
+        };
+
+        private static readonly BiDictionary<Opcode, int> MiscOpcodes = new BiDictionary<Opcode, int>
+        {
+            {Opcode.MSG_AUCTION_HELLO, 0x2307},
+            {Opcode.MSG_CHANNEL_START, 0x0A15},
+            {Opcode.MSG_CHANNEL_UPDATE, 0x2417},
+            {Opcode.MSG_CORPSE_QUERY, 0x4336},
+            {Opcode.MSG_INSPECT_ARENA_TEAMS, 0x2704},
+            {Opcode.MSG_LIST_STABLED_PETS, 0x0834},
+            {Opcode.MSG_MINIMAP_PING, 0x6635},
+            {Opcode.MSG_MOVE_CHARM_TELEPORT_CHEAT, 0x7A08},
+            {Opcode.MSG_MOVE_FALL_LAND, 0x380A},
+            {Opcode.MSG_MOVE_HEARTBEAT, 0x3914},
+            {Opcode.MSG_MOVE_JUMP, 0x7A06},
+            {Opcode.MSG_MOVE_SET_FACING, 0x7914},
+            {Opcode.MSG_MOVE_SET_PITCH, 0x7312},
+            {Opcode.MSG_MOVE_SET_RUN_MODE, 0x791A},
+            {Opcode.MSG_MOVE_SET_WALK_MODE, 0x7002},
+            {Opcode.MSG_MOVE_START_ASCEND, 0x390A},
+            {Opcode.MSG_MOVE_START_BACKWARD, 0x330A},
+            {Opcode.MSG_MOVE_START_DESCEND, 0x3800},
+            {Opcode.MSG_MOVE_START_FORWARD, 0x7814},
+            {Opcode.MSG_MOVE_START_PITCH_DOWN, 0x3908},
+            {Opcode.MSG_MOVE_START_PITCH_UP, 0x3304},
+            {Opcode.MSG_MOVE_START_STRAFE_LEFT, 0x3A16},
+            {Opcode.MSG_MOVE_START_STRAFE_RIGHT, 0x3A02},
+            {Opcode.MSG_MOVE_START_SWIM, 0x3206},
+            {Opcode.MSG_MOVE_START_TURN_LEFT, 0x700C},
+            {Opcode.MSG_MOVE_START_TURN_RIGHT, 0x7000},
+            {Opcode.MSG_MOVE_STOP, 0x320A},
+            {Opcode.MSG_MOVE_STOP_ASCEND, 0x7B00},
+            {Opcode.MSG_MOVE_STOP_PITCH, 0x7216},
+            {Opcode.MSG_MOVE_STOP_STRAFE, 0x3002},
+            {Opcode.MSG_MOVE_STOP_SWIM, 0x3802},
+            {Opcode.MSG_MOVE_STOP_TURN, 0x331E},
+            {Opcode.MSG_MOVE_TELEPORT, 0x55A0},
+            {Opcode.MSG_MOVE_TELEPORT_ACK, 0x390C},
+            {Opcode.MSG_MOVE_TELEPORT_CHEAT, 0x3A10},
+            {Opcode.MSG_MOVE_TIME_SKIPPED, 0x19B3},
+            {Opcode.MSG_MOVE_TOGGLE_COLLISION_CHEAT, 0x7B04},
+            {Opcode.MSG_MOVE_WORLDPORT_ACK, 0x2411},
+            {Opcode.MSG_NOTIFY_PARTY_SQUELCH, 0x4D06},
+            {Opcode.MSG_PARTY_ASSIGNMENT, 0x0424}, // found CMSG
+            {Opcode.MSG_PETITION_DECLINE, 0x4905},
+            {Opcode.MSG_PETITION_RENAME, 0x4005},
+            {Opcode.MSG_QUERY_NEXT_MAIL_TIME, 0x0F04},
+            {Opcode.MSG_QUEST_PUSH_RESULT, 0x4515},
+            {Opcode.MSG_RAID_READY_CHECK, 0x2304},
+            {Opcode.MSG_RAID_READY_CHECK_CONFIRM, 0x4F05},
+            {Opcode.MSG_RAID_READY_CHECK_FINISHED, 0x2E15},
+            {Opcode.MSG_RAID_TARGET_UPDATE, 0x2C36},
+            {Opcode.MSG_RANDOM_ROLL, 0x0905},
+            {Opcode.MSG_SAVE_GUILD_EMBLEM, 0x2404},
+            {Opcode.MSG_SET_DUNGEON_DIFFICULTY, 0x4925},
+            {Opcode.MSG_SET_RAID_DIFFICULTY, 0x0614},
+            {Opcode.MSG_TABARDVENDOR_ACTIVATE, 0x6926},
+            {Opcode.MSG_TALENT_WIPE_CONFIRM, 0x0107},
+            {Opcode.MSG_VERIFY_CONNECTIVITY, 0x4F57},
         };
     }
 }

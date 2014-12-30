@@ -4,12 +4,16 @@ namespace WowPacketParser.Enums.Version.V4_3_2_15211
 {
     public static class Opcodes_4_3_2
     {
-        public static BiDictionary<Opcode, int> Opcodes()
+        public static BiDictionary<Opcode, int> Opcodes(Direction direction)
         {
-            return Opcs;
+            if (direction == Direction.ClientToServer || direction == Direction.BNClientToServer)
+                return ClientOpcodes;
+            if (direction == Direction.ServerToClient || direction == Direction.BNServerToClient)
+                return ServerOpcodes;
+            return MiscOpcodes;
         }
 
-        private static readonly BiDictionary<Opcode, int> Opcs = new BiDictionary<Opcode, int>
+        private static readonly BiDictionary<Opcode, int> ClientOpcodes = new BiDictionary<Opcode, int>
         {
             {Opcode.CMSG_ACCEPT_LEVEL_GRANT, 0x0D33},
             {Opcode.CMSG_ACTIVATETAXI, 0x4DF9},
@@ -56,8 +60,10 @@ namespace WowPacketParser.Enums.Version.V4_3_2_15211
             {Opcode.CMSG_TRAINER_LIST, 0x4DD5},
             {Opcode.CMSG_UNLEARN_SKILL, 0x2DC7},
             {Opcode.CMSG_USE_ITEM, 0x2549},
-            {Opcode.MSG_MOVE_HEARTBEAT, 0x2B81},
-            {Opcode.MSG_TABARDVENDOR_ACTIVATE, 0x05FB},
+        };
+
+        private static readonly BiDictionary<Opcode, int> ServerOpcodes = new BiDictionary<Opcode, int>
+        {
             {Opcode.SMSG_ACCOUNT_DATA_TIMES, 0x058B},
             {Opcode.SMSG_ADDON_INFO, 0x6D8D},
             {Opcode.SMSG_ATTACKERSTATEUPDATE, 0x2D59},
@@ -123,6 +129,12 @@ namespace WowPacketParser.Enums.Version.V4_3_2_15211
             {Opcode.SMSG_UPDATE_OBJECT, 0x0D63},
             {Opcode.SMSG_UPDATE_WORLD_STATE, 0x45E5},
             {Opcode.SMSG_WARDEN_DATA, 0x0CF0},
+        };
+
+        private static readonly BiDictionary<Opcode, int> MiscOpcodes = new BiDictionary<Opcode, int>
+        {
+            {Opcode.MSG_MOVE_HEARTBEAT, 0x2B81},
+            {Opcode.MSG_TABARDVENDOR_ACTIVATE, 0x05FB},
         };
     }
 }

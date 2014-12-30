@@ -83,8 +83,16 @@ namespace WowPacketParser.Parsing
 
                         if (handlers.ContainsKey(key))
                         {
+                            // @TODO This is a hack to keep things easy regarding declaration of opcodes.
+                            // Ideally, we would split the opcodes into three different enums:
+                            // ClientOpcodes, ServerOpcodes, BidirectionalOpcodes
+                            // The first two are obvious as to what they would contain.
+                            // The last one would be MSG_, UMSG_, TEST_, etc... opcodes
+                            // However that's just too much pain to do considering the mess Blizzard does
+                            // by naming their opcodes sometimes without following their own rules.
+                            var direction = attr.Opcode.ToString()[0] == 'S' ? Direction.ServerToClient : Direction.ClientToServer;
                             Trace.WriteLine(string.Format("Error: (Build: {0}) tried to overwrite delegate for opcode {1} ({2}); new handler: {3}; old handler: {4}",
-                                ClientVersion.Build, Opcodes.GetOpcode(attr.Opcode), attr.Opcode, del.Method, handlers[key].Method));
+                                ClientVersion.Build, Opcodes.GetOpcode(attr.Opcode, direction), attr.Opcode, del.Method, handlers[key].Method));
                             continue;
                         }
 
@@ -102,7 +110,7 @@ namespace WowPacketParser.Parsing
 
             var opcode = Opcodes.GetOpcode(packet.Opcode, packet.Direction);
             if (opcode == Opcode.NULL_OPCODE)
-                opcode = Opcodes.GetOpcode(packet.Opcode);
+                opcode = Opcodes.GetOpcode(packet.Opcode, Direction.Bidirectional);
 
             packet.WriteLine(packet.GetHeader(isMultiple));
 
@@ -115,6 +123,7 @@ namespace WowPacketParser.Parsing
             var hasHandler = VersionHandlers.TryGetValue(key, out handler);
             if (!hasHandler)
             {
+                // If no handler was found, try to find a handler that works for any version.
                 key = new KeyValuePair<ClientVersionBuild, Opcode>(ClientVersionBuild.Zero, opcode);
                 hasHandler = VersionHandlers.TryGetValue(key, out handler);
             }
@@ -125,7 +134,7 @@ namespace WowPacketParser.Parsing
                 {
                     var attrs = handler.Method.GetCustomAttributes(typeof(HasSniffDataAttribute), false);
 
-                    packet.AddSniffData(StoreNameType.Opcode, packet.Opcode, Opcodes.GetOpcodeName(packet.Opcode));
+                    packet.AddSniffData(StoreNameType.Opcode, packet.Opcode, Opcodes.GetOpcodeName(packet.Opcode, packet.Direction));
 
                     if (attrs.Length == 0)
                     {
@@ -144,7 +153,7 @@ namespace WowPacketParser.Parsing
                     {
                         var pos = packet.Position;
                         var len = packet.Length;
-                        packet.WriteLine("Packet not fully read! Current position is {0}, length is {1}, and diff is {2}.",
+                        packet.WriteLine("Packet not fully read! Current position: {0} Length: {1} Bytes remaining: {2}.",
                             pos, len, len - pos);
 
                         //if (len < 300) // If the packet isn't "too big" and it is not full read, print its hex table

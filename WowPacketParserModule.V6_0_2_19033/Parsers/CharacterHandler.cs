@@ -2,6 +2,8 @@
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
+using WowPacketParser.Store;
+using WowPacketParser.Store.Objects;
 using WowPacketParserModule.V6_0_2_19033.Enums;
 
 namespace WowPacketParserModule.V6_0_2_19033.Parsers
@@ -21,8 +23,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadPackedGuid128("Guid", i);
 
                 packet.ReadByte("ListPosition", i);
-                packet.ReadEnum<Race>("RaceID", TypeCode.Byte, i);
-                packet.ReadEnum<Class>("ClassID", TypeCode.Byte, i);
+                var race = packet.ReadEnum<Race>("RaceID", TypeCode.Byte, i);
+                var klass = packet.ReadEnum<Class>("ClassID", TypeCode.Byte, i);
                 packet.ReadByte("SexID", i);
                 packet.ReadByte("SkinID", i);
                 packet.ReadByte("FaceID", i);
@@ -30,10 +32,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadByte("HairColor", i);
                 packet.ReadByte("FacialHairStyle", i);
                 packet.ReadByte("ExperienceLevel", i);
-                packet.ReadUInt32("ZoneID", i);
-                packet.ReadUInt32("MapID", i);
-                
-                packet.ReadVector3("PreloadPos", i);
+                var zone = packet.ReadUInt32("ZoneID", i);
+                var mapId = packet.ReadUInt32("MapID", i);
+
+                var pos = packet.ReadVector3("PreloadPos", i);
 
                 packet.ReadPackedGuid128("GuildGUID", i);
 
@@ -56,9 +58,15 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
                 packet.ResetBitReader();
                 var nameLength = packet.ReadBits("Character Name Length", 6, i);
-                packet.ReadBit("FirstLogin", i);
+                var firstLogin = packet.ReadBit("FirstLogin", i);
                 packet.ReadBit("BoostInProgress", i);
                 packet.ReadWoWString("Character Name", nameLength, i);
+
+                if (firstLogin)
+                {
+                    var startPos = new StartPosition { Map = (int) mapId, Position = pos, Zone = (int)zone };
+                    Storage.StartPositions.Add(new Tuple<Race, Class>(race, klass), startPos, packet.TimeSpan);
+                }
             }
 
             for (var i = 0; i < restrictionsCount; ++i)
@@ -376,6 +384,21 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("LevelTime");
 
             packet.ReadBit("TriggerEvent");
+        }
+
+        [Parser(Opcode.SMSG_LEVELUP_INFO)]
+        public static void HandleLevelUp(Packet packet)
+        {
+            packet.ReadInt32("Level");
+            packet.ReadInt32("HealthDelta");
+
+            for (var i = 0; i < 6; i++)
+                packet.ReadInt32("PowerDelta", (PowerType)i);
+
+            for (var i = 0; i < 5; i++)
+                packet.ReadInt32("StatDelta", (StatType)i);
+
+            packet.ReadInt32("Cp");
         }
     }
 }

@@ -4,12 +4,16 @@ namespace WowPacketParser.Enums.Version.V4_3_3_15354
 {
     public static class Opcodes_4_3_3
     {
-        public static BiDictionary<Opcode, int> Opcodes()
+        public static BiDictionary<Opcode, int> Opcodes(Direction direction)
         {
-            return Opcs;
+            if (direction == Direction.ClientToServer || direction == Direction.BNClientToServer)
+                return ClientOpcodes;
+            if (direction == Direction.ServerToClient || direction == Direction.BNServerToClient)
+                return ServerOpcodes;
+            return MiscOpcodes;
         }
 
-        private static readonly BiDictionary<Opcode, int> Opcs = new BiDictionary<Opcode, int>
+        private static readonly BiDictionary<Opcode, int> ClientOpcodes = new BiDictionary<Opcode, int>
         {
             {Opcode.CMSG_ADDON_REGISTERED_PREFIXES, 0x0480},
             {Opcode.CMSG_AREATRIGGER, 0x33A4},
@@ -72,37 +76,11 @@ namespace WowPacketParser.Enums.Version.V4_3_3_15354
             {Opcode.CMSG_WARDEN_DATA, 0x0202},
             {Opcode.CMSG_WORLD_STATE_UI_TIMER_UPDATE, 0x39E5},
             {Opcode.CMSG_ZONEUPDATE, 0x3125},
-            {Opcode.MSG_GUILD_PERMISSIONS, 0x02BC},
-            {Opcode.MSG_MOVE_HEARTBEAT,0x1FF4},
-            {Opcode.MSG_MOVE_JUMP, 0x1A10},
-            {Opcode.MSG_MOVE_SET_FACING, 0x16B4},
-            {Opcode.MSG_MOVE_SET_FLIGHT_SPEED, 0x71C6},
-            {Opcode.MSG_MOVE_SET_PITCH, 0x1251},
-            {Opcode.MSG_MOVE_SET_RUN_MODE, 0x13F4},
-            {Opcode.MSG_MOVE_SET_RUN_SPEED, 0x7004},
-            {Opcode.MSG_MOVE_SET_SWIM_BACK_SPEED, 0x3404},
-            {Opcode.MSG_MOVE_SET_SWIM_SPEED, 0x70CC},
-            {Opcode.MSG_MOVE_SET_WALK_MODE, 0x1B71},
-            {Opcode.MSG_MOVE_SET_WALK_SPEED, 0x704C},
-            {Opcode.MSG_MOVE_START_ASCEND, 0x17F4},
-            {Opcode.MSG_MOVE_START_BACKWARD, 0x1A91},
-            {Opcode.MSG_MOVE_START_DESCEND, 0x1355},
-            {Opcode.MSG_MOVE_START_FORWARD, 0x1E74},
-            {Opcode.MSG_MOVE_START_PITCH_DOWN, 0x1E70},
-            {Opcode.MSG_MOVE_START_PITCH_UP, 0x1370},
-            {Opcode.MSG_MOVE_START_STRAFE_LEFT, 0x1E51},
-            {Opcode.MSG_MOVE_START_STRAFE_RIGHT, 0x1691},
-            {Opcode.MSG_MOVE_START_SWIM, 0x1A90},
-            {Opcode.MSG_MOVE_START_TURN_LEFT, 0x1B11},
-            {Opcode.MSG_MOVE_START_TURN_RIGHT, 0x1AD4},
-            {Opcode.MSG_MOVE_STOP, 0x1350},
-            {Opcode.MSG_MOVE_STOP_ASCEND, 0x1690},
-            {Opcode.MSG_MOVE_STOP_PITCH, 0x1E15},
-            {Opcode.MSG_MOVE_STOP_STRAFE, 0x1631},
-            {Opcode.MSG_MOVE_STOP_SWIM, 0x1E11},
-            {Opcode.MSG_MOVE_STOP_TURN, 0x1331},
-            {Opcode.MSG_MOVE_TOGGLE_COLLISION_CHEAT, 0x1AF0},
-            {Opcode.MSG_SET_DUNGEON_DIFFICULTY, 0x22ED},
+            {Opcode.CMSG_UPDATE_ACCOUNT_DATA, 0x38EC},
+        };
+
+        private static readonly BiDictionary<Opcode, int> ServerOpcodes = new BiDictionary<Opcode, int>
+        {
             {Opcode.SMSG_ACCOUNT_DATA_TIMES, 0x622D},
             {Opcode.SMSG_ADDON_INFO, 0x22AD},
             {Opcode.SMSG_ALL_ACHIEVEMENT_DATA, 0x390E},
@@ -156,7 +134,6 @@ namespace WowPacketParser.Enums.Version.V4_3_3_15354
             {Opcode.SMSG_REDIRECT_CLIENT, 0x0855},
             {Opcode.SMSG_RESUME_COMMS, 0x0015},
             {Opcode.SMSG_SEND_UNLEARN_SPELLS, 0x78AC},
-            {Opcode.CMSG_UPDATE_ACCOUNT_DATA, 0x38EC},
             {Opcode.SMSG_SET_PHASE_SHIFT, 0x7104},
             {Opcode.SMSG_SET_PROFICIENCY, 0x7324},
             {Opcode.SMSG_SPELL_GO, 0x6425},
@@ -168,6 +145,41 @@ namespace WowPacketParser.Enums.Version.V4_3_3_15354
             {Opcode.SMSG_ACTION_BUTTONS, 0x604C},
             {Opcode.SMSG_UPDATE_OBJECT, 0x6264},
             {Opcode.SMSG_UPDATE_WORLD_STATE, 0x60A5},
+        };
+
+        private static readonly BiDictionary<Opcode, int> MiscOpcodes = new BiDictionary<Opcode, int>
+        {
+            {Opcode.MSG_GUILD_PERMISSIONS, 0x02BC},
+            {Opcode.MSG_MOVE_HEARTBEAT,0x1FF4},
+            {Opcode.MSG_MOVE_JUMP, 0x1A10},
+            {Opcode.MSG_MOVE_SET_FACING, 0x16B4},
+            {Opcode.MSG_MOVE_SET_FLIGHT_SPEED, 0x71C6},
+            {Opcode.MSG_MOVE_SET_PITCH, 0x1251},
+            {Opcode.MSG_MOVE_SET_RUN_MODE, 0x13F4},
+            {Opcode.MSG_MOVE_SET_RUN_SPEED, 0x7004},
+            {Opcode.MSG_MOVE_SET_SWIM_BACK_SPEED, 0x3404},
+            {Opcode.MSG_MOVE_SET_SWIM_SPEED, 0x70CC},
+            {Opcode.MSG_MOVE_SET_WALK_MODE, 0x1B71},
+            {Opcode.MSG_MOVE_SET_WALK_SPEED, 0x704C},
+            {Opcode.MSG_MOVE_START_ASCEND, 0x17F4},
+            {Opcode.MSG_MOVE_START_BACKWARD, 0x1A91},
+            {Opcode.MSG_MOVE_START_DESCEND, 0x1355},
+            {Opcode.MSG_MOVE_START_FORWARD, 0x1E74},
+            {Opcode.MSG_MOVE_START_PITCH_DOWN, 0x1E70},
+            {Opcode.MSG_MOVE_START_PITCH_UP, 0x1370},
+            {Opcode.MSG_MOVE_START_STRAFE_LEFT, 0x1E51},
+            {Opcode.MSG_MOVE_START_STRAFE_RIGHT, 0x1691},
+            {Opcode.MSG_MOVE_START_SWIM, 0x1A90},
+            {Opcode.MSG_MOVE_START_TURN_LEFT, 0x1B11},
+            {Opcode.MSG_MOVE_START_TURN_RIGHT, 0x1AD4},
+            {Opcode.MSG_MOVE_STOP, 0x1350},
+            {Opcode.MSG_MOVE_STOP_ASCEND, 0x1690},
+            {Opcode.MSG_MOVE_STOP_PITCH, 0x1E15},
+            {Opcode.MSG_MOVE_STOP_STRAFE, 0x1631},
+            {Opcode.MSG_MOVE_STOP_SWIM, 0x1E11},
+            {Opcode.MSG_MOVE_STOP_TURN, 0x1331},
+            {Opcode.MSG_MOVE_TOGGLE_COLLISION_CHEAT, 0x1AF0},
+            {Opcode.MSG_SET_DUNGEON_DIFFICULTY, 0x22ED},
         };
     }
 }

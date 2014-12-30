@@ -109,42 +109,43 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 {
                     var creatureDifficulty = new CreatureDifficulty();
 
-                    db2File.ReadUInt32("ID");
-                    var id = db2File.ReadEntry("Creature ID");
-                    creatureDifficulty.Faction = db2File.ReadUInt32("Faction Template ID");
+                    var Id = db2File.ReadEntry("Id");
+                    creatureDifficulty.CreatureID = db2File.ReadUInt32("Creature Id");
+                    creatureDifficulty.FactionID = db2File.ReadUInt32("Faction Template Id");
                     creatureDifficulty.Expansion = db2File.ReadInt32("Expansion");
                     creatureDifficulty.MinLevel = db2File.ReadInt32("Min Level");
                     creatureDifficulty.MaxLevel = db2File.ReadInt32("Max Level");
 
+                    creatureDifficulty.Flags = new uint[5];
                     for (var i = 0; i < 5; ++i)
-                        db2File.ReadUInt32("Flags", i);
+                        creatureDifficulty.Flags[i] = db2File.ReadUInt32("Flags", i);
 
-                    Storage.CreatureDifficultys.Add((uint) id.Key, creatureDifficulty, packet.TimeSpan);
+                    Storage.CreatureDifficultys.Add((uint)Id.Key, creatureDifficulty, packet.TimeSpan);
                     break;
                 }
                 case DB2Hash.GameObjects: // New structure - 6.0.2
                 {
                     var gameObjectTemplateDB2 = new GameObjectTemplateDB2();
-                    var gameObjectTemplatePositionDB2 = new GameObjectTemplatePositionDB2();
 
-                    var id = db2File.ReadEntry("GameObject ID");
+                    var Id = db2File.ReadEntry("ID");
 
-                    gameObjectTemplatePositionDB2.map = db2File.ReadUInt32("Map");
+                    gameObjectTemplateDB2.MapID = db2File.ReadUInt32("Map");
 
-                    gameObjectTemplateDB2.DisplayId = db2File.ReadUInt32("Display ID");
+                    gameObjectTemplateDB2.DisplayId = db2File.ReadUInt32("DisplayID");
 
-                    gameObjectTemplatePositionDB2.positionX = db2File.ReadSingle("Position X");
-                    gameObjectTemplatePositionDB2.positionY = db2File.ReadSingle("Position Y");
-                    gameObjectTemplatePositionDB2.positionZ = db2File.ReadSingle("Position Z");
-                    gameObjectTemplatePositionDB2.rotationX = db2File.ReadSingle("Rotation X");
-                    gameObjectTemplatePositionDB2.rotationY = db2File.ReadSingle("Rotation Y");
-                    gameObjectTemplatePositionDB2.rotationZ = db2File.ReadSingle("Rotation Z");
-                    gameObjectTemplatePositionDB2.rotationW = db2File.ReadSingle("Rotation W");
+                    gameObjectTemplateDB2.PositionX = db2File.ReadSingle("PositionX");
+                    gameObjectTemplateDB2.PositionY = db2File.ReadSingle("PositionY");
+                    gameObjectTemplateDB2.PositionZ = db2File.ReadSingle("PositionZ");
+                    gameObjectTemplateDB2.RotationX = db2File.ReadSingle("RotationX");
+                    gameObjectTemplateDB2.RotationY = db2File.ReadSingle("RotationY");
+                    gameObjectTemplateDB2.RotationZ = db2File.ReadSingle("RotationZ");
+                    gameObjectTemplateDB2.RotationW = db2File.ReadSingle("RotationW");
 
                     gameObjectTemplateDB2.Size = db2File.ReadSingle("Size");
+
                     db2File.ReadInt32("Phase Use Flags");
-                    gameObjectTemplatePositionDB2.PhaseId = db2File.ReadInt32("Phase ID");
-                    gameObjectTemplatePositionDB2.PhaseGroupId = db2File.ReadInt32("Phase Group ID");
+                    gameObjectTemplateDB2.PhaseId = db2File.ReadInt32("PhaseID");
+                    gameObjectTemplateDB2.PhaseGroupId = db2File.ReadInt32("PhaseGroupID");
 
                     gameObjectTemplateDB2.Type = db2File.ReadEnum<GameObjectType>("Type", TypeCode.Int32);
 
@@ -155,12 +156,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                     if (db2File.ReadUInt16() > 0)
                         gameObjectTemplateDB2.Name = db2File.ReadCString("Name");
 
-                    Storage.GameObjectTemplateDB2s.Add((uint) id.Key, gameObjectTemplateDB2, packet.TimeSpan);
-                    if (gameObjectTemplatePositionDB2.positionX != 0.0f &&
-                        gameObjectTemplatePositionDB2.positionY != 0.0f &&
-                        gameObjectTemplatePositionDB2.positionZ != 0.0f)
-                        Storage.GameObjectTemplatePositionDB2s.Add((uint) id.Key, gameObjectTemplatePositionDB2,
-                            packet.TimeSpan);
+                    Storage.GameObjectTemplateDB2s.Add((uint)Id.Key, gameObjectTemplateDB2, packet.TimeSpan);
                     break;
                 }
                 case DB2Hash.Item: // New structure - 6.0.2
@@ -345,23 +341,29 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 }
                 case DB2Hash.SpellMisc: // New structure - 6.0.2
                 {
-                    db2File.ReadUInt32("ID");
+                    var spellMisc = new SpellMisc();
 
+                    var Id = db2File.ReadEntry("ID");
+
+                    spellMisc.Attributes = new uint[14];
                     for (var i = 0; i < 14; ++i)
-                        db2File.ReadUInt32("Attributes", i);
+                        spellMisc.Attributes[i] = db2File.ReadUInt32("Attributes", i);
 
-                    db2File.ReadUInt32("Casting Time Index");
-                    db2File.ReadUInt32("Duration Index");
-                    db2File.ReadUInt32("Range Index");
-                    db2File.ReadSingle("Speed");
+                    spellMisc.CastingTimeIndex = db2File.ReadUInt32("CastingTimeIndex");
+                    spellMisc.DurationIndex = db2File.ReadUInt32("DurationIndex");
+                    spellMisc.RangeIndex = db2File.ReadUInt32("RangeIndex");
+                    spellMisc.Speed = db2File.ReadSingle("Speed");
 
+                    spellMisc.SpellVisualID = new uint[14];
                     for (var i = 0; i < 2; ++i)
-                        db2File.ReadUInt32("Spell Visual ID", i);
+                        spellMisc.SpellVisualID[i] = db2File.ReadUInt32("SpellVisualID", i);
 
-                    db2File.ReadUInt32("Spell Icon ID");
-                    db2File.ReadUInt32("Active Icon ID");
-                    db2File.ReadUInt32("School Mask");
-                    db2File.ReadSingle("UnkWoD1");
+                    spellMisc.SpellIconID = db2File.ReadUInt32("SpellIconID");
+                    spellMisc.ActiveIconID = db2File.ReadUInt32("ActiveIconID");
+                    spellMisc.SchoolMask = db2File.ReadUInt32("SchoolMask");
+                    spellMisc.UnkWoD1 = db2File.ReadSingle("UnkWoD1");
+
+                    Storage.SpellMiscs.Add((uint)Id.Key, spellMisc, packet.TimeSpan);
                     break;
                 }
                 case DB2Hash.Toy: // New structure - 6.0.2

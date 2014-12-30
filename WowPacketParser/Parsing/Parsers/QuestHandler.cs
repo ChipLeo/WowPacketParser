@@ -497,8 +497,9 @@ namespace WowPacketParser.Parsing.Parsers
                 var reqType = packet.ReadEnum<QuestRequirementType>("Requirement Type", TypeCode.Byte, i);
                 switch (reqType)
                 {
-                    case QuestRequirementType.Creature:
-                    case QuestRequirementType.Unknown3:
+                    case QuestRequirementType.CreatureKill:
+                    case QuestRequirementType.CreatureInteract:
+                    case QuestRequirementType.PetBattleDefeatCreature:
                         packet.ReadEntry<Int32>(StoreNameType.Unit, "Required Creature ID", i);
                         break;
                     case QuestRequirementType.Item:
@@ -513,8 +514,12 @@ namespace WowPacketParser.Parsing.Parsers
                     case QuestRequirementType.Spell:
                         packet.ReadEntry<Int32>(StoreNameType.Spell, "Required Spell ID", i);
                         break;
-                    case QuestRequirementType.Faction:
+                    case QuestRequirementType.FactionRepHigher:
+                    case QuestRequirementType.FactionRepLower:
                         packet.ReadUInt32("Required Faction ID", i);
+                        break;
+                    case QuestRequirementType.PetBattleDefeatSpecies:
+                        packet.ReadUInt32("Required Species ID", i);
                         break;
                     default:
                         packet.ReadInt32("Required ID", i);
@@ -1190,7 +1195,7 @@ namespace WowPacketParser.Parsing.Parsers
         public static void HandleQuestgiverStatus(Packet packet)
         {
             uint count = 1;
-            if (packet.Opcode == Opcodes.GetOpcode(Opcode.SMSG_QUESTGIVER_STATUS_MULTIPLE))
+            if (packet.Opcode == Opcodes.GetOpcode(Opcode.SMSG_QUESTGIVER_STATUS_MULTIPLE, Direction.ServerToClient))
                 count = packet.ReadUInt32("Count");
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_0_6a_13623))

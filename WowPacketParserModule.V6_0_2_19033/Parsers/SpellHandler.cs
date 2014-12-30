@@ -258,7 +258,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_PET_CAST_SPELL)]
         public static void HandleCastSpell(Packet packet)
         {
-            if (packet.Opcode == Opcodes.GetOpcode(Opcode.CMSG_PET_CAST_SPELL))
+            if (packet.Opcode == Opcodes.GetOpcode(Opcode.CMSG_PET_CAST_SPELL, Direction.ClientToServer))
                 packet.ReadPackedGuid128("PetGUID");
 
             ReadSpellCastRequest(ref packet);
@@ -268,7 +268,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_SPELL_GO)]
         public static void HandleSpellStart(Packet packet)
         {
-            bool isSpellGo = (packet.Opcode | 0x20000) == Opcodes.GetOpcode(Opcode.SMSG_SPELL_GO);
+            bool isSpellGo = packet.Opcode == Opcodes.GetOpcode(Opcode.SMSG_SPELL_GO, Direction.ServerToClient);
 
             packet.ReadPackedGuid128("Caster Guid");
             packet.ReadPackedGuid128("CasterUnit Guid");
@@ -576,6 +576,47 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("SpellID");
             packet.ReadInt16("ProcCount");
             packet.ReadInt16("ProcNum");
+        }
+
+        [Parser(Opcode.SMSG_SPELLDISPELLOG)]
+        public static void HandleSpellInterruptLog(Packet packet)
+        {
+            packet.ReadBit("Is Steal");
+            packet.ReadBit("Is Break");
+            packet.ReadPackedGuid128("Target GUID");
+            packet.ReadPackedGuid128("Caster GUID");
+            packet.ReadUInt32("Spell ID");
+            var dataSize = packet.ReadUInt32("Dispel count");
+            for (var i = 0; i < dataSize; ++i)
+            {
+                packet.ResetBitReader();
+                packet.ReadUInt32("Spell ID", i);
+                packet.ReadBit("Is Harmful", i);
+                var hasRolled = packet.ReadBit("Has Rolled", i);
+                var hasNeeded = packet.ReadBit("Has Needed", i);
+                if (hasRolled)
+                    packet.ReadUInt32("Rolled", i);
+                if (hasNeeded)
+                    packet.ReadUInt32("Needed", i);
+            }
+        }
+
+        [Parser(Opcode.SMSG_RESUME_CAST_BAR)]
+        public static void HandleResumeCastBar(Packet packet)
+        {
+            packet.ReadPackedGuid128("Guid");
+            packet.ReadPackedGuid128("Target");
+
+            packet.ReadUInt32("SpellID");
+            packet.ReadUInt32("TimeRemaining");
+            packet.ReadUInt32("TotalTime");
+
+            var result = packet.ReadBit("HasInterruptImmunities");
+            if (result)
+            {
+                packet.ReadUInt32("SchoolImmunities");
+                packet.ReadUInt32("Immunities");
+            }
         }
     }
 }

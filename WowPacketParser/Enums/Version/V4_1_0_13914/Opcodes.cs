@@ -4,31 +4,21 @@ namespace WowPacketParser.Enums.Version.V4_1_0_13914
 {
     public static class Opcodes_4_1_0
     {
-        public static BiDictionary<Opcode, int> Opcodes()
+        public static BiDictionary<Opcode, int> Opcodes(Direction direction)
         {
-            return Opcs;
+            if (direction == Direction.ClientToServer || direction == Direction.BNClientToServer)
+                return ClientOpcodes;
+            if (direction == Direction.ServerToClient || direction == Direction.BNServerToClient)
+                return ServerOpcodes;
+            return MiscOpcodes;
         }
 
-        private static readonly BiDictionary<Opcode, int> Opcs = new BiDictionary<Opcode, int>
+        private static readonly BiDictionary<Opcode, int> ClientOpcodes = new BiDictionary<Opcode, int>
         {
-            {Opcode.MSG_AUCTION_HELLO, 0x0FC3D}, // 4.1.0 13914
-            {Opcode.MSG_GUILD_EVENT_LOG_QUERY, 0x09A7F}, // 4.1.0 13914
-            {Opcode.MSG_GUILD_PERMISSIONS, 0x09B3C}, // 4.1.0 13914
-            {Opcode.MSG_INSPECT_ARENA_TEAMS, 0x0AD6D}, // 4.1.0 13914
-            {Opcode.MSG_LIST_STABLED_PETS, 0x0FA3C}, // 4.1.0 13914
-            {Opcode.MSG_MOVE_TIME_SKIPPED, 0x05C6F}, // 4.1.0 13914
-            {Opcode.MSG_NOTIFY_PARTY_SQUELCH, 0x0583D}, // 4.1.0 13914
-            {Opcode.MSG_QUERY_GUILD_BANK_TEXT, 0x05F7D}, // 4.1.0 13914
-            {Opcode.MSG_QUERY_NEXT_MAIL_TIME, 0x02C3E}, // 4.1.0 13914
-            {Opcode.MSG_QUEST_PUSH_RESULT, 0x0B93C}, // 4.1.0 13914
-            {Opcode.MSG_RAID_READY_CHECK, 0x0BA2E}, // 4.1.0 13914
-            {Opcode.MSG_RAID_READY_CHECK_CONFIRM, 0x0083F}, // 4.1.0 13914
-            {Opcode.MSG_RAID_TARGET_UPDATE, 0x00B7E}, // 4.1.0 13914
-            {Opcode.MSG_RANDOM_ROLL, 0x0F92C}, // 4.1.0 13914
-            {Opcode.MSG_SAVE_GUILD_EMBLEM, 0x0286C}, // 4.1.0 13914
-            {Opcode.MSG_TABARDVENDOR_ACTIVATE, 0x02A3E}, // 4.1.0 13914
-            {Opcode.MSG_TALENT_WIPE_CONFIRM, 0x00C6F}, // 4.1.0 13914
-            {Opcode.MSG_VERIFY_CONNECTIVITY, 0x4F57}, // 4.1.0 13914
+        };
+
+        private static readonly BiDictionary<Opcode, int> ServerOpcodes = new BiDictionary<Opcode, int>
+        {
             {Opcode.SMSG_ACCOUNT_DATA_TIMES, 0x0B86D}, // 4.1.0 13914
             {Opcode.SMSG_ACHIEVEMENT_DELETED, 0x03A6D}, // 4.1.0 13914
             {Opcode.SMSG_ACHIEVEMENT_EARNED, 0x0EA6C}, // 4.1.0 13914
@@ -167,7 +157,7 @@ namespace WowPacketParser.Enums.Version.V4_1_0_13914
             {Opcode.SMSG_ON_CANCEL_EXPECTED_RIDE_VEHICLE_AURA, 0x01F7F}, // 4.1.0 13914
             {Opcode.SMSG_OPEN_LFG_DUNGEON_FINDER, 0x05A7D}, // 4.1.0 13914
             {Opcode.SMSG_PAGE_TEXT_QUERY_RESPONSE, 0x09B6F}, // 4.1.0 13914
-            {Opcode.SMSG_PARTYKILLLOG, 0x0982F}, // 4.1.0 13914
+            {Opcode.SMSG_PARTY_KILL_LOG, 0x0982F}, // 4.1.0 13914
             {Opcode.SMSG_PARTY_COMMAND_RESULT, 0x0E92F}, // 4.1.0 13914
             {Opcode.SMSG_PERIODICAURALOG, 0x04C3E}, // 4.1.0 13914
             {Opcode.SMSG_PETITION_QUERY_RESPONSE, 0x0CA2C}, // 4.1.0 13914
@@ -256,6 +246,28 @@ namespace WowPacketParser.Enums.Version.V4_1_0_13914
             {Opcode.SMSG_WHO, 0x01C3F}, // 4.1.0 13914
             {Opcode.SMSG_WHOIS, 0x07D3F}, // 4.1.0 13914
             {Opcode.SMSG_ZONE_UNDER_ATTACK, 0x0FA2F}, // 4.1.0 13914
+        };
+
+        private static readonly BiDictionary<Opcode, int> MiscOpcodes = new BiDictionary<Opcode, int>
+        {
+            {Opcode.MSG_AUCTION_HELLO, 0x0FC3D}, // 4.1.0 13914
+            {Opcode.MSG_GUILD_EVENT_LOG_QUERY, 0x09A7F}, // 4.1.0 13914
+            {Opcode.MSG_GUILD_PERMISSIONS, 0x09B3C}, // 4.1.0 13914
+            {Opcode.MSG_INSPECT_ARENA_TEAMS, 0x0AD6D}, // 4.1.0 13914
+            {Opcode.MSG_LIST_STABLED_PETS, 0x0FA3C}, // 4.1.0 13914
+            {Opcode.MSG_MOVE_TIME_SKIPPED, 0x05C6F}, // 4.1.0 13914
+            {Opcode.MSG_NOTIFY_PARTY_SQUELCH, 0x0583D}, // 4.1.0 13914
+            {Opcode.MSG_QUERY_GUILD_BANK_TEXT, 0x05F7D}, // 4.1.0 13914
+            {Opcode.MSG_QUERY_NEXT_MAIL_TIME, 0x02C3E}, // 4.1.0 13914
+            {Opcode.MSG_QUEST_PUSH_RESULT, 0x0B93C}, // 4.1.0 13914
+            {Opcode.MSG_RAID_READY_CHECK, 0x0BA2E}, // 4.1.0 13914
+            {Opcode.MSG_RAID_READY_CHECK_CONFIRM, 0x0083F}, // 4.1.0 13914
+            {Opcode.MSG_RAID_TARGET_UPDATE, 0x00B7E}, // 4.1.0 13914
+            {Opcode.MSG_RANDOM_ROLL, 0x0F92C}, // 4.1.0 13914
+            {Opcode.MSG_SAVE_GUILD_EMBLEM, 0x0286C}, // 4.1.0 13914
+            {Opcode.MSG_TABARDVENDOR_ACTIVATE, 0x02A3E}, // 4.1.0 13914
+            {Opcode.MSG_TALENT_WIPE_CONFIRM, 0x00C6F}, // 4.1.0 13914
+            {Opcode.MSG_VERIFY_CONNECTIVITY, 0x4F57}, // 4.1.0 13914
         };
     }
 }
