@@ -140,7 +140,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_UNK_1341)]
         public static void HandleUnk1341(Packet packet)
         {
-            packet.ReadBoolean("Unk");
+            packet.ReadBool("Unk");
         }
 
         [Parser(Opcode.CMSG_UNK_1370)]
@@ -632,7 +632,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_UNK_1EAE)]
         public static void HandleSUnk1EAE(Packet packet)
         {
-            packet.ReadBoolean("unk");
+            packet.ReadBool("unk");
         }
 
         [Parser(Opcode.CMSG_NULL_0060)]

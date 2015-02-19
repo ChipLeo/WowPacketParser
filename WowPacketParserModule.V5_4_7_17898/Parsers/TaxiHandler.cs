@@ -8,7 +8,7 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
 {
     public static class TaxiHandler
     {
-        [Parser(Opcode.CMSG_TAXINODE_STATUS_QUERY)]
+        [Parser(Opcode.CMSG_TAXI_NODE_STATUS_QUERY)]
         public static void HandleTaxiStatusQuery(Packet packet)
         {
             var guid = packet.StartBitStream(0, 1, 6, 4, 5, 2, 3, 7);
@@ -17,7 +17,7 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_TAXIQUERYAVAILABLENODES)]
+        [Parser(Opcode.CMSG_TAXI_QUERY_AVAILABLE_NODES)]
         public static void HandleTaxiQuery(Packet packet)
         {
             var guid = packet.StartBitStream(1, 3, 0, 5, 7, 4, 6, 2);
@@ -44,7 +44,7 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_SHOWTAXINODES, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
+        [Parser(Opcode.SMSG_SHOW_TAXI_NODES, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleShowTaxiNodes(Packet packet)
         {
             var u = packet.ReadUInt32("Unk UInt32 1");
@@ -58,7 +58,7 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
                 packet.ReadUInt64("NodeMask", i++);
         }
 
-        [Parser(Opcode.SMSG_SHOWTAXINODES, ClientVersionBuild.V4_3_4_15595)]
+        [Parser(Opcode.SMSG_SHOW_TAXI_NODES, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleShowTaxiNodes434(Packet packet)
         {
             var u = packet.ReadUInt32("Unk UInt32 1");
@@ -73,7 +73,7 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
                 packet.ReadByte("NodeMask", i);
         }
 
-        [Parser(Opcode.CMSG_ACTIVATETAXI)]
+        [Parser(Opcode.CMSG_ACTIVATE_TAXI)]
         public static void HandleActivateTaxi(Packet packet)
         {
             packet.ReadGuid("GUID");
@@ -84,10 +84,10 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.SMSG_ACTIVATE_TAXI_REPLY)]
         public static void HandleActivateTaxiReply(Packet packet)
         {
-            packet.ReadEnum<TaxiError>("Result", TypeCode.UInt32);
+            packet.ReadUInt32E<TaxiError>("Result");
         }
 
-        [Parser(Opcode.CMSG_ACTIVATETAXIEXPRESS)]
+        [Parser(Opcode.CMSG_ACTIVATE_TAXI_EXPRESS)]
         public static void HandleActivateTaxiExpress(Packet packet)
         {
             packet.ReadGuid("GUID");
@@ -104,7 +104,7 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
         [Parser(Opcode.CMSG_SET_TAXI_BENCHMARK_MODE)]
         public static void HandleSetTaxiBenchmarkMode(Packet packet)
         {
-            packet.ReadBoolean("Activate");
+            packet.ReadBool("Activate");
         }
 
         [Parser(Opcode.SMSG_NEW_TAXI_PATH)]

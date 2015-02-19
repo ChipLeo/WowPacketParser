@@ -11,7 +11,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class ChatHandler
     {
-        [Parser(Opcode.CMSG_CHAT_IGNORED)]
+        [Parser(Opcode.CMSG_CHAT_REPORT_IGNORED)]
         public static void HandleClientChatIgnored(Packet packet)
         {
             packet.ReadByte("unk24"); // 24
@@ -23,7 +23,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_MESSAGECHAT_CHANNEL)]
         public static void HandleClientChatChannel(Packet packet)
         {
-            packet.ReadEnum<Language>("Language", TypeCode.Int32);
+            packet.ReadInt32E<Language>("Language");
             var channelNameLen = packet.ReadBits(9);
             var msgLen = packet.ReadBits(8);
             packet.ReadWoWString("Message", msgLen);
@@ -47,14 +47,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_MESSAGECHAT_SAY)]
         public static void HandleClientChatMessageGuild(Packet packet)
         {
-            packet.ReadEnum<Language>("Language", TypeCode.Int32);
+            packet.ReadInt32E<Language>("Language");
             packet.ReadWoWString("Message", packet.ReadBits(8));
         }
 
         [Parser(Opcode.CMSG_MESSAGECHAT_WHISPER)]
         public static void HandleClientChatMessageWhisper(Packet packet)
         {
-            packet.ReadEnum<Language>("Language", TypeCode.Int32);
+            packet.ReadInt32E<Language>("Language");
             var msgLen = packet.ReadBits(8);
             var recvName = packet.ReadBits(9);
 
@@ -65,7 +65,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_MESSAGECHAT_YELL)]
         public static void HandleClientChatMessageYell(Packet packet)
         {
-            packet.ReadEnum<Language>("Language", TypeCode.Int32);
+            packet.ReadInt32E<Language>("Language");
             packet.ReadWoWString("Message", packet.ReadBits(8));
         }
 
@@ -82,7 +82,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             var zoneId = packet.ReadEntry<UInt32>(StoreNameType.Zone, "Zone Id");
             var length = packet.ReadBits("Message Length", 12);
-            message.text = packet.ReadWoWString("Message", length);
+            message.Text = packet.ReadWoWString("Message", length);
 
             Storage.DefenseMessages.Add(zoneId, message, packet.TimeSpan);
         }
@@ -171,7 +171,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             if (unitGuid.GetObjectType() == ObjectType.Unit)
                 entry = unitGuid.GetEntry();
 
-            text.Type = packet.ReadEnum<ChatMessageType>("Type", TypeCode.Byte);
+            text.Type = packet.ReadByteE<ChatMessageType>("Type");
 
             if (hasAchievementID)
                 packet.ReadUInt32("AchievementID");

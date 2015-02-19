@@ -15,7 +15,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
     {
         public static uint LastGossipPOIEntry = 0;
 
-        [Parser(Opcode.CMSG_AUCTION_HELLO)]
+        [Parser(Opcode.CMSG_AUCTION_HELLO_REQUEST)]
         public static void HandleAuctionHello(Packet packet)
         {
             var GUID = packet.StartBitStream(1, 5, 2, 0, 3, 6, 4, 7);
@@ -128,7 +128,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_AUCTION_HELLO)]
+        [Parser(Opcode.SMSG_AUCTION_HELLO_RESPONSE)]
         public static void HandleAuctionHelloResponse(Packet packet)
         {
             var GUID = new byte[8];
@@ -193,11 +193,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             for (var i = 0; i < questgossips; ++i)
             {
                 packet.ReadWoWString("Title", titleLen[i], i);
-                packet.ReadEnum<QuestFlags>("Flags", TypeCode.UInt32, i);//528
+                packet.ReadUInt32E<QuestFlags>("Flags", i);//528
                 packet.ReadInt32("Level", i);//8
                 packet.ReadUInt32("Icon", i);//4
                 packet.ReadEntry<UInt32>(StoreNameType.Quest, "Quest ID", i); //528
-                packet.ReadEnum<QuestFlags2>("Flags 2", TypeCode.UInt32, i);//532
+                packet.ReadUInt32E<QuestFlags2>("Flags 2", i);//532
             }
 
             packet.ReadXORByte(guid, 1);
@@ -211,9 +211,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     RequiredMoney = packet.ReadUInt32("Required money", i),//3012
                     BoxText = packet.ReadWoWString("Box Text", BoxTextLen[i], i),//12
                     Index = packet.ReadUInt32("Index", i),//0
-                    Box = packet.ReadBoolean("Box", i),
+                    Box = packet.ReadBool("Box", i),
                     OptionText = packet.ReadWoWString("Text", OptionTextLen[i], i),
-                    OptionIcon = packet.ReadEnum<GossipOptionIcon>("Icon", TypeCode.Byte, i),//4
+                    OptionIcon = packet.ReadByteE<GossipOptionIcon>("Icon", i),//4
                 };
 
                 gossip.GossipOptions.Add(gossipOption);
@@ -261,9 +261,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             var gossipPOI = new GossipPOI();
 
-            gossipPOI.Flags = (uint)packet.ReadEnum<UnknownFlags>("Flags", TypeCode.Int32);
+            gossipPOI.Flags = (uint)packet.ReadInt32E<UnknownFlags>("Flags");
             var pos = packet.ReadVector2("Coordinates");
-            gossipPOI.Icon = packet.ReadEnum<GossipPOIIcon>("Icon", TypeCode.UInt32);
+            gossipPOI.Icon = packet.ReadUInt32E<GossipPOIIcon>("Icon");
             gossipPOI.Importance = packet.ReadUInt32("Importance");
             gossipPOI.Name = packet.ReadCString("Icon Name");
 
@@ -573,7 +573,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     packet.ReadInt32("Int818", i, j);
                 trainerSpell.RequiredSkill = packet.ReadUInt32("Required Skill", i);
                 trainerSpell.RequiredSkillLevel = packet.ReadUInt32("Required Skill Level", i);
-                packet.ReadEnum<TrainerSpellState>("State", TypeCode.Byte, i);
+                packet.ReadByteE<TrainerSpellState>("State", i);
 
                 npcTrainer.TrainerSpells.Add(trainerSpell);
             }
@@ -587,7 +587,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadXORByte(guid, 5);
             packet.ReadXORByte(guid, 0);
             packet.ReadXORByte(guid, 2);
-            npcTrainer.Type = packet.ReadEnum<TrainerType>("Type", TypeCode.Int32);
+            npcTrainer.Type = packet.ReadInt32E<TrainerType>("Type");
 
             packet.WriteGuid("Guid", guid);
             var GUID = new WowGuid64(BitConverter.ToUInt64(guid, 0));

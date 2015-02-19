@@ -275,9 +275,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleSSendMailResult(Packet packet)
         {
             packet.ReadUInt32("Mail Id");
-            var error = packet.ReadEnum<MailErrorType>("Mail Error", TypeCode.UInt32);
+            var error = packet.ReadUInt32E<MailErrorType>("Mail Error");
             packet.ReadUInt32("Equip Error");
-            var action = packet.ReadEnum<MailActionType>("Mail Action", TypeCode.UInt32);
+            var action = packet.ReadUInt32E<MailActionType>("Mail Action");
             packet.ReadUInt32("Item Low GUID");
             packet.ReadUInt32("Item count");
         }

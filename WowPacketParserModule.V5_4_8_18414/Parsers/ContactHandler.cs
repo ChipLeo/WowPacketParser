@@ -11,20 +11,20 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_CONTACT_LIST)]
         public static void HandleContactListClient(Packet packet)
         {
-            packet.ReadEnum<ContactListFlag>("List Flags?", TypeCode.Int32);
+            packet.ReadInt32E<ContactListFlag>("List Flags?");
         }
 
-        [Parser(Opcode.CMSG_SETSHEATHED)]
+        [Parser(Opcode.CMSG_SET_SHEATHED)]
         public static void HandleSetSheathed(Packet packet)
         {
-            packet.ReadEnum<SheathState>("Sheath", TypeCode.Int32);
+            packet.ReadInt32E<SheathState>("Sheath");
             packet.ReadBit("hasData");
         }
 
         [Parser(Opcode.SMSG_CONTACT_LIST)]
         public static void HandleContactList(Packet packet)
         {
-            packet.ReadEnum<ContactListFlag>("List Flags", TypeCode.Int32);
+            packet.ReadInt32E<ContactListFlag>("List Flags");
             var count = packet.ReadInt32("Count");
 
             for (var i = 0; i < count; i++)
@@ -32,19 +32,19 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadGuid("GUID");
                 packet.ReadInt32("Realm Id");
                 packet.ReadInt32("Realm Id");
-                var flag = packet.ReadEnum<ContactEntryFlag>("Flags", TypeCode.Int32);
+                var flag = packet.ReadInt32E<ContactEntryFlag>("Flags");
                 packet.ReadCString("Note");
 
                 if (!flag.HasAnyFlag(ContactEntryFlag.Friend))
                     continue;
 
-                var status = packet.ReadEnum<ContactStatus>("Status", TypeCode.Byte);
+                var status = packet.ReadByteE<ContactStatus>("Status");
                 if (status == 0) // required any flag
                     continue;
 
                 packet.ReadEntry<Int32>(StoreNameType.Area, "Area");
                 packet.ReadInt32("Level");
-                packet.ReadEnum<Class>("Class", TypeCode.Int32);
+                packet.ReadInt32E<Class>("Class");
             }
         }
     }

@@ -87,7 +87,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 if (unk88[i])
                     packet.ReadInt32("unk84", i); // 84
                 packet.ParseBitStream(guid64[i], 5);
-                packet.ReadEnum<EquipmentSlotType>("Slot", TypeCode.Byte, i); // 92
+                packet.ReadByteE<EquipmentSlotType>("Slot", i); // 92
                 packet.ParseBitStream(guid64[i], 0, 1);
                 packet.WriteGuid("Creator GUID", guid64[i], i); // 64
             }

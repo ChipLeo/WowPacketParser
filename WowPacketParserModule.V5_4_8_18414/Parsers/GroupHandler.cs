@@ -380,7 +380,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadXORByte(assignerGuid, 6);
             packet.ReadXORByte(assignerGuid, 2);
             packet.ReadXORByte(targetGuid, 3);
-            packet.ReadEnum<LfgRoleFlag>("Old Roles", TypeCode.Int32);
+            packet.ReadInt32E<LfgRoleFlag>("Old Roles");
             packet.ReadXORByte(assignerGuid, 7);
             packet.ReadXORByte(targetGuid, 5);
             packet.ReadXORByte(assignerGuid, 3);
@@ -394,7 +394,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadXORByte(assignerGuid, 4);
             packet.ReadByte("Byte28");
             packet.ReadXORByte(assignerGuid, 0);
-            packet.ReadEnum<LfgRoleFlag>("New Roles", TypeCode.Int32);
+            packet.ReadInt32E<LfgRoleFlag>("New Roles");
 
             packet.WriteGuid("Guid2", assignerGuid);
             packet.WriteGuid("Guid3", targetGuid);
@@ -403,9 +403,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_PARTY_COMMAND_RESULT)]
         public static void HandlePartyCommandResult(Packet packet)
         {
-            packet.ReadEnum<PartyCommand>("Command", TypeCode.UInt32);
+            packet.ReadUInt32E<PartyCommand>("Command");
             packet.ReadCString("Member");
-            packet.ReadEnum<PartyResult>("Result", TypeCode.UInt32);
+            packet.ReadUInt32E<PartyResult>("Result");
             packet.ReadUInt32("LFG Boot Cooldown");
             packet.ReadGuid("Player Guid"); // Usually 0
         }

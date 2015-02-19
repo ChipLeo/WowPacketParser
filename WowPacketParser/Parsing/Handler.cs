@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
 using WowPacketParser.Enums;
 using WowPacketParser.Enums.Version;
@@ -13,7 +12,7 @@ namespace WowPacketParser.Parsing
 {
     public static class Handler
     {
-        private static Dictionary<KeyValuePair<ClientVersionBuild, Opcode>, Action<Packet>> LoadDefaultHandlers()
+        public static Dictionary<KeyValuePair<ClientVersionBuild, Opcode>, Action<Packet>> LoadDefaultHandlers()
         {
             var handlers = new Dictionary<KeyValuePair<ClientVersionBuild, Opcode>, Action<Packet>>(1000);
 
@@ -32,9 +31,10 @@ namespace WowPacketParser.Parsing
             LoadHandlersInto(VersionHandlers, Assembly.GetExecutingAssembly(), ClientVersionBuild.Zero);
         }
 
-        public static void LoadHandlers(Assembly asm, ClientVersionBuild build)
+        public static Dictionary<KeyValuePair<ClientVersionBuild, Opcode>, Action<Packet>> LoadHandlers(Assembly asm, ClientVersionBuild build)
         {
             LoadHandlersInto(VersionHandlers, asm, build);
+            return VersionHandlers;
         }
 
         private static void LoadHandlersInto(Dictionary<KeyValuePair<ClientVersionBuild, Opcode>, Action<Packet>> handlers, Assembly asm, ClientVersionBuild build)
@@ -174,7 +174,7 @@ namespace WowPacketParser.Parsing
             else
             {
                 packet.AsHex();
-                status = ParsedStatus.NotParsed;
+                status = opcode == Opcode.NULL_OPCODE ? ParsedStatus.NotParsed : ParsedStatus.NoStructure;
             }
 
             if (!isMultiple)

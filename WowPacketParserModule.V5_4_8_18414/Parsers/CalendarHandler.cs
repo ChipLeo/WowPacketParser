@@ -15,7 +15,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk1180"); // 1180
             packet.ReadInt32("unk1172"); // 1172
             packet.ReadInt32("unk1176"); // 1176
-            packet.ReadEnum<CalendarEventType>("Event Type", TypeCode.Byte); // 1170
+            packet.ReadByteE<CalendarEventType>("Event Type"); // 1170
 
             var count = packet.ReadBits(22); // 1184
             var descLen = packet.ReadBits(11); // 145
@@ -36,9 +36,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadXORByte(guid[i], 0);
                 packet.ReadXORByte(guid[i], 6);
                 packet.ReadXORByte(guid[i], 7);
-                packet.ReadEnum<CalendarEventStatus>("Status", TypeCode.Byte, i); // 8
+                packet.ReadByteE<CalendarEventStatus>("Status", i); // 8
                 packet.ReadXORByte(guid[i], 5);
-                packet.ReadEnum<CalendarModerationRank>("Moderation Rank", TypeCode.Byte, i); // 9
+                packet.ReadByteE<CalendarModerationRank>("Moderation Rank", i); // 9
 
                 packet.WriteGuid("Guid", guid[i], i);
             }

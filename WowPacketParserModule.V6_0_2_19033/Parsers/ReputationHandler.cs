@@ -1,4 +1,3 @@
-using System;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
@@ -7,6 +6,11 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 {
     public static class ReputationHandler
     {
+        [Parser(Opcode.CMSG_REQUEST_FORCED_REACTIONS)]
+        public static void HandleReputationZero(Packet packet)
+        {
+        }
+
         [Parser(Opcode.CMSG_RESET_FACTION_CHEAT)]
         public static void HandleResetFactionCheat(Packet packet)
         {
@@ -26,8 +30,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
             for (var i = 0; i < 0x100; i++)
             {
-                packet.ReadEnum<FactionFlag>("FactionFlags", TypeCode.Byte, i);
-                packet.ReadEnum<ReputationRank>("FactionStandings", TypeCode.UInt32, i);
+                packet.ReadByteE<FactionFlag>("FactionFlags", i);
+                packet.ReadUInt32E<ReputationRank>("FactionStandings", i);
             }
 
             for (var i = 0; i < 0x100; i++)
@@ -44,6 +48,23 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadUInt32("Faction");
                 packet.ReadUInt32("Reaction");
             }
+        }
+
+        [Parser(Opcode.SMSG_SET_FACTION_STANDING)]
+        public static void HandleSetFactionStanding(Packet packet)
+        {
+            packet.ReadSingle("BonusFromAchievementSystem");
+            packet.ReadSingle("ReferAFriendBonus");
+
+            var count = packet.ReadInt32("");
+            for (int i = 0; i < count; i++)
+            {
+                packet.ReadInt32("Index");
+                packet.ReadInt32("Standing");
+            }
+
+            packet.ResetBitReader();
+            packet.ReadBit("ShowVisual");
         }
     }
 }

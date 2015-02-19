@@ -83,7 +83,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 return;
             }
 
-            gameObject.Type = packet.ReadEnum<GameObjectType>("Type", TypeCode.Int32);
+            gameObject.Type = packet.ReadInt32E<GameObjectType>("Type");
             gameObject.DisplayId = packet.ReadUInt32("Display ID");
 
             var name = new string[4];
@@ -107,7 +107,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             for (var i = 0; i < gameObject.QuestItems.Length; i++)
                 gameObject.QuestItems[i] = (uint)packet.ReadEntry<Int32>(StoreNameType.Item, "Quest Item", i);
 
-            packet.ReadEnum<ClientType>("Expansion", TypeCode.UInt32);
+            packet.ReadUInt32E<ClientType>("Expansion");
 
             Storage.GameObjectTemplates.Add((uint)entry.Key, gameObject, packet.TimeSpan);
 

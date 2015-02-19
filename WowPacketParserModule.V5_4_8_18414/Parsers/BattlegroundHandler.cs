@@ -64,7 +64,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             guid[0] = packet.ReadBit();
             guid[7] = packet.ReadBit();
-            packet.ReadBoolean("Accepted");
+            packet.ReadBool("Accepted");
             guid[4] = packet.ReadBit();
             guid[3] = packet.ReadBit();
             guid[1] = packet.ReadBit();
@@ -92,7 +92,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             guid[6] = packet.ReadBit();
             guid[0] = packet.ReadBit();
             guid[2] = packet.ReadBit();
-            packet.ReadBoolean("Accepted");
+            packet.ReadBool("Accepted");
             guid[1] = packet.ReadBit();
             guid[5] = packet.ReadBit();
             guid[7] = packet.ReadBit();
@@ -109,7 +109,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_BATTLEFIELD_PORT)]
         public static void HandleBattlefieldPort(Packet packet)
         {
-            packet.ReadBoolean("Action");
+            packet.ReadBool("Action");
             packet.ReadInt32("Slot");
             packet.ReadInt32("Id");
             packet.ReadTime("Time");

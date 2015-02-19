@@ -299,7 +299,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             var guid = new byte[8];
             packet.ReadByte("unk65"); // 65
-            packet.ReadEnum<LfgRoleCheckStatus>("Role Check Status", TypeCode.Byte); // 16
+            packet.ReadByteE<LfgRoleCheckStatus>("Role Check Status"); // 16
             var count36 = packet.ReadBits("Member count", 21); // 36
             var guid40 = new byte[count36][];
             for (var i = 0; i < count36; i++)
@@ -322,7 +322,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             {
                 packet.ReadByte("Level", i); // 56
                 packet.ParseBitStream(guid40[i], 3, 6);
-                packet.ReadEnum<LfgRoleFlag>("Roles", TypeCode.Int32, i); // 88
+                packet.ReadInt32E<LfgRoleFlag>("Roles", i); // 88
                 packet.ParseBitStream(guid40[i], 2, 4, 0, 1, 5, 7);
                 packet.WriteGuid("Player", guid40[i]);
             }

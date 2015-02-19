@@ -13,7 +13,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class TimeHandler
     {
-        [Parser(Opcode.SMSG_GAMETIME_UPDATE)]
+        [Parser(Opcode.SMSG_GAME_TIME_UPDATE)]
         public static void HandleGameTimeUpdate(Packet packet)
         {
             packet.ReadPackedTime("Int28"); // 28

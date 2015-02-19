@@ -180,7 +180,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Vendor Guid", guid2);
         }
 
-        [Parser(Opcode.CMSG_BUYBACK_ITEM)]
+        [Parser(Opcode.CMSG_BUY_BACK_ITEM)]
         public static void HandleBuyBackItem(Packet packet)
         {
             packet.ReadUInt32("Slot");
@@ -197,8 +197,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadByte("Slot"); // 20
         }
 
-        [Parser(Opcode.CMSG_ITEM_REFUND_INFO)]
-        public static void HandleItemRefundInfo(Packet packet)
+        [Parser(Opcode.CMSG_GET_ITEM_PURCHASE_DATA)]
+        public static void HandleGetItemPurchaseData(Packet packet)
         {
             var guid = packet.StartBitStream(1, 0, 3, 2, 7, 4, 5, 6);
             packet.ResetBitReader();
@@ -273,7 +273,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_REQUEST_HOTFIX)]
         public static void HandleItemRequestHotfix(Packet packet)
         {
-            packet.ReadEnum<WowPacketParser.Enums.DB2Hash>("Type", TypeCode.UInt32);
+            packet.ReadUInt32E<WowPacketParser.Enums.DB2Hash>("Type");
 
             var count = packet.ReadBits("Count", 21);
 
@@ -555,7 +555,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleBuyFailed(Packet packet)
         {
             var guid = packet.StartBitStream(6, 3, 1, 2, 4, 5, 0, 7);
-            packet.ReadEnum<BuyResult>("Result", TypeCode.Byte);
+            packet.ReadByteE<BuyResult>("Result");
             packet.ParseBitStream(guid, 2, 7);
             packet.ReadEntry<UInt32>(StoreNameType.Item, "Entry");
             packet.ParseBitStream(guid, 4, 5, 1, 3, 6, 0);
@@ -581,7 +581,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             var id = packet.ReadInt32("Entry");
             packet.ReadTime("Hotfix date");
-            var HashType = packet.ReadEnum<DB2Hash>("Type", TypeCode.UInt32); // See DB2Hash enum. Left like this for now to see some numbers pop. ^^
+            var HashType = packet.ReadUInt32E<DB2Hash>("Type"); // See DB2Hash enum. Left like this for now to see some numbers pop. ^^
             var size = packet.ReadUInt32("Size");
 
             if (size == 0 || id < 0)
@@ -596,13 +596,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     var item = Storage.ItemTemplates.ContainsKey(itemId) ? Storage.ItemTemplates[itemId].Item1 : new ItemTemplate();
 
                     packet.ReadEntry<UInt32>(StoreNameType.Item, "Entry");
-                    item.Class = packet.ReadEnum<ItemClass>("Class", TypeCode.Int32);
+                    item.Class = packet.ReadInt32E<ItemClass>("Class");
                     item.SubClass = packet.ReadUInt32("Sub Class");
                     item.SoundOverrideSubclass = packet.ReadInt32("Sound Override Subclass");
-                    item.Material = packet.ReadEnum<Material>("Material", TypeCode.Int32);
+                    item.Material = packet.ReadInt32E<Material>("Material");
                     item.DisplayId = packet.ReadUInt32("Display ID");
-                    item.InventoryType = packet.ReadEnum<InventoryType>("Inventory Type", TypeCode.UInt32);
-                    item.SheathType = packet.ReadEnum<SheathType>("Sheath Type", TypeCode.Int32);
+                    item.InventoryType = packet.ReadUInt32E<InventoryType>("Inventory Type");
+                    item.SheathType = packet.ReadInt32E<SheathType>("Sheath Type");
 
                     Storage.ItemTemplates.Add(itemId, item, packet.TimeSpan);
                     break;
@@ -612,18 +612,18 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     var item = Storage.ItemTemplates.ContainsKey(itemId) ? Storage.ItemTemplates[itemId].Item1 : new ItemTemplate();
 
                     packet.ReadEntry<UInt32>(StoreNameType.Item, "Entry");
-                    item.Quality = packet.ReadEnum<ItemQuality>("Quality", TypeCode.Int32);
-                    item.Flags1 = packet.ReadEnum<ItemProtoFlags>("Flags", TypeCode.UInt32);
-                    item.Flags2 = packet.ReadEnum<ItemFlagExtra>("Extra Flags", TypeCode.Int32);
+                    item.Quality = packet.ReadByteE<ItemQuality>("Quality");
+                    item.Flags1 = packet.ReadUInt32E<ItemProtoFlags>("Flags");
+                    item.Flags2 = packet.ReadInt32E<ItemFlagExtra>("Extra Flags");
                     item.Unk430_1 = packet.ReadSingle("Unk430_1");
                     item.Unk430_2 = packet.ReadSingle("Unk430_2");
                     packet.ReadSingle("unk");
                     item.BuyCount = packet.ReadUInt32("Buy count");
                     item.BuyPrice = packet.ReadUInt32("Buy Price");
                     item.SellPrice = packet.ReadUInt32("Sell Price");
-                    item.InventoryType = packet.ReadEnum<InventoryType>("Inventory Type", TypeCode.Int32);
-                    item.AllowedClasses = packet.ReadEnum<ClassMask>("Allowed Classes", TypeCode.Int32);
-                    item.AllowedRaces = packet.ReadEnum<RaceMask>("Allowed Races", TypeCode.Int32);
+                    item.InventoryType = packet.ReadInt32E<InventoryType>("Inventory Type");
+                    item.AllowedClasses = packet.ReadInt32E<ClassMask>("Allowed Classes");
+                    item.AllowedRaces = packet.ReadInt32E<RaceMask>("Allowed Races");
                     item.ItemLevel = packet.ReadUInt32("Item Level");
                     item.RequiredLevel = packet.ReadUInt32("Required Level");
                     item.RequiredSkillId = packet.ReadUInt32("Required Skill ID");
@@ -640,7 +640,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     item.StatTypes = new ItemModType[10];
                     for (var i = 0; i < 10; i++)
                     {
-                        var statType = packet.ReadEnum<ItemModType>("Stat Type", TypeCode.Int32, i);
+                        var statType = packet.ReadInt32E<ItemModType>("Stat Type", i);
                         item.StatTypes[i] = statType == ItemModType.None ? ItemModType.Mana : statType; // TDB
                     }
 
@@ -657,7 +657,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                         item.StatUnk2[i] = packet.ReadInt32("Unk UInt32 2", i);
 
                     item.ScalingStatDistribution = packet.ReadInt32("Scaling Stat Distribution");
-                    item.DamageType = packet.ReadEnum<DamageType>("Damage Type", TypeCode.Int32);
+                    item.DamageType = packet.ReadInt32E<DamageType>("Damage Type");
                     item.Delay = packet.ReadUInt32("Delay");
                     item.RangedMod = packet.ReadSingle("Ranged Mod");
 
@@ -667,7 +667,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
                     item.TriggeredSpellTypes = new ItemSpellTriggerType[5];
                     for (var i = 0; i < 5; i++)
-                        item.TriggeredSpellTypes[i] = packet.ReadEnum<ItemSpellTriggerType>("Trigger Spell Type", TypeCode.Int32, i);
+                        item.TriggeredSpellTypes[i] = packet.ReadInt32E<ItemSpellTriggerType>("Trigger Spell Type", i);
 
                     item.TriggeredSpellCharges = new int[5];
                     for (var i = 0; i < 5; i++)
@@ -685,7 +685,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     for (var i = 0; i < 5; i++)
                         item.TriggeredSpellCategoryCooldowns[i] = packet.ReadInt32("Triggered Spell Category Cooldown", i);
 
-                    item.Bonding = packet.ReadEnum<ItemBonding>("Bonding", TypeCode.Int32);
+                    item.Bonding = packet.ReadInt32E<ItemBonding>("Bonding");
 
                     if (packet.ReadUInt16() > 0)
                         item.Name = packet.ReadCString("Name", 0);
@@ -698,12 +698,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                         item.Description = packet.ReadCString("Description");
 
                     item.PageText = packet.ReadUInt32("Page Text");
-                    item.Language = packet.ReadEnum<Language>("Language", TypeCode.Int32);
-                    item.PageMaterial = packet.ReadEnum<PageMaterial>("Page Material", TypeCode.Int32);
+                    item.Language = packet.ReadInt32E<Language>("Language");
+                    item.PageMaterial = packet.ReadInt32E<PageMaterial>("Page Material");
                     item.StartQuestId = (uint)packet.ReadEntry<Int32>(StoreNameType.Quest, "Start Quest");
                     item.LockId = packet.ReadUInt32("Lock ID");
-                    item.Material = packet.ReadEnum<Material>("Material", TypeCode.Int32);
-                    item.SheathType = packet.ReadEnum<SheathType>("Sheath Type", TypeCode.Int32);
+                    item.Material = packet.ReadInt32E<Material>("Material");
+                    item.SheathType = packet.ReadInt32E<SheathType>("Sheath Type");
                     item.RandomPropery = packet.ReadInt32("Random Property");
                     item.RandomSuffix = packet.ReadUInt32("Random Suffix");
                     item.ItemSet = packet.ReadUInt32("Item Set");
@@ -712,12 +712,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     var map = packet.ReadInt32();
                     item.MapId = map;
                     packet.WriteLine("Map ID: " + (map != 0 ? StoreGetters.GetName(StoreNameType.Map, map) : map + " (No map)"));
-                    item.BagFamily = packet.ReadEnum<BagFamilyMask>("Bag Family", TypeCode.Int32);
-                    item.TotemCategory = packet.ReadEnum<TotemCategory>("Totem Category", TypeCode.Int32);
+                    item.BagFamily = packet.ReadInt32E<BagFamilyMask>("Bag Family");
+                    item.TotemCategory = packet.ReadInt32E<TotemCategory>("Totem Category");
 
                     item.ItemSocketColors = new ItemSocketColor[3];
                     for (var i = 0; i < 3; i++)
-                        item.ItemSocketColors[i] = packet.ReadEnum<ItemSocketColor>("Socket Color", TypeCode.Int32, i);
+                        item.ItemSocketColors[i] = packet.ReadInt32E<ItemSocketColor>("Socket Color", i);
 
                     item.SocketContent = new uint[3];
                     for (var i = 0; i < 3; i++)
@@ -728,7 +728,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     item.ArmorDamageModifier = packet.ReadSingle("Armor Damage Modifier");
                     item.Duration = packet.ReadUInt32("Duration");
                     item.ItemLimitCategory = packet.ReadInt32("Limit Category");
-                    item.HolidayId = packet.ReadEnum<Holiday>("Holiday", TypeCode.Int32);
+                    item.HolidayId = packet.ReadInt32E<Holiday>("Holiday");
                     item.StatScalingFactor = packet.ReadSingle("Stat Scaling Factor");
                     item.CurrencySubstitutionId = packet.ReadUInt32("Currency Substitution Id");
                     item.CurrencySubstitutionCount = packet.ReadUInt32("Currency Substitution Count");
@@ -768,7 +768,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
-        [Parser(Opcode.SMSG_ENCHANTMENTLOG)]
+        [Parser(Opcode.SMSG_ENCHANTMENT_LOG)]
         public static void HandleEnchantementLog(Packet packet)
         {
             packet.ReadInt32("unk40"); // 40
@@ -867,7 +867,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ParseBitStream(guid48, 1, 6, 2);
             packet.ParseBitStream(guid56, 3, 4);
 
-            var result = packet.ReadEnum<InventoryResult>("Result", TypeCode.Byte); // 17
+            var result = packet.ReadByteE<InventoryResult>("Result"); // 17
 
             if (result == InventoryResult.ItemMaxLimitCategoryCountExceeded ||
                 result == InventoryResult.ItemMaxLimitCategorySocketedExceeded ||
@@ -1036,8 +1036,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_READ_ITEM_OK)]
-        public static void HandleReadItemOK(Packet packet)
+        [Parser(Opcode.SMSG_READ_ITEM_RESULT_OK)]
+        public static void HandleReadItemResultOK(Packet packet)
         {
             packet.ReadGuid("Item GUID");
         }
@@ -1135,7 +1135,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             packet.ParseBitStream(guid24, 4, 1);
 
-            packet.ReadEnum<SellResult>("Sell Result", TypeCode.Byte);
+            packet.ReadByteE<SellResult>("Sell Result");
 
             packet.ParseBitStream(guid24, 2);
             packet.ParseBitStream(guid16, 4, 0, 5, 2);
@@ -1153,8 +1153,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_SET_PROFICIENCY)]
         public static void HandleSetProficiency(Packet packet)
         {
-            packet.ReadEnum<UnknownFlags>("Mask", TypeCode.UInt32);
-            packet.ReadEnum<ItemClass>("Class", TypeCode.Byte);
+            packet.ReadUInt32E<UnknownFlags>("Mask");
+            packet.ReadByteE<ItemClass>("Class");
         }
     }
 }

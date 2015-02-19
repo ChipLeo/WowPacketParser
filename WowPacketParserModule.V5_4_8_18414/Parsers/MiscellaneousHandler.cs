@@ -55,7 +55,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadGuid("GUID");
         }
 
-        [Parser(Opcode.CMSG_GET_MIRRORIMAGE_DATA)]
+        [Parser(Opcode.CMSG_GET_MIRROR_IMAGE_DATA)]
         public static void HandleGetMirrorImageData(Packet packet)
         {
             packet.ReadInt32("Display ID"); // 96
@@ -106,7 +106,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadByte("byte24");
         }
 
-        [Parser(Opcode.CMSG_NEUTRALPLAYERFACTIONSELECTRESULT)]
+        [Parser(Opcode.CMSG_NEUTRAL_PLAYER_SELECT_FACTION)]
         public static void HandleFactionSelect(Packet packet)
         {
             packet.ReadUInt32("Option");
@@ -124,14 +124,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadUInt32("Ping");
         }
 
-        [Parser(Opcode.CMSG_RAID_READY_CHECK)]
-        public static void HandleRaidReadyCheck(Packet packet)
+        [Parser(Opcode.CMSG_DO_READY_CHECK)]
+        public static void HandleDoReadyCheck(Packet packet)
         {
             packet.ReadByte("unk16"); // 16
         }
 
-        [Parser(Opcode.CMSG_RAID_READY_CHECK_CONFIRM)]
-        public static void HandleRaidReadyCheckConfirm(Packet packet)
+        [Parser(Opcode.CMSG_READY_CHECK_RESPONSE)]
+        public static void HandleReadyCheckResponse(Packet packet)
         {
             packet.ReadByte("unk16"); // 16
             var guid = new byte[8];
@@ -179,7 +179,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_SET_PVP)]
         public static void HandleSetPVP(Packet packet)
         {
-            packet.ReadBoolean("PvP");
+            packet.ReadBool("PvP");
         }
 
         [Parser(Opcode.CMSG_SELECT_LOOT_SPEC)]
@@ -245,8 +245,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.AddValue("Position", pos);
         }
 
-        [Parser(Opcode.CMSG_TIME_SYNC_RESP)]
-        public static void HandleTimeSyncResp(Packet packet)
+        [Parser(Opcode.CMSG_TIME_SYNC_RESPONSE)]
+        public static void HandleTimeSyncResponse(Packet packet)
         {
             packet.ReadUInt32("MCounter");
             packet.ReadUInt32("Client Ticks");
@@ -511,7 +511,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var guid = packet.StartBitStream(0, 4, 2, 6, 5, 1, 3, 7);
             packet.ParseBitStream(guid, 3);
             packet.ReadEntry<UInt32>(StoreNameType.Item, "Entry"); // 24
-            packet.ReadEnum<DrunkenState>("Drunken State", TypeCode.UInt32); // 28
+            packet.ReadUInt32E<DrunkenState>("Drunken State"); // 28
             packet.ParseBitStream(guid, 4, 6, 7, 0, 2, 5, 1);
             packet.WriteGuid("Guid", guid);
         }
@@ -690,12 +690,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_MIRRORIMAGE_CREATURE_DATA)]
+        [Parser(Opcode.SMSG_MIRROR_IMAGE_CREATURE_DATA)]
         public static void HandleSMirrorimageCreatureData(Packet packet)
         {
         }
 
-        [Parser(Opcode.SMSG_MIRRORIMAGE_DATA)]
+        [Parser(Opcode.SMSG_MIRROR_IMAGE_COMPONENTED_DATA)]
         public static void HandleMirrorImageData(Packet packet)
         {
             var guid24 = new byte[8];
@@ -874,7 +874,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("unk24");
         }
 
-        [Parser(Opcode.SMSG_PLAYERBOUND)]
+        [Parser(Opcode.SMSG_PLAYER_BOUND)]
         public static void HandlePlayerBound(Packet packet)
         {
             var guid = packet.StartBitStream(2, 4, 0, 3, 6, 7, 5, 1);
@@ -889,8 +889,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadUInt32("Ping");
         }
 
-        [Parser(Opcode.SMSG_PRE_RESURRECT)]
-        public static void HandlePreResurrect(Packet packet)
+        [Parser(Opcode.SMSG_PRE_RESSURECT)]
+        public static void HandlePreRessurect(Packet packet)
         {
             var guid = packet.StartBitStream(1, 7, 5, 2, 6, 0, 3, 4);
             packet.ParseBitStream(guid, 5, 1, 7, 0, 6, 4, 2, 3);
@@ -905,8 +905,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_RAID_READY_CHECK)]
-        public static void HandleSRaidReadyCheck(Packet packet)
+        [Parser(Opcode.SMSG_READY_CHECK_STARTED)]
+        public static void HandleSReadyCheckStarted(Packet packet)
         {
             var guid16 = new byte[8];
             var guid32 = new byte[8];
@@ -945,8 +945,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
         }
 
-        [Parser(Opcode.SMSG_RAID_READY_CHECK_COMPLETED)]
-        public static void HandleRaidreadycheck(Packet packet)
+        [Parser(Opcode.SMSG_READY_CHECK_COMPLETED)]
+        public static void Handlereadycheck(Packet packet)
         {
             var guid = packet.StartBitStream(4, 2, 5, 7, 1, 0, 3, 6);
             packet.ParseBitStream(guid, 6, 0, 3, 1, 5);
@@ -955,8 +955,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_RAID_READY_CHECK_CONFIRM)]
-        public static void HandleSRaidReadyCheckConfirm(Packet packet)
+        [Parser(Opcode.SMSG_READY_CHECK_RESPONSE)]
+        public static void HandleSReadyCheckResponse(Packet packet)
         {
             var guid16 = new byte[8];
             var guid24 = new byte[8];
@@ -1062,7 +1062,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_SET_FACTION_ATWAR)]
+        [Parser(Opcode.SMSG_SET_FACTION_AT_WAR)]
         public static void HandleSetFactionAtWar(Packet packet)
         {
             packet.ReadByte("unk16"); // 16
@@ -1097,11 +1097,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     packet.ReadSingle("Amount", i, j);
                     packet.ReadByte("Spell Mask bitpos", i, j);
                 }
-                packet.ReadEnum<SpellModOp>("Spell Mod", TypeCode.Byte, i);
+                packet.ReadByteE<SpellModOp>("Spell Mod", i);
             }
         }
 
-        [Parser(Opcode.SMSG_SET_TIMEZONE_INFORMATION)]
+        [Parser(Opcode.SMSG_SET_TIME_ZONE_INFORMATION)]
         public static void HandleServerTimezone(Packet packet)
         {
             var Location2Lenght = packet.ReadBits(7);
@@ -1205,16 +1205,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             packet.ReadUInt32("Max Value"); // 8
             packet.ReadUInt32("Spell Id"); // 4
-            packet.ReadEnum<MirrorTimerType>("Timer Type", TypeCode.UInt32); // 5
+            packet.ReadUInt32E<MirrorTimerType>("Timer Type"); // 5
             packet.ReadInt32("Regen"); // 6
             packet.ReadUInt32("Current Value"); // 9
-            packet.ReadBoolean("Paused");
+            packet.ReadBool("Paused");
         }
 
         [Parser(Opcode.SMSG_STOP_MIRROR_TIMER)]
         public static void HandleStopMirrorTimer(Packet packet)
         {
-            packet.ReadEnum<MirrorTimerType>("Timer Type", TypeCode.UInt32);
+            packet.ReadUInt32E<MirrorTimerType>("Timer Type");
         }
 
         [Parser(Opcode.SMSG_STREAMING_MOVIE)]
@@ -1314,7 +1314,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadWoWString("Guild Name", guildNameLength[i], i);
                 packet.ReadXORByte(guildGUID[i], 3);
                 packet.ReadXORByte(accountId[i], 4);
-                packet.ReadEnum<Class>("Class", TypeCode.Byte, i);
+                packet.ReadByteE<Class>("Class", i);
                 packet.ReadXORByte(accountId[i], 7);
                 packet.ReadXORByte(playerGUID[i], 6);
                 packet.ReadXORByte(playerGUID[i], 2);
@@ -1324,14 +1324,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
                 packet.ReadXORByte(accountId[i], 2);
                 packet.ReadXORByte(accountId[i], 3);
-                packet.ReadEnum<Race>("Race", TypeCode.Byte, i);
+                packet.ReadByteE<Race>("Race", i);
                 packet.ReadXORByte(guildGUID[i], 7);
                 packet.ReadXORByte(accountId[i], 1);
                 packet.ReadXORByte(accountId[i], 5);
                 packet.ReadXORByte(accountId[i], 6);
                 packet.ReadXORByte(playerGUID[i], 5);
                 packet.ReadXORByte(accountId[i], 0);
-                packet.ReadEnum<Gender>("Gender", TypeCode.Byte, i);
+                packet.ReadByteE<Gender>("Gender", i);
                 packet.ReadXORByte(guildGUID[i], 5);
                 packet.ReadByte("Level", i);
                 packet.ReadEntry<Int32>(StoreNameType.Zone, "Zone Id", i);
@@ -1393,7 +1393,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 cnt[i] = packet.ReadBits("cnt", 21, i);
             for (var i = 0; i < count; i++)
             {
-                packet.ReadEnum<SpellModOp>("Spell Mod", TypeCode.Byte, i);
+                packet.ReadByteE<SpellModOp>("Spell Mod", i);
                 for (var j = 0; j < cnt[i]; j++)
                 {
                     packet.ReadSingle("Amount", i, j);
@@ -1487,7 +1487,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
         [Parser(Opcode.CMSG_ATTACKSTOP)]
         [Parser(Opcode.CMSG_GET_TIMEZONE_INFORMATION)]
-        [Parser(Opcode.CMSG_WORLD_STATE_UI_TIMER_UPDATE)]
+        [Parser(Opcode.CMSG_UI_TIME_REQUEST)]
         [Parser(Opcode.MSG_MOVE_WORLDPORT_ACK)]  //0
         [Parser(Opcode.SMSG_SHOW_NEUTRAL_PLAYER_FACTION_SELECT_UI)]
         public static void HandleCNullMisc(Packet packet)

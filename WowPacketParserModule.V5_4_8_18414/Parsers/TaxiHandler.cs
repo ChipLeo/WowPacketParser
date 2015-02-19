@@ -7,7 +7,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class TaxiHandler
     {
-        [Parser(Opcode.CMSG_ACTIVATETAXI)]
+        [Parser(Opcode.CMSG_ACTIVATE_TAXI)]
         public static void HandleActivateTaxi(Packet packet)
         {
             packet.ReadUInt32("Node 2 ID"); // 28
@@ -17,7 +17,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_ACTIVATETAXIEXPRESS)]
+        [Parser(Opcode.CMSG_ACTIVATE_TAXI_EXPRESS)]
         public static void HandleActivateTaxiExpress(Packet packet)
         {
             var guid = new byte[8];
@@ -33,15 +33,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_ENABLETAXI)]
-        public static void HandleEnabletaxi(Packet packet)
+        [Parser(Opcode.CMSG_ENABLE_TAXI_NODE)]
+        public static void HandleEnableTaxiMode(Packet packet)
         {
             var guid = packet.StartBitStream(3, 1, 6, 0, 4, 7, 2, 5);
             packet.ParseBitStream(guid, 1, 6, 3, 0, 4, 5, 7, 2);
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_TAXINODE_STATUS_QUERY)]
+        [Parser(Opcode.CMSG_TAXI_NODE_STATUS_QUERY)]
         public static void HandleTaxiStatusQuery(Packet packet)
         {
             var guid = packet.StartBitStream(7, 4, 1, 3, 0, 5, 2, 6);
@@ -49,7 +49,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_TAXIQUERYAVAILABLENODES)]
+        [Parser(Opcode.CMSG_TAXI_QUERY_AVAILABLE_NODES)]
         public static void HandleTaxiQuery(Packet packet)
         {
             var guid = packet.StartBitStream(7, 1, 0, 4, 2, 5, 6, 3);
@@ -60,7 +60,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_SET_TAXI_BENCHMARK_MODE)]
         public static void HandleSetTaxiBenchmarkMode(Packet packet)
         {
-            packet.ReadBoolean("Activate");
+            packet.ReadBool("Activate");
         }
 
         [Parser(Opcode.SMSG_ACTIVATE_TAXI_REPLY)]
@@ -69,7 +69,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadEnum<TaxiError>("Result", 4);
         }
 
-        [Parser(Opcode.SMSG_SHOWTAXINODES)]
+        [Parser(Opcode.SMSG_SHOW_TAXI_NODES)]
         public static void HandleShowTaxiNodes(Packet packet)
         {
             var guid = new byte[8];

@@ -26,7 +26,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_CHANNEL_VOICE_ON)]
         [Parser(Opcode.CMSG_CHANNEL_VOICE_OFF)]
         [Parser(Opcode.CMSG_SET_CHANNEL_WATCH)]
-        [Parser(Opcode.CMSG_DECLINE_CHANNEL_INVITE)]
+        [Parser(Opcode.CMSG_CHANNEL_DECLINE_INVITE)]
         [Parser(Opcode.CMSG_CHANNEL_DISPLAY_LIST)]
         public static void HandleChannelMisc(Packet packet)
         {
@@ -37,13 +37,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             packet.ReadByte("Type");
             packet.ReadCString("Channel Name");
-            packet.ReadEnum<ChannelFlag>("Flags", TypeCode.Byte);
+            packet.ReadByteE<ChannelFlag>("Flags");
             var count = packet.ReadInt32("Counter");
             for (var i = 0; i < count; i++)
             {
                 packet.ReadGuid("Player GUID " + i);
                 packet.ReadUInt32("Realm ID");
-                packet.ReadEnum<ChannelMemberFlag>("Player Flags " + i, TypeCode.Byte);
+                packet.ReadByteE<ChannelMemberFlag>("Player Flags " + i);
             }
         }
 

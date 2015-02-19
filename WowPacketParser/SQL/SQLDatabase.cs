@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Data;
+using System.Diagnostics;
 using System.Text;
 using Wintellect.PowerCollections;
 using WowPacketParser.Enums;
@@ -70,7 +70,7 @@ namespace WowPacketParser.SQL
                 {
                     var broadcastText = new BroadcastText();
 
-                    uint Id = Convert.ToUInt32(reader["Id"]);
+                    uint id = Convert.ToUInt32(reader["Id"]);
 
                     broadcastText.language = Convert.ToUInt32(reader["Language"]);
                     broadcastText.MaleText = Convert.ToString(reader["MaleText"]);
@@ -88,7 +88,7 @@ namespace WowPacketParser.SQL
                     broadcastText.unk1 = Convert.ToUInt32(reader["UnkMoP1"]);
                     broadcastText.unk2 = Convert.ToUInt32(reader["UnkMoP2"]);
 
-                    var tuple = Tuple.Create(Id, broadcastText);
+                    var tuple = Tuple.Create(id, broadcastText);
                     BroadcastTextStores.Add(tuple);
                 }
             }
@@ -107,7 +107,7 @@ namespace WowPacketParser.SQL
                 {
                     var creatureDifficulty = new CreatureDifficulty();
 
-                    uint Id = (uint)reader.GetValue(0);
+                    uint id = (uint)reader.GetValue(0);
 
                     creatureDifficulty.CreatureID = (uint)reader.GetValue(1);
                     creatureDifficulty.FactionID = (uint)reader.GetValue(2);
@@ -120,7 +120,7 @@ namespace WowPacketParser.SQL
                     for (int i = 0; i < 5; i++)
                         creatureDifficulty.Flags[i] = (uint)reader.GetValue(i + 6);
 
-                    CreatureDifficultyStores.Add(Id, creatureDifficulty);
+                    CreatureDifficultyStores.Add(id, creatureDifficulty);
                 }
             }
         }
@@ -151,7 +151,8 @@ namespace WowPacketParser.SQL
         /// <typeparam name="T">Type of the elements of the list of entries (usually uint)</typeparam>
         /// <typeparam name="TK">Type of the struct</typeparam>
         /// <param name="entries">List of entries to select from DB</param>
-        /// <param name="primaryKeyName"> </param>
+        /// <param name="primaryKeyName"></param>
+        /// <param name="database"></param>
         /// <returns>Dictionary of structs of type TK</returns>
         public static StoreDictionary<T, TK> GetDict<T, TK>(List<T> entries, string primaryKeyName = "entry", string database = null)
         {
@@ -203,32 +204,6 @@ namespace WowPacketParser.SQL
                     var i = 1;
                     foreach (var field in fields)
                     {
-#if __MonoCS__ // Mono does not support __makeref (only added in the upcoming 2.12 version)
-                        if (values[i] is DBNull && field.Item1.FieldType == typeof(string))
-                            field.Item1.SetValue(instance, string.Empty);
-                        else if (field.Item1.FieldType.BaseType == typeof(Enum))
-                            field.Item1.SetValue(instance, Enum.Parse(field.Item1.FieldType, values[i].ToString()));
-                        else if (field.Item1.FieldType.BaseType == typeof(Array))
-                        {
-                            var arr = Array.CreateInstance(field.Item1.FieldType.GetElementType(), field.Item2.Count);
-
-                            for (var j = 0; j < arr.Length; j++)
-                            {
-                                var elemType = arr.GetType().GetElementType();
-
-                                var val = elemType.IsEnum ?
-                                    Enum.Parse(elemType, values[i + j].ToString()) :
-                                    Convert.ChangeType(values[i + j], elemType);
-
-                                arr.SetValue(val, j);
-                            }
-                            field.Item1.SetValue(instance, arr);
-                        }
-                        else if (field.Item1.FieldType == typeof(bool))
-                            field.Item1.SetValue(instance, Convert.ToBoolean(values[i]));
-                        else
-                            field.Item1.SetValue(instance, values[i]);
-#else
                         if (values[i] is DBNull && field.Item1.FieldType == typeof(string))
                             field.Item1.SetValueDirect(__makeref(instance), string.Empty);
                         else if (field.Item1.FieldType.BaseType == typeof(Enum))
@@ -253,7 +228,7 @@ namespace WowPacketParser.SQL
                             field.Item1.SetValueDirect(__makeref(instance), Convert.ToBoolean(values[i]));
                         else
                             field.Item1.SetValueDirect(__makeref(instance), values[i]);
-#endif
+
                         i += field.Item2.Count;
                     }
 
@@ -278,7 +253,7 @@ namespace WowPacketParser.SQL
         /// <param name="primaryKeyName1">Name of the first primary key</param>
         /// <param name="primaryKeyName2">Name of the second primary key</param>
         /// <returns>Dictionary of structs of type TK</returns>
-        public static StoreDictionary<Tuple<T, TG>, TK> GetDict<T, TG, TK>(List<Tuple<T, TG>> entries, string primaryKeyName1, string primaryKeyName2)
+        public static StoreDictionary<Tuple<T, TG>, TK> GetDict<T, TG, TK>(List<Tuple<T, TG>> entries, string primaryKeyName1, string primaryKeyName2) where T : struct where TG : struct
         {
             if (entries.Count == 0)
                 return null;
@@ -316,11 +291,11 @@ namespace WowPacketParser.SQL
                 whereClause.Append("(")
                     .Append(primaryKeyName1)
                     .Append(" = ")
-                    .Append(tuple.Item1)
+                    .Append(Convert.ToInt64(tuple.Item1))
                     .Append(" AND ")
                     .Append(primaryKeyName2)
                     .Append(" = ")
-                    .Append(tuple.Item2)
+                    .Append(Convert.ToInt64(tuple.Item2))
                     .Append(")");
                 if (ji != entries.Count)
                     whereClause.Append(" OR ");
@@ -349,32 +324,6 @@ namespace WowPacketParser.SQL
                     var i = 2;
                     foreach (var field in fields)
                     {
-#if __MonoCS__ // Mono does not support __makeref (only added in the upcoming 2.12 version)
-                        if (values[i] is DBNull && field.Item1.FieldType == typeof(string))
-                            field.Item1.SetValue(instance, string.Empty);
-                        else if (field.Item1.FieldType.BaseType == typeof(Enum))
-                            field.Item1.SetValue(instance, Enum.Parse(field.Item1.FieldType, values[i].ToString()));
-                        else if (field.Item1.FieldType.BaseType == typeof(Array))
-                        {
-                            var arr = Array.CreateInstance(field.Item1.FieldType.GetElementType(), field.Item2.Count);
-
-                            for (var j = 0; j < arr.Length; j++)
-                            {
-                                var elemType = arr.GetType().GetElementType();
-
-                                var val = elemType.IsEnum ?
-                                    Enum.Parse(elemType, values[i + j].ToString()) :
-                                    Convert.ChangeType(values[i + j], elemType);
-
-                                arr.SetValue(val, j);
-                            }
-                            field.Item1.SetValue(instance, arr);
-                        }
-                        else if (field.Item1.FieldType == typeof(bool))
-                            field.Item1.SetValue(instance, Convert.ToBoolean(values[i]));
-                        else
-                            field.Item1.SetValue(instance, values[i]);
-#else
                         if (values[i] is DBNull && field.Item1.FieldType == typeof(string))
                             field.Item1.SetValueDirect(__makeref(instance), string.Empty);
                         else if (field.Item1.FieldType.BaseType == typeof(Enum))
@@ -399,11 +348,22 @@ namespace WowPacketParser.SQL
                             field.Item1.SetValueDirect(__makeref(instance), Convert.ToBoolean(values[i]));
                         else
                             field.Item1.SetValueDirect(__makeref(instance), values[i]);
-#endif
+
                         i += field.Item2.Count;
                     }
 
-                    var key = Tuple.Create((T)values[0], (TG)values[1]);
+                    T key1;
+                    TG key2;
+                    if (typeof (T).IsEnum)
+                        key1 = (T) Enum.ToObject(typeof (T), values[0]);
+                    else
+                        key1 = (T) values[0];
+                    if (typeof (TG).IsEnum)
+                        key2 = (TG)Enum.ToObject(typeof(TG), values[1]);
+                    else
+                        key2 = (TG)values[1];
+
+                    var key = Tuple.Create(key1, key2);
                     if (!dict.ContainsKey(key))
                         dict.Add(key, instance);
                 }
@@ -483,29 +443,6 @@ namespace WowPacketParser.SQL
                     var i = 2;
                     foreach (var field in fields)
                     {
-#if __MonoCS__ // Mono does not support __makeref (only added in the upcoming 2.12 version)
-                        if (values[i] is DBNull && field.Item1.FieldType == typeof(string))
-                            field.Item1.SetValue(instance, string.Empty);
-                        else if (field.Item1.FieldType.BaseType == typeof(Enum))
-                            field.Item1.SetValue(instance, Enum.Parse(field.Item1.FieldType, values[i].ToString()));
-                        else if (field.Item1.FieldType.BaseType == typeof(Array))
-                        {
-                            var arr = Array.CreateInstance(field.Item1.FieldType.GetElementType(), field.Item2.Count);
-
-                            for (var j = 0; j < arr.Length; j++)
-                            {
-                                var elemType = arr.GetType().GetElementType();
-                                var val = Convert.ChangeType(values[i + j], elemType);
-
-                                arr.SetValue(val, j);
-                            }
-                            field.Item1.SetValue(instance, arr);
-                        }
-                        else if (field.Item1.FieldType == typeof(bool))
-                            field.Item1.SetValue(instance, Convert.ToBoolean(values[i]));
-                        else
-                            field.Item1.SetValue(instance, values[i]);
-#else
                         if (values[i] is DBNull && field.Item1.FieldType == typeof(string))
                             field.Item1.SetValueDirect(__makeref(instance), string.Empty);
                         else if (field.Item1.FieldType.BaseType == typeof(Enum))
@@ -527,7 +464,7 @@ namespace WowPacketParser.SQL
                             field.Item1.SetValueDirect(__makeref(instance), Convert.ToBoolean(values[i]));
                         else
                             field.Item1.SetValueDirect(__makeref(instance), values[i]);
-#endif
+
                         i += field.Item2.Count;
                     }
 

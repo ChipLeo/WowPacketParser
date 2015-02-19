@@ -12,6 +12,8 @@
         PktSessionSplit,
         CompressSniff,
         SniffVersionSplit,
-        HexOnly
+        HexOnly,
+        PktDirectionSplit,
+        ConnectionIndexes
     }
 }

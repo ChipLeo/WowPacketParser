@@ -52,7 +52,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadSByte("Bag"); // 16
         }
 
-        [Parser(Opcode.CMSG_SHOW_TRADESKILL)]
+        [Parser(Opcode.CMSG_SHOW_TRADE_SKILL)]
         public static void HandleShowTradeskill(Packet packet)
         {
             packet.ReadInt32("unk24"); // 24
@@ -80,7 +80,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk16");
         }
 
-        [Parser(Opcode.SMSG_SHOW_TRADESKILL_RESPONSE)]
+        [Parser(Opcode.SMSG_SHOW_TRADE_SKILL_RESPONSE)]
         public static void HandleShowTradeskillResponse(Packet packet)
         {
             packet.ReadInt32("unk24"); // 24
@@ -161,7 +161,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("Trade Id"); // 48
             packet.ReadInt32("Unk Int32 2"); // 40
             packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 16
-            packet.ReadBoolean("Trader"); // 44
+            packet.ReadBool("Trader"); // 44
             packet.ReadInt64("Gold"); // 56
             packet.ReadInt32("Unk Slot 1"); // 68
             packet.ReadInt32("Unk Int32 5"); // 36

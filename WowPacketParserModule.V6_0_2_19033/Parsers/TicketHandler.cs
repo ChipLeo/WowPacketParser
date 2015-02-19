@@ -6,6 +6,14 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 {
     public static class TicketHandler
     {
+        [Parser(Opcode.CMSG_GM_TICKET_GET_TICKET)]
+        [Parser(Opcode.CMSG_GM_TICKET_GET_CASE_STATUS)]
+        [Parser(Opcode.CMSG_GM_TICKET_GET_SYSTEM_STATUS)]
+        [Parser(Opcode.SMSG_GM_TICKET_RESPONSE_ERROR)]
+        public static void HandleGMTicketZero(Packet packet)
+        {
+        }
+
         [Parser(Opcode.SMSG_GM_TICKET_CASE_STATUS)]
         public static void HandleGMTicketCaseStatus(Packet packet)
         {
@@ -64,6 +72,39 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadWoWString("TicketDescription", bits1);
                 packet.ReadWoWString("WaitTimeOverrideMessage", bits2022);
             }
+        }
+
+        [Parser(Opcode.CMSG_COMPLAIN)]
+        public static void HandleComplain(Packet packet)
+        {
+            var result = packet.ReadByte("Offender");
+
+            if (result == 0)
+                packet.ReadInt32("MailID");
+
+            if (result == 1)
+            {
+                packet.ReadInt32("Command");
+                packet.ReadInt32("ChannelID");
+
+                packet.ResetBitReader();
+
+                var len = packet.ReadBits(12);
+                packet.ReadWoWString("MessageLog", len);
+            }
+
+            if (result == 2)
+            {
+                // Order guessed
+                packet.ReadInt64("EventGuid");
+                packet.ReadInt64("InviteGuid");
+            }
+        }
+
+        [Parser(Opcode.CMSG_GM_TICKET_ACKNOWLEDGE_SURVEY)]
+        public static void HandleGMTicketAcknowledgeSurvey(Packet packet)
+        {
+            packet.ReadInt32("CaseID");
         }
     }
 }

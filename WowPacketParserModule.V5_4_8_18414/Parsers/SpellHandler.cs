@@ -674,7 +674,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_PET_CAST_FAILED)]
         public static void HandlePetCastFailed(Packet packet)
         {
-            packet.ReadEnum<SpellCastFailureReason>("Reason", TypeCode.Int32); // 28
+            packet.ReadInt32E<SpellCastFailureReason>("Reason"); // 28
             packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 20
             packet.ReadByte("Cast count"); // 32
             var unk24 = !packet.ReadBit("!unk24"); // 24
@@ -756,7 +756,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid);
         }
 
-        [Parser(Opcode.SMSG_PROCRESIST)]
+        [Parser(Opcode.SMSG_PROC_RESIST)]
         public static void HandleProcResist(Packet packet)
         {
             var guid = new byte[8];
@@ -814,8 +814,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_REMOVED_SPELL)]
-        public static void HandleRemovedSpell(Packet packet)
+        [Parser(Opcode.SMSG_UNLEARNED_SPELLS)]
+        public static void HandleUnlearnedSpells(Packet packet)
         {
             var count = packet.ReadBits("Count", 22);
             for (var i = 0; i < count; i++)
@@ -986,7 +986,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var guid = new byte[8];
             guid = packet.StartBitStream(7, 0, 5, 6, 1, 4, 3, 2);
             packet.ParseBitStream(guid, 0, 1);
-            packet.ReadEnum<SpellCastFailureReason>("Reason", TypeCode.Byte); // 29
+            packet.ReadByteE<SpellCastFailureReason>("Reason"); // 29
             packet.ParseBitStream(guid, 7, 5, 6);
             packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 24
             packet.ReadByte("Cast count"); // 28
@@ -1000,7 +1000,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var guid = new byte[8];
             guid = packet.StartBitStream(7, 3, 6, 2, 1, 5, 0, 4);
             packet.ParseBitStream(guid, 2, 6, 7, 0, 3, 1);
-            packet.ReadEnum<SpellCastFailureReason>("Reason", TypeCode.Byte); // 29
+            packet.ReadByteE<SpellCastFailureReason>("Reason"); // 29
             packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 24
             packet.ReadByte("Cast count"); // 28
             packet.ParseBitStream(guid, 4, 5);
@@ -1527,7 +1527,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid2);
         }
 
-        [Parser(Opcode.SMSG_SPELLINSTAKILLLOG)]
+        [Parser(Opcode.SMSG_SPELL_INSTAKILL_LOG)]
         public static void HandleSpellInstaKillLog(Packet packet)
         {
             var guid = new byte[8];
@@ -1566,7 +1566,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid2);
         }
 
-        [Parser(Opcode.SMSG_SPELLINTERRUPTLOG)]
+        [Parser(Opcode.SMSG_SPELL_INTERRUPT_LOG)]
         public static void HandleSpellInterruptLog(Packet packet)
         {
             var guid = new byte[8];
@@ -1608,7 +1608,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Caster", guid2);
         }
 
-        [Parser(Opcode.SMSG_SPELLORDAMAGE_IMMUNE)]
+        [Parser(Opcode.SMSG_SPELL_OR_DAMAGE_IMMUNE)]
         public static void HandleSpellOrDamageImmune(Packet packet)
         {
             var guid = new byte[8];

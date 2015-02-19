@@ -430,7 +430,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadUInt32("Position", i);
             var action = (uint)packet.ReadUInt16() + (packet.ReadByte() << 16);
             packet.AddValue("Action", action, i);
-            packet.ReadEnum<ActionButtonType>("Type", TypeCode.Byte, i++);
+            packet.ReadByteE<ActionButtonType>("Type", i++);
             var guid = packet.StartBitStream(1, 0, 5, 3, 2, 7, 6, 4);
             packet.ParseBitStream(guid, 5, 6, 7, 3, 2, 1, 4, 0);
             packet.WriteGuid("Guid", guid);
@@ -440,7 +440,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandlePetActionFeedback(Packet packet)
         {
             var hasData = !packet.ReadBit("!hasData"); // 16
-            var state = packet.ReadEnum<PetFeedback>("Pet state", TypeCode.Byte); // 20
+            var state = packet.ReadByteE<PetFeedback>("Pet state"); // 20
             if (hasData)
                 packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 16
         }
@@ -450,7 +450,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             var guid = packet.StartBitStream(2, 7, 6, 0, 5, 1, 3, 4);
             packet.ParseBitStream(guid, 7, 4, 6, 1);
-            packet.ReadEnum<PetTalk>("Talk Type", TypeCode.UInt32); // 24
+            packet.ReadUInt32E<PetTalk>("Talk Type"); // 24
             packet.ParseBitStream(guid, 2, 3, 5, 0);
             packet.WriteGuid("Guid", guid);
         }

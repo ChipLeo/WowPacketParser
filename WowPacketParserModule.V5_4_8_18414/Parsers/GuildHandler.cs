@@ -54,7 +54,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
         }
 
-        [Parser(Opcode.CMSG_GUILD_DEL_RANK)]
+        [Parser(Opcode.CMSG_GUILD_DELETE_RANK)]
         public static void HandleGuildDelRank(Packet packet)
         {
             packet.ReadToEnd();
@@ -180,24 +180,24 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.CMSG_GUILD_NEWS_UPDATE_STICKY)]
-        [Parser(Opcode.CMSG_GUILD_PROMOTE)]
+        [Parser(Opcode.CMSG_GUILD_PROMOTE_MEMBER)]
         [Parser(Opcode.CMSG_GUILD_QUERY_NEWS)]
-        [Parser(Opcode.CMSG_GUILD_QUERY_RANKS)]
-        [Parser(Opcode.CMSG_GUILD_REMOVE)]
+        [Parser(Opcode.CMSG_GUILD_GET_RANKS)]
+        [Parser(Opcode.CMSG_GUILD_OFFICER_REMOVE_MEMBER)]
         [Parser(Opcode.CMSG_GUILD_REQUEST_CHALLENGE_UPDATE)]
-        [Parser(Opcode.CMSG_GUILD_ROSTER)]
+        [Parser(Opcode.CMSG_GUILD_GET_ROSTER)]
         [Parser(Opcode.CMSG_GUILD_SET_GUILD_MASTER)]
         [Parser(Opcode.SMSG_GUILD_COMMAND_RESULT)]
         [Parser(Opcode.SMSG_GUILD_NEWS_UPDATE)]
-        [Parser(Opcode.SMSG_GUILD_RANKS_UPDATE)]
+        [Parser(Opcode.SMSG_GUILD_SEND_RANK_CHANGE)]
         [Parser(Opcode.SMSG_GUILD_REPUTATION_WEEKLY_CAP)]
         [Parser(Opcode.SMSG_GUILD_REWARDS_LIST)]
         [Parser(Opcode.SMSG_GUILD_XP)]
         [Parser(Opcode.SMSG_GUILD_XP_GAIN)]
         [Parser(Opcode.SMSG_PETITION_ALREADY_SIGNED)]
         [Parser(Opcode.SMSG_PETITION_QUERY_RESPONSE)]
-        [Parser(Opcode.SMSG_PETITION_RENAME_RESULT)]
-        [Parser(Opcode.SMSG_PETITION_SHOWLIST)]
+        [Parser(Opcode.SMSG_PETITION_RENAME_RESPONSE)]
+        [Parser(Opcode.SMSG_PETITION_SHOW_LIST)]
         [Parser(Opcode.SMSG_PETITION_SHOW_SIGNATURES)]
         [Parser(Opcode.SMSG_PETITION_SIGN_RESULTS)]
         public static void HandleGuild(Packet packet)
@@ -347,7 +347,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_PETITION_SHOWLIST)]
+        [Parser(Opcode.CMSG_PETITION_SHOW_LIST)]
         public static void HandlePetitionShowlist(Packet packet)
         {
             var guid = packet.StartBitStream(1, 7, 2, 5, 4, 0, 3, 6);
@@ -364,14 +364,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("GUID", guid);
         }
 
-        [Parser(Opcode.CMSG_QUERY_GUILD_REWARDS)]
-        public static void HandleQueryGuildRewards(Packet packet)
-        {
-            packet.ReadInt32("unk");
-        }
-
-        [Parser(Opcode.CMSG_QUERY_GUILD_XP)]
-        public static void HandleQueryGuildXp(Packet packet)
+        [Parser(Opcode.CMSG_REQUEST_GUILD_XP)]
+        public static void HandleRequestGuildXp(Packet packet)
         {
             var guid = packet.StartBitStream(5, 6, 0, 1, 3, 7, 4, 2);
             packet.ParseBitStream(guid, 4, 6, 3, 0, 7, 5, 2, 1);
@@ -424,7 +418,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
-        [Parser(Opcode.SMSG_GUILD_EVENT_LOG_QUERY_RESULT)]
+        [Parser(Opcode.SMSG_GUILD_EVENT_LOG_QUERY_RESULTS)]
         public static void HandleServerGuildEventLogQueryResult(Packet packet)
         {
             packet.ReadToEnd();
@@ -519,7 +513,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_GUILD_RANK)]
+        [Parser(Opcode.SMSG_GUILD_RANKS)]
         public static void HandleGuildRankServer(Packet packet)
         {
             const int guildBankMaxTabs = 8;
@@ -537,7 +531,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 for (var j = 0; j < guildBankMaxTabs; ++j)
                 {
                     packet.ReadInt32("Tab Slots", i, j);
-                    packet.ReadEnum<GuildBankRightsFlag>("Tab Rights", TypeCode.Int32, i, j);
+                    packet.ReadInt32E<GuildBankRightsFlag>("Tab Rights", i, j);
                 }
 
                 packet.ReadWoWString("Name", length[i], i);
@@ -608,9 +602,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_LF_GUILD_BROWSE)]
         public static void HandleLFGuildBrowse(Packet packet)
         {
-            packet.ReadEnum<GuildFinderOptionsRoles>("Class Roles", TypeCode.UInt32); // 16
-            packet.ReadEnum<GuildFinderOptionsAvailability>("Availability", TypeCode.UInt32); // 24
-            packet.ReadEnum<GuildFinderOptionsInterest>("Guild Interests", TypeCode.UInt32); // 28
+            packet.ReadUInt32E<GuildFinderOptionsRoles>("Class Roles"); // 16
+            packet.ReadUInt32E<GuildFinderOptionsAvailability>("Availability"); // 24
+            packet.ReadUInt32E<GuildFinderOptionsInterest>("Guild Interests"); // 28
             packet.ReadUInt32("Player Level"); // 20
         }
 
@@ -678,7 +672,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_TABARDVENDOR_ACTIVATE)]
+        [Parser(Opcode.SMSG_TABARD_VENDOR_ACTIVATE)]
         public static void HandleTabardVendorActivate(Packet packet)
         {
             var guid = packet.StartBitStream(1, 5, 0, 7, 4, 6, 3, 2);

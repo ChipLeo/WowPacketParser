@@ -136,18 +136,20 @@ namespace WowPacketParser.SQL.Builders
             var rows = new List<QueryBuilder.SQLInsertRow>();
             foreach (var npcTrainer in Storage.NpcTrainers)
             {
-                var comment = new QueryBuilder.SQLInsertRow();
-                comment.HeaderComment = StoreGetters.GetName(StoreNameType.Unit, (int)npcTrainer.Key, false);
+                var comment = new QueryBuilder.SQLInsertRow
+                {
+                    HeaderComment = StoreGetters.GetName(StoreNameType.Unit, (int) npcTrainer.Key, false)
+                };
                 rows.Add(comment);
                 foreach (var trainerSpell in npcTrainer.Value.Item1.TrainerSpells)
                 {
                     var row = new QueryBuilder.SQLInsertRow();
-                    row.AddValue("entry", npcTrainer.Key);
-                    row.AddValue("spell", trainerSpell.Spell);
-                    row.AddValue("spellcost", trainerSpell.Cost);
-                    row.AddValue("reqskill", trainerSpell.RequiredSkill);
-                    row.AddValue("reqskillvalue", trainerSpell.RequiredSkillLevel);
-                    row.AddValue("reqlevel", trainerSpell.RequiredLevel);
+                    row.AddValue("ID", npcTrainer.Key);
+                    row.AddValue("SpellID", trainerSpell.Spell);
+                    row.AddValue("MoneyCost", trainerSpell.Cost);
+                    row.AddValue("ReqSkillLine", trainerSpell.RequiredSkill);
+                    row.AddValue("ReqSkillRank", trainerSpell.RequiredSkillLevel);
+                    row.AddValue("ReqLevel", trainerSpell.RequiredLevel);
                     row.Comment = StoreGetters.GetName(StoreNameType.Spell, (int)trainerSpell.Spell, false);
                     rows.Add(row);
                 }
@@ -170,8 +172,10 @@ namespace WowPacketParser.SQL.Builders
             var rows = new List<QueryBuilder.SQLInsertRow>();
             foreach (var npcVendor in Storage.NpcVendors)
             {
-                var comment = new QueryBuilder.SQLInsertRow();
-                comment.HeaderComment = StoreGetters.GetName(StoreNameType.Unit, (int)npcVendor.Key);
+                var comment = new QueryBuilder.SQLInsertRow
+                {
+                    HeaderComment = StoreGetters.GetName(StoreNameType.Unit, (int) npcVendor.Key)
+                };
                 rows.Add(comment);
                 foreach (var vendorItem in npcVendor.Value.Item1.VendorItems)
                 {
@@ -305,10 +309,13 @@ namespace WowPacketParser.SQL.Builders
             var rows = new List<QueryBuilder.SQLInsertRow>();
             foreach (var loot in Storage.Loots)
             {
-                var comment = new QueryBuilder.SQLInsertRow();
-                comment.HeaderComment =
-                    StoreGetters.GetName(Utilities.ObjectTypeToStore(Storage.Loots.Keys().First().Item2), (int)loot.Key.Item1, false) +
-                    " (" + loot.Value.Item1.Gold + " gold)";
+                var comment = new QueryBuilder.SQLInsertRow
+                {
+                    HeaderComment =
+                        StoreGetters.GetName(Utilities.ObjectTypeToStore(Storage.Loots.Keys().First().Item2),
+                            (int) loot.Key.Item1, false) +
+                        " (" + loot.Value.Item1.Gold + " gold)"
+                };
                 rows.Add(comment);
                 foreach (var lootItem in loot.Value.Item1.LootItems)
                 {
@@ -654,6 +661,27 @@ namespace WowPacketParser.SQL.Builders
             "Warrior Trainer"
         };
 
+        private static string GetSubName(int Entry, bool withEntry)
+        {
+            var name = StoreGetters.GetName(StoreNameType.Unit, Entry, withEntry);
+            var firstIndex = name.LastIndexOf('<');
+            var lastIndex = name.LastIndexOf('>');
+            if (firstIndex != -1 && lastIndex != -1)
+                return name.Substring(firstIndex + 1, lastIndex - firstIndex - 1);
+
+            return "";
+        }
+
+        private static uint ProcessNpcFlags(string subName)
+        {
+            if (_professionTrainers.Contains(subName))
+                return (uint)NPCFlags.ProfessionTrainer;
+            else if (_classTrainers.Contains(subName))
+                return (uint)NPCFlags.ClassTrainer;
+
+            return 0;
+        }
+
         // Non-WDB data but nevertheless data that should be saved to creature_template
         [BuilderMethod(Units = true)]
         public static string NpcTemplateNonWDB(Dictionary<WowGuid, Unit> units)
@@ -716,18 +744,17 @@ namespace WowPacketParser.SQL.Builders
                     ((template.NpcFlag & (uint) NPCFlags.ProfessionTrainer) == 0 ||
                      (template.NpcFlag & (uint) NPCFlags.ClassTrainer) == 0))
                 {
-                    var name = StoreGetters.GetName(StoreNameType.Unit, (int) unit.Key.GetEntry(), false);
-                    var firstIndex = name.LastIndexOf('<');
-                    var lastIndex = name.LastIndexOf('>');
-                    if (firstIndex != -1 && lastIndex != -1)
+                    UnitTemplate unitData;
+                    var subname = GetSubName((int)unit.Key.GetEntry(), false); // Fall back
+                    if (Storage.UnitTemplates.TryGetValue((uint)unit.Key.GetEntry(), out unitData))
                     {
-                        var subname = name.Substring(firstIndex + 1, lastIndex - firstIndex - 1);
-
-                        if (_professionTrainers.Contains(subname))
-                            template.NpcFlag |= (uint) NPCFlags.ProfessionTrainer;
-                        else if (_classTrainers.Contains(subname))
-                            template.NpcFlag |= (uint) NPCFlags.ClassTrainer;
+                        if (unitData.SubName.Length > 0)
+                            template.NpcFlag |= ProcessNpcFlags(unitData.SubName);
+                        else // If the SubName doesn't exist or is cached, fall back to DB method
+                            template.NpcFlag |= ProcessNpcFlags(subname);
                     }
+                    else // In case we have NonWDB data which doesn't have an entry in UnitTemplates
+                        template.NpcFlag |= ProcessNpcFlags(subname);
                 }
 
                 templates.Add(unit.Key.GetEntry(), template);
@@ -847,63 +874,55 @@ namespace WowPacketParser.SQL.Builders
             // For each sound and emote, if the time they were send is in the +1/-1 seconds range of
             // our texts, add that sound and emote to our Storage.CreatureTexts
 
+            var broadcastTextStoresMale = SQLDatabase.BroadcastTextStores.GroupBy(blub => blub.Item2.MaleText).ToDictionary(group => group.Key, group => group.ToList());
+            var broadcastTextStoresFemale = SQLDatabase.BroadcastTextStores.GroupBy(blub => blub.Item2.FemaleText).ToDictionary(group => group.Key, group => group.ToList());
+
             foreach (var text in Storage.CreatureTexts)
             {
                 // For each text
                 foreach (var textValue in text.Value)
                 {
                     // For each emote
-                    foreach (var emote in Storage.Emotes)
-                    {
-                        // Emote packets always have a sender (guid);
-                        // skip this one if it was sent by a different creature
-                        if (emote.Key.GetEntry() != text.Key)
-                            continue;
-
-                        foreach (var emoteValue in emote.Value)
-                        {
-                            var timeSpan = textValue.Item2 - emoteValue.Item2;
-                            if (timeSpan != null && timeSpan.Value.Duration() <= TimeSpan.FromSeconds(1))
-                                textValue.Item1.Emote = emoteValue.Item1;
-                        }
-                    }
+                    var text1 = text;
+                    var value1 = textValue;
+                    foreach (var emoteValue in from emote in Storage.Emotes where emote.Key.GetEntry() == text1.Key from emoteValue in emote.Value let timeSpan = value1.Item2 - emoteValue.Item2 where timeSpan != null && timeSpan.Value.Duration() <= TimeSpan.FromSeconds(1) select emoteValue)
+                        textValue.Item1.Emote = emoteValue.Item1;
 
                     // For each sound
-                    foreach (var sound in Storage.Sounds)
+                    var value = textValue;
+                    foreach (var sound in from sound in Storage.Sounds let timeSpan = value.Item2 - sound.Item2 where timeSpan != null && timeSpan.Value.Duration() <= TimeSpan.FromSeconds(1) select sound)
+                        textValue.Item1.Sound = sound.Item1;
+
+                    if (SQLDatabase.BroadcastTextStores != null)
                     {
-                        var timeSpan = textValue.Item2 - sound.Item2;
-                        if (timeSpan != null && timeSpan.Value.Duration() <= TimeSpan.FromSeconds(1))
-                            textValue.Item1.Sound = sound.Item1;
+                        List<Tuple<uint, BroadcastText>> textList;
+                        if (broadcastTextStoresMale.TryGetValue(textValue.Item1.Text, out textList) ||
+                            broadcastTextStoresFemale.TryGetValue(textValue.Item1.Text, out textList))
+                            foreach (var broadcastTextId in textList)
+                            {
+                                if (!String.IsNullOrWhiteSpace(textValue.Item1.BroadcastTextID))
+                                    textValue.Item1.BroadcastTextID += " - " + broadcastTextId.Item1;
+                                else
+                                    textValue.Item1.BroadcastTextID = broadcastTextId.Item1.ToString();
+                            }
                     }
 
                     // Set comment
-
                     string from = null, to = null;
-                    if (!textValue.Item1.SenderGUID.IsEmpty())
+                    if (!textValue.Item1.SenderGUID.IsEmpty() || textValue.Item1.SenderGUID != null)
                     {
                         if (textValue.Item1.SenderGUID.GetObjectType() == ObjectType.Player)
                             from = "Player";
                         else
-                        {
-                            if (!string.IsNullOrEmpty(textValue.Item1.SenderName))
-                                from = textValue.Item1.SenderName;
-                            else
-                                from = StoreGetters.GetName(StoreNameType.Unit, (int)textValue.Item1.SenderGUID.GetEntry(), false);
-                        }
+                            @from = !string.IsNullOrEmpty(textValue.Item1.SenderName) ? textValue.Item1.SenderName : StoreGetters.GetName(StoreNameType.Unit, (int)textValue.Item1.SenderGUID.GetEntry(), false);
                     }
 
-                    if (!textValue.Item1.ReceiverGUID.IsEmpty())
+                    if (!textValue.Item1.ReceiverGUID.IsEmpty() || textValue.Item1.ReceiverGUID != null)
                     {
                         if (textValue.Item1.ReceiverGUID.GetObjectType() == ObjectType.Player)
                             to = "Player";
                         else
-                        {
-                            if (!string.IsNullOrEmpty(textValue.Item1.ReceiverName))
-                                to = textValue.Item1.ReceiverName;
-                            else
-                                to = StoreGetters.GetName(StoreNameType.Unit, (int)textValue.Item1.ReceiverGUID.GetEntry(), false);
-                        }
-
+                            to = !string.IsNullOrEmpty(textValue.Item1.ReceiverName) ? textValue.Item1.ReceiverName : StoreGetters.GetName(StoreNameType.Unit, (int)textValue.Item1.ReceiverGUID.GetEntry(), false);
                     }
 
                     Trace.Assert(text.Key == textValue.Item1.SenderGUID.GetEntry() ||
@@ -925,9 +944,6 @@ namespace WowPacketParser.SQL.Builders
 
             const string tableName = "creature_text";
 
-            var broadcastTextStoresMale = SQLDatabase.BroadcastTextStores.GroupBy(blub => blub.Item2.MaleText).ToDictionary(group => group.Key, group => group.ToList());
-            var broadcastTextStoresFemale = SQLDatabase.BroadcastTextStores.GroupBy(blub => blub.Item2.FemaleText).ToDictionary(group => group.Key, group => group.ToList());
-
             var rows = new List<QueryBuilder.SQLInsertRow>();
             foreach (var text in Storage.CreatureTexts)
             {
@@ -945,24 +961,7 @@ namespace WowPacketParser.SQL.Builders
                     row.AddValue("emote", textValue.Item1.Emote);
                     row.AddValue("duration", 0);
                     row.AddValue("sound", textValue.Item1.Sound);
-
-                    if (SQLDatabase.BroadcastTextStores != null)
-                    {
-                        List<Tuple<uint, BroadcastText>> textList;
-                        if (broadcastTextStoresMale.TryGetValue(textValue.Item1.Text, out textList) ||
-                            broadcastTextStoresFemale.TryGetValue(textValue.Item1.Text, out textList))
-                            foreach (var broadcastTextId in textList)
-                            {
-                                if (!String.IsNullOrWhiteSpace(textValue.Item1.BroadcastTextID))
-                                    textValue.Item1.BroadcastTextID += " - " + broadcastTextId.Item1.ToString();
-                                else
-                                    textValue.Item1.BroadcastTextID = broadcastTextId.Item1.ToString();
-                            }
-
-                        row.AddValue("BroadcastTextID", textValue.Item1.BroadcastTextID);
-
-                    }
-
+                    row.AddValue("BroadcastTextID", textValue.Item1.BroadcastTextID);
                     row.AddValue("comment", textValue.Item1.Comment);
 
                     rows.Add(row);

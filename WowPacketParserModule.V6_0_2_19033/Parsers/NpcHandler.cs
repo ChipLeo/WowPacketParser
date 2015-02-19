@@ -11,7 +11,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 {
     public static class NpcHandler
     {
-        public static uint LastGossipPOIEntry = 0;
+        public static uint LastGossipPOIEntry;
 
         [Parser(Opcode.CMSG_BANKER_ACTIVATE)]
         [Parser(Opcode.CMSG_BINDER_ACTIVATE)]
@@ -19,6 +19,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_GOSSIP_HELLO)]
         [Parser(Opcode.CMSG_LIST_INVENTORY)]
         [Parser(Opcode.CMSG_TRAINER_LIST)]
+        [Parser(Opcode.SMSG_SHOW_BANK)]
         public static void HandleNpcHello(Packet packet)
         {
             packet.ReadPackedGuid128("Guid");
@@ -42,10 +43,11 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 return;
 
             var hasData = packet.ReadBit("Has Data");
-            if (!hasData)
+            var size = packet.ReadInt32("Size");
+
+            if (!hasData || size == 0)
                 return; // nothing to do
 
-            var size = packet.ReadInt32("Size");
             var data = packet.ReadBytes(size);
 
             var pkt = new Packet(data, packet.Opcode, packet.Time, packet.Direction, packet.Number, packet.Writer, packet.FileName);
@@ -85,10 +87,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             var gossipPOI = new GossipPOI();
 
-            gossipPOI.Flags = (uint)packet.ReadBits("Flags", 14);
+            gossipPOI.Flags = packet.ReadBits("Flags", 14);
             var bit84 = packet.ReadBits(6);
             var pos = packet.ReadVector2("Coordinates");
-            gossipPOI.Icon = packet.ReadEnum<GossipPOIIcon>("Icon", TypeCode.UInt32);
+            gossipPOI.Icon = packet.ReadUInt32E<GossipPOIIcon>("Icon");
             gossipPOI.Importance = packet.ReadUInt32("Data");
             gossipPOI.Name = packet.ReadWoWString("Icon Name", bit84);
 
@@ -168,7 +170,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 else
                     Storage.Gossips.Add(Tuple.Create((uint)menuId, (uint)textId), gossip, packet.TimeSpan);
 
-                packet.AddSniffData(StoreNameType.Gossip, (int)menuId, guid.GetEntry().ToString(CultureInfo.InvariantCulture));
+                packet.AddSniffData(StoreNameType.Gossip, menuId, guid.GetEntry().ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -194,29 +196,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 // ItemInstance
                 //if (ItemInstance)
                 {
-                    vendorItem.ItemId = (uint)packet.ReadEntry<Int32>(StoreNameType.Item, "ItemID", i);
-                    packet.ReadUInt32("RandomPropertiesSeed", i);
-                    packet.ReadUInt32("RandomPropertiesID", i);
-
-                    packet.ResetBitReader();
-
-                    var hasBonuses = packet.ReadBit("HasItemBonus", i);
-                    var hasModifications = packet.ReadBit("HasModifications", i);
-                    if (hasBonuses)
-                    {
-                        packet.ReadByte("Context", i);
-
-                        var bonusCount = packet.ReadUInt32();
-                        for (var j = 0; j < bonusCount; ++j)
-                            packet.ReadUInt32("BonusListID", i, j);
-                    }
-
-                    if (hasModifications)
-                    {
-                        var modificationCount = packet.ReadUInt32() / 4;
-                        for (var j = 0; j < modificationCount; ++j)
-                            packet.ReadUInt32("Modification", i, j);
-                    }
+                    vendorItem.ItemId = (uint)ItemHandler.ReadItemInstance(packet, i);
                 }
 
                 var maxCount = packet.ReadInt32("Quantity", i);
@@ -232,7 +212,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
                 vendorItem.MaxCount = maxCount == -1 ? 0 : maxCount; // TDB
                 if (vendorItem.Type == 2)
-                    vendorItem.MaxCount = (int)buyCount;
+                    vendorItem.MaxCount = buyCount;
 
                 npcVendor.VendorItems.Add(vendorItem);
             }
@@ -257,7 +237,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             {
                 var trainerSpell = new TrainerSpell();
 
-                trainerSpell.Spell = (uint)packet.ReadEntry<Int32>(StoreNameType.Spell, "SpellID", i);
+                trainerSpell.Spell = (uint)packet.ReadInt32<SpellId>("SpellID", i);
                 trainerSpell.Cost = (uint)packet.ReadInt32("MoneyCost", i);
                 trainerSpell.RequiredSkill = (uint)packet.ReadInt32("ReqSkillLine", i);
                 trainerSpell.RequiredSkillLevel = (uint)packet.ReadInt32("ReqSkillRank", i);
@@ -265,7 +245,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 for (var j = 0; j < 3; ++j)
                     packet.ReadInt32("ReqAbility", i, j);
 
-                packet.ReadEnum<TrainerSpellState>("Usable", TypeCode.Byte, i);
+                packet.ReadByteE<TrainerSpellState>("Usable", i);
                 trainerSpell.RequiredLevel = packet.ReadByte("ReqLevel", i);
 
                 npcTrainer.TrainerSpells.Add(trainerSpell);
@@ -292,7 +272,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
             packet.ReadPackedGuid128("TrainerGUID");
             packet.ReadInt32("TrainerID");
-            packet.ReadEntry<Int32>(StoreNameType.Spell, "SpellID");
+            packet.ReadInt32<SpellId>("SpellID");
         }
 
         [Parser(Opcode.CMSG_SPELLCLICK)]
@@ -309,6 +289,39 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void HandleBuyBankSlot(Packet packet)
         {
             packet.ReadPackedGuid128("Banker");
+        }
+
+        [Parser(Opcode.CMSG_CLOSE_INTERACTION)] // trigger in CGGameUI::CloseInteraction
+        public static void HandleCloseInteraction(Packet packet)
+        {
+            packet.ReadPackedGuid128("Guid");
+        }
+
+        [Parser(Opcode.SMSG_SUPPRESS_NPC_GREETINGS)]
+        public static void HandleSuppressNPCGreetings(Packet packet)
+        {
+            packet.ReadPackedGuid128("UnitGUID");
+            packet.ReadBit("SuppressNPCGreetings");
+        }
+
+        [Parser(Opcode.SMSG_TRAINER_BUY_FAILED)]
+        public static void HandleTrainerBuyFailed(Packet packet)
+        {
+            packet.ReadPackedGuid128("TrainerGUID");
+            packet.ReadInt32<SpellId>("SpellID");
+            packet.ReadUInt32("TrainerFailedReason");
+        }
+
+        [Parser(Opcode.CMSG_SPIRIT_HEALER_ACTIVATE)]
+        public static void HandleSpiritHealerActivate(Packet packet)
+        {
+            packet.ReadPackedGuid128("Healer");
+        }
+
+        [Parser(Opcode.SMSG_TABARD_VENDOR_ACTIVATE)]
+        public static void HandleTabardVendorActivate(Packet packet)
+        {
+            packet.ReadPackedGuid128("Vendor");
         }
     }
 }

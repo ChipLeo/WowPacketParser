@@ -94,7 +94,7 @@ namespace WowPacketParserModule.V5_4_2_17658.Parsers
                 packet.ReadWoWString("Channel Name", channelLen);
 
             if (hasAchi)
-                packet.ReadEntry<Int32>(StoreNameType.Achievement, "Achievement Id");
+                packet.ReadInt32<AchievementId>("Achievement Id");
 
             if (hasPrefix)
                 packet.ReadWoWString("Addon Message Prefix", prefixLen);
@@ -111,7 +111,7 @@ namespace WowPacketParserModule.V5_4_2_17658.Parsers
             if (hasText)
                 text.Text = packet.ReadWoWString("Text", textLen);
 
-            text.Type = (ChatMessageType)packet.ReadEnum<ChatMessageType540>("Chat type", TypeCode.Byte);
+            text.Type = (ChatMessageType)packet.ReadByteE<ChatMessageType540>("Chat type");
 
             text.SenderGUID = packet.WriteGuid("SenderGUID", senderGUIDBytes);
             text.ReceiverGUID = packet.WriteGuid("ReceiverGUID", receiverGUIDBytes);
@@ -139,7 +139,7 @@ namespace WowPacketParserModule.V5_4_2_17658.Parsers
         [Parser(Opcode.CMSG_MESSAGECHAT_YELL)]
         public static void HandleClientChatMessage(Packet packet)
         {
-            packet.ReadEnum<Language>("Language", TypeCode.Int32);
+            packet.ReadInt32E<Language>("Language");
             var len = packet.ReadBits(8);
             packet.ReadWoWString("Message", len);
         }
@@ -150,8 +150,8 @@ namespace WowPacketParserModule.V5_4_2_17658.Parsers
             var guid1 = new byte[8];
             var guid2 = new byte[8];
 
-            packet.ReadEnum<EmoteType>("Emote ID", TypeCode.Int32);
-            packet.ReadEnum<EmoteTextType>("Text Emote ID", TypeCode.Int32);
+            packet.ReadInt32E<EmoteType>("Emote ID");
+            packet.ReadInt32E<EmoteTextType>("Text Emote ID");
 
             guid2[1] = packet.ReadBit();
             guid1[3] = packet.ReadBit();
@@ -195,7 +195,7 @@ namespace WowPacketParserModule.V5_4_2_17658.Parsers
         public static void HandleDefenseMessage(Packet packet)
         {
             var len = packet.ReadBits(12);
-            packet.ReadEntry<Int32>(StoreNameType.Zone, "Zone Id");
+            packet.ReadInt32<ZoneId>("Zone Id");
             packet.ReadWoWString("Message", len);
         }
     }

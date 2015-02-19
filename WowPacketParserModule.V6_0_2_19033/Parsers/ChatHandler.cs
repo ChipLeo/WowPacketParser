@@ -13,6 +13,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_MESSAGECHAT_ADDON_OFFICER)]
         [Parser(Opcode.CMSG_MESSAGECHAT_ADDON_PARTY)]
         [Parser(Opcode.CMSG_MESSAGECHAT_ADDON_RAID)]
+        [Parser(Opcode.CMSG_MESSAGECHAT_ADDON_INSTANCE)]
         public static void HandleAddonMessage(Packet packet)
         {
             var prefixLen = packet.ReadBits(5);
@@ -41,7 +42,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_MESSAGECHAT_INSTANCE)]
         public static void HandleClientChatMessage(Packet packet)
         {
-            packet.ReadEnum<Language>("Language", TypeCode.Int32);
+            packet.ReadInt32E<Language>("Language");
             var len = packet.ReadBits(8);
             packet.ReadWoWString("Text", len);
         }
@@ -49,7 +50,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_MESSAGECHAT_CHANNEL)]
         public static void HandleClientChatMessageChannel434(Packet packet)
         {
-            packet.ReadEnum<Language>("Language", TypeCode.Int32);
+            packet.ReadInt32E<Language>("Language");
             var channelNameLen = packet.ReadBits(9);
             var msgLen = packet.ReadBits(8);
             packet.ResetBitReader();
@@ -60,7 +61,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_MESSAGECHAT_WHISPER)]
         public static void HandleClientChatMessageWhisper(Packet packet)
         {
-            packet.ReadEnum<Language>("Language", TypeCode.Int32);
+            packet.ReadInt32E<Language>("Language");
             var recvName = packet.ReadBits(9);
             var msgLen = packet.ReadBits(8);
 
@@ -83,7 +84,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             var text = new CreatureText
             {
                 Type = (ChatMessageType) packet.ReadByte("Chat type"),
-                Language = packet.ReadEnum<Language>("Language", TypeCode.Byte),
+                Language = packet.ReadByteE<Language>("Language"),
                 SenderGUID = packet.ReadPackedGuid128("SenderGUID")
             };
 
@@ -134,11 +135,16 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadWoWString("StringParam", bits20);
         }
 
+        [Parser(Opcode.CMSG_EMOTE)]
+        public static void HandleEmoteClient(Packet packet)
+        {
+        }
+
         [Parser(Opcode.SMSG_EMOTE)]
         public static void HandleEmote(Packet packet)
         {
             var guid = packet.ReadPackedGuid128("GUID");
-            var emote = packet.ReadEnum<EmoteType>("Emote ID", TypeCode.Int32);
+            var emote = packet.ReadInt32E<EmoteType>("Emote ID");
 
             if (guid.GetObjectType() == ObjectType.Unit)
                 Storage.Emotes.Add(guid, emote, packet.TimeSpan);
@@ -149,8 +155,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
             packet.ReadPackedGuid128("Guid");
 
-            packet.ReadEnum<EmoteType>("Emote ID", TypeCode.Int32);
-            packet.ReadEnum<EmoteTextType>("Text Emote ID", TypeCode.Int32);
+            packet.ReadInt32E<EmoteType>("Emote ID");
+            packet.ReadInt32E<EmoteTextType>("Text Emote ID");
         }
 
         [Parser(Opcode.SMSG_TEXT_EMOTE)]
@@ -158,17 +164,24 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
             packet.ReadPackedGuid128("SourceGUID");
             packet.ReadPackedGuid128("WowAccountGUID");
-            packet.ReadEnum<EmoteType>("EmoteID", TypeCode.Int32);
-            packet.ReadEnum<EmoteTextType>("SoundIndex", TypeCode.Int32);
+            packet.ReadInt32E<EmoteType>("EmoteID");
+            packet.ReadInt32E<EmoteTextType>("SoundIndex");
             packet.ReadPackedGuid128("TargetGUID");
         }
 
         [Parser(Opcode.SMSG_DEFENSE_MESSAGE)]
         public static void HandleDefenseMessage(Packet packet)
         {
-            packet.ReadEntry<Int32>(StoreNameType.Zone, "ZoneID");
+            packet.ReadInt32<ZoneId>("ZoneID");
             var len = packet.ReadBits(12);
             packet.ReadWoWString("MessageText", len);
+        }
+
+        [Parser(Opcode.SMSG_CHAT_PLAYER_NOT_FOUND)]
+        public static void HandleChatPlayerNotFound(Packet packet)
+        {
+            var bits16 = packet.ReadBits(9);
+            packet.ReadWoWString("Name", bits16);
         }
     }
 }

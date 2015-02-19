@@ -66,7 +66,7 @@ namespace WowPacketParserModule.V5_4_2_17658.Parsers
                         packet.ReadInt32("Int14", i, j, k);
                     }
 
-                    packet.ReadEntry<UInt32>(StoreNameType.Item, "Item Id", i, j);
+                    packet.ReadUInt32<ItemId>("Item Id", i, j);
 
                     var len = packet.ReadInt32();
 

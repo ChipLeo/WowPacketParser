@@ -57,7 +57,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             using (var addons = new Packet(packet.ReadBytes(packet.ReadInt32()), packet.Opcode, packet.Time, packet.Direction, packet.Number, packet.Writer, packet.FileName))
             {
                 var pkt2 = addons;
-                CoreParsers.AddonHandler.ReadClientAddonsList(ref pkt2);
+                CoreParsers.AddonHandler.ReadClientAddonsList(pkt2);
             }
 
             packet.ReadBit("Unk bit");
@@ -185,8 +185,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
                 for (int i = 0; i < RaceCount; i++)
                 {
-                    packet.ReadEnum<Race>("Race", TypeCode.Byte, i); //+61+i*2
-                    packet.ReadEnum<ClientType>("Race Expansion", TypeCode.Byte, i); //+62+i*2
+                    packet.ReadByteE<Race>("Race", i); //+61+i*2
+                    packet.ReadByteE<ClientType>("Race Expansion", i); //+62+i*2
                 }
 
                 for (uint i = 0; i < count1; i++)
@@ -205,8 +205,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
                 for (int i = 0; i < ClassCount; i++)
                 {
-                    packet.ReadEnum<Class>("Class", TypeCode.Byte, i); //+19*4+1+i*2
-                    packet.ReadEnum<ClientType>("Class Expansion", TypeCode.Byte, i); //+19*4+2+i*2
+                    packet.ReadByteE<Class>("Class", i); //+19*4+1+i*2
+                    packet.ReadByteE<ClientType>("Class Expansion", i); //+19*4+2+i*2
                 }
 
                 packet.ReadUInt32("dword52"); //52
@@ -227,7 +227,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadUInt32("dword44"); //44
                 packet.ReadUInt32("dword16"); //16
             }
-            packet.ReadEnum<ResponseCode>("Auth Code", TypeCode.Byte); //124
+            packet.ReadByteE<ResponseCode>("Auth Code"); //124
         }
 
         [Parser(Opcode.SMSG_LOGIN_VERIFY_WORLD)]

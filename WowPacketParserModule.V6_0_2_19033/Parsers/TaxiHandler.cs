@@ -6,7 +6,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 {
     public static class TaxiHandler
     {
-        [Parser(Opcode.CMSG_ACTIVATETAXI)]
+        [Parser(Opcode.CMSG_ACTIVATE_TAXI)]
         public static void HandleActivateTaxi(Packet packet)
         {
             packet.ReadPackedGuid128("Vendor");
@@ -14,7 +14,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadUInt32("DestNode");
         }
 
-        [Parser(Opcode.CMSG_ACTIVATETAXIEXPRESS)]
+        [Parser(Opcode.CMSG_ACTIVATE_TAXI_EXPRESS)]
         public static void HandleActivateTaxiExpress(Packet packet)
         {
             packet.ReadPackedGuid128("Unit");
@@ -24,13 +24,14 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadUInt32("PathNodes", i);
         }
 
-        [Parser(Opcode.CMSG_ENABLETAXI)]
+        [Parser(Opcode.CMSG_ENABLE_TAXI_NODE)]
+        [Parser(Opcode.CMSG_TAXI_QUERY_AVAILABLE_NODES)]
         public static void HandleTaxiStatusQuery(Packet packet)
         {
             packet.ReadPackedGuid128("Unit");
         }
 
-        [Parser(Opcode.SMSG_SHOWTAXINODES)]
+        [Parser(Opcode.SMSG_SHOW_TAXI_NODES)]
         public static void HandleShowTaxiNodes(Packet packet)
         {
             var bit56 = packet.ReadBit("HasWindowInfo");
@@ -52,7 +53,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBits("Status", 2);
         }
 
-        [Parser(Opcode.CMSG_TAXINODE_STATUS_QUERY)]
+        [Parser(Opcode.CMSG_TAXI_NODE_STATUS_QUERY)]
         public static void HandleTaxinodeStatusQuery(Packet packet)
         {
             packet.ReadPackedGuid128("UnitGUID");

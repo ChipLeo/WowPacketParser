@@ -107,7 +107,6 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Numerics" />
     <Reference Include="Tamir.SharpSSH, Version=1.1.1.13, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Tamir.SharpSSH.1.1.1.13\lib\Tamir.SharpSSH.dll</HintPath>
@@ -122,6 +121,7 @@
     <Compile Include="Enums\ArenaError.cs" />
     <Compile Include="Enums\ArenaEvent.cs" />
     <Compile Include="Enums\AttackerStateFlags.cs" />
+    <Compile Include="Enums\AttackSwingErr.cs" />
     <Compile Include="Enums\AuctionHouseAction.cs" />
     <Compile Include="Enums\AuctionHouseError.cs" />
     <Compile Include="Enums\AuraFlag.cs" />
@@ -162,6 +162,8 @@
     <Compile Include="Enums\BuyResult.cs" />
     <Compile Include="Enums\DB2Hash.cs" />
     <Compile Include="Enums\ItemFieldFlags.cs" />
+    <Compile Include="Enums\ItemModifier.cs" />
+    <Compile Include="Enums\LootError.cs" />
     <Compile Include="Enums\PetTalk.cs" />
     <Compile Include="Enums\QuestFlags2.cs" />
     <Compile Include="Enums\QuestRequirementType.cs" />
@@ -210,6 +212,7 @@
     <Compile Include="Enums\InhabitType.cs" />
     <Compile Include="Enums\MountResult.cs" />
     <Compile Include="Enums\RaidSummonFail.cs" />
+    <Compile Include="Enums\StandState.cs" />
     <Compile Include="Enums\TalentErrors.cs" />
     <Compile Include="Enums\TargetIcon.cs" />
     <Compile Include="Enums\InstanceResetWarningType.cs" />
@@ -305,6 +308,8 @@
     <Compile Include="Enums\TrainerSpellState.cs" />
     <Compile Include="Enums\TrainerType.cs" />
     <Compile Include="Enums\TransferAbortReason.cs" />
+    <Compile Include="Enums\Tutorial.cs" />
+    <Compile Include="Enums\TutorialAction.cs" />
     <Compile Include="Enums\TypeMask.cs" />
     <Compile Include="Enums\UnitDynamicFlags.cs" />
     <Compile Include="Enums\UnitFlags2.cs" />
@@ -328,8 +333,6 @@
     <Compile Include="Enums\Version\V4_1_0_13914\UpdateFields.cs" />
     <Compile Include="Enums\Version\V4_2_0_14333\Opcodes.cs" />
     <Compile Include="Enums\Version\V4_2_0_14333\UpdateFields.cs" />
-    <Compile Include="Enums\Version\V4_2_0_14480\Opcodes.cs" />
-    <Compile Include="Enums\Version\V4_2_0_14480\UpdateFields.cs" />
     <Compile Include="Enums\Version\V4_2_2_14545\Opcodes.cs" />
     <Compile Include="Enums\Version\V4_2_2_14545\UpdateFields.cs" />
     <Compile Include="Enums\Version\V4_3_0_15005\Opcodes.cs" />
@@ -376,6 +379,7 @@
     <Compile Include="Misc\Bit.cs" />
     <Compile Include="Misc\ClientVersion.cs" />
     <Compile Include="Misc\ConcurrentPriorityQueue.cs" />
+    <Compile Include="Misc\Configuration.cs" />
     <Compile Include="Misc\Extensions.cs" />
     <Compile Include="Misc\Filters.cs" />
     <Compile Include="Misc\WowGuid.cs" />
@@ -448,6 +452,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Saving\BinaryPacketWriter.cs" />
+    <Compile Include="Saving\SplitDirectionBinaryPacketWriter.cs" />
     <Compile Include="Saving\SplitSessionBinaryPacketWriter.cs" />
     <Compile Include="Saving\SplitBinaryPacketWriter.cs" />
     <Compile Include="SQL\Builder.cs" />

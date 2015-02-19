@@ -80,7 +80,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                         var guid = packet.ReadPackedGuid("GUID", i);
 
                         WoWObject obj;
-                        var updates = CoreParsers.UpdateHandler.ReadValuesUpdateBlock(ref packet, guid.GetObjectType(), i, false);
+                        var updates = CoreParsers.UpdateHandler.ReadValuesUpdateBlock(packet, guid.GetObjectType(), i, false);
 
                         if (Storage.Objects.TryGetValue(guid, out obj))
                         {
@@ -100,7 +100,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     }
                     case "DestroyObjects":
                     {
-                        CoreParsers.UpdateHandler.ReadObjectsBlock(ref packet, i);
+                        CoreParsers.UpdateHandler.ReadObjectsBlock(packet, i);
                         break;
                     }
                 }
@@ -109,11 +109,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
         private static void ReadCreateObjectBlock(ref Packet packet, Guid guid, uint map, int index)
         {
-            var objType = packet.ReadEnum<ObjectType>("Object Type", TypeCode.Byte, index);
+            var objType = packet.ReadByteE<ObjectType>("Object Type", index);
             packet.ResetBitReader();
             var moves = ReadMovementUpdateBlock548(ref packet, guid, index);
             packet.ResetBitReader();
-            var updates = CoreParsers.UpdateHandler.ReadValuesUpdateBlock(ref packet, objType, index, true);
+            var updates = CoreParsers.UpdateHandler.ReadValuesUpdateBlock(packet, objType, index, true);
 
             WoWObject obj;
             switch (objType)
@@ -699,7 +699,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                         if (hasSplineVerticalAcceleration) // 260
                             packet.ReadInt32("Spline Vertical Acceleration", index); // 256
 
-                        splineType = packet.ReadEnum<SplineType>("Spline Type", TypeCode.Byte, index); // 228
+                        splineType = packet.ReadByteE<SplineType>("Spline Type", index); // 228
 
                         if (splineType == SplineType.FacingAngle) // 228
                             packet.ReadSingle("Facing Angle", index); // 308

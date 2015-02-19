@@ -65,7 +65,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 if (hasOverDamage[i])
                     packet.ReadInt32("Over Damage", i);
                 packet.ReadInt32("Damage", i); // 4
-                packet.ReadEnum<AuraType>("Aura Type", TypeCode.Int32, i); // 64*4
+                packet.ReadInt32E<AuraType>("Aura Type", i); // 64*4
                 if (hasResist[i])
                     packet.ReadInt32("Resist", i);
                 if (hasAbsorb[i])
@@ -106,7 +106,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Target Guid", targetGUID);
         }
 
-        [Parser(Opcode.SMSG_SPELLDAMAGESHIELD)]
+        [Parser(Opcode.SMSG_SPELL_DAMAGE_SHIELD)]
         public static void HandleSpellDamageShield(Packet packet)
         {
             var guid = new byte[8];
@@ -168,7 +168,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid2);
         }
 
-        [Parser(Opcode.SMSG_SPELLDISPELLOG)]
+        [Parser(Opcode.SMSG_SPELL_DISPEL_LOG)]
         public static void HandleSpellDispellLog(Packet packet)
         {
             var casterGUID = new byte[8];
@@ -241,7 +241,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Target GUID", targetGUID);
         }
 
-        [Parser(Opcode.SMSG_SPELLENERGIZELOG)]
+        [Parser(Opcode.SMSG_SPELL_ENERGIZE_LOG)]
         public static void HandleSpellEnergizeLog(Packet packet)
         {
             var guid = new byte[8];
@@ -300,13 +300,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadXORByte(guid, 3); // 59
 
             packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 72
-            packet.ReadEnum<PowerType>("Power Type", TypeCode.UInt32); // 52
+            packet.ReadUInt32E<PowerType>("Power Type"); // 52
 
             packet.WriteGuid("Guid", guid);
             packet.WriteGuid("Guid2", guid2);
         }
 
-        [Parser(Opcode.SMSG_SPELLHEALLOG)]
+        [Parser(Opcode.SMSG_SPELL_HEAL_LOG)]
         public static void HandleSpellHealLog(Packet packet)
         {
             var casterGUID = new byte[8];
@@ -378,7 +378,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Target GUID", targetGUID);
         }
 
-        [Parser(Opcode.SMSG_SPELLLOGEXECUTE)]
+        [Parser(Opcode.SMSG_SPELL_EXECUTE_LOG)]
         public static void HandleSpellLogExecute(Packet packet)
         {
             var guid = new byte[8];
@@ -528,7 +528,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 for (var j = 0; j < bits54[i]; ++j)
                     packet.ReadInt32("Int54", i, j);
 
-                var type = packet.ReadEnum<SpellEffect>("Spell Effect", TypeCode.Int32, i);
+                var type = packet.ReadInt32E<SpellEffect>("Spell Effect", i);
 
                 for (var j = 0; j < bits44[i]; ++j)
                     packet.ReadEntry<Int32>(StoreNameType.Item, "Created Item", i, j);
@@ -540,13 +540,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_SPELLLOGMISS)]
+        [Parser(Opcode.SMSG_SPELL_MISS_LOG)]
         public static void HandleSpellLogMiss(Packet packet)
         {
             ReadSpellMissLog(ref packet);
         }
 
-        [Parser(Opcode.SMSG_SPELLNONMELEEDAMAGELOG)]
+        [Parser(Opcode.SMSG_SPELL_NON_MELEE_DAMAGE_LOG)]
         public static void HandleSpellNonMeleeDmgLog(Packet packet)
         {
             ReadSpellNonMeleeDamageLog(ref packet);
@@ -566,7 +566,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             for (var i = 0; i < count; i++)
             {
-                packet.ReadEnum<SpellMissType>("Miss Info", TypeCode.Byte, index, i);
+                packet.ReadByteE<SpellMissType>("Miss Info", index, i);
                 packet.ParseBitStream(guid20[i], 7, 5, 0, 6, 3, 2);
                 if (debug[i])
                 {

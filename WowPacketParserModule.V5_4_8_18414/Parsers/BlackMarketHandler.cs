@@ -7,8 +7,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class BlackMarketHandler
     {
-        [Parser(Opcode.CMSG_BLACK_MARKET_BID)]
-        public static void HandleBlackMarketBid(Packet packet)
+        [Parser(Opcode.CMSG_BLACK_MARKET_BID_ON_ITEM)]
+        public static void HandleBlackMarketBidOnItem(Packet packet)
         {
             var guid2 = new byte[8];
 
@@ -21,8 +21,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid2);
         }
 
-        [Parser(Opcode.CMSG_BLACK_MARKET_HELLO)]
-        public static void HandleBlackMarketHello(Packet packet)
+        [Parser(Opcode.CMSG_BLACK_MARKET_OPEN)]
+        public static void HandleBlackMarketOpen(Packet packet)
         {
             var guid2 = new byte[8];
 
@@ -44,8 +44,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid2);
         }
 
-        [Parser(Opcode.SMSG_BLACK_MARKET_HELLO)]
-        public static void HandleServerBlackMarketHello(Packet packet)
+        [Parser(Opcode.SMSG_BLACK_MARKET_OPEN_RESULT)]
+        public static void HandleServerBlackMarketOpenResult(Packet packet)
         {
             var guid = new byte[8];
 
@@ -99,8 +99,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_BLACKMARKET_BID_RESULT)]
-        public static void HandleBlackMarketBidResult(Packet packet)
+        [Parser(Opcode.SMSG_BLACK_MARKET_BID_ON_ITEM_RESULT)]
+        public static void HandleBlackMarketBidOnItemResult(Packet packet)
         {
         }
     }

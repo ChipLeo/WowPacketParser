@@ -64,8 +64,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid1);
         }
 
-        [Parser(Opcode.SMSG_ALL_ACHIEVEMENT_DATA_ACCOUNT)]
-        public static void HandleAllAchievementDataAccount(Packet packet)
+        [Parser(Opcode.SMSG_ALL_ACCOUNT_CRITERIA)]
+        public static void HandleAllAccountCriteria(Packet packet)
         {
             var count = packet.ReadBits("count", 19);
             var guid = new byte[count][];
@@ -116,8 +116,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_ALL_ACHIEVEMENT_DATA_PLAYER)]
-        public static void HandleAllAchievementDataPlayer(Packet packet)
+        [Parser(Opcode.SMSG_ALL_ACHIEVEMENT_DATA)]
+        public static void HandleAllAchievementData(Packet packet)
         {
             var count = packet.ReadBits("Criteria count", 19);
             var guid = new byte[count][];
@@ -187,8 +187,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_CRITERIA_UPDATE_ACCOUNT)]
-        public static void HandleCriteriaUpdateAccount(Packet packet)
+        [Parser(Opcode.SMSG_ACCOUNT_CRITERIA_UPDATE)]
+        public static void HandleAccountCriteriaUpdate(Packet packet)
         {
             var counter = new byte[8];
             var accountId = new byte[8];
@@ -238,8 +238,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteLine("Counter: {0}", BitConverter.ToInt64(counter, 0));
         }
 
-        [Parser(Opcode.SMSG_CRITERIA_UPDATE_PLAYER)]
-        public static void HandleCriteriaPlayer(Packet packet)
+        [Parser(Opcode.SMSG_CRITERIA_UPDATE)]
+        public static void HandleCriteria(Packet packet)
         {
             var guid = packet.StartBitStream(4, 6, 2, 3, 7, 1, 5, 0);
             packet.ParseBitStream(guid, 3, 6, 2);

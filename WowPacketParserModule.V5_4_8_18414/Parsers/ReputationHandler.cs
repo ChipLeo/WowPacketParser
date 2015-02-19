@@ -20,8 +20,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var count = 256;
             for (var i = 0; i < count; i++)
             {
-                packet.ReadEnum<FactionFlag>("Faction Flags", TypeCode.Byte, i);
-                packet.ReadEnum<ReputationRank>("Faction Standing", TypeCode.UInt32, i);
+                packet.ReadByteE<FactionFlag>("Faction Flags", i);
+                packet.ReadUInt32E<ReputationRank>("Faction Standing", i);
             }
             for (var i = 0; i < count; i++)
             {

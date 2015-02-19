@@ -965,8 +965,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             ReadPlayerMovementInfo(ref packet, info.MovementUpdateWalkSpeed);
         }
 
-        [Parser(Opcode.SMSG_PLAYER_MOVE)]
-        public static void HandlePlayerMove(Packet packet)
+        [Parser(Opcode.SMSG_MOVE_UPDATE)]
+        public static void HandleMoveUpdate(Packet packet)
         {
             ReadPlayerMovementInfo(ref packet, info.PlayerMove);
         }
@@ -3458,8 +3458,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_MONSTER_MOVE)]
-        public static void HandleMonsterMove(Packet packet)
+        [Parser(Opcode.SMSG_ON_MONSTER_MOVE)]
+        public static void HandleOnMonsterMove(Packet packet)
         {
             var guid3 = new byte[8];
             var target = new byte[8];
@@ -3574,7 +3574,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ParseBitStream(guid3, 3);
 
             if (hasSplineFlags)
-                packet.ReadEnum<SplineFlag>("Spline Flags", TypeCode.UInt32);
+                packet.ReadUInt32E<SplineFlag>("Spline Flags");
 
             if (unk69)
                 packet.ReadByte("unk69");
@@ -3874,7 +3874,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_MOUNTSPECIAL_ANIM)]
+        [Parser(Opcode.SMSG_MOUNT_SPECIAL_ANIM)]
         public static void HandleMountSpecialAnim(Packet packet)
         {
             var guid = packet.StartBitStream(5, 7, 0, 3, 2, 1, 4, 6);
@@ -3882,8 +3882,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_SET_PHASE_SHIFT)]
-        public static void HandleSetPhaseShift(Packet packet)
+        [Parser(Opcode.SMSG_SET_PHASE_SHIFT_CHANGE)]
+        public static void HandleSetPhaseShiftChange(Packet packet)
         {
             CoreParsers.MovementHandler.ActivePhases.Clear();
 

@@ -130,8 +130,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Auctioneer GUID", guid);
         }
 
-        [Parser(Opcode.SMSG_AUCTION_BIDDER_LIST_RESULT)]
-        public static void HandleAuctionListBidderResult(Packet packet)
+        [Parser(Opcode.SMSG_AUCTION_LIST_BIDDER_ITEMS_RESULT)]
+        public static void HandleAuctionListBidderItemsResult(Packet packet)
         {
             var count = packet.ReadUInt32("Count");
             for (var i = 0; i < count; ++i)
@@ -152,7 +152,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadUInt32("Item Suffix", i);
                 packet.ReadUInt32("Item Count", i);
                 packet.ReadInt32("Item Spell Charges", i);
-                packet.ReadEnum<ItemProtoFlags>("Item Flags", TypeCode.UInt32, i);
+                packet.ReadUInt32E<ItemProtoFlags>("Item Flags", i);
                 packet.ReadGuid("Owner", i);
                 packet.ReadValue("Start Bid", TypeCode.UInt64, i);
                 packet.ReadValue("Out Bid", TypeCode.UInt64, i);
@@ -193,8 +193,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ParseBitStream(guid, 3, 0, 7, 1, 4, 6, 5, 2);
             if (unk16)
                 packet.ReadInt64("unk16"); // 16
-            var error = packet.ReadEnum<AuctionHouseError>("Error", TypeCode.UInt32); // 44
-            var action = packet.ReadEnum<AuctionHouseAction>("Action", TypeCode.UInt32); // 48
+            var error = packet.ReadUInt32E<AuctionHouseError>("Error"); // 44
+            var action = packet.ReadUInt32E<AuctionHouseAction>("Action"); // 48
 
             packet.ReadUInt32("Auction ID"); // 52
             if (unk32)
@@ -226,7 +226,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadUInt32("Item Suffix", i);
                 packet.ReadUInt32("Item Count", i);
                 packet.ReadInt32("Item Spell Charges", i);
-                packet.ReadEnum<ItemProtoFlags>("Item Flags", TypeCode.UInt32, i);
+                packet.ReadUInt32E<ItemProtoFlags>("Item Flags", i);
                 packet.ReadGuid("Owner", i);
                 packet.ReadValue("Start Bid", TypeCode.UInt64, i);
                 packet.ReadValue("Out Bid", TypeCode.UInt64, i);

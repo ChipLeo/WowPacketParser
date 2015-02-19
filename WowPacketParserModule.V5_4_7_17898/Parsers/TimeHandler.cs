@@ -13,13 +13,13 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
 {
     public static class TimeHandler
     {
-        [Parser(Opcode.SMSG_GAMESPEED_SET)]
+        [Parser(Opcode.SMSG_GAME_SPEED_SET)]
         public static void HandleGameSpeedSet(Packet packet)
         {
             packet.ReadSingle("New Game Speed");
         }
 
-        [Parser(Opcode.SMSG_GAMETIME_SET)]
+        [Parser(Opcode.SMSG_GAME_TIME_SET)]
         public static void HandleGameTimeSet(Packet packet)
         {
             packet.ReadPackedTime("Time 1");
@@ -28,7 +28,7 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
             packet.ReadInt32("Unk dword20");
         }
 
-        [Parser(Opcode.SMSG_GAMETIME_UPDATE)]
+        [Parser(Opcode.SMSG_GAME_TIME_UPDATE)]
         public static void HandleGameTimeUpdate(Packet packet)
         {
             packet.ReadInt32("Unk dword16");

@@ -1,5 +1,4 @@
-﻿using System;
-using WowPacketParser.Enums;
+﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
@@ -10,6 +9,17 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 {
     public static class MiscellaneousHandler
     {
+        public static void ReadElaspedTimer(Packet packet, params object[] indexes)
+        {
+            packet.ReadInt32("TimerID", indexes);
+            packet.ReadInt32("CurrentDuration", indexes);
+        }
+
+        [Parser(Opcode.CMSG_REQUEST_ARTIFACT_COMPLETION_HISTORY)]
+        public static void HandleMiscZero(Packet packet)
+        {
+        }
+
         [Parser(Opcode.SMSG_INVALIDATE_PLAYER)]
         public static void HandleReadGuid(Packet packet)
         {
@@ -20,7 +30,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_LOAD_SCREEN)]
         public static void HandleClientEnterWorld(Packet packet)
         {
-            var mapId = packet.ReadEntry<Int32>(StoreNameType.Map, "MapID");
+            var mapId = packet.ReadInt32<MapId>("MapID");
             packet.ReadBit("Showing");
 
             packet.AddSniffData(StoreNameType.Map, mapId, "LOAD_SCREEN");
@@ -29,7 +39,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_WEATHER)]
         public static void HandleWeatherStatus(Packet packet)
         {
-            var state = packet.ReadEnum<WeatherState>("State", TypeCode.Int32);
+            var state = packet.ReadInt32E<WeatherState>("State");
             var grade = packet.ReadSingle("Intensity");
             var unk = packet.ReadBit("Abrupt"); // Type
 
@@ -114,22 +124,22 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadByte("IsTournamentRealm");
             packet.ReadTime("WeeklyReset");
 
-            var bit32 = packet.ReadBit();
-            var bit20 = packet.ReadBit();
-            var bit56 = packet.ReadBit();
-            var bit44 = packet.ReadBit();
+            var hasRestrictedAccountMaxLevel = packet.ReadBit("HasRestrictedAccountMaxLevel");
+            var hasRestrictedAccountMaxMoney = packet.ReadBit("HasRestrictedAccountMaxMoney");
+            var hasIneligibleForLootMask = packet.ReadBit("HasIneligibleForLootMask");
+            var hasInstanceGroupSize = packet.ReadBit("HasInstanceGroupSize");
 
-            if (bit32)
-                packet.ReadInt32("IneligibleForLootMask");
-
-            if (bit20)
-                packet.ReadInt32("InstanceGroupSize");
-
-            if (bit56)
+            if (hasRestrictedAccountMaxLevel)
                 packet.ReadInt32("RestrictedAccountMaxLevel");
 
-            if (bit44)
+            if (hasRestrictedAccountMaxMoney)
                 packet.ReadInt32("RestrictedAccountMaxMoney");
+
+            if (hasIneligibleForLootMask)
+                packet.ReadInt32("IneligibleForLootMask");
+
+            if (hasInstanceGroupSize)
+                packet.ReadInt32("InstanceGroupSize");
         }
 
         [Parser(Opcode.CMSG_WHO)]
@@ -176,7 +186,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             }
 
             for (var i = 0; i < bits728; ++i)
-                packet.ReadEntry<UInt32>(StoreNameType.Area, "Area", i);
+                packet.ReadUInt32<AreaId>("Area", i);
         }
 
         [Parser(Opcode.SMSG_WHO)]
@@ -206,9 +216,9 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
                 packet.ReadInt32("VirtualRealmAddress", i);
 
-                packet.ReadEnum<Race>("Race", TypeCode.Byte, i);
-                packet.ReadEnum<Gender>("Sex", TypeCode.Byte, i);
-                packet.ReadEnum<Class>("ClassId", TypeCode.Byte, i);
+                packet.ReadByteE<Race>("Race", i);
+                packet.ReadByteE<Gender>("Sex", i);
+                packet.ReadByteE<Class>("ClassId", i);
                 packet.ReadByte("Level", i);
 
                 packet.ReadWoWString("Name", bits15, i);
@@ -307,18 +317,18 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             Storage.Sounds.Add(sound, packet.TimeSpan);
         }
 
-        [Parser(Opcode.CMSG_RANDOM_ROLL)]
-        public static void HandleRandomRoll(Packet packet)
+        [Parser(Opcode.SMSG_PLAY_MUSIC)]
+        public static void HandlePlayMusic(Packet packet)
         {
-            packet.ReadInt32("Min");
-            packet.ReadInt32("Max");
-            packet.ReadByte("PartyIndex");
+            var sound = packet.ReadUInt32("SoundKitID");
+
+            Storage.Sounds.Add(sound, packet.TimeSpan);
         }
 
         [Parser(Opcode.SMSG_ZONE_UNDER_ATTACK)]
         public static void HandleZoneUpdate(Packet packet)
         {
-            packet.ReadEntry<Int32>(StoreNameType.Zone, "AreaID");
+            packet.ReadInt32<ZoneId>("AreaID");
         }
 
         [Parser(Opcode.CMSG_PAGE_TEXT_QUERY)]
@@ -334,17 +344,20 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
             var pageText = new PageText();
 
-            packet.ReadUInt32("Entry");
-            var hasData = packet.ReadBit();
+            packet.ReadUInt32("PageTextID");
+
+            packet.ResetBitReader();
+
+            var hasData = packet.ReadBit("Allow");
             if (!hasData)
                 return; // nothing to do
 
-            var entry = packet.ReadUInt32("Entry");
-            pageText.NextPageID = packet.ReadUInt32("Next Page");
+            var entry = packet.ReadUInt32("ID");
+            pageText.NextPageID = packet.ReadUInt32("NextPageID");
 
             packet.ResetBitReader();
             var textLen = packet.ReadBits(12);
-            pageText.Text = packet.ReadWoWString("Page Text", textLen);
+            pageText.Text = packet.ReadWoWString("Text", textLen);
 
             packet.AddSniffData(StoreNameType.PageText, (int)entry, "QUERY_RESPONSE");
             Storage.PageTexts.Add(entry, pageText, packet.TimeSpan);
@@ -383,10 +396,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_TUTORIAL_FLAG)]
         public static void HandleTutorialFlag(Packet packet)
         {
-            var bits16 = packet.ReadBits("TutorialAction", 2); // 0 == Update, 1 == Clear?, 2 == Reset
+            var action = packet.ReadEnum<TutorialAction>("TutorialAction", 2);
 
-            if (bits16 == 0)
-                packet.ReadInt32("TutorialBit");
+            if (action == TutorialAction.Update)
+                packet.ReadInt32E<Tutorial>("TutorialBit");
         }
 
         [Parser(Opcode.SMSG_START_ELAPSED_TIMERS)]
@@ -426,6 +439,162 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
             packet.ReadPackedGuid128("Unit");
             packet.ReadUInt16("AnimKitID");
+        }
+
+        [Parser(Opcode.CMSG_BUG_REPORT)]
+        public static void HandleBugReport(Packet packet)
+        {
+            packet.ReadBit("Type");
+
+            var len1 = packet.ReadBits(12);
+            var len2 = packet.ReadBits(10);
+
+            packet.ReadWoWString("DiagInfo", len1);
+            packet.ReadWoWString("Text", len2);
+        }
+
+        [Parser(Opcode.SMSG_RESURRECT_REQUEST)]
+        public static void HandleResurrectRequest(Packet packet)
+        {
+            packet.ReadPackedGuid128("ResurrectOffererGUID");
+
+            packet.ReadInt32("ResurrectOffererVirtualRealmAddress");
+            packet.ReadInt32("PetNumber");
+            packet.ReadInt32("SpellID");
+
+            var len = packet.ReadBits(6);
+
+            packet.ReadBit("UseTimer");
+            packet.ReadBit("Sickness");
+
+            packet.ReadWoWString("Name", len);
+        }
+
+        [Parser(Opcode.CMSG_RESURRECT_RESPONSE)]
+        public static void HandleResurrectResponse(Packet packet)
+        {
+            packet.ReadPackedGuid128("Resurrecter");
+            packet.ReadInt32("Response");
+        }
+
+        [Parser(Opcode.CMSG_ACCEPT_LEVEL_GRANT)]
+        public static void HandleAcceptLevelGrant(Packet packet)
+        {
+            packet.ReadPackedGuid128("Granter");
+        }
+
+        [Parser(Opcode.SMSG_PRE_RESSURECT)]
+        public static void HandlePreRessurect(Packet packet)
+        {
+            packet.ReadPackedGuid128("PlayerGUID");
+        }
+
+        [Parser(Opcode.CMSG_QUERY_COUNTDOWN_TIMER)]
+        public static void HandleQueryCountdownTimer(Packet packet)
+        {
+            packet.ReadInt32("TimerType");
+        }
+
+        [Parser(Opcode.SMSG_STREAMING_MOVIE)]
+        public static void HandleStreamingMovie(Packet packet)
+        {
+            var count = packet.ReadInt32("MovieCount");
+            for (var i = 0; i < count; i++)
+                packet.ReadInt16("MovieIDs", i);
+        }
+
+        [Parser(Opcode.SMSG_CUSTOM_LOAD_SCREEN)]
+        public static void HandleCustomLoadScreen(Packet packet)
+        {
+            packet.ReadInt32("TeleportSpellID");
+        }
+
+        [Parser(Opcode.CMSG_CONVERSATION_UNK1)]
+        public static void HandleConversationUnk1(Packet packet)
+        {
+            packet.ReadPackedGuid128("Conversation");
+            packet.ReadInt32("ConversationID?");
+        }
+
+        [Parser(Opcode.SMSG_PLAY_OBJECT_SOUND)]
+        public static void HandlePlayObjectSound(Packet packet)
+        {
+            packet.ReadUInt32("SoundId");
+            packet.ReadPackedGuid128("SourceObjectGUID");
+            packet.ReadPackedGuid128("TargetObjectGUID");
+            packet.ReadVector3("Position");
+        }
+
+        [Parser(Opcode.SMSG_PLAY_SPEAKERBOT_SOUND)]
+        public static void HandlePlaySpeakerbotSound(Packet packet)
+        {
+            packet.ReadPackedGuid128("SourceObjectGUID");
+            packet.ReadUInt32("SoundId");
+        }
+
+        [Parser(Opcode.SMSG_START_ELAPSED_TIMER)]
+        public static void HandleStartElapsedTimer(Packet packet)
+        {
+            ReadElaspedTimer(packet);
+        }
+
+        [Parser(Opcode.SMSG_STOP_ELAPSED_TIMER)]
+        public static void HandleStopElapsedTimer(Packet packet)
+        {
+            packet.ReadInt32("TimerID");
+            packet.ReadBit("KeepTimer");
+        }
+
+        [Parser(Opcode.CMSG_RANDOM_ROLL)]
+        public static void HandleRandomRoll(Packet packet)
+        {
+            packet.ReadInt32("Min");
+            packet.ReadInt32("Max");
+            packet.ReadByte("PartyIndex");
+        }
+
+        [Parser(Opcode.SMSG_RANDOM_ROLL)]
+        public static void HandleRandomRollResult(Packet packet)
+        {
+            packet.ReadPackedGuid128("Roller");
+            packet.ReadPackedGuid128("RollerWowAccount");
+            packet.ReadInt32("Min");
+            packet.ReadInt32("Max");
+            packet.ReadInt32("Result");
+        }
+
+        [Parser(Opcode.SMSG_SET_TASK_COMPLETE)]
+        public static void HandleSetTaskComplete(Packet packet)
+        {
+            packet.ReadInt32("TaskID");
+        }
+
+        [Parser(Opcode.SMSG_DISPLAY_GAME_ERROR)]
+        public static void HandleDisplayGameError(Packet packet)
+        {
+            packet.ReadUInt32("Error");
+            var hasArg = packet.ReadBit("HasArg");
+            var hasArg2 = packet.ReadBit("HasArg2");
+
+            if (hasArg)
+                packet.ReadUInt32("Arg");
+
+            if (hasArg2)
+                packet.ReadUInt32("Arg2");
+        }
+
+
+        [Parser(Opcode.SMSG_RESTRICTED_ACCOUNT_WARNING)]
+        public static void HandleRestrictedAccountWarning(Packet packet)
+        {
+            packet.ReadUInt32("Arg");
+            packet.ReadByte("Type");
+        }
+
+        [Parser(Opcode.SMSG_WEEKLY_LAST_RESET)]
+        public static void HandleLastWeeklyReset(Packet packet)
+        {
+            packet.ReadTime("Reset");
         }
     }
 }

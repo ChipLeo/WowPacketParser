@@ -31,7 +31,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.CMSG_LOOT_RELEASE)]
-        public static void HandleLootRelease(Packet packet)
+        public static void HandleCLootRelease(Packet packet)
         {
             var guid = packet.StartBitStream(7, 4, 2, 3, 0, 5, 6, 1);
             packet.ParseBitStream(guid, 0, 6, 4, 2, 5, 3, 7, 1);
@@ -81,8 +81,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("Money");
         }
 
-        [Parser(Opcode.SMSG_LOOT_RELEASE_RESPONSE)]
-        public static void HandleLootReleaseResponse(Packet packet)
+        [Parser(Opcode.SMSG_LOOT_RELEASE)]
+        public static void HandleSLootRelease(Packet packet)
         {
             var guid16 = new byte[8];
             var guid24 = new byte[8];

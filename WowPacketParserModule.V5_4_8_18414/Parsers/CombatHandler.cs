@@ -28,7 +28,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             var guid = packet.StartBitStream(5, 7, 0, 4, 6, 2, 3, 1);
             packet.ParseBitStream(guid, 4, 6, 5);
-            packet.ReadEnum<AIReaction>("Reaction", TypeCode.Int32);
+            packet.ReadInt32E<AIReaction>("Reaction");
             packet.ParseBitStream(guid, 7, 1, 2, 0, 3);
             packet.WriteGuid("Guid", guid);
         }
@@ -52,7 +52,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
 
             packet.ReadInt32("Length");
-            var hitInfo = packet.ReadEnum<SpellHitInfo>("HitInfo", TypeCode.Int32);
+            var hitInfo = packet.ReadInt32E<SpellHitInfo>("HitInfo");
 
             packet.ReadPackedGuid("AttackerGUID");
             packet.ReadPackedGuid("TargetGUID");
@@ -77,7 +77,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 for (var i = 0; i < subDmgCount; ++i)
                     packet.ReadInt32("Damage Resisted", i);
 
-            var state = packet.ReadEnum<VictimStates>("VictimState", TypeCode.Byte);
+            var state = packet.ReadByteE<VictimStates>("VictimState");
             packet.ReadInt32("Unk Attacker State 0");
 
             packet.ReadEntry<Int32>(StoreNameType.Spell, "Melee Spell ID");
@@ -262,7 +262,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid2);
         }
 
-        [Parser(Opcode.SMSG_DUEL_INBOUNDS)]
+        [Parser(Opcode.SMSG_DUEL_IN_BOUNDS)]
         public static void HandleDuelInbounds(Packet packet)
         {
         }
@@ -356,7 +356,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("Int3C");
             packet.ReadXORByte(guid, 0);
             packet.ReadXORByte(guid, 7);
-            packet.ReadEnum<EnvironmentDamage>("Type", TypeCode.Byte);
+            packet.ReadByteE<EnvironmentDamage>("Type");
             packet.ReadXORByte(guid, 6);
             packet.ReadXORByte(guid, 3);
             packet.ReadXORByte(guid, 5);

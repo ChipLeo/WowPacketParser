@@ -21,7 +21,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_DB_QUERY_BULK)]
         public static void HandleDBQueryBulk(Packet packet)
         {
-            packet.ReadEnum<DB2Hash>("DB2 File", TypeCode.Int32);
+            packet.ReadInt32E<DB2Hash>("DB2 File");
             var count = packet.ReadBits(21);
 
             var guids = new byte[count][];
@@ -134,17 +134,17 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             creature.DisplayIds[3] = packet.ReadUInt32("Display Id 4");
             creature.DisplayIds[1] = packet.ReadUInt32("Display Id 2");
 			
-            creature.Expansion = packet.ReadEnum<ClientType>("Expansion", TypeCode.UInt32);
+            creature.Expansion = packet.ReadUInt32E<ClientType>("Expansion");
 			
-            creature.Type = packet.ReadEnum<CreatureType>("Type", TypeCode.Int32);
+            creature.Type = packet.ReadInt32E<CreatureType>("Type");
 			
             creature.Modifier2 = packet.ReadSingle("Modifier Health");
 
-            creature.TypeFlags = packet.ReadEnum<CreatureTypeFlag>("Type Flags", TypeCode.UInt32);
+            creature.TypeFlags = packet.ReadUInt32E<CreatureTypeFlag>("Type Flags");
 			
             creature.TypeFlags2 = packet.ReadUInt32("Creature Type Flags 2");
 
-            creature.Rank = packet.ReadEnum<CreatureRank>("Rank", TypeCode.Int32);
+            creature.Rank = packet.ReadInt32E<CreatureRank>("Rank");
             creature.MovementId = packet.ReadUInt32("Movement Id");
 
             var name = new string[8];
@@ -177,7 +177,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             creature.Modifier1 = packet.ReadSingle("Modifier Mana");
 
-            creature.Family = packet.ReadEnum<CreatureFamily>("Family", TypeCode.Int32);
+            creature.Family = packet.ReadInt32E<CreatureFamily>("Family");
 
             packet.AddSniffData(StoreNameType.Unit, entry.Key, "QUERY_RESPONSE");
 
@@ -197,15 +197,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var guid = packet.StartBitStream(3, 6, 7, 2, 5, 4, 0, 1);
             packet.ParseBitStream(guid, 5, 4, 7, 6, 1, 2);
 
-            var nameData = !packet.ReadBoolean("!nameData");
+            var nameData = !packet.ReadBool("!nameData");
             if (nameData)
             {
                 packet.ReadInt32("RealmID"); // 108
                 packet.ReadInt32("unk36");
-                packet.ReadEnum<Class>("Class", TypeCode.Byte);
-                packet.ReadEnum<Race>("Race", TypeCode.Byte);
+                packet.ReadByteE<Class>("Class");
+                packet.ReadByteE<Race>("Race");
                 packet.ReadByte("Level");
-                packet.ReadEnum<Gender>("Gender", TypeCode.Byte);
+                packet.ReadByteE<Gender>("Gender");
             }
             packet.ParseBitStream(guid, 0, 3);
 
@@ -313,7 +313,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_REALM_QUERY_RESPONSE)]
         public static void HandleQueryRealmNameResponse(Packet packet)
         {
-            var hasData = !packet.ReadBoolean("!HasData");
+            var hasData = !packet.ReadBool("!HasData");
             packet.ReadInt32("RealmID");
             if (hasData)
             {

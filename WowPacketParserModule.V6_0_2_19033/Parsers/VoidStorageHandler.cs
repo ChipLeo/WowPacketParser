@@ -1,5 +1,4 @@
-﻿using System;
-using WowPacketParser.Enums;
+﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 
@@ -23,27 +22,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadPackedGuid128("Creator", i);
                 packet.ReadUInt32("Slot", i);
 
-                packet.ReadUInt32("ItemID", i);
-                packet.ReadUInt32("RandomPropertiesSeed", i);
-                packet.ReadUInt32("RandomPropertiesID", i);
-                packet.ResetBitReader();
-                var hasBonuses = packet.ReadBit("HasItemBonus", i);
-                var hasModifications = packet.ReadBit("HasModifications", i);
-                if (hasBonuses)
-                {
-                    packet.ReadByte("Context", i);
-
-                    var bonusCount = packet.ReadUInt32();
-                    for (var j = 0; j < bonusCount; ++j)
-                        packet.ReadUInt32("BonusListID", i, j);
-                }
-
-                if (hasModifications)
-                {
-                    var modificationCount = packet.ReadUInt32() / 4;
-                    for (var j = 0; j < modificationCount; ++j)
-                        packet.ReadUInt32("Modification", i, j);
-                }
+                ItemHandler.ReadItemInstance(packet, i);
             }
         }
 
@@ -91,27 +70,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadPackedGuid128("Creator", i);
                 packet.ReadInt32("Slot", i);
 
-                packet.ReadUInt32("ItemID", i);
-                packet.ReadUInt32("RandomPropertiesSeed", i);
-                packet.ReadUInt32("RandomPropertiesID", i);
-                packet.ResetBitReader();
-                var hasBonuses = packet.ReadBit("HasItemBonus", i);
-                var hasModifications = packet.ReadBit("HasModifications", i);
-                if (hasBonuses)
-                {
-                    packet.ReadByte("Context", i);
-
-                    var bonusCount = packet.ReadUInt32();
-                    for (var j = 0; j < bonusCount; ++j)
-                        packet.ReadUInt32("BonusListID", i, j);
-                }
-
-                if (hasModifications)
-                {
-                    var modificationCount = packet.ReadUInt32() / 4;
-                    for (var j = 0; j < modificationCount; ++j)
-                        packet.ReadUInt32("Modification", i, j);
-                }
+                ItemHandler.ReadItemInstance(packet, i);
             }
 
             // RemovedItems
@@ -122,13 +81,19 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_VOID_TRANSFER_RESULT)]
         public static void HandleVoidTransferResults(Packet packet)
         {
-            packet.ReadEnum<VoidTransferError>("Error", TypeCode.UInt32);
+            packet.ReadUInt32E<VoidTransferError>("Error");
         }
 
         [Parser(Opcode.CMSG_VOID_STORAGE_UNLOCK)]
         public static void HandleVoidStorageUnlock(Packet packet)
         {
             packet.ReadPackedGuid128("Npc");
+        }
+
+        [Parser(Opcode.SMSG_VOID_STORAGE_FAILED)]
+        public static void HandleVoidStorageFailed(Packet packet)
+        {
+            packet.ReadByte("Reason");
         }
     }
 }

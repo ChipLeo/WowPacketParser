@@ -12,7 +12,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_SET_RAID_DIFFICULTY)]
         public static void HandleSetDifficulty(Packet packet)
         {
-            packet.ReadEnum<MapDifficulty>("Difficulty", TypeCode.Int32);
+            packet.ReadInt32E<MapDifficulty>("Difficulty");
         }
 
         [Parser(Opcode.CMSG_SAVE_CUF_PROFILES)]
@@ -177,7 +177,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_SET_DUNGEON_DIFFICULTY)]
         public static void HandleSetDungeonDifficulty(Packet packet)
         {
-            packet.ReadEnum<MapDifficulty>("Difficulty", TypeCode.Int32);
+            packet.ReadInt32E<MapDifficulty>("Difficulty");
         }
 
         [Parser(Opcode.SMSG_RAID_INSTANCE_MESSAGE)]
@@ -192,7 +192,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.CMSG_RESET_INSTANCES)]
-        [Parser(Opcode.SMSG_CORPSE_NOT_IN_INSTANCE)]
+        [Parser(Opcode.SMSG_AREA_TRIGGER_NO_CORPSE)]
         [Parser(Opcode.SMSG_UPDATE_DUNGEON_ENCOUNTER_FOR_LOOT)]
         public static void HandleInstanceNull(Packet packet)
         {

@@ -273,7 +273,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_VOID_TRANSFER_RESULT)]
         public static void HandleVoidTransferResults(Packet packet)
         {
-            packet.ReadEnum<VoidTransferError>("Error", TypeCode.UInt32);
+            packet.ReadUInt32E<VoidTransferError>("Error");
         }
     }
 }
