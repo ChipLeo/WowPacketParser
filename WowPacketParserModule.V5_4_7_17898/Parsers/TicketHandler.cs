@@ -7,7 +7,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
 {
     public static class TicketHandler
     {
-        [Parser(Opcode.SMSG_GMTICKET_GETTICKET)]
+        [Parser(Opcode.SMSG_GM_TICKET_GET_TICKET)]
         public static void HandleGetGMTicket(Packet packet)
         {
             packet.ReadInt32("Current Time");

@@ -102,7 +102,7 @@ namespace WowPacketParserModule.V5_4_1_17538.Parsers
             var objectName = new ObjectName
             {
                 ObjectType = ObjectType.Unit,
-                Name = creature.Name,
+                Name = creature.Name
             };
             Storage.ObjectNames.Add((uint)entry.Key, objectName, packet.TimeSpan);
         }

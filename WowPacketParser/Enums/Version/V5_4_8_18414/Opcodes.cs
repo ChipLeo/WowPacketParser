@@ -111,7 +111,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_GET_MAIL_LIST,                            0x077A}, //++
             {Opcode.CMSG_GET_MIRROR_IMAGE_DATA,                    0x02A3}, //++
             {Opcode.CMSG_GET_TIMEZONE_INFORMATION,                 0x18B2}, //++
-            {Opcode.CMSG_GMTICKET_GETTICKET,                       0x0AB6}, //++
+            {Opcode.CMSG_GM_TICKET_GET_TICKET,                     0x0AB6}, //++
             {Opcode.CMSG_GOSSIP_HELLO,                             0x12F3}, //++
             {Opcode.CMSG_GOSSIP_SELECT_OPTION,                     0x0748}, //++
             {Opcode.CMSG_GROUP_ASSISTANT_LEADER,                   0x1897}, //+-
@@ -129,10 +129,10 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_GUILD_BANK_DEPOSIT_MONEY,                 0x0770}, //--
             {Opcode.CMSG_GUILD_BANK_LOG_QUERY,                     0x0CD3}, //--
             {Opcode.CMSG_GUILD_BANK_UPDATE_TAB,                    0x07C2}, //--
-            {Opcode.CMSG_GUILD_BANKER_ACTIVATE,                    0x0372}, //--
-            {Opcode.CMSG_GUILD_DECLINE,                            0x147B}, //+-
+            {Opcode.CMSG_GUILD_BANK_ACTIVATE,                      0x0372}, //--
+            {Opcode.CMSG_GUILD_DECLINE_INVITATION,                 0x147B}, //+-
             {Opcode.CMSG_GUILD_DELETE_RANK,                        0x0D79}, //--
-            {Opcode.CMSG_GUILD_DEMOTE,                             0x1553}, //--
+            {Opcode.CMSG_GUILD_DEMOTE_MEMBER,                      0x1553}, //--
             {Opcode.CMSG_GUILD_DISBAND,                            0x0D73}, //--
             {Opcode.CMSG_GUILD_EVENT_LOG_QUERY,                    0x15D9}, //--
             {Opcode.CMSG_GUILD_INFO_TEXT,                          0x0C70}, //--
@@ -306,8 +306,8 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_SPIRIT_HEALER_ACTIVATE,                   0x0340}, //++
             {Opcode.CMSG_SPLIT_ITEM,                               0x02EC}, //+-
             {Opcode.CMSG_STAND_STATE_CHANGE,                       0x03E6}, //+-
-            {Opcode.CMSG_SUBMIT_BUG,                               0x0861}, //+-
-            {Opcode.CMSG_SUBMIT_COMPLAIN,                          0x030D}, //--
+            {Opcode.CMSG_SUPPORT_TICKET_SUBMIT_BUG,                0x0861}, //+-
+            {Opcode.CMSG_SUPPORT_TICKET_SUBMIT_COMPLAINT,          0x030D}, //--
             {Opcode.CMSG_SUGGESTION_SUBMIT,                        0x0A12}, //+-
             {Opcode.CMSG_SWAP_INV_ITEM,                            0x03DF}, //++
             {Opcode.CMSG_SWAP_ITEM,                                0x035D}, //++
@@ -456,7 +456,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BARBER_SHOP_RESULT,                       0x0C3F}, //+-
             {Opcode.SMSG_BATTLEFIELD_LIST,                         0x160E}, //++
             {Opcode.SMSG_BATTLEFIELD_MGR_EJECTED,                  0x18C2}, //--
-            {Opcode.SMSG_BATTLEFIELD_MGR_ENTERED,                  0x081B}, //--
+            {Opcode.SMSG_BATTLEFIELD_MGR_ENTERING,                 0x081B}, //--
             {Opcode.SMSG_BATTLEFIELD_RATED_INFO,                   0x0EBA}, //++
             {Opcode.SMSG_BATTLEFIELD_STATUS,                       0x0433}, //++
             {Opcode.SMSG_BATTLEFIELD_STATUS_QUEUED,                0x122E}, //++
@@ -497,7 +497,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             //{Opcode.SMSG_BLACKMARKET_BID_RESULT,                   0x18BA}, //-- bad id
             {Opcode.SMSG_BREAK_TARGET,                             0x021A}, //++
             {Opcode.SMSG_BUY_FAILED,                               0x1563}, //+-
-            {Opcode.SMSG_BUY_ITEM,                                 0x101A}, //++
+            {Opcode.SMSG_BUY_SUCCEEDED,                            0x101A}, //++
             {Opcode.SMSG_CALENDAR_RAID_LOCKOUT_ADDED,              0x0CAB}, //--
             {Opcode.SMSG_CALENDAR_SEND_CALENDAR,                   0x1A0A}, //--
             {Opcode.SMSG_CALENDAR_SEND_NUM_PENDING,                0x0A3F}, //++
@@ -572,7 +572,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GAMEOBJECT_QUERY_RESPONSE,                0x06BF}, //++
             {Opcode.SMSG_GAME_TIME_UPDATE,                         0x0E1B}, //++
             {Opcode.SMSG_GMRESPONSE_RECEIVED,                      0x148E}, //++
-            {Opcode.SMSG_GMTICKET_SYSTEMSTATUS,                    0x163B}, //++
+            {Opcode.SMSG_GM_TICKET_SYSTEM_STATUS,                  0x163B}, //++
             {Opcode.SMSG_GOSSIP_COMPLETE,                          0x034E}, //+-
             {Opcode.SMSG_GOSSIP_MESSAGE,                           0x0244}, //--
             {Opcode.SMSG_GOSSIP_POI,                               0x0785}, //++
@@ -583,9 +583,9 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GROUP_SET_LEADER,                         0x18BF}, //+-
             {Opcode.SMSG_GROUP_SET_ROLE,                           0x1E1F}, //--
             {Opcode.SMSG_GUILD_ACHIEVEMENT_DATA,                   0x0EF8}, //++
-            {Opcode.SMSG_GUILD_BANK_LIST,                          0x0B79}, //--
+            {Opcode.SMSG_GUILD_BANK_QUERY_RESULTS,                 0x0B79}, //--
             {Opcode.SMSG_GUILD_BANK_LOG_QUERY_RESULT,              0x0FF0}, //--
-            {Opcode.SMSG_GUILD_CHALLENGE_UPDATED,                  0x0AE9}, //--
+            {Opcode.SMSG_GUILD_CHALLENGE_UPDATE,                   0x0AE9}, //--
             {Opcode.SMSG_GUILD_COMMAND_RESULT,                     0x0EF1}, //--
             {Opcode.SMSG_GUILD_EVENT_LOG_QUERY_RESULTS,            0x1AF1}, //--
             {Opcode.SMSG_GUILD_INVITE,                             0x0F71}, //--

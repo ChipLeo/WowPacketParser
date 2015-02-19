@@ -279,7 +279,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
         }
 
-        [Parser(Opcode.SMSG_BATTLEFIELD_MGR_ENTERED)]
+        [Parser(Opcode.SMSG_BATTLEFIELD_MGR_ENTERING)]
         public static void HandleBattlefieldMgrEntered(Packet packet)
         {
         }

@@ -562,7 +562,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Vendor", guid);
         }
 
-        [Parser(Opcode.SMSG_BUY_ITEM)]
+        [Parser(Opcode.SMSG_BUY_SUCCEEDED)]
         public static void HandleBuyItemResponse(Packet packet)
         {
             var guid = packet.StartBitStream(3, 4, 7, 6, 0, 2, 1, 5);

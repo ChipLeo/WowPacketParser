@@ -1,4 +1,3 @@
-using System;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Store;
@@ -32,7 +31,7 @@ namespace WowPacketParser.Parsing.Parsers
             var objectName = new ObjectName
             {
                 ObjectType = ObjectType.Item,
-                Name = name,
+                Name = name
             };
             Storage.ObjectNames.Add(entry, objectName, packet.TimeSpan);
         }
@@ -258,14 +257,14 @@ namespace WowPacketParser.Parsing.Parsers
             packet.WriteGuid("Item Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_ITEM_REFUND_RESULT, ClientVersionBuild.Zero, ClientVersionBuild.V4_2_2_14545)]
+        [Parser(Opcode.SMSG_ITEM_PURCHASE_REFUND_RESULT, ClientVersionBuild.Zero, ClientVersionBuild.V4_2_2_14545)]
         public static void HandleItemRefundResult(Packet packet)
         {
             packet.ReadGuid("Item Guid");
             packet.ReadInt32("Error ID");
         }
 
-        [Parser(Opcode.SMSG_ITEM_REFUND_RESULT, ClientVersionBuild.V4_2_2_14545, ClientVersionBuild.V4_3_0_15005)]
+        [Parser(Opcode.SMSG_ITEM_PURCHASE_REFUND_RESULT, ClientVersionBuild.V4_2_2_14545, ClientVersionBuild.V4_3_0_15005)]
         public static void HandleItemRefundResult422(Packet packet)
         {
             var guid = packet.StartBitStream(5, 0, 3, 7, 4, 1, 6, 2);
@@ -281,7 +280,7 @@ namespace WowPacketParser.Parsing.Parsers
             packet.WriteGuid("Item Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_ITEM_REFUND_RESULT, ClientVersionBuild.V4_3_4_15595)]
+        [Parser(Opcode.SMSG_ITEM_PURCHASE_REFUND_RESULT, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleItemRefundResult434(Packet packet)
         {
             var guid = packet.StartBitStream(4, 5, 1, 6, 7, 0, 3, 2);
@@ -363,7 +362,7 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadByte("Bag Slot");
         }
 
-        [Parser(Opcode.SMSG_BUY_ITEM)]
+        [Parser(Opcode.SMSG_BUY_SUCCEEDED)]
         public static void HandleBuyItemResponse(Packet packet)
         {
             packet.ReadGuid("Vendor GUID");
@@ -1212,7 +1211,7 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadBit("Successful");
         }
 
-        [Parser(Opcode.SMSG_ITEM_TEXT_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_ITEM_TEXT_RESPONSE)]
         public static void HandleItemTextQueryResult(Packet packet)
         {
             if (!packet.ReadBool("Empty"))
@@ -1263,6 +1262,12 @@ namespace WowPacketParser.Parsing.Parsers
             var guid = packet.StartBitStream(3, 0, 5, 4, 6, 2, 1, 7);
             packet.ParseBitStream(guid, 1, 0, 3, 4, 7, 6, 5, 2);
             packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_ITEM_UPGRADE_RESULT)]
+        public static void HandleItemUpgradeResult(Packet packet)
+        {
+            packet.ReadBit("Result");
         }
     }
 }

@@ -230,7 +230,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("str", packet.ReadBits(10));
         }
 
-        [Parser(Opcode.CMSG_SUBMIT_BUG)]
+        [Parser(Opcode.CMSG_SUPPORT_TICKET_SUBMIT_BUG)]
         public static void HandleSubmitBug(Packet packet)
         {
             var pos = new Vector4();

@@ -43,13 +43,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
-        [Parser(Opcode.CMSG_GUILD_BANKER_ACTIVATE)]
+        [Parser(Opcode.CMSG_GUILD_BANK_ACTIVATE)]
         public static void HandleGuildBankerActivate(Packet packet)
         {
             packet.ReadToEnd();
         }
 
-        [Parser(Opcode.CMSG_GUILD_DECLINE)]
+        [Parser(Opcode.CMSG_GUILD_DECLINE_INVITATION)]
         public static void HandleGuildDecline(Packet packet)
         {
         }
@@ -60,7 +60,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
-        [Parser(Opcode.CMSG_GUILD_DEMOTE)]
+        [Parser(Opcode.CMSG_GUILD_DEMOTE_MEMBER)]
         public static void HandleGuildDemote(Packet packet)
         {
             var guid = packet.StartBitStream(3, 6, 0, 2, 7, 5, 4, 1);
@@ -400,7 +400,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_GUILD_BANK_LIST)]
+        [Parser(Opcode.SMSG_GUILD_BANK_QUERY_RESULTS)]
         public static void HandleServerGuildBankList(Packet packet)
         {
             packet.ReadToEnd();
@@ -412,7 +412,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadToEnd();
         }
 
-        [Parser(Opcode.SMSG_GUILD_CHALLENGE_UPDATED)]
+        [Parser(Opcode.SMSG_GUILD_CHALLENGE_UPDATE)]
         public static void HandleServerGuildChallengeUpdated(Packet packet)
         {
             packet.ReadToEnd();

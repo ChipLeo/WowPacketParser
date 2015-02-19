@@ -70,6 +70,6 @@ namespace WowPacketParserModule.V5_4_2_17658.Enums
         PetBattleCombatLog = 64,
         PetBattleInfo = 65,
         InstanceChat = 66,
-        InstanceChatLeader = 67,
+        InstanceChatLeader = 67
     }
 }

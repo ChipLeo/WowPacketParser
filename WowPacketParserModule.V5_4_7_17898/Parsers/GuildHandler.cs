@@ -417,7 +417,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.ReadUInt32("Current guild members");
         }
 
-        [Parser(Opcode.CMSG_GUILD_BANKER_ACTIVATE)]
+        [Parser(Opcode.CMSG_GUILD_BANK_ACTIVATE)]
         public static void HandleGuildBankerActivate(Packet packet)
         {
             var guid = new byte[8];
@@ -601,7 +601,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.WriteGuid("GUID", guid);
         }
 
-        [Parser(Opcode.CMSG_GUILD_DEMOTE)]
+        [Parser(Opcode.CMSG_GUILD_DEMOTE_MEMBER)]
         public static void HandleGuildDemote(Packet packet)
         {
             var guid = packet.StartBitStream(1, 0, 7, 5, 3, 2, 4, 6);
