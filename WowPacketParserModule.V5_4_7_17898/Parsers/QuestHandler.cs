@@ -674,19 +674,19 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
                         case QuestRequirementType.CreatureKill:
                         case QuestRequirementType.CreatureInteract:
                         case QuestRequirementType.PetBattleDefeatCreature:
-                            packet.ReadEntry<Int32>(StoreNameType.Unit, "Required Creature ID", i);
+                            packet.ReadInt32<UnitId>("Required Creature ID", i);
                             break;
                         case QuestRequirementType.Item:
-                            packet.ReadEntry<Int32>(StoreNameType.Item, "Required Item ID", i);
+                            packet.ReadInt32<ItemId>("Required Item ID", i);
                             break;
                         case QuestRequirementType.GameObject:
-                            packet.ReadEntry<Int32>(StoreNameType.GameObject, "Required GameObject ID", i);
+                            packet.ReadInt32<GOId>("Required GameObject ID", i);
                             break;
                         case QuestRequirementType.Currency:
                             packet.ReadUInt32("Required Currency ID", i);
                             break;
                         case QuestRequirementType.Spell:
-                            packet.ReadEntry<Int32>(StoreNameType.Spell, "Required Spell ID", i);
+                            packet.ReadInt32<SpellId>("Required Spell ID", i);
                             break;
                         case QuestRequirementType.FactionRepHigher:
                         case QuestRequirementType.FactionRepLower:

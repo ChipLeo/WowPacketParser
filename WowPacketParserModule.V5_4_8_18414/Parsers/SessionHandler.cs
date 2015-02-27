@@ -238,7 +238,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             pos.X = packet.ReadSingle();
             pos.O = packet.ReadSingle();
             pos.Y = packet.ReadSingle();
-            CoreParsers.MovementHandler.CurrentMapId = (uint)packet.ReadEntry<Int32>(StoreNameType.Map, "Map");
+            CoreParsers.MovementHandler.CurrentMapId = (uint)packet.ReadInt32<MapId>("Map");
             pos.Z = packet.ReadSingle();
 
             packet.AddValue("Position", pos);

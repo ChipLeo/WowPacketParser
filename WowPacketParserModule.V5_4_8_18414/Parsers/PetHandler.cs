@@ -196,7 +196,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.StartBitStream(guid1, 2, 4, 7, 0, 6, 1, 5, 3);
 
             if (hasTargetMask)
-                packet.ReadEnum<TargetFlag>("Target Flags", 20);
+                packet.ReadBitsE<TargetFlag>("Target Flags", 20);
 
             if (hasTargetString)
                 targetString = packet.ReadBits("hasTargetString", 7);
@@ -349,7 +349,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("hasGlyphIndex");
 
             if (hasSpellId)
-                packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID");
+                packet.ReadInt32<SpellId>("Spell ID");
             packet.WriteGuid("PetGuid", petGuid);
         }
 
@@ -394,15 +394,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadXORByte(guid1, 1);
             packet.ReadXORByte(guid1, 7);
 
-            packet.WriteGuid("Pet Guid", guid1);
-            packet.WriteGuid("Pet Number", guid2);
+            var GUID = new WowGuid64(BitConverter.ToUInt64(guid1, 0));
+            var Number = BitConverter.ToUInt64(guid2, 0);
+            packet.WriteGuid("Guid", guid1);
+            packet.AddValue("Pet Number", Number);
 
-            var PetGuid = new WowGuid64(BitConverter.ToUInt64(guid1, 0));
-            var PetNumberGuid = new WowGuid64(BitConverter.ToUInt64(guid2, 0));
-            var PetNumber = PetNumberGuid.GetEntry().ToString(CultureInfo.InvariantCulture); // Not sure about this.
-
-            // Store temporary name from Pet Number GUID (will be retrieved as uint64 in SMSG_PET_NAME_QUERY_RESPONSE)
-            StoreGetters.AddName(PetGuid, PetNumber);
+            // Store temporary name (will be replaced in SMSG_PET_NAME_QUERY_RESPONSE)
+            StoreGetters.AddName(GUID, Number.ToString(CultureInfo.InvariantCulture));
         }
 
         [Parser(Opcode.CMSG_PET_RENAME)]
@@ -442,7 +440,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var hasData = !packet.ReadBit("!hasData"); // 16
             var state = packet.ReadByteE<PetFeedback>("Pet state"); // 20
             if (hasData)
-                packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 16
+                packet.ReadInt32<SpellId>("Spell ID"); // 16
         }
 
         [Parser(Opcode.SMSG_PET_ACTION_SOUND)]
@@ -460,7 +458,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             packet.ReadByte("Stable Type"); // 168 0
             packet.ReadInt32("Pet Level"); // 41 1
-            packet.ReadEntry<UInt32>(StoreNameType.Unit, "Entry"); // 5
+            packet.ReadUInt32<UnitId>("Entry"); // 5
             packet.ReadInt32("Display ID"); // 4
             packet.ReadInt32("Pet Slot"); // 7 0
             packet.ReadInt32("Pet number"); // 6

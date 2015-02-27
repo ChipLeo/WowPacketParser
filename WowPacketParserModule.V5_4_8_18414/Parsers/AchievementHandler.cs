@@ -181,9 +181,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ParseBitStream(guid[i], 5);
                 packet.ReadPackedTime("Time", i);
 
-                packet.WriteGuid("Guid", guid[i], i);
-                packet.WriteLine("[{0}] Counter: {1}", i, BitConverter.ToUInt64(counter[i], 0));
-                packet.WriteLine("[{0}] Flags: {1}", i, flags[i]);
+                packet.WriteGuid("Criteria Guid", guid[i], i);
+                packet.AddValue("Criteria Counter", BitConverter.ToUInt64(counter[i], 0), i);
+                packet.AddValue("Criteria Flags", flags[i], i);
             }
         }
 
@@ -234,8 +234,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadXORByte(accountId, 0);
             packet.ReadXORByte(accountId, 6);
 
-            packet.WriteLine("Account: {0}", BitConverter.ToUInt64(accountId, 0));
-            packet.WriteLine("Counter: {0}", BitConverter.ToInt64(counter, 0));
+            packet.AddValue("Account", BitConverter.ToUInt64(accountId, 0));
+            packet.AddValue("Counter", BitConverter.ToInt64(counter, 0));
         }
 
         [Parser(Opcode.SMSG_CRITERIA_UPDATE)]

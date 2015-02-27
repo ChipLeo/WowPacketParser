@@ -4,6 +4,7 @@ using WowPacketParser.Enums.Version;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
+using WowPacketParser.Store.Objects;
 using WowPacketParserModule.V5_4_8_18414.Enums;
 using CoreParsers = WowPacketParser.Parsing.Parsers;
 
@@ -22,9 +23,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_AREATRIGGER)]
         public static void HandleClientAreaTrigger(Packet packet)
         {
-            packet.ReadInt32("AreaTrigger");
-            packet.ReadBit("unkb");
-            packet.ReadBit("unkb2");
+            var entry = packet.ReadEntry("Area Trigger Id");
+            packet.ReadBit("Unk bit1");
+            packet.ReadBit("Unk bit2");
+
+            packet.AddSniffData(StoreNameType.AreaTrigger, entry.Key, "AREATRIGGER");
         }
 
         [Parser(Opcode.CMSG_BUY_BANK_SLOT)]
@@ -83,7 +86,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_LOAD_SCREEN)]
         public static void HandleClientEnterWorld(Packet packet)
         {
-            var mapId = packet.ReadEntry<UInt32>(StoreNameType.Map, "Map Id");
+            var mapId = packet.ReadUInt32<MapId>("Map Id");
             packet.ReadBit("Loading");
             CoreParsers.MovementHandler.CurrentMapId = (uint)mapId;
             packet.AddSniffData(StoreNameType.Map, (int)mapId, "LOAD_SCREEN");
@@ -282,7 +285,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("string1AB", bits1AB);
 
             for (var i = 0; i < zones; ++i)
-                packet.ReadEntry<Int32>(StoreNameType.Zone, "Zone Id");
+                packet.ReadInt32<ZoneId>("Zone Id");
 
             packet.ReadWoWString("Player Name", PlayerNameLen);
 
@@ -510,7 +513,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             var guid = packet.StartBitStream(0, 4, 2, 6, 5, 1, 3, 7);
             packet.ParseBitStream(guid, 3);
-            packet.ReadEntry<UInt32>(StoreNameType.Item, "Entry"); // 24
+            packet.ReadUInt32<ItemId>("Entry"); // 24
             packet.ReadUInt32E<DrunkenState>("Drunken State"); // 28
             packet.ParseBitStream(guid, 4, 6, 7, 0, 2, 5, 1);
             packet.WriteGuid("Guid", guid);
@@ -529,28 +532,30 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS)]
         public static void HandleFeatureSystemStatus(Packet packet)
         {
-            packet.ReadInt32("unk48");
-            packet.ReadInt32("unk80");
-            packet.ReadInt32("unk56");
-            packet.ReadByte("unk53");
-            packet.ReadInt32("unk20");
-            packet.ReadBit("unk45");
-            packet.ReadBit("unk47");
+            packet.ReadInt32("Scroll of Resurrections Per Day");
+            packet.ReadInt32("Scroll of Resurrections Remaining");
+
+            packet.ReadInt32("Realm Id?");
+            packet.ReadByte("Complain System Status");
+            packet.ReadInt32("Unused Int32");
+
+            packet.ReadBit("bit26");
+            packet.ReadBit("Shop Enabled");
             packet.ReadBit("unk52");
             packet.ReadBit("unk17");
             packet.ReadBit("unk16");
             packet.ReadBit("unk44");
             packet.ReadBit("unk76");
-            var unk72 = packet.ReadBit("unk72");
+            var sessionTimeAlert = packet.ReadBit("Session Time Alert");
             packet.ReadBit("unk46");
-            var unk40 = packet.ReadBit("unk40");
-            if (unk72)
+            var quickTicket = packet.ReadBit("EuropaTicketSystemEnabled");
+            if (sessionTimeAlert)
             {
                 packet.ReadInt32("unk60");
                 packet.ReadInt32("unk64");
                 packet.ReadInt32("unk68");
             }
-            if (unk40)
+            if (quickTicket)
             {
                 packet.ReadInt32("unk36");
                 packet.ReadInt32("unk32");
@@ -861,9 +866,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandlePlaySound(Packet packet)
         {
             var guid = packet.StartBitStream(2, 3, 7, 6, 0, 5, 4, 1);
-            packet.ReadInt32("Sound");
+            var sound = packet.ReadUInt32("Sound Id");
             packet.ParseBitStream(guid, 3, 2, 4, 7, 5, 0, 6, 1);
             packet.WriteGuid("Guid", guid);
+
+            Storage.Sounds.Add(sound, packet.TimeSpan);
         }
 
         [Parser(Opcode.SMSG_PLAYED_TIME)]
@@ -879,7 +886,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             var guid = packet.StartBitStream(2, 4, 0, 3, 6, 7, 5, 1);
             packet.ParseBitStream(guid, 6, 1, 2, 3, 4, 5, 7, 0);
-            packet.ReadEntry<UInt32>(StoreNameType.Area, "Area ID");
+            packet.ReadUInt32<AreaId>("Area ID");
             packet.WriteGuid("Guid", guid);
         }
 
@@ -1234,9 +1241,18 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_WEATHER)]
         public static void Handleweather(Packet packet)
         {
-            packet.ReadInt32("unk24");
-            packet.ReadSingle("unk16");
-            packet.ReadBit("unk20");
+            var state = packet.ReadInt32E<WeatherState>("State");
+            var grade = packet.ReadSingle("Grade");
+            var unk = packet.ReadBit("Unk Bit"); // Type
+
+            Storage.WeatherUpdates.Add(new WeatherUpdate
+            {
+                MapId = CoreParsers.MovementHandler.CurrentMapId,
+                ZoneId = 0, // fixme
+                State = state,
+                Grade = grade,
+                Unk = unk
+            }, packet.TimeSpan);
         }
 
         [Parser(Opcode.SMSG_WHO)]
@@ -1334,11 +1350,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadByteE<Gender>("Gender", i);
                 packet.ReadXORByte(guildGUID[i], 5);
                 packet.ReadByte("Level", i);
-                packet.ReadEntry<Int32>(StoreNameType.Zone, "Zone Id", i);
+                packet.ReadInt32<ZoneId>("Zone Id", i);
 
                 packet.WriteGuid("PlayerGUID", playerGUID[i], i);
                 packet.WriteGuid("GuildGUID", guildGUID[i], i);
-                packet.WriteLine("[{0}] Account: {1}", i, BitConverter.ToUInt64(accountId[i], 0));
+                packet.AddValue("Account", BitConverter.ToUInt64(accountId[i], 0), i);
             }
         }
 

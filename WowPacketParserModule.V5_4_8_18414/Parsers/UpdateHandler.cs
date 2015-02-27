@@ -262,7 +262,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 hasFallData = packet.ReadBit("has fall data", index); // 132+
 
                 if (hasMovementFlags) // 16*4
-                    moveInfo.Flags = packet.ReadEnum<MovementFlag>("Movement Flags", 30, index);
+                    moveInfo.Flags = packet.ReadBitsE<MovementFlag>("Movement Flags", 30, index);
 
                 hasFloat3 = !packet.ReadBit("skip float3", index); // 136+ if (skipFloat3) dword ptr [esi+88h] = 0 else dword ptr [esi+88h] = ds:dword_D26EA8
                 moveInfo.HasSplineData = packet.ReadBit("has Spline", index); // 344+
@@ -281,7 +281,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                         hasSplineUnkPart = packet.ReadBit(); // 304+
                         splineCount = packet.ReadBits("Spline Waypoints", 20, index); // 264+
                         packet.ReadBits("Unk bits", 2, index); // 280-
-                        packet.ReadEnum<SplineFlag434>("Spline flags", 25, index); // 224
+                        packet.ReadBitsE<SplineFlag434>("Spline flags", 25, index); // 224
 
                         if (hasSplineUnkPart) // 304
                         {
@@ -297,7 +297,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     hasFallDirection = packet.ReadBit("Has Fall Direction", index); // 128
 
                 if (hasMovementFlagsExtra) // 20*4
-                    moveInfo.FlagsExtra = packet.ReadEnum<MovementFlagExtra>("Extra Movement Flags", 13, index); // 20*4
+                    moveInfo.FlagsExtra = packet.ReadBitsE<MovementFlagExtra>("Extra Movement Flags", 13, index); // 20*4
             }
             //107bits
 

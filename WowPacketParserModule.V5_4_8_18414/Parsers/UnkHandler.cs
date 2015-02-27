@@ -146,7 +146,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_UNK_1370)]
         public static void HandleUnk1370(Packet packet)
         {
-            packet.ReadEntry<UInt32>(StoreNameType.Quest, "Quest ID"); // 24
+            packet.ReadUInt32<QuestId>("Quest ID"); // 24
             packet.ReadByte("unk28"); // 28
             var guid = packet.StartBitStream(5, 3, 0, 6, 1, 2, 7, 4);
             packet.ParseBitStream(guid, 1, 2, 0, 5, 6, 4, 7, 3);
@@ -195,7 +195,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("Suffix factor"); // 24
                 packet.ReadInt32("unk36"); // 36
                 packet.ReadInt32("unk32"); // 32
-                packet.ReadEntry<UInt32>(StoreNameType.Item, "Entry"); // 48
+                packet.ReadUInt32<ItemId>("Entry"); // 48
                 packet.ReadInt32("unk28"); // 28
             }
             packet.ReadInt32("unk56"); // 56
@@ -375,7 +375,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             guid[5] = packet.ReadBit();
             guid[4] = packet.ReadBit();
             packet.ParseBitStream(guid, 0, 1, 2, 7, 3, 6, 5);
-            packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 20
+            packet.ReadInt32<SpellId>("Spell ID"); // 20
             packet.ParseBitStream(guid, 4);
             packet.WriteGuid("Guid", guid);
         }

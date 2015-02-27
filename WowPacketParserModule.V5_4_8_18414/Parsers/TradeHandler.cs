@@ -125,7 +125,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleTradeStatus(Packet packet)
         {
             packet.ReadBit("Unk Bit");
-            var status = packet.ReadEnum<TradeStatus548>("Status", 5);
+            var status = packet.ReadBitsE<TradeStatus548>("Status", 5);
             switch (status)
             {
                 case TradeStatus548.TRADE_STATUS_PROPOSED:
@@ -160,7 +160,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             packet.ReadInt32("Trade Id"); // 48
             packet.ReadInt32("Unk Int32 2"); // 40
-            packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 16
+            packet.ReadInt32<SpellId>("Spell ID"); // 16
             packet.ReadBool("Trader"); // 44
             packet.ReadInt64("Gold"); // 56
             packet.ReadInt32("Unk Slot 1"); // 68
@@ -244,7 +244,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadXORByte(guids1[i], 1);
                 packet.ReadXORByte(guids1[i], 2);
                 packet.ReadXORByte(guids1[i], 3);
-                packet.ReadEntry<UInt32>(StoreNameType.Item, "Item Entry", i);
+                packet.ReadUInt32<ItemId>("Item Entry", i);
                 packet.ReadXORByte(guids1[i], 7);
                 packet.ReadXORByte(guids1[i], 0);
                 packet.ReadUInt32("Item Count", i); // 46

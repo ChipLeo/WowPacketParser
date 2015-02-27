@@ -171,7 +171,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 			
             creature.QuestItems = new uint[qItemCount];
             for (var i = 0; i < qItemCount; i++)
-                creature.QuestItems[i] = (uint)packet.ReadEntry<UInt32>(StoreNameType.Item, "Quest Item", i);			
+                creature.QuestItems[i] = (uint)packet.ReadUInt32<ItemId>("Quest Item", i);			
 			
             creature.KillCredits[1] = packet.ReadUInt32("Kill Credit 2");
 

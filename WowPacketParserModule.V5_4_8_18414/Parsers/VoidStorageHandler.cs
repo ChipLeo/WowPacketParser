@@ -187,7 +187,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadXORByte(creatorGuid[i], 2);
                 packet.ReadXORByte(creatorGuid[i], 5);
                 packet.ReadXORByte(creatorGuid[i], 3);
-                packet.ReadEntry<UInt32>(StoreNameType.Item, "Item Entry", i);
+                packet.ReadUInt32<ItemId>("Item Entry", i);
                 packet.ReadXORByte(itemId[i], 5);
                 packet.ReadXORByte(itemId[i], 1);
                 packet.ReadInt32("Item Slot", i);
@@ -239,7 +239,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             {
                 packet.ReadInt32("Item Slot", i); //28
                 packet.ReadXORByte(guid[i], 5);
-                packet.ReadEntry<UInt32>(StoreNameType.Item, "Item Entry", i); //16
+                packet.ReadUInt32<ItemId>("Item Entry", i); //16
                 packet.ReadXORByte(guid[i], 6);
                 packet.ReadXORByte(guid[i], 3);
                 packet.ReadInt32("Item Suffix Factor", i); //20

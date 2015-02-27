@@ -179,6 +179,35 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadUInt32("Criteria Id", i); // 24
         }
 
+        [Parser(Opcode.CMSG_GUILD_SET_NOTE)]
+        public static void HandleGuildPlayerSetNote(Packet packet)
+        {
+            var playerGUID = new byte[8];
+
+            playerGUID[1] = packet.ReadBit();
+            var noteLength = packet.ReadBits("note length", 8);
+            playerGUID[4] = packet.ReadBit();
+            playerGUID[2] = packet.ReadBit();
+            var ispublic = packet.ReadBit("IsPublic");
+            playerGUID[3] = packet.ReadBit();
+            playerGUID[5] = packet.ReadBit();
+            playerGUID[0] = packet.ReadBit();
+            playerGUID[6] = packet.ReadBit();
+            playerGUID[7] = packet.ReadBit();
+
+            packet.ReadXORByte(playerGUID, 5);
+            packet.ReadXORByte(playerGUID, 1);
+            packet.ReadXORByte(playerGUID, 6);
+            packet.ReadWoWString("note", noteLength);
+            packet.ReadXORByte(playerGUID, 0);
+            packet.ReadXORByte(playerGUID, 7);
+            packet.ReadXORByte(playerGUID, 4);
+            packet.ReadXORByte(playerGUID, 3);
+            packet.ReadXORByte(playerGUID, 2);
+
+            packet.WriteGuid("Player GUID", playerGUID);
+        }
+
         [Parser(Opcode.CMSG_GUILD_NEWS_UPDATE_STICKY)]
         [Parser(Opcode.CMSG_GUILD_PROMOTE_MEMBER)]
         [Parser(Opcode.CMSG_GUILD_QUERY_NEWS)]
@@ -456,30 +485,31 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var guid = new byte[8];
             var guid2 = new byte[8];
 
-            var len = new uint[255];
+            uint[] rankName = null;
             var count = 0u;
-            var len2 = 0u;
+            uint nameLen = 0;
 
 
             guid[5] = packet.ReadBit();
-            var unk16 = packet.ReadBit("unk16");
-            if (unk16)
+            var hasData = packet.ReadBit("hasData");
+            if (hasData)
             {
-                count = packet.ReadBits("cnt", 21);
+                count = packet.ReadBits("Rank Count", 21);
                 guid2[5] = packet.ReadBit();
                 guid2[1] = packet.ReadBit();
                 guid2[4] = packet.ReadBit();
                 guid2[7] = packet.ReadBit();
+                rankName = new uint[count];
                 for (var i = 0; i < count; i++)
                 {
-                    len[i] = packet.ReadBits(7);
+                    rankName[i] = packet.ReadBits(7);
                 }
                 guid2[3] = packet.ReadBit();
                 guid2[2] = packet.ReadBit();
                 guid2[0] = packet.ReadBit();
                 guid2[6] = packet.ReadBit();
 
-                len2 = packet.ReadBits("unk36", 7);
+                nameLen = packet.ReadBits(7);
             }
             guid[3] = packet.ReadBit();
             guid[7] = packet.ReadBit();
@@ -488,23 +518,23 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             guid[0] = packet.ReadBit();
             guid[4] = packet.ReadBit();
             guid[6] = packet.ReadBit();
-            if (unk16)
+            if (hasData)
             {
-                packet.ReadInt32("unk160");
-                packet.ReadInt32("unk152");
+                packet.ReadInt32("Emblem Border Style");
+                packet.ReadInt32("Emblem Style");
                 packet.ParseBitStream(guid2, 2, 7);
-                packet.ReadInt32("unk156");
+                packet.ReadInt32("Emblem Color");
                 packet.ReadInt32("RealmID"); // 32
                 for (var i = 0; i < count; i++)
                 {
-                    packet.ReadInt32("unk144", i);
-                    packet.ReadInt32("unk140", i);
-                    packet.ReadWoWString("str", len[i], i);
+                    packet.ReadInt32("Rights Order", i);
+                    packet.ReadInt32("Creation Order", i);
+                    packet.ReadWoWString("Rank Name", rankName[i], i);
                 }
-                packet.ReadWoWString("str", len2);
-                packet.ReadInt32("unk168");
+                packet.ReadWoWString("Guild Name", nameLen);
+                packet.ReadInt32("Emblem Background Color");
                 packet.ParseBitStream(guid2, 5, 4);
-                packet.ReadInt32("unk164");
+                packet.ReadInt32("Emblem Border Color");
                 packet.ParseBitStream(guid2, 1, 6, 0, 3);
                 packet.WriteGuid("Guid2", guid2);
             }
@@ -557,6 +587,36 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("Name", count16);
             packet.ParseBitStream(guid120, 3, 2, 6, 7, 5, 0, 1, 4);
             packet.WriteGuid("Guid", guid120);
+        }
+
+        [Parser(Opcode.SMSG_GUILD_SET_NOTE)]
+        public static void HandleGuildClientSetNote(Packet packet)
+        {
+            var playerGUID = new byte[8];
+
+            playerGUID[1] = packet.ReadBit();
+            var noteLength = packet.ReadBits("note length", 8);
+            var ispublic = packet.ReadBit("IsPublic");
+            playerGUID[4] = packet.ReadBit();
+            playerGUID[2] = packet.ReadBit();
+            playerGUID[3] = packet.ReadBit();
+            playerGUID[5] = packet.ReadBit();
+            playerGUID[0] = packet.ReadBit();
+            playerGUID[6] = packet.ReadBit();
+            playerGUID[7] = packet.ReadBit();
+
+            packet.ReadXORByte(playerGUID, 5);
+            packet.ReadXORByte(playerGUID, 1);
+            packet.ReadXORByte(playerGUID, 6);
+            packet.ReadXORByte(playerGUID, 0);
+            packet.ReadWoWString("note", noteLength);
+            packet.ReadXORByte(playerGUID, 7);
+            packet.ReadXORByte(playerGUID, 4);
+            packet.ReadXORByte(playerGUID, 3);
+            packet.ReadXORByte(playerGUID, 2);
+            packet.ResetBitReader();
+
+            packet.WriteGuid("Player GUID", playerGUID);
         }
 
         [Parser(Opcode.CMSG_GUILD_SET_RANK_PERMISSIONS)]
@@ -683,7 +743,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_TURN_IN_PETITION_RESULTS)]
         public static void HandlePetitionTurnInResults(Packet packet)
         {
-            packet.ReadEnum<PetitionResultType>("Result", 4);
+            packet.ReadBitsE<PetitionResultType>("Result", 4);
         }
     }
 }

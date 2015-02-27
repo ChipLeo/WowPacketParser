@@ -82,7 +82,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     packet.ReadInt32("unk100", i, j); // 100
                     packet.ReadByte("unk104", i, j); // 104
                 }
-                packet.ReadEntry<UInt32>(StoreNameType.Item, "Item Entry", i); // 76
+                packet.ReadUInt32<ItemId>("Item Entry", i); // 76
                 packet.ParseBitStream(guid64[i], 6, 4, 7, 2);
                 if (unk88[i])
                     packet.ReadInt32("unk84", i); // 84

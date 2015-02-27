@@ -149,6 +149,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_GUILD_GET_ROSTER,                         0x1459}, //--
             {Opcode.CMSG_GUILD_SET_ACHIEVEMENT_TRACKING,           0x0CF0}, //++
             {Opcode.CMSG_GUILD_SET_GUILD_MASTER,                   0x1A83}, //--
+            {Opcode.CMSG_GUILD_SET_NOTE,                           0x05DA}, //--
             {Opcode.CMSG_GUILD_SET_RANK_PERMISSIONS,               0x0C7A}, //+-
             {Opcode.CMSG_IGNORE_TRADE,                             0x0276}, //++
             {Opcode.CMSG_INITIATE_TRADE,                           0x0267}, //++
@@ -436,7 +437,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_ALL_ACHIEVEMENT_DATA,                     0x180A}, //++
             {Opcode.SMSG_AREA_SPIRIT_HEALER_TIME,                  0x188E}, //++
             {Opcode.SMSG_AREA_TRIGGER_DENIED,                      0x148F}, //++ pair 1C44
-            {Opcode.SMSG_ARENA_SEASON_WORLD_STATE,                 0x069B}, //++
+            {Opcode.SMSG_PVP_SEASON,                               0x069B}, //++
             {Opcode.SMSG_ARCHAEOLOGY_SURVERY_CAST,                 0x1160}, //++
             {Opcode.SMSG_ATTACKERSTATEUPDATE,                      0x06AA}, //++
             {Opcode.SMSG_ATTACKSTART,                              0x1A9E}, //++
@@ -596,6 +597,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GUILD_QUERY_RESPONSE,                     0x1B79}, //++
             {Opcode.SMSG_GUILD_RANKS,                              0x0A79}, //--
             {Opcode.SMSG_GUILD_SEND_RANK_CHANGE,                   0x0A60}, //--
+            {Opcode.SMSG_GUILD_SET_NOTE,                           0x0BE1}, //--
             {Opcode.SMSG_GUILD_RENAMED,                            0x0E70}, //++
             {Opcode.SMSG_GUILD_REPUTATION_WEEKLY_CAP,              0x1A71}, //--
             {Opcode.SMSG_GUILD_REWARDS_LIST,                       0x1A69}, //--

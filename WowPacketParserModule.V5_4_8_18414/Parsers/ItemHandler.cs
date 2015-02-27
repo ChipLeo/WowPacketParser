@@ -133,7 +133,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             packet.ReadUInt32("Bag Slot"); // 44
             packet.ReadUInt32("Item Count"); // 40
-            packet.ReadEntry<UInt32>(StoreNameType.Item, "Entry"); // 36
+            packet.ReadUInt32<ItemId>("Entry"); // 36
             packet.ReadUInt32("Vendor Slot"); // 32
 
             var guid1 = new byte[8];
@@ -287,7 +287,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             for (var i = 0; i < count; i++)
             {
                 packet.ParseBitStream(guid[i], 1);
-                packet.ReadEntry<UInt32>(StoreNameType.Item, "Entry", i);
+                packet.ReadUInt32<ItemId>("Entry", i);
                 packet.ParseBitStream(guid[i], 0, 5, 6, 4, 7, 2, 3);
                 packet.WriteGuid("GUID", guid[i], i);
             }
@@ -557,7 +557,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var guid = packet.StartBitStream(6, 3, 1, 2, 4, 5, 0, 7);
             packet.ReadByteE<BuyResult>("Result");
             packet.ParseBitStream(guid, 2, 7);
-            packet.ReadEntry<UInt32>(StoreNameType.Item, "Entry");
+            packet.ReadUInt32<ItemId>("Entry");
             packet.ParseBitStream(guid, 4, 5, 1, 3, 6, 0);
             packet.WriteGuid("Vendor", guid);
         }
@@ -595,7 +595,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 {
                     var item = Storage.ItemTemplates.ContainsKey(itemId) ? Storage.ItemTemplates[itemId].Item1 : new ItemTemplate();
 
-                    packet.ReadEntry<UInt32>(StoreNameType.Item, "Entry");
+                    packet.ReadUInt32<ItemId>("Entry");
                     item.Class = packet.ReadInt32E<ItemClass>("Class");
                     item.SubClass = packet.ReadUInt32("Sub Class");
                     item.SoundOverrideSubclass = packet.ReadInt32("Sound Override Subclass");
@@ -611,7 +611,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 {
                     var item = Storage.ItemTemplates.ContainsKey(itemId) ? Storage.ItemTemplates[itemId].Item1 : new ItemTemplate();
 
-                    packet.ReadEntry<UInt32>(StoreNameType.Item, "Entry");
+                    packet.ReadUInt32<ItemId>("Entry");
                     item.Quality = packet.ReadByteE<ItemQuality>("Quality");
                     item.Flags1 = packet.ReadUInt32E<ItemProtoFlags>("Flags");
                     item.Flags2 = packet.ReadInt32E<ItemFlagExtra>("Extra Flags");
@@ -628,7 +628,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     item.RequiredLevel = packet.ReadUInt32("Required Level");
                     item.RequiredSkillId = packet.ReadUInt32("Required Skill ID");
                     item.RequiredSkillLevel = packet.ReadUInt32("Required Skill Level");
-                    item.RequiredSpell = (uint)packet.ReadEntry<Int32>(StoreNameType.Spell, "Required Spell");
+                    item.RequiredSpell = (uint)packet.ReadInt32<SpellId>("Required Spell");
                     item.RequiredHonorRank = packet.ReadUInt32("Required Honor Rank");
                     item.RequiredCityRank = packet.ReadUInt32("Required City Rank");
                     item.RequiredRepFaction = packet.ReadUInt32("Required Rep Faction");
@@ -648,13 +648,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     for (var i = 0; i < 10; i++)
                         item.StatValues[i] = packet.ReadInt32("Stat Value", i);
 
-                    item.StatUnk1 = new int[10];
+                    item.StatTypes = new ItemModType[10];
                     for (var i = 0; i < 10; i++)
-                        item.StatUnk1[i] = packet.ReadInt32("Unk UInt32 1", i);
+                    {
+                        var statType = packet.ReadInt32E<ItemModType>("Stat Type", i);
+                        item.StatTypes[i] = statType == ItemModType.None ? ItemModType.Mana : statType; // TDB
+                    }
 
-                    item.StatUnk2 = new int[10];
+                    item.StatValues = new int[10];
                     for (var i = 0; i < 10; i++)
-                        item.StatUnk2[i] = packet.ReadInt32("Unk UInt32 2", i);
+                        item.StatValues[i] = packet.ReadInt32("Stat Values", i);
 
                     item.ScalingStatDistribution = packet.ReadInt32("Scaling Stat Distribution");
                     item.DamageType = packet.ReadInt32E<DamageType>("Damage Type");
@@ -663,7 +666,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
                     item.TriggeredSpellIds = new int[5];
                     for (var i = 0; i < 5; i++)
-                        item.TriggeredSpellIds[i] = packet.ReadEntry<Int32>(StoreNameType.Spell, "Triggered Spell ID", i);
+                        item.TriggeredSpellIds[i] = packet.ReadInt32<SpellId>("Triggered Spell ID", i);
 
                     item.TriggeredSpellTypes = new ItemSpellTriggerType[5];
                     for (var i = 0; i < 5; i++)
@@ -700,14 +703,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     item.PageText = packet.ReadUInt32("Page Text");
                     item.Language = packet.ReadInt32E<Language>("Language");
                     item.PageMaterial = packet.ReadInt32E<PageMaterial>("Page Material");
-                    item.StartQuestId = (uint)packet.ReadEntry<Int32>(StoreNameType.Quest, "Start Quest");
+                    item.StartQuestId = (uint)packet.ReadInt32<QuestId>("Start Quest");
                     item.LockId = packet.ReadUInt32("Lock ID");
                     item.Material = packet.ReadInt32E<Material>("Material");
                     item.SheathType = packet.ReadInt32E<SheathType>("Sheath Type");
                     item.RandomPropery = packet.ReadInt32("Random Property");
                     item.RandomSuffix = packet.ReadUInt32("Random Suffix");
                     item.ItemSet = packet.ReadUInt32("Item Set");
-                    item.AreaId = (uint)packet.ReadEntry<UInt32>(StoreNameType.Area, "Area");
+                    item.AreaId = (uint)packet.ReadUInt32<AreaId>("Area");
                     // In this single (?) case, map 0 means no map
                     var map = packet.ReadInt32();
                     item.MapId = map;
@@ -746,7 +749,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 {
                     var unit = Storage.UnitTemplates.ContainsKey(itemId) ? Storage.UnitTemplates[itemId].Item1 : new UnitTemplate();
 
-                    packet.ReadEntry<UInt32>(StoreNameType.Unit, "Entry");
+                    packet.ReadUInt32<UnitId>("Entry");
                     packet.ReadBytes(48);
                     packet.ReadInt16("NameLen");
                     unit.Name = packet.ReadCString("Name");
@@ -1004,7 +1007,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("Suffix Factor"); // 36
             packet.ReadXORByte(itemGuid, 7); // 55
             packet.ReadInt32("unk60"); // 60
-            packet.ReadEntry<UInt32>(StoreNameType.Item, "Entry"); // 72
+            packet.ReadUInt32<ItemId>("Entry"); // 72
             packet.ReadInt32("Random Property ID"); // 68
             packet.ReadXORByte(itemGuid, 6); // 54
             packet.ReadInt32("unk24"); // 24

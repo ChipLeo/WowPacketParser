@@ -196,7 +196,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadUInt32E<QuestFlags>("Flags", i);//528
                 packet.ReadInt32("Level", i);//8
                 packet.ReadUInt32("Icon", i);//4
-                packet.ReadEntry<UInt32>(StoreNameType.Quest, "Quest ID", i); //528
+                packet.ReadUInt32<QuestId>("Quest ID", i); //528
                 packet.ReadUInt32E<QuestFlags2>("Flags 2", i);//532
             }
 
@@ -380,7 +380,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("Display ID", i);    // +12
                 var buyCount = packet.ReadUInt32("Buy Count", i);    // +28
 
-                vendorItem.ItemId = (uint)packet.ReadEntry<Int32>(StoreNameType.Item, "Item ID", i);   // +8
+                vendorItem.ItemId = (uint)packet.ReadInt32<ItemId>("Item ID", i);   // +8
 
                 if (hasExtendedCost[i])
                     vendorItem.ExtendedCostId = packet.ReadUInt32("Extended Cost", i);    // +36
@@ -402,7 +402,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var vendorGUID = new WowGuid64(BitConverter.ToUInt64(guid, 0));
             Storage.NpcVendors.Add(vendorGUID.GetEntry(), npcVendor, packet.TimeSpan);
         }
-
 
         [HasSniffData]
         [Parser(Opcode.SMSG_NPC_TEXT_UPDATE)]
@@ -537,7 +536,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ParseBitStream(guid, 1, 2, 0, 3, 4);
             packet.ReadInt32("Reason"); // 24
             packet.ParseBitStream(guid, 5, 6, 7);
-            packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID"); // 28
+            packet.ReadInt32<SpellId>("Spell ID"); // 28
             packet.WriteGuid("Guid", guid);
         }
 
@@ -568,7 +567,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 var trainerSpell = new TrainerSpell();
                 trainerSpell.RequiredLevel = packet.ReadByte("Required Level", i);
                 trainerSpell.Cost = packet.ReadUInt32("Cost", i);
-                trainerSpell.Spell = (uint)packet.ReadEntry<Int32>(StoreNameType.Spell, "Spell ID", i);
+                trainerSpell.Spell = (uint)packet.ReadInt32<SpellId>("Spell ID", i);
                 for (var j = 0; j < 3; ++j)
                     packet.ReadInt32("Int818", i, j);
                 trainerSpell.RequiredSkill = packet.ReadUInt32("Required Skill", i);

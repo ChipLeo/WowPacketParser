@@ -80,7 +80,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             var message = new DefenseMessage();
 
-            var zoneId = packet.ReadEntry<UInt32>(StoreNameType.Zone, "Zone Id");
+            var zoneId = packet.ReadUInt32<ZoneId>("Zone Id");
             var length = packet.ReadBits("Message Length", 12);
             message.Text = packet.ReadWoWString("Message", length);
 
@@ -96,7 +96,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             //text.Language = packet.ReadEnum<Language>("Language", TypeCode.Int32);
 
             var hasSenderName = !packet.ReadBit("!hasSenderName");
-            packet.ReadBit("unk5272");
+            packet.ReadBit("Show only in bubble"); // 0 Show in chat log, 1 for showing only in bubble
             var SenderLen = 0u;
             if (hasSenderName)
                 SenderLen = packet.ReadBits("SenderLen", 11);
@@ -152,7 +152,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             var guid2 = packet.StartBitStream(2, 5, 7, 4, 0, 1, 3, 6);
             packet.ParseBitStream(guid2, 4, 5, 7, 3, 2, 6, 0, 1);
-            packet.WriteGuid("Guid2", guid2);
 
             if (hasChannelName)
                 packet.ReadWoWString("ChannelName", ChannelLen);
@@ -164,23 +163,19 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadSingle("unk1494");
 
             packet.ParseBitStream(guid, 4, 7, 1, 5, 0, 6, 2, 3);
-            packet.WriteGuid("Sender", guid);
 
             var unitGuid = new WowGuid64(BitConverter.ToUInt64(guid, 0));
 
             if (unitGuid.GetObjectType() == ObjectType.Unit)
                 entry = unitGuid.GetEntry();
 
-            text.Type = packet.ReadByteE<ChatMessageType>("Type");
+            text.Type = (ChatMessageType)packet.ReadByteE<ChatMessageType548>("Type");
 
             if (hasAchievementID)
                 packet.ReadUInt32("AchievementID");
 
             packet.ParseBitStream(guid4, 1, 3, 4, 6, 0, 2, 5, 7);
-            packet.WriteGuid("Guid4", guid4);
-
             packet.ParseBitStream(guid3, 2, 5, 3, 6, 7, 4, 1, 0);
-            packet.WriteGuid("Target", guid3);
 
             if (hasLanguage)
                 packet.ReadByte("Language");
@@ -192,13 +187,23 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 text.Text = packet.ReadWoWString("Message", MessageLen);
 
             if (hasReceiverName)
-                text.Text += " -> " + packet.ReadWoWString("Receiver", ReceiverLen);
+                text.ReceiverName = packet.ReadWoWString("Receiver Name", ReceiverLen);
 
             if (hasSenderName)
-                text.Comment = packet.ReadWoWString("Sender", SenderLen);
+                text.SenderName = packet.ReadWoWString("Sender Name", SenderLen);
 
             if (hasRealmID1)
                 packet.ReadInt32("RealmID1"); // 56
+
+            text.SenderGUID = packet.WriteGuid("SenderGUID", guid);
+            text.ReceiverGUID = packet.WriteGuid("ReceiverGUID", guid3);
+            packet.WriteGuid("GuildGUID", guid2);
+            packet.WriteGuid("GroupGUID", guid4);
+
+            if (text.SenderGUID.GetObjectType() == ObjectType.Unit)
+                entry = text.SenderGUID.GetEntry();
+            else if (text.ReceiverGUID.GetObjectType() == ObjectType.Unit)
+                entry = text.ReceiverGUID.GetEntry();
 
             if (entry != 0)
                 Storage.CreatureTexts.Add(entry, text, packet.TimeSpan);
@@ -213,7 +218,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_ZONE_UNDER_ATTACK)]
         public static void HandleZoneUnderAttack(Packet packet)
         {
-            packet.ReadEntry<UInt32>(StoreNameType.Zone, "Zone Id");
+            packet.ReadUInt32<ZoneId>("Zone Id");
         }
     }
 }

@@ -357,7 +357,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("DW128", c);
                 packet.ReadXORByte(charGuids[c], 6); //6
                 packet.ReadInt32E<CharacterFlag>("CharacterFlag", c); //96
-                var zone = packet.ReadEntry<UInt32>(StoreNameType.Zone, "Zone Id", c); //68
+                var zone = packet.ReadUInt32<ZoneId>("Zone Id", c); //68
                 packet.ReadXORByte(guildGuids[c], 7); //95
                 var z = packet.ReadSingle("Position Z", c); //54h
 
@@ -459,7 +459,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_EXPLORATION_EXPERIENCE)]
         public static void HandleExplorationExpirience(Packet packet)
         {
-            packet.ReadEntry<UInt32>(StoreNameType.Area, "Area ID");
+            packet.ReadUInt32<AreaId>("Area ID");
             packet.ReadUInt32("Experience");
         }
 

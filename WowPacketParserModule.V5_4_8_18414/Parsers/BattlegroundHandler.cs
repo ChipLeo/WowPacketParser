@@ -244,7 +244,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadByte("Min Level"); // 46
             packet.ReadInt32("winnerConquest"); // 24
             packet.ReadInt32("winnerHonor"); // 72
-            packet.ReadEntry<Int32>(StoreNameType.Battleground, "BGType"); // 32
+            packet.ReadInt32<BgId>("BGType"); // 32
             packet.ReadInt32("winnerHonor"); // 40
             packet.ReadByte("Max Level"); // 47
             packet.ReadInt32("loserHonor"); // 48

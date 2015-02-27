@@ -137,7 +137,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             for (var i = 0; i < count; ++i)
             {
                 packet.ReadUInt32("Auction Id", i);
-                packet.ReadEntry<UInt32>(StoreNameType.Item, "Item Entry", i);
+                packet.ReadUInt32<ItemId>("Item Entry", i);
 
                 int enchantmentCount = 8;
                 for (var j = 0; j < enchantmentCount; ++j)
@@ -171,7 +171,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             var guid = packet.StartBitStream(5, 4, 7, 6, 0, 1, 2, 3);
             packet.ParseBitStream(guid, 7, 3);
-            packet.ReadEntry<UInt32>(StoreNameType.Item, "Item Entry"); // 32
+            packet.ReadUInt32<ItemId>("Item Entry"); // 32
             packet.ParseBitStream(guid, 1, 2);
             packet.ReadInt32("Location"); // 24
             packet.ParseBitStream(guid, 0);
@@ -211,7 +211,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             for (var i = 0; i < count; ++i)
             {
                 packet.ReadUInt32("Auction Id", i);
-                packet.ReadEntry<UInt32>(StoreNameType.Item, "Item Entry", i);
+                packet.ReadUInt32<ItemId>("Item Entry", i);
 
                 int enchantmentCount = 8;
                 for (var j = 0; j < enchantmentCount; ++j)
