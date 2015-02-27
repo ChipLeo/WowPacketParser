@@ -573,7 +573,7 @@ namespace WowPacketParserModule.V5_4_1_17538.Parsers
                 packet.ReadBits(5);
 
             if (hasTargetMask)
-                packet.ReadEnum<TargetFlag>("Target Flags", 20);
+                packet.ReadBitsE<TargetFlag>("Target Flags", 20);
 
             packet.ResetBitReader(); //?
 
