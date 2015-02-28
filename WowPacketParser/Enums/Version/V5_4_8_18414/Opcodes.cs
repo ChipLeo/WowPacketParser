@@ -123,33 +123,33 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_GROUP_SET_ROLES,                          0x1A92}, //+-
             {Opcode.CMSG_GROUP_UNINVITE_GUID,                      0x0CE1}, //+-
             {Opcode.CMSG_GUILD_ACCEPT,                             0x18A2}, //+-
-            {Opcode.CMSG_GUILD_ADD_RANK,                           0x047A}, //--
-            {Opcode.CMSG_GUILD_ASSIGN_MEMBER_RANK,                 0x05D0}, //--
-            {Opcode.CMSG_GUILD_BANK_BUY_TAB,                       0x0251}, //--
-            {Opcode.CMSG_GUILD_BANK_DEPOSIT_MONEY,                 0x0770}, //--
-            {Opcode.CMSG_GUILD_BANK_LOG_QUERY,                     0x0CD3}, //--
-            {Opcode.CMSG_GUILD_BANK_UPDATE_TAB,                    0x07C2}, //--
-            {Opcode.CMSG_GUILD_BANK_ACTIVATE,                      0x0372}, //--
+            {Opcode.CMSG_GUILD_ADD_RANK,                           0x047A}, //+-
+            {Opcode.CMSG_GUILD_ASSIGN_MEMBER_RANK,                 0x05D0}, //+-
+            {Opcode.CMSG_GUILD_BANK_BUY_TAB,                       0x0251}, //+-
+            {Opcode.CMSG_GUILD_BANK_DEPOSIT_MONEY,                 0x0770}, //+-
+            {Opcode.CMSG_GUILD_BANK_LOG_QUERY,                     0x0CD3}, //+-
+            {Opcode.CMSG_GUILD_BANK_UPDATE_TAB,                    0x07C2}, //+-
+            {Opcode.CMSG_GUILD_BANK_ACTIVATE,                      0x0372}, //+-
             {Opcode.CMSG_GUILD_DECLINE_INVITATION,                 0x147B}, //+-
-            {Opcode.CMSG_GUILD_DELETE_RANK,                        0x0D79}, //--
-            {Opcode.CMSG_GUILD_DEMOTE_MEMBER,                      0x1553}, //--
-            {Opcode.CMSG_GUILD_DISBAND,                            0x0D73}, //--
-            {Opcode.CMSG_GUILD_EVENT_LOG_QUERY,                    0x15D9}, //--
-            {Opcode.CMSG_GUILD_INFO_TEXT,                          0x0C70}, //--
-            {Opcode.CMSG_GUILD_INVITE,                             0x0869}, //--
-            {Opcode.CMSG_GUILD_LEAVE,                              0x04D8}, //--
-            {Opcode.CMSG_GUILD_MOTD,                               0x1473}, //--
-            {Opcode.CMSG_GUILD_NEWS_UPDATE_STICKY,                 0x04D1}, //--
-            {Opcode.CMSG_GUILD_PROMOTE_MEMBER,                     0x0571}, //--
-            {Opcode.CMSG_GUILD_QUERY,                              0x1AB6}, //--
-            {Opcode.CMSG_GUILD_QUERY_NEWS,                         0x1C58}, //--
-            {Opcode.CMSG_GUILD_GET_RANKS,                          0x0D50}, //--
-            {Opcode.CMSG_GUILD_OFFICER_REMOVE_MEMBER,              0x0CD8}, //--
-            {Opcode.CMSG_GUILD_REQUEST_CHALLENGE_UPDATE,           0x147A}, //--
-            {Opcode.CMSG_GUILD_GET_ROSTER,                         0x1459}, //--
+            {Opcode.CMSG_GUILD_DELETE_RANK,                        0x0D79}, //+-
+            {Opcode.CMSG_GUILD_DEMOTE_MEMBER,                      0x1553}, //+-
+            {Opcode.CMSG_GUILD_DISBAND,                            0x0D73}, //+-
+            {Opcode.CMSG_GUILD_EVENT_LOG_QUERY,                    0x15D9}, //+-
+            {Opcode.CMSG_GUILD_INFO_TEXT,                          0x0C70}, //+-
+            {Opcode.CMSG_GUILD_INVITE,                             0x0869}, //+-
+            {Opcode.CMSG_GUILD_LEAVE,                              0x04D8}, //+-
+            {Opcode.CMSG_GUILD_MOTD,                               0x1473}, //+-
+            {Opcode.CMSG_GUILD_NEWS_UPDATE_STICKY,                 0x04D1}, //+-
+            {Opcode.CMSG_GUILD_PROMOTE_MEMBER,                     0x0571}, //+-
+            {Opcode.CMSG_GUILD_QUERY,                              0x1AB6}, //+-
+            {Opcode.CMSG_GUILD_QUERY_NEWS,                         0x1C58}, //+-
+            {Opcode.CMSG_GUILD_GET_RANKS,                          0x0D50}, //+-
+            {Opcode.CMSG_GUILD_OFFICER_REMOVE_MEMBER,              0x0CD8}, //+-
+            {Opcode.CMSG_GUILD_REQUEST_CHALLENGE_UPDATE,           0x147A}, //+-
+            {Opcode.CMSG_GUILD_GET_ROSTER,                         0x1459}, //+-
             {Opcode.CMSG_GUILD_SET_ACHIEVEMENT_TRACKING,           0x0CF0}, //++
-            {Opcode.CMSG_GUILD_SET_GUILD_MASTER,                   0x1A83}, //--
-            {Opcode.CMSG_GUILD_SET_NOTE,                           0x05DA}, //--
+            {Opcode.CMSG_GUILD_SET_GUILD_MASTER,                   0x1A83}, //+-
+            {Opcode.CMSG_GUILD_SET_NOTE,                           0x05DA}, //+-
             {Opcode.CMSG_GUILD_SET_RANK_PERMISSIONS,               0x0C7A}, //+-
             {Opcode.CMSG_IGNORE_TRADE,                             0x0276}, //++
             {Opcode.CMSG_INITIATE_TRADE,                           0x0267}, //++
@@ -308,7 +308,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_SPLIT_ITEM,                               0x02EC}, //+-
             {Opcode.CMSG_STAND_STATE_CHANGE,                       0x03E6}, //+-
             {Opcode.CMSG_SUPPORT_TICKET_SUBMIT_BUG,                0x0861}, //+-
-            {Opcode.CMSG_SUPPORT_TICKET_SUBMIT_COMPLAINT,          0x030D}, //--
+            {Opcode.CMSG_SUPPORT_TICKET_SUBMIT_COMPLAINT,          0x030D}, //-- sub_66E294
             {Opcode.CMSG_SUGGESTION_SUBMIT,                        0x0A12}, //+-
             {Opcode.CMSG_SWAP_INV_ITEM,                            0x03DF}, //++
             {Opcode.CMSG_SWAP_ITEM,                                0x035D}, //++
@@ -327,7 +327,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNREGISTER_ALL_ADDON_PREFIXES,            0x029F}, //++
             {Opcode.CMSG_UPDATE_ACCOUNT_DATA,                      0x0068}, //++
             {Opcode.CMSG_UPGRADE_ITEM,                             0x1042}, //++
-            {Opcode.CMSG_USE_ITEM,                                 0x1CC1}, //--
+            {Opcode.CMSG_USE_ITEM,                                 0x1CC1}, //-- sub_696A02
             {Opcode.CMSG_USED_FOLLOW,                              0x0374}, //++
             {Opcode.CMSG_VIOLENCE_LEVEL,                           0x0040}, //+-
             {Opcode.CMSG_VOICE_SESSION_ENABLE,                     0x15A9}, //++
@@ -602,8 +602,8 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GUILD_REPUTATION_WEEKLY_CAP,              0x1A71}, //--
             {Opcode.SMSG_GUILD_REWARDS_LIST,                       0x1A69}, //--
             {Opcode.SMSG_GUILD_ROSTER,                             0x0BE0}, //++
-            {Opcode.SMSG_GUILD_XP,                                 0x0AF0}, //--
-            {Opcode.SMSG_GUILD_XP_GAIN,                            0x0FE0}, //--
+            {Opcode.SMSG_GUILD_XP,                                 0x0AF0}, //+-
+            {Opcode.SMSG_GUILD_XP_GAIN,                            0x0FE0}, //+-
             {Opcode.SMSG_HEALTH_UPDATE,                            0x148B}, //++
             {Opcode.SMSG_HIGHEST_THREAT_UPDATE,                    0x14AE}, //++
             {Opcode.SMSG_HOTFIX_NOTIFY_BLOB,                       0x1EBA}, //--

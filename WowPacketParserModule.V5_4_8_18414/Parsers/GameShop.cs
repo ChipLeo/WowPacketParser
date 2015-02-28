@@ -38,7 +38,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     packet.ReadBits("unk5308", 4, i);
 
             }*/
-            packet.ReadToEnd();
         }
     }
 }
