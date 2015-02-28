@@ -519,7 +519,6 @@ namespace WowPacketParserModule.V4_3_4_15595.Parsers
             packet.WriteGuid("GUID", guid);
         }
 
-
         [Parser(Opcode.CMSG_GUILD_GET_RANKS)]
         public static void HandleGuildRanks434(Packet packet)
         {
