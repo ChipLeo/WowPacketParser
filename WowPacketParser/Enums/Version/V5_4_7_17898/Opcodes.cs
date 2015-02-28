@@ -48,7 +48,6 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.CMSG_CHAR_DELETE, 0x113B},
             {Opcode.CMSG_CHAR_ENUM, 0x12C2},
             {Opcode.CMSG_COMMENTATOR_SKIRMISH_QUEUE_COMMAND, 0x051B}, //??
-            {Opcode.CMSG_CONTACT_LIST, 0x1186},
             {Opcode.CMSG_CONNECT_TO_FAILED, 0x16C8},
             {Opcode.CMSG_CONTACT_LIST, 0x1186},
             {Opcode.CMSG_CORPSE_QUERY, 0x129B},
@@ -314,7 +313,6 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.SMSG_HOTFIX_NOTIFY_BLOB, 0x0C81},
             {Opcode.SMSG_INITIALIZE_FACTIONS, 0x11E1},
             {Opcode.SMSG_INITIAL_SPELLS, 0x1B05},
-            {Opcode.SMSG_SETUP_CURRENCY, 0x1E3A},
             {Opcode.SMSG_INIT_WORLD_STATES, 0x0F03},
             {Opcode.SMSG_INSPECT_HONOR_STATS, 0x1429},
             {Opcode.SMSG_INSPECT_RATED_BG_STATS, 0x046B},
@@ -342,7 +340,7 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.SMSG_MESSAGECHAT, 0x0E60},
             {Opcode.SMSG_MONEY_NOTIFY, 0x05E2},
             {Opcode.SMSG_MOTD, 0x0E20},
-            {Opcode.SMSG_MOUNT_SPECIAL_ANIM, 0x0172}, //??
+            //{Opcode.SMSG_MOUNT_SPECIAL_ANIM, 0x0172}, //??
             {Opcode.SMSG_MOVE_ROOT, 0x198B},
             {Opcode.SMSG_MOVE_SET_CAN_FLY, 0x01F4}, // 5.4.7 17956
             {Opcode.SMSG_MOVE_SET_FLIGHT_SPEED, 0x02DC}, // 5.4.7 17956
@@ -435,7 +433,7 @@ namespace WowPacketParser.Enums.Version.V5_4_7_17898
             {Opcode.SMSG_SPELL_CATEGORY_COOLDOWN, 0x053B},
             {Opcode.SMSG_SPELL_COOLDOWN, 0x1B14},
             {Opcode.SMSG_SPELL_DISPEL_LOG , 0x0919},
-            {Opcode.SMSG_SPELL_ENERGIZE_LOG, 0x0071},
+            //{Opcode.SMSG_SPELL_ENERGIZE_LOG, 0x0071}, ??
             {Opcode.SMSG_SPELL_EXECUTE_LOG, 0x19B4},
             {Opcode.SMSG_SPELL_FAILED_OTHER, 0x1E7A},
             {Opcode.SMSG_SPELL_FAILURE, 0x0E03},
