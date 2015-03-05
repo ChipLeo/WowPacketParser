@@ -4528,14 +4528,6 @@ namespace WowPacketParserModule.V4_3_4_15595.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_MOVE_SPLINE_SET_FEATHER_FALL)]
-        public static void HandleSplineMoveFeatherFall434(Packet packet)
-        {
-            var guid = packet.StartBitStream(3, 2, 7, 5, 4, 6, 1, 0);
-            packet.ParseBitStream(guid, 1, 4, 7, 6, 2, 0, 5, 3);
-            packet.WriteGuid("Guid", guid);
-        }
-
         [Parser(Opcode.SMSG_MOVE_SPLINE_SET_NORMAL_FALL)]
         public static void HandleSplineMoveNormalFall434(Packet packet)
         {
@@ -7139,14 +7131,6 @@ namespace WowPacketParserModule.V4_3_4_15595.Parsers
         {
             var guid = packet.StartBitStream(5, 0, 4, 6, 7, 2, 3, 1);
             packet.ParseBitStream(guid, 5, 7, 3, 4, 1, 2, 0, 6);
-            packet.WriteGuid("Guid", guid);
-        }
-
-        [Parser(Opcode.SMSG_MOVE_SPLINE_SET_NORMAL_FALL)]
-        public static void HandleSplineMoveSetNormalFall434(Packet packet)
-        {
-            var guid = packet.StartBitStream(3, 5, 1, 0, 7, 6, 2, 4);
-            packet.ParseBitStream(guid, 7, 6, 2, 0, 5, 4, 3, 1);
             packet.WriteGuid("Guid", guid);
         }
 
