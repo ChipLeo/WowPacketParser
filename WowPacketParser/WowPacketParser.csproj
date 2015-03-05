@@ -330,7 +330,6 @@
     </Compile>
     <Compile Include="Enums\Version\V4_0_6_13596\UpdateFields.cs" />
     <Compile Include="Enums\Version\V4_1_0_13914\Opcodes.cs" />
-    <Compile Include="Enums\Version\V4_1_0_13914\UpdateFields.cs" />
     <Compile Include="Enums\Version\V4_2_0_14333\Opcodes.cs" />
     <Compile Include="Enums\Version\V4_2_0_14333\UpdateFields.cs" />
     <Compile Include="Enums\Version\V4_2_2_14545\Opcodes.cs" />
@@ -366,6 +365,7 @@
     <Compile Include="Enums\Version\V6_0_2_19033\Opcodes.cs" />
     <Compile Include="Enums\Version\V6_0_3_19103\Opcodes.cs" />
     <Compile Include="Enums\Version\V6_1_0_19678\Opcodes.cs" />
+    <Compile Include="Enums\Version\V6_1_0_19678\SpellCastFailureReason.cs" />
     <Compile Include="Enums\Version\V6_1_0_19678\UpdateFields.cs" />
     <Compile Include="Enums\VictimStates.cs" />
     <Compile Include="Enums\VoidTransferError.cs" />
@@ -487,11 +487,17 @@
     <Compile Include="Store\Objects\GameObjectTemplateNonWDB.cs" />
     <Compile Include="Store\Objects\Gossip.cs" />
     <Compile Include="Store\Objects\GossipPOI.cs" />
+    <Compile Include="Store\Objects\Holiday.cs" />
     <Compile Include="Store\Objects\Item.cs" />
+    <Compile Include="Store\Objects\ItemAppearance.cs" />
+    <Compile Include="Store\Objects\ItemBonus.cs" />
+    <Compile Include="Store\Objects\ItemBonusTreeNode.cs" />
     <Compile Include="Store\Objects\ItemTemplate.cs" />
+    <Compile Include="Store\Objects\KeyChain.cs" />
     <Compile Include="Store\Objects\Loot.cs" />
     <Compile Include="Store\Objects\LootItem.cs" />
     <Compile Include="Store\Objects\ModelData.cs" />
+    <Compile Include="Store\Objects\Mount.cs" />
     <Compile Include="Store\Objects\NpcText.cs" />
     <Compile Include="Store\Objects\NpcSpellClick.cs" />
     <Compile Include="Store\Objects\NpcTrainer.cs" />
