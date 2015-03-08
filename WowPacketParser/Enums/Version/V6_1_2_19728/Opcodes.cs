@@ -26,7 +26,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19728
             {Opcode.CMSG_AUTH_CONTINUED_SESSION, 0x0485},
             {Opcode.CMSG_AUTH_SESSION, 0x03DD},
             {Opcode.CMSG_BANKER_ACTIVATE, 0x0CA5},
-            {Opcode.CMSG_BATTLEFIELD_JOIN, 0x1D36},                   // Unconfirmed
+            {Opcode.CMSG_BATTLEFIELD_JOIN, 0x1D36},
             {Opcode.CMSG_BATTLEFIELD_JOIN_RATED, 0x01AA},             // Unconfirmed
             {Opcode.CMSG_BATTLEFIELD_LEAVE, 0x0272},                  // Unconfirmed
             {Opcode.CMSG_BATTLEFIELD_PORT, 0x1D32},                   // Unconfirmed
@@ -48,7 +48,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19728
             {Opcode.CMSG_GUILD_BANK_DEPOSIT_MONEY, 0x0832},           // Unconfirmed
             {Opcode.CMSG_GUILD_DECLINE_INVITATION, 0x1967},           // Unconfirmed
             {Opcode.CMSG_JOIN_ARENA, 0x0865},                         // Unconfirmed
-            {Opcode.CMSG_JOIN_ARENA_SKIRMISH, 0x1E01},                // Unconfirmed
+            {Opcode.CMSG_JOIN_ARENA_SKIRMISH, 0x1E01},
             {Opcode.CMSG_JOIN_CHANNEL, 0x152A},
             {Opcode.CMSG_LEARN_TALENTS, 0x0AAA},
             {Opcode.CMSG_LEAVE_CHANNEL, 0x113D},
@@ -131,7 +131,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19728
             {Opcode.CMSG_VOID_STORAGE_TRANSFER, 0x0E07},
             {Opcode.CMSG_VOID_STORAGE_UNLOCK, 0x0AA1},
             {Opcode.CMSG_WARGAME_RESPONSE, 0x0E3F},                   // Unconfirmed
-            {Opcode.SMSG_BATTLEFIELD_RATED_INFO, 0x0A40},             // Unconfirmed
+            {Opcode.CMSG_REQUEST_RATED_INFO, 0x0A40},                 // Unconfirmed
         };
 
         private static readonly BiDictionary<Opcode, int> ServerOpcodes = new BiDictionary<Opcode, int>
