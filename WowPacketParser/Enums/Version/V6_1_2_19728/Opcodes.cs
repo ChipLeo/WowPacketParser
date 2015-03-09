@@ -25,21 +25,24 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19728
             {Opcode.CMSG_ADD_IGNORE, 0x16A0},
             {Opcode.CMSG_ATTACKSTOP, 0x0A01},
             {Opcode.CMSG_ATTACKSWING, 0x0BF4},
+            {Opcode.CMSG_AUCTION_LIST_BIDDER_ITEMS, 0x1821},
+            {Opcode.CMSG_AUCTION_PLACE_BID, 0x1822},
             {Opcode.CMSG_AUTH_CONTINUED_SESSION, 0x0485},
             {Opcode.CMSG_AUTH_SESSION, 0x03DD},
             {Opcode.CMSG_BANKER_ACTIVATE, 0x0CA5},
+            {Opcode.CMSG_BATTLE_PAY_GET_PRODUCT_LIST_QUERY, 0x1616},
+            {Opcode.CMSG_BATTLE_PET_MODIFY_NAME, 0x0B37},
             {Opcode.CMSG_BATTLEFIELD_JOIN, 0x1D36},
             {Opcode.CMSG_BATTLEFIELD_JOIN_RATED, 0x01AA},             // Unconfirmed
             {Opcode.CMSG_BATTLEFIELD_LEAVE, 0x0272},                  // Unconfirmed
             {Opcode.CMSG_BATTLEFIELD_PORT, 0x1D32},                   // Unconfirmed
             {Opcode.CMSG_BUY_BACK_ITEM, 0x1E84},
             {Opcode.CMSG_BUY_BANK_SLOT, 0x1DE2},
-            {Opcode.CMSG_BUY_ITEM, 0x1255},
-            {Opcode.CMSG_BUY_ITEM, 0x1931},
             {Opcode.CMSG_BUY_ITEM, 0x1CE5},
             {Opcode.CMSG_CANCEL_AURA, 0x12FB},
             {Opcode.CMSG_CANCEL_CAST, 0x058A},
             {Opcode.CMSG_CANCEL_TRADE, 0x0E0F},                       // Unconfirmed
+            {Opcode.CMSG_CAN_DUEL, 0x0A38},
             {Opcode.CMSG_CAST_SPELL, 0x1274},
             {Opcode.CMSG_CHANGE_SUB_GROUP, 0x0AB7},                   // Unconfirmed
             {Opcode.CMSG_CHANNEL_BAN, 0x187E},
@@ -47,8 +50,8 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19728
             {Opcode.CMSG_CHANNEL_KICK, 0x153D},
             {Opcode.CMSG_CHANNEL_MODERATOR, 0x152D},
             {Opcode.CMSG_CHANNEL_MUTE, 0x1909},
-            {Opcode.CMSG_CHANNEL_OWNER, 0x14CA},
             {Opcode.CMSG_CHANNEL_PASSWORD, 0x193A},
+            {Opcode.CMSG_CHANNEL_SET_OWNER, 0x14CA},
             {Opcode.CMSG_CHANNEL_UNBAN, 0x155D},
             {Opcode.CMSG_CHANNEL_UNMODERATOR, 0x10AE},
             {Opcode.CMSG_CHANNEL_UNMUTE, 0x109A},
@@ -59,24 +62,31 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19728
             {Opcode.CMSG_CONVERT_RAID, 0x0A98},                       // Unconfirmed
             {Opcode.CMSG_CREATURE_QUERY, 0x0FD3},
             {Opcode.CMSG_DB_QUERY_BULK, 0x0836},
+            {Opcode.CMSG_DELETE_EQUIPMENT_SET, 0x014A},
             {Opcode.CMSG_DEL_FRIEND, 0x163F},
             {Opcode.CMSG_DEL_IGNORE, 0x03C0},
-            {Opcode.CMSG_DELETE_EQUIPMENT_SET, 0x014A},
             {Opcode.CMSG_DEPOSIT_REAGENT_BANK, 0x002A},
             {Opcode.CMSG_DO_READY_CHECK, 0x139E},                     // Unconfirmed
             {Opcode.CMSG_DUEL_PROPOSED, 0x0A38},
-            {Opcode.CMSG_DUEL_RESPONSE, 0x0A5B},                      // Unconfirmed
+            {Opcode.CMSG_DUEL_RESPONSE, 0x0C62},
             {Opcode.CMSG_EMOTE, 0x01AD},
             {Opcode.CMSG_EQUIPMENT_SET_SAVE, 0x09E2},
             {Opcode.CMSG_GAMEOBJECT_QUERY, 0x06C8},
             {Opcode.CMSG_GARRISON_MISSION_BONUS_ROLL, 0x07D2},        // Unconfirmed
             {Opcode.CMSG_GET_UNDELETE_COOLDOWN_STATUS, 0x063D},
+            {Opcode.CMSG_GM_TICKET_CREATE, 0x0A1E},
+            {Opcode.CMSG_GM_TICKET_DELETE_TICKET, 0x129E},
+            {Opcode.CMSG_GM_TICKET_GET_STATUS, 0x0A18},
+            {Opcode.CMSG_GM_TICKET_GET_TICKET, 0x0717},
+            {Opcode.CMSG_GM_TICKET_GET_WEB_TICKET, 0x1A3F},
+            {Opcode.CMSG_GM_TICKET_RESPONSE_RESOLVE, 0x0217},
+            {Opcode.CMSG_GM_TICKET_UPDATE_TEXT, 0x13A0},
+            {Opcode.CMSG_GOSSIP_HELLO, 0x1C22},
             {Opcode.CMSG_GOSSIP_SELECT_OPTION, 0x1E0C},               // Unconfirmed
             {Opcode.CMSG_GUILD_BANK_BUY_TAB, 0x0F09},
             {Opcode.CMSG_GUILD_BANK_DEPOSIT_MONEY, 0x0832},           // Unconfirmed
             {Opcode.CMSG_GUILD_DECLINE_INVITATION, 0x1967},           // Unconfirmed
             {Opcode.CMSG_GUILD_QUERY, 0x12BE},
-            {Opcode.CMSG_GUILD_QUERY, 0x1914},
             {Opcode.CMSG_JOIN_ARENA, 0x0865},                         // Unconfirmed
             {Opcode.CMSG_JOIN_ARENA_SKIRMISH, 0x1E01},
             {Opcode.CMSG_JOIN_CHANNEL, 0x152A},
@@ -88,9 +98,9 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19728
             {Opcode.CMSG_LFG_SET_COMMENT, 0x0615},                    // Unconfirmed
             {Opcode.CMSG_LIST_INVENTORY, 0x1922},
             {Opcode.CMSG_LOAD_SCREEN, 0x13C0},
-            {Opcode.CMSG_LOG_DISCONNECT, 0x12D5},
             {Opcode.CMSG_LOGOUT_CANCEL, 0x0F8C},
             {Opcode.CMSG_LOGOUT_REQUEST, 0x0CA6},
+            {Opcode.CMSG_LOG_DISCONNECT, 0x12D5},
             {Opcode.CMSG_LOOT_METHOD, 0x0E3E},                        // Unconfirmed
             {Opcode.CMSG_MESSAGECHAT_AFK, 0x185E},
             {Opcode.CMSG_MESSAGECHAT_CHANNEL, 0x1D8A},
@@ -148,6 +158,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19728
             {Opcode.CMSG_REQUEST_RATED_INFO, 0x0A40},                 // Unconfirmed
             {Opcode.CMSG_ROUTER_CLIENT_LOG_STREAMING_ERROR, 0x12D6},
             {Opcode.CMSG_SAVE_CUF_PROFILES, 0x0EC7},
+            {Opcode.CMSG_SELL_ITEM, 0x1931},
             {Opcode.CMSG_SET_ACHIEVEMENTS_HIDDEN, 0x16D0},
             {Opcode.CMSG_SET_ACTION_BUTTON, 0x133F},
             {Opcode.CMSG_SET_ACTIVE_MOVER, 0x0108},
@@ -157,6 +168,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19728
             {Opcode.CMSG_SET_EVERYONE_IS_ASSISTANT, 0x1716},          // Unconfirmed
             {Opcode.CMSG_SET_FACTION_AT_WAR, 0x1C66},                 // Unconfirmed
             {Opcode.CMSG_SET_FACTION_INACTIVE, 0x1862},
+            {Opcode.CMSG_SET_LOOT_SPECIALIZATION, 0x00D72},
             {Opcode.CMSG_SET_PARTY_LEADER, 0x131D},                   // Unconfirmed
             {Opcode.CMSG_SET_PVP, 0x1BC7},
             {Opcode.CMSG_SET_RAID_DIFFICULTY, 0x0397},                // Unconfirmed
@@ -178,6 +190,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19728
             {Opcode.CMSG_SUPPORT_TICKET_SUBMIT_COMPLAINT, 0x16C0},
             {Opcode.CMSG_SUPPORT_TICKET_SUBMIT_SUGGESTION, 0x1A16},   // Unconfirmed
             {Opcode.CMSG_SUSPEND_COMMS_ACK, 0x1375},
+            {Opcode.CMSG_SUSPEND_TOKEN_RESPONSE, 0x1255},
             {Opcode.CMSG_SWAP_INV_ITEM, 0x003C},
             {Opcode.CMSG_SWAP_ITEM, 0x0438},
             {Opcode.CMSG_SWAP_SUB_GROUPS, 0x0F98},                    // Unconfirmed
