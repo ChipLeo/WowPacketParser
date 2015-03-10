@@ -32,6 +32,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19728
             {Opcode.CMSG_BANKER_ACTIVATE, 0x0CA5},
             {Opcode.CMSG_BATTLE_PAY_GET_PRODUCT_LIST_QUERY, 0x1616},
             {Opcode.CMSG_BATTLE_PET_MODIFY_NAME, 0x0B37},
+            {Opcode.CMSG_BATTLE_PET_SUMMON, 0x0A9D},
             {Opcode.CMSG_BATTLEFIELD_JOIN, 0x1D36},
             {Opcode.CMSG_BATTLEFIELD_JOIN_RATED, 0x01AA},             // Unconfirmed
             {Opcode.CMSG_BATTLEFIELD_LEAVE, 0x0272},                  // Unconfirmed
@@ -66,6 +67,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19728
             {Opcode.CMSG_DEL_FRIEND, 0x163F},
             {Opcode.CMSG_DEL_IGNORE, 0x03C0},
             {Opcode.CMSG_DEPOSIT_REAGENT_BANK, 0x002A},
+            {Opcode.CMSG_DISCARDED_TIME_SYNC_ACKS, 0x0103},
             {Opcode.CMSG_DO_READY_CHECK, 0x139E},                     // Unconfirmed
             {Opcode.CMSG_DUEL_RESPONSE, 0x0C62},
             {Opcode.CMSG_EMOTE, 0x01AD},
@@ -86,6 +88,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19728
             {Opcode.CMSG_GUILD_BANK_DEPOSIT_MONEY, 0x0832},           // Unconfirmed
             {Opcode.CMSG_GUILD_DECLINE_INVITATION, 0x1967},           // Unconfirmed
             {Opcode.CMSG_GUILD_QUERY, 0x12BE},
+            {Opcode.CMSG_GUILD_SET_ACHIEVEMENT_TRACKING, 0x1977},
             {Opcode.CMSG_JOIN_ARENA, 0x0865},                         // Unconfirmed
             {Opcode.CMSG_JOIN_ARENA_SKIRMISH, 0x1E01},
             {Opcode.CMSG_JOIN_CHANNEL, 0x152A},
@@ -145,6 +148,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19728
             {Opcode.CMSG_PLAYED_TIME, 0x0750},
             {Opcode.CMSG_PLAYER_LOGIN, 0x0E98},
             {Opcode.CMSG_PORT_GRAVEYARD, 0x0C65},                     // Unconfirmed
+            {Opcode.CMSG_QUERY_NEXT_MAIL_TIME, 0x08B6},
             {Opcode.CMSG_QUEUED_MESSAGES_END, 0x027E},
             {Opcode.CMSG_RANDOMIZE_CHAR_NAME, 0x0B3E},
             {Opcode.CMSG_READY_CHECK_RESPONSE, 0x07B5},               // Unconfirmed
@@ -338,6 +342,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19728
             {Opcode.SMSG_PONG, 0x011D},
             {Opcode.SMSG_POWER_UPDATE, 0x0F96},
             {Opcode.SMSG_PVP_SEASON, 0x1D61},
+            {Opcode.SMSG_QUERY_BATTLE_PET_NAME_RESPONSE, 0x17BD},
             {Opcode.SMSG_QUESTGIVER_STATUS_MULTIPLE, 0x0814},
             {Opcode.SMSG_QUEST_QUERY_RESPONSE, 0x0817},
             {Opcode.SMSG_RANDOMIZE_CHAR_NAME, 0x121A},
