@@ -61,7 +61,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19728
             {Opcode.CMSG_CLOSE_INTERACTION, 0x1C36},
             {Opcode.CMSG_CONVERT_RAID, 0x0A98},                       // Unconfirmed
             {Opcode.CMSG_CREATURE_QUERY, 0x0FD3},
-            {Opcode.CMSG_DB_QUERY_BULK, 0x0836},
+            {Opcode.CMSG_DB_QUERY_BULK, 0x039F},
             {Opcode.CMSG_DELETE_EQUIPMENT_SET, 0x014A},
             {Opcode.CMSG_DEL_FRIEND, 0x163F},
             {Opcode.CMSG_DEL_IGNORE, 0x03C0},
