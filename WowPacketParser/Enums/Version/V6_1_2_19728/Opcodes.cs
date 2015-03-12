@@ -80,9 +80,11 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19750
             {Opcode.CMSG_ENABLE_NAGLE, 0x0B55},
             {Opcode.CMSG_EQUIPMENT_SET_SAVE, 0x09E2},
             {Opcode.CMSG_GAMEOBJ_USE, 0x18B2},
+            {Opcode.CMSG_GARRISON_REQUEST_BLUEPRINT_AND_SPECIALIZATION_DATA, 0x0B8C},
             {Opcode.CMSG_GAMEOBJECT_QUERY, 0x06C8},
             {Opcode.CMSG_GARRISON_MISSION_BONUS_ROLL, 0x07D2},        // Unconfirmed
             {Opcode.CMSG_GARRISON_REQUEST_UPGRADEABLE, 0x12FA},
+            {Opcode.CMSG_GET_GARRISON_INFO, 0x072D},
             {Opcode.CMSG_GET_ITEM_PURCHASE_DATA, 0x016E},
             {Opcode.CMSG_GET_UNDELETE_COOLDOWN_STATUS, 0x063D},
             {Opcode.CMSG_GM_TICKET_CREATE, 0x0A1E},
@@ -98,6 +100,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19750
             {Opcode.CMSG_GUILD_BANK_DEPOSIT_MONEY, 0x0832},           // Unconfirmed
             {Opcode.CMSG_GUILD_DECLINE_INVITATION, 0x1967},           // Unconfirmed
             {Opcode.CMSG_GUILD_QUERY, 0x12BE},
+            {Opcode.CMSG_GUILD_REQUEST_PARTY_STATE, 0x0B5B},
             {Opcode.CMSG_GUILD_SET_ACHIEVEMENT_TRACKING, 0x1977},
             {Opcode.CMSG_INSPECT, 0x1C21},
             {Opcode.CMSG_JOIN_ARENA, 0x0865},                         // Unconfirmed
@@ -114,6 +117,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19750
             {Opcode.CMSG_LOGOUT_CANCEL, 0x0F8C},
             {Opcode.CMSG_LOGOUT_REQUEST, 0x0CA6},
             {Opcode.CMSG_LOG_DISCONNECT, 0x12D5},
+            {Opcode.CMSG_LOOT, 0x0BF1},
             {Opcode.CMSG_LOOT_METHOD, 0x0E3E},                        // Unconfirmed
             {Opcode.CMSG_LOOT_MONEY, 0x050A},
             {Opcode.CMSG_LOOT_RELEASE, 0x1A25},
@@ -141,6 +145,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19750
             {Opcode.CMSG_MOVE_SET_COLLISION_HEIGHT_ACK, 0x0018},
             {Opcode.CMSG_MOVE_SET_FACING, 0x0803},
             {Opcode.CMSG_MOVE_SET_PITCH, 0x080F},
+            {Opcode.CMSG_MOVE_SPLINE_DONE, 0x0514},
             {Opcode.CMSG_MOVE_START_ASCEND, 0x0510},
             {Opcode.CMSG_MOVE_START_BACKWARD, 0x0147},
             {Opcode.CMSG_MOVE_START_DESCEND, 0x0117},
@@ -156,6 +161,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19750
             {Opcode.CMSG_MOVE_STOP_SWIM, 0x081B},
             {Opcode.CMSG_MOVE_STOP_TURN, 0x0854},
             {Opcode.CMSG_MOVE_TIME_SKIPPED, 0x0903},
+            {Opcode.CMSG_MOVE_WATER_WALK_ACK, 0x0C07},
             {Opcode.CMSG_NAME_QUERY, 0x0BBD},
             {Opcode.CMSG_NPC_TEXT_QUERY, 0x1E24},
             {Opcode.CMSG_OBJECT_UPDATE_FAILED, 0x0B2D},
@@ -183,8 +189,10 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19750
             {Opcode.CMSG_RANDOMIZE_CHAR_NAME, 0x0B3E},
             {Opcode.CMSG_READY_CHECK_RESPONSE, 0x07B5},               // Unconfirmed
             {Opcode.CMSG_REAGENT_BANK_BUY_TAB, 0x1D75},
+            {Opcode.CMSG_REALM_NAME_QUERY, 0x0F9F},
             {Opcode.CMSG_REORDER_CHARACTERS, 0x17B7},
             {Opcode.CMSG_REQUEST_ACCOUNT_DATA, 0x0798},
+            {Opcode.CMSG_REQUEST_CEMETERY_LIST, 0x0FD0},
             {Opcode.CMSG_REQUEST_PVP_OPTIONS_ENABLED, 0x029E},        // Unconfirmed
             {Opcode.CMSG_REQUEST_PVP_REWARDS, 0x06DC},                // Unconfirmed
             {Opcode.CMSG_REQUEST_RAID_INFO, 0x0A96},                  // Unconfirmed
@@ -209,6 +217,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19750
             {Opcode.CMSG_SET_SELECTION, 0x0E8C},
             {Opcode.CMSG_SET_SPECIALIZATION, 0x0759},
             {Opcode.CMSG_SET_TITLE, 0x1650},
+            {Opcode.CMSG_SET_TRADE_CURRENCY, 0x06F2},
             {Opcode.CMSG_SET_WATCHED_FACTION, 0x1E82},
             {Opcode.CMSG_SHOWING_CLOAK, 0x0F04},
             {Opcode.CMSG_SHOWING_HELM, 0x0C36},
