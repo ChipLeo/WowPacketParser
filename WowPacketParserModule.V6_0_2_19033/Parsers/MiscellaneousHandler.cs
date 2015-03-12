@@ -307,8 +307,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("Serial");
         }
 
-        [Parser(Opcode.SMSG_INITIAL_SETUP)]
-        public static void HandleInitialSetup(Packet packet)
+        [Parser(Opcode.SMSG_INITIAL_SETUP, ClientVersionBuild.V6_0_2_19033, ClientVersionBuild.V6_0_3_19342)]
+        public static void HandleInitialSetup60x(Packet packet)
         {
             var int6 = packet.ReadInt32("QuestsCompletedCount");
 
@@ -320,6 +320,16 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             for (var i = 0; i < int6; ++i)
                 packet.ReadByte("QuestsCompleted", i);
+        }
+
+        [Parser(Opcode.SMSG_INITIAL_SETUP, ClientVersionBuild.V6_1_0_19678)]
+        public static void HandleInitialSetup61x(Packet packet)
+        {
+            packet.ReadByte("ServerExpansionLevel");
+            packet.ReadByte("ServerExpansionTier");
+
+            packet.ReadInt32("ServerRegionID");
+            packet.ReadTime("RaidOrigin");
         }
 
         [Parser(Opcode.CMSG_AREATRIGGER)]
@@ -673,6 +683,13 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("Arg2");
             var length = packet.ReadBits("TextLength", 12);
             packet.ReadWoWString("Text", length);
+        }
+
+        [Parser(Opcode.SMSG_NUKE_ALL_OBJECTS_DUE_TO_SEAMLESS_PORT)]
+        public static void HandleNukeAllObjectsDueToSeamlessPort(Packet packet)
+        {
+            packet.ReadUInt32("Unk5");
+            packet.ReadBits("Unk4", 2);
         }
     }
 }
