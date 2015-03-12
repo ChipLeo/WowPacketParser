@@ -117,6 +117,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19750
             {Opcode.CMSG_LOGOUT_CANCEL, 0x0F8C},
             {Opcode.CMSG_LOGOUT_REQUEST, 0x0CA6},
             {Opcode.CMSG_LOG_DISCONNECT, 0x12D5},
+            {Opcode.CMSG_LOG_STREAMING_ERROR, 0x12D6},
             {Opcode.CMSG_LOOT, 0x0BF1},
             {Opcode.CMSG_LOOT_METHOD, 0x0E3E},                        // Unconfirmed
             {Opcode.CMSG_LOOT_MONEY, 0x050A},
@@ -197,7 +198,6 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19750
             {Opcode.CMSG_REQUEST_PVP_REWARDS, 0x06DC},                // Unconfirmed
             {Opcode.CMSG_REQUEST_RAID_INFO, 0x0A96},                  // Unconfirmed
             {Opcode.CMSG_REQUEST_RATED_INFO, 0x0A40},                 // Unconfirmed
-            {Opcode.CMSG_ROUTER_CLIENT_LOG_STREAMING_ERROR, 0x12D6},
             {Opcode.CMSG_SAVE_CUF_PROFILES, 0x0EC7},
             {Opcode.CMSG_SELL_ITEM, 0x1931},
             {Opcode.CMSG_SET_ACHIEVEMENTS_HIDDEN, 0x16D0},
