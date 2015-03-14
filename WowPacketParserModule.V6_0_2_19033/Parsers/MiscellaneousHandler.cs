@@ -157,7 +157,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("TutorialsEnabled");
             packet.ReadBit("Unk bit44"); // Also tutorials related
             packet.ReadBit("TwitterEnabled");
-            var bit61 = packet.ReadBit("Unk bit61");
+
+            var bit61 = ClientVersion.AddedInVersion(ClientVersionBuild.V6_1_0_19702) ? (bool)packet.ReadBit("Unk bit61") : false;
 
             if (hasEuropaTicketSystemStatus)
                 ReadCliEuropaTicketConfig(packet, "EuropaTicketSystemStatus");
@@ -165,6 +166,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             if (hasSessionAlert)
                 ReadClientSessionAlertConfig(packet, "SessionAlert");
 
+            // Note: Only since ClientVersionBuild.V6_1_0_19702
             if (bit61)
             {
                 var int88 = packet.ReadInt32("int88");
@@ -305,8 +307,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("Serial");
         }
 
-        [Parser(Opcode.SMSG_INITIAL_SETUP)]
-        public static void HandleInitialSetup(Packet packet)
+        [Parser(Opcode.SMSG_INITIAL_SETUP, ClientVersionBuild.V6_0_2_19033, ClientVersionBuild.V6_0_3_19342)]
+        public static void HandleInitialSetup60x(Packet packet)
         {
             var int6 = packet.ReadInt32("QuestsCompletedCount");
 
@@ -318,6 +320,16 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             for (var i = 0; i < int6; ++i)
                 packet.ReadByte("QuestsCompleted", i);
+        }
+
+        [Parser(Opcode.SMSG_INITIAL_SETUP, ClientVersionBuild.V6_1_0_19678)]
+        public static void HandleInitialSetup61x(Packet packet)
+        {
+            packet.ReadByte("ServerExpansionLevel");
+            packet.ReadByte("ServerExpansionTier");
+
+            packet.ReadInt32("ServerRegionID");
+            packet.ReadTime("RaidOrigin");
         }
 
         [Parser(Opcode.CMSG_AREATRIGGER)]
@@ -663,8 +675,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         }
 
         // new opcode on 6.x, related to combat log and mostly used in garrisons
-        [Parser(Opcode.SMSG_COMBAT_LOG_UNK)]
-        public static void HandleCombatLogUnk(Packet packet)
+        [Parser(Opcode.SMSG_WORLD_TEXT)]
+        public static void HandleWorldText(Packet packet)
         {
             packet.ReadPackedGuid128("Guid");
             packet.ReadInt32("Arg1");
