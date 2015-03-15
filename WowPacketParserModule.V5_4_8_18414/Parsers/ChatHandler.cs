@@ -11,8 +11,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class ChatHandler
     {
-        [Parser(Opcode.CMSG_CHAT_REPORT_IGNORED)]
-        public static void HandleClientChatIgnored(Packet packet)
+        [Parser(Opcode.CMSG_REPORT_IGNORED)]
+        public static void HandleClientReportIgnored(Packet packet)
         {
             packet.ReadByte("unk24"); // 24
             var guid = packet.StartBitStream(5, 0, 1, 3, 6, 7, 4, 2);

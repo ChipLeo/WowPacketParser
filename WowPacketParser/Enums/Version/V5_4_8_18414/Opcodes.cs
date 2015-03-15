@@ -86,7 +86,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_CHAR_ENUM,                                0x00E0}, //++
             {Opcode.CMSG_CHAR_FACTION_CHANGE,                      0x0329}, //+-
             {Opcode.CMSG_CHAR_RENAME,                              0x0963}, //+-
-            {Opcode.CMSG_CHAT_REPORT_IGNORED,                      0x048A}, //+-
+            {Opcode.CMSG_REPORT_IGNORED,                           0x048A}, //+-
             {Opcode.CMSG_CLEAR_RAID_MARKER,                        0x1443}, //+-
             {Opcode.CMSG_CLEAR_TRADE_ITEM,                         0x00A7}, //++
             {Opcode.CMSG_CONTACT_LIST,                             0x0BB4}, //+-
