@@ -186,7 +186,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19769
             {Opcode.CMSG_PARTY_INVITE_RESPONSE, 0x16BF},
             {Opcode.CMSG_PARTY_UNINVITE, 0x02B6},                     // Unconfirmed
             {Opcode.CMSG_PETITION_SHOW_LIST, 0x0CF5},
-            {Opcode.CMSG_PET_ABANDON, 0x01CA},                        // Unconfirmed
+            {Opcode.CMSG_PET_ABANDON, 0x09E1},
             {Opcode.CMSG_PET_ACTION, 0x09F5},
             {Opcode.CMSG_PET_BATTLE_QUEUE_PROPOSE_MATCH_RESULT, 0x1ACF}, // Unconfirmed
             {Opcode.CMSG_PET_BATTLE_REQUEST_PVP, 0x16C8},             // Unconfirmed
@@ -271,7 +271,6 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19769
             {Opcode.CMSG_TRANSMOGRIFY_ITEMS, 0x03F1},
             {Opcode.CMSG_UI_TIME_REQUEST, 0x0316},
             {Opcode.CMSG_UNLEARN_SPECIALIZATION, 0x0708},             // Unconfirmed
-            {Opcode.CMSG_UNLEARN_TALENTS, 0x0FA9},
             {Opcode.CMSG_UPDATE_ACCOUNT_DATA, 0x1637},
             {Opcode.CMSG_USE_EQUIPMENT_SET, 0x083C},
             {Opcode.CMSG_USE_ITEM, 0x06D0},
