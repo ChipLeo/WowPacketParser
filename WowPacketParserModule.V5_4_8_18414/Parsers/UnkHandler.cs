@@ -662,12 +662,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_NULL_135B)]
         [Parser(Opcode.CMSG_NULL_1362)]
         [Parser(Opcode.CMSG_NULL_1452)]
-        [Parser(Opcode.CMSG_NULL_147B)]
         [Parser(Opcode.CMSG_NULL_14DB)]
         [Parser(Opcode.CMSG_NULL_14E0)]
         [Parser(Opcode.CMSG_NULL_15A8)]
         [Parser(Opcode.CMSG_NULL_15E2)]
-        [Parser(Opcode.CMSG_NULL_18A2)]
         [Parser(Opcode.CMSG_NULL_1A23)]
         [Parser(Opcode.CMSG_NULL_1A87)]
         [Parser(Opcode.CMSG_NULL_1C45)]
@@ -683,7 +681,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_NULL_0C9A)]
         [Parser(Opcode.SMSG_NULL_0E2B)]
         [Parser(Opcode.SMSG_NULL_0E8B)]
-        [Parser(Opcode.SMSG_NULL_0FE1)]
         [Parser(Opcode.SMSG_NULL_1313)]
         public static void HandleUnkNull(Packet packet)
         {
