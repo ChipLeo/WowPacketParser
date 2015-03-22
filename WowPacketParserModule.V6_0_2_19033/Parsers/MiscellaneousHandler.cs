@@ -695,5 +695,41 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             var length = packet.ReadBits("TextLength", 12);
             packet.ReadWoWString("Text", length);
         }
+
+        [Parser(Opcode.SMSG_COMPLETE_SHIPMENT_RESPONSE)]
+        public static void HandleCompleteShipmentResponse(Packet packet)
+        {
+            var count = packet.ReadInt32("Count");
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadInt32("unk1");
+                packet.ReadInt64("unk2");
+                packet.ReadInt64("unk3");
+                packet.ReadInt32("unk4");
+                packet.ReadInt32("unk5");
+                packet.ReadInt32("unk6");
+            }
+        }
+
+        [Parser(Opcode.SMSG_SOCIAL_UNK0213)]
+        public static void HandleSocialUnk0213(Packet packet)
+        {
+            packet.ReadBit("unk1");
+            var len1 = packet.ReadBits("unk1len", 9);
+            var len2 = packet.ReadBits("unk2len", 9);
+            var len3 = packet.ReadBits("unk3len", 9);
+            packet.ReadWoWString("str1", len1);
+            packet.ReadWoWString("str2", len2);
+            packet.ReadWoWString("str3", len3);
+        }
+
+        [Parser(Opcode.SMSG_UNK_1B24)]
+        public static void HandleUnk1B24(Packet packet)
+        {
+            var count1 = packet.ReadInt32("count1");
+            packet.ReadBytes(count1);
+            var count2 = packet.ReadInt32("count2");
+            packet.ReadBytes(count2);
+        }
     }
 }
