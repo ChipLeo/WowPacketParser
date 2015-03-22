@@ -723,6 +723,7 @@ namespace WowPacketParser.Enums.Version.V6_1_0_19678
             {Opcode.SMSG_INSTANCE_SAVE_CREATED, 0x1B39},
             {Opcode.SMSG_INVALIDATE_PLAYER, 0x1799},
             {Opcode.SMSG_INVENTORY_CHANGE_FAILURE, 0x05E1},
+            {Opcode.SMSG_IS_QUEST_COMPLETE_RESPONSE, 0x0108},
             {Opcode.SMSG_ITEM_COOLDOWN, 0x05A3},
             {Opcode.SMSG_ITEM_ENCHANT_TIME_UPDATE, 0x176A},
             {Opcode.SMSG_ITEM_EXPIRE_PURCHASE_REFUND, 0x112B},
