@@ -438,6 +438,13 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadWoWString("DeclinedName", count[i], i);
         }
 
+        [Parser(Opcode.SMSG_SET_PLAYER_DECLINED_NAMES_RESULT)]
+        public static void HandleSetPlayerDeclinedNamesResult(Packet packet)
+        {
+            packet.ReadInt32("ResultCode");
+            packet.ReadPackedGuid128("Player");
+        }
+
         [Parser(Opcode.SMSG_HEALTH_UPDATE)]
         public static void HandleHealthUpdate(Packet packet)
         {
@@ -585,6 +592,15 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadUInt32("NewFacialHair");
             packet.ReadUInt32("NewSkinColor");
             packet.ReadUInt32("Unk");
+        }
+
+        [Parser(Opcode.SMSG_STAND_STATE_UPDATE)]
+        public static void HandleStandStateUpdate(Packet packet)
+        {
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_1_0_19678))
+                packet.ReadInt32("Unk4");
+
+            packet.ReadByteE<StandState>("State");
         }
     }
 }

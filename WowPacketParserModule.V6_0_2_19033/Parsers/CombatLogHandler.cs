@@ -108,39 +108,22 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("Crit");
             packet.ReadBit("Multistrike");
 
-            var bit128 = packet.ReadBit("HasCritRollMade");
-            var bit120 = packet.ReadBit("HasLogData");
+            var hasCritRollMade = packet.ReadBit("HasCritRollMade");
+            var hasCritRollNeeded = packet.ReadBit("HasCritRollNeeded");
+            var hasLogData = packet.ReadBit("HasLogData");
 
-            if (bit128)
+            if (hasCritRollMade)
                 packet.ReadSingle("CritRollMade");
 
-            if (bit120)
+            if (hasCritRollNeeded)
+                packet.ReadSingle("CritRollNeeded");
+
+            if (hasLogData)
                 SpellParsers.ReadSpellCastLogData(packet);
         }
 
         [Parser(Opcode.SMSG_SPELL_ENERGIZE_LOG)]
         public static void HandleSpellEnergizeLog(Packet packet)
-        {
-            packet.ReadPackedGuid128("CasterGUID");
-            packet.ReadPackedGuid128("TargetGUID");
-
-            packet.ReadInt32<SpellId>("SpellID");
-            packet.ReadUInt32E<PowerType>("Type");
-
-            if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_1_0_19678))
-                packet.ReadPackedGuid128("Unk96");
-
-            packet.ReadInt32("Amount");
-
-            packet.ResetBitReader();
-
-            var bit100 = packet.ReadBit("HasLogData");
-            if (bit100)
-                SpellParsers.ReadSpellCastLogData(packet);
-        }
-
-        [Parser(Opcode.SMSG_SPELL_ENERGIZE_LOG2)]
-        public static void HandleSpellEnergizeLog2(Packet packet)
         {
             packet.ReadPackedGuid128("CasterGUID");
             packet.ReadPackedGuid128("TargetGUID");
@@ -312,6 +295,22 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                     packet.ReadSingle("HitRollNeededHitRollNeeded", i);
                 }
             }
+        }
+
+        [Parser(Opcode.SMSG_ATTACKSWING_LANDED_LOG)]
+        public static void HandleAttackswingLandedLog(Packet packet)
+        {
+            SpellParsers.ReadSpellCastLogData(packet);
+
+            packet.ReadInt32("Size");
+
+            CombatHandler.ReadAttackRoundInfo(packet);
+        }
+
+        [Parser(Opcode.CMSG_SET_ADVANCED_COMBAT_LOGGING)]
+        public static void HandleSetAdvancedCombatLogging(Packet packet)
+        {
+            packet.ReadBit("Enable");
         }
 
         [Parser(Opcode.SMSG_PROC_RESIST)]
