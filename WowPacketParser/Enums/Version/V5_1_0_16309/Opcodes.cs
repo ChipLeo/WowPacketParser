@@ -843,7 +843,7 @@ namespace WowPacketParser.Enums.Version.V5_1_0_16309
             {Opcode.SMSG_RAID_SUMMON_FAILED, 0x0C31},
             {Opcode.SMSG_GENERATE_RANDOM_CHARACTER_NAME_RESULT, 0x0B74},
             {Opcode.SMSG_RATED_BG_RATING, 0x0935},
-            {Opcode.SMSG_RATED_BATTLEFIELD_INFO, 0x0418},
+            {Opcode.SMSG_BATTLEFIELD_RATED_INFO, 0x0418},
             {Opcode.SMSG_READ_ITEM_RESULT_FAILED, 0x00C9},
             {Opcode.SMSG_READ_ITEM_RESULT_OK, 0x08CD},
             {Opcode.SMSG_REALM_QUERY_RESPONSE, 0x0D81},

@@ -786,7 +786,7 @@ namespace WowPacketParser.Enums.Version.V4_3_0_15005
             {Opcode.SMSG_RAID_INSTANCE_MESSAGE, 18434},
             {Opcode.SMSG_RAID_MARKERS_CHANGED, 18072},
             {Opcode.SMSG_GENERATE_RANDOM_CHARACTER_NAME_RESULT, 9402},
-            {Opcode.SMSG_RATED_BATTLEFIELD_INFO, 3214},
+            {Opcode.SMSG_BATTLEFIELD_RATED_INFO, 3214},
             {Opcode.SMSG_READ_ITEM_RESULT_FAILED, 5670},
             {Opcode.SMSG_READ_ITEM_RESULT_OK, 22178},
             {Opcode.SMSG_REALM_SPLIT, 6176},

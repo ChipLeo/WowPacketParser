@@ -295,7 +295,7 @@ namespace WowPacketParser.Enums.Version.V5_3_0_16981
             {Opcode.SMSG_RAID_MARKERS_CHANGED, 0x0595},
             {Opcode.SMSG_GENERATE_RANDOM_CHARACTER_NAME_RESULT, 0x0AD9},
             {Opcode.SMSG_RATED_BG_RATING, 0x05C8},
-            {Opcode.SMSG_RATED_BATTLEFIELD_INFO, 0x0394},
+            {Opcode.SMSG_BATTLEFIELD_RATED_INFO, 0x0394},
             {Opcode.SMSG_REALM_QUERY_RESPONSE, 0x10CC},
             {Opcode.SMSG_REALM_SPLIT, 0x0F89},
             {Opcode.SMSG_CONNECT_TO, 0x0328},

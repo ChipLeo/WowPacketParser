@@ -973,7 +973,7 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadUInt32("Unk UInt32 2");
         }
 
-        [Parser(Opcode.SMSG_RATED_BATTLEFIELD_INFO)]
+        [Parser(Opcode.SMSG_BATTLEFIELD_RATED_INFO)]
         public static void HandleRatedBGStats(Packet packet)
         {
             for (var i = 0; i < 18; i++)

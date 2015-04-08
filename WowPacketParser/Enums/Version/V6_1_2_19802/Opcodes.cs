@@ -1402,7 +1402,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19802
             {Opcode.SMSG_RAID_INSTANCE_MESSAGE, 0x15CB},
             {Opcode.SMSG_RAID_MARKERS_CHANGED, 0x18F5},
             {Opcode.SMSG_RANDOM_ROLL, 0x1240},
-            {Opcode.SMSG_RATED_BATTLEFIELD_INFO, 0x0311},
+            {Opcode.SMSG_BATTLEFIELD_RATED_INFO, 0x0311},
             {Opcode.SMSG_READY_CHECK_COMPLETED, 0x0B35},
             {Opcode.SMSG_READY_CHECK_RESPONSE, 0x0DF6},
             {Opcode.SMSG_READY_CHECK_STARTED, 0x1618},
