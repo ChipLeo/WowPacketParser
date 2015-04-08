@@ -5,7 +5,7 @@ using WowPacketParser.SQL;
 namespace WowPacketParser.Store.Objects
 {
     [DBTableName("gameobjects")]
-    public sealed class GameObjectTemplateDB2
+    public sealed class GameObjects
     {
         [DBFieldName("MapID")]
         public uint MapID;
@@ -38,10 +38,10 @@ namespace WowPacketParser.Store.Objects
         public float Size;
 
         [DBFieldName("PhaseID", ClientVersionBuild.V6_0_2_19033)]
-        public int PhaseId;
+        public uint PhaseId;
 
         [DBFieldName("PhaseGroupID", ClientVersionBuild.V6_0_2_19033)]
-        public int PhaseGroupId;
+        public uint PhaseGroupId;
 
         [DBFieldName("Type")]
         public GameObjectType Type;

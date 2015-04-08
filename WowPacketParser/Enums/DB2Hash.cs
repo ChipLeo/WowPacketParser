@@ -132,12 +132,14 @@ namespace WowPacketParser.Enums
         SpellPowerDifficulty            = 0x7EA08450, // WoD - 6.0.1
         SpellReagents                   = 0xAB66C99F, // MoP - 5.2.0
         SpellRuneCost                   = 0x1A27961E, // WoD - 6.0.1
+        SpellTotems                     = 0xA50F8A31, // WoD
         SpellVisual                     = 0xF72496D9, // MoP - 5.4.0
         SpellVisualEffectName           = 0x02E18F32, // MoP - 5.4.0
         SpellVisualKit                  = 0xF483EADB, // MoP - 5.4.0
         SpellVisualKitAreaModel         = 0x208AB51D, // MoP - 5.4.0
         SpellVisualKitModelAttach       = 0xF07194C3, // MoP - 5.4.0
         SpellVisualMissile              = 0x51A28350, // MoP - 5.4.0
+        SpellXSpellVisual               = 0x27B7A01A, // WoD
         TaxiNodes                       = 0x50D91A78, // WoD - 6.0.1
         TaxiPath                        = 0xAB30A45C, // WoD - 6.0.1
         TaxiPathNode                    = 0xE5E988BC, // WoD - 6.0.1

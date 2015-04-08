@@ -369,7 +369,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("MaxLevel");       // unconfirmed order
             packet.ReadInt32("InstanceID");     // unconfirmed order
             packet.ReadInt32<MapId>("MapID");          // unconfirmed order
-            
+
             packet.ResetBitReader();
             packet.ReadBit("Index");
         }

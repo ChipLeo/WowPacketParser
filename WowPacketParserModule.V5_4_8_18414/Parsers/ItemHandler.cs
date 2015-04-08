@@ -617,7 +617,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                         broadcastText.Type = db2File.ReadUInt32("Unk MoP 2"); // kind of type?
 
                         Storage.BroadcastTexts.Add((uint)Id.Key, broadcastText, packet.TimeSpan);
-                        packet.AddSniffData(StoreNameType.BroadcastText, Id.Key, "BROADCAST_TEXT");
+                        packet.AddSniffData(StoreNameType.None, Id.Key, "BROADCAST_TEXT");
                         break;
                     }
                 case DB2Hash.Creature: // New structure - 5.4.0
@@ -666,7 +666,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     }
                 case DB2Hash.GameObjects:
                     {
-                        var gameObjectTemplateDB2 = new GameObjectTemplateDB2();
+                        var gameObjectTemplateDB2 = new GameObjects();
 
                         var Id = db2File.ReadEntry("GameObject Id");
 
@@ -692,7 +692,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                         if (db2File.ReadUInt16() > 0)
                             gameObjectTemplateDB2.Name = db2File.ReadCString("Name");
 
-                        Storage.GameObjectTemplateDB2s.Add((uint)Id.Key, gameObjectTemplateDB2, packet.TimeSpan);
+                        Storage.GameObjects.Add((uint)Id.Key, gameObjectTemplateDB2, packet.TimeSpan);
                         break;
                     }
                 case DB2Hash.Item:
