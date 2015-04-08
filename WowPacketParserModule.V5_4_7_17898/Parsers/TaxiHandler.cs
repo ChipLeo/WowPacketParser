@@ -26,7 +26,7 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_TAXINODE_STATUS)]
+        [Parser(Opcode.SMSG_TAXI_NODE_STATUS)]
         public static void HandleTaxiStatus(Packet packet)
         {
             var guid = new byte[8];

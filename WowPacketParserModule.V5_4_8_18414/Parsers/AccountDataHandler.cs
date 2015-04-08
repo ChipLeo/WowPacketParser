@@ -7,7 +7,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class AccountDataHandler
     {
-        [Parser(Opcode.CMSG_REALM_NAME_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_REALM_NAME)]
         public static void HandleRealmNameQuery(Packet packet)
         {
             packet.ReadUInt32("RealmID");

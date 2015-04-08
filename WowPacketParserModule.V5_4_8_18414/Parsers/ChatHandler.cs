@@ -11,7 +11,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class ChatHandler
     {
-        [Parser(Opcode.CMSG_REPORT_IGNORED)]
+        [Parser(Opcode.CMSG_CHAT_REPORT_IGNORED)]
         public static void HandleClientReportIgnored(Packet packet)
         {
             packet.ReadByte("unk24"); // 24
@@ -20,7 +20,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_MESSAGECHAT_CHANNEL)]
+        [Parser(Opcode.CMSG_CHAT_MESSAGE_CHANNEL)]
         public static void HandleClientChatChannel(Packet packet)
         {
             packet.ReadInt32E<Language>("Language");
@@ -30,28 +30,28 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("Channel Name", channelNameLen);
         }
 
-        [Parser(Opcode.CMSG_MESSAGECHAT_DND)]
-        [Parser(Opcode.CMSG_MESSAGECHAT_EMOTE)]
-        [Parser(Opcode.CMSG_MESSAGECHAT_AFK)]
+        [Parser(Opcode.CMSG_CHAT_MESSAGE_DND)]
+        [Parser(Opcode.CMSG_CHAT_MESSAGE_EMOTE)]
+        [Parser(Opcode.CMSG_CHAT_MESSAGE_AFK)]
         public static void HandleMessageChatDND(Packet packet)
         {
             var len = packet.ReadBits(8);
             packet.ReadWoWString("Message", len);
         }
 
-        [Parser(Opcode.CMSG_MESSAGECHAT_GUILD)]
-        [Parser(Opcode.CMSG_MESSAGECHAT_OFFICER)]
-        [Parser(Opcode.CMSG_MESSAGECHAT_PARTY)]
-        [Parser(Opcode.CMSG_MESSAGECHAT_RAID)]
-        [Parser(Opcode.CMSG_MESSAGECHAT_RAID_WARNING)]
-        [Parser(Opcode.CMSG_MESSAGECHAT_SAY)]
+        [Parser(Opcode.CMSG_CHAT_MESSAGE_GUILD)]
+        [Parser(Opcode.CMSG_CHAT_MESSAGE_OFFICER)]
+        [Parser(Opcode.CMSG_CHAT_MESSAGE_PARTY)]
+        [Parser(Opcode.CMSG_CHAT_MESSAGE_RAID)]
+        [Parser(Opcode.CMSG_CHAT_MESSAGE_RAID_WARNING)]
+        [Parser(Opcode.CMSG_CHAT_MESSAGE_SAY)]
         public static void HandleClientChatMessageGuild(Packet packet)
         {
             packet.ReadInt32E<Language>("Language");
             packet.ReadWoWString("Message", packet.ReadBits(8));
         }
 
-        [Parser(Opcode.CMSG_MESSAGECHAT_WHISPER)]
+        [Parser(Opcode.CMSG_CHAT_MESSAGE_WHISPER)]
         public static void HandleClientChatMessageWhisper(Packet packet)
         {
             packet.ReadInt32E<Language>("Language");
@@ -62,14 +62,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("Receivers Name", recvName);
         }
 
-        [Parser(Opcode.CMSG_MESSAGECHAT_YELL)]
+        [Parser(Opcode.CMSG_CHAT_MESSAGE_YELL)]
         public static void HandleClientChatMessageYell(Packet packet)
         {
             packet.ReadInt32E<Language>("Language");
             packet.ReadWoWString("Message", packet.ReadBits(8));
         }
 
-        [Parser(Opcode.SMSG_CHAT_PLAYER_NOT_FOUND)]
+        [Parser(Opcode.SMSG_CHAT_PLAYER_NOTFOUND)]
         public static void HandleChatPlayerNotFound(Packet packet)
         {
             packet.ReadWoWString("Name", packet.ReadBits(9));
@@ -87,7 +87,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             Storage.DefenseMessages.Add(zoneId, message, packet.TimeSpan);
         }
 
-        [Parser(Opcode.SMSG_MESSAGECHAT)] // sub_70A096
+        [Parser(Opcode.SMSG_CHAT)] // sub_70A096
         public static void HandleMessageChat(Packet packet)
         {
             var text = new CreatureText();

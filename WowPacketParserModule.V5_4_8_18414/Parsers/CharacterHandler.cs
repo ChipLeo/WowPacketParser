@@ -63,7 +63,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid2);
         }
 
-        [Parser(Opcode.CMSG_CHAR_CREATE)]
+        [Parser(Opcode.CMSG_CREATE_CHARACTER)]
         public static void HandleClientCharCreate(Packet packet)
         {
             packet.ReadByte("Outfit Id");
@@ -158,7 +158,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid80);
         }
 
-        [Parser(Opcode.CMSG_CHAR_RENAME)]
+        [Parser(Opcode.CMSG_CHARACTER_RENAME_REQUEST)]
         public static void HandleClientCharRename(Packet packet)
         {
             var guid = new byte[8];
@@ -184,13 +184,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("Emote");
         }
 
-        [Parser(Opcode.CMSG_PLAYED_TIME)]
+        [Parser(Opcode.CMSG_REQUEST_PLAYED_TIME)]
         public static void HandleCPlayedTime(Packet packet)
         {
             packet.ReadBool("Print in chat");
         }
 
-        [Parser(Opcode.CMSG_RANDOMIZE_CHAR_NAME)]
+        [Parser(Opcode.CMSG_GENERATE_RANDOM_CHARACTER_NAME)]
         public static void HandleGenerateRandomCharacterNameQuery(Packet packet)
         {
             packet.ReadByteE<Race>("Race");
@@ -244,7 +244,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("Standstate");
         }
 
-        [Parser(Opcode.CMSG_TEXT_EMOTE)]
+        [Parser(Opcode.CMSG_SEND_TEXT_EMOTE)]
         public static void HandleTextEmote(Packet packet)
         {
             packet.ReadInt32E<EmoteTextType>("Text Emote ID");
@@ -269,7 +269,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_CHAR_ENUM)]
+        [Parser(Opcode.SMSG_ENUM_CHARACTERS_RESULT)]
         public static void HandleCharEnum(Packet packet)
         {
             // імена не перевірено, лише послідовність типів данних
@@ -405,7 +405,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_RANDOMIZE_CHAR_NAME)]
+        [Parser(Opcode.SMSG_GENERATE_RANDOM_CHARACTER_NAME_RESULT)]
         public static void HandleGenerateRandomCharacterNameResponse(Packet packet)
         {
             packet.ReadBit("Success");
@@ -500,7 +500,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_LEVELUP_INFO)]
+        [Parser(Opcode.SMSG_LEVEL_UP_INFO)]
         public static void HandleLevelUpInfo(Packet packet)
         {
             packet.ReadInt32("Talent Level"); // 0 - No Talent gain / 1 - Talent Point gain  // 64
@@ -512,7 +512,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("Power", (PowerType)i); // 44
         }
 
-        [Parser(Opcode.SMSG_LOG_XPGAIN)]
+        [Parser(Opcode.SMSG_LOG_XP_GAIN)]
         public static void HandleLogXPGain(Packet packet)
         {
             var guid = new byte[8];

@@ -6,7 +6,7 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
 {
     public static class GuildHandler
     {
-        [Parser(Opcode.CMSG_GUILD_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_GUILD_INFO)]
         public static void HandleGuildQuery(Packet packet)
         {
             var playerGUID = new byte[8];
@@ -50,7 +50,7 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
             packet.WriteGuid("Guild GUID", guildGUID);
         }
 
-        [Parser(Opcode.SMSG_GUILD_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_GUILD_INFO_RESPONSE)]
         public static void HandleGuildQueryResponse(Packet packet)
         {
             var guid2 = new byte[8];

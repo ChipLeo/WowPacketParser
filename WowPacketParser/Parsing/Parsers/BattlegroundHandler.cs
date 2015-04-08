@@ -369,7 +369,7 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_BATTLEMASTER_HELLO)]
         [Parser(Opcode.CMSG_AREA_SPIRIT_HEALER_QUERY)]
         [Parser(Opcode.CMSG_AREA_SPIRIT_HEALER_QUEUE)]
-        [Parser(Opcode.CMSG_REPORT_PVP_AFK)]
+        [Parser(Opcode.CMSG_REPORT_PVP_PLAYER_AFK)]
         [Parser(Opcode.SMSG_BATTLEGROUND_PLAYER_LEFT, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         [Parser(Opcode.SMSG_BATTLEGROUND_PLAYER_JOINED, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_0_15005)]
         public static void HandleBattlemasterHello(Packet packet)
@@ -691,7 +691,7 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadByte("Warmup");
         }
 
-        [Parser(Opcode.CMSG_BATTLEFIELD_MGR_QUEUE_INVITE_RESPONSE, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
+        [Parser(Opcode.CMSG_BF_MGR_QUEUE_INVITE_RESPONSE, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleBattlefieldMgrQueueInviteResponse(Packet packet)
         {
             packet.ReadInt32("Battle Id");
@@ -733,14 +733,14 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadByte("Relocated");
         }
 
-        [Parser(Opcode.CMSG_BATTLEFIELD_MGR_ENTRY_INVITE_RESPONSE, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
+        [Parser(Opcode.CMSG_BF_MGR_ENTRY_INVITE_RESPONSE, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleBattlefieldMgrEntryInviteResponse(Packet packet)
         {
             packet.ReadInt32("Battle Id");
             packet.ReadBool("Accepted");
         }
 
-        [Parser(Opcode.CMSG_BATTLEFIELD_MGR_EXIT_REQUEST, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
+        [Parser(Opcode.CMSG_BF_MGR_QUEUE_EXIT_REQUEST, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleBattlefieldMgrExitRequest(Packet packet)
         {
             packet.ReadInt32("Battle Id");
@@ -897,14 +897,14 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadUInt32("Rank");
         }
 
-        [Parser(Opcode.CMSG_BATTLEFIELD_MGR_QUEUE_REQUEST, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
+        [Parser(Opcode.CMSG_BF_MGR_QUEUE_REQUEST, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleBattelfieldMgrQueueRequest(Packet packet)
         {
             packet.ReadUInt32("BattleID");
         }
 
         [Parser(Opcode.CMSG_REQUEST_RATED_BG_INFO, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
-        [Parser(Opcode.CMSG_REQUEST_PVP_OPTIONS_ENABLED)]
+        [Parser(Opcode.CMSG_GET_PVP_OPTIONS_ENABLED)]
         [Parser(Opcode.CMSG_BATTLEGROUND_PLAYER_POSITIONS)]
         [Parser(Opcode.SMSG_BATTLEGROUND_INFO_THROTTLED)]
         [Parser(Opcode.SMSG_BATTLEFIELD_PORT_DENIED)]
@@ -973,7 +973,7 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadUInt32("Unk UInt32 2");
         }
 
-        [Parser(Opcode.SMSG_RATED_BG_STATS)]
+        [Parser(Opcode.SMSG_RATED_BATTLEFIELD_INFO)]
         public static void HandleRatedBGStats(Packet packet)
         {
             for (var i = 0; i < 18; i++)

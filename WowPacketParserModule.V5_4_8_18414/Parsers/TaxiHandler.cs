@@ -95,7 +95,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadByte("NodeMask", i);
         }
 
-        [Parser(Opcode.SMSG_TAXINODE_STATUS)]
+        [Parser(Opcode.SMSG_TAXI_NODE_STATUS)]
         public static void HandleTaxiStatus(Packet packet)
         {
             var guid = new byte[8];

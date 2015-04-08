@@ -228,7 +228,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("GUID", guid);
         }
 
-        [Parser(Opcode.CMSG_GUILD_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_GUILD_INFO)]
         public static void HandleGuildQuery(Packet packet)
         {
             var playerGUID = new byte[8];
@@ -541,7 +541,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
         }
 
-        [Parser(Opcode.SMSG_GUILD_PARTY_STATE_RESPONSE)]
+        [Parser(Opcode.SMSG_GUILD_PARTY_STATE)]
         public static void HandleGuildPartyStateResponse(Packet packet)
         {
             packet.ReadInt32("Unk20"); // 20
@@ -556,7 +556,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("Text", (int)packet.ReadBits(10));
         }
 
-        [Parser(Opcode.SMSG_GUILD_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_GUILD_INFO_RESPONSE)]
         public static void HandleGuildQueryResponse(Packet packet)
         {
             var guid = new byte[8];
@@ -836,13 +836,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_TURN_IN_PETITION_RESULTS)]
+        [Parser(Opcode.SMSG_TURN_IN_PETITION_RESULT)]
         public static void HandlePetitionTurnInResults(Packet packet)
         {
             packet.ReadBitsE<PetitionResultType>("Result", 4);
         }
 
-        [Parser(Opcode.SMSG_GUILD_BANK_LOG_QUERY_RESULT)]
+        [Parser(Opcode.SMSG_GUILD_BANK_LOG_QUERY_RESULTS)]
         [Parser(Opcode.SMSG_GUILD_BANK_QUERY_RESULTS)]
         [Parser(Opcode.SMSG_GUILD_CHALLENGE_UPDATE)]
         [Parser(Opcode.SMSG_GUILD_COMMAND_RESULT)]
@@ -851,7 +851,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_GUILD_NEWS_UPDATE)]
         [Parser(Opcode.SMSG_GUILD_SEND_RANK_CHANGE)]
         [Parser(Opcode.SMSG_GUILD_REPUTATION_WEEKLY_CAP)]
-        [Parser(Opcode.SMSG_GUILD_REWARDS_LIST)]
+        [Parser(Opcode.SMSG_GUILD_REWARD_LIST)]
         [Parser(Opcode.SMSG_PETITION_ALREADY_SIGNED)]
         [Parser(Opcode.SMSG_PETITION_QUERY_RESPONSE)]
         [Parser(Opcode.SMSG_PETITION_RENAME_RESPONSE)]

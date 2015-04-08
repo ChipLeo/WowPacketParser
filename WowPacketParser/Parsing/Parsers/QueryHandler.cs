@@ -21,7 +21,7 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadGuid("GUID");
         }
 
-        [Parser(Opcode.SMSG_NAME_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_PLAYER_NAME_RESPONSE)]
         public static void HandleNameQueryResponse(Packet packet)
         {
             WowGuid guid;
@@ -82,19 +82,19 @@ namespace WowPacketParser.Parsing.Parsers
             var entry = packet.ReadInt32("Entry");
             var guid = packet.ReadGuid("GUID");
 
-            if (packet.Opcode == Opcodes.GetOpcode(Opcode.CMSG_CREATURE_QUERY, Direction.ClientToServer) || packet.Opcode == Opcodes.GetOpcode(Opcode.CMSG_GAMEOBJECT_QUERY, Direction.ClientToServer))
+            if (packet.Opcode == Opcodes.GetOpcode(Opcode.CMSG_QUERY_CREATURE, Direction.ClientToServer) || packet.Opcode == Opcodes.GetOpcode(Opcode.CMSG_QUERY_GAME_OBJECT, Direction.ClientToServer))
                 if (guid.HasEntry() && (entry != guid.GetEntry()))
                     packet.AddValue("Error", "Entry does not match calculated GUID entry");
         }
 
-        [Parser(Opcode.CMSG_CREATURE_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_CREATURE)]
         public static void HandleCreatureQuery(Packet packet)
         {
             ReadQueryHeader(packet);
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_CREATURE_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_CREATURE_RESPONSE)]
         public static void HandleCreatureQueryResponse(Packet packet)
         {
             var entry = packet.ReadEntry("Entry");
@@ -181,14 +181,14 @@ namespace WowPacketParser.Parsing.Parsers
             Storage.ObjectNames.Add((uint)entry.Key, objectName, packet.TimeSpan);
         }
 
-        [Parser(Opcode.CMSG_PAGE_TEXT_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_PAGE_TEXT)]
         public static void HandlePageTextQuery(Packet packet)
         {
             ReadQueryHeader(packet);
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_PAGE_TEXT_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_PAGE_TEXT_RESPONSE)]
         public static void HandlePageTextResponse(Packet packet)
         {
             var pageText = new PageText();
@@ -204,14 +204,14 @@ namespace WowPacketParser.Parsing.Parsers
             Storage.PageTexts.Add(entry, pageText, packet.TimeSpan);
         }
 
-        [Parser(Opcode.CMSG_NPC_TEXT_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_NPC_TEXT)]
         public static void HandleNpcTextQuery(Packet packet)
         {
             ReadQueryHeader(packet);
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_NPC_TEXT_UPDATE)]
+        [Parser(Opcode.SMSG_QUERY_NPC_TEXT_RESPONSE)]
         public static void HandleNpcTextUpdate(Packet packet)
         {
             var npcText = new NpcText();

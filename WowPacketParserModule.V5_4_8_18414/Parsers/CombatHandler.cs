@@ -8,7 +8,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class CombatHandler
     {
-        [Parser(Opcode.CMSG_ATTACKSWING)]
+        [Parser(Opcode.CMSG_ATTACK_SWING)]
         public static void HandleAttackSwing(Packet packet)
         {
             var guid = packet.StartBitStream(6, 5, 7, 0, 3, 1, 4, 2);
@@ -33,7 +33,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_ATTACKERSTATEUPDATE)]
+        [Parser(Opcode.SMSG_ATTACKER_STATE_UPDATE)]
         public static void HandleAttackerStateUpdate(Packet packet)
         {
             var bit2C = packet.ReadBit("bit2C");
@@ -108,7 +108,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             if (hitInfo.HasAnyFlag(SpellHitInfo.HITINFO_BLOCK | SpellHitInfo.HITINFO_UNK12))
                 packet.ReadSingle("Unk Float");
         }
-        [Parser(Opcode.SMSG_ATTACKSTART)]
+        [Parser(Opcode.SMSG_ATTACK_START)]
         public static void HandleAttackStartStart(Packet packet)
         {
             var attackerGUID = new byte[8];
@@ -151,7 +151,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Victim GUID", victimGUID);
         }
 
-        [Parser(Opcode.SMSG_ATTACKSTOP)]
+        [Parser(Opcode.SMSG_ATTACK_STOP)]
         public static void HandleAttackStartStop(Packet packet)
         {
             var victimGUID = new byte[8];
@@ -324,7 +324,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("str2", unk73);
         }
 
-        [Parser(Opcode.SMSG_ENVIRONMENTALDAMAGELOG)]
+        [Parser(Opcode.SMSG_ENVIRONMENTAL_DAMAGE_LOG)]
         public static void HandleEnvirenmentalDamageLog(Packet packet)
         {
             var guid = new byte[8];

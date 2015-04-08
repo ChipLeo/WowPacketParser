@@ -24,14 +24,14 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
         }
 
-        [Parser(Opcode.CMSG_GUILD_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_GUILD_INFO)]
         public static void HandleGuildQuery(Packet packet)
         {
             packet.ReadPackedGuid128("Guild Guid");
             packet.ReadPackedGuid128("Player Guid");
         }
 
-        [Parser(Opcode.SMSG_GUILD_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_GUILD_INFO_RESPONSE)]
         public static void HandleGuildQueryResponse(Packet packet)
         {
             packet.ReadPackedGuid128("Guild Guid");
@@ -219,13 +219,13 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             }
         }
 
-        [Parser(Opcode.CMSG_GUILD_REQUEST_PARTY_STATE)]
+        [Parser(Opcode.CMSG_REQUEST_GUILD_PARTY_STATE)]
         public static void HandleGuildUpdatePartyState(Packet packet)
         {
             packet.ReadPackedGuid128("GuildGUID");
         }
 
-        [Parser(Opcode.SMSG_GUILD_PARTY_STATE_RESPONSE)]
+        [Parser(Opcode.SMSG_GUILD_PARTY_STATE)]
         public static void HandleGuildPartyStateResponse(Packet packet)
         {
             packet.ReadBit("Is guild group");
@@ -289,7 +289,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_GUILD_REWARDS_LIST)]
+        [Parser(Opcode.SMSG_GUILD_REWARD_LIST)]
         public static void HandleGuildRewardsList(Packet packet)
         {
             packet.ReadTime("Version");
@@ -392,7 +392,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("FullUpdate");
         }
 
-        [Parser(Opcode.SMSG_GUILD_BANK_LOG_QUERY_RESULT)]
+        [Parser(Opcode.SMSG_GUILD_BANK_LOG_QUERY_RESULTS)]
         public static void HandleGuildBankLogQueryResult(Packet packet)
         {
             packet.ReadInt32("Tab");
@@ -850,7 +850,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadWoWString("NewGuildName", length);
         }
 
-        [Parser(Opcode.SMSG_TURN_IN_PETITION_RESULTS)]
+        [Parser(Opcode.SMSG_TURN_IN_PETITION_RESULT)]
         public static void HandlePetitionTurnInResults(Packet packet)
         {
             packet.ReadBitsE<PetitionResultType>("Result", 4);

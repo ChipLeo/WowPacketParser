@@ -10,7 +10,7 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
 {
     public static class QuestHandler
     {
-        [Parser(Opcode.CMSG_QUESTGIVER_STATUS_QUERY)]
+        [Parser(Opcode.CMSG_QUEST_GIVER_STATUS_QUERY)]
         public static void HandleQuestgiverStatusQuery(Packet packet)
         {
             var guid = packet.StartBitStream(4, 3, 2, 1, 0, 5, 7, 6);
@@ -18,7 +18,7 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_QUESTGIVER_STATUS)]
+        [Parser(Opcode.SMSG_QUEST_GIVER_STATUS)]
         public static void HandleQuestgiverStatus(Packet packet)
         {
             var guid = new byte[8];
@@ -37,7 +37,7 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_QUESTGIVER_STATUS_MULTIPLE)]
+        [Parser(Opcode.SMSG_QUEST_GIVER_STATUS_MULTIPLE)]
         public static void HandleQuestgiverStatusMultiple(Packet packet)
         {
             var count = packet.ReadBits("Count", 21);
@@ -67,7 +67,7 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
             }
         }
 
-        [Parser(Opcode.CMSG_QUEST_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_QUEST_INFO)]
         public static void HandleQuestQuery(Packet packet)
         {
             var guid = new byte[8];
@@ -80,7 +80,7 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_QUEST_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_QUEST_INFO_RESPONSE)]
         public static void HandleQuestQueryResponse(Packet packet)
         {
             var id = packet.ReadEntry("Quest ID"); // +4
@@ -342,7 +342,7 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
             packet.ReadInt32("Count");
         }
 
-        [Parser(Opcode.CMSG_QUESTGIVER_HELLO)]
+        [Parser(Opcode.CMSG_QUEST_GIVER_HELLO)]
         public static void HandleQuestgiverHello(Packet packet)
         {
             var guid = new byte[8];
@@ -351,7 +351,7 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_QUESTGIVER_QUEST_LIST)]
+        [Parser(Opcode.SMSG_QUEST_GIVER_QUEST_LIST_MESSAGE)]
         public static void HandleQuestgiverQuestList(Packet packet)
         {
             packet.ReadUInt32("Emote");
@@ -410,7 +410,7 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_QUESTGIVER_OFFER_REWARD)]
+        [Parser(Opcode.SMSG_QUEST_GIVER_OFFER_REWARD_MESSAGE)]
         public static void HandleQuestOfferReward(Packet packet)
         {
             packet.ReadUInt32("RewardItemIdCount[2]");
@@ -519,7 +519,7 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_QUESTGIVER_REQUEST_ITEMS)]
+        [Parser(Opcode.SMSG_QUEST_GIVER_REQUEST_ITEMS)]
         public static void HandleQuestRequestItems(Packet packet)
         {
             var guid = new byte[8];
@@ -570,7 +570,7 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_QUESTGIVER_REQUEST_REWARD)]
+        [Parser(Opcode.CMSG_QUEST_GIVER_REQUEST_REWARD)]
         public static void HandleQuestRequestReward(Packet packet)
         {
             var guid = new byte[8];
@@ -583,7 +583,7 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_QUESTGIVER_CHOOSE_REWARD)]
+        [Parser(Opcode.CMSG_QUEST_GIVER_CHOOSE_REWARD)]
         public static void HandleQuestChooseReward(Packet packet)
         {
             var guid = new byte[8];
@@ -604,7 +604,7 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_QUESTGIVER_COMPLETE_QUEST)]
+        [Parser(Opcode.CMSG_QUEST_GIVER_COMPLETE_QUEST)]
         public static void HandleQuestCompleteQuest(Packet packet)
         {
             var guid = new byte[8];
@@ -635,7 +635,7 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
                 packet.ReadInt32<QuestId>("Quest ID", i);
         }
 
-        [Parser(Opcode.SMSG_QUESTGIVER_QUEST_COMPLETE)]
+        [Parser(Opcode.SMSG_QUEST_GIVER_QUEST_COMPLETE)]
         public static void HandleQuestCompleted(Packet packet)
         {
             packet.ReadBit("Unk Bit 1");

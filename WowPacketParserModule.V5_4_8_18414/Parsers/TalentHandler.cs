@@ -118,7 +118,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_TALENTS_INFO)]
+        [Parser(Opcode.SMSG_UPDATE_TALENT_DATA)]
         public static void ReadTalentInfo(Packet packet)
         {
             packet.ReadByte("Active Spec Group");

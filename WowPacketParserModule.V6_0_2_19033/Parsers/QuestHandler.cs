@@ -75,14 +75,14 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadWoWString("QuestTitle", bits13, indexes);
         }
 
-        [Parser(Opcode.CMSG_QUEST_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_QUEST_INFO)]
         public static void HandleQuestQuery(Packet packet)
         {
             packet.ReadInt32("Entry");
             packet.ReadPackedGuid128("Guid");
         }
 
-        [Parser(Opcode.CMSG_QUESTGIVER_QUERY_QUEST)]
+        [Parser(Opcode.CMSG_QUEST_GIVER_QUERY_QUEST)]
         public static void HandleQuestGiverQueryQuest(Packet packet)
         {
             packet.ReadPackedGuid128("QuestGiverGUID");
@@ -90,7 +90,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("RespondToGiver");
         }
 
-        [Parser(Opcode.CMSG_QUESTGIVER_COMPLETE_QUEST)]
+        [Parser(Opcode.CMSG_QUEST_GIVER_COMPLETE_QUEST)]
         public static void HandleQuestGiverCompleteQuest(Packet packet)
         {
             packet.ReadPackedGuid128("QuestGiverGUID");
@@ -98,7 +98,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("FromScript");
         }
 
-        [Parser(Opcode.CMSG_QUESTGIVER_CHOOSE_REWARD)]
+        [Parser(Opcode.CMSG_QUEST_GIVER_CHOOSE_REWARD)]
         public static void HandleQuestChooseReward(Packet packet)
         {
             packet.ReadPackedGuid128("QuestGiverGUID");
@@ -106,7 +106,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("ItemChoiceID");
         }
 
-        [Parser(Opcode.CMSG_QUESTGIVER_ACCEPT_QUEST)]
+        [Parser(Opcode.CMSG_QUEST_GIVER_ACCEPT_QUEST)]
         public static void HandleQuestgiverAcceptQuest(Packet packet)
         {
             packet.ReadPackedGuid128("QuestGiverGUID");
@@ -114,7 +114,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("StartCheat");
         }
 
-        [Parser(Opcode.CMSG_QUESTGIVER_REQUEST_REWARD)]
+        [Parser(Opcode.CMSG_QUEST_GIVER_REQUEST_REWARD)]
         public static void HandleQuestRequestReward(Packet packet)
         {
             packet.ReadPackedGuid128("QuestGiverGUID");
@@ -145,23 +145,26 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
                 for (var j = 0; j < int2; ++j)
                 {
-                    var questPoi = new QuestPOI();
-                    var idx = packet.ReadInt32("BlobIndex", i, j);
-                    questPoi.ObjectiveIndex = packet.ReadInt32("ObjectiveIndex", i, j);
-                    packet.ReadInt32("QuestObjectiveID", i, j);
-                    packet.ReadInt32("QuestObjectID", i, j);
-                    questPoi.Map = (uint)packet.ReadInt32("MapID", i, j);
-                    questPoi.WorldMapAreaId = (uint)packet.ReadInt32("WorldMapAreaID", i, j);
-                    questPoi.FloorId = (uint)packet.ReadInt32("Floor", i, j);
-                    packet.ReadInt32("Priority", i, j);
-                    packet.ReadInt32("Flags", i, j);
-                    packet.ReadInt32("WorldEffectID", i, j);
-                    packet.ReadInt32("PlayerConditionID", i, j);
+                    var questPoi = new QuestPOIWoD
+                    {
+                        BlobIndex = packet.ReadInt32("BlobIndex", i, j),
+                        ObjectiveIndex = packet.ReadInt32("ObjectiveIndex", i, j),
+                        QuestObjectiveID = packet.ReadInt32("QuestObjectiveID", i, j),
+                        QuestObjectID = packet.ReadInt32("QuestObjectID", i, j),
+                        MapID = (uint) packet.ReadInt32("MapID", i, j),
+                        WorldMapAreaId = (uint) packet.ReadInt32("WorldMapAreaID", i, j),
+                        Floor = (uint) packet.ReadInt32("Floor", i, j),
+                        Priority = packet.ReadInt32("Priority", i, j),
+                        Flags = packet.ReadInt32("Flags", i, j),
+                        WorldEffectID = packet.ReadInt32("WorldEffectID", i, j),
+                        PlayerConditionID = packet.ReadInt32("PlayerConditionID", i, j)
+                    };
+
                     packet.ReadInt32("NumPoints", i, j);
-                    packet.ReadInt32("Int12", i, j);
+                    questPoi.WoDUnk1 = packet.ReadInt32("WoDUnk1", i, j);
 
                     var int13 = packet.ReadInt32("QuestPOIBlobPoint", i, j);
-                    questPoi.Points = new List<QuestPOIPoint>(int13);
+                    questPoi.Points = new Dictionary<QuestPOIPoint, uint>(int13);
                     for (var k = 0u; k < int13; ++k)
                     {
                         var questPoiPoint = new QuestPOIPoint
@@ -170,16 +173,16 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                             X = packet.ReadInt32("X", i, j, (int)k),
                             Y = packet.ReadInt32("Y", i, j, (int)k)
                         };
-                        questPoi.Points.Add(questPoiPoint);
+                        questPoi.Points.Add(questPoiPoint, (uint)j);
                     }
 
-                    Storage.QuestPOIs.Add(new Tuple<uint, uint>(questId, (uint)idx), questPoi, packet.TimeSpan);
+                    Storage.QuestPOIWoDs.Add(new Tuple<uint, uint>(questId, (uint)j), questPoi, packet.TimeSpan);
                 }
             }
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_QUEST_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_QUEST_INFO_RESPONSE)]
         public static void HandleQuestQueryResponse(Packet packet)
         {
             packet.ReadInt32("Entry");
@@ -352,7 +355,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadInt32<QuestId>("QuestID", i);
         }
 
-        [Parser(Opcode.SMSG_QUESTGIVER_QUEST_DETAILS)]
+        [Parser(Opcode.SMSG_QUEST_GIVER_QUEST_DETAILS)]
         public static void HandleQuestgiverDetails(Packet packet)
         {
             var questDetails = new QuestDetails();
@@ -420,20 +423,20 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             Storage.QuestDetails.Add((uint)id, questDetails, packet.TimeSpan);
         }
 
-        [Parser(Opcode.CMSG_QUESTGIVER_STATUS_QUERY)]
+        [Parser(Opcode.CMSG_QUEST_GIVER_STATUS_QUERY)]
         public static void HandleQuestgiverStatusQuery(Packet packet)
         {
             packet.ReadPackedGuid128("QuestGiverGUID");
         }
 
-        [Parser(Opcode.SMSG_QUESTGIVER_STATUS)]
+        [Parser(Opcode.SMSG_QUEST_GIVER_STATUS)]
         public static void HandleQuestgiverStatus(Packet packet)
         {
             packet.ReadPackedGuid128("QuestGiverGUID");
             packet.ReadInt32E<QuestGiverStatus4x>("StatusFlags");
         }
 
-        [Parser(Opcode.SMSG_QUESTGIVER_STATUS_MULTIPLE)]
+        [Parser(Opcode.SMSG_QUEST_GIVER_STATUS_MULTIPLE)]
         public static void HandleQuestgiverStatusMultiple(Packet packet)
         {
             var int16 = packet.ReadInt32("QuestGiverStatusCount");
@@ -460,7 +463,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_QUESTGIVER_QUEST_COMPLETE)]
+        [Parser(Opcode.SMSG_QUEST_GIVER_QUEST_COMPLETE)]
         public static void HandleQuestCompleted(Packet packet)
         {
             packet.ReadUInt32("QuestId");
@@ -478,7 +481,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("LaunchGossip");
         }
 
-        [Parser(Opcode.SMSG_QUESTGIVER_OFFER_REWARD)]
+        [Parser(Opcode.SMSG_QUEST_GIVER_OFFER_REWARD_MESSAGE)]
         public static void HandleQuestOfferReward(Packet packet)
         {
             var questOfferReward = new QuestOfferReward();
@@ -555,7 +558,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadInt32("Qbits", i);
         }
 
-        [Parser(Opcode.SMSG_QUESTGIVER_QUEST_LIST)]
+        [Parser(Opcode.SMSG_QUEST_GIVER_QUEST_LIST_MESSAGE)]
         public static void HandleQuestgiverQuestList(Packet packet)
         {
             var guid = packet.ReadPackedGuid128("QuestGiverGUID");
@@ -589,7 +592,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
         }
 
-        [Parser(Opcode.SMSG_QUESTGIVER_REQUEST_ITEMS)]
+        [Parser(Opcode.SMSG_QUEST_GIVER_REQUEST_ITEMS)]
         public static void HandleQuestRequestItems(Packet packet)
         {
             var questRequestItems = new QuestRequestItems();
@@ -652,7 +655,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadByte("ObjectiveType");
         }
 
-        [Parser(Opcode.CMSG_QUESTGIVER_HELLO)]
+        [Parser(Opcode.CMSG_QUEST_GIVER_HELLO)]
         public static void HandleQuestGiverHello(Packet packet)
         {
             packet.ReadPackedGuid128("QuestGiver GUID");

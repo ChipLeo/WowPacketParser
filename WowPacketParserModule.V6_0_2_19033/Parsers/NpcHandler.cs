@@ -16,7 +16,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_BANKER_ACTIVATE)]
         [Parser(Opcode.CMSG_BINDER_ACTIVATE)]
         [Parser(Opcode.SMSG_BINDER_CONFIRM)]
-        [Parser(Opcode.CMSG_GOSSIP_HELLO)]
+        [Parser(Opcode.CMSG_TALK_TO_GOSSIP)]
         [Parser(Opcode.CMSG_LIST_INVENTORY)]
         [Parser(Opcode.CMSG_TRAINER_LIST)]
         [Parser(Opcode.SMSG_SHOW_BANK)]
@@ -25,7 +25,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadPackedGuid128("Guid");
         }
 
-        [Parser(Opcode.CMSG_NPC_TEXT_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_NPC_TEXT)]
         public static void HandleNpcTextQuery(Packet packet)
         {
             packet.ReadInt32("Entry");
@@ -33,7 +33,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_NPC_TEXT_UPDATE)]
+        [Parser(Opcode.SMSG_QUERY_NPC_TEXT_RESPONSE)]
         public static void HandleNpcTextUpdate(Packet packet)
         {
             var npcText = new NpcTextMop();
@@ -174,7 +174,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_LIST_INVENTORY)]
+        [Parser(Opcode.SMSG_VENDOR_INVENTORY)]
         public static void HandleVendorInventoryList(Packet packet)
         {
             var npcVendor = new NpcVendor();
@@ -275,7 +275,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32<SpellId>("SpellID");
         }
 
-        [Parser(Opcode.CMSG_SPELLCLICK)]
+        [Parser(Opcode.CMSG_SPELL_CLICK)]
         public static void HandleSpellClick(Packet packet)
         {
             var guid = packet.ReadPackedGuid128("SpellClickUnitGUID");
@@ -318,7 +318,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadPackedGuid128("Healer");
         }
 
-        [Parser(Opcode.SMSG_TABARD_VENDOR_ACTIVATE)]
+        [Parser(Opcode.SMSG_PLAYER_TABARD_VENDOR_ACTIVATE)]
         public static void HandleTabardVendorActivate(Packet packet)
         {
             packet.ReadPackedGuid128("Vendor");

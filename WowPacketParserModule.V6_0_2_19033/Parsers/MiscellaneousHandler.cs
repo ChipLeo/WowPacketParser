@@ -4,7 +4,8 @@ using WowPacketParser.Parsing;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 using CoreParsers = WowPacketParser.Parsing.Parsers;
-using TutorialAction61x = WowPacketParser.Enums.Version.V6_1_0_19678.TutorialAction;
+using TutorialAction610 = WowPacketParser.Enums.Version.V6_1_0_19678.TutorialAction;
+using TutorialAction612 = WowPacketParser.Enums.Version.V6_1_2_19802.TutorialAction;
 
 namespace WowPacketParserModule.V6_0_2_19033.Parsers
 {
@@ -17,7 +18,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         }
 
         [Parser(Opcode.CMSG_REQUEST_ARTIFACT_COMPLETION_HISTORY)]
-        [Parser(Opcode.CMSG_TWITTER_GET_STATUS)]
+        [Parser(Opcode.CMSG_TWITTER_CHECK_STATUS)]
         public static void HandleMiscZero(Packet packet)
         {
         }
@@ -29,7 +30,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         }
 
         [HasSniffData]
-        [Parser(Opcode.CMSG_LOAD_SCREEN)]
+        [Parser(Opcode.CMSG_LOADING_SCREEN_NOTIFY)]
         public static void HandleClientEnterWorld(Packet packet)
         {
             var mapId = packet.ReadInt32<MapId>("MapID");
@@ -69,6 +70,14 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("BpayStoreAvailable");
             packet.ReadBit("BpayStoreDisabledByParentalControls");
             packet.ReadBit("CharUndeleteEnabled");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_1_2_19802))
+            {
+                packet.ReadBit("CommerceSystemEnabled");
+                packet.ReadBit("Unk14");
+                packet.ReadBit("WillKickFromWorld");
+                packet.ReadInt32("TokenPollTimeSeconds");
+                packet.ReadInt32E<ConsumableTokenRedeem>("TokenRedeemIndex");
+            }
         }
 
         public static void ReadCliSavedThrottleObjectState(Packet packet, params object[] idx)
@@ -130,8 +139,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 ReadClientSessionAlertConfig(packet, "SessionAlert");
         }
 
-        [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS, ClientVersionBuild.V6_1_0_19678)]
-        public static void HandleFeatureSystemStatus61x(Packet packet)
+        [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS, ClientVersionBuild.V6_1_0_19678, ClientVersionBuild.V6_1_2_19802)]
+        public static void HandleFeatureSystemStatus610(Packet packet)
         {
             packet.ReadByte("ComplaintStatus");
 
@@ -170,6 +179,58 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             // Note: Only since ClientVersionBuild.V6_1_0_19702
             if (bit61)
+            {
+                var int88 = packet.ReadInt32("int88");
+                for (int i = 0; i < int88; i++)
+                    packet.ReadByte("byte23", i);
+            }
+        }
+
+        [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS, ClientVersionBuild.V6_1_2_19802)]
+        public static void HandleFeatureSystemStatus612(Packet packet)
+        {
+            packet.ReadByte("ComplaintStatus");
+
+            packet.ReadInt32("ScrollOfResurrectionRequestsRemaining");
+            packet.ReadInt32("ScrollOfResurrectionMaxRequestsPerDay");
+            packet.ReadInt32("CfgRealmID");
+            packet.ReadInt32("CfgRealmRecID");
+            packet.ReadInt32("Int27");
+            packet.ReadInt32("TwitterMsTillCanPost");
+            packet.ReadInt32("TokenPollTimeSeconds");
+            packet.ReadInt32E<ConsumableTokenRedeem>("TokenRedeemIndex");
+
+            packet.ResetBitReader();
+
+            packet.ReadBit("VoiceEnabled");
+            var hasEuropaTicketSystemStatus = packet.ReadBit("HasEuropaTicketSystemStatus");
+            packet.ReadBit("ScrollOfResurrectionEnabled");
+            packet.ReadBit("BpayStoreEnabled");
+            packet.ReadBit("BpayStoreAvailable");
+            packet.ReadBit("BpayStoreDisabledByParentalControls");
+            packet.ReadBit("ItemRestorationButtonEnabled");
+            packet.ReadBit("BrowserEnabled");
+            var hasSessionAlert = packet.ReadBit("HasSessionAlert");
+            packet.ReadBit("RecruitAFriendSendingEnabled");
+            packet.ReadBit("CharUndeleteEnabled");
+            packet.ReadBit("RestrictedAccount");
+            packet.ReadBit("TutorialsEnabled");
+            packet.ReadBit("Unk bit44"); // Also tutorials related
+            packet.ReadBit("TwitterEnabled");
+            packet.ReadBit("CommerceSystemEnabled");
+            packet.ReadBit("Unk67");
+            packet.ReadBit("WillKickFromWorld");
+            var bit4A = packet.ReadBit("Unk4A");
+
+            packet.ResetBitReader();
+
+            if (hasEuropaTicketSystemStatus)
+                ReadCliEuropaTicketConfig(packet, "EuropaTicketSystemStatus");
+
+            if (hasSessionAlert)
+                ReadClientSessionAlertConfig(packet, "SessionAlert");
+
+            if (bit4A)
             {
                 var int88 = packet.ReadInt32("int88");
                 for (int i = 0; i < int88; i++)
@@ -334,7 +395,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadTime("RaidOrigin");
         }
 
-        [Parser(Opcode.CMSG_AREATRIGGER)]
+        [Parser(Opcode.CMSG_AREA_TRIGGER)]
         public static void HandleClientAreaTrigger(Packet packet)
         {
             var entry = packet.ReadEntry("Area Trigger Id");
@@ -401,7 +462,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32<ZoneId>("AreaID");
         }
 
-        [Parser(Opcode.CMSG_PAGE_TEXT_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_PAGE_TEXT)]
         public static void HandlePageTextQuery(Packet packet)
         {
             packet.ReadInt32("Entry");
@@ -409,7 +470,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_PAGE_TEXT_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_PAGE_TEXT_RESPONSE)]
         public static void HandlePageTextResponse(Packet packet)
         {
             var pageText = new PageText();
@@ -464,7 +525,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         }
 
         [Parser(Opcode.CMSG_TUTORIAL_FLAG, ClientVersionBuild.V6_0_2_19033, ClientVersionBuild.V6_0_3_19342)]
-        public static void HandleTutorialFlag6x(Packet packet)
+        public static void HandleTutorialFlag60x(Packet packet)
         {
             var action = packet.ReadBitsE<TutorialAction>("TutorialAction", 2);
 
@@ -472,12 +533,21 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadInt32E<Tutorial>("TutorialBit");
         }
 
-        [Parser(Opcode.CMSG_TUTORIAL_FLAG, ClientVersionBuild.V6_0_3_19342)]
-        public static void HandleTutorialFlag61x(Packet packet)
+        [Parser(Opcode.CMSG_TUTORIAL_FLAG, ClientVersionBuild.V6_1_0_19678, ClientVersionBuild.V6_1_2_19802)]
+        public static void HandleTutorialFlag610(Packet packet)
         {
-            var action = packet.ReadBitsE<TutorialAction61x>("TutorialAction", 2);
+            var action = packet.ReadBitsE<TutorialAction610>("TutorialAction", 2);
 
-            if (action == TutorialAction61x.Update)
+            if (action == TutorialAction610.Update)
+                packet.ReadInt32E<Tutorial>("TutorialBit");
+        }
+
+        [Parser(Opcode.CMSG_TUTORIAL_FLAG, ClientVersionBuild.V6_1_2_19802)]
+        public static void HandleTutorialFlag612(Packet packet)
+        {
+            var action = packet.ReadBitsE<TutorialAction612>("TutorialAction", 2);
+
+            if (action == TutorialAction612.Update)
                 packet.ReadInt32E<Tutorial>("TutorialBit");
         }
 
@@ -574,7 +644,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("TimerType");
         }
 
-        [Parser(Opcode.SMSG_STREAMING_MOVIE)]
+        [Parser(Opcode.SMSG_STREAMING_MOVIES)]
         public static void HandleStreamingMovie(Packet packet)
         {
             var count = packet.ReadInt32("MovieCount");
@@ -662,7 +732,6 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadUInt32("Arg2");
         }
 
-
         [Parser(Opcode.SMSG_RESTRICTED_ACCOUNT_WARNING)]
         public static void HandleRestrictedAccountWarning(Packet packet)
         {
@@ -730,6 +799,33 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBytes(count1);
             var count2 = packet.ReadInt32("count2");
             packet.ReadBytes(count2);
+        }
+
+        [Parser(Opcode.CMSG_ENGINE_SURVEY)]
+        public static void HandleEngineSurvey(Packet packet)
+        {
+            packet.ReadUInt32("GPUVendorID");
+            packet.ReadUInt32("GPUModelID");
+            packet.ReadUInt32("Unk1C");
+            packet.ReadUInt32("Unk10");
+            packet.ReadUInt32("Unk38");
+            packet.ReadUInt32("DisplayResWidth");
+            packet.ReadUInt32("DisplayResHeight");
+            packet.ReadUInt32("Unk2C");
+            packet.ReadUInt32("MemoryCapacity");
+            packet.ReadUInt32("Unk30");
+            packet.ReadUInt32("Unk18");
+            packet.ReadByte("HasHDPlayerModels");
+            packet.ReadByte("Is64BitSystem");
+            packet.ReadByte("Unk3C");
+            packet.ReadByte("Unk3F");
+            packet.ReadByte("Unk3E");
+        }
+
+        [Parser(Opcode.SMSG_TWITTER_STATUS)]
+        public static void HandleTwitterStatus(Packet packet)
+        {
+            packet.ReadUInt32("StatusInt");
         }
     }
 }

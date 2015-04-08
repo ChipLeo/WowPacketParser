@@ -188,7 +188,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.ReadByte("Unk Byte");
         }
 
-        [Parser(Opcode.CMSG_VOID_STORAGE_UNLOCK)]
+        [Parser(Opcode.CMSG_UNLOCK_VOID_STORAGE)]
         public static void HandleVoidStorageUnlock(Packet packet)
         {
             var guid = packet.StartBitStream(5, 1, 3, 0, 4, 6, 7, 2);
@@ -258,7 +258,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.WriteGuid("NPC Guid", npcGuid);
         }
 
-        [Parser(Opcode.CMSG_VOID_SWAP_ITEM)]
+        [Parser(Opcode.CMSG_SWAP_VOID_ITEM)]
         public static void HandleVoidSwapItem(Packet packet)
         {
             packet.ReadInt32("New Slot");

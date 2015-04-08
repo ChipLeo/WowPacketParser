@@ -18,7 +18,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadWoWString("Addon", len[i], i);
         }
 
-        [Parser(Opcode.CMSG_MESSAGECHAT_ADDON_WHISPER)]
+        [Parser(Opcode.CMSG_CHAT_MESSAGE_ADDON_WHISPER)]
         public static void HandleMessageChatAddonWhisper(Packet packet)
         {
             var targetLen = packet.ReadBits(9);
@@ -84,7 +84,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.CMSG_UNREGISTER_ALL_ADDON_PREFIXES)]
+        [Parser(Opcode.CMSG_CHAT_UNREGISTER_ALL_ADDON_PREFIXES)]
         public static void HandleAddonNull(Packet packet)
         {
         }

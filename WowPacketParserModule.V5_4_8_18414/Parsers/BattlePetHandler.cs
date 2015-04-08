@@ -55,7 +55,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     packet.ReadWoWString("declNames", declinedNamesLen[i - 1], i);
         }
 
-        [Parser(Opcode.CMSG_BATTLE_PET_NAME_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_BATTLE_PET_NAME)]
         public static void HandleBattlePetNameQuery(Packet packet)
         {
             var petName = new byte[8];

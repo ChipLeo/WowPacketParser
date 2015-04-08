@@ -9,7 +9,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class GameObjectHandler
     {
-        [Parser(Opcode.CMSG_GAMEOBJECT_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_GAME_OBJECT)]
         public static void HandleGameObjectQuery(Packet packet)
         {
             var entry = packet.ReadUInt32("Entry");
@@ -19,7 +19,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("GameObject Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_GAMEOBJ_REPORT_USE)]
+        [Parser(Opcode.CMSG_GAME_OBJ_REPORT_USE)]
         public static void HandleGOReportUse(Packet packet)
         {
             var guid = packet.StartBitStream(4, 7, 5, 3, 6, 1, 2, 0);
@@ -27,7 +27,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("GameObject Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_GAMEOBJ_USE)]
+        [Parser(Opcode.CMSG_GAME_OBJ_USE)]
         public static void HandleGOUse(Packet packet)
         {
             var guid = packet.StartBitStream(6, 1, 3, 4, 0, 5, 7, 2);
@@ -35,7 +35,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("GameObject Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_GAMEOBJECT_CUSTOM_ANIM)]
+        [Parser(Opcode.SMSG_GAME_OBJECT_CUSTOM_ANIM)]
         public static void HandleGOCustomAnim(Packet packet)
         {
             var guid = new byte[8];
@@ -65,7 +65,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_GAMEOBJECT_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_GAME_OBJECT_RESPONSE)]
         public static void HandleGameObjectQueryResponse(Packet packet)
         {
             var gameObject = new GameObjectTemplate();

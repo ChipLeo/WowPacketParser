@@ -32,7 +32,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.CMSG_AUTOEQUIP_ITEM)]
+        [Parser(Opcode.CMSG_AUTO_EQUIP_ITEM)]
         public static void HandleAutoEquipItem(Packet packet)
         {
             packet.ReadByte("Slot");

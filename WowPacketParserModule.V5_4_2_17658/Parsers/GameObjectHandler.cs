@@ -8,7 +8,7 @@ namespace WowPacketParserModule.V5_4_2_17658.Parsers
 {
     public static class GameObjectHandler
     {
-        [Parser(Opcode.CMSG_GAMEOBJECT_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_GAME_OBJECT)]
         public static void HandleGameObjectQuery(Packet packet)
         {
             var guid = new byte[8];
@@ -22,7 +22,7 @@ namespace WowPacketParserModule.V5_4_2_17658.Parsers
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_GAMEOBJECT_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_GAME_OBJECT_RESPONSE)]
         public static void HandleGameObjectQueryResponse(Packet packet)
         {
             var gameObject = new GameObjectTemplate();

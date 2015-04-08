@@ -11,7 +11,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class LootHandler
     {
-        [Parser(Opcode.CMSG_LOOT)]
+        [Parser(Opcode.CMSG_LOOT_UNIT)]
         public static void HandleLoot(Packet packet)
         {
             var guid = packet.StartBitStream(4, 5, 2, 7, 0, 1, 3, 6);
@@ -19,7 +19,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_LOOT_METHOD)]
+        [Parser(Opcode.CMSG_SET_LOOT_METHOD)]
         public static void HandleLootMethod(Packet packet)
         {
             packet.ReadByte("unk29"); // 29

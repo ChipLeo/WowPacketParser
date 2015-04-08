@@ -68,7 +68,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_GUILD_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_GUILD_INFO)]
         public static void HandleGuildQuery(Packet packet)
         {
             var playerGUID = new byte[8];
@@ -118,7 +118,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.ReadInt32("Unk");
         }
 
-        [Parser(Opcode.SMSG_GUILD_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_GUILD_INFO_RESPONSE)]
         public static void HandleGuildQueryResponse(Packet packet)
         {
             var guid2 = new byte[8];
@@ -397,7 +397,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.ReadWoWString("MOTD", motdLength);
         }
 
-        [Parser(Opcode.CMSG_GUILD_REQUEST_PARTY_STATE)]
+        [Parser(Opcode.CMSG_REQUEST_GUILD_PARTY_STATE)]
         public static void HandleGuildUpdatePartyState(Packet packet)
         {
             var guid = new byte[8];
@@ -408,7 +408,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_GUILD_PARTY_STATE_RESPONSE)]
+        [Parser(Opcode.SMSG_GUILD_PARTY_STATE)]
         public static void HandleGuildPartyStateResponse(Packet packet)
         {
             packet.ReadBit("Is guild group");
@@ -532,7 +532,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.ReadUInt64("Member Total XP");
         }
 
-        [Parser(Opcode.SMSG_GUILD_REWARDS_LIST)]
+        [Parser(Opcode.SMSG_GUILD_REWARD_LIST)]
         public static void HandleGuildRewardsList(Packet packet)
         {
             packet.ReadTime("Time");

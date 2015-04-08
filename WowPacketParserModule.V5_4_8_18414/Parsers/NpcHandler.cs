@@ -89,7 +89,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("NPC Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_NPC_TEXT_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_NPC_TEXT)]
         public static void HandleNpcTextQuery(Packet packet)
         {
             packet.ReadUInt32("Text Id");
@@ -334,7 +334,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_LIST_INVENTORY)]
+        [Parser(Opcode.SMSG_VENDOR_INVENTORY)]
         public static void HandleVendorInventoryList(Packet packet)
         {
             var npcVendor = new NpcVendor();
@@ -404,7 +404,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_NPC_TEXT_UPDATE)]
+        [Parser(Opcode.SMSG_QUERY_NPC_TEXT_RESPONSE)]
         public static void HandleNpcTextUpdate(Packet packet)
         {
             var npcText = new NpcTextMop();

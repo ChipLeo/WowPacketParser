@@ -11,7 +11,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
         }
 
-        [Parser(Opcode.SMSG_SEND_MAIL_RESULT)]
+        [Parser(Opcode.SMSG_MAIL_COMMAND_RESULT)]
         public static void HandleMailCommandResult(Packet packet)
         {
             packet.ReadUInt32("MailID");
@@ -218,7 +218,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt64("Money");
         }
 
-        [Parser(Opcode.CMSG_GET_MAIL_LIST)]
+        [Parser(Opcode.CMSG_MAIL_GET_LIST)]
         public static void HandleGetMailList(Packet packet)
         {
             packet.ReadPackedGuid128("Mailbox");

@@ -9,7 +9,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class MailHandler
     {
-        [Parser(Opcode.CMSG_GET_MAIL_LIST)]
+        [Parser(Opcode.CMSG_MAIL_GET_LIST)]
         public static void HandleGetMailList(Packet packet)
         {
             var guid = packet.StartBitStream(6, 3, 7, 5, 4, 1, 2, 0);
@@ -271,7 +271,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadSingle("unk16");
         }
 
-        [Parser(Opcode.SMSG_SEND_MAIL_RESULT)]
+        [Parser(Opcode.SMSG_MAIL_COMMAND_RESULT)]
         public static void HandleSSendMailResult(Packet packet)
         {
             packet.ReadUInt32("Mail Id");

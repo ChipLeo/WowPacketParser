@@ -20,7 +20,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_AREATRIGGER)]
+        [Parser(Opcode.CMSG_AREA_TRIGGER)]
         public static void HandleClientAreaTrigger(Packet packet)
         {
             var entry = packet.ReadEntry("Area Trigger Id");
@@ -83,7 +83,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_LOAD_SCREEN)]
+        [Parser(Opcode.CMSG_LOADING_SCREEN_NOTIFY)]
         public static void HandleClientEnterWorld(Packet packet)
         {
             var mapId = packet.ReadUInt32<MapId>("Map Id");
@@ -206,7 +206,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("Title");
         }
 
-        [Parser(Opcode.CMSG_SPELLCLICK)]
+        [Parser(Opcode.CMSG_SPELL_CLICK)]
         public static void HandleSpellClick(Packet packet)
         {
             var guidBytes = new byte[8];
@@ -1224,7 +1224,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadUInt32E<MirrorTimerType>("Timer Type");
         }
 
-        [Parser(Opcode.SMSG_STREAMING_MOVIE)]
+        [Parser(Opcode.SMSG_STREAMING_MOVIES)]
         public static void HandleStreamingMovie(Packet packet)
         {
             var count16 = packet.ReadBits("count16", 23);
@@ -1232,7 +1232,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt16("File Data ID"); // 20
         }
 
-        [Parser(Opcode.SMSG_TIME_SYNC_REQ)]
+        [Parser(Opcode.SMSG_TIME_SYNC_REQUEST)]
         public static void HandleTimeSyncReq(Packet packet)
         {
             packet.ReadUInt32("MCounter");
@@ -1469,7 +1469,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk2");
         }
 
-        [Parser(Opcode.CMSG_ATTACKSTOP)]
+        [Parser(Opcode.CMSG_ATTACK_STOP)]
         [Parser(Opcode.CMSG_GET_TIMEZONE_INFORMATION)]
         [Parser(Opcode.CMSG_UI_TIME_REQUEST)]
         [Parser(Opcode.MSG_MOVE_WORLDPORT_ACK)]  //0

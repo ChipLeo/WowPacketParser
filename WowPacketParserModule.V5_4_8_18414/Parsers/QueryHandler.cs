@@ -12,7 +12,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class QueryHandler
     {
-        [Parser(Opcode.CMSG_CREATURE_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_CREATURE)]
         public static void HandleCreatureQuery(Packet packet)
         {
             packet.ReadUInt32("Entry");
@@ -75,7 +75,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("int24");
         }
 
-        [Parser(Opcode.CMSG_PAGE_TEXT_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_PAGE_TEXT)]
         public static void HandlePageTextQuery(Packet packet)
         {
             var guid = new byte[8];
@@ -98,7 +98,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_CREATURE_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_CREATURE_RESPONSE)]
         public static void HandleCreatureQueryResponse(Packet packet)
         {
             var entry = packet.ReadEntry("Entry");
@@ -191,7 +191,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             Storage.ObjectNames.Add((uint)entry.Key, objectName, packet.TimeSpan);
         }
 
-        [Parser(Opcode.SMSG_NAME_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_PLAYER_NAME_RESPONSE)]
         public static void HandleNameQueryResponse(Packet packet)
         {
             var guid = packet.StartBitStream(3, 6, 7, 2, 5, 4, 0, 1);
@@ -281,7 +281,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_PAGE_TEXT_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_PAGE_TEXT_RESPONSE)]
         public static void HandlePageTextResponse(Packet packet)
         {
             var pageText = new PageText();

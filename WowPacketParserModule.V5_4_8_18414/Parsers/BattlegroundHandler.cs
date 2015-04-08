@@ -33,7 +33,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
         [Parser(Opcode.CMSG_AREA_SPIRIT_HEALER_QUERY)]
         [Parser(Opcode.CMSG_BATTLEMASTER_HELLO)]
-        [Parser(Opcode.CMSG_REPORT_PVP_AFK)]
+        [Parser(Opcode.CMSG_REPORT_PVP_PLAYER_AFK)]
         public static void HandleBattlemasterHello(Packet packet)
         {
         }
@@ -57,7 +57,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk");
         }
 
-        [Parser(Opcode.CMSG_BATTLEFIELD_MGR_ENTRY_INVITE_RESPONSE)]
+        [Parser(Opcode.CMSG_BF_MGR_ENTRY_INVITE_RESPONSE)]
         public static void HandleBattlefieldMgrEntryInviteResponse(Packet packet)
         {
             var guid = new byte[8];
@@ -75,7 +75,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_BATTLEFIELD_MGR_EXIT_REQUEST)]
+        [Parser(Opcode.CMSG_BF_MGR_QUEUE_EXIT_REQUEST)]
         public static void HandleBattlefieldMgrExitRequest(Packet packet)
         {
             var guid = packet.StartBitStream(3, 2, 4, 1, 7, 0, 5, 6);
@@ -83,7 +83,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_BATTLEFIELD_MGR_QUEUE_INVITE_RESPONSE)]
+        [Parser(Opcode.CMSG_BF_MGR_QUEUE_INVITE_RESPONSE)]
         public static void HandleBattlefieldMgrQueueInviteResponse(Packet packet)
         {
             var guid = new byte[8];
@@ -101,7 +101,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_BATTLEFIELD_MGR_QUEUE_REQUEST)]
+        [Parser(Opcode.CMSG_BF_MGR_QUEUE_REQUEST)]
         public static void HandleBattelfieldMgrQueueRequest(Packet packet)
         {
         }
@@ -448,7 +448,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid3", guid3);
         }
 
-        [Parser(Opcode.SMSG_BATTLEFIELD_STATUS_NEEDCONFIRMATION)]
+        [Parser(Opcode.SMSG_BATTLEFIELD_STATUS_NEED_CONFIRMATION)]
         public static void HandleBattlefieldStatusNeedConfirmation(Packet packet)
         {
             var guid = new byte[8];
@@ -502,7 +502,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid2);
         }
 
-        [Parser(Opcode.SMSG_BATTLEFIELD_STATUS_WAITFORGROUPS)]
+        [Parser(Opcode.SMSG_BATTLEFIELD_STATUS_WAIT_FOR_GROUPS)]
         public static void HandleBattlefieldStatusWaitForGroups(Packet packet)
         {
         }
@@ -657,7 +657,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("unk19"); // 19
         }
 
-        [Parser(Opcode.SMSG_RATED_BG_STATS)]
+        [Parser(Opcode.SMSG_RATED_BG_RATING)]
         public static void HandleRatedBGStats(Packet packet)
         {
         }
@@ -705,7 +705,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_REQUEST_PVP_OPTIONS_ENABLED)]
+        [Parser(Opcode.CMSG_GET_PVP_OPTIONS_ENABLED)]
         [Parser(Opcode.CMSG_BATTLEGROUND_PLAYER_POSITIONS)]
         [Parser(Opcode.SMSG_BATTLEGROUND_INFO_THROTTLED)]
         [Parser(Opcode.SMSG_BATTLEFIELD_PORT_DENIED)]

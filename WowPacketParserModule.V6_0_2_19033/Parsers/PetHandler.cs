@@ -6,13 +6,13 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 {
     public static class PetHandler
     {
-        [Parser(Opcode.CMSG_PET_NAME_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_PET_NAME)]
         public static void HandlePetNameQuery(Packet packet)
         {
             packet.ReadPackedGuid128("PetID");
         }
 
-        [Parser(Opcode.SMSG_PET_NAME_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_PET_NAME_RESPONSE)]
         public static void HandlePetNameQueryResponse(Packet packet)
         {
             packet.ReadPackedGuid128("PetID");
@@ -37,7 +37,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         }
 
 
-        [Parser(Opcode.SMSG_PET_SPELLS)]
+        [Parser(Opcode.SMSG_PET_SPELLS_MESSAGE)]
         public static void HandlePetSpells(Packet packet)
         {
             packet.ReadPackedGuid128("PetGUID");
@@ -99,8 +99,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadVector3("ActionPosition");
         }
 
-        [Parser(Opcode.CMSG_PET_RENAME)]
-        public static void HandlePetRename(Packet packet)
+        public static void ReadPetRenameData(Packet packet)
         {
             packet.ReadPackedGuid128("PetGUID");
             packet.ReadInt32("PetNumber");
@@ -120,6 +119,19 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             packet.ReadWoWString("NewName", bits20);
         }
+
+        [Parser(Opcode.SMSG_PET_NAME_INVALID)]
+        public static void HandlePetNameInvalid(Packet packet)
+        {
+            packet.ReadByte("Result");
+            ReadPetRenameData(packet);
+        }
+
+        [Parser(Opcode.CMSG_PET_RENAME)]
+        public static void HandlePetRename(Packet packet)
+        {
+            ReadPetRenameData(packet);
+        }
         
         [Parser(Opcode.SMSG_PET_SPECIALIZATION)]
         public static void HandlePetSpecialization(Packet packet)
@@ -127,15 +139,15 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
              packet.ReadInt16("Specialization");
         }
         
-        [Parser(Opcode.CMSG_PET_SET_SPECIALIZATION)]
+        [Parser(Opcode.CMSG_LEARN_PET_SPECIALIZATION_GROUP)]
         public static void HandlePetSetSpecialization(Packet packet)
         {
             packet.ReadPackedGuid128("PetGUID");
             packet.ReadInt32("SpecGroupId");
         }
         
-        [Parser(Opcode.SMSG_PET_LEARNED_SPELL)]
-        [Parser(Opcode.SMSG_PET_REMOVED_SPELL)]
+        [Parser(Opcode.SMSG_PET_LEARNED_SPELLS)]
+        [Parser(Opcode.SMSG_PET_UNLEARNED_SPELLS)]
         public static void HandlePetSpellsLearnedRemoved(Packet packet)
         {
             var count = packet.ReadUInt32("Spell Count");

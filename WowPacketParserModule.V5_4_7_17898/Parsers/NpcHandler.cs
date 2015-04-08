@@ -160,7 +160,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.AddSniffData(StoreNameType.Gossip, (int)menuId, guid.GetEntry().ToString(CultureInfo.InvariantCulture));
         }
 
-        [Parser(Opcode.CMSG_NPC_TEXT_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_NPC_TEXT)]
         public static void HandleNpcTextQuery(Packet packet)
         {
             packet.ReadInt32("Entry");
@@ -172,7 +172,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_NPC_TEXT_UPDATE)]
+        [Parser(Opcode.SMSG_QUERY_NPC_TEXT_RESPONSE)]
         public static void HandleNpcTextUpdate(Packet packet)
         {
             var npcText = new NpcTextMop();
@@ -307,7 +307,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_LIST_INVENTORY)]
+        [Parser(Opcode.SMSG_VENDOR_INVENTORY)]
         public static void HandleVendorInventoryList(Packet packet)
         {
             var npcVendor = new NpcVendor();

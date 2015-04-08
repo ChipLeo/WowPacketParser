@@ -11,12 +11,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
     public static class CharacterHandler
     {
         [Parser(Opcode.SMSG_SHOW_NEUTRAL_PLAYER_FACTION_SELECT_UI)]
-        [Parser(Opcode.CMSG_CHAR_UNDELETE_ENUM)]
+        [Parser(Opcode.CMSG_ENUM_CHARACTERS_DELETED_BY_CLIENT)]
         public static void HandleCharacterZero(Packet packet)
         {
         }
 
-        [Parser(Opcode.SMSG_CHAR_ENUM)]
+        [Parser(Opcode.SMSG_ENUM_CHARACTERS_RESULT)]
         public static void HandleCharEnum(Packet packet)
         {
             packet.ReadBit("Success");
@@ -86,7 +86,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             }
         }
 
-        [Parser(Opcode.CMSG_CHAR_CREATE)]
+        [Parser(Opcode.CMSG_CREATE_CHARACTER)]
         public static void HandleClientCharCreate(Packet packet)
         {
             var bits29 = packet.ReadBits(6);
@@ -123,7 +123,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadPackedGuid128("CharacterGuid");
         }
 
-        [Parser(Opcode.CMSG_GET_UNDELETE_COOLDOWN_STATUS)]
+        [Parser(Opcode.CMSG_GET_UNDELETE_CHARACTER_COOLDOWN_STATUS)]
         public static void HandleGetUndeleteCooldownStatus(Packet packet)
         {
         }
@@ -167,14 +167,14 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadPackedGuid128("PlayerGUID");
         }
 
-        [Parser(Opcode.CMSG_RANDOMIZE_CHAR_NAME)]
+        [Parser(Opcode.CMSG_GENERATE_RANDOM_CHARACTER_NAME)]
         public static void HandleGenerateRandomCharacterNameQuery(Packet packet)
         {
             packet.ReadByteE<Race>("Race");
             packet.ReadByteE<Gender>("Sex");
         }
 
-        [Parser(Opcode.SMSG_RANDOMIZE_CHAR_NAME)]
+        [Parser(Opcode.SMSG_GENERATE_RANDOM_CHARACTER_NAME_RESULT)]
         public static void HandleGenerateRandomCharacterNameResponse(Packet packet)
         {
             packet.ReadBit("Success");
@@ -183,7 +183,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadWoWString("Name", bits17);
         }
 
-        [Parser(Opcode.CMSG_CHAR_RENAME)]
+        [Parser(Opcode.CMSG_CHARACTER_RENAME_REQUEST)]
         public static void HandleClientCharRename(Packet packet)
         {
             packet.ReadPackedGuid128("Guid");
@@ -194,7 +194,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadWoWString("NewName", bits16);
         }
 
-        [Parser(Opcode.SMSG_CHAR_RENAME)]
+        [Parser(Opcode.SMSG_CHARACTER_RENAME_RESULT)]
         public static void HandleServerCharRename(Packet packet)
         {
             packet.ReadByte("Result");
@@ -244,7 +244,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadByte("FaceID");
         }
 
-        [Parser(Opcode.SMSG_CHAR_FACTION_CHANGE)]
+        [Parser(Opcode.SMSG_CHAR_FACTION_CHANGE_RESULT)]
         public static void HandleCharFactionChangeResult(Packet packet)
         {
             packet.ReadByte("Result");
@@ -320,7 +320,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("SpecID");
         }
 
-        [Parser(Opcode.SMSG_LOG_XPGAIN)]
+        [Parser(Opcode.SMSG_LOG_XP_GAIN)]
         public static void HandleLogXPGain(Packet packet)
         {
             packet.ReadPackedGuid128("Victim");
@@ -343,7 +343,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("XpAbortReason");
         }
 
-        [Parser(Opcode.CMSG_NAME_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_PLAYER_NAME)]
         public static void HandleNameQuery(Packet packet)
         {
             packet.ReadPackedGuid128("Guid");
@@ -361,7 +361,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadInt32("NativeRealmAddress");
         }
 
-        [Parser(Opcode.SMSG_NAME_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_PLAYER_NAME_RESPONSE)]
         public static void HandleNameQueryResponse(Packet packet)
         {
             var hasData = packet.ReadByte("HasData");
@@ -395,7 +395,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             }
         }
 
-        [Parser(Opcode.CMSG_PLAYED_TIME)]
+        [Parser(Opcode.CMSG_REQUEST_PLAYED_TIME)]
         public static void HandleClientPlayedTime(Packet packet)
         {
             packet.ReadBit("TriggerScriptEvent");
@@ -410,7 +410,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("TriggerEvent");
         }
 
-        [Parser(Opcode.SMSG_LEVELUP_INFO)]
+        [Parser(Opcode.SMSG_LEVEL_UP_INFO)]
         public static void HandleLevelUpInfo(Packet packet)
         {
             packet.ReadInt32("Level");

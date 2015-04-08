@@ -12,7 +12,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class ActionBarHandler
     {
-        [Parser(Opcode.CMSG_SET_ACTIONBAR_TOGGLES)]
+        [Parser(Opcode.CMSG_SET_ACTION_BAR_TOGGLES)]
         public static void HandleSetActionBarToggles(Packet packet)
         {
             packet.ReadByte("Action Bar");
@@ -27,7 +27,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteLine("Action Id: {0}", BitConverter.ToUInt32(actionId, 0));
         }
 
-        [Parser(Opcode.SMSG_ACTION_BUTTONS)]
+        [Parser(Opcode.SMSG_UPDATE_ACTION_BUTTONS)]
         public static void HandleActionButtons(Packet packet)
         {
             const int buttonCount = 132;

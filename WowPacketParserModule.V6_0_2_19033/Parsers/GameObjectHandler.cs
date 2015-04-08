@@ -8,7 +8,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 {
     public static class GameObjectHandler
     {
-        [Parser(Opcode.CMSG_GAMEOBJECT_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_GAME_OBJECT)]
         public static void HandleGameObjectQuery(Packet packet)
         {
             packet.ReadInt32("Entry");
@@ -16,7 +16,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_GAMEOBJECT_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_GAME_OBJECT_RESPONSE)]
         public static void HandleGameObjectQueryResponse(Packet packet)
         {
             var gameObject = new GameObjectTemplate();
@@ -69,15 +69,15 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             Storage.ObjectNames.Add((uint)entry.Key, objectName, packet.TimeSpan);
         }
 
-        [Parser(Opcode.CMSG_GAMEOBJ_REPORT_USE)]
-        [Parser(Opcode.CMSG_GAMEOBJ_USE)]
+        [Parser(Opcode.CMSG_GAME_OBJ_REPORT_USE)]
+        [Parser(Opcode.CMSG_GAME_OBJ_USE)]
         [Parser(Opcode.SMSG_PAGE_TEXT)]
         public static void HandleGoMisc(Packet packet)
         {
             packet.ReadPackedGuid128("GameObjectGUID");
         }
 
-        [Parser(Opcode.SMSG_GAMEOBJECT_CUSTOM_ANIM)]
+        [Parser(Opcode.SMSG_GAME_OBJECT_CUSTOM_ANIM)]
         public static void HandleGoCustomAnim(Packet packet)
         {
             packet.ReadPackedGuid128("ObjectGUID");
@@ -85,13 +85,13 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("PlayAsDespawn");
         }
 
-        [Parser(Opcode.SMSG_GAMEOBJECT_DESPAWN)]
+        [Parser(Opcode.SMSG_GAME_OBJECT_DESPAWN)]
         public static void HandleGameObjectDespawn(Packet packet)
         {
             packet.ReadPackedGuid128("ObjectGUID");
         }
 
-        [Parser(Opcode.SMSG_GAMEOBJECT_ACTIVATE_ANIM_KIT)]
+        [Parser(Opcode.SMSG_GAME_OBJECT_ACTIVATE_ANIM_KIT)]
         public static void HandleGameObjectActivateAnimKit(Packet packet)
         {
             packet.ReadPackedGuid128("ObjectGUID");
@@ -99,7 +99,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("Maintain");
         }
 
-        [Parser(Opcode.SMSG_GAMEOBJECT_PLAY_SPELL_VISUAL)]
+        [Parser(Opcode.SMSG_GAME_OBJECT_PLAY_SPELL_VISUAL)]
         public static void HandleGameObjectPlaySpellVisual(Packet packet)
         {
             packet.ReadPackedGuid128("ObjectGUID");
@@ -117,7 +117,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("SpellID");
         }
 
-        [Parser(Opcode.SMSG_GAMEOBJECT_RESET_STATE)]
+        [Parser(Opcode.SMSG_GAME_OBJECT_RESET_STATE)]
         public static void HandleGameObjectResetState(Packet packet)
         {
             packet.ReadPackedGuid128("ObjectGUID");

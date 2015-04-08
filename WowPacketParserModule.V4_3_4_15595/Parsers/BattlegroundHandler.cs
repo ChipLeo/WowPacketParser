@@ -392,7 +392,7 @@ namespace WowPacketParserModule.V4_3_4_15595.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_BATTLEFIELD_MGR_QUEUE_INVITE_RESPONSE)]
+        [Parser(Opcode.CMSG_BF_MGR_QUEUE_INVITE_RESPONSE)]
         public static void HandleBattlefieldMgrQueueInviteResponse434(Packet packet)
         {
             var guid = new byte[8];
@@ -504,7 +504,7 @@ namespace WowPacketParserModule.V4_3_4_15595.Parsers
             packet.WriteGuid("Guid", bytes);
         }
 
-        [Parser(Opcode.CMSG_BATTLEFIELD_MGR_ENTRY_INVITE_RESPONSE)]
+        [Parser(Opcode.CMSG_BF_MGR_ENTRY_INVITE_RESPONSE)]
         public static void HandleBattlefieldMgrEntryInviteResponse434(Packet packet)
         {
             var guid = new byte[8];
@@ -524,7 +524,7 @@ namespace WowPacketParserModule.V4_3_4_15595.Parsers
         }
 
 
-        [Parser(Opcode.CMSG_BATTLEFIELD_MGR_EXIT_REQUEST)]
+        [Parser(Opcode.CMSG_BF_MGR_QUEUE_EXIT_REQUEST)]
         public static void HandleBattlefieldMgrExitRequest434(Packet packet)
         {
             var guid = packet.StartBitStream(2, 0, 3, 7, 4, 5, 6, 1);
@@ -583,7 +583,7 @@ namespace WowPacketParserModule.V4_3_4_15595.Parsers
             packet.ReadWoWString("Name", len);
         }
 
-        [Parser(Opcode.CMSG_BATTLEFIELD_MGR_QUEUE_REQUEST)]
+        [Parser(Opcode.CMSG_BF_MGR_QUEUE_REQUEST)]
         public static void HandleBattelfieldMgrQueueRequest434(Packet packet)
         {
             var guid = packet.StartBitStream(0, 3, 7, 4, 6, 2, 1, 5);
@@ -599,7 +599,7 @@ namespace WowPacketParserModule.V4_3_4_15595.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_RATED_BG_STATS)]
+        [Parser(Opcode.SMSG_RATED_BATTLEFIELD_INFO)]
         public static void HandleRatedBGStats(Packet packet)
         {
             packet.ReadUInt32("BgWeeklyWins20vs20");
@@ -910,7 +910,7 @@ namespace WowPacketParserModule.V4_3_4_15595.Parsers
 
         }
 
-        [Parser(Opcode.SMSG_BATTLEFIELD_STATUS_NEEDCONFIRMATION)]
+        [Parser(Opcode.SMSG_BATTLEFIELD_STATUS_NEED_CONFIRMATION)]
         public static void HandleBattlefieldStatusNeedConfirmation(Packet packet)
         {
 
@@ -965,7 +965,7 @@ namespace WowPacketParserModule.V4_3_4_15595.Parsers
             packet.WriteGuid("BG Guid", guid2);
         }
 
-        [Parser(Opcode.SMSG_BATTLEFIELD_STATUS_WAITFORGROUPS)]
+        [Parser(Opcode.SMSG_BATTLEFIELD_STATUS_WAIT_FOR_GROUPS)]
         public static void HandleBattlefieldStatusWaitForGroups(Packet packet)
         {
             packet.ReadByte("Unk Byte");

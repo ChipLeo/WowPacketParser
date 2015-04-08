@@ -9,7 +9,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
     {
         [Parser(Opcode.CMSG_SET_DUNGEON_DIFFICULTY)]
         [Parser(Opcode.CMSG_SET_RAID_DIFFICULTY)]
-        [Parser(Opcode.SMSG_SET_RAID_DIFFICULTY)]
+        [Parser(Opcode.SMSG_RAID_DIFFICULTY_SET)]
         public static void HandleSetDifficulty(Packet packet)
         {
             packet.ReadInt32E<MapDifficulty>("Difficulty");

@@ -22,7 +22,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("Int24"); // 24
         }
 
-        [Parser(Opcode.SMSG_LOGIN_SETTIMESPEED)]
+        [Parser(Opcode.SMSG_LOGIN_SET_TIME_SPEED)]
         public static void HandleLoginSetTimeSpeed(Packet packet)
         {
             packet.ReadInt32("unk32");

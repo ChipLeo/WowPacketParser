@@ -285,7 +285,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadSingle("O");
         }
 
-        [Parser(Opcode.SMSG_REDIRECT_CLIENT)]
+        [Parser(Opcode.SMSG_CONNECT_TO)]
         public static void HandleRedirectClient(Packet packet)
         {
             packet.ReadUInt64("Unk, send it CMSG_AUTH_SESSION, may be bytes sent and bytes received");

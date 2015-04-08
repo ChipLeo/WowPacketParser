@@ -17,7 +17,7 @@ namespace WowPacketParserModule.V5_4_0_17359.Parsers
         }
 
         [HasSniffData]
-        [Parser(Opcode.CMSG_LOAD_SCREEN)]
+        [Parser(Opcode.CMSG_LOADING_SCREEN_NOTIFY)]
         public static void HandleClientEnterWorld(Packet packet)
         {
             var mapId = packet.ReadUInt32<MapId>("MapID");
@@ -71,7 +71,7 @@ namespace WowPacketParserModule.V5_4_0_17359.Parsers
             packet.ReadWoWString("Split Date", len);
         }
 
-        [Parser(Opcode.CMSG_AREATRIGGER)]
+        [Parser(Opcode.CMSG_AREA_TRIGGER)]
         public static void HandleClientAreaTrigger(Packet packet)
         {
             var entry = packet.ReadEntry("Area Trigger Id");
@@ -1119,7 +1119,7 @@ namespace WowPacketParserModule.V5_4_0_17359.Parsers
             }
             else
             {
-                packet.WriteLine("ServerToClient: SMSG_QUESTGIVER_QUEST_COMPLETE");
+                packet.WriteLine("ServerToClient: SMSG_QUEST_GIVER_QUEST_COMPLETE");
 
                 packet.ReadInt32("Reward XP");
                 packet.ReadInt32<QuestId>("Quest ID");
@@ -2001,7 +2001,7 @@ namespace WowPacketParserModule.V5_4_0_17359.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_SET_VIGNETTE)]
+        [Parser(Opcode.SMSG_VIGNETTE_UPDATE)]
         public static void HandleUnknown177(Packet packet)
         {
 
@@ -2797,7 +2797,7 @@ namespace WowPacketParserModule.V5_4_0_17359.Parsers
             packet.WriteGuid("Guid2", guid2);
         }
 
-        [Parser(Opcode.SMSG_UNKNOWN_410)] // SMSG_GAMEOBJECT_CUSTOM_ANIM???
+        [Parser(Opcode.SMSG_UNKNOWN_410)] // SMSG_GAME_OBJECT_CUSTOM_ANIM???
         public static void HandleUnknown410(Packet packet)
         {
             var guid = new byte[8];

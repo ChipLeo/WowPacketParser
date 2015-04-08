@@ -7,7 +7,7 @@ namespace WowPacketParserModule.V5_4_0_17359.Parsers
 {
     public static class GuildHandler
     {
-        [Parser(Opcode.SMSG_GUILD_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_GUILD_INFO_RESPONSE)]
         public static void HandleGuildQueryResponse(Packet packet)
         {
             var guild1 = new byte[8];
@@ -182,7 +182,7 @@ namespace WowPacketParserModule.V5_4_0_17359.Parsers
             packet.ReadWoWString("MOTD", motdLength);
         }
 
-        [Parser(Opcode.CMSG_GUILD_REQUEST_PARTY_STATE)]
+        [Parser(Opcode.CMSG_REQUEST_GUILD_PARTY_STATE)]
         public static void HandleGuildRequestPartyState(Packet packet)
         {
             var guid = new byte[8];
@@ -193,7 +193,7 @@ namespace WowPacketParserModule.V5_4_0_17359.Parsers
             packet.WriteGuid("Guild GUID", guid);
         }
 
-        [Parser(Opcode.SMSG_GUILD_PARTY_STATE_RESPONSE)]
+        [Parser(Opcode.SMSG_GUILD_PARTY_STATE)]
         public static void HandleGuildPartyStateResponse(Packet packet)
         {
             packet.ReadSingle("Guild XP multiplier");

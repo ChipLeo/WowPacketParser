@@ -493,7 +493,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("unk24");
         }
 
-        [Parser(Opcode.SMSG_CHANNEL_START)]
+        [Parser(Opcode.SMSG_SPELL_CHANNEL_START)]
         public static void HandleSpellChannelStart(Packet packet)
         {
             var casterGUID = new byte[8];
@@ -553,7 +553,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Caster Guid", casterGUID);
         }
 
-        [Parser(Opcode.SMSG_CHANNEL_UPDATE)]
+        [Parser(Opcode.SMSG_SPELL_CHANNEL_UPDATE)]
         public static void HandleSpellChannelUpdate(Packet packet)
         {
             var guid = packet.StartBitStream(0, 3, 4, 1, 5, 2, 6, 7);
@@ -589,7 +589,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_INITIAL_SPELLS)]
+        [Parser(Opcode.SMSG_SEND_KNOWN_SPELLS)]
         public static void HandleInitialSpells(Packet packet)
         {
             packet.ReadBit("Unk16");
@@ -632,7 +632,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             /*
              Після
-             ServerToClient: SMSG_CHANNEL_START (0x10F9) Length: 16
+             ServerToClient: SMSG_SPELL_CHANNEL_START (0x10F9) Length: 16
              Spell ID: 115175 (0x1C1E7)
              йде
              ServerToClient: SMSG_UNK_1203 (0x1203) Length: 12
@@ -930,7 +930,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32<SpellId>("Spell ID", i);
         }
 
-        [Parser(Opcode.SMSG_SPELL_CATEGORY_COOLDOWN)]
+        [Parser(Opcode.SMSG_CATEGORY_COOLDOWN)]
         public static void HandleSpellCategoryCooldown(Packet packet)
         {
             var count = packet.ReadBits("Count", 21);
@@ -1685,7 +1685,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_SUPERCEDED_SPELL)]
+        [Parser(Opcode.SMSG_SUPERCEDED_SPELLS)]
         public static void HandleSupercededSpell(Packet packet)
         {
             /*

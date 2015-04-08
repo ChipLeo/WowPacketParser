@@ -12,7 +12,7 @@ namespace WowPacketParser.Parsing.Parsers
         }
 
         [Parser(Opcode.SMSG_SHOW_MAILBOX)]
-        [Parser(Opcode.CMSG_GET_MAIL_LIST)]
+        [Parser(Opcode.CMSG_MAIL_GET_LIST)]
         public static void HandleShowMailbox(Packet packet)
         {
             packet.ReadGuid("GUID");
@@ -168,7 +168,7 @@ namespace WowPacketParser.Parsing.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_SEND_MAIL_RESULT)]
+        [Parser(Opcode.SMSG_MAIL_COMMAND_RESULT)]
         public static void HandleSendMailResult(Packet packet)
         {
             packet.ReadUInt32("Mail Id");

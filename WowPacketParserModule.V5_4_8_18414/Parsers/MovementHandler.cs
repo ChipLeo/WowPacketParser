@@ -3432,7 +3432,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             ReadPlayerMovementInfo(packet, info.MovementWaterWalkAck);
         }
 
-        [Parser(Opcode.SMSG_BINDPOINTUPDATE)]
+        [Parser(Opcode.SMSG_BIND_POINT_UPDATE)]
         public static void HandleBindPointUpdate(Packet packet)
         {
             packet.ReadVector3("Position");
@@ -3758,7 +3758,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_MOVE_SET_HOVER)]
+        [Parser(Opcode.SMSG_MOVE_SET_HOVERING)]
         public static void HandleMoveSetHover(Packet packet)
         {
             ReadPlayerMovementInfo(packet, info.MovementSetHover);
@@ -3859,7 +3859,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_MOVE_UNSET_HOVER)]
+        [Parser(Opcode.SMSG_MOVE_UNSET_HOVERING)]
         public static void HandleMoveUnSetHover(Packet packet)
         {
             ReadPlayerMovementInfo(packet, info.MovementUnSetHover);
@@ -3882,7 +3882,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.SMSG_SET_PHASE_SHIFT_CHANGE)]
+        [Parser(Opcode.SMSG_PHASE_SHIFT_CHANGE)]
         public static void HandleSetPhaseShiftChange(Packet packet)
         {
             CoreParsers.MovementHandler.ActivePhases.Clear();

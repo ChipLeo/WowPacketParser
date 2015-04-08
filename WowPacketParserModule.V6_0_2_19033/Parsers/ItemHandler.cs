@@ -172,6 +172,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             SpellHandler.ReadSpellCastRequest(packet, "Cast");
         }
 
+        [Parser(Opcode.CMSG_ADD_TOY)]
+        public static void HandleAddToy(Packet packet)
+        {
+            packet.ReadPackedGuid128("Guid");
+        }
+
         [Parser(Opcode.CMSG_USE_TOY)]
         public static void HandleUseToy(Packet packet)
         {
@@ -197,7 +203,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("UseGuildBank");
         }
 
-        [Parser(Opcode.CMSG_AUTOSTORE_LOOT_ITEM)]
+        [Parser(Opcode.CMSG_LOOT_ITEM)]
         public static void HandleAutoStoreLootItem(Packet packet)
         {
             var int16 = packet.ReadInt32("Count");
@@ -210,7 +216,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         }
 
         [Parser(Opcode.CMSG_AUTOBANK_ITEM)]
-        [Parser(Opcode.CMSG_AUTOEQUIP_ITEM)]
+        [Parser(Opcode.CMSG_AUTO_EQUIP_ITEM)]
         [Parser(Opcode.CMSG_AUTOSTORE_BANK_ITEM)]
         [Parser(Opcode.CMSG_SWAP_INV_ITEM)]
         public static void HandleAutoItem(Packet packet)
@@ -432,6 +438,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
             var length = packet.ReadBits("TextLength", 13, idx);
             packet.ReadWoWString("Text", length, idx);
+        }
+
+        [Parser(Opcode.CMSG_ITEM_TEXT_QUERY)]
+        public static void HandleItemTextQuery(Packet packet)
+        {
+            packet.ReadPackedGuid128("Item Guid");
         }
 
         [Parser(Opcode.SMSG_QUERY_ITEM_TEXT_RESPONSE)]

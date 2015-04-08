@@ -112,6 +112,8 @@ namespace WowPacketParser.Misc
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_1_0_19702,  new DateTime(2015, 02, 26)),
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_1_2_19769,  new DateTime(2015, 03, 12)),
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_1_2_19793,  new DateTime(2015, 03, 19)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_1_2_19802,  new DateTime(2015, 03, 21)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_1_2_19831,  new DateTime(2015, 03, 31)),
         };
 
         private static ClientType _expansion;
@@ -226,6 +228,8 @@ namespace WowPacketParser.Misc
                     case ClientVersionBuild.V6_1_0_19702:
                     case ClientVersionBuild.V6_1_2_19769:
                     case ClientVersionBuild.V6_1_2_19793:
+                    case ClientVersionBuild.V6_1_2_19802:
+                    case ClientVersionBuild.V6_1_2_19831:
                         return ClientVersionBuild.V6_0_2_19033;
                     default:
                         return Build;
@@ -287,7 +291,10 @@ namespace WowPacketParser.Misc
                 var asm = Assembly.LoadFrom(string.Format(AppDomain.CurrentDomain.BaseDirectory + "/" + "WowPacketParserModule.{0}.dll", VersionDefiningBuild));
                 Trace.WriteLine(string.Format("Loading module WowPacketParserModule.{0}.dll", VersionDefiningBuild));
                 Handler.LoadHandlers(asm, VersionDefiningBuild);
-                UpdateFields.LoadUFDictionaries(asm, VersionDefiningBuild);
+
+                // This is a huge hack to handle the abnormal situation that appeared with builds 6.0 and 6.1 having mostly the same packet structures
+                if (!UpdateFields.LoadUFDictionaries(asm, version))
+                    UpdateFields.LoadUFDictionaries(asm, VersionDefiningBuild);
             }
             catch (FileNotFoundException)
             {
