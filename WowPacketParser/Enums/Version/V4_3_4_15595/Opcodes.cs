@@ -1061,7 +1061,7 @@ namespace WowPacketParser.Enums.Version.V4_3_4_15595
             {Opcode.SMSG_RAID_SUMMON_FAILED, 0x18B6},
             {Opcode.SMSG_GENERATE_RANDOM_CHARACTER_NAME_RESULT, 0x38B1},
             {Opcode.SMSG_RATED_BG_RATING, 0x15A1},
-            {Opcode.SMSG_BATTLEFIELD_RATED_INFO, 0x34A1},
+            {Opcode.SMSG_RATED_BATTLEFIELD_INFO, 0x34A1},
             {Opcode.SMSG_READY_CHECK_THROTTLED_ERROR, 0x2607},
             {Opcode.SMSG_READ_ITEM_RESULT_FAILED, 0x0F16},
             {Opcode.SMSG_READ_ITEM_RESULT_OK, 0x2605},
