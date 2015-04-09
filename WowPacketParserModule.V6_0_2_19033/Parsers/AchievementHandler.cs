@@ -6,6 +6,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 {
     public static class AchievementHandler
     {
+        [Parser(Opcode.CMSG_QUERY_INSPECT_ACHIEVEMENTS)]
+        public static void HandleInspectAchievementData(Packet packet)
+        {
+            packet.ReadPackedGuid128("GUID");
+        }
+
         [Parser(Opcode.SMSG_CRITERIA_UPDATE)]
         public static void HandleCriteriaPlayer(Packet packet)
         {

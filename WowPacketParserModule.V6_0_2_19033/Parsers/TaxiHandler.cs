@@ -38,6 +38,11 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadPackedGuid128("Unit");
         }
 
+        [Parser(Opcode.CMSG_TAXI_REQUEST_EARLY_LANDING)]
+        public static void HandleTaxiNull(Packet packet)
+        {
+        }
+
         [Parser(Opcode.SMSG_SHOW_TAXI_NODES)]
         public static void HandleShowTaxiNodes(Packet packet)
         {
