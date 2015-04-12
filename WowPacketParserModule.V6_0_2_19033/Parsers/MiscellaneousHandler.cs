@@ -841,5 +841,11 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadPackedGuid128("Guid");
             packet.ReadInt32("Unk");
         }
+
+        [Parser(Opcode.SMSG_DURABILITY_DAMAGE_DEATH)]
+        public static void HandleDurabilityDamageDeath(Packet packet)
+        {
+            packet.ReadInt32("Percent");
+        }
     }
 }
