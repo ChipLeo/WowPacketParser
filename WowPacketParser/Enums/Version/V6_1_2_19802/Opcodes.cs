@@ -670,6 +670,8 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19802
             {Opcode.CMSG_TWITTER_POST, 0x0FA2},
             {Opcode.CMSG_UI_TIME_REQUEST, 0x0316},
             {Opcode.CMSG_UNACCEPT_TRADE, 0x0AD1},
+            {Opcode.CMSG_UNK_0925, 0x0925},
+            {Opcode.CMSG_UNK_1C25, 0x1C25},
             {Opcode.CMSG_UNDELETE_CHARACTER, 0x1296},
             {Opcode.CMSG_UNLEARN_SKILL, 0x0931},
             {Opcode.CMSG_UNLEARN_SPECIALIZATION, 0x0708},

@@ -828,5 +828,18 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
             packet.ReadUInt32("StatusInt");
         }
+
+        [Parser(Opcode.CMSG_UNK_0925)]
+        public static void HandleUnk0925(Packet packet)
+        {
+            packet.ReadUInt32("Unk");
+        }
+
+        [Parser(Opcode.CMSG_UNK_1C25)]
+        public static void HandleUnk1C25(Packet packet)
+        {
+            packet.ReadPackedGuid128("Guid");
+            packet.ReadInt32("Unk");
+        }
     }
 }
