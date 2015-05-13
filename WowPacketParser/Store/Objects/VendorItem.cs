@@ -1,4 +1,6 @@
-﻿namespace WowPacketParser.Store.Objects
+﻿using WowPacketParser.Misc;
+
+namespace WowPacketParser.Store.Objects
 {
     public class VendorItem
     {
@@ -11,5 +13,12 @@
         public uint ExtendedCostId;
 
         public uint Type;
+
+        public int PlayerConditionId;
+
+        public bool IgnoreFiltering;
+
+        public int VerifiedBuild = ClientVersion.BuildInt;
+
     }
 }
