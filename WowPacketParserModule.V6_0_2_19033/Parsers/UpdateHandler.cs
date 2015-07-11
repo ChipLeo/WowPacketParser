@@ -160,6 +160,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 {
                     packet.ReadPackedGuid128("Id", index);
                     packet.ReadVector3("Direction", index);
+                    if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_1_2_19802)) // correct?
+                        packet.ReadVector3("TransportPosition", index);
                     packet.ReadInt32("TransportID", index);
                     packet.ReadSingle("Magnitude", index);
                     packet.ReadByte("Type", index);
@@ -181,7 +183,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                     {
                         packet.ResetBitReader();
 
-                        packet.ReadBitsE<SplineFlag434>("SplineFlags", 25, index);
+                        packet.ReadBitsE<SplineFlag434>("SplineFlags", ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173) ? 28 : 25, index);
                         var face = packet.ReadBits("Face", 2, index);
 
                         var hasJumpGravity = packet.ReadBit("HasJumpGravity", index);
@@ -222,6 +224,9 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                                 packet.ReadSingle("In", index, i);
                                 packet.ReadSingle("Out", index, i);
                             }
+
+                            if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173))
+                                packet.ResetBitReader();
 
                             packet.ReadBits("FilterFlags", 2, index);
                         }
@@ -268,6 +273,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 moveInfo.Orientation = packet.ReadSingle();
 
                 packet.AddValue("Stationary Position", moveInfo.Position, index);
+                packet.AddValue("Stationary Orientation", moveInfo.Orientation, index);
             }
 
             if (hasCombatVictim) // 504
@@ -306,6 +312,9 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadBit("HasAttached", index);
                 packet.ReadBit("HasFaceMovementDir", index);
                 packet.ReadBit("HasFollowsTerrain", index);
+
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173))
+                    packet.ReadBit("Unk bit WoD62x", index);
 
                 var hasTargetRollPitchYaw = packet.ReadBit("HasTargetRollPitchYaw", index);
                 var hasScaleCurveID = packet.ReadBit("HasScaleCurveID", index);
@@ -438,7 +447,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ResetBitReader();
 
             packet.ReadBitsE<MovementFlag>("Movement Flags", 30, index);
-            moveInfo.FlagsExtra = packet.ReadBitsE<MovementFlagExtra>("Extra Movement Flags", 15, index);
+            moveInfo.FlagsExtra = packet.ReadBitsE<MovementFlagExtra>("Extra Movement Flags", ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173) ? 16 : 15, index);
 
             var hasTransport = packet.ReadBit("Has Transport Data", index);
             var hasFall = packet.ReadBit("Has Fall Data", index);

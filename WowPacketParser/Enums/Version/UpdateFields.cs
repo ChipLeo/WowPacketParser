@@ -94,8 +94,16 @@ namespace WowPacketParser.Enums.Version
         public static string GetUpdateFieldName<T>(int field)
         {
             if (UpdateFieldDictionaries.ContainsKey(typeof(T)))
-                if (UpdateFieldDictionaries[typeof(T)].ContainsValue(field))
-                    return UpdateFieldDictionaries[typeof (T)][field];
+            {
+                int diff = 0;
+                do
+                {
+                    if (UpdateFieldDictionaries[typeof(T)].ContainsValue(field - diff))
+                        return UpdateFieldDictionaries[typeof(T)][field - diff] + (diff > 0 ? " + " + diff.ToString() : "");
+                    diff++;
+                }
+                while (diff < field);
+            }
 
             return field.ToString(CultureInfo.InvariantCulture);
         }
@@ -245,16 +253,20 @@ namespace WowPacketParser.Enums.Version
                 }
                 case ClientVersionBuild.V6_1_0_19678:
                 case ClientVersionBuild.V6_1_0_19702:
+                case ClientVersionBuild.V6_1_2_19769:
+                case ClientVersionBuild.V6_1_2_19793:
                 case ClientVersionBuild.V6_1_2_19802:
                 case ClientVersionBuild.V6_1_2_19831:
                 case ClientVersionBuild.V6_1_2_19865:
                 {
                     return "V6_1_2_19802";
                 }
-                case ClientVersionBuild.V6_1_2_19769:
-                case ClientVersionBuild.V6_1_2_19793:
+                case ClientVersionBuild.V6_2_0_20173:
+                case ClientVersionBuild.V6_2_0_20182:
+                case ClientVersionBuild.V6_2_0_20201:
+                case ClientVersionBuild.V6_2_0_20216:
                 {
-                    return "V6_1_2_19793";
+                    return "V6_2_0_20173";
                 }
                 default:
                 {

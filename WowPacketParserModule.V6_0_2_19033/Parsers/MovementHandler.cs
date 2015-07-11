@@ -25,7 +25,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ResetBitReader();
 
             packet.ReadBitsE<MovementFlag>("Movement Flags", 30, idx);
-            packet.ReadBitsE<MovementFlagExtra>("Extra Movement Flags", 15, idx);
+            packet.ReadBitsE<MovementFlagExtra>("Extra Movement Flags", ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173) ? 16 : 15, idx);
 
             var hasTransport = packet.ReadBit("Has Transport Data", idx);
             var hasFall = packet.ReadBit("Has Fall Data", idx);
@@ -73,16 +73,18 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             ReadMovementStats(packet);
             packet.ReadInt32("AckIndex");
         }
-        public static void ReadMovementForce(Packet packet)
+        public static void ReadMovementForce(Packet packet, params object[] idx)
         {
-            packet.ReadPackedGuid128("ID");
-            packet.ReadVector3("Direction");
-            packet.ReadInt32("TransportID");
-            packet.ReadSingle("Magnitude");
+            packet.ReadPackedGuid128("ID", idx);
+            packet.ReadVector3("Direction", idx);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_1_2_19802)) // correct?
+                packet.ReadVector3("TransportPosition", idx);
+            packet.ReadInt32("TransportID", idx);
+            packet.ReadSingle("Magnitude", idx);
 
             packet.ResetBitReader();
 
-            packet.ReadBits("Type", 2);
+            packet.ReadBits("Type", 2, idx);
         }
 
         [Parser(Opcode.CMSG_WORLD_PORT_RESPONSE)]
@@ -420,15 +422,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             var int32 = packet.ReadInt32("MovementForcesCount");
             for (int i = 0; i < int32; i++)
-            {
-                packet.ReadPackedGuid128("ID", i);
-                packet.ReadVector3("Direction", i);
-                packet.ReadInt32("TransportID", i);
-                packet.ReadSingle("Magnitude", i);
-
-                packet.ResetBitReader();
-                packet.ReadBits("Type", 2, i);
-            }
+                ReadMovementForce(packet, i, "MovementForce");
 
             packet.ResetBitReader();
 
@@ -611,14 +605,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void HandleMoveApplyMovementForceAck(Packet packet)
         {
             ReadMovementAck(packet);
-            packet.ReadPackedGuid128("TriggerGUID");
-            packet.ReadVector3("Direction");
-            packet.ReadInt32("TransportID");
-            packet.ReadSingle("Facing");
-
-            packet.ResetBitReader();
-
-            packet.ReadBits("Reason", 2);
+            ReadMovementForce(packet, "MovementForce");
         }
 
         [Parser(Opcode.SMSG_MOVE_APPLY_MOVEMENT_FORCE)]
@@ -627,21 +614,14 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadPackedGuid128("MoverGUID");
             packet.ReadInt32("SequenceIndex");
 
-            packet.ReadPackedGuid128("TriggerGUID");
-            packet.ReadVector3("Direction");
-            packet.ReadInt32("TransportID");
-            packet.ReadSingle("Facing");
-
-            packet.ResetBitReader();
-
-            packet.ReadBits("Reason", 2);
+            ReadMovementForce(packet, "MovementForce");
         }
 
         [Parser(Opcode.SMSG_MOVE_UPDATE_APPLY_MOVEMENT_FORCE)]
         public static void HandleMoveUpdateApplyMovementForce(Packet packet)
         {
             ReadMovementStats(packet);
-            ReadMovementForce(packet);
+            ReadMovementForce(packet, "MovementForce");
         }
 
         [Parser(Opcode.CMSG_MOVE_SET_COLLISION_HEIGHT_ACK)]
@@ -828,7 +808,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 }
 
                 if (bit104)
-                    ReadMovementForce(packet);
+                    ReadMovementForce(packet, "MovementForce");
 
                 if (bit128)
                     packet.ReadPackedGuid128("MoverGUID");

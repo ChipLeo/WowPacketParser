@@ -42,10 +42,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadPackedGuid128("Guild Guid");
                 packet.ReadInt32("VirtualRealmAddress");
                 var rankCount = packet.ReadInt32("RankCount");
-                packet.ReadInt32("EmblemStyle");
                 packet.ReadInt32("EmblemColor");
-                packet.ReadInt32("BorderStyle");
+                packet.ReadInt32("EmblemStyle");
                 packet.ReadInt32("BorderColor");
+                packet.ReadInt32("BorderStyle");
                 packet.ReadInt32("BackgroundColor");
 
                 for (var i = 0; i < rankCount; i++)
@@ -331,10 +331,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadPackedGuid128("GuildGUID");
             packet.ReadUInt32("OldGuildVirtualRealmAddress");
             packet.ReadPackedGuid128("OldGuildGUID");
-            packet.ReadUInt32("EmblemStyle");
             packet.ReadUInt32("EmblemColor");
-            packet.ReadUInt32("BorderStyle");
+            packet.ReadUInt32("EmblemStyle");
             packet.ReadUInt32("BorderColor");
+            packet.ReadUInt32("BorderStyle");
             packet.ReadUInt32("BackgroundColor");
             packet.ReadInt32("Level");
 
@@ -928,6 +928,56 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             for (var i = 0; i < count; ++i)
                 ReadLFGuildBrowseData(packet, "Post", i);
+        }
+        
+        [Parser(Opcode.CMSG_LF_GUILD_SET_GUILD_POST, ClientVersionBuild.V6_1_2_19802)]
+        public static void HandleGuildFinderSetGuildPost612(Packet packet)
+        {
+            packet.ReadUInt32E<GuildFinderOptionsInterest>("Guild Interests"); // ok
+            packet.ReadUInt32E<GuildFinderOptionsAvailability>("Availability"); // ok
+            packet.ReadUInt32E<GuildFinderOptionsRoles>("Class Roles"); // ok
+            packet.ReadUInt32E<GuildFinderOptionsLevel>("Level");
+            packet.ReadBit("Listed");
+            packet.ReadWoWString("Comment", packet.ReadBits(10));
+        }
+
+        [Parser(Opcode.CMSG_SAVE_GUILD_EMBLEM)]
+        public static void HandleSaveGuildEmblem(Packet packet) 
+        {
+            packet.ReadPackedGuid128("Vendor");
+            packet.ReadUInt32("EColor");
+            packet.ReadUInt32("EStyle");
+            packet.ReadUInt32("BColor");
+            packet.ReadUInt32("BStyle");
+            packet.ReadUInt32("Bg");
+        }
+
+        [Parser(Opcode.SMSG_PLAYER_SAVE_GUILD_EMBLEM)]
+        public static void HandlePlayerSaveGuildEmblem(Packet packet)
+        {
+            packet.ReadInt32E<GuildEmblemError>("Error");
+        }
+
+        [Parser(Opcode.CMSG_GUILD_BANK_SWAP_ITEMS)]
+        public static void HandleGuildBankSwapItems(Packet packet)
+        {
+            packet.ReadPackedGuid128("GuildBankSwapItems");
+            packet.ReadByte("BankTab");
+            packet.ReadByte("BankSlot");
+            packet.ReadInt32("ItemID");
+            packet.ReadByte("BankTab1");
+            packet.ReadByte("BankSlot1");
+            packet.ReadInt32("ItemID1");
+            packet.ReadInt32("BankItemCount");
+            packet.ReadByte("ContainerSlot");
+            packet.ReadByte("ContainerItemSlot");
+            packet.ReadByte("ToSlot");
+            packet.ReadInt32("StackCount");
+
+            packet.ResetBitReader();
+
+            packet.ReadBit("BankOnly");
+            packet.ReadBit("AutoStore");
         }
     }
 }

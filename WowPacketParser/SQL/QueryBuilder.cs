@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using WowPacketParser.Misc;
@@ -61,9 +63,7 @@ namespace WowPacketParser.SQL
                     foreach (var row in grouping)
                     {
                         foreach (var value in row.WhereClause)
-                        {
                             updateRow.AddWhere(value.Value, row.Comment);
-                        }
                     }
 
                     Rows.Add(updateRow);
@@ -101,9 +101,9 @@ namespace WowPacketParser.SQL
                 _primaryKey = primaryKey;
             }
 
-            public void AddWhere(uint value, string comment = "")
+            public void AddWhere(object value, string comment = "")
             {
-                WhereClause.Add(new KeyValuePair<string, uint>(comment, value));
+                WhereClause.Add(new KeyValuePair<string, object>(comment, value));
             }
 
             public override string Build()
@@ -185,8 +185,8 @@ namespace WowPacketParser.SQL
             public readonly Dictionary<string, object> Values =
                 new Dictionary<string, object>();
 
-            public readonly List<KeyValuePair<string, uint>> WhereClause =
-                new List<KeyValuePair<string, uint>>();
+            public readonly List<KeyValuePair<string, object>> WhereClause =
+                new List<KeyValuePair<string, object>>();
 
             /// <summary>
             /// Returns the amount of values
@@ -245,9 +245,9 @@ namespace WowPacketParser.SQL
             /// </summary>
             /// <param name="field">The field name associated with the value</param>
             /// <param name="value">The value used in the where clause</param>
-            public void AddWhere(string field, uint value)
+            public void AddWhere(string field, object value)
             {
-                WhereClause.Add(new KeyValuePair<string, uint>(SQLUtil.AddBackQuotes(field), value));
+                WhereClause.Add(new KeyValuePair<string, object>(SQLUtil.AddBackQuotes(field), value));
             }
 
             private string _table;
@@ -298,7 +298,7 @@ namespace WowPacketParser.SQL
                     count++;
                     row.Append(whereClause.Key);
                     row.Append("=");
-                    row.Append(whereClause.Value);
+                    row.Append(whereClause.Value is string ? SQLUtil.Stringify(whereClause.Value) : whereClause.Value);
                     if (WhereClause.Count != count)
                         row.Append(" AND ");
                 }
@@ -323,7 +323,7 @@ namespace WowPacketParser.SQL
             private readonly bool _deleteDuplicates;
 
             // Add a new insert header every 500 rows
-            private const int MaxRowsPerInsert = 500;
+            private const int MaxRowsPerInsert = 250;
 
             /// <summary>
             /// Creates an insert query including the insert header and its rows
@@ -414,28 +414,25 @@ namespace WowPacketParser.SQL
                 query.Append(InsertHeader);
 
                 var count = 0;
+                HashSet<string> rowStrings = new HashSet<string>();
                 foreach (var row in Rows)
                 {
                     if (count >= MaxRowsPerInsert && !_deleteDuplicates)
                     {
                         query.ReplaceLast(',', ';');
+                        query.Append(Environment.NewLine);
                         query.Append(InsertHeader);
                         count = 0;
                     }
-                    query.Append(row.Build());
+                    string rowString = row.Build();
+                    if (_deleteDuplicates && !rowStrings.Add(rowString))
+                        continue;
+
+                    query.Append(rowString);
                     count++;
                 }
 
                 query.Append(Environment.NewLine);
-
-                // This is easier to implement that comparing raw objects in each row
-                // and certainly faster. Imagine comparing 1k rows of <string, int, int, emote, YouGotIt>
-                if (_deleteDuplicates)
-                {
-                    var str = String.Join("\n", query.ToString().Split('\n').Distinct()); // Do not use Enviroment.NewLine
-                    query.Clear();
-                    query.Append(str);
-                }
 
                 query.ReplaceLast(',', ';');
 
@@ -443,7 +440,7 @@ namespace WowPacketParser.SQL
             }
         }
 
-        public class SQLInsertRow : ISQLQuery
+        public class SQLInsertRow : ISQLQuery, IEqualityComparer<SQLInsertRow>
         {
             public readonly List<string> FieldNames = new List<string>();
             private readonly List<string> _values = new List<string>();
@@ -543,6 +540,20 @@ namespace WowPacketParser.SQL
                 row.Append(Environment.NewLine);
 
                 return row.ToString();
+            }
+
+            public bool Equals(SQLInsertRow x, SQLInsertRow y)
+            {
+                return x._values.SequenceEqual(y._values);
+            }
+
+            public int GetHashCode(SQLInsertRow obj)
+            {
+                int hashCode = 0;
+                foreach (var value in obj._values)
+                    hashCode ^= value.GetHashCode();
+
+                return hashCode;
             }
         }
 
@@ -657,12 +668,12 @@ namespace WowPacketParser.SQL
             {
                 var query = new StringBuilder();
 
-                query.Append("DELETE FROM ");
-                query.Append(SQLUtil.AddBackQuotes(Table));
-                query.Append(" WHERE ");
-
                 if (_between)
                 {
+                    query.Append("DELETE FROM ");
+                    query.Append(SQLUtil.AddBackQuotes(Table));
+                    query.Append(" WHERE ");
+
                     switch (_primaryKeyNumber)
                     {
                         case 2:
@@ -692,9 +703,17 @@ namespace WowPacketParser.SQL
                         case 2:
                         {
                             var counter = 0;
+                            var rowsPerDelete = 0;
+
+                            query.Append("DELETE FROM ");
+                            query.Append(SQLUtil.AddBackQuotes(Table));
+                            query.Append(" WHERE ");
+
                             foreach (var tuple in ValuesDouble)
                             {
                                 counter++;
+                                rowsPerDelete++;
+
                                 query.Append("(");
                                 query.Append(SQLUtil.AddBackQuotes(PrimaryKeyDouble.Item1));
                                 query.Append("=");
@@ -704,19 +723,43 @@ namespace WowPacketParser.SQL
                                 query.Append("=");
                                 query.Append(tuple.Item2);
                                 query.Append(")");
+
                                 // Append an OR if not end of items
-                                if (ValuesDouble.Count != counter)
+                                if (rowsPerDelete < 25 && ValuesDouble.Count != counter)
                                     query.Append(" OR ");
+                                else if (rowsPerDelete == 25)
+                                {
+                                    rowsPerDelete = 0;
+                                    query.Append(";");
+
+                                    if (ValuesDouble.Count != counter)
+                                    {
+                                        query.Append(Environment.NewLine);
+                                        query.Append("DELETE FROM ");
+                                        query.Append(SQLUtil.AddBackQuotes(Table));
+                                        query.Append(" WHERE ");
+                                    }
+                                }
+                                else if (ValuesDouble.Count == counter)
+                                    query.Append(";");
                             }
-                            query.Append(";");
                             break;
                         }
                         case 3:
                         {
                             var counter = 0;
+
+                            var rowsPerDelete = 0;
+
+                            query.Append("DELETE FROM ");
+                            query.Append(SQLUtil.AddBackQuotes(Table));
+                            query.Append(" WHERE ");
+
                             foreach (var tuple in ValuesTriple)
                             {
                                 counter++;
+                                rowsPerDelete++;
+
                                 query.Append("(");
                                 query.Append(SQLUtil.AddBackQuotes(PrimaryKeyTriple.Item1));
                                 query.Append("=");
@@ -730,30 +773,72 @@ namespace WowPacketParser.SQL
                                 query.Append("=");
                                 query.Append(tuple.Item3);
                                 query.Append(")");
+
                                 // Append an OR if not end of items
-                                if (ValuesTriple.Count != counter)
+                                if (rowsPerDelete < 25 && ValuesTriple.Count != counter)
                                     query.Append(" OR ");
+                                else if (rowsPerDelete == 25)
+                                {
+                                    rowsPerDelete = 0;
+                                    query.Append(";");
+
+                                    if (ValuesTriple.Count != counter)
+                                    {
+                                        query.Append(Environment.NewLine);
+                                        query.Append("DELETE FROM ");
+                                        query.Append(SQLUtil.AddBackQuotes(Table));
+                                        query.Append(" WHERE ");
+                                    }
+                                }
+                                else if (ValuesTriple.Count == counter)
+                                    query.Append(";");
                             }
-                            query.Append(";");
                             break;
                         }
                         default:
                         {
+                            query.Append("DELETE FROM ");
+                            query.Append(SQLUtil.AddBackQuotes(Table));
+                            query.Append(" WHERE ");
                             query.Append(SQLUtil.AddBackQuotes(PrimaryKey));
                             query.Append(Values.Count == 1 ? "=" : " IN (");
 
                             var counter = 0;
+                            var rowsPerDelete = 0;
+
                             foreach (var entry in Values)
                             {
                                 counter++;
+                                rowsPerDelete++;
+
                                 query.Append(entry);
                                 // Append comma if not end of items
                                 if (Values.Count != counter)
                                     query.Append(SQLUtil.CommaSeparator);
-                                else if (Values.Count != 1)
+                                else if (Values.Count != 1 && Values.Count != counter)
                                     query.Append(")");
+                                else if (rowsPerDelete == 25)
+                                {
+                                    rowsPerDelete = 0;
+                                    query.Append(";");
+
+                                    if (Values.Count != counter)
+                                    {
+                                        query.Append(Environment.NewLine);
+                                        query.Append("DELETE FROM ");
+                                        query.Append(SQLUtil.AddBackQuotes(Table));
+                                        query.Append(" WHERE ");
+                                        query.Append(SQLUtil.AddBackQuotes(PrimaryKey));
+                                        query.Append(Values.Count == 1 ? "=" : " IN (");
+                                    }
+                                }
+                                else if (Values.Count == counter)
+                                {
+                                    if (Values.Count != 1)
+                                        query.Append(")");
+                                    query.Append(";");
+                                }
                             }
-                            query.Append(";");
                             break;
                         }
                     }

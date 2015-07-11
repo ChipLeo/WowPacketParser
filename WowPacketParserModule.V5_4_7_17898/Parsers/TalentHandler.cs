@@ -5,9 +5,9 @@ using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
-using WowPacketParserModule.V5_4_7_18019.Enums;
+using WowPacketParserModule.V5_4_7_17898.Enums;
 
-namespace WowPacketParserModule.V5_4_7_18019.Parsers
+namespace WowPacketParserModule.V5_4_7_17898.Parsers
 {
     public static class TalentHandler
     {

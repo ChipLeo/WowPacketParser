@@ -88,8 +88,15 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void ReadSpellCastRequest(Packet packet, params object[] idx)
         {
             packet.ReadByte("CastID", idx);
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173))
+            {
+                for (var i = 0; i < 2; i++)
+                    packet.ReadInt32("Misc", idx, i);
+            }
+
             packet.ReadInt32<SpellId>("SpellID", idx);
-            packet.ReadInt32("Misc", idx);
+            packet.ReadInt32(ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173) ? "SpellXSpellVisualID" : "Misc", idx);
 
             ReadSpellTargetData(packet, idx, "Target");
 
@@ -205,6 +212,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 if (hasAura)
                 {
                     aura.SpellId = (uint)packet.ReadInt32<SpellId>("SpellID", i);
+                    if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173))
+                        packet.ReadUInt32("SpellXSpellVisualID", i);
                     aura.AuraFlags = packet.ReadByteE<AuraFlagMoP>("Flags", i);
                     packet.ReadInt32("ActiveFlags", i);
                     aura.Level = packet.ReadUInt16("CastLevel", i);
@@ -364,6 +373,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadByte("CastID", idx);
 
             packet.ReadInt32<SpellId>("SpellID", idx);
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173))
+                packet.ReadUInt32("SpellXSpellVisualID", idx);
+
             packet.ReadUInt32("CastFlags", idx);
             packet.ReadUInt32("CastTime", idx);
 
@@ -404,7 +417,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             packet.ResetBitReader();
 
-            packet.ReadBits("CastFlagsEx", 18, idx);
+            packet.ReadBits("CastFlagsEx", ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173) ? 20 : 18, idx);
 
             var hasRuneData = packet.ReadBit("HasRuneData", idx);
             var hasProjectileVisual = packet.ReadBit("HasProjectileVisual", idx);
@@ -547,6 +560,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadPackedGuid128("CasterUnit");
             packet.ReadByte("CastID");
             packet.ReadUInt32<SpellId>("SpellID");
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173))
+                packet.ReadInt32("SpellXSpellVisualID");
+
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_1_0_19678))
                 packet.ReadInt16E<SpellCastFailureReason>("Reason");
             else
@@ -610,6 +627,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadPackedGuid128("Caster");
             packet.ReadPackedGuid128("Target");
             packet.ReadInt32("SpellID");
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173))
+                packet.ReadInt32("SpellXSpellVisualID");
+
             packet.ReadInt16("ProcCount");
             packet.ReadInt16("ProcNum");
         }
@@ -727,7 +748,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void HandleCooldownEvent61x(Packet packet)
         {
             packet.ReadInt32<SpellId>("SpellID");
-            packet.ReadBit("Unk16");
+            packet.ReadBit("IsPet");
         }
 
         [Parser(Opcode.SMSG_LOSS_OF_CONTROL_AURA_UPDATE)]
@@ -756,7 +777,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
             packet.ReadUInt32<SpellId>("SpellID");
             packet.ReadBit("ClearOnHold");
-            packet.ReadBit("Unk20");
+            packet.ReadBit("IsPet");
         }
 
         [Parser(Opcode.SMSG_CLEAR_COOLDOWNS)]
@@ -866,7 +887,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
             packet.ReadInt32<SpellId>("SpellID");
             packet.ReadInt32("DeltaTime");
-            packet.ReadBit("Unk24");
+            packet.ReadBit("IsPet");
         }
 
         [Parser(Opcode.SMSG_CLEAR_TARGET)]
@@ -958,11 +979,20 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("LockoutSchoolMask");
         }
 
-        [Parser(Opcode.SMSG_SET_SPELL_CHARGES)]
+        [Parser(Opcode.SMSG_SET_SPELL_CHARGES, ClientVersionBuild.Zero, ClientVersionBuild.V6_2_0_20173)]
         public static void HandleSetSpellCharges(Packet packet)
         {
             packet.ReadUInt32("Category");
             packet.ReadSingle("Count");
+            packet.ReadBit("IsPet");
+        }
+
+        [Parser(Opcode.SMSG_SET_SPELL_CHARGES, ClientVersionBuild.V6_2_0_20173)]
+        public static void HandleSetSpellCharges62x(Packet packet)
+        {
+            packet.ReadUInt32("Category");
+            packet.ReadUInt32("RecoveryTime");
+            packet.ReadByte("ConsumedCharges");
             packet.ReadBit("IsPet");
         }
 

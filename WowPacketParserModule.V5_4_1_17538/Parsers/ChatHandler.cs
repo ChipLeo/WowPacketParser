@@ -3,7 +3,6 @@ using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
-using Guid = WowPacketParser.Misc.WowGuid;
 using ChatMessageType540 = WowPacketParserModule.V5_4_1_17538.Enums.ChatMessageType;
 
 namespace WowPacketParserModule.V5_4_1_17538.Parsers
@@ -100,7 +99,7 @@ namespace WowPacketParserModule.V5_4_1_17538.Parsers
 
             text.Text = packet.ReadWoWString("Text", textLen);
 
-            text.Type = (ChatMessageType)packet.ReadByteE<ChatMessageType540>("Chat type");
+            text.Type = (ChatMessageType)packet.ReadByteE<ChatMessageTypeNew>("SlashCmd");
 
             if (hasAchi)
                 packet.ReadInt32<AchievementId>("Achievement Id");

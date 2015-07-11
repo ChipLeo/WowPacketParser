@@ -212,6 +212,7 @@
     <Compile Include="Enums\Holiday.cs" />
     <Compile Include="Enums\HotfixSQLOutput.cs" />
     <Compile Include="Enums\InhabitType.cs" />
+    <Compile Include="Enums\LocaleConstant.cs" />
     <Compile Include="Enums\MountResult.cs" />
     <Compile Include="Enums\RaidSummonFail.cs" />
     <Compile Include="Enums\StandState.cs" />
@@ -305,6 +306,7 @@
     <Compile Include="Enums\TaxiError.cs" />
     <Compile Include="Enums\TeamType.cs" />
     <Compile Include="Enums\TimerType.cs" />
+    <Compile Include="Enums\TokenResults.cs" />
     <Compile Include="Enums\TotemCategory.cs" />
     <Compile Include="Enums\TradeStatus.cs" />
     <Compile Include="Enums\TrainerSpellState.cs" />
@@ -312,6 +314,7 @@
     <Compile Include="Enums\TransferAbortReason.cs" />
     <Compile Include="Enums\Tutorial.cs" />
     <Compile Include="Enums\TutorialAction.cs" />
+    <Compile Include="Enums\TwitterResults.cs" />
     <Compile Include="Enums\TypeMask.cs" />
     <Compile Include="Enums\UnitDynamicFlags.cs" />
     <Compile Include="Enums\UnitFlags2.cs" />
@@ -372,6 +375,7 @@
     <Compile Include="Enums\Version\V6_1_0_19678\UpdateFields.cs" />
     <Compile Include="Enums\Version\V6_1_2_19802\Opcodes.cs" />
     <Compile Include="Enums\Version\V6_1_2_19802\TutorialAction.cs" />
+    <Compile Include="Enums\Version\V6_2_0_20173\Opcodes.cs" />
     <Compile Include="Enums\VictimStates.cs" />
     <Compile Include="Enums\VoidTransferError.cs" />
     <Compile Include="Enums\WardenCheckType.cs" />
@@ -465,6 +469,7 @@
     <Compile Include="SQL\Builder.cs" />
     <Compile Include="SQL\Builders\BuilderAttributes.cs" />
     <Compile Include="SQL\Builders\DB2.cs" />
+    <Compile Include="SQL\Builders\Locales.cs" />
     <Compile Include="SQL\Builders\Miscellaneous.cs" />
     <Compile Include="SQL\Builders\QuestMisc.cs" />
     <Compile Include="SQL\Builders\Spawns.cs" />
@@ -484,6 +489,7 @@
     <Compile Include="Store\Objects\Aura.cs" />
     <Compile Include="Store\Objects\BattlePetSpecies.cs" />
     <Compile Include="Store\Objects\BroadcastText.cs" />
+    <Compile Include="Store\Objects\BroadcastTextLocale.cs" />
     <Compile Include="Store\Objects\ChrUpgrade.cs" />
     <Compile Include="Store\Objects\Creature.cs" />
     <Compile Include="Store\Objects\CreatureDifficulty.cs" />
@@ -510,6 +516,8 @@
     <Compile Include="Store\Objects\ItemSparse.cs" />
     <Compile Include="Store\Objects\ItemTemplate.cs" />
     <Compile Include="Store\Objects\KeyChain.cs" />
+    <Compile Include="Store\Objects\LocalesQuest.cs" />
+    <Compile Include="Store\Objects\LocalesQuestObjectives.cs" />
     <Compile Include="Store\Objects\Location.cs" />
     <Compile Include="Store\Objects\Loot.cs" />
     <Compile Include="Store\Objects\LootItem.cs" />
@@ -533,6 +541,7 @@
     <Compile Include="Store\Objects\SpellAuraRestrictions.cs" />
     <Compile Include="Store\Objects\SpellCastingRequirements.cs" />
     <Compile Include="Store\Objects\SpellClassOptions.cs" />
+    <Compile Include="Store\Objects\SpellEffectGroupSize.cs" />
     <Compile Include="Store\Objects\SpellLearnSpell.cs" />
     <Compile Include="Store\Objects\SpellMisc.cs" />
     <Compile Include="Store\Objects\SpellPower.cs" />
