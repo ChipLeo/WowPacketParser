@@ -8,6 +8,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
     {
         [Parser(Opcode.CMSG_BATTLE_PAY_GET_PRODUCT_LIST)]
         [Parser(Opcode.CMSG_BATTLE_PAY_GET_PURCHASE_LIST)]
+        [Parser(Opcode.CMSG_UPDATE_VAS_PURCHASE_STATES)]
         public static void HandleZeroLengthPackets(Packet packet)
         {
         }
