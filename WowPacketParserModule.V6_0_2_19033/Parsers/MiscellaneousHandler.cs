@@ -431,11 +431,11 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
             packet.ReadBit("IsFullUpdate");
 
-            var int32 = packet.ReadInt32("ToySpellIDsCount");
+            var int32 = packet.ReadInt32("ToyItemIDsCount");
             var int16 = packet.ReadInt32("ToyIsFavoriteCount");
 
             for (int i = 0; i < int32; i++)
-                packet.ReadInt32("ToySpellIDs", i);
+                packet.ReadInt32("ToyItemID", i);
 
             packet.ResetBitReader();
 
@@ -855,6 +855,13 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void HandleDurabilityDamageDeath(Packet packet)
         {
             packet.ReadInt32("Percent");
+        }
+
+        [Parser(Opcode.CMSG_TOY_SET_FAVORITE)]
+        public static void HandleToySetFavorite(Packet packet)
+        {
+            packet.ReadUInt32("ItemID");
+            packet.ReadBit("Favorite");
         }
     }
 }

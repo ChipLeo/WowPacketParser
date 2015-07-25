@@ -227,7 +227,7 @@ namespace WowPacketParser.SQL
         private static void LoadMapDifficulty()
         {
             //                                                  0     1        2
-            var query = new StringBuilder(string.Format("SELECT m_ID, m_mapID, m_difficultyID FROM {0}.map_difficulty;", Settings.WPPDatabase));
+            var query = new StringBuilder(string.Format("SELECT ID, MapID, DifficultyID FROM {0}.map_difficulty;", Settings.WPPDatabase));
             using (var reader = SQLConnector.ExecuteQuery(query.ToString()))
             {
                 if (reader == null)
@@ -382,6 +382,7 @@ namespace WowPacketParser.SQL
         /// <param name="entries">List of entries to select from DB</param>
         /// <param name="primaryKeyName1">Name of the first primary key</param>
         /// <param name="primaryKeyName2">Name of the second primary key</param>
+        /// <param name="database">Database name. If null TDB will be used.</param>
         /// <returns>Dictionary of structs of type TK</returns>
         public static StoreDictionary<Tuple<T, TG>, TK> GetDict<T, TG, TK>(List<Tuple<T, TG>> entries, string primaryKeyName1, string primaryKeyName2, string database = null)
             where T : struct
@@ -516,6 +517,8 @@ namespace WowPacketParser.SQL
         /// <param name="entries">List of entries to select from DB</param>
         /// <param name="primaryKeyName1">Name of the first primary key</param>
         /// <param name="primaryKeyName2">Name of the second primary key</param>
+        /// <param name="primaryKeyName3">Name of the third primary key</param>
+        /// <param name="database">Database name. If null TDB will be used.</param>
         /// <returns>Dictionary of structs of type TK</returns>
         public static StoreDictionary<Tuple<T, TG, TH>, TK> GetDict<T, TG, TH, TK>(List<Tuple<T, TG, TH>> entries, string primaryKeyName1, string primaryKeyName2, string primaryKeyName3, string database = null)
             where T : struct
@@ -575,8 +578,6 @@ namespace WowPacketParser.SQL
 
             var query = string.Format("SELECT {0} FROM {1}.{2} WHERE {3}",
                 fieldNames.ToString().TrimEnd(','), database ?? Settings.TDBDatabase, tableName, whereClause);
-
-            Trace.WriteLine(query);
 
             var dict = new Dictionary<Tuple<T, TG, TH>, TK>(entries.Count);
 

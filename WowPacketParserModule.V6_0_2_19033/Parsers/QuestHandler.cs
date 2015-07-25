@@ -169,16 +169,14 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                     questPoi.WoDUnk1 = packet.ReadInt32("WoDUnk1", i, j);
 
                     var int13 = packet.ReadInt32("QuestPOIBlobPoint", i, j);
-                    questPoi.Points = new Dictionary<QuestPOIPoint, uint>(int13);
-                    for (var k = 0u; k < int13; ++k)
+                    for (var k = 0; k < int13; ++k)
                     {
-                        var questPoiPoint = new QuestPOIPoint
+                        var questPoiPoint = new QuestPOIPointWoD
                         {
-                            Index = k,
-                            X = packet.ReadInt32("X", i, j, (int)k),
-                            Y = packet.ReadInt32("Y", i, j, (int)k)
+                            X = packet.ReadInt32("X", i, j, k),
+                            Y = packet.ReadInt32("Y", i, j, k)
                         };
-                        questPoi.Points.Add(questPoiPoint, (uint)j);
+                        Storage.QuestPOIPointWoDs.Add(Tuple.Create(questId, j, k), questPoiPoint);
                     }
 
                     Storage.QuestPOIWoDs.Add(Tuple.Create(questId, j), questPoi, packet.TimeSpan);
@@ -209,12 +207,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             quest.RewardNextQuest = packet.ReadUInt32("RewardNextQuest");
             quest.RewardXPDifficulty = packet.ReadUInt32("RewardXPDifficulty");
 
-            quest.Float10 = packet.ReadSingle("Float10");
+            quest.RewardXPMultiplier = packet.ReadSingle("RewardXPMultiplier");
 
             quest.RewardMoney = packet.ReadInt32("RewardMoney");
             quest.RewardMoneyDifficulty = packet.ReadUInt32("RewardMoneyDifficulty");
 
-            quest.Float13 = packet.ReadSingle("Float13");
+            quest.RewardMoneyMultiplier = packet.ReadSingle("RewardMoneyMultiplier");
 
             quest.RewardBonusMoney = packet.ReadUInt32("RewardBonusMoney");
             quest.RewardDisplaySpell = packet.ReadUInt32("RewardDisplaySpell");
