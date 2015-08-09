@@ -1556,6 +1556,7 @@ namespace WowPacketParser.Enums.Version.V6_2_0_20173
             {Opcode.SMSG_TUTORIAL_FLAGS, 0x0C5C},
             {Opcode.SMSG_TWITTER_STATUS, 0x04DA},
             {Opcode.SMSG_UI_TIME, 0x0B52},
+            {Opcode.SMSG_UNK_CLIENT_0922, 0x0922},
             {Opcode.SMSG_UNDELETE_CHARACTER_RESPONSE, 0x0A47},
             {Opcode.SMSG_UNDELETE_COOLDOWN_STATUS_RESPONSE, 0x0620},
             {Opcode.SMSG_UNLEARNED_SPELLS, 0x04B9},

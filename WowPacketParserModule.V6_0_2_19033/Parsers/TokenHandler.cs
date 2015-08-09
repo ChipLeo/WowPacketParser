@@ -122,7 +122,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadUInt32("UnkInt");
         }
 
-        [Parser(Opcode.SMSG_UPDATE_WOW_TOKEN_AUCTIONABLE_LIST_RESPONSE)]
+        [Parser(Opcode.SMSG_WOW_TOKEN_UPDATE_AUCTIONABLE_LIST_RESPONSE)]
         public static void HandleUpdateListedAuctionableTokensResponse(Packet packet)
         {
             packet.ReadInt32("UnkInt"); // send CMSG_UPDATE_WOW_TOKEN_AUCTIONABLE_LIST

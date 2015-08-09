@@ -16,6 +16,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadVector3("Points", indexes, i);
         }
 
+        [Parser(Opcode.SMSG_UNK_CLIENT_0922)]
         [Parser(Opcode.SMSG_AREA_TRIGGER_RE_PATH)]
         public static void HandleAreaTriggerRePath(Packet packet)
         {
