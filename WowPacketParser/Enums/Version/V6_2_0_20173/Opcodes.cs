@@ -1490,6 +1490,7 @@ namespace WowPacketParser.Enums.Version.V6_2_0_20173
             {Opcode.SMSG_SHOW_TRADE_SKILL_RESPONSE, 0x0C97},
             {Opcode.SMSG_SOCKET_GEMS, 0x061C},
             {Opcode.SMSG_SOR_START_EXPERIENCE_INCOMPLETE, 0x0448},
+            {Opcode.SMSG_SORT_BAGS_ACK, 0x065C},
             {Opcode.SMSG_SPECIAL_MOUNT_ANIM, 0x0E13},
             {Opcode.SMSG_SPELL_ABSORB_LOG, 0x0139},
             {Opcode.SMSG_SPELL_CHANNEL_START, 0x07BD},

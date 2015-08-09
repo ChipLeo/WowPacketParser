@@ -17,6 +17,24 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("CurrentDuration", indexes);
         }
 
+        [Parser(Opcode.CMSG_COMMENTATOR_ENABLE)]
+        public static void HandleComentatorEnable(Packet packet)
+        {
+            packet.ReadInt64("unk64 10h");
+            packet.ReadInt32("unk32 1Ch");
+            packet.ReadInt32("unk32 34h");
+            packet.ReadInt32("unk32 18h");
+            packet.ReadInt32("unk32 20h");
+            packet.ReadInt32("unk32 30h");
+            packet.ReadInt32("unk32 2Ch");
+            packet.ReadInt32("unk32 24h");
+            packet.ReadInt32("unk32 28h");
+            packet.ReadInt16("unk16 38h");
+            packet.ReadByte("unk 3Bh");
+            packet.ReadByte("unk 3Ah");
+            packet.ReadByte("unk 3Ch");
+        }
+
         [Parser(Opcode.CMSG_GARRISON_GET_BUILDING_LANDMARKS)]
         [Parser(Opcode.CMSG_REQUEST_ARTIFACT_COMPLETION_HISTORY)]
         [Parser(Opcode.CMSG_TWITTER_CHECK_STATUS)]
