@@ -890,5 +890,11 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadUInt32("ItemID");
             packet.ReadBit("Favorite");
         }
+
+        [Parser(Opcode.SMSG_BOSS_KILL_CREDIT)]
+        public static void HandleBossKillCredit(Packet packet)
+        {
+            packet.ReadUInt32("EncounterID");
+        }
     }
 }
