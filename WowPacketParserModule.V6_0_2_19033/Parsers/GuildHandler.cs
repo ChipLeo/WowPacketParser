@@ -20,6 +20,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_GUILD_MEMBER_DAILY_RESET)]
         [Parser(Opcode.SMSG_GUILD_EVENT_BANK_CONTENTS_CHANGED)]
         [Parser(Opcode.SMSG_GUILD_EVENT_RANKS_UPDATED)]
+        [Parser(Opcode.SMSG_GUILD_INVITE_EXPIRED)]
         public static void HandleGuildZero(Packet packet)
         {
         }

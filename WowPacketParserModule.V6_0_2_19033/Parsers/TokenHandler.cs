@@ -65,7 +65,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadUInt32("UnkInt");
         }
 
-        [Parser(Opcode.SMSG_REQUEST_WOW_TOKEN_MARKET_PRICE_RESPONSE)]
+        [Parser(Opcode.SMSG_WOW_TOKEN_MARKET_PRICE_RESPONSE)]
         public static void HandleTokenUpdateMarketPriceResponse(Packet packet)
         {
             packet.ReadUInt64("CurrentMarketPrice");
