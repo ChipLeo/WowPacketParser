@@ -61,7 +61,7 @@ namespace WowPacketParser.Tests.Misc
             ClientVersion.SetVersion(new DateTime(2025, 1, 1));
             Assert.IsFalse(ClientVersion.IsUndefined());
 
-            ClientVersion.SetVersion(new DateTime(2010, 6, 29));
+            ClientVersion.SetVersion(new DateTime(2010, 6, 22));
             Assert.AreEqual(ClientVersionBuild.V3_3_5_12213, ClientVersion.Build);
 
             ClientVersion.SetVersion(new DateTime(2015, 7, 9));
