@@ -1570,8 +1570,10 @@ namespace WowPacketParser.Enums.Version.V6_2_0_20173
             {Opcode.SMSG_UPDATE_OBJECT, 0x0D36},
             {Opcode.SMSG_UPDATE_TALENT_DATA, 0x0057},
             {Opcode.SMSG_UPDATE_TASK_PROGRESS, 0x0E98},
+            {Opcode.SMSG_UPDATE_VAS_PURCHASE_STATES_RESPONSE, 0x0654},
             {Opcode.SMSG_UPDATE_WEEKLY_SPELL_USAGE, 0x09FE},
             {Opcode.SMSG_UPDATE_WORLD_STATE, 0x0036},
+            {Opcode.SMSG_UPDATE_WOW_TOKEN_COUNT_RESPONSE, 0x0A88},
             {Opcode.SMSG_USERLIST_ADD, 0x1C59},
             {Opcode.SMSG_USERLIST_REMOVE, 0x1D5A},
             {Opcode.SMSG_USERLIST_UPDATE, 0x1489},
@@ -1607,6 +1609,7 @@ namespace WowPacketParser.Enums.Version.V6_2_0_20173
             {Opcode.SMSG_WOW_TOKEN_SELL_REQUEST_CONFIRMATION, 0x0898},
             {Opcode.SMSG_WOW_TOKEN_SELL_RESULT_CONFIRMATION, 0x06A6},
             {Opcode.SMSG_WOW_TOKEN_UPDATE_AUCTIONABLE_LIST_RESPONSE, 0x028F},
+            {Opcode.SMSG_WOW_TOKEN_VETERAN_ELIGIBILITY_RESPONSE, 0x0A9B},
             {Opcode.SMSG_XP_GAIN_ABORTED, 0x01A6},
             {Opcode.SMSG_XP_GAIN_ENABLED, 0x02DC},
             {Opcode.SMSG_ZONE_UNDER_ATTACK, 0x1419}

@@ -23,6 +23,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("Confirmed");
         }
 
+        [Parser(Opcode.CMSG_CHECK_WOW_TOKEN_VETERAN_ELIGIBILITY)]
+        public static void HandleCheckTokenVeteranEligibility(Packet packet)
+        {
+            packet.ReadUInt32("UnkInt");
+        }
+
         [Parser(Opcode.CMSG_SELL_WOW_TOKEN_CONFIRM)]
         public static void HandleTokenConfirmSellToken(Packet packet)
         {
@@ -136,6 +142,14 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadUInt64("BuyoutPrice", i);
                 packet.ReadUInt32("EndTime", i);
             }
+        }
+
+        [Parser(Opcode.SMSG_WOW_TOKEN_VETERAN_ELIGIBILITY_RESPONSE)]
+        public static void HandleTokenVeteranEligibilityResponse(Packet packet)
+        {
+            packet.ReadInt64("UnkInt64");
+            packet.ReadInt32("UnkInt32");
+            packet.ReadInt32("UnkInt32 2");
         }
 
         [Parser(Opcode.SMSG_TOKEN_SELL_RESULT)]

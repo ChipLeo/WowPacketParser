@@ -287,5 +287,22 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             for (int i = 0; i < itemCount; i++)
                 ItemHandler.ReadItemInstance(packet, i);
         }
+
+        [Parser(Opcode.SMSG_UPDATE_VAS_PURCHASE_STATES_RESPONSE)]
+        public static void HandleUpdateVasPurchaseStatesResponse(Packet packet)
+        {
+            var Count = packet.ReadBits("Count", 6);
+            packet.ResetBitReader();
+            for (int i = 0; i < Count; i++)
+            {
+                packet.ReadPackedGuid128("Guid", i);
+                packet.ReadInt32("UnkInt32", i);
+                packet.ReadInt32("UnkInt32 2", i);
+                var cnt = packet.ReadBits("Cnt", 2, i);
+                packet.ResetBitReader();
+                for (int j = 0; j < cnt; j++)
+                    packet.ReadInt32("unkInt32", i, j);
+            }
+        }
     }
 }
