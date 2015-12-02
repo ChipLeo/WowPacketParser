@@ -7,7 +7,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class VoidStorageHandler
     {
-        [Parser(Opcode.CMSG_VOID_STORAGE_QUERY)]
+        [Parser(Opcode.CMSG_QUERY_VOID_STORAGE)]
         public static void HandleVoidStorageQuery(Packet packet)
         {
             var guid = packet.StartBitStream(1, 5, 6, 0, 7, 2, 3, 4);

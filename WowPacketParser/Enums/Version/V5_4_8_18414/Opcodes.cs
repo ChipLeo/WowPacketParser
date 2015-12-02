@@ -39,11 +39,11 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_AUTH_CONTINUED_SESSION,                   0x0F49}, //+-
             {Opcode.CMSG_AUTH_SESSION,                             0x00B2}, //+-
             {Opcode.CMSG_AUTOBANK_ITEM,                            0x066D}, //++
-            {Opcode.CMSG_AUTOSTORE_BAG_ITEM,                       0x067C}, //+-
             {Opcode.CMSG_AUTOSTORE_BANK_ITEM,                      0x02CF}, //++
             {Opcode.CMSG_AUTOSTORE_LOOT_ITEM,                      0x0354}, //++
             {Opcode.CMSG_AUTO_DECLINE_GUILD_INVITES,               0x06CB}, //++
             {Opcode.CMSG_AUTO_EQUIP_ITEM,                          0x025F}, //++
+            {Opcode.CMSG_AUTO_STORE_BAG_ITEM,                      0x067C}, //+-
             {Opcode.CMSG_BANKER_ACTIVATE,                          0x02E9}, //+-
             {Opcode.CMSG_BATTLEFIELD_LEAVE,                        0x0257}, //+-
             {Opcode.CMSG_BATTLEFIELD_LIST,                         0x1C41}, //+-
@@ -117,7 +117,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_ENABLE_TAXI_NODE,                         0x0741}, //++
             {Opcode.CMSG_ENUM_CHARACTERS,                          0x00E0}, //++
             {Opcode.CMSG_EQUIPMENT_SET_DELETE,                     0x02E8}, //+-
-            {Opcode.CMSG_EQUIPMENT_SET_SAVE,                       0x0669}, //+-
             {Opcode.CMSG_EQUIPMENT_SET_USE,                        0x036E}, //+-
             {Opcode.CMSG_FORCE_MOVE_ROOT_ACK,                      0x107A}, //++
             {Opcode.CMSG_FORCE_MOVE_UNROOT_ACK,                    0x1051}, //++
@@ -288,6 +287,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_QUERY_QUEST_INFO,                         0x02D5}, //++
             {Opcode.CMSG_QUERY_REALM_NAME,                         0x1A16}, //++
             {Opcode.CMSG_QUERY_TIME,                               0x0640}, //++
+            {Opcode.CMSG_QUERY_VOID_STORAGE,                       0x0140}, //+-
             {Opcode.CMSG_QUEST_GIVER_ACCEPT_QUEST,                 0x06D1}, //++
             {Opcode.CMSG_QUEST_GIVER_CHOOSE_REWARD,                0x07CB}, //++
             {Opcode.CMSG_QUEST_GIVER_COMPLETE_QUEST,               0x0659}, //++
@@ -322,6 +322,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_RESET_INSTANCES,                          0x0C69}, //+-
             {Opcode.CMSG_RESUME_TOKEN_ACK,                         0x0292}, //++ pair SMSG 18BA
             {Opcode.CMSG_SAVE_CUF_PROFILES,                        0x06E6}, //++
+            {Opcode.CMSG_SAVE_EQUIPMENT_SET,                       0x0669}, //+-
             //{Opcode.CMSG_SELECT_FACTION,                           0x0027}, //
             {Opcode.CMSG_SELECT_LOOT_SPEC,                         0x1260}, //+-
             {Opcode.CMSG_SELL_ITEM,                                0x1358}, //+-
@@ -415,7 +416,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_USE_ITEM,                                 0x1CC1}, //-- sub_696A02
             {Opcode.CMSG_VIOLENCE_LEVEL,                           0x0040}, //+-
             {Opcode.CMSG_VOICE_SESSION_ENABLE,                     0x15A9}, //++
-            {Opcode.CMSG_VOID_STORAGE_QUERY,                       0x0140}, //+-
             {Opcode.CMSG_VOID_STORAGE_TRANSFER,                    0x1440}, //+-
             {Opcode.CMSG_WARDEN_DATA,                              0x1816}, //+-
             {Opcode.CMSG_WHO,                                      0x18A3}, //+-
