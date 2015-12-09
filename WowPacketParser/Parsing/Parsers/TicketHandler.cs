@@ -109,6 +109,7 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadByte("Get survey");
         }
 
+        [Parser(Opcode.CMSG_GM_TICKET_GET_CASE_STATUS)]
         [Parser(Opcode.CMSG_GM_TICKET_GET_TICKET)]
         [Parser(Opcode.CMSG_GM_TICKET_GET_SYSTEM_STATUS)]
         [Parser(Opcode.CMSG_GM_TICKET_RESPONSE_RESOLVE)]

@@ -37,14 +37,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
         }
 
-        [Parser(Opcode.CMSG_UNK_03F1)]
-        public static void HandleUnk03F1(Packet packet)
-        {
-            var guid = packet.StartBitStream(5, 6, 0, 4, 1, 2, 7, 3);
-            packet.ParseBitStream(guid, 0, 2, 6, 7, 1, 5, 3, 4);
-            packet.WriteGuid("Guid", guid);
-        }
-
         [Parser(Opcode.CMSG_UNK_06C5)]
         public static void HandleUnk06C5(Packet packet)
         {
@@ -167,12 +159,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var guid = packet.StartBitStream(2, 3, 5, 1, 4, 7, 0, 6);
             packet.ParseBitStream(guid, 5, 3, 7, 1, 4, 0, 6, 2);
             packet.WriteGuid("Guid", guid);
-        }
-
-        [Parser(Opcode.CMSG_UNK_1D36)]
-        public static void HandleUnk1D36(Packet packet)
-        {
-            packet.ReadInt32("unk");
         }
 
         [Parser(Opcode.SMSG_UNK_000F)]
@@ -651,10 +637,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_NULL_06D4)]
         [Parser(Opcode.CMSG_NULL_06F5)]
         [Parser(Opcode.CMSG_NULL_0813)]
-        [Parser(Opcode.CMSG_NULL_0826)]
         [Parser(Opcode.CMSG_NULL_0A23)]
-        [Parser(Opcode.CMSG_NULL_0A82)]
-        [Parser(Opcode.CMSG_NULL_0A87)]
         [Parser(Opcode.CMSG_NULL_0C62)]
         [Parser(Opcode.CMSG_NULL_1063)]
         [Parser(Opcode.CMSG_NULL_1124)]
@@ -664,16 +647,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_NULL_1452)]
         [Parser(Opcode.CMSG_NULL_14DB)]
         [Parser(Opcode.CMSG_NULL_14E0)]
-        [Parser(Opcode.CMSG_NULL_15A8)]
         [Parser(Opcode.CMSG_NULL_15E2)]
-        [Parser(Opcode.CMSG_NULL_1A23)]
         [Parser(Opcode.CMSG_NULL_1A87)]
         [Parser(Opcode.CMSG_NULL_1C45)]
         [Parser(Opcode.CMSG_NULL_1C5A)]
         [Parser(Opcode.CMSG_NULL_1D61)]
         [Parser(Opcode.CMSG_NULL_1DC3)]
         [Parser(Opcode.CMSG_NULL_1F34)]
-        [Parser(Opcode.CMSG_NULL_1F89)]
         [Parser(Opcode.CMSG_NULL_1F8E)]
         [Parser(Opcode.CMSG_NULL_1F9E)]
         [Parser(Opcode.CMSG_NULL_1F9F)]

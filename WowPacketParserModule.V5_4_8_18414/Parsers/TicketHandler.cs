@@ -11,7 +11,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_GM_TICKET_GET_TICKET)]
         public static void HandleGetTicket(Packet packet)
         {
-            packet.ReadInt32("Ticket ID");
+            //packet.ReadInt32("Ticket ID");
         }
     }
 }

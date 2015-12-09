@@ -37,6 +37,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             bool hasFallDirection = false;
             bool hasSplineElevation = false;
             bool hasUnkTime = false;
+            bool hasMountDisplayId = false;
 
             uint count = 0;
 
@@ -194,6 +195,17 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                         break;
                     case MovementStatusElements.MSEHasSpline:
                         packet.ReadBit("hasSpline");
+                        break;
+                    case MovementStatusElements.MSEHasMountDisplayId:
+                        hasMountDisplayId = !packet.ReadBit("!hasMountDisplayId");
+                        break;
+                    case MovementStatusElements.MSEMountDisplayIdWithCheck: // Fallback here
+                        if (!hasMountDisplayId)
+                            break;
+                        packet.ReadInt32("Mount Display ID");
+                        break;
+                    case MovementStatusElements.MSEMountDisplayIdWithoutCheck:
+                        packet.ReadInt32("Mount Display ID");
                         break;
                     case MovementStatusElements.MSECounterCount:
                         count = packet.ReadBits("counter", 22);
@@ -604,10 +616,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             ReadPlayerMovementInfo(packet, info.MovementKnockBackAck);
         }
 
-        [Parser(Opcode.CMSG_UNK_01F1)]
-        public static void HandleCUnk01F1(Packet packet)
+        [Parser(Opcode.CMSG_MOVE_SET_FLY)]
+        public static void HandleMoveSetFly(Packet packet)
         {
-            ReadPlayerMovementInfo(packet, info.CUnk01F1); // 679E4F
+            ReadPlayerMovementInfo(packet, info.MovementSetFly); // 679E4F
         }
 
         [Parser(Opcode.CMSG_UNK_08D3)]
@@ -616,10 +628,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             ReadPlayerMovementInfo(packet, info.CUnk08D3);
         }
 
-        [Parser(Opcode.CMSG_UNK_09DB)]
-        public static void HandleCUnk09DB(Packet packet)
+        [Parser(Opcode.CMSG_MOVE_CHNG_TRANSPORT)]
+        public static void HandleMoveChngTransport(Packet packet)
         {
-            ReadPlayerMovementInfo(packet, info.Unk09DB);
+            ReadPlayerMovementInfo(packet, info.MovementChngTransport);
         }
 
         [Parser(Opcode.CMSG_UNK_09FA)]
@@ -3658,7 +3670,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             guid[0] = packet.ReadBit();
             guid[1] = packet.ReadBit();
 
-            var unk20 = !packet.ReadBit("skip unk20");
+            var hasMountDisplayId = !packet.ReadBit("!hasMountDisplayId");
 
             guid[3] = packet.ReadBit();
 
@@ -3670,8 +3682,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             guid[4] = packet.ReadBit();
 
             packet.ReadSingle("Speed");
-            if (unk20)
-                packet.ReadInt32("unk20");
+            if (hasMountDisplayId)
+                packet.ReadInt32("Mount Display Id");
 
             packet.ParseBitStream(guid, 3, 2, 5, 6);
 

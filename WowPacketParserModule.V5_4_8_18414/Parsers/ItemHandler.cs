@@ -1294,8 +1294,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("Successful");
         }
 
-        [Parser(Opcode.SMSG_SEND_ITEM_UPGRADE)]
-        public static void HandleSendItemUpgrade(Packet packet)
+        [Parser(Opcode.SMSG_ITEM_EXPIRE_PURCHASE_REFUND)]
+        public static void HandleItemExpirePurchaseRefund(Packet packet)
         {
             var guid = packet.StartBitStream(7, 4, 2, 6, 5, 3, 1, 0);
             packet.ParseBitStream(guid, 4, 0, 6, 7, 1, 2, 3, 5);

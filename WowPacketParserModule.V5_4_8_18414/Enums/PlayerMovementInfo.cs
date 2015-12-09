@@ -1379,7 +1379,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
 
         public MovementStatusElements[] MovementSetCollisionHeightAck = // 09FB +8
         {
-            MovementStatusElements.MSEExtraInt32,             // 196
+            MovementStatusElements.MSEMountDisplayIdWithoutCheck, // 196
             MovementStatusElements.MSEPositionZ,              // 52  34h
             MovementStatusElements.MSEExtraFloat,             // 16  10h
             MovementStatusElements.MSEPositionY,              // 48  30h
@@ -4204,7 +4204,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
             MovementStatusElements.MSEEnd
         };
 
-        public MovementStatusElements[] Unk09DB = // 09DB
+        public MovementStatusElements[] MovementChngTransport = // 09DB
         {
             MovementStatusElements.MSEPositionX,              // 36
             MovementStatusElements.MSEPositionY,              // 40
@@ -4439,7 +4439,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
             MovementStatusElements.MSEEnd
         };
 
-        public MovementStatusElements[] CUnk01F1 = // 01F1
+        public MovementStatusElements[] MovementSetFly = // 01F1
         {
             MovementStatusElements.MSEPositionY,              // 40
             MovementStatusElements.MSEPositionZ,              // 44
@@ -4521,7 +4521,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
         {
             MovementStatusElements.MSECount,                  // 176
             MovementStatusElements.MSEExtraFloat,             // 196
-            MovementStatusElements.MSEExtraInt32,             // 188
+            MovementStatusElements.MSEMountDisplayIdWithoutCheck, // 188
             MovementStatusElements.MSEPositionX,              // 36
             MovementStatusElements.MSEPositionY,              // 40
             MovementStatusElements.MSEPositionZ,              // 44

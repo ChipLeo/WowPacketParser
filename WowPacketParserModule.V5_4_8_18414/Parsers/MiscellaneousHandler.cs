@@ -185,8 +185,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBool("PvP");
         }
 
-        [Parser(Opcode.CMSG_SELECT_LOOT_SPEC)]
-        public static void HandleSelectLootSpec(Packet packet)
+        [Parser(Opcode.CMSG_SET_LOOT_SPECIALIZATION)]
+        public static void HandleSetLootSpec(Packet packet)
         {
             packet.ReadInt32("SpecializationID"); 
             // 0 Default by spec
@@ -342,9 +342,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_UNK_115B)]
         public static void HandleUnk115B(Packet packet)
         {
-            packet.ReadBit("unkb");
+            var hasData = !packet.ReadBit("!unkb");
             packet.ResetBitReader();
-            packet.ReadInt32("unk");
+            if (hasData)
+                packet.ReadInt32("unkInt32");
         }
 
         [Parser(Opcode.CMSG_UNK_1841)]

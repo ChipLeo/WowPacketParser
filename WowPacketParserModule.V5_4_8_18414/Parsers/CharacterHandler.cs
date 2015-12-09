@@ -118,8 +118,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_CHAR_FACTION_CHANGE)]
-        public static void HandleClientCharFactionChange(Packet packet)
+        [Parser(Opcode.CMSG_CHAR_RACE_OR_FACTION_CHANGE)]
+        public static void HandleClientCharRaceOrFactionChange(Packet packet)
         {
             packet.ReadByte("unk18"); // 18
             packet.ReadByte("unk21"); // 21

@@ -31,11 +31,18 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
         }
 
-        [Parser(Opcode.CMSG_AREA_SPIRIT_HEALER_QUERY)]
         [Parser(Opcode.CMSG_BATTLEMASTER_HELLO)]
         [Parser(Opcode.CMSG_REPORT_PVP_PLAYER_AFK)]
         public static void HandleBattlemasterHello(Packet packet)
         {
+        }
+
+        [Parser(Opcode.CMSG_AREA_SPIRIT_HEALER_QUERY)]
+        public static void HandleAreaSpiritHealerQuery(Packet packet)
+        {
+            var guid = packet.StartBitStream(5, 6, 0, 4, 1, 2, 7, 3);
+            packet.ParseBitStream(guid, 0, 2, 6, 7, 1, 5, 3, 4);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.CMSG_AREA_SPIRIT_HEALER_QUEUE)]
@@ -716,8 +723,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_BATTLEFIELD_STATUS)]
         [Parser(Opcode.CMSG_PVP_LOG_DATA)]
         [Parser(Opcode.CMSG_QUERY_BATTLEFIELD_STATE)]
-        [Parser(Opcode.CMSG_REQUEST_RATED_BG_STATS)]
         [Parser(Opcode.CMSG_REQUEST_PVP_REWARDS)]
+        [Parser(Opcode.CMSG_REQUEST_RATED_BG_STATS)]
+        [Parser(Opcode.CMSG_REQUEST_RATED_INFO)]
         public static void HandleBattlegroundNull(Packet packet)
         {
         }

@@ -114,7 +114,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleServerAuthChallenge(Packet packet)
         {
             packet.ReadUInt32("Server Seed");
-            packet.WriteLine(packet.ReadBytes(32).ToString());
+            for (uint i = 0; i < 8; ++i)
+                packet.ReadUInt32("DosChallenge", i);
             packet.ReadByte("Unk Byte");        
         }
 
