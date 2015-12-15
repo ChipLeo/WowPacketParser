@@ -818,11 +818,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 hasFallDirection = packet.ReadBit(); // 176
             var hasFlightSpeed = packet.ReadBit("hasFlightSpeed"); // 220
             var unk260 = packet.ReadBit("unk260"); // 260
-
-/*
-            var hasPitch = !packet.ReadBit();
-*/
-
             guid[3] = packet.ReadBit();
             guid[4] = packet.ReadBit();
             var hasRunSpeed = packet.ReadBit("hasRunSpeed"); // 36
@@ -956,11 +951,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             if (unk228)
                 packet.ReadSingle("unke0h"); // e0h
-
-            /*
-            if (hasPitch)
-                packet.ReadSingle("Pitch");
-             */
 
             packet.WriteGuid("Guid", guid);
             packet.AddValue("Position", pos);
