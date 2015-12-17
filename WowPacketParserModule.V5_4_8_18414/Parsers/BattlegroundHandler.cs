@@ -167,6 +167,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
         }
 
+        [Parser(Opcode.CMSG_REQUEST_BATTLEFIELD_STATUS)]
+        [Parser(Opcode.CMSG_REQUEST_CONQUEST_FORMULA_CONSTANTS)]
+        [Parser(Opcode.CMSG_REQUEST_RATED_BATTLEFIELD_INFO)]
+        public static void HandleBattlefieldZero(Packet packet)
+        {
+        }
+
         [Parser(Opcode.CMSG_REQUEST_INSPECT_RATED_BG_STATS)]
         public static void HandleRequestInspectRBGStats(Packet packet)
         {

@@ -488,6 +488,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteLine("Position: {0}", pos);
         }
 
+        [Parser(Opcode.CMSG_DISCARDED_TIME_SYNC_ACKS)]
+        public static void HandleDiscardedTimeSyncAcks(Packet packet)
+        {
+            var hasData = !packet.ReadBit("!hasSequenceIndex");
+            packet.ResetBitReader();
+            if (hasData)
+                packet.ReadInt32("MaxSequenceIndex");
+        }
+
         [Parser(Opcode.CMSG_FORCE_MOVE_ROOT_ACK)]
         public static void HandleForceMoveRootAck(Packet packet)
         {

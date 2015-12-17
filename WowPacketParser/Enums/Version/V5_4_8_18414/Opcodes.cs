@@ -124,6 +124,9 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_DEL_FRIEND,                               0x1103}, //+-
             {Opcode.CMSG_DEL_IGNORE,                               0x0737}, //+-
             {Opcode.CMSG_DESTROY_ITEM,                             0x0026}, //+-
+            {Opcode.CMSG_DF_GET_JOIN_STATUS,                       0x032D}, //++
+            {Opcode.CMSG_DF_GET_SYSTEM_INFO,                       0x006B}, //++
+            {Opcode.CMSG_DISCARDED_TIME_SYNC_ACKS,                 0x115B}, //++
             {Opcode.CMSG_DISMISS_CRITTER,                          0x12DB}, //--
             {Opcode.CMSG_DO_READY_CHECK,                           0x0817}, //+-
             {Opcode.CMSG_DUEL_PROPOSED,                            0x1A26}, //+-
@@ -199,7 +202,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_ITEM_TEXT_QUERY,                          0x0123}, //++
             {Opcode.CMSG_LEARN_TALENT,                             0x02A7}, //+-
             {Opcode.CMSG_LFG_JOIN,                                 0x046B}, //++
-            {Opcode.CMSG_LFG_PLAYER_LOCK_INFO_REQUEST,             0x006B}, //++
             {Opcode.CMSG_LFG_TELEPORT,                             0x1AA6}, //+-
             {Opcode.CMSG_LF_GUILD_ADD_APPLICATION,                 0x0C63}, //+-
             {Opcode.CMSG_LF_GUILD_BROWSE,                          0x159A}, //+-
@@ -250,15 +252,12 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_NULL_01C0,                                0x01C0}, //+-
             {Opcode.CMSG_NULL_02D6,                                0x02D6}, //+-
             {Opcode.CMSG_NULL_02DA,                                0x02DA}, //+-
-            {Opcode.CMSG_NULL_032D,                                0x032D}, //+-
             {Opcode.CMSG_NULL_033D,                                0x033D}, //+-
             {Opcode.CMSG_NULL_0360,                                0x0360}, //++
-            {Opcode.CMSG_NULL_0365,                                0x0365}, //+-
             {Opcode.CMSG_NULL_03C4,                                0x03C4}, //+-
             {Opcode.CMSG_NULL_05E1,                                0x05E1}, //+-
             {Opcode.CMSG_NULL_0644,                                0x0644}, //+-
             {Opcode.CMSG_NULL_06D4,                                0x06D4}, //+-
-            {Opcode.CMSG_NULL_06F5,                                0x06F5}, //+-
             {Opcode.CMSG_NULL_0813,                                0x0813}, //+-
             {Opcode.CMSG_NULL_0A23,                                0x0A23}, //+-
             {Opcode.CMSG_NULL_0C62,                                0x0C62}, //+-
@@ -278,7 +277,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_NULL_1DC3,                                0x1DC3}, //+-
             {Opcode.CMSG_NULL_1F34,                                0x1F34}, //+-
             {Opcode.CMSG_NULL_1F8E,                                0x1F8E}, //+-
-            {Opcode.CMSG_NULL_1F9E,                                0x1F9E}, //+-
             {Opcode.CMSG_NULL_1F9F,                                0x1F9F}, //+-
             {Opcode.CMSG_OBJECT_UPDATE_FAILED,                     0x1061}, //+-
             {Opcode.CMSG_OFFER_PETITION,                           0x15BE}, //+-
@@ -302,6 +300,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_PLAYER_LOGIN,                             0x158F}, //++
             {Opcode.CMSG_PVP_LOG_DATA,                             0x14C2}, //+-
             {Opcode.CMSG_QUERY_BATTLE_PET_NAME,                    0x1CE0}, //+-
+            {Opcode.CMSG_QUERY_COUNTDOWN_TIMER,                    0x044E}, //++
             {Opcode.CMSG_QUERY_CREATURE,                           0x0842}, //++
             {Opcode.CMSG_QUERY_GAME_OBJECT,                        0x1461}, //++
             {Opcode.CMSG_QUERY_GUILD_INFO,                         0x1AB6}, //+-
@@ -338,8 +337,11 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_REPOP_REQUEST,                            0x134A}, //+-
             {Opcode.CMSG_REPORT_PVP_PLAYER_AFK,                    0x06F9}, //--
             {Opcode.CMSG_REQUEST_ACCOUNT_DATA,                     0x1D8A}, //++
+            {Opcode.CMSG_REQUEST_BATTLEFIELD_STATUS,               0x1F9E}, //++
             {Opcode.CMSG_REQUEST_CATEGORY_COOLDOWNS,               0x1203}, //++
             {Opcode.CMSG_REQUEST_CEMETERY_LIST,                    0x06E4}, //++
+            {Opcode.CMSG_REQUEST_CONQUEST_FORMULA_CONSTANTS,       0x0365}, //++
+            {Opcode.CMSG_REQUEST_FORCED_REACTIONS,                 0x06F5}, //++
             {Opcode.CMSG_REQUEST_GUILD_REWARDS_LIST,               0x06C4}, //+-
             {Opcode.CMSG_REQUEST_GUILD_XP,                         0x05F8}, //+-
             {Opcode.CMSG_REQUEST_HOTFIX,                           0x158D}, //+-
@@ -415,7 +417,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_02C4,                                 0x02C4}, //+-
             {Opcode.CMSG_UNK_0377,                                 0x0377}, //-- battle pet
             {Opcode.CMSG_UNK_03E4,                                 0x03E4}, //+-
-            {Opcode.CMSG_UNK_044E,                                 0x044E}, //+-
             {Opcode.CMSG_UNK_0656,                                 0x0656}, //+-
             {Opcode.CMSG_UNK_06C5,                                 0x06C5}, //++ battle pet
             {Opcode.CMSG_UNK_06C9,                                 0x06C9}, //++
@@ -428,7 +429,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_10A7,                                 0x10A7}, //+-
             {Opcode.CMSG_UNK_10C3,                                 0x10C3}, //++
             {Opcode.CMSG_UNK_10D3,                                 0x10D3}, //++
-            {Opcode.CMSG_UNK_115B,                                 0x115B}, //++
             {Opcode.CMSG_UNK_12B3,                                 0x12B3}, //++
             {Opcode.CMSG_UNK_1341,                                 0x1341}, //++
             {Opcode.CMSG_UNK_1370,                                 0x1370}, //++

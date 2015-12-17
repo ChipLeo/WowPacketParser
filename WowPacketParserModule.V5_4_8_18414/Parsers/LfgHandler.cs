@@ -9,6 +9,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class LfgHandler
     {
+        [Parser(Opcode.CMSG_DF_GET_SYSTEM_INFO)]
+        public static void HandleLFGLockInfoRequest(Packet packet)
+        {
+            packet.ReadByte("PartyIndex");
+            packet.ReadBit("Player");
+        }
+
         [Parser(Opcode.CMSG_LFG_JOIN)]
         public static void HandleLFGJoin(Packet packet)
         {

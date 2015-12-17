@@ -133,6 +133,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadByte("unk16"); // 16
         }
 
+        [Parser(Opcode.CMSG_QUERY_COUNTDOWN_TIMER)]
+        public static void HandleQueryCountdownTimer(Packet packet)
+        {
+            packet.ReadInt32("TimerType");
+        }
+
         [Parser(Opcode.CMSG_READY_CHECK_RESPONSE)]
         public static void HandleReadyCheckResponse(Packet packet)
         {
@@ -337,15 +343,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var guid = packet.StartBitStream(5, 7, 3, 2, 6, 1, 0, 4);
             packet.ParseBitStream(guid, 0, 3, 2, 6, 5, 7, 4, 1);
             packet.WriteGuid("Guid", guid);
-        }
-
-        [Parser(Opcode.CMSG_UNK_115B)]
-        public static void HandleUnk115B(Packet packet)
-        {
-            var hasData = !packet.ReadBit("!unkb");
-            packet.ResetBitReader();
-            if (hasData)
-                packet.ReadInt32("unkInt32");
         }
 
         [Parser(Opcode.CMSG_UNK_1841)]
@@ -1455,7 +1452,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.CMSG_UNK_0247)]
-        [Parser(Opcode.CMSG_UNK_044E)]
         [Parser(Opcode.CMSG_UNK_0656)]
         [Parser(Opcode.CMSG_UNK_1446)]
         public static void HandleUnk1446(Packet packet)

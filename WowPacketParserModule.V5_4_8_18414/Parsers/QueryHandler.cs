@@ -56,23 +56,23 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             var guid = new byte[8];
             guid[4] = packet.ReadBit();
-            var hasRealmID = packet.ReadBit("hasRealmID"); // 20
+            var hasRealmID1 = packet.ReadBit("hasRealmID1"); // 20
             guid[6] = packet.ReadBit();
             guid[0] = packet.ReadBit();
             guid[7] = packet.ReadBit();
             guid[1] = packet.ReadBit();
-            var byte28 = packet.ReadBit("has byte28");
+            var hasRealmID2 = packet.ReadBit("hasRealmID2"); // 28
             guid[5] = packet.ReadBit();
             guid[2] = packet.ReadBit();
             guid[3] = packet.ReadBit();
             packet.ParseBitStream(guid, 7, 5, 1, 2, 6, 3, 0, 4);
             packet.WriteGuid("Guid", guid);
 
-            if (hasRealmID)
-                packet.ReadInt32("RealmID"); // 20
+            if (hasRealmID1)
+                packet.ReadInt32("RealmID1"); // 20
 
-            if (byte28)
-                packet.ReadInt32("int24");
+            if (hasRealmID2)
+                packet.ReadInt32("RealmID2"); // 28
         }
 
         [Parser(Opcode.CMSG_QUERY_PAGE_TEXT)]
