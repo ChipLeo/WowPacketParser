@@ -239,7 +239,6 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadInt64("FollowerDBIDs");
         }
 
-        [Parser(Opcode.SMSG_GARRISON_UPGRADEABLE_RESULT)]
         [Parser(Opcode.SMSG_GARRISON_IS_UPGRADEABLE_RESULT)]
         public static void HandleClientGarrisonUpgradeableResult(Packet packet)
         {
@@ -463,8 +462,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("Unk"); // maybe: SkillLineID?
         }
 
-        [Parser(Opcode.SMSG_GARRISON_OPEN_TRADESKILL_NPC_RESPONSE)]
-        public static void HandleGarrisonOpenTradeskillNpcResponse(Packet packet)
+        [Parser(Opcode.SMSG_GARRISON_OPEN_TRADESKILL_NPC)]
+        public static void HandleSGarrisonOpenTradeskillNpc(Packet packet)
         {
             packet.ReadPackedGuid128("GUID");
 
@@ -516,8 +515,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("GarrPlotInstanceID");
         }
 
-        [Parser(Opcode.SMSG_GARRISON_SET_NUM_FOLLOWER_ACTIVATIONS_REMAINING)]
-        public static void HandleGarrisonSetNumFollowerActivationsRemaining(Packet packet)
+        [Parser(Opcode.SMSG_GARRISON_NUM_FOLLOWER_ACTIVATIONS_REMAINING)]
+        public static void HandleGarrisonNumFollowerActivationsRemaining(Packet packet)
         {
             packet.ReadInt32("Activated");
         }
