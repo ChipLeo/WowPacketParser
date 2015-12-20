@@ -662,14 +662,14 @@ namespace WowPacketParser.Parsing.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_BATTLEFIELD_MGR_STATE_CHANGE, ClientVersionBuild.V4_0_6a_13623, ClientVersionBuild.V4_3_4_15595)]
+        [Parser(Opcode.SMSG_BATTLEFIELD_MGR_STATE_CHANGED, ClientVersionBuild.V4_0_6a_13623, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleBattlefieldMgrStateChanged406(Packet packet)
         {
             packet.ReadUInt32E<BattlegroundStatus>("status");
             packet.ReadGuid("BG Guid");
         }
 
-        [Parser(Opcode.SMSG_BATTLEFIELD_MGR_STATE_CHANGE, ClientVersionBuild.Zero, ClientVersionBuild.V4_0_6a_13623)]
+        [Parser(Opcode.SMSG_BATTLEFIELD_MGR_STATE_CHANGED, ClientVersionBuild.Zero, ClientVersionBuild.V4_0_6a_13623)]
         public static void HandleBattlefieldMgrStateChanged(Packet packet)
         {
             packet.ReadUInt32E<BattlegroundStatus>("Old status");

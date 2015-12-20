@@ -460,8 +460,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("Time");
         }
 
-        [Parser(Opcode.SMSG_BATTLEFIELD_MGR_DROP_TIMER_CANCELED)]
-        public static void HandleBFMgrDropTimerCanceled(Packet packet)
+        [Parser(Opcode.SMSG_BATTLEFIELD_MGR_DROP_TIMER_CANCELLED)]
+        public static void HandleBFMgrDropTimerCancelled(Packet packet)
         {
             packet.ReadUInt64("QueueID");
         }

@@ -652,7 +652,7 @@ namespace WowPacketParser.Enums.Version.V4_0_6_13596
             {Opcode.SMSG_BATTLEFIELD_MGR_ENTRY_INVITE, 0x0455E},
             {Opcode.SMSG_BATTLEFIELD_MGR_QUEUE_INVITE, 0x0054C},
             {Opcode.SMSG_BATTLEFIELD_MGR_QUEUE_REQUEST_RESPONSE, 0x00C0C},
-            {Opcode.SMSG_BATTLEFIELD_MGR_STATE_CHANGE, 0x0485C},
+            {Opcode.SMSG_BATTLEFIELD_MGR_STATE_CHANGED, 0x0485C},
             {Opcode.SMSG_BATTLEFIELD_PORT_DENIED, 0x10059}, //UnknownopcodeID
             //{Opcode.SMSG_BATTLEFIELD_STATUS1, 0x0454C},
             //{Opcode.SMSG_BATTLEFIELD_STATUS2, 0x0051E},

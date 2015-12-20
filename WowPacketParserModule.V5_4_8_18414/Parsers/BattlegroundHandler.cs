@@ -313,7 +313,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
         }
 
-        [Parser(Opcode.SMSG_BATTLEFIELD_MGR_STATE_CHANGE)]
+        [Parser(Opcode.SMSG_BATTLEFIELD_MGR_STATE_CHANGED)]
         public static void HandleBattlefieldMgrStateChanged(Packet packet)
         {
         }

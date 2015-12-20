@@ -301,7 +301,7 @@ namespace WowPacketParserModule.V4_3_4_15595.Parsers
             packet.ReadByte((arena ? "Green" : "Horde") + " team size");
         }
 
-        [Parser(Opcode.SMSG_BATTLEFIELD_MGR_STATE_CHANGE)]
+        [Parser(Opcode.SMSG_BATTLEFIELD_MGR_STATE_CHANGED)]
         public static void HandleBattlefieldMgrStateChanged434(Packet packet)
         {
             var guid = packet.StartBitStream(4, 3, 7, 2, 1, 6, 0, 4);

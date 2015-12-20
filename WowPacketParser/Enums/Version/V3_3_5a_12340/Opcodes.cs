@@ -1195,7 +1195,7 @@ namespace WowPacketParser.Enums.Version.V3_3_5a_12340
             {Opcode.SMSG_BATTLEFIELD_MGR_QUEUE_REQUEST_RESPONSE, 0x4E4},
             {Opcode.SMSG_BATTLEFIELD_MGR_EJECT_PENDING, 0x4E5},
             {Opcode.SMSG_BATTLEFIELD_MGR_EJECTED, 0x4E6},
-            {Opcode.SMSG_BATTLEFIELD_MGR_STATE_CHANGE, 0x4E8},
+            {Opcode.SMSG_BATTLEFIELD_MGR_STATE_CHANGED, 0x4E8},
             {Opcode.SMSG_TOGGLE_XP_GAIN, 0x4ED},
             {Opcode.SMSG_GMRESPONSE_DB_ERROR, 0x4EE},
             {Opcode.SMSG_GMRESPONSE_RECEIVED, 0x4EF},

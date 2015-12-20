@@ -490,7 +490,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BATTLEFIELD_LIST,                         0x160E}, //++
             {Opcode.SMSG_BATTLEFIELD_MGR_EJECTED,                  0x18C2}, //--
             {Opcode.SMSG_BATTLEFIELD_MGR_ENTERING,                 0x081B}, //--
-            {Opcode.SMSG_BATTLEFIELD_MGR_STATE_CHANGE,             0x083A}, //--
+            {Opcode.SMSG_BATTLEFIELD_MGR_STATE_CHANGED,            0x083A}, //--
             {Opcode.SMSG_BATTLEFIELD_RATED_INFO,                   0x0EBA}, //++
             {Opcode.SMSG_BATTLEFIELD_STATUS,                       0x0433}, //++
             {Opcode.SMSG_BATTLEFIELD_STATUS_ACTIVE,                0x1AAF}, //++
