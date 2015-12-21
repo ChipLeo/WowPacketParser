@@ -858,7 +858,7 @@ namespace WowPacketParser.Enums.Version.V6_2_2_20444
             {Opcode.SMSG_CHARACTER_UPGRADE_SPELL_TIER_SET, 0x0F1D},
             {Opcode.SMSG_CHARACTER_UPGRADE_STARTED, 0x0896},
             {Opcode.SMSG_CHAR_CUSTOMIZE, 0x079D},
-            {Opcode.SMSG_CHAR_CUSTOMIZE_FAILED, 0x00E9},
+            {Opcode.SMSG_CHAR_CUSTOMIZE_RESULT, 0x00E9},
             {Opcode.SMSG_CHAR_FACTION_CHANGE_RESULT, 0x0AFC},
             {Opcode.SMSG_CHAT, 0x1299},
             {Opcode.SMSG_CHAT_AUTO_RESPONDED, 0x10C9},

@@ -565,7 +565,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_CHALLENGE_MODE_REWARDS,                   0x168A}, //++ pair 1C5A
             {Opcode.SMSG_CHANNEL_LIST,                             0x0B22}, //++ pair 0C1B
             {Opcode.SMSG_CHANNEL_NOTIFY,                           0x0F06}, //--
-            {Opcode.SMSG_CHAR_RENAME,                              0x0CBF}, //--
+            {Opcode.SMSG_CHARACTER_RENAME_RESULT,                  0x0CBF}, //--
             {Opcode.SMSG_CHAT,                                     0x1A9A}, //++
             {Opcode.SMSG_CHAT_NOT_IN_PARTY,                        0x0A8A}, //++ pair 009A
             {Opcode.SMSG_CHAT_PLAYER_AMBIGUOUS,                    0x061A}, //--
