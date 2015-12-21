@@ -438,8 +438,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadUInt32("CharShipmentContainerID");
         }
 
-        [Parser(Opcode.SMSG_GARRISON_UPGRADE_FOLLOWER_ITEM_LEVEL)]
-        public static void HandleGarrisonUpgradeFollowerItemLevel(Packet packet)
+        [Parser(Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_ITEM_LEVEL)]
+        public static void HandleGarrisonFollowerChangedItemLevel(Packet packet)
         {
             ReadGarrisonFollower(packet);
         }
@@ -529,8 +529,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadPackedGuid128("TrophyGUID");
         }
 
-        [Parser(Opcode.CMSG_TROPHY_MONUMENT_LOAD_SELECTED_TROPHY_ID)]
-        public static void HandleGetSelectedTrophyId(Packet packet)
+        [Parser(Opcode.CMSG_LOAD_SELECTED_TROPHY)]
+        public static void HandleGetSelectedTrophy(Packet packet)
         {
             packet.ReadInt32("TrophyID");
         }
@@ -590,8 +590,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("Success");
         }
 
-        [Parser(Opcode.SMSG_GARRISON_MONUMENT_SELECTED_TROPHY_ID_LOADED)]
-        public static void HandleGarrisonMonumentSelectedTrophyIdLoaded(Packet packet)
+        [Parser(Opcode.SMSG_LOAD_SELECTED_TROPHY_RESULT)]
+        public static void HandleLoadSelectedTrophyResult(Packet packet)
         {
             packet.ReadBit("Success");
             packet.ReadInt32("TrophyID");

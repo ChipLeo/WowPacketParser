@@ -469,10 +469,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_MOVE_SET_LAND_WALK)]
         [Parser(Opcode.SMSG_MOVE_ROOT)]
         [Parser(Opcode.SMSG_MOVE_SET_CAN_FLY)]
-        [Parser(Opcode.SMSG_MOVE_ENABLE_TRANSITION_BETWEEN_SWIM_AND_FLY)]
+        [Parser(Opcode.SMSG_MOVE_SET_CAN_TRANSITION_BETWEEN_SWIM_AND_FLY)]
         [Parser(Opcode.SMSG_MOVE_SET_HOVERING)]
         [Parser(Opcode.SMSG_MOVE_UNSET_CAN_FLY)]
-        [Parser(Opcode.SMSG_MOVE_DISABLE_TRANSITION_BETWEEN_SWIM_AND_FLY)]
+        [Parser(Opcode.SMSG_MOVE_UNSET_CAN_TRANSITION_BETWEEN_SWIM_AND_FLY)]
         [Parser(Opcode.SMSG_MOVE_UNSET_HOVERING)]
         [Parser(Opcode.SMSG_MOVE_UNROOT)]
         [Parser(Opcode.SMSG_MOVE_SET_WATER_WALK)]
@@ -815,7 +815,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_MOVE_SET_ANIM_KIT)]
+        [Parser(Opcode.SMSG_SET_MOVEMENT_ANIM_KIT)]
         public static void HandleSetMovementAnimKit(Packet packet)
         {
             packet.ReadPackedGuid128("Unit");

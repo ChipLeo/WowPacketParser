@@ -575,7 +575,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_CLEAR_ALL_SPELL_CHARGES,                  0x0C5B}, //++
             {Opcode.SMSG_CLEAR_TARGET,                             0x1061}, //++
             {Opcode.SMSG_CLIENTCACHE_VERSION,                      0x002A}, //++
-            {Opcode.SMSG_CLIENT_CONTROL_UPDATE,                    0x1043}, //++
+            {Opcode.SMSG_CONTROL_UPDATE,                           0x1043}, //++
             {Opcode.SMSG_COMBAT_EVENT_FAILED,                      0x18C3}, //++
             {Opcode.SMSG_CONNECT_TO,                               0x1149}, //--
             {Opcode.SMSG_CONTACT_LIST,                             0x1F22}, //++

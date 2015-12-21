@@ -3451,8 +3451,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32<MapId>("Map Id");
         }
 
-        [Parser(Opcode.SMSG_CLIENT_CONTROL_UPDATE)]
-        public static void HandleClientControlUpdate(Packet packet)
+        [Parser(Opcode.SMSG_CONTROL_UPDATE)]
+        public static void HandleControlUpdate(Packet packet)
         {
             var guid = new byte[8];
             guid[2] = packet.ReadBit();
