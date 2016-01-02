@@ -120,6 +120,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_INSTANCE_SAVE_CREATED)]
+        public static void HandleInstanceSaveCreated(Packet packet)
+        {
+            packet.ReadBool("Gm");
+        }
+
         [Parser(Opcode.SMSG_LOAD_CUF_PROFILES)]
         public static void HandleLoadCUFProfiles(Packet packet)
         {

@@ -244,7 +244,32 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.SMSG_LFG_QUEUE_STATUS)]
-        public static void HandleLfgQueueStatusUpdate(Packet packet)
+        public static void HandleLFGQueueStatus(Packet packet)
+        {
+            var guid = packet.StartBitStream(4, 3, 5, 1, 2, 0, 6, 7);
+            packet.ReadInt32("unk44"); // 44
+            packet.ParseBitStream(guid, 0);
+            packet.ReadInt32("unk28"); // 28
+            packet.ParseBitStream(guid, 4);
+            packet.ReadInt32("unk24"); // 24
+            for (var i = 0; i < 3; i++)
+            {
+                packet.ReadInt32("AvgWaitTimeByRole", i); // 56
+                packet.ReadByte("LastNeeded", i); // 68
+            }
+            packet.ReadInt32("unk48"); // 48
+            packet.ReadInt32("unk40"); // 40
+            packet.ParseBitStream(guid, 1);
+            packet.ReadInt32("unk16"); // 16
+            packet.ParseBitStream(guid, 7, 2);
+            packet.ReadInt32("unk20"); // 20
+            packet.ParseBitStream(guid, 5, 3, 6);
+
+            packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_LFG_UPDATE_STATUS)]
+        public static void HandleLfgUpdateStatus(Packet packet)
         {
             var guid = new byte[8];
 

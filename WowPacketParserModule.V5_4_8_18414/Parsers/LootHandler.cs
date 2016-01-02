@@ -46,6 +46,41 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_LOOT_LIST)]
+        public static void HandleLootList(Packet packet)
+        {
+            var guid48 = new byte[8];
+            guid48[5] = packet.ReadBit();
+            var unk24 = packet.ReadBit("unk24"); // 24
+            var guid16 = new byte[8];
+            if (unk24)
+                guid16 = packet.StartBitStream(4, 6, 0, 7, 5, 2, 3, 1);
+            guid48[1] = packet.ReadBit();
+            var unk40 = packet.ReadBit("unk40"); // 40
+            guid48[4] = packet.ReadBit();
+            guid48[3] = packet.ReadBit();
+            guid48[2] = packet.ReadBit();
+            var guid32 = new byte[8];
+            if (unk40)
+                guid32 = packet.StartBitStream(2, 3, 4, 5, 6, 0, 1, 7);
+            guid48[7] = packet.ReadBit();
+            guid48[0] = packet.ReadBit();
+            guid48[6] = packet.ReadBit();
+            if (unk40)
+            {
+                packet.ParseBitStream(guid32, 7, 1, 0, 6, 5, 3, 4, 2);
+                packet.WriteGuid("guid32", guid32);
+            }
+            if (unk24)
+            {
+                packet.ParseBitStream(guid16, 4, 5, 6, 3, 2, 7, 0, 1);
+                packet.WriteGuid("guid16", guid16);
+            }
+            packet.ParseBitStream(guid48, 5, 1, 6, 2, 3, 0, 7, 4);
+
+            packet.WriteGuid("guid48", guid48);
+        }
+
         [Parser(Opcode.SMSG_LOOT_MASTER_LIST)]
         public static void HandleLootMasterList(Packet packet)
         {

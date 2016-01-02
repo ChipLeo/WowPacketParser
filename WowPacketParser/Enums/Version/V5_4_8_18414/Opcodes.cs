@@ -52,6 +52,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_BATTLEMASTER_JOIN,                        0x0769}, //+-
             {Opcode.CMSG_BATTLEMASTER_JOIN_ARENA,                  0x02D2}, //++
             {Opcode.CMSG_BATTLE_CHAR_BOOST,                        0x08E3}, //+-
+            {Opcode.CMSG_BATTLE_PAY_START_PURCHASE,                0x1886}, //++
             {Opcode.CMSG_BATTLE_PET_DELETE_PET,                    0x18B6}, //+-
             {Opcode.CMSG_BATTLE_PET_INITIAL_UPDATE_RESPONSE,       0x1A07}, //+-
             {Opcode.CMSG_BATTLE_PET_MODIFY_NAME,                   0x1887}, //+-
@@ -436,7 +437,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_178A,                                 0x178A}, //++ raid
             {Opcode.CMSG_UNK_1841,                                 0x1841}, //+-
             {Opcode.CMSG_UNK_185B,                                 0x185B}, //++
-            {Opcode.CMSG_UNK_1886,                                 0x1886}, //++
             {Opcode.CMSG_UNK_19C2,                                 0x19C2}, //+-
             {Opcode.CMSG_UNLEARN_SKILL,                            0x0268}, //++
             {Opcode.CMSG_UNLOCK_VOID_STORAGE,                      0x0444}, //+-
@@ -502,6 +502,8 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BATTLEGROUND_PLAYER_LEFT,                 0x0206}, //+-
             {Opcode.SMSG_BATTLEGROUND_PLAYER_POSITIONS,            0x060A}, //++
             {Opcode.SMSG_BATTLE_PAY_GET_DISTRIBUTION_LIST_RESPONSE, 0x043F}, //--
+            {Opcode.SMSG_BATTLE_PAY_PURCHASE_UPDATE,               0x14E2}, //++ pair+ 1886
+            {Opcode.SMSG_BATTLE_PAY_START_PURCHASE_RESPONSE,       0x0612}, //++ pair 1886
             {Opcode.SMSG_BATTLE_PET_CHAT_RESTRICTED,               0x06BE}, //--
             {Opcode.SMSG_BATTLE_PET_DEBUG_QUEUE_DUMP_RESPONSE,     0x001E}, //--
             {Opcode.SMSG_BATTLE_PET_DELETED,                       0x18AB}, //+-
@@ -683,6 +685,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_INSPECT_TALENT,                           0x1842}, //++
             {Opcode.SMSG_INSTANCE_INFO,                            0x16BF}, //++
             {Opcode.SMSG_INSTANCE_RESET,                           0x160F}, //+-
+            {Opcode.SMSG_INSTANCE_SAVE_CREATED,                    0x1EAE}, //++
             {Opcode.SMSG_INVALIDATE_PLAYER,                        0x102E}, //++
             {Opcode.SMSG_INVENTORY_CHANGE_FAILURE,                 0x0C1E}, //+-
             {Opcode.SMSG_ITEM_ENCHANT_TIME_UPDATE,                 0x10A2}, //++
@@ -697,7 +700,8 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_LFG_JOIN_RESULT,                          0x18E3}, //++
             {Opcode.SMSG_LFG_PLAYER_INFO,                          0x1861}, //++
             {Opcode.SMSG_LFG_PROPOSAL_UPDATE,                      0x1E3B}, //--
-            {Opcode.SMSG_LFG_QUEUE_STATUS,                         0x0C2E}, //++
+            {Opcode.SMSG_LFG_QUEUE_STATUS,                         0x1006}, //++
+            {Opcode.SMSG_LFG_UPDATE_STATUS,                        0x0C2E}, //++
             {Opcode.SMSG_LFG_ROLE_CHECK_UPDATE,                    0x12BB}, //++
             {Opcode.SMSG_LF_GUILD_APPLICATIONS_LIST_CHANGED,       0x1A70}, //--
             {Opcode.SMSG_LF_GUILD_APPLICATIONS_LIST_UPDATED,       0x0AE0}, //++
@@ -711,6 +715,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_LOGOUT_RESPONSE,                          0x008F}, //++
             {Opcode.SMSG_LOG_XP_GAIN,                              0x1E9A}, //--
             {Opcode.SMSG_LOOT_CLEAR_MONEY,                         0x1632}, //++
+            {Opcode.SMSG_LOOT_LIST,                                0x1C3F}, //++
             {Opcode.SMSG_LOOT_MASTER_LIST,                         0x02BF}, //+-
             {Opcode.SMSG_LOOT_MONEY_NOTIFY,                        0x14C0}, //++
             {Opcode.SMSG_LOOT_RELEASE,                             0x123F}, //+-
@@ -985,23 +990,18 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0332,                                 0x0332}, //++
             {Opcode.SMSG_UNK_0354,                                 0x0354}, //++
             {Opcode.SMSG_UNK_0364,                                 0x0364}, //++
-            {Opcode.SMSG_UNK_0612,                                 0x0612}, //++ pair 1886
             {Opcode.SMSG_UNK_0B81,                                 0x0B81}, //++ pair 02DA auction
             {Opcode.SMSG_UNK_0C44,                                 0x0C44}, //+-
             {Opcode.SMSG_UNK_0EAA,                                 0x0EAA}, //++
             {Opcode.SMSG_UNK_0EAB,                                 0x0EAB}, //++
-            {Opcode.SMSG_UNK_1006,                                 0x1006}, //++
             {Opcode.SMSG_UNK_103E,                                 0x103E}, //++
             {Opcode.SMSG_UNK_1206,                                 0x1206}, //++
             {Opcode.SMSG_UNK_129B,                                 0x129B}, //++
-            {Opcode.SMSG_UNK_14E2,                                 0x14E2}, //++ pair+ 1886
             {Opcode.SMSG_UNK_162A,                                 0x162A}, //++
             {Opcode.SMSG_UNK_188F,                                 0x188F}, //++
             {Opcode.SMSG_UNK_1904,                                 0x1904}, //++
-            {Opcode.SMSG_UNK_1C3F,                                 0x1C3F}, //++
             {Opcode.SMSG_UNK_1DBE,                                 0x1DBE}, //++
             {Opcode.SMSG_UNK_1E1B,                                 0x1E1B}, //++ levelup 90
-            {Opcode.SMSG_UNK_1EAE,                                 0x1EAE}, //++
             {Opcode.SMSG_UNLEARNED_SPELLS,                         0x14C3}, //+-
             {Opcode.SMSG_UPDATE_ACCOUNT_DATA,                      0x0AAE}, //++
             {Opcode.SMSG_UPDATE_ACTION_BUTTONS,                    0x081A}, //++
