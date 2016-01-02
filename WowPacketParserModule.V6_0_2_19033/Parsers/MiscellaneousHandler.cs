@@ -61,9 +61,9 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_WEATHER)]
         public static void HandleWeatherStatus(Packet packet)
         {
-            var state = packet.ReadInt32E<WeatherState>("State");
-            var grade = packet.ReadSingle("Intensity");
-            var unk = packet.ReadBit("Abrupt"); // Type
+            WeatherState state = packet.ReadInt32E<WeatherState>("State");
+            float grade = packet.ReadSingle("Intensity");
+            Bit unk = packet.ReadBit("Abrupt"); // Type
 
             Storage.WeatherUpdates.Add(new WeatherUpdate
             {
@@ -471,8 +471,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             packet.ReadInt32("Unk");
 
-            var int32 = packet.ReadInt32("ItemCount");
-            var int16 = packet.ReadInt32("FlagsCount");
+            int int32 = packet.ReadInt32("ItemCount");
+            int int16 = packet.ReadInt32("FlagsCount");
 
             for (int i = 0; i < int32; i++)
                 packet.ReadInt32("ItemID", i);
@@ -484,7 +484,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_PLAY_SOUND)]
         public static void HandlePlaySound(Packet packet)
         {
-            var sound = packet.ReadUInt32("SoundKitID");
+            uint sound = packet.ReadUInt32("SoundKitID");
             packet.ReadPackedGuid128("SourceObjectGUID");
 
             Storage.Sounds.Add(sound, packet.TimeSpan);
@@ -493,7 +493,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_PLAY_MUSIC)]
         public static void HandlePlayMusic(Packet packet)
         {
-            var sound = packet.ReadUInt32("SoundKitID");
+            uint sound = packet.ReadUInt32("SoundKitID");
 
             Storage.Sounds.Add(sound, packet.TimeSpan);
         }
@@ -515,25 +515,25 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_QUERY_PAGE_TEXT_RESPONSE)]
         public static void HandlePageTextResponse(Packet packet)
         {
-            var pageText = new PageText();
-
             packet.ReadUInt32("PageTextID");
-
             packet.ResetBitReader();
 
-            var hasData = packet.ReadBit("Allow");
+            Bit hasData = packet.ReadBit("Allow");
             if (!hasData)
                 return; // nothing to do
 
-            var entry = packet.ReadUInt32("ID");
+            PageText pageText = new PageText();
+
+            uint entry = packet.ReadUInt32("ID");
+            pageText.ID = entry;
             pageText.NextPageID = packet.ReadUInt32("NextPageID");
 
             packet.ResetBitReader();
-            var textLen = packet.ReadBits(12);
+            uint textLen = packet.ReadBits(12);
             pageText.Text = packet.ReadWoWString("Text", textLen);
 
             packet.AddSniffData(StoreNameType.PageText, (int)entry, "QUERY_RESPONSE");
-            Storage.PageTexts.Add(entry, pageText, packet.TimeSpan);
+            Storage.PageTexts.Add(pageText, packet.TimeSpan);
         }
 
         [Parser(Opcode.SMSG_PLAY_ONE_SHOT_ANIM_KIT)]
@@ -682,12 +682,6 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void HandlePreRessurect(Packet packet)
         {
             packet.ReadPackedGuid128("PlayerGUID");
-        }
-
-        [Parser(Opcode.CMSG_QUERY_COUNTDOWN_TIMER)]
-        public static void HandleQueryCountdownTimer(Packet packet)
-        {
-            packet.ReadInt32("TimerType");
         }
 
         [Parser(Opcode.SMSG_STREAMING_MOVIES)]

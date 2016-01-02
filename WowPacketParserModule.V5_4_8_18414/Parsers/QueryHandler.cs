@@ -103,12 +103,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             var entry = packet.ReadEntry("Entry");
 
+            CreatureTemplate creature = new CreatureTemplate
+            {
+                Entry = (uint)entry.Key
+            };
+
             var hasData = packet.ReadBit("hasData");
 
             if (!hasData)
                 return; // nothing to do
-
-            var creature = new UnitTemplate();
 
             uint lengthSubname = packet.ReadBits("Subname length", 11);
             uint qItemCount = packet.ReadBits("itemCount", 22);
@@ -127,25 +130,25 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             uint lengthIconName = packet.ReadBits(6) ^ 1;
 
-            creature.KillCredits = new uint[2];
+            creature.KillCredits = new uint?[2];
             creature.KillCredits[0] = packet.ReadUInt32("Kill Credit 1");
 			
-            creature.DisplayIds = new uint[4];
-            creature.DisplayIds[3] = packet.ReadUInt32("Display Id 4");
-            creature.DisplayIds[1] = packet.ReadUInt32("Display Id 2");
+            creature.ModelIDs = new uint?[4];
+            creature.ModelIDs[3] = packet.ReadUInt32("Display Id 4");
+            creature.ModelIDs[1] = packet.ReadUInt32("Display Id 2");
 			
             creature.Expansion = packet.ReadUInt32E<ClientType>("Expansion");
 			
             creature.Type = packet.ReadInt32E<CreatureType>("Type");
 			
-            creature.Modifier2 = packet.ReadSingle("Modifier Health");
+            creature.HealthModifier = packet.ReadSingle("Modifier Health");
 
             creature.TypeFlags = packet.ReadUInt32E<CreatureTypeFlag>("Type Flags");
 			
             creature.TypeFlags2 = packet.ReadUInt32("Creature Type Flags 2");
 
             creature.Rank = packet.ReadInt32E<CreatureRank>("Rank");
-            creature.MovementId = packet.ReadUInt32("Movement Id");
+            creature.MovementID = packet.ReadUInt32("Movement Id");
 
             var name = new string[8];
             for (var i = 0; i < 4; i++)
@@ -162,33 +165,34 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 creature.SubName = packet.ReadCString("Sub Name");
 				
 			
-            creature.DisplayIds[0] = packet.ReadUInt32("Display Id 1");	
+            creature.ModelIDs[0] = packet.ReadUInt32("Display Id 1");
 				
-            creature.DisplayIds[2] = packet.ReadUInt32("Display Id 3");
+            creature.ModelIDs[2] = packet.ReadUInt32("Display Id 3");
 			
             if (lengthIconName > 1)
                 creature.IconName = packet.ReadCString("Icon Name");
 			
-            creature.QuestItems = new uint[qItemCount];
+            //creature.QuestItem = new uint[qItemCount];
             for (var i = 0; i < qItemCount; i++)
-                creature.QuestItems[i] = (uint)packet.ReadUInt32<ItemId>("Quest Item", i);			
+                /*creature.QuestItems[i] = (uint)*/packet.ReadUInt32<ItemId>("Quest Item", i);			
 			
             creature.KillCredits[1] = packet.ReadUInt32("Kill Credit 2");
 
-            creature.Modifier1 = packet.ReadSingle("Modifier Mana");
+            creature.ManaModifier = packet.ReadSingle("Modifier Mana");
 
             creature.Family = packet.ReadInt32E<CreatureFamily>("Family");
 
             packet.AddSniffData(StoreNameType.Unit, entry.Key, "QUERY_RESPONSE");
 
-            Storage.UnitTemplates.Add((uint)entry.Key, creature, packet.TimeSpan);
+            Storage.CreatureTemplates.Add(creature, packet.TimeSpan);
 
             var objectName = new ObjectName
             {
                 ObjectType = ObjectType.Unit,
                 Name = creature.Name,
+                ID = entry.Key
             };
-            Storage.ObjectNames.Add((uint)entry.Key, objectName, packet.TimeSpan);
+            Storage.ObjectNames.Add(objectName, packet.TimeSpan);
         }
 
         [Parser(Opcode.SMSG_QUERY_PLAYER_NAME_RESPONSE)]
@@ -276,8 +280,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             {
                 ObjectType = ObjectType.Player,
                 Name = name,
+                ID = (int)playerGuid.GetLow()
             };
-            Storage.ObjectNames.Add((uint)playerGuid.GetLow(), objectName, packet.TimeSpan);
+            Storage.ObjectNames.Add(objectName, packet.TimeSpan);
         }
 
         [HasSniffData]
@@ -298,9 +303,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             pageText.Text = packet.ReadWoWString("Page Text", textLen);
 
             var entry = packet.ReadUInt32("Entry");
+            pageText.ID = entry;
 
             packet.AddSniffData(StoreNameType.PageText, (int)entry, "QUERY_RESPONSE");
-            Storage.PageTexts.Add(entry, pageText, packet.TimeSpan);
+            Storage.PageTexts.Add(pageText, packet.TimeSpan);
         }
 
         [Parser(Opcode.SMSG_QUERY_TIME_RESPONSE)]

@@ -266,39 +266,60 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
             for (var i = 0; i < count; i++)
             {
+                var questPOIs = new List<QuestPOI>();
+                var questPoiPointsForQuest = new List<QuestPOIPoint>();
+
                 for (var j = 0; j < counter[i]; j++)
                 {
-                    var questPoi = new QuestPOI();
+                    QuestPOI questPoi = new QuestPOI();
 
-                    questPoi.FloorId = packet.ReadUInt32("Floor Id", i, j);
-                    questPoi.Points = new List<QuestPOIPoint>(points[i][j]);
-                    for (var k = 0u; k < points[i][j]; k++)
+                    questPoi.Floor = (int)packet.ReadUInt32("Floor Id", i, j);
+                    var questPoiPoints = new List<QuestPOIPoint>();
+                    for (int k = 0; k < points[i][j]; k++)
                     {
-                        var questPoiPoint = new QuestPOIPoint
+                        QuestPOIPoint questPoiPoint = new QuestPOIPoint
                         {
-                            Index = k,
+                            Idx2 = k,
                             X = packet.ReadInt32("Point X", i, j, (int)k),
                             Y = packet.ReadInt32("Point Y", i, j, (int)k)
                         };
-                        questPoi.Points.Add(questPoiPoint);
+                        questPoiPoints.Add(questPoiPoint);
                     }
                     questPoi.ObjectiveIndex = packet.ReadInt32("Objective Index", i, j);
                     var idx = packet.ReadInt32("POI Index", i, j);
                     packet.ReadInt32("Unk14*4", i, j);
                     packet.ReadInt32("Unk42*4", i, j);
 
-                    questPoi.Map = (uint)packet.ReadUInt32<MapId>("Map Id", i, j);
+                    questPoi.MapID = (int)packet.ReadUInt32<MapId>("Map Id", i, j);
                     packet.ReadInt32("Points Counter", i, j);
-                    questPoi.WorldMapAreaId = packet.ReadUInt32("World Map Area", i, j);
+                    questPoi.WorldMapAreaId = (int)packet.ReadUInt32("World Map Area", i, j);
                     packet.ReadInt32("Unk200", i, j);
 
-                    questPoi.UnkInt2 = packet.ReadUInt32("Unk Int32 3", i, j);
-                    questPoi.UnkInt1 = packet.ReadUInt32("Unk Int32 2", i, j);
+                    packet.ReadUInt32("Unk Int32 3", i, j);
+                    packet.ReadUInt32("Unk Int32 2", i, j);
 
-                    Storage.QuestPOIs.Add(new Tuple<uint, uint>((uint)0, (uint)idx), questPoi, packet.TimeSpan);
+                    questPoiPoints.ForEach(p =>
+                    {
+                        p.Idx1 = idx;
+                        questPoiPointsForQuest.Add(p);
+                    });
+
+                    questPOIs.Add(questPoi);
                 }
                 var questId = packet.ReadInt32<QuestId>("Quest ID", i);
                 packet.ReadInt32("POI size", i);
+
+                questPoiPointsForQuest.ForEach(q =>
+                {
+                    q.QuestID = questId;
+                    Storage.QuestPOIPoints.Add(q, packet.TimeSpan);
+                });
+
+                questPOIs.ForEach(q =>
+                {
+                    q.QuestID = questId;
+                    Storage.QuestPOIs.Add(q, packet.TimeSpan);
+                });
             }
             packet.ReadInt32("count");
         }
@@ -389,16 +410,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadUInt32("Reward ItemID Count2"); // +2957
                 packet.ReadUInt32("int2973"); // +2975
 
-                var quest = new QuestTemplate
+                QuestTemplate quest = new QuestTemplate
                 {
-                    Method = questIsntAutoComplete ? QuestMethod.Normal : QuestMethod.AutoComplete,
+                    QuestType = QuestType.Normal
                 };
 
-                quest.RewardCurrencyId = new uint[4];
-                quest.RewardCurrencyCount = new uint[4];
+                quest.RewardCurrencyID = new uint?[4];
+                quest.RewardCurrencyCount = new uint?[4];
                 for (var i = 0; i < 4; ++i)
                 {
-                    quest.RewardCurrencyId[i] = packet.ReadUInt32("Reward Currency ID", i); // +3001 + 16
+                    quest.RewardCurrencyID[i] = packet.ReadUInt32("Reward Currency ID", i); // +3001 + 16
                     quest.RewardCurrencyCount[i] = packet.ReadUInt32("Reward Currency Count", i); // +3001 + 0
                 }
 
@@ -407,33 +428,33 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 quest.SoundTurnIn = packet.ReadUInt32("Sound TurnIn"); // +2947
 
                 const int repCount = 5;
-                quest.RewardFactionId = new uint[repCount];
-                quest.RewardFactionValueId = new int[repCount];
-                quest.RewardFactionValueIdOverride = new uint[repCount];
+                quest.RewardFactionID = new uint?[repCount];
+                quest.RewardFactionValue = new int?[repCount];
+                quest.RewardFactionOverride = new int?[repCount];
 
                 for (var i = 0; i < repCount; i++)
                 {
-                    quest.RewardFactionValueId[i] = packet.ReadInt32("Reward Reputation ID", i); // +2986 + 20
-                    quest.RewardFactionValueIdOverride[i] = packet.ReadUInt32("Reward Reputation ID Override", i); // +2986 + 0
-                    quest.RewardFactionId[i] = packet.ReadUInt32("Reward Faction ID", i); // +2986 + 400
+                    quest.RewardFactionValue[i] = packet.ReadInt32("Reward Reputation ID", i); // +2986 + 20
+                    quest.RewardFactionOverride[i] = (int)packet.ReadUInt32("Reward Reputation ID Override", i); // +2986 + 0
+                    quest.RewardFactionID[i] = packet.ReadUInt32("Reward Faction ID", i); // +2986 + 400
                 }
 
-                quest.RewardOrRequiredMoney = packet.ReadInt32("Reward Money"); // +16
+                quest.RewardMoney = packet.ReadInt32("Reward Money"); // +16
                 packet.ReadUInt32("EmoteOnComplete"); // +2981
                 packet.ReadUInt32("Reward Choice ItemID Count5"); // +2972
                 packet.ReadUInt32("MinimapTargetMask"); // +25
-                quest.EndText = packet.ReadWoWString("QuestEndText", questEndTextLen); // +1658
+                quest.AreaDescription = packet.ReadWoWString("QuestEndText", questEndTextLen); // +1658
                 packet.ReadUInt32("Reward Choice ItemID 2"); // +2971
-                quest.RewardMoneyMaxLevel = packet.ReadUInt32("Reward Money Max Level"); // +18
+                quest.RewardBonusMoney = packet.ReadUInt32("Reward Money Max Level"); // +18
                 packet.ReadUInt32("Reward Item1 ID"); // +2952
-                quest.CompletedText = packet.ReadWoWString("QuestCompletedText", questCompletedTextLen); // +2433
+                quest.QuestCompletionLog = packet.ReadWoWString("QuestCompletedText", questCompletedTextLen); // +2433
                 packet.ReadInt32("Reward Choice ItemID 4"); // +2977
                 packet.ReadUInt32("RewardHonorAddition"); // +21
                 quest.QuestGiverTextWindow = packet.ReadWoWString("QuestGiverTextWindow", questGiverTextWindowLen); // +1793
-                quest.Objectives = packet.ReadWoWString("QuestObjectives", questObjectivesLen); // +158
+                quest.LogDescription = packet.ReadWoWString("QuestObjectives", questObjectivesLen); // +158
                 packet.ReadUInt32("RewArenaPoints"); // +1790
                 packet.ReadUInt32("Reward Choice ItemID 6"); // +2983
-                quest.SuggestedPlayers = packet.ReadUInt32("Suggested Players"); // +13
+                packet.ReadUInt32("Suggested Players"); // +13
                 packet.ReadUInt32("RepObjectiveFaction"); // +6
                 packet.ReadUInt32("Required Source Item ID 2"); // +2961
                 packet.ReadUInt32("Reward ItemID 2"); // +2953
@@ -442,12 +463,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadUInt32("PointOpt"); // +29
 
                 // +8
-                quest.Level = packet.ReadInt32("Level"); // +8
+                quest.QuestLevel = packet.ReadInt32("Level"); // +8
 
                 packet.ReadUInt32("RepObjectiveFaction2"); // +7
                 packet.ReadUInt32("Required Source Item ID Count 3"); // +2966
                 packet.ReadUInt32("XPId"); // +17
-                quest.Details = packet.ReadWoWString("QuestDetails", questDetailsLen); // +908
+                quest.QuestDescription = packet.ReadWoWString("QuestDetails", questDetailsLen); // +908
                 packet.ReadUInt32("Reward ItemID Count1"); // +2956
                 packet.ReadUInt32("Reward Choice ItemID Count6"); // +2984
                 packet.ReadUInt32("Reward ItemID Count3"); // +2958
@@ -458,7 +479,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadUInt32("Required Source Item ID Count 2"); // +2965
                 packet.ReadUInt32("Required Source Item ID 3"); // +2962
                 packet.ReadUInt32("RewSkillPoints"); // +1792
-                quest.Title = packet.ReadWoWString("QuestTitle", questTitleLen); // +30
+                quest.LogTitle = packet.ReadWoWString("QuestTitle", questTitleLen); // +30
                 var type = packet.ReadInt32E<QuestType>("Type"); // +12
                 packet.ReadUInt32("RepObjectiveValue2"); // +15
                 packet.ReadUInt32("unk11"); // +2982
@@ -480,7 +501,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadWoWString("QuestTurnTextWindow", questTurnTextWindowLen); // +2113
                 packet.ReadUInt32("Reward Choice ItemID Count4"); // +2978
                 packet.ReadUInt32("Required Source Item ID Count 1"); // +2964
-                quest.ZoneOrSort = packet.ReadInt32E<QuestSort>("Sort"); // +11
+                quest.QuestSortID = packet.ReadInt32E<QuestSort>("Sort"); // +11
                 packet.ReadUInt32("BonusTalents"); // +1789
                 packet.ReadUInt32("Reward Choice ItemID Count1"); // +2969
                 packet.ReadUInt32("Rewarded Spell"); // +19
@@ -492,8 +513,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadUInt32("SourceItemID"); // +23
 
                 packet.AddSniffData(StoreNameType.Quest, id.Key, "QUERY_RESPONSE");
+                quest.ID = (uint)id.Key;
 
-                Storage.QuestTemplates.Add((uint)id.Key, quest, packet.TimeSpan);
+                Storage.QuestTemplates.Add(quest, packet.TimeSpan);
             }
         }
 

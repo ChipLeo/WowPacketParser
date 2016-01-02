@@ -93,6 +93,10 @@
       <HintPath>..\packages\DotNetZip.1.9.6\lib\net20\Ionic.Zip.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="JetBrains.Annotations, Version=9.2.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.9.2.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MySql.Data, Version=6.9.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.6.9.7\lib\net45\MySql.Data.dll</HintPath>
       <Private>True</Private>
@@ -218,6 +222,7 @@
     <Compile Include="Enums\RaidSummonFail.cs" />
     <Compile Include="Enums\StandState.cs" />
     <Compile Include="Enums\TalentErrors.cs" />
+    <Compile Include="Enums\TargetedDatabase.cs" />
     <Compile Include="Enums\TargetIcon.cs" />
     <Compile Include="Enums\InstanceResetWarningType.cs" />
     <Compile Include="Enums\InstanceStatus.cs" />
@@ -272,7 +277,7 @@
     <Compile Include="Enums\PowerType.cs" />
     <Compile Include="Enums\QuestFlags.cs" />
     <Compile Include="Enums\QuestGiverStatus.cs" />
-    <Compile Include="Enums\QuestMethod.cs" />
+    <Compile Include="Enums\QuestInfo.cs" />
     <Compile Include="Enums\QuestPartyResult.cs" />
     <Compile Include="Enums\QuestReasonType.cs" />
     <Compile Include="Enums\QuestSort.cs" />
@@ -480,6 +485,8 @@
     <Compile Include="SQL\Builders\Spawns.cs" />
     <Compile Include="SQL\Builders\UnitMisc.cs" />
     <Compile Include="SQL\Builders\WDBTemplates.cs" />
+    <Compile Include="SQL\RowList.cs" />
+    <Compile Include="SQL\IDataModel.cs" />
     <Compile Include="SQL\DBFieldNameAttribute.cs" />
     <Compile Include="SQL\DBTableNameAttribute.cs" />
     <Compile Include="SQL\ISQLQuery.cs" />
@@ -495,19 +502,24 @@
     <Compile Include="Store\Objects\BattlePetSpecies.cs" />
     <Compile Include="Store\Objects\BroadcastText.cs" />
     <Compile Include="Store\Objects\BroadcastTextLocale.cs" />
-    <Compile Include="Store\Objects\ChrUpgrade.cs" />
+    <Compile Include="Store\Objects\ChrUpgradeBucketSpell.cs" />
+    <Compile Include="Store\Objects\ChrUpgradeBucket.cs" />
+    <Compile Include="Store\Objects\ChrUpgradeTier.cs" />
     <Compile Include="Store\Objects\Creature.cs" />
+    <Compile Include="Store\Objects\CreatureAddon.cs" />
+    <Compile Include="Store\Objects\CreatureDB2.cs" />
     <Compile Include="Store\Objects\CreatureDifficulty.cs" />
     <Compile Include="Store\Objects\CreatureEquipment.cs" />
+    <Compile Include="Store\Objects\CreatureTemplateAddon.cs" />
     <Compile Include="Store\Objects\CreatureText.cs" />
     <Compile Include="Store\Objects\CurvePoint.cs" />
-    <Compile Include="Store\Objects\DefenseMessage.cs" />
     <Compile Include="Store\Objects\GameObject.cs" />
+    <Compile Include="Store\Objects\GameObjectModel.cs" />
     <Compile Include="Store\Objects\GameObjects.cs" />
     <Compile Include="Store\Objects\GameObjectTemplate.cs" />
-    <Compile Include="Store\Objects\GameObjectTemplateNonWDB.cs" />
-    <Compile Include="Store\Objects\Gossip.cs" />
-    <Compile Include="Store\Objects\GossipPOI.cs" />
+    <Compile Include="Store\Objects\GossipMenu.cs" />
+    <Compile Include="Store\Objects\GossipMenuOption.cs" />
+    <Compile Include="Store\Objects\PointsOfInterest.cs" />
     <Compile Include="Store\Objects\Holiday.cs" />
     <Compile Include="Store\Objects\HotfixData.cs" />
     <Compile Include="Store\Objects\Item.cs" />
@@ -522,10 +534,10 @@
     <Compile Include="Store\Objects\ItemTemplate.cs" />
     <Compile Include="Store\Objects\KeyChain.cs" />
     <Compile Include="Store\Objects\LocalesQuest.cs" />
-    <Compile Include="Store\Objects\LocalesQuestObjectives.cs" />
+    <Compile Include="Store\Objects\QuestDetails.cs" />
+    <Compile Include="Store\Objects\QuestGreeting.cs" />
+    <Compile Include="Store\Objects\QuestObjectivesLocale.cs" />
     <Compile Include="Store\Objects\Location.cs" />
-    <Compile Include="Store\Objects\Loot.cs" />
-    <Compile Include="Store\Objects\LootItem.cs" />
     <Compile Include="Store\Objects\ModelData.cs" />
     <Compile Include="Store\Objects\Mount.cs" />
     <Compile Include="Store\Objects\NpcText.cs" />
@@ -537,10 +549,13 @@
     <Compile Include="Store\Objects\PageText.cs" />
     <Compile Include="Store\Objects\PhaseXPhaseGroup.cs" />
     <Compile Include="Store\Objects\Player.cs" />
-    <Compile Include="Store\Objects\QuestMisc.cs" />
+    <Compile Include="Store\Objects\QuestObjective.cs" />
+    <Compile Include="Store\Objects\QuestOfferReward.cs" />
     <Compile Include="Store\Objects\QuestPOI.cs" />
     <Compile Include="Store\Objects\QuestPOIPoint.cs" />
+    <Compile Include="Store\Objects\QuestRequestItems.cs" />
     <Compile Include="Store\Objects\QuestTemplate.cs" />
+    <Compile Include="Store\Objects\QuestVisualEffect.cs" />
     <Compile Include="Store\Objects\SceneScript.cs" />
     <Compile Include="Store\Objects\SniffData.cs" />
     <Compile Include="Store\Objects\SpellAuraRestrictions.cs" />
@@ -552,22 +567,17 @@
     <Compile Include="Store\Objects\SpellPower.cs" />
     <Compile Include="Store\Objects\SpellReagents.cs" />
     <Compile Include="Store\Objects\SpellRuneCost.cs" />
-    <Compile Include="Store\Objects\SpellsX.cs" />
     <Compile Include="Store\Objects\SpellTotems.cs" />
-    <Compile Include="Store\Objects\StartAction.cs" />
-    <Compile Include="Store\Objects\StartItem.cs" />
-    <Compile Include="Store\Objects\StartPosition.cs" />
-    <Compile Include="Store\Objects\StartSpell.cs" />
+    <Compile Include="Store\Objects\PlayerCreateInfoAction.cs" />
+    <Compile Include="Store\Objects\PlayerCreateInfo.cs" />
     <Compile Include="Store\Objects\TaxiNodes.cs" />
     <Compile Include="Store\Objects\TaxiPath.cs" />
     <Compile Include="Store\Objects\TaxiPathNode.cs" />
     <Compile Include="Store\Objects\Toy.cs" />
-    <Compile Include="Store\Objects\TrainerSpell.cs" />
     <Compile Include="Store\Objects\Unit.cs" />
-    <Compile Include="Store\Objects\UnitTemplate.cs" />
+    <Compile Include="Store\Objects\CreatureTemplate.cs" />
     <Compile Include="Store\Objects\UnitTemplateNonWDB.cs" />
     <Compile Include="Store\Objects\VehicleTemplateAccessory.cs" />
-    <Compile Include="Store\Objects\VendorItem.cs" />
     <Compile Include="Store\Objects\WeatherUpdate.cs" />
     <Compile Include="Store\Objects\WoWObject.cs" />
     <Compile Include="Store\Storage.cs" />

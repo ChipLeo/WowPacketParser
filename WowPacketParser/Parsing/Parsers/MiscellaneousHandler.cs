@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using WowPacketParser.Enums;
 using WowPacketParser.Enums.Version;
 using WowPacketParser.Misc;
@@ -7,6 +8,7 @@ using WowPacketParser.Store.Objects;
 
 namespace WowPacketParser.Parsing.Parsers
 {
+    [SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
     public static class MiscellaneousParsers
     {
         [Parser(Opcode.CMSG_LOG_DISCONNECT)]
@@ -35,9 +37,9 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_HOTFIX_NOTIFY_BLOB)]
         public static void HandleHotfixInfo(Packet packet)
         {
-            var count = ClientVersion.AddedInVersion(ClientVersionBuild.V4_3_4_15595) ? packet.ReadBits("Count", 22) : packet.ReadUInt32("Count");
+            uint count = ClientVersion.AddedInVersion(ClientVersionBuild.V4_3_4_15595) ? packet.ReadBits("Count", 22) : packet.ReadUInt32("Count");
 
-            for (var i = 0; i < count; ++i)
+            for (int i = 0; i < count; ++i)
             {
                 packet.ReadUInt32E<DB2Hash>("Hotfix DB2 File", i);
                 packet.ReadTime("Hotfix date", i);
@@ -74,22 +76,19 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_COMPRESSED_MULTIPLE_PACKETS)]
         public static void HandleCompressedMultiplePackets(Packet packet)
         {
-            using (var packet2 = packet.Inflate(packet.ReadInt32()))
+            using (Packet packet2 = packet.Inflate(packet.ReadInt32()))
                 HandleMultiplePackets(packet2);
         }
 
         [Parser(Opcode.SMSG_MULTIPLE_PACKETS)]
         public static void HandleMultiplePackets(Packet packet)
         {
-            //packet.WriteLine("Starting Multiple_packets handler");
-            //packet.AsHex();
-            // Testing: packet.WriteLine(packet.AsHex());
             packet.WriteLine("{");
-            var i = 0;
+            int i = 0;
             while (packet.CanRead())
             {
-                var opcode = 0;
-                var len = 0;
+                int opcode = 0;
+                int len = 0;
                 byte[] bytes = null;
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_3_0_15005))
                 {
@@ -117,7 +116,7 @@ namespace WowPacketParser.Parsing.Parsers
 
                 packet.Write("[{0}] ", i++);
 
-                using (var newpacket = new Packet(bytes, opcode, packet.Time, packet.Direction, packet.Number, packet.Writer, packet.FileName))
+                using (Packet newpacket = new Packet(bytes, opcode, packet.Time, packet.Direction, packet.Number, packet.Writer, packet.FileName))
                     Handler.Parse(newpacket, true);
 
             }
@@ -137,7 +136,7 @@ namespace WowPacketParser.Parsing.Parsers
             }
 
             packet.WriteLine("{");
-            var i = 0;
+            int i = 0;
             while (packet.CanRead())
             {
                 packet.Opcode = packet.ReadUInt16();
@@ -406,7 +405,7 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_PLAY_OBJECT_SOUND)]
         public static void HandleSoundMessages(Packet packet)
         {
-            var sound = packet.ReadUInt32("Sound Id");
+            uint sound = packet.ReadUInt32("Sound Id");
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_3_0_15005))
                 packet.ReadGuid("GUID");
@@ -420,9 +419,9 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_WEATHER)]
         public static void HandleWeatherStatus(Packet packet)
         {
-            var state = packet.ReadInt32E<WeatherState>("State");
-            var grade = packet.ReadSingle("Grade");
-            var unk = packet.ReadByte("Unk Byte"); // Type
+            WeatherState state = packet.ReadInt32E<WeatherState>("State");
+            float grade = packet.ReadSingle("Grade");
+            byte unk = packet.ReadByte("Unk Byte"); // Type
 
             Storage.WeatherUpdates.Add(new WeatherUpdate
             {
@@ -830,7 +829,7 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_SPELL_CLICK)]
         public static void HandleSpellClick(Packet packet)
         {
-            var guid = packet.ReadGuid("GUID");
+            WowGuid guid = packet.ReadGuid("GUID");
 
             if (guid.GetObjectType() == ObjectType.Unit)
                 Storage.NpcSpellClicks.Add(guid, packet.TimeSpan);
@@ -1098,7 +1097,12 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadUInt16("AnimKit.dbc Id");
         }
 
-        [Parser(Opcode.CMSG_GET_TIMEZONE_INFORMATION)]
+        [Parser(Opcode.CMSG_QUERY_COUNTDOWN_TIMER)]
+        public static void HandleQueryCountdownTimer(Packet packet)
+        {
+            packet.ReadInt32("TimerType");
+        }
+
         [Parser(Opcode.SMSG_MINIGAME_STATE)]
         [Parser(Opcode.CMSG_KEEP_ALIVE)]
         [Parser(Opcode.CMSG_TUTORIAL_RESET)]

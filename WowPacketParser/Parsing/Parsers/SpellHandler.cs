@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using WowPacketParser.Enums;
 using WowPacketParser.Enums.Version;
@@ -9,6 +9,7 @@ using WowPacketParser.Store.Objects;
 
 namespace WowPacketParser.Parsing.Parsers
 {
+    [SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
     public static class SpellHandler
     {
         [Parser(Opcode.SMSG_SPELL_INTERRUPT_LOG)] // 4.3.4
@@ -173,28 +174,14 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadByte("Talent Spec");
 
             var count = packet.ReadUInt16("Spell Count");
-            var spells = new List<uint>(count);
             for (var i = 0; i < count; i++)
             {
-                uint spellId;
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_1_0_9767))
-                    spellId = (uint) packet.ReadInt32<SpellId>("Spell ID", i);
+                     packet.ReadInt32<SpellId>("Spell ID", i);
                 else
-                    spellId = packet.ReadUInt16<SpellId>("Spell ID", i);
+                    packet.ReadUInt16<SpellId>("Spell ID", i);
 
                 packet.ReadInt16("Unk Int16", i);
-
-                spells.Add(spellId);
-            }
-
-            var startSpell = new StartSpell {Spells = spells};
-
-            WoWObject character;
-            if (Storage.Objects.TryGetValue(SessionHandler.LoginGuid, out character))
-            {
-                var player = character as Player;
-                if (player != null && player.FirstLogin)
-                    Storage.StartSpells.Add(new Tuple<Race, Class>(player.Race, player.Class), startSpell, packet.TimeSpan);
             }
 
             var cooldownCount = packet.ReadUInt16("Cooldown Count");
@@ -224,21 +211,9 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadBit("InitialLogin");
             packet.ResetBitReader();
 
-            var spells = new List<uint>((int)count);
             for (var i = 0; i < count; i++)
             {
-                var spellId = packet.ReadUInt32<SpellId>("Spell ID", i);
-                spells.Add(spellId);
-            }
-
-            var startSpell = new StartSpell { Spells = spells };
-
-            WoWObject character;
-            if (Storage.Objects.TryGetValue(SessionHandler.LoginGuid, out character))
-            {
-                var player = character as Player;
-                if (player != null && player.FirstLogin)
-                    Storage.StartSpells.Add(new Tuple<Race, Class>(player.Race, player.Class), startSpell, packet.TimeSpan);
+                packet.ReadUInt32<SpellId>("Spell ID", i);
             }
         }
 
@@ -688,7 +663,7 @@ namespace WowPacketParser.Parsing.Parsers
                     packet.ReadXORByte(transportGuid, 7);
 
                     packet.WriteGuid("Transport Guid", transportGuid);
-                    packet.AddValue("Transport Position", pos);
+                    packet.AddValue("Transport Position", tpos);
                 }
 
                 if (hasO)
@@ -891,9 +866,9 @@ namespace WowPacketParser.Parsing.Parsers
 
             if (flags.HasAnyFlag(CastFlag.Unknown21) && !isSpellGo)
             {
-                var spellClick = new NpcSpellClick
+                NpcSpellClick spellClick = new NpcSpellClick
                 {
-                    SpellId = (uint) spellId,
+                    SpellID = (uint) spellId,
                     CasterGUID = casterGUID,
                     TargetGUID = targetGUID
                 };

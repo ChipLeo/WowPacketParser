@@ -1,16 +1,25 @@
-﻿using System;
-using WowPacketParser.Enums;
+﻿using WowPacketParser.Enums;
+using WowPacketParser.Misc;
+using WowPacketParser.SQL;
 
 namespace WowPacketParser.Store.Objects
 {
-    public sealed class SniffData
+    [DBTableName("sniffdata")]
+    public sealed class SniffData : IDataModel
     {
-        public string FileName { get; set; }
+        [DBFieldName("Build", true)]
+        public int Build = ClientVersion.BuildInt;
 
-        public StoreNameType ObjectType { get; set; }
+        [DBFieldName("SniffName", true)]
+        public string SniffName;
 
-        public int Id { get; set; }
+        [DBFieldName("ObjectType", true)]
+        public StoreNameType ObjectType;
 
-        public String Data { get; set; }
+        [DBFieldName("Id", true)]
+        public int Id;
+
+        [DBFieldName("Data")]
+        public string Data;
     }
 }

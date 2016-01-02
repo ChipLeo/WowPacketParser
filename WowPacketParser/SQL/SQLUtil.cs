@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using MySql.Data.MySqlClient;
 using WowPacketParser.Enums;
@@ -114,9 +115,6 @@ namespace WowPacketParser.SQL
         /// <returns></returns>
         public static object ToSQLValue(object value, bool isFlag = false, bool noQuotes = false)
         {
-            //if (value == null)
-            //    return value; // mhmmm
-
             if (value is string && !noQuotes)
                 value = Stringify(value);
 
@@ -125,8 +123,7 @@ namespace WowPacketParser.SQL
 
             if (value is Enum)
             {
-                var enumType = value.GetType();
-                var undertype = Enum.GetUnderlyingType(enumType);
+                Type undertype = Enum.GetUnderlyingType(value.GetType());
                 value = Convert.ChangeType(value, undertype);
             }
 
@@ -137,6 +134,142 @@ namespace WowPacketParser.SQL
                 value = Hexify((uint)value);
 
             return value;
+        }
+
+        public static string GetTableName<T>() where T : IDataModel
+        {
+            var tableAttrs =
+                (DBTableNameAttribute[])typeof(T).GetCustomAttributes(typeof(DBTableNameAttribute), false);
+            if (tableAttrs.Length > 0)
+                return tableAttrs[0].Name;
+
+            //convert CamelCase name to camel_case
+            string name = typeof(T).Name;
+            return AddBackQuotes(string.Concat(name.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x.ToString().ToLower() : x.ToString().ToLower())));
+        }
+
+        public static List<Tuple<string, FieldInfo, List<DBFieldNameAttribute>>> GetFields<T>() where T : IDataModel
+        {
+            return (from field in Utilities.GetFieldsAndAttributes<T, DBFieldNameAttribute>()
+                    where field.Value.Any(f => f.IsVisible())
+                    let fieldName = field.Value.Single(f => f.IsVisible()).ToString()
+                    select new Tuple<string, FieldInfo, List<DBFieldNameAttribute>>(fieldName, field.Key, field.Value)).ToList();
+        }
+
+        public static FieldInfo GetFirstPrimaryKey<T>() where T : IDataModel
+        {
+            return GetFields<T>().Where(f => f.Item3.Any(g => g.IsPrimaryKey)).Select(f => f.Item2).FirstOrDefault();
+        }
+
+        public static bool IsPrimaryKey(FieldInfo field)
+        {
+            return Utilities.GetAttributes<DBFieldNameAttribute>(field).Any(a => a.IsPrimaryKey);
+        }
+
+        /// <param name="storeList"><see cref="DataBag{T}"/> with items form sniff.</param>
+        /// <param name="dbList"><see cref="DataBag{T}"/> with items from database.</param>
+        /// <param name="storeType">Are we dealing with Spells, Quests, Units, ...?</param>
+        public static string Compare<T>(DataBag<T> storeList, RowList<T> dbList, StoreNameType storeType)
+            where T : IDataModel, new()
+        {
+            return Compare(storeList, dbList, t => StoreGetters.GetName(storeType, Convert.ToInt32(GetFirstPrimaryKey<T>().GetValue(t)), false));
+        }
+
+        /// <summary>
+        /// <para>Compare two dictionaries (of the same types) and creates SQL inserts
+        ///  or updates accordingly.</para>
+        /// <remarks>Second dictionary can be null (only inserts queries will be produced)</remarks>
+        /// <remarks>Use DBTableName and DBFieldName attributes to specify table and field names, in TK</remarks>
+        /// </summary>
+        /// <typeparam name="T">Type of the primary key (uint)</typeparam>
+        /// <param name="storeList">Dictionary retrieved from  parser</param>
+        /// <param name="dbList">Dictionary retrieved from  DB</param>
+        /// <param name="commentSetter"></param>
+        /// <returns>A string containing full SQL queries</returns>
+        public static string Compare<T>(DataBag<T> storeList, RowList<T> dbList, Func<T, string> commentSetter)
+            where T : IDataModel, new()
+        {
+            var fields = GetFields<T>();
+            if (fields == null)
+                return string.Empty;
+
+            var rowsIns = new RowList<T>();
+            var rowsUpd = new Dictionary<Row<T>, RowList<T>>();
+
+            foreach (var elem1 in storeList)
+            {
+                if (dbList != null && dbList.ContainsKey(elem1.Item1)) // update
+                {
+
+                    var lastField = fields[fields.Count - 1];
+                    var verBuildField = fields.FirstOrDefault(f => f.Item2.Name == "VerifiedBuild");
+                    if (verBuildField != null)
+                    {
+                        int buildvSniff = (int)lastField.Item2.GetValue(elem1.Item1);
+                        int buildvDB = (int)lastField.Item2.GetValue(dbList[elem1.Item1].Data);
+
+                        if (buildvDB > buildvSniff) // skip update if DB already has a VerifiedBuild higher than this one
+                            continue;
+                    }
+
+                    var row = new Row<T>();
+                    T elem2 = dbList[elem1.Item1].Data;
+
+                    foreach (var field in fields)
+                    {
+                        object val1 = field.Item2.GetValue(elem1.Item1);
+                        object val2 = field.Item2.GetValue(elem2);
+
+                        Array arr1 = val1 as Array;
+                        if (arr1 != null)
+                        {
+                            Array arr2 = (Array)val2;
+
+                            for (int i = 0; i < field.Item3.First().Count; i++)
+                            {
+                                object value1 = arr1.GetValue(i);
+                                object value2 = arr2.GetValue(i);
+
+                                if (Utilities.EqualValues(value1, value2))
+                                    arr1.SetValue(null, i);
+                            }
+                            field.Item2.SetValue(elem1.Item1, arr1);
+                            continue;
+                        }
+
+                        if ((val2 is Array) && val1 == null)
+                            continue;
+
+                        if (val1 is string)
+                        {
+                            val1 = ((string)val1).Replace(Environment.NewLine, "\n");
+                            // prevent double escaping
+                            val1 =  ((string)val1).Replace("\"\"", "\"");
+                        }
+
+                        if (Utilities.EqualValues(val1, val2))
+                            field.Item2.SetValue(elem1.Item1, null);
+                    }
+
+                    row.Comment = commentSetter(elem1.Item1);
+
+                    row.Data = elem1.Item1;
+                    rowsUpd.Add(row, new RowList<T>().Add(elem2));
+                }
+                else // insert new
+                {
+                    var row = new Row<T>
+                    {
+                        Comment = commentSetter(elem1.Item1),
+                        Data = elem1.Item1
+                    };
+
+                    rowsIns.Add(row);
+                }
+            }
+
+            return new SQLInsert<T>(rowsIns).Build() +
+                   new SQLUpdate<T>(rowsUpd).Build();
         }
 
         /// <summary>
@@ -154,7 +287,7 @@ namespace WowPacketParser.SQL
         /// <returns>A string containing full SQL queries</returns>
         public static string CompareDicts<T, TK>(StoreDictionary<T, TK> dict1, StoreDictionary<T, TK> dict2, StoreNameType storeType, string primaryKeyName = "entry")
         {
-            var tableAttrs = (DBTableNameAttribute[])typeof(TK).GetCustomAttributes(typeof(DBTableNameAttribute), false);
+            /*var tableAttrs = (DBTableNameAttribute[])typeof(TK).GetCustomAttributes(typeof(DBTableNameAttribute), false);
             if (tableAttrs.Length <= 0)
                 return string.Empty;
             var tableName = tableAttrs[0].Name;
@@ -165,14 +298,14 @@ namespace WowPacketParser.SQL
 
             fields.RemoveAll(field => field.Item2.Name == null);
 
-            var rowsIns = new List<QueryBuilder.SQLInsertRow>();
-            var rowsUpd = new List<QueryBuilder.SQLUpdateRow>();
+            var rowsIns = new List<SQLInsertRow>();
+            var rowsUpd = new List<SQLUpdateRow>();
 
             foreach (var elem1 in Settings.SQLOrderByKey ? dict1.OrderBy(blub => blub.Key).ToList() : dict1.ToList())
             {
                 if (dict2 != null && dict2.ContainsKey(elem1.Key)) // update
                 {
-                    var row = new QueryBuilder.SQLUpdateRow();
+                    var row = new SQLUpdateRow();
 
                     foreach (var field in fields)
                     {
@@ -230,7 +363,7 @@ namespace WowPacketParser.SQL
                 }
                 else // insert new
                 {
-                    var row = new QueryBuilder.SQLInsertRow();
+                    var row = new SQLInsertRow();
                     row.AddValue(primaryKeyName, elem1.Key);
                     row.Comment = StoreGetters.GetName(storeType, Convert.ToInt32(elem1.Key), false);
 
@@ -258,10 +391,11 @@ namespace WowPacketParser.SQL
                 }
             }
 
-            var result = new QueryBuilder.SQLInsert(tableName, rowsIns, deleteDuplicates: false).Build() +
-                         new QueryBuilder.SQLUpdate(rowsUpd).Build();
+            var result = new SQLInsert(tableName, rowsIns, deleteDuplicates: false).Build() +
+                         new SQLUpdate(rowsUpd).Build();
 
-            return result;
+            return result;*/
+            return string.Empty;
         }
 
         /// <summary>
@@ -282,7 +416,7 @@ namespace WowPacketParser.SQL
         /// <returns>A string containing full SQL queries</returns>
         public static string CompareDicts<T, TG, TK>(StoreDictionary<Tuple<T, TG>, TK> dict1, StoreDictionary<Tuple<T, TG>, TK> dict2, StoreNameType storeType1, StoreNameType storeType2, string primaryKeyName1, string primaryKeyName2)
         {
-            var tableAttrs = (DBTableNameAttribute[])typeof(TK).GetCustomAttributes(typeof(DBTableNameAttribute), false);
+            /*var tableAttrs = (DBTableNameAttribute[])typeof(TK).GetCustomAttributes(typeof(DBTableNameAttribute), false);
             if (tableAttrs.Length <= 0)
                 return string.Empty;
             var tableName = tableAttrs[0].Name;
@@ -293,14 +427,14 @@ namespace WowPacketParser.SQL
 
             fields.RemoveAll(field => field.Item2.Name == null);
 
-            var rowsIns = new List<QueryBuilder.SQLInsertRow>();
-            var rowsUpd = new List<QueryBuilder.SQLUpdateRow>();
+            var rowsIns = new List<SQLInsertRow>();
+            var rowsUpd = new List<SQLUpdateRow>();
 
             foreach (var elem1 in Settings.SQLOrderByKey ? dict1.OrderBy(blub => blub.Key).ToList() : dict1.ToList())
             {
                 if (dict2 != null && dict2.ContainsKey(elem1.Key)) // update
                 {
-                    var row = new QueryBuilder.SQLUpdateRow();
+                    var row = new SQLUpdateRow();
 
                     foreach (var field in fields)
                     {
@@ -365,7 +499,7 @@ namespace WowPacketParser.SQL
                 }
                 else // insert new
                 {
-                    var row = new QueryBuilder.SQLInsertRow();
+                    var row = new SQLInsertRow();
                     row.AddValue(primaryKeyName1, elem1.Key.Item1);
                     row.AddValue(primaryKeyName2, elem1.Key.Item2);
 
@@ -405,10 +539,11 @@ namespace WowPacketParser.SQL
                 }
             }
 
-            var result = new QueryBuilder.SQLInsert(tableName, rowsIns, deleteDuplicates: false, primaryKeyNumber: 2).Build() +
-                         new QueryBuilder.SQLUpdate(rowsUpd).Build();
+            var result = new SQLInsert(tableName, rowsIns, deleteDuplicates: false, primaryKeyNumber: 2).Build() +
+                         new SQLUpdate(rowsUpd).Build();
 
-            return result;
+            return result;*/
+            return string.Empty;
         }
 
         /// <summary>
@@ -432,25 +567,25 @@ namespace WowPacketParser.SQL
         /// <returns>A string containing full SQL queries</returns>
         public static string CompareDicts<T, TG, TH, TK>(StoreDictionary<Tuple<T, TG, TH>, TK> dict1, StoreDictionary<Tuple<T, TG, TH>, TK> dict2, StoreNameType storeType1, StoreNameType storeType2, StoreNameType storeType3, string primaryKeyName1, string primaryKeyName2, string primaryKeyName3)
         {
-            var tableAttrs = (DBTableNameAttribute[])typeof(TK).GetCustomAttributes(typeof(DBTableNameAttribute), false);
+            /*var tableAttrs = (DBTableNameAttribute[])typeof(TK).GetCustomAttributes(typeof(DBTableNameAttribute), false);
             if (tableAttrs.Length <= 0)
                 return string.Empty;
             var tableName = tableAttrs[0].Name;
 
-            var fields = Utilities.GetFieldsAndAttribute<TK, DBFieldNameAttribute>();
+            var fields = Utilities.GetFieldsAndAttributes<TK, DBFieldNameAttribute>();
             if (fields == null)
                 return string.Empty;
 
             fields.RemoveAll(field => field.Item2.Name == null);
 
-            var rowsIns = new List<QueryBuilder.SQLInsertRow>();
-            var rowsUpd = new List<QueryBuilder.SQLUpdateRow>();
+            var rowsIns = new List<SQLInsertRow>();
+            var rowsUpd = new List<SQLUpdateRow>();
 
             foreach (var elem1 in Settings.SQLOrderByKey ? dict1.OrderBy(blub => blub.Key).ToList() : dict1.ToList())
             {
                 if (dict2 != null && dict2.ContainsKey(elem1.Key)) // update
                 {
-                    var row = new QueryBuilder.SQLUpdateRow();
+                    var row = new SQLUpdateRow();
 
                     foreach (var field in fields)
                     {
@@ -520,7 +655,7 @@ namespace WowPacketParser.SQL
                 }
                 else // insert new
                 {
-                    var row = new QueryBuilder.SQLInsertRow();
+                    var row = new SQLInsertRow();
                     row.AddValue(primaryKeyName1, elem1.Key.Item1);
                     row.AddValue(primaryKeyName2, elem1.Key.Item2);
                     row.AddValue(primaryKeyName3, elem1.Key.Item3);
@@ -565,10 +700,11 @@ namespace WowPacketParser.SQL
                 }
             }
 
-            var result = new QueryBuilder.SQLInsert(tableName, rowsIns, deleteDuplicates: false, primaryKeyNumber: 3).Build() +
-                         new QueryBuilder.SQLUpdate(rowsUpd).Build();
+            var result = new SQLInsert(tableName, rowsIns, deleteDuplicates: false, primaryKeyNumber: 3).Build() +
+                         new SQLUpdate(rowsUpd).Build();
 
-            return result;
+            return result;*/
+            return string.Empty;
         }
     }
 }

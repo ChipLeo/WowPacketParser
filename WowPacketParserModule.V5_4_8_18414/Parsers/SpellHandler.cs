@@ -6,7 +6,7 @@ using WowPacketParser.Misc;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 using WowPacketParser.Parsing;
-using CoreParsers = WowPacketParser.Parsing.Parsers;
+//using CoreParsers = WowPacketParser.Parsing.Parsers;
 using Guid = WowPacketParser.Misc.WowGuid;
 
 namespace WowPacketParserModule.V5_4_8_18414.Parsers

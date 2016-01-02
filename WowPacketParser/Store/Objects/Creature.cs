@@ -5,42 +5,81 @@ using WowPacketParser.SQL;
 namespace WowPacketParser.Store.Objects
 {
     [DBTableName("creature")]
-    public class Creature
+    public sealed class Creature : IDataModel
     {
-        [DBFieldName("Type")]
-        public CreatureType Type;
+        [DBFieldName("guid", true)]
+        public string GUID;
 
-        [DBFieldName("ItemID", 3)]
-        public uint[] ItemID;
+        [DBFieldName("id")]
+        public uint? ID;
 
-        [DBFieldName("Mount")]
-        public uint Mount;
+        [DBFieldName("map")]
+        public uint? Map;
 
-        [DBFieldName("DisplayID", 4)]
-        public uint[] DisplayID;
+        [DBFieldName("zoneId")]
+        public uint? ZoneID;
 
-        [DBFieldName("DisplayIDProbability", 4)]
-        public float[] DisplayIDProbability;
+        [DBFieldName("areaId")]
+        public uint? AreaID;
 
-        [DBFieldName("Name")]
-        public string Name;
+        [DBFieldName("spawnMask")]
+        public uint? SpawnMask;
 
-        [DBFieldName("FemaleName")]
-        public string FemaleName;
+        [DBFieldName("phaseMask", TargetedDatabase.Zero, TargetedDatabase.WarlordsOfDraenor)]
+        public uint? PhaseMask;
 
-        [DBFieldName("SubName")]
-        public string SubName;
+        [DBFieldName("PhaseId", TargetedDatabase.Cataclysm)]
+        public string PhaseID;
 
-        [DBFieldName("FemaleSubName")]
-        public string FemaleSubName;
+        [DBFieldName("PhaseGroup")]
+        public int? PhaseGroup;
 
-        [DBFieldName("Rank")]
-        public uint Rank;
+        [DBFieldName("modelid")]
+        public uint? ModelID;
 
-        [DBFieldName("Rank")]
-        public uint InhabitType;
+        [DBFieldName("equipment_id")]
+        public int EquipmentID;
+
+        [DBFieldName("position_x")]
+        public float? PositionX;
+
+        [DBFieldName("position_y")]
+        public float? PositionY;
+
+        [DBFieldName("position_z")]
+        public float? PositionZ;
+
+        [DBFieldName("orientation")]
+        public float? Orientation;
+
+        [DBFieldName("spawntimesecs")]
+        public uint? SpawnTimeSecs;
+
+        [DBFieldName("spawndist")]
+        public float? SpawnDist;
+
+        [DBFieldName("currentwaypoint")]
+        public uint? CurrentWaypoint;
+
+        [DBFieldName("curhealth")]
+        public uint? CurHealth;
+
+        [DBFieldName("curmana")]
+        public uint? CurMana;
+
+        [DBFieldName("MovementType")]
+        public uint? MovementType;
+
+        [DBFieldName("npcflag")]
+        public uint? NpcFlag;
+
+        [DBFieldName("unit_flags")]
+        public uint? UnitFlag;
+
+        [DBFieldName("dynamicflags")]
+        public uint? DynamicFlag;
 
         [DBFieldName("VerifiedBuild")]
-        public int VerifiedBuild = ClientVersion.BuildInt;
+        public int? VerifiedBuild = ClientVersion.BuildInt;
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
@@ -24,15 +23,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadByte("Slot Id");
             var actionId = packet.StartBitStream(7, 0, 5, 2, 1, 6, 3, 4);
             packet.ParseBitStream(actionId, 6, 7, 3, 5, 2, 1, 4, 0);
-            packet.WriteLine("Action Id: {0}", BitConverter.ToUInt32(actionId, 0));
+            packet.AddValue("Action Id", BitConverter.ToUInt32(actionId, 0));
         }
 
         [Parser(Opcode.SMSG_UPDATE_ACTION_BUTTONS)]
         public static void HandleActionButtons(Packet packet)
         {
             const int buttonCount = 132;
-
-            var startAction = new CoreObjects.StartAction { Actions = new List<CoreObjects.Action>(buttonCount) };
 
             var buttons = new byte[buttonCount][];
 
@@ -83,23 +80,26 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 if (actionId == 0)
                     continue;
 
-                var action = new CoreObjects.Action
+                PlayerCreateInfoAction action = new PlayerCreateInfoAction
                 {
                     Button = (uint)i,
-                    Id = (uint)actionId,
+                    Action = (uint)actionId,
                     Type = 0 // removed in MoP
                 };
 
-                packet.AddValue("Action " + i, action.Id);
-                startAction.Actions.Add(action);
-            }
+                packet.AddValue("Action " + i, action.Action);
 
-            CoreObjects.WoWObject character;
-            if (Storage.Objects.TryGetValue(CoreParsers.SessionHandler.LoginGuid, out character))
-            {
-                var player = character as CoreObjects.Player;
-                if (player != null && player.FirstLogin)
-                    Storage.StartActions.Add(new Tuple<Race, Class>(player.Race, player.Class), startAction, packet.TimeSpan);
+                WoWObject character;
+                if (Storage.Objects.TryGetValue(CoreParsers.SessionHandler.LoginGuid, out character))
+                {
+                    Player player = character as Player;
+                    if (player != null && player.FirstLogin)
+                    {
+                        action.Race = player.Race;
+                        action.Class = player.Class;
+                        Storage.StartActions.Add(action, packet.TimeSpan);
+                    }
+                }
             }
         }
     }

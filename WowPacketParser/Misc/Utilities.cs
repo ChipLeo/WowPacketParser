@@ -103,9 +103,8 @@ namespace WowPacketParser.Misc
         [SecurityCritical]
         internal static void GetMemUse(string prefix)
         {
-            var process = Process.GetCurrentProcess();
-            Trace.WriteLine(String.Format("Memory GC: {0,5}, Process: {1,5} - {2}",
-                BytesToString(GC.GetTotalMemory(true)), BytesToString(process.PrivateMemorySize64), prefix));
+            Process process = Process.GetCurrentProcess();
+            Trace.WriteLine($"Memory GC: {BytesToString(GC.GetTotalMemory(true)),5}, Process: {BytesToString(process.PrivateMemorySize64),5} - {prefix}");
         }
 
         public static void RemoveConfigOptions(ref List<string> files)
@@ -161,19 +160,6 @@ namespace WowPacketParser.Misc
             return true;
         }
 
-        public static string GetCompressedFileExtension(FileCompression value)
-        {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
-
-            FileCompressionAttribute[] attributes =
-                (FileCompressionAttribute[])fi.GetCustomAttributes(typeof(FileCompressionAttribute), false);
-
-            if (attributes.Length == 0)
-                throw new NotImplementedException();
-
-            return attributes[0].Extension;
-        }
-
         /// <summary>
         /// Compares two objects (values) with special cases for floats and strings
         /// </summary>
@@ -192,14 +178,12 @@ namespace WowPacketParser.Misc
                 return false;
 
             // Notice that if one of the values is DBNull, DBNull == "" must return true
-            var str1 = o1 as string;
-            var str2 = o2 as string;
+            string str1 = o1 as string;
+            string str2 = o2 as string;
 
-            if (str1 != null)
-                str1 = str1.TrimEnd('\r', '\n', ' ');
+            str1 = str1?.TrimEnd('\r', '\n', ' ');
 
-            if (str2 != null)
-                str2 = str2.TrimEnd('\r', '\n', ' ');
+            str2 = str2?.TrimEnd('\r', '\n', ' ');
 
             if (str1 != null && str2 == null)
                 return str1 == Convert.ToString(o2);
@@ -216,26 +200,39 @@ namespace WowPacketParser.Misc
         /// Get a list of fields and attributes from a type. Only fields with the
         /// specified attribute are returned.
         /// </summary>
+        /// <param name="remove">Remove fields without the specified attribute.</param>
         /// <typeparam name="T">Type (class/struct)</typeparam>
         /// <typeparam name="TK">Attribute</typeparam>
         /// <returns>A list of tuples where Item1 is FieldInfo and Item2 the corresponding attribute</returns>
-        public static List<Tuple<FieldInfo, TK>> GetFieldsAndAttribute<T, TK>() where TK : Attribute
+        public static Dictionary<FieldInfo, List<TK>> GetFieldsAndAttributes<T, TK>(bool remove = true) where TK : Attribute
         {
             var fi = typeof(T).GetFields(BindingFlags.Public | BindingFlags.Instance);
             if (fi.Length <= 0)
                 return null;
 
-            var list = new List<Tuple<FieldInfo, TK>>(fi.Length);
+            var dict = new Dictionary<FieldInfo, List<TK>>(fi.Length);
 
-            foreach (var field in fi)
+            foreach (FieldInfo field in fi)
             {
                 var attrs = field.GetCustomAttributes(typeof(TK), false);
-                if (attrs.Length <= 0)
+                if (remove && attrs.Length <= 0)
                     continue;
 
-                list.AddRange(attrs.Select(attr => Tuple.Create(field, (TK) attr)));
+                dict.Add(field, ((TK[]) attrs).ToList());
             }
 
+            return dict;
+        }
+
+        public static List<T> GetAttributes<T>(FieldInfo field) where T : Attribute
+        {
+            var list = new List<T>();
+
+            var attrs = field.GetCustomAttributes(typeof(T), false);
+            if (attrs.Length <= 0)
+                return new List<T>();
+
+            list.AddRange(attrs.Select(attr => (T)attr));
             return list;
         }
 
@@ -253,7 +250,7 @@ namespace WowPacketParser.Misc
         /// </summary>
         /// <param name="byteCount">Number of bytes</param>
         /// <returns>String with byte suffix</returns>
-        public static String BytesToString(long byteCount)
+        public static string BytesToString(long byteCount)
         {
             string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
             if (byteCount == 0)
