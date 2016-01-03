@@ -120,6 +120,30 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("GUID", guid);
         }
 
+        [Parser(Opcode.SMSG_GUILD_EVENT_PRESENCE_CHANGE)]
+        public static void HandleGuildEventPresenceChange(Packet packet)
+        {
+            var guid = new byte[8];
+            guid[0] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            packet.ReadBit("Mobile"); // 17
+            guid[2] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            var bits18 = packet.ReadBits(6);
+            guid[1] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            packet.ReadBit("LoggedOn"); // 16
+            packet.ParseBitStream(guid, 3, 2, 0);
+            packet.ReadInt32("VirtualRealmAddress");
+            packet.ParseBitStream(guid, 6);
+            packet.ReadWoWString("Name", bits18);
+            packet.ParseBitStream(guid, 4, 5, 7, 1);
+
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.CMSG_GUILD_GET_RANKS)]
         public static void HandleGuildRanks(Packet packet)
         {

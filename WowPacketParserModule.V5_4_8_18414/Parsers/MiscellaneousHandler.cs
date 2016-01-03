@@ -964,7 +964,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             var guid = packet.StartBitStream(4, 2, 5, 7, 1, 0, 3, 6);
             packet.ParseBitStream(guid, 6, 0, 3, 1, 5);
-            packet.ReadByte("unk3"); // 3
+            packet.ReadByte("Party Index"); // 3
             packet.ParseBitStream(guid, 7, 2, 4);
             packet.WriteGuid("Guid", guid);
         }

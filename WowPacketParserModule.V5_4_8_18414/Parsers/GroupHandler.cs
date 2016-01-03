@@ -141,6 +141,17 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("Active"); // 16
         }
 
+        [Parser(Opcode.CMSG_UPDATE_RAID_TARGET)]
+        public static void HandleUpdateRaidTarget(Packet packet)
+        {
+            packet.ReadByte("PartyIndex"); // 24
+            packet.ReadByte("Symbol"); // 25
+            var guid = packet.StartBitStream(3, 2, 1, 5, 0, 6, 7, 4);
+            packet.ParseBitStream(guid, 2, 3, 0, 7, 5, 1, 6, 4);
+
+            packet.WriteGuid("Target", guid);
+        }
+
         [Parser(Opcode.SMSG_GROUP_DECLINE)]
         public static void HandleGroupDecline(Packet packet)
         {

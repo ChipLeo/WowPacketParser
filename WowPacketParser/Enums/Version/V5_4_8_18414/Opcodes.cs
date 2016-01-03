@@ -221,7 +221,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_LOG_DISCONNECT,                           0x10B3}, //++
             {Opcode.CMSG_LOOT_MONEY,                               0x02F6}, //+-
             {Opcode.CMSG_LOOT_RELEASE,                             0x0840}, //++
-            {Opcode.CMSG_LOOT_ROLL,                                0x0A3A}, //--
+            {Opcode.CMSG_LOOT_ROLL,                                0x15C2}, //++
             {Opcode.CMSG_LOOT_UNIT,                                0x1CE2}, //+-
             {Opcode.CMSG_MAIL_CREATE_TEXT_ITEM,                    0x1270}, //+-
             {Opcode.CMSG_MAIL_DELETE,                              0x14E2}, //+-
@@ -441,7 +441,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNLEARN_SKILL,                            0x0268}, //++
             {Opcode.CMSG_UNLOCK_VOID_STORAGE,                      0x0444}, //+-
             {Opcode.CMSG_UPDATE_ACCOUNT_DATA,                      0x0068}, //++
-            {Opcode.CMSG_UPDATE_RAID_TARGET,                       0x0886}, //--
+            {Opcode.CMSG_UPDATE_RAID_TARGET,                       0x0886}, //++
             {Opcode.CMSG_UPGRADE_ITEM,                             0x1042}, //++
             {Opcode.CMSG_USED_FOLLOW,                              0x0374}, //++
             {Opcode.CMSG_USE_ITEM,                                 0x1CC1}, //-- sub_696A02
@@ -470,7 +470,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_AREA_SPIRIT_HEALER_TIME,                  0x188E}, //++
             {Opcode.SMSG_AREA_TRIGGER_DENIED,                      0x148F}, //++ pair 1C44
             {Opcode.SMSG_AREA_TRIGGER_NO_CORPSE,                   0x089E}, //+-
-            {Opcode.SMSG_ARENA_UNIT_DESTROYED,                     0x00BE}, //--
             {Opcode.SMSG_ATTACKER_STATE_UPDATE,                    0x06AA}, //++
             {Opcode.SMSG_ATTACK_START,                             0x1A9E}, //++
             {Opcode.SMSG_ATTACK_STOP,                              0x12AF}, //++
@@ -598,6 +597,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_DEATH_RELEASE_LOC,                        0x1063}, //+-
             {Opcode.SMSG_DEFENSE_MESSAGE,                          0x0A1F}, //+-
             {Opcode.SMSG_DELETE_CHAR,                              0x0C9F}, //+-
+            {Opcode.SMSG_DESTROY_ARENA_UNIT,                       0x00BE}, //++
             {Opcode.SMSG_DESTROY_OBJECT,                           0x14C2}, //++
             {Opcode.SMSG_DISMOUNT,                                 0x0E3A}, //++
             {Opcode.SMSG_DISPLAY_PROMOTION,                        0x00A3}, //++
@@ -655,12 +655,12 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GUILD_EVENT_TAB_MODIFIED,                 0x0BF1}, //--
             {Opcode.SMSG_GUILD_EVENT_TAB_TEXT_CHANGED,             0x0A70}, //--
             {Opcode.SMSG_GUILD_EVENT_LOG_QUERY_RESULTS,            0x1AF1}, //--
+            {Opcode.SMSG_GUILD_EVENT_PRESENCE_CHANGE,              0x0B70}, //++
             {Opcode.SMSG_GUILD_INVITE,                             0x0F71}, //--
             {Opcode.SMSG_GUILD_INVITE_ACCEPT,                      0x0B69}, //--
             {Opcode.SMSG_GUILD_INVITE_CANCEL,                      0x0FE1}, //++
             {Opcode.SMSG_GUILD_LEAVE,                              0x0BF8}, //--
             {Opcode.SMSG_GUILD_MEMBER_DAILY_RESET,                 0x1BE8}, //+-
-            {Opcode.SMSG_GUILD_MEMBER_LOGGED,                      0x0B70}, //--
             {Opcode.SMSG_GUILD_MOTD,                               0x0B68}, //--
             {Opcode.SMSG_GUILD_NEWS_UPDATE,                        0x0AE8}, //--
             {Opcode.SMSG_GUILD_PARTY_STATE,                        0x0A78}, //++
@@ -1011,6 +1011,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UPDATE_COMBO_POINTS,                      0x082F}, //++
             {Opcode.SMSG_UPDATE_CURRENCY,                          0x129E}, //++
             {Opcode.SMSG_UPDATE_CURRENCY_WEEK_LIMIT,               0x0E2A}, //++
+            {Opcode.SMSG_UPDATE_DUNGEON_ENCOUNTER_FOR_LOOT,        0x1863}, //++
             {Opcode.SMSG_UPDATE_INSTANCE_OWNERSHIP,                0x10E0}, //--
             {Opcode.SMSG_UPDATE_LAST_INSTANCE,                     0x189B}, //+-
             {Opcode.SMSG_UPDATE_OBJECT,                            0x1792}, //--

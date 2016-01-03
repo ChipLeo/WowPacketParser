@@ -11,6 +11,18 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class LootHandler
     {
+        [Parser(Opcode.CMSG_LOOT_ROLL)]
+        public static void HandleLootRoll(Packet packet)
+        {
+            packet.ReadByte("LootListID"); // 25
+            packet.ReadByteE<LootRollType>("RollType"); // 24
+            //packet.ReadPackedGuid128("LootObj");
+            var guid = packet.StartBitStream(7, 1, 2, 0, 6, 3, 4, 5);
+            packet.ParseBitStream(guid, 0, 2, 7, 3, 1, 5, 4, 6);
+
+            packet.WriteGuid("LootObj", guid);
+        }
+
         [Parser(Opcode.CMSG_LOOT_UNIT)]
         public static void HandleLoot(Packet packet)
         {
