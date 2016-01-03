@@ -582,6 +582,43 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             updateFlagPacket.ClosePacket(false);
         }
 
+        [Parser(Opcode.SMSG_SEND_RAID_TARGET_UPDATE_SINGLE)]
+        public static void HandleSendRaidTargetUpdateSingle(Packet packet)
+        {
+            var guid = new byte[8];
+            var guid2 = new byte[8];
+
+            guid[6] = packet.ReadBit();
+            guid2[4] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid2[6] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid2[7] = packet.ReadBit();
+            guid2[2] = packet.ReadBit();
+            guid2[5] = packet.ReadBit();
+            guid2[1] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid2[0] = packet.ReadBit();
+            guid2[3] = packet.ReadBit();
+
+            packet.ParseBitStream(guid2, 1);
+            packet.ReadByte("PartyIndex"); // 33
+            packet.ParseBitStream(guid, 0, 5, 3);
+            packet.ParseBitStream(guid2, 7, 6);
+            packet.ParseBitStream(guid, 1);
+            packet.ParseBitStream(guid2, 2, 4, 0, 3, 5);
+            packet.ParseBitStream(guid, 6);
+            packet.ReadByte("Symbol"); // 32
+            packet.ParseBitStream(guid, 4, 2, 7);
+
+            packet.WriteGuid("ChangedBy", guid);
+            packet.WriteGuid("Target", guid2);
+        }
+
         [Parser(Opcode.SMSG_GROUP_DESTROYED)]
         [Parser(Opcode.SMSG_GROUP_UNINVITE)]
         [Parser(Opcode.CMSG_GROUP_DECLINE)]

@@ -71,7 +71,7 @@ namespace WowPacketParser.Parsing.Parsers
         public static void HandleGetGMTicket(Packet packet)
         {
             var ticketStatus = packet.ReadInt32E<GMTicketStatus>("TicketStatus");
-            if (ticketStatus != GMTicketStatus.HasText)
+            if (ticketStatus != GMTicketStatus.GMTICKET_STATUS_HASTEXT)
                 return;
 
             packet.ReadInt32("TicketID");

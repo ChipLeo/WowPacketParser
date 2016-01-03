@@ -18,13 +18,31 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadWoWString("Addon", len[i], i);
         }
 
-        [Parser(Opcode.CMSG_CHAT_ADDON_MESSAGE_PARTY)]
-        public static void HandleChatAddonMessageParty(Packet packet)
+        [Parser(Opcode.CMSG_CHAT_ADDON_MESSAGE_INSTANCE_CHAT)]
+        public static void HandleChatAddonMessageInstanceChat(Packet packet)
+        {
+            var len272 = packet.ReadBits(5);
+            var len16 = packet.ReadBits(8);
+            packet.ReadWoWString("Message", len16);
+            packet.ReadWoWString("Prefix", len272);
+        }
+
+        [Parser(Opcode.CMSG_CHAT_ADDON_MESSAGE_GUILD)]
+        public static void HandleChatAddonMessageGuild(Packet packet)
         {
             var len33 = packet.ReadBits(8);
             var len16 = packet.ReadBits(5);
             packet.ReadWoWString("Prefix", len16);
             packet.ReadWoWString("Message", len33);
+        }
+
+        [Parser(Opcode.CMSG_CHAT_ADDON_MESSAGE_PARTY)]
+        public static void HandleChatAddonMessageParty(Packet packet)
+        {
+            var len33 = packet.ReadBits(8);
+            var len16 = packet.ReadBits(5);
+            packet.ReadWoWString("Message", len33);
+            packet.ReadWoWString("Prefix", len16);
         }
 
         [Parser(Opcode.CMSG_CHAT_ADDON_MESSAGE_WHISPER)]

@@ -185,6 +185,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk20"); // 20
         }
 
+        [Parser(Opcode.CMSG_RESURRECT_RESPONSE)]
+        public static void HandleResurrectResponse(Packet packet)
+        {
+            packet.ReadInt32("Response");
+            var guid = packet.StartBitStream(3, 0, 6, 4, 5, 2, 1, 7);
+            packet.ParseBitStream(guid, 7, 0, 1, 3, 4, 6, 2, 5);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.CMSG_SET_PVP)]
         public static void HandleSetPVP(Packet packet)
         {
@@ -1046,6 +1055,33 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             packet.ReadInt32("unk20"); // 20
             packet.ReadBits("unk16", 2); // 16
+        }
+
+        [Parser(Opcode.SMSG_RESURRECT_REQUEST)]
+        public static void HandleResurrectRequest(Packet packet)
+        {
+            packet.ReadUInt32("ResurrectOffererVirtualRealmAddress"); // 17
+            packet.ReadInt32("PetNumber"); // 18
+            packet.ReadUInt32("SpellID"); // 20
+
+            var guid = new byte[8];
+
+            guid[3] = packet.ReadBit();
+            packet.ReadBit("Sickness"); // 76
+            packet.ReadBit("UseTimer"); // 77
+            guid[1] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+
+            var len = packet.ReadBits(6);
+            packet.ParseBitStream(guid, 7, 3, 5);
+            packet.ReadWoWString("Name", len);
+            packet.ParseBitStream(guid, 2, 4, 1, 6, 0);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_SET_AI_ANIM_KIT)]

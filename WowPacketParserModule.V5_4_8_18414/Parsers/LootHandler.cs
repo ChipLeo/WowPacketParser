@@ -415,5 +415,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
             packet.WriteGuid("Guid104", guid104);
         }
+
+        [Parser(Opcode.SMSG_LOOT_ROLLS_COMPLETE)]
+        public static void HandleLootRollsComplete(Packet packet)
+        {
+            var guid = packet.StartBitStream(6, 5, 2, 3, 7, 0, 1, 4);
+            packet.ParseBitStream(guid, 1, 0, 2);
+            packet.ReadByte("LootListID"); // 24
+            packet.ParseBitStream(guid, 7, 4, 6, 3, 5);
+
+            packet.WriteGuid("LootObj", guid);
+        }
     }
 }

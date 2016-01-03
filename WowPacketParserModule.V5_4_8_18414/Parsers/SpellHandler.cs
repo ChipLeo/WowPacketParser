@@ -671,6 +671,23 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_NOTIFY_MISSILE_TRAJECTORY_COLLISION)]
+        public static void HandleNotifyMissileTrajectoryCollision(Packet packet)
+        {
+            var pos = new Vector3();
+            var guid = packet.StartBitStream(2, 7, 3, 0, 5, 6, 4, 1);
+            packet.ParseBitStream(guid, 6, 5, 4);
+            pos.Y = packet.ReadSingle();
+            packet.ParseBitStream(guid, 2, 0, 3, 7);
+            packet.ReadByte("CastID");
+            pos.X = packet.ReadSingle();
+            pos.Z = packet.ReadSingle();
+            packet.ParseBitStream(guid, 1);
+
+            packet.AddValue("CollisionPos", pos);
+            packet.WriteGuid("Caster", guid);
+        }
+
         [Parser(Opcode.SMSG_PET_CAST_FAILED)]
         public static void HandlePetCastFailed(Packet packet)
         {
