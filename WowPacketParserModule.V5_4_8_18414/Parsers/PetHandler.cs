@@ -403,22 +403,25 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             StoreGetters.AddName(GUID, Number.ToString(CultureInfo.InvariantCulture));
         }
 
-        [Parser(Opcode.CMSG_PET_RENAME)]
+        [Parser(Opcode.CMSG_PET_RENAME)] // sub_668D4B
         public static void HandlePetRename(Packet packet)
         {
-            packet.ReadInt32("unk16"); // 16
-            var unk20 = packet.ReadBit("unk20"); // 20
-            var unk149 = packet.ReadBit("unk149"); // 149
-            uint unk150 = 0;
-            uint unk22 = 0;
-            if (unk149 == 1)
-                unk150 = packet.ReadBits(7);
-            if (unk20)
-                unk22 = packet.ReadBits(8);
-            if (unk20)
-                packet.ReadWoWString("str1", unk22);
-            if (unk149==1)
-                packet.ReadWoWString("str2", unk150);
+            packet.ReadInt32("PetNumber"); // 16
+            var hasNewName = !packet.ReadBit("!hasNewName"); // 20
+            var HasDeclinedNames = packet.ReadBit("HasDeclinedNames"); // 149
+            var count = new int[5];
+            uint NewNameLen = 0;
+            if (HasDeclinedNames)
+                for (int i = 0; i < 5; ++i)
+                    count[i] = (int)packet.ReadBits(7);
+            if (hasNewName)
+                NewNameLen = packet.ReadBits(8);
+            packet.ResetBitReader();
+            if (hasNewName)
+                packet.ReadWoWString("NewName", NewNameLen);
+            if (HasDeclinedNames)
+                for (int i = 0; i < 5; ++i)
+                    packet.ReadWoWString("Declined Name", count[i], i);
         }
 
         [Parser(Opcode.CMSG_PET_SET_ACTION)]
