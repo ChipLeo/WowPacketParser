@@ -87,6 +87,8 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_CHAR_CUSTOMIZE,                           0x0A13}, //+-
             {Opcode.CMSG_CHAR_DELETE,                              0x04E2}, //+-
             {Opcode.CMSG_CHAR_RACE_OR_FACTION_CHANGE,              0x0329}, //+-
+            {Opcode.CMSG_CHAT_ADDON_MESSAGE_PARTY,                 0x0E3B}, //++ addon
+            {Opcode.CMSG_CHAT_ADDON_MESSAGE_WHISPER,               0x0EBB}, //++
             {Opcode.CMSG_CHAT_CHANNEL_ANNOUNCEMENTS,               0x06AF}, //--
             {Opcode.CMSG_CHAT_CHANNEL_BAN,                         0x08BF}, //--
             {Opcode.CMSG_CHAT_CHANNEL_INVITE,                      0x10AB}, //--
@@ -101,7 +103,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_CHAT_CHANNEL_UNMUTE,                      0x022A}, //--
             {Opcode.CMSG_CHAT_JOIN_CHANNEL,                        0x148E}, //++
             {Opcode.CMSG_CHAT_LEAVE_CHANNEL,                       0x042A}, //+-
-            {Opcode.CMSG_CHAT_MESSAGE_ADDON_WHISPER,               0x0EBB}, //++
             {Opcode.CMSG_CHAT_MESSAGE_AFK,                         0x0EAB}, //++
             {Opcode.CMSG_CHAT_MESSAGE_CHANNEL,                     0x00BB}, //+-
             {Opcode.CMSG_CHAT_MESSAGE_DND,                         0x002E}, //++
@@ -150,7 +151,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_GET_TIMEZONE_INFORMATION,                 0x18B2}, //++
             {Opcode.CMSG_GM_TICKET_CREATE,                         0x1A86}, //--
             {Opcode.CMSG_GM_TICKET_DELETE_TICKET,                  0x1A23}, //+-
-            {Opcode.CMSG_GM_TICKET_GET_TICKET,                     0x1F89}, //+-
+            {Opcode.CMSG_GM_TICKET_GET_TICKET,                     0x1F89}, //++
             //{Opcode.CMSG_GM_TICKET_GET_TICKET,                     0x0AB6}, //++ gmticket
             {Opcode.CMSG_GM_TICKET_GET_SYSTEM_STATUS,              0x0A82}, //+-
             {Opcode.CMSG_GM_TICKET_GET_CASE_STATUS,                0x15A8}, //++
@@ -173,6 +174,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_GUILD_BANK_BUY_TAB,                       0x0251}, //+-
             {Opcode.CMSG_GUILD_BANK_DEPOSIT_MONEY,                 0x0770}, //+-
             {Opcode.CMSG_GUILD_BANK_LOG_QUERY,                     0x0CD3}, //+-
+            {Opcode.CMSG_GUILD_BANK_REMAINING_WITHDRAW_MONEY_QUERY, 0x14DB}, //++
             {Opcode.CMSG_GUILD_BANK_UPDATE_TAB,                    0x07C2}, //+-
             {Opcode.CMSG_GUILD_DECLINE_INVITATION,                 0x147B}, //+-
             {Opcode.CMSG_GUILD_DELETE_RANK,                        0x0D79}, //+-
@@ -268,7 +270,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_NULL_135B,                                0x135B}, //+-
             {Opcode.CMSG_NULL_1362,                                0x1362}, //++
             {Opcode.CMSG_NULL_1452,                                0x1452}, //+-
-            {Opcode.CMSG_NULL_14DB,                                0x14DB}, //+-
             {Opcode.CMSG_NULL_14E0,                                0x14E0}, //+-
             {Opcode.CMSG_NULL_15E2,                                0x15E2}, //+-
             {Opcode.CMSG_NULL_1A87,                                0x1A87}, //+-
@@ -425,7 +426,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_08D3,                                 0x08D3}, //+-
             {Opcode.CMSG_UNK_09FA,                                 0x09FA}, //++
             {Opcode.CMSG_UNK_0A16,                                 0x0A16}, //++
-            {Opcode.CMSG_UNK_0E3B,                                 0x0E3B}, //++ addon
             {Opcode.CMSG_UNK_10A2,                                 0x10A2}, //+-
             {Opcode.CMSG_UNK_10A7,                                 0x10A7}, //+-
             {Opcode.CMSG_UNK_10C3,                                 0x10C3}, //++
@@ -630,6 +630,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GAME_TIME_UPDATE,                         0x0E1B}, //++
             {Opcode.SMSG_GENERATE_RANDOM_CHARACTER_NAME_RESULT,    0x169F}, //+-
             {Opcode.SMSG_GMRESPONSE_RECEIVED,                      0x148E}, //++
+            {Opcode.SMSG_GM_TICKET_GET_TICKET,                     0x129B}, //++
             {Opcode.SMSG_GM_TICKET_SYSTEM_STATUS,                  0x163B}, //++
             {Opcode.SMSG_GOSSIP_COMPLETE,                          0x034E}, //+-
             {Opcode.SMSG_GOSSIP_MESSAGE,                           0x0244}, //--
@@ -643,8 +644,8 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GUILD_ACHIEVEMENT_DATA,                   0x0EF8}, //++
             {Opcode.SMSG_GUILD_ACHIEVEMENT_EARNED,                 0x1BF1}, //--
             {Opcode.SMSG_GUILD_BANK_LOG_QUERY_RESULTS,             0x0FF0}, //--
-            {Opcode.SMSG_GUILD_BANK_MONEY_WITHDRAWN,               0x0B78}, //--
             {Opcode.SMSG_GUILD_BANK_QUERY_RESULTS,                 0x0B79}, //--
+            {Opcode.SMSG_GUILD_BANK_REMAINING_WITHDRAW_MONEY,      0x0B78}, //++
             {Opcode.SMSG_GUILD_CHALLENGE_UPDATE,                   0x0AE9}, //--
             {Opcode.SMSG_GUILD_COMMAND_RESULT,                     0x0EF1}, //--
             {Opcode.SMSG_GUILD_CRITERIA_DATA,                      0x1BF0}, //--
@@ -996,7 +997,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0EAB,                                 0x0EAB}, //++
             {Opcode.SMSG_UNK_103E,                                 0x103E}, //++
             {Opcode.SMSG_UNK_1206,                                 0x1206}, //++
-            {Opcode.SMSG_UNK_129B,                                 0x129B}, //++
             {Opcode.SMSG_UNK_162A,                                 0x162A}, //++
             {Opcode.SMSG_UNK_188F,                                 0x188F}, //++
             {Opcode.SMSG_UNK_1904,                                 0x1904}, //++

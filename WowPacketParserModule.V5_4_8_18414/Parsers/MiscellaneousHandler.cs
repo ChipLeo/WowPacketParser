@@ -1416,28 +1416,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_UNK_129B)]
-        public static void HandleUnk129B(Packet packet)
-        {
-            var hasData = packet.ReadBit("HasData");
-            if (hasData)
-            {
-                var len1 = packet.ReadBits("len6", 11);
-                var len2 = packet.ReadBits("len2042", 10);
-                packet.ReadInt32("unk5");
-                packet.ReadByte("unk2040");
-                packet.ReadByte("unk2041");
-                packet.ReadByte("unk2025");
-                packet.ReadInt32("unk509");
-                packet.ReadWoWString("str6", len1);
-                packet.ReadInt32("unk767");
-                packet.ReadInt32("unk507");
-                packet.ReadInt32("unk508");
-                packet.ReadWoWString("str2042", len2);
-            }
-            packet.ReadInt32("unk");
-        }
-
         [Parser(Opcode.SMSG_UNK_188F)]
         public static void HandleUnk188F(Packet packet)
         {
