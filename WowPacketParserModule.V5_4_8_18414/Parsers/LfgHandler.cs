@@ -243,6 +243,80 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_LFG_PROPOSAL_UPDATE)]
+        public static void HandleLfgProposalUpdate(Packet packet)
+        {
+            //packet.ReadTime("Date");
+            //packet.ReadInt32("Bosses Killed Mask");
+            //packet.ReadInt32("Unk UInt32 1");
+            //packet.ReadUInt32("Unk UInt32 2");
+            //packet.ReadLfgEntry("LFG Entry");
+            //packet.ReadUInt32("Unk UInt32 3");
+
+            var guid1 = new byte[8];
+            var guid2 = new byte[8];
+
+            guid1[6] = packet.ReadBit();
+            guid1[0] = packet.ReadBit();
+            guid2[1] = packet.ReadBit();
+            guid2[7] = packet.ReadBit();
+            guid2[5] = packet.ReadBit();
+            guid1[5] = packet.ReadBit();
+            guid2[4] = packet.ReadBit();
+            packet.ReadBit("Silent"); // 64
+            guid1[2] = packet.ReadBit();
+            guid2[6] = packet.ReadBit();
+            guid1[3] = packet.ReadBit();
+            guid1[7] = packet.ReadBit();
+            guid2[3] = packet.ReadBit();
+            uint count = packet.ReadBits("Response Count", 21);
+            for (int i = 0; i < count; ++i)
+            {
+                var bits = new Bit[5];
+                for (int j = 0; j < 5; ++j) // 6 4 7 8 5
+                    bits[j] = packet.ReadBit();
+                packet.AddValue("Bits",
+                    $"In Dungeon?: {bits[1]}, Same Group?: {bits[4]}, Accept: {bits[0]}, Answer: {bits[2]}, Self: {bits[3]}", i); // 0 and 1 could be swapped
+            }
+            guid2[2] = packet.ReadBit();
+            guid1[4] = packet.ReadBit();
+            packet.ReadBit("unk16"); // 16
+            guid2[0] = packet.ReadBit();
+            guid1[1] = packet.ReadBit();
+
+            packet.ReadXORByte(guid1, 1);
+            packet.ReadXORByte(guid2, 4);
+            packet.ReadXORByte(guid1, 4);
+            packet.ReadXORByte(guid2, 7);
+            packet.ReadXORByte(guid2, 2);
+            packet.ReadXORByte(guid2, 0);
+
+            packet.ReadInt32("unk32"); // 32
+            packet.ReadByteE<LfgProposalState>("State"); // 65
+            packet.ReadInt32("unk48"); // 48
+            packet.ReadXORByte(guid1, 6);
+            packet.ReadInt32("unk84"); // 84
+            packet.ReadXORByte(guid2, 5);
+            packet.ReadXORByte(guid2, 3);
+            packet.ReadInt32("unk56"); // 56
+            packet.ReadXORByte(guid1, 5);
+            packet.ReadXORByte(guid2, 6);
+
+            for (int i = 0; i < count; ++i)
+                packet.ReadInt32E<LfgRoleFlag>("Roles", i);
+
+            packet.ReadInt32("unk88"); // 88
+            packet.ReadXORByte(guid1, 7);
+            packet.ReadXORByte(guid2, 1);
+            packet.ReadXORByte(guid1, 0);
+            packet.ReadXORByte(guid1, 2);
+            packet.ReadInt32("unk52"); // 52
+            packet.ReadXORByte(guid1, 3);
+
+            packet.WriteGuid("Guid1", guid1);
+            packet.WriteGuid("Guid2", guid2);
+        }
+
         [Parser(Opcode.SMSG_LFG_QUEUE_STATUS)]
         public static void HandleLFGQueueStatus(Packet packet)
         {

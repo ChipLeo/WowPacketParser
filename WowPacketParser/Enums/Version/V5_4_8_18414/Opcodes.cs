@@ -241,6 +241,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_MOVE_GRAVITY_DISABLE_ACK,                 0x09D3}, //++
             {Opcode.CMSG_MOVE_GRAVITY_ENABLE_ACK,                  0x11D8}, //++
             {Opcode.CMSG_MOVE_KNOCK_BACK_ACK,                      0x00F2}, //++ pair 0562
+            {Opcode.CMSG_MOVE_REMOVE_MOVEMENT_FORCE_ACK,           0x10DB}, //++
             {Opcode.CMSG_MOVE_SET_CAN_FLY_ACK,                     0x1052}, //++
             {Opcode.CMSG_MOVE_SET_CAN_TRANSITION_BETWEEN_SWIM_AND_FLY_ACK, 0x11DB}, //++
             {Opcode.CMSG_MOVE_SET_COLLISION_HEIGHT_ACK,            0x09FB}, //++
@@ -437,6 +438,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_1841,                                 0x1841}, //+-
             {Opcode.CMSG_UNK_185B,                                 0x185B}, //++
             {Opcode.CMSG_UNK_19C2,                                 0x19C2}, //+-
+            {Opcode.CMSG_UNK_1D9D,                                 0x1D9D}, //++ LFG
             {Opcode.CMSG_UNLEARN_SKILL,                            0x0268}, //++
             {Opcode.CMSG_UNLOCK_VOID_STORAGE,                      0x0444}, //+-
             {Opcode.CMSG_UPDATE_ACCOUNT_DATA,                      0x0068}, //++
@@ -744,6 +746,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_MOVE_KNOCK_BACK,                          0x0562}, //++
             {Opcode.SMSG_MOVE_LAND_WALK,                           0x086A}, //++
             {Opcode.SMSG_MOVE_NORMAL_FALL,                         0x08E0}, //++
+            {Opcode.SMSG_MOVE_REMOVE_MOVEMENT_FORCE,               0x0341}, //++
             {Opcode.SMSG_MOVE_ROOT,                                0x15AE}, //++
             {Opcode.SMSG_MOVE_SET_ACTIVE_MOVER,                    0x0C6D}, //+-
             {Opcode.SMSG_MOVE_SET_CAN_FLY,                         0x178D}, //++
@@ -771,6 +774,8 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_MOVE_UPDATE_FLIGHT_SPEED,                 0x00E1}, //++
             {Opcode.SMSG_MOVE_UPDATE_KNOCK_BACK,                   0x0251}, //++
             {Opcode.SMSG_MOVE_UPDATE_PITCH_RATE,                   0x09E2}, //--
+            {Opcode.SMSG_MOVE_UPDATE_APPLY_MOVEMENT_FORCE,         0x0AB6}, //++
+            {Opcode.SMSG_MOVE_UPDATE_REMOVE_MOVEMENT_FORCE,        0x1464}, //++
             {Opcode.SMSG_MOVE_UPDATE_RUN_BACK_SPEED,               0x08A3}, //++
             {Opcode.SMSG_MOVE_UPDATE_RUN_SPEED,                    0x158E}, //++
             {Opcode.SMSG_MOVE_UPDATE_SWIM_BACK_SPEED,              0x025A}, //--

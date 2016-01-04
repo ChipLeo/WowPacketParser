@@ -1161,6 +1161,7 @@ namespace WowPacketParser.Enums
         CMSG_UNK_185B,
         CMSG_UNK_19C2,
         CMSG_UNK_1C25,
+        CMSG_UNK_1D9D,
         CMSG_UNLEARN_DANCE_MOVE,
         CMSG_UNLEARN_SKILL,
         CMSG_UNLEARN_SPECIALIZATION,

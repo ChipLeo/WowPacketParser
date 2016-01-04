@@ -563,6 +563,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             ReadPlayerMovementInfo(packet, info.MovementGravityEnableAck);
         }
 
+        [Parser(Opcode.CMSG_MOVE_REMOVE_MOVEMENT_FORCE_ACK)]
+        public static void HandleMoveRemoveMovementForceAck(Packet packet)
+        {
+            ReadPlayerMovementInfo(packet, info.MovementRemoveMovementForceAck);
+        }
+
         [Parser(Opcode.CMSG_MOVE_SET_COLLISION_HEIGHT_ACK)]
         public static void HandleMoveSetCollisionHeightAck(Packet packet)
         {
@@ -720,6 +726,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleMoveNormalFall(Packet packet)
         {
             ReadPlayerMovementInfo(packet, info.MovementNormalFall);
+        }
+
+        [Parser(Opcode.SMSG_MOVE_REMOVE_MOVEMENT_FORCE)]
+        public static void HandleMoveRemoveMovementForce(Packet packet)
+        {
+            ReadPlayerMovementInfo(packet, info.MovementRemoveMovementForce);
         }
 
         [Parser(Opcode.SMSG_MOVE_ROOT)]
@@ -3899,6 +3911,18 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             pos.O = packet.ReadSingle();
             packet.WriteLine("Pos: {0}", pos);
             packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_MOVE_UPDATE_APPLY_MOVEMENT_FORCE)]
+        public static void HandleMoveUpdateApplyMovementForce(Packet packet)
+        {
+            ReadPlayerMovementInfo(packet, info.MovementUpdateApplyMovementForce);
+        }
+
+        [Parser(Opcode.SMSG_MOVE_UPDATE_REMOVE_MOVEMENT_FORCE)]
+        public static void HandleMoveUpdateRemoveMovementForce(Packet packet)
+        {
+            ReadPlayerMovementInfo(packet, info.MovementUpdateRemoveMovementForce);
         }
 
         [Parser(Opcode.SMSG_MOVE_UNSET_HOVERING)]
