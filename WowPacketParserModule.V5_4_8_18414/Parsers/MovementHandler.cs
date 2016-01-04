@@ -3818,6 +3818,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             ReadPlayerMovementInfo(packet, info.MovementSetHover);
         }
 
+        [Parser(Opcode.SMSG_MOVE_SET_IGNORE_MOVEMENT_FORCES)]
+        public static void HandleMoveSsetIgnoreMovementForces(Packet packet)
+        {
+            ReadPlayerMovementInfo(packet, info.MovementSetIgnoreMovementForces);
+        }
+
         [Parser(Opcode.SMSG_MOVE_SET_RUN_SPEED)]
         public static void HandleMoveSetRunSpeed(Packet packet)
         {
@@ -3863,6 +3869,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadSingle("Speed");
             packet.ParseBitStream(guid, 2, 3, 0, 1, 7);
             packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_MOVE_SKIP_TIME)]
+        public static void HandleMoveSkipTime(Packet packet)
+        {
+            ReadPlayerMovementInfo(packet, info.MovementSkipTime);
         }
 
         [Parser(Opcode.SMSG_MOVE_TELEPORT)] // C90474
@@ -3911,6 +3923,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             pos.O = packet.ReadSingle();
             packet.WriteLine("Pos: {0}", pos);
             packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_MOVE_UNSET_IGNORE_MOVEMENT_FORCES)]
+        public static void HandleMoveUnsetIgnoreMovementForces(Packet packet)
+        {
+            ReadPlayerMovementInfo(packet, info.MovementUnsetIgnoreMovementForces);
         }
 
         [Parser(Opcode.SMSG_MOVE_UPDATE_APPLY_MOVEMENT_FORCE)]

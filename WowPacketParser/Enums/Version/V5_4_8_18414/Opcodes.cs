@@ -757,6 +757,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_MOVE_SET_FLIGHT_BACK_SPEED,               0x0319}, //+-
             {Opcode.SMSG_MOVE_SET_FLIGHT_SPEED,                    0x006E}, //++
             {Opcode.SMSG_MOVE_SET_HOVERING,                        0x1802}, //+-
+            {Opcode.SMSG_MOVE_SET_IGNORE_MOVEMENT_FORCES,          0x1065}, //+-
             {Opcode.SMSG_MOVE_SET_PITCH_RATE,                      0x17AB}, //+-
             {Opcode.SMSG_MOVE_SET_RUN_BACK_SPEED,                  0x0A83}, //++
             {Opcode.SMSG_MOVE_SET_RUN_SPEED,                       0x184C}, //++
@@ -764,7 +765,9 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_MOVE_SET_SWIM_SPEED,                      0x0817}, //++
             {Opcode.SMSG_MOVE_SET_TURN_RATE,                       0x0069}, //+-
             {Opcode.SMSG_MOVE_SET_WALK_SPEED,                      0x0469}, //++
+            {Opcode.SMSG_MOVE_SKIP_TIME,                           0x0A02}, //+-
             {Opcode.SMSG_MOVE_TELEPORT,                            0x0B39}, //++
+            {Opcode.SMSG_MOVE_UNSET_IGNORE_MOVEMENT_FORCES,        0x0D61}, //+-
             {Opcode.SMSG_MOVE_UNROOT,                              0x1FAE}, //++
             {Opcode.SMSG_MOVE_UNSET_CAN_FLY,                       0x0162}, //++
             {Opcode.SMSG_MOVE_UNSET_CAN_TRANSITION_BETWEEN_SWIM_AND_FLY, 0x0868}, //++
