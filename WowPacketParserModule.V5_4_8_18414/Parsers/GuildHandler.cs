@@ -574,6 +574,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("unk16"); // 16
         }
 
+        [Parser(Opcode.SMSG_GUILD_MOTD)]
         [Parser(Opcode.SMSG_GUILD_NEWS_TEXT)]
         public static void HandleNewText(Packet packet)
         {

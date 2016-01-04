@@ -624,6 +624,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_FORCE_SET_VEHICLE_REC_ID,                 0x149F}, //++
             {Opcode.SMSG_FRIEND_STATUS,                            0x0532}, //++
             {Opcode.SMSG_GAMEOBJECT_DESPAWN_ANIM,                  0x108B}, //++
+            {Opcode.SMSG_GAME_OBJECT_ACTIVATE_ANIM_KIT,            0x0C8A}, //++
             {Opcode.SMSG_GAME_OBJECT_CUSTOM_ANIM,                  0x001F}, //++
             {Opcode.SMSG_GAME_SHOP_QUERY_RESPONSE,                 0x1ABF}, //--
             {Opcode.SMSG_GAME_STORE_INGAME_BUY_FAILED,             0x023A}, //++
@@ -661,7 +662,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GUILD_INVITE_CANCEL,                      0x0FE1}, //++
             {Opcode.SMSG_GUILD_LEAVE,                              0x0BF8}, //--
             {Opcode.SMSG_GUILD_MEMBER_DAILY_RESET,                 0x1BE8}, //+-
-            {Opcode.SMSG_GUILD_MOTD,                               0x0B68}, //--
+            {Opcode.SMSG_GUILD_MOTD,                               0x0B68}, //++
             {Opcode.SMSG_GUILD_NEWS_UPDATE,                        0x0AE8}, //--
             {Opcode.SMSG_GUILD_PARTY_STATE,                        0x0A78}, //++
             {Opcode.SMSG_GUILD_PERMISSIONS_QUERY_RESULTS,          0x0FF9}, //--
