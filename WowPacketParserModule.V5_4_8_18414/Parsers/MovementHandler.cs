@@ -509,6 +509,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             ReadPlayerMovementInfo(packet, info.MovementForceMoveUnrootAck);
         }
 
+        [Parser(Opcode.CMSG_MOVE_APPLY_MOVEMENT_FORCE_ACK)]
+        public static void HandleMoveApplyMovementForceAck(Packet packet)
+        {
+            ReadPlayerMovementInfo(packet, info.MovementApplyMovementForceAck);
+        }
+
         [Parser(Opcode.CMSG_MOVE_FEATHER_FALL_ACK)]
         public static void HandleMoveFeatherFallAck(Packet packet)
         {
@@ -631,12 +637,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             ReadPlayerMovementInfo(packet, info.MovementSetFly); // 679E4F
         }
 
-        [Parser(Opcode.CMSG_UNK_08D3)]
-        public static void HandleCUnk08D3(Packet packet)
-        {
-            ReadPlayerMovementInfo(packet, info.CUnk08D3);
-        }
-
         [Parser(Opcode.CMSG_MOVE_CHNG_TRANSPORT)]
         public static void HandleMoveChngTransport(Packet packet)
         {
@@ -659,6 +659,37 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleMoveFallLand(Packet packet)
         {
             ReadPlayerMovementInfo(packet, info.MovementFallLand);
+        }
+
+        [Parser(Opcode.SMSG_MOVE_APPLY_MOVEMENT_FORCE)]
+        public static void HandleMoveApplyMovementForce(Packet packet)
+        {
+            var guid48 = new byte[8];
+            var direction = new Vector3();
+            guid48[2] = packet.ReadBit();
+            guid48[3] = packet.ReadBit();
+            packet.ReadBits("Type", 2); // 40
+            guid48[7] = packet.ReadBit();
+            guid48[5] = packet.ReadBit();
+            guid48[0] = packet.ReadBit();
+            guid48[1] = packet.ReadBit();
+            guid48[6] = packet.ReadBit();
+            guid48[4] = packet.ReadBit();
+
+            packet.ParseBitStream(guid48, 6);
+            direction.Y = packet.ReadSingle(); // 24
+            packet.ParseBitStream(guid48, 4);
+            direction.Z = packet.ReadSingle(); // 28
+            packet.ReadInt32("MCounter"); // 44
+            packet.ReadInt32("Mount Display ID"); // 16
+            packet.ParseBitStream(guid48, 5);
+            packet.ReadSingle("Magnitude"); // 36
+            packet.ParseBitStream(guid48, 0, 7, 1, 3, 2);
+            packet.ReadInt32("unk32"); // 32
+            direction.X = packet.ReadSingle(); // 20
+
+            packet.AddValue("Direction", direction);
+            packet.WriteGuid("Guid", guid48);
         }
 
         [Parser(Opcode.SMSG_MOVE_FEATHER_FALL)]

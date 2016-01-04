@@ -286,35 +286,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk4");
         }
 
-        [Parser(Opcode.SMSG_UNK_1DBE)]
-        public static void HandleSUnk1DBE(Packet packet)
-        {
-            var guid48 = new byte[8];
-            guid48[2] = packet.ReadBit();
-            guid48[3] = packet.ReadBit();
-            packet.ReadBits("unk40", 2); // 40
-            guid48[7] = packet.ReadBit();
-            guid48[5] = packet.ReadBit();
-            guid48[0] = packet.ReadBit();
-            guid48[1] = packet.ReadBit();
-            guid48[6] = packet.ReadBit();
-            guid48[4] = packet.ReadBit();
-
-            packet.ParseBitStream(guid48, 6);
-            packet.ReadSingle("unk24"); // 24
-            packet.ParseBitStream(guid48, 4);
-            packet.ReadSingle("unk28"); // 28
-            packet.ReadInt32("unk44"); // 44
-            packet.ReadInt32("unk16"); // 16
-            packet.ParseBitStream(guid48, 5);
-            packet.ReadSingle("unk36"); // 36
-            packet.ParseBitStream(guid48, 0, 7, 1, 3, 2);
-            packet.ReadInt32("unk32"); // 32
-            packet.ReadSingle("unk20"); // 20
-
-            packet.WriteGuid("Guid", guid48);
-        }
-
         [Parser(Opcode.SMSG_CRITERIA_DELETED)]
         public static void HandleCriteriaDeleted(Packet packet)
         {
