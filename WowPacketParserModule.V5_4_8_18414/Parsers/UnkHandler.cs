@@ -195,20 +195,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("unk60"); // 60
         }
 
-        [Parser(Opcode.SMSG_UNK_0354)]
-        public static void HandleSUnk0354(Packet packet)
-        {
-            packet.ReadInt32("Unk");
-        }
-
-        [Parser(Opcode.SMSG_UNK_0364)]
-        public static void HandleSUnk0364(Packet packet)
-        {
-            var count = packet.ReadBits("Count", 22);
-            for (var i = 0; i < count; i++)
-                packet.ReadInt32Visible("Unk20", i);
-        }
-
         [Parser(Opcode.SMSG_UNK_0B81)]
         public static void HandleSUnk0B81(Packet packet)
         {

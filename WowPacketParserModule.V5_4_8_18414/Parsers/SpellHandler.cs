@@ -493,6 +493,49 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("unk24");
         }
 
+        [Parser(Opcode.SMSG_DISPEL_FAILED)]
+        public static void HandleDispelFailed(Packet packet)
+        {
+            var guid = new byte[8];
+            var guid2 = new byte[8];
+
+            guid2[5] = packet.ReadBit();
+            guid2[0] = packet.ReadBit();
+            guid2[4] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid2[7] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid2[3] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid2[6] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid2[1] = packet.ReadBit();
+            guid2[2] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            var count = packet.ReadBits("FailedSpellsCount", 22);
+            guid[2] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+
+            packet.ParseBitStream(guid2, 2);
+            packet.ParseBitStream(guid, 1);
+            packet.ParseBitStream(guid2, 5);
+            packet.ParseBitStream(guid, 2, 5, 3, 7);
+            packet.ParseBitStream(guid2, 4);
+            packet.ParseBitStream(guid, 4);
+            packet.ParseBitStream(guid2, 3, 0, 1);
+            packet.ParseBitStream(guid, 6, 0);
+            packet.ParseBitStream(guid2, 7, 6);
+
+            for (int i = 0; i < count; i++)
+                packet.ReadUInt32<SpellId>("FailedSpellID");
+
+            packet.ReadUInt32<SpellId>("SpellID");
+
+            packet.WriteGuid("Guid", guid);
+            packet.WriteGuid("Guid2", guid2);
+        }
+
         [Parser(Opcode.SMSG_SPELL_CHANNEL_START)]
         public static void HandleSpellChannelStart(Packet packet)
         {
@@ -1759,6 +1802,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("unk20", i);
                 packet.ReadByte("unk24", i);
             }
+        }
+
+        [Parser(Opcode.SMSG_WEEKLY_SPELL_USAGE_UPDATE)]
+        public static void HandleWeeklySpellUsageUpdate(Packet packet)
+        {
+            packet.ReadInt32("Category"); // 16
+            packet.ReadByte("Uses"); // 20
         }
 
         [Parser(Opcode.SMSG_UNK_0470)]

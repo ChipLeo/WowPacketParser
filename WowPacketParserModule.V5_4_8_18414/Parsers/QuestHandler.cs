@@ -137,6 +137,27 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_CLEAR_QUEST_COMPLETED_BIT)]
+        public static void HandleClearQuestCompletedBit(Packet packet)
+        {
+            packet.ReadInt32("QuestID");
+        }
+
+        [Parser(Opcode.SMSG_CLEAR_QUEST_COMPLETED_BITS)]
+        public static void HandleClearQuestCompletedBits(Packet packet)
+        {
+            var count = packet.ReadBits("Count", 22);
+            for (var i = 0; i < count; i++)
+                packet.ReadInt32Visible("QuestID", i);
+        }
+
+        [Parser(Opcode.SMSG_IS_QUEST_COMPLETE_RESPONSE)]
+        public static void HandleIsQuestCompleteResponse(Packet packet)
+        {
+            packet.ReadBit("Unk"); // 16
+            packet.ReadInt32<QuestId>("Quest ID"); // 20
+        }
+
         [Parser(Opcode.SMSG_QUEST_GIVER_QUEST_LIST_MESSAGE)]
         public static void HandleQuestgiverQuestList(Packet packet)
         {
@@ -176,6 +197,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadXORByte(guid, 4);
 
             packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_QUEST_UPDATE_ADD_PVP_CREDIT)]
+        public static void HandleQuestUpdateAddPvPCredit(Packet packet)
+        {
+            packet.ReadInt32<QuestId>("Quest ID"); // 16
+            packet.ReadInt16("Count"); // 20
         }
 
         [Parser(Opcode.SMSG_QUEST_UPDATE_ADD_KILL)]
@@ -791,6 +819,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid2", guid9160);
         }
 
+        [Parser(Opcode.SMSG_QUEST_GIVER_QUEST_FAILED)]
+        public static void HandleQuestFailed(Packet packet)
+        {
+            packet.ReadUInt32E<QuestReasonType>("Reason"); // 20
+            packet.ReadUInt32<QuestId>("Quest ID"); // 16
+        }
+
         [Parser(Opcode.SMSG_QUEST_GIVER_REQUEST_ITEMS)]
         public static void HandleQuestRequestItems(Packet packet)
         {
@@ -869,6 +904,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_QUEST_PUSH_RESULT)]
+        public static void HandleQuestPushResult(Packet packet)
+        {
+            var guid = packet.StartBitStream(3, 0, 1, 4, 7, 5, 6, 2);
+            packet.ParseBitStream(guid, 4);
+            packet.ReadByteE<QuestPartyResult>("Result"); // 24
+            packet.ParseBitStream(guid, 1, 5, 3, 7, 6, 2, 0);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_QUEST_UPDATE_COMPLETE)]
         public static void HandleQuestUpdateComplete(Packet packet)
         {
@@ -881,6 +926,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk16"); // 16
             packet.ReadInt32<QuestId>("Quest ID"); // 20
             packet.ReadByteE<QuestRequirementType>("Requirement Type"); // 24
+        }
+
+        [Parser(Opcode.SMSG_DAILY_QUESTS_RESET)]
+        [Parser(Opcode.SMSG_QUEST_FORCE_REMOVED)]
+        [Parser(Opcode.SMSG_QUEST_UPDATE_FAILED)]
+        [Parser(Opcode.SMSG_QUEST_UPDATE_FAILED_TIMER)]
+        [Parser(Opcode.SMSG_SET_QUEST_COMPLETED_BIT)]
+        public static void HandleSetQuestCompletedBit(Packet packet)
+        {
+            packet.ReadInt32("QuestID");
         }
 
         [Parser(Opcode.SMSG_QUEST_LOG_FULL)]
