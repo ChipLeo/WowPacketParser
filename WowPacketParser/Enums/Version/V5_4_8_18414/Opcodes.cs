@@ -574,6 +574,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_CHAT_RESTRICTED,                          0x1A3B}, //--
             {Opcode.SMSG_CHAT_SERVER_MESSAGE,                      0x0302}, //+-
             {Opcode.SMSG_CLEAR_ALL_SPELL_CHARGES,                  0x0C5B}, //++
+            {Opcode.SMSG_CLEAR_SPELL_CHARGES,                      0x00F2}, //+-
             {Opcode.SMSG_CLEAR_TARGET,                             0x1061}, //++
             {Opcode.SMSG_CLIENTCACHE_VERSION,                      0x002A}, //++
             {Opcode.SMSG_CONTROL_UPDATE,                           0x1043}, //++
@@ -679,6 +680,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_HEALTH_UPDATE,                            0x148B}, //++
             {Opcode.SMSG_HIGHEST_THREAT_UPDATE,                    0x14AE}, //++
             {Opcode.SMSG_HOTFIX_NOTIFY_BLOB,                       0x1EBA}, //--
+            {Opcode.SMSG_INCREASE_CAST_TIME_FOR_SPELL,             0x00F3}, //+-
             {Opcode.SMSG_INITIALIZE_FACTIONS,                      0x0AAA}, //++
             {Opcode.SMSG_INITIAL_SETUP,                            0x0A8B}, //++
             {Opcode.SMSG_INIT_WORLD_STATES,                        0x1560}, //--
@@ -1002,6 +1004,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0332,                                 0x0332}, //++
             {Opcode.SMSG_UNK_0354,                                 0x0354}, //++
             {Opcode.SMSG_UNK_0364,                                 0x0364}, //++
+            {Opcode.SMSG_UNK_0470,                                 0x0470}, //+- spell
             {Opcode.SMSG_UNK_0B81,                                 0x0B81}, //++ pair 02DA auction
             {Opcode.SMSG_UNK_0C44,                                 0x0C44}, //+-
             {Opcode.SMSG_UNK_0EAA,                                 0x0EAA}, //++

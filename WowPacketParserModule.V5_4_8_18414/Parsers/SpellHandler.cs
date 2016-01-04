@@ -571,6 +571,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_CLEAR_SPELL_CHARGES)]
+        public static void HandleclearSpellCharges(Packet packet)
+        {
+            var guid = packet.StartBitStream(6, 0, 2, 7, 5, 4, 3, 1);
+            packet.ParseBitStream(guid, 7, 6, 4);
+            packet.ReadInt32("Spell"); // 24
+            packet.ParseBitStream(guid, 1, 3, 2, 0, 5);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_COOLDOWN_EVENT)]
         public static void HandleCooldownEvent(Packet packet)
         {
@@ -586,6 +596,18 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             var guid = packet.StartBitStream(6, 3, 0, 7, 1, 2, 5, 4);
             packet.ParseBitStream(guid, 3, 6, 7, 5, 1, 4, 2, 0);
+            packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_INCREASE_CAST_TIME_FOR_SPELL)]
+        public static void HandleIncreaseCastTimeForSpell(Packet packet)
+        {
+            var guid = packet.StartBitStream(2, 6, 5, 0, 4, 3, 1, 7);
+            packet.ParseBitStream(guid, 1, 2, 6, 4);
+            packet.ReadInt32("Time"); // 28
+            packet.ParseBitStream(guid, 3);
+            packet.ReadInt32("Spell"); // 24
+            packet.ParseBitStream(guid, 0, 7, 5);
             packet.WriteGuid("Guid", guid);
         }
 
@@ -1737,6 +1759,18 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("unk20", i);
                 packet.ReadByte("unk24", i);
             }
+        }
+
+        [Parser(Opcode.SMSG_UNK_0470)]
+        public static void HandleUnk0470(Packet packet)
+        {
+            var guid = packet.StartBitStream(1, 4, 2, 5, 6, 7, 0, 3);
+            packet.ParseBitStream(guid, 2, 1, 5, 4, 0);
+            packet.ReadInt32("Spell"); // 24
+            packet.ParseBitStream(guid, 3, 6);
+            packet.ReadByte("unk"); // 28
+            packet.ParseBitStream(guid, 7);
+            packet.WriteGuid("Guid", guid);
         }
     }
 }
