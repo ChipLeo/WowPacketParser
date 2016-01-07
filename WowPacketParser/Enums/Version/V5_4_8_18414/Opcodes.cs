@@ -504,7 +504,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_AUCTION_LIST_BIDDER_ITEMS_RESULT,         0x0B24}, //++
             {Opcode.SMSG_AUCTION_LIST_RESULT,                      0x0982}, //++
             {Opcode.SMSG_AUCTION_OUTBID_NOTIFICATION,              0x1A9F}, //++
-            {Opcode.SMSG_AUCTION_OWNER_LIST_RESULT,                0x1785}, //++
             {Opcode.SMSG_AUCTION_OWNER_NOTIFICATION,               0x1A8E}, //+-
             {Opcode.SMSG_AURA_POINTS_DEPLETED,                     0x1553}, //++
             {Opcode.SMSG_AURA_UPDATE,                              0x0072}, //++
@@ -668,7 +667,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GOSSIP_COMPLETE,                          0x034E}, //+-
             {Opcode.SMSG_GOSSIP_MESSAGE,                           0x0244}, //--
             {Opcode.SMSG_GOSSIP_POI,                               0x0785}, //++
-            {Opcode.SMSG_GROUP_DECLINE,                            0x17A3}, //--
+            {Opcode.SMSG_GROUP_DECLINE,                            0x17A3}, //+-
             {Opcode.SMSG_GROUP_DESTROYED,                          0x1B27}, //--
             {Opcode.SMSG_GROUP_INVITE,                             0x0A8F}, //--
             {Opcode.SMSG_GROUP_LIST,                               0x0CBB}, //--
@@ -730,7 +729,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_ITEM_EXPIRE_PURCHASE_REFUND,              0x0E33}, //++
             {Opcode.SMSG_ITEM_PURCHASE_REFUND_RESULT,              0x049E}, //--
             {Opcode.SMSG_ITEM_PUSH_RESULT,                         0x0E0A}, //++
-            {Opcode.SMSG_ITEM_TEXT_QUERY_RESPONSE,                 0x1134}, //++ pair 0123
             {Opcode.SMSG_ITEM_TIME_UPDATE,                         0x18C1}, //+-
             {Opcode.SMSG_ITEM_UPGRADE_RESULT,                      0x0222}, //++
             {Opcode.SMSG_LEARNED_SPELL,                            0x129A}, //++
@@ -880,6 +878,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_QUERY_CREATURE_RESPONSE,                  0x048B}, //--
             {Opcode.SMSG_QUERY_GAME_OBJECT_RESPONSE,               0x06BF}, //++
             {Opcode.SMSG_QUERY_GUILD_INFO_RESPONSE,                0x1B79}, //++
+            {Opcode.SMSG_QUERY_ITEM_TEXT_RESPONSE,                 0x1134}, //++ pair 0123
             {Opcode.SMSG_QUERY_NEXT_MAIL_TIME,                     0x089B}, //++ pair 077B
             {Opcode.SMSG_QUERY_NPC_TEXT_RESPONSE,                  0x140A}, //+-
             {Opcode.SMSG_QUERY_PAGE_TEXT_RESPONSE,                 0x081E}, //+-
@@ -1056,8 +1055,10 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_0EAB,                                 0x0EAB}, //++
             {Opcode.SMSG_UNK_103E,                                 0x103E}, //++
             {Opcode.SMSG_UNK_10BA,                                 0x10BA}, //+-
+            {Opcode.SMSG_UNK_10D8,                                 0x10D8}, //+- spell
             {Opcode.SMSG_UNK_1206,                                 0x1206}, //++
             {Opcode.SMSG_UNK_142B,                                 0x142B}, //+-
+            {Opcode.SMSG_UNK_14D2,                                 0x14D2}, //+- spell
             {Opcode.SMSG_UNK_162A,                                 0x162A}, //++
             {Opcode.SMSG_UNK_188F,                                 0x188F}, //++
             {Opcode.SMSG_UNK_1904,                                 0x1904}, //++

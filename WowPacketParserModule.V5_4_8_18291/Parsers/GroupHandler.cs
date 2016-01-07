@@ -269,12 +269,6 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
             packet.ReadGuid("Player Guid"); // Usually 0
         }
 
-        [Parser(Opcode.SMSG_GROUP_DECLINE)]
-        public static void HandleGroupDecline(Packet packet)
-        {
-            packet.ReadCString("Player");
-        }
-
         [Parser(Opcode.SMSG_PARTY_MEMBER_STATS)]
         public static void HandlePartyMemberStats(Packet packet)
         {

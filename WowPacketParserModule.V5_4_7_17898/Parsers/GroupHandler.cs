@@ -239,12 +239,6 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.WriteGuid("crossRealmGuid", crossRealmGuid);
         }
 
-        [Parser(Opcode.SMSG_GROUP_DECLINE)]
-        public static void HandleGroupDecline(Packet packet)
-        {
-            packet.ReadCString();
-        }
-
         [Parser(Opcode.SMSG_GROUP_INVITE)]
         public static void HandleSmsgGroupInvite(Packet packet)
         {

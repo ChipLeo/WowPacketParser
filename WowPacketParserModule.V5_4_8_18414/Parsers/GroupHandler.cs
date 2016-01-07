@@ -152,12 +152,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Target", guid);
         }
 
-        [Parser(Opcode.SMSG_GROUP_DECLINE)]
-        public static void HandleGroupDecline(Packet packet)
-        {
-            packet.ReadCString("Player");
-        }
-
         [Parser(Opcode.SMSG_GROUP_INVITE)]
         public static void HandleSGroupInvite(Packet packet)
         {
@@ -411,16 +405,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid3", targetGuid);
         }
 
-        [Parser(Opcode.SMSG_PARTY_COMMAND_RESULT)]
-        public static void HandlePartyCommandResult(Packet packet)
-        {
-            packet.ReadUInt32E<PartyCommand>("Command");
-            packet.ReadCString("Member");
-            packet.ReadUInt32E<PartyResult>("Result");
-            packet.ReadUInt32("LFG Boot Cooldown");
-            packet.ReadGuid("Player Guid"); // Usually 0
-        }
-
         [Parser(Opcode.SMSG_PARTY_MEMBER_STATS)]
         public static void HandlePartyMemberStats(Packet packet)
         {
@@ -630,7 +614,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Target", guid2);
         }
 
-        [Parser(Opcode.SMSG_GROUP_DESTROYED)]
         [Parser(Opcode.SMSG_GROUP_UNINVITE)]
         [Parser(Opcode.CMSG_GROUP_DECLINE)]
         [Parser(Opcode.MSG_RAID_READY_CHECK_FINISHED)]
