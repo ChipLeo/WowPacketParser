@@ -491,6 +491,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_UNK_043A)]
+        [Parser(Opcode.SMSG_UNK_0E8E)]
+        [Parser(Opcode.SMSG_UNK_10BA)]
+        [Parser(Opcode.SMSG_UNK_142B)]
+        [Parser(Opcode.SMSG_UNK_1E3F)]
+        public static void HandleUnkBit(Packet packet)
+        {
+            packet.ReadBool("Result");
+        }
+
         [Parser(Opcode.CMSG_NULL_0060)]
         [Parser(Opcode.CMSG_NULL_0082)]
         [Parser(Opcode.CMSG_NULL_0141)]
@@ -522,7 +532,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_NULL_1F34)]
         [Parser(Opcode.CMSG_NULL_1F8E)]
         [Parser(Opcode.CMSG_NULL_1F9F)]
-        [Parser(Opcode.SMSG_NULL_0C59)]
         [Parser(Opcode.SMSG_NULL_0C9A)]
         [Parser(Opcode.SMSG_NULL_0E2B)]
         [Parser(Opcode.SMSG_NULL_0E8B)]

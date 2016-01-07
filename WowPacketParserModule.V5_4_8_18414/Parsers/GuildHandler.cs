@@ -101,6 +101,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_GUILD_CHANGE_NAME_RESULT)]
+        public static void HandleGuildChangeNameResult(Packet packet)
+        {
+            packet.ReadBool("Result");
+        }
+
         [Parser(Opcode.CMSG_GUILD_DECLINE_INVITATION)]
         public static void HandleGuildDecline(Packet packet)
         {
@@ -142,6 +148,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ParseBitStream(guid, 4, 5, 7, 1);
 
             packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_GUILD_FLAGGED_FOR_RENAME)]
+        public static void HandleGuildFlaggedForRename(Packet packet)
+        {
+            packet.ReadBool("Result");
         }
 
         [Parser(Opcode.CMSG_GUILD_GET_RANKS)]

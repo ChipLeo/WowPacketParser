@@ -30,6 +30,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32E<GMTicketSystemStatus>("System Status");
         }
 
+        [Parser(Opcode.SMSG_GM_TICKET_RESOLVE_RESPONSE)]
+        public static void HandleGMTicketResolveResponse(Packet packet)
+        {
+            packet.ReadBit("ShowSurvey");
+        }
+
         [Parser(Opcode.SMSG_GM_TICKET_SYSTEM_STATUS)]
         public static void HandleGMTicketSystemStatus(Packet packet)
         {

@@ -767,6 +767,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("unk24"); // 24
         }
 
+        [Parser(Opcode.SMSG_PET_CLEAR_SPELLS)]
+        public static void HandleSpellZero(Packet packet)
+        {
+        }
+
         [Parser(Opcode.SMSG_PLAY_SPELL_VISUAL)]
         public static void HandlePlaySpellVisual(Packet packet)
         {
@@ -1022,6 +1027,17 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("Cooldown"); // 24
                 packet.ReadInt32("Category Cooldown"); // 20
             }
+        }
+
+        [Parser(Opcode.SMSG_RESPEC_WIPE_CONFIRM)]
+        public static void HandleRespecWipeConfirm(Packet packet)
+        {
+            var guid = packet.StartBitStream(5, 7, 3, 2, 1, 0, 4, 6);
+            packet.ParseBitStream(guid, 1, 0);
+            packet.ReadSByte("RespecType");
+            packet.ParseBitStream(guid, 7, 3, 2, 5, 6, 4);
+            packet.ReadUInt32("Cost");
+            packet.WriteGuid("RespecMaster", guid);
         }
 
         [Parser(Opcode.SMSG_SPELL_COOLDOWN)]

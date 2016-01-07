@@ -12,5 +12,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("Voice Enabled");      // 16
             packet.ReadBit("Microphone Enabled"); // 17
         }
+
+        [Parser(Opcode.SMSG_VOICE_CHAT_STATUS)]
+        public static void HandleVoiceStatus(Packet packet)
+        {
+            packet.ReadBool("Status");
+        }
     }
 }

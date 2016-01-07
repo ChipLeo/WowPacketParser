@@ -509,6 +509,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_CHEAT_IGNORE_DIMISHING_RETURNS)]
+        public static void HandleCheatIgnoreDimishingReturns(Packet packet)
+        {
+            packet.ReadBool("Result");
+        }
+
         [Parser(Opcode.SMSG_CLIENTCACHE_VERSION)]
         public static void HandleClientCacheVersion(Packet packet)
         {
@@ -644,6 +650,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
             packet.ReadInt32("unk32");
             packet.ReadInt32("unk36");
+        }
+
+        [Parser(Opcode.SMSG_GOD_MODE)]
+        public static void HandlePetGodMode(Packet packet)
+        {
+            packet.ReadBool("GodMode");
         }
 
         [Parser(Opcode.SMSG_INITIAL_SETUP)]
@@ -1101,6 +1113,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var guid = packet.StartBitStream(7, 4, 2, 1, 3, 5, 6, 0);
             packet.ParseBitStream(guid, 7, 5, 1, 4, 6, 2, 0, 3);
             packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_SET_DF_FAST_LAUNCH_RESULT)]
+        public static void HandleSetDFFastLaunchresult(Packet packet)
+        {
+            packet.ReadBool("Result");
         }
 
         [Parser(Opcode.SMSG_SET_FACTION_AT_WAR)]

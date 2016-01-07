@@ -489,6 +489,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.AddValue("Position", point);
         }
 
+        [Parser(Opcode.SMSG_PET_GOD_MODE)]
+        public static void HandlePetGodMode(Packet packet)
+        {
+            packet.ReadBool("PetGodMode");
+        }
+
         [Parser(Opcode.SMSG_PET_GUIDS)]
         public static void HandlePetGuids(Packet packet)
         {
