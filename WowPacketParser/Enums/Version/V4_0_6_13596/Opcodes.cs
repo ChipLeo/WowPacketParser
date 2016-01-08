@@ -1103,7 +1103,7 @@ namespace WowPacketParser.Enums.Version.V4_0_6_13596
             {Opcode.SMSG_MAIL_COMMAND_RESULT, 0x0E5C0},
             //{Opcode.SMSG_SEND_QUEUED_PACKETS, 0x0E280},
             {Opcode.SMSG_SEND_UNLEARN_SPELLS, 0x0BDE8},
-            {Opcode.SMSG_SERVERTIME, 0x023A4},
+            {Opcode.SMSG_SERVER_TIME, 0x023A4},
             {Opcode.SMSG_SERVER_BUCK_DATA, 0x101AE}, //UnknownopcodeID
             {Opcode.SMSG_SERVER_BUCK_DATA_START, 0x101F9}, //UnknownopcodeID
             {Opcode.SMSG_SERVER_FIRST_ACHIEVEMENT, 0x068CC},

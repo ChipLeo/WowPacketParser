@@ -614,11 +614,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Target", guid2);
         }
 
-        [Parser(Opcode.SMSG_GROUP_UNINVITE)]
         [Parser(Opcode.CMSG_GROUP_DECLINE)]
-        [Parser(Opcode.MSG_RAID_READY_CHECK_FINISHED)]
         [Parser(Opcode.CMSG_REQUEST_RAID_INFO)]
         [Parser(Opcode.CMSG_GROUP_REQUEST_JOIN_UPDATES)]
+        [Parser(Opcode.SMSG_GROUP_ACTION_THROTTLED)]
+        [Parser(Opcode.SMSG_GROUP_UNINVITE)]
         public static void HandleGroupNull(Packet packet)
         {
         }

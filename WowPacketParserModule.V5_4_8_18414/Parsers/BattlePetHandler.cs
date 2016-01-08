@@ -459,7 +459,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_BATTLE_PETS_HEALED)]
         [Parser(Opcode.SMSG_BATTLE_PET_FINISHED)]
+        [Parser(Opcode.SMSG_BATTLE_PET_LICENSE_CHANGED)]
         public static void HandleBattlePetNull(Packet packet)
         {
         }

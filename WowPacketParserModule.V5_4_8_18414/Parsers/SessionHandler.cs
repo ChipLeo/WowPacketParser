@@ -113,10 +113,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_AUTH_CHALLENGE)]
         public static void HandleServerAuthChallenge(Packet packet)
         {
-            packet.ReadUInt32("Server Seed");
             for (uint i = 0; i < 8; ++i)
-                packet.ReadUInt32("DosChallenge", i);
-            packet.ReadByte("Unk Byte");        
+                packet.ReadUInt32("DosChallenge", i); // 16
+            packet.ReadByte("Unk Byte"); // 52
+            packet.ReadUInt32("Server Seed"); // 12
         }
 
         [Parser(Opcode.SMSG_AUTH_RESPONSE)]
@@ -323,6 +323,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             {
                 packet.ReadInt32("unk16"); // 16
             }
+        }
+
+        [Parser(Opcode.SMSG_WAIT_QUEUE_FINISH)]
+        public static void HandleZeroLengthPackets(Packet packet)
+        {
         }
 
         // This is not opcode. This is string:

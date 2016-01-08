@@ -662,7 +662,7 @@ namespace WowPacketParser.Enums.Version.V3_3_5a_12340
             {Opcode.SMSG_GAME_TIME_UPDATE, 0x43},
             {Opcode.SMSG_GAME_TIME_SET, 0x45},
             {Opcode.SMSG_GAME_SPEED_SET, 0x47},
-            {Opcode.SMSG_SERVERTIME, 0x49},
+            {Opcode.SMSG_SERVER_TIME, 0x49},
             {Opcode.SMSG_LOGOUT_RESPONSE, 0x4C},
             {Opcode.SMSG_LOGOUT_COMPLETE, 0x4D},
             {Opcode.SMSG_LOGOUT_CANCEL_ACK, 0x4F},

@@ -660,7 +660,7 @@ namespace WowPacketParser.Enums.Version.V4_2_2_14545
             {Opcode.SMSG_SELL_ITEM, 0x9CD3},
             {Opcode.SMSG_MAIL_COMMAND_RESULT, 0x8CC2},
             {Opcode.SMSG_SEND_UNLEARN_SPELLS, 0xCED2},
-            {Opcode.SMSG_SERVERTIME, 0x01CD7},
+            {Opcode.SMSG_SERVER_TIME, 0x01CD7},
             {Opcode.SMSG_SERVER_FIRST_ACHIEVEMENT, 0x0CDF},
             {Opcode.SMSG_CHAT_SERVER_MESSAGE, 0xC873},
             {Opcode.SMSG_SETUP_CURRENCY, 0x227E},

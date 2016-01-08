@@ -37,7 +37,7 @@ namespace WowPacketParserModule.V5_4_7_18019.Parsers
             packet.ReadPackedTime("New Time");
         }
 
-        [Parser(Opcode.SMSG_SERVERTIME)]
+        [Parser(Opcode.SMSG_SERVER_TIME)]
         public static void HandleServerTime(Packet packet)
         {
             packet.ReadPackedTime("Server game time");

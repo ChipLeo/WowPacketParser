@@ -768,6 +768,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.SMSG_PET_CLEAR_SPELLS)]
+        [Parser(Opcode.SMSG_FEIGN_DEATH_RESISTED)]
         public static void HandleSpellZero(Packet packet)
         {
         }

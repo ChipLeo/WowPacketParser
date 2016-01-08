@@ -46,5 +46,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadSingle("unk1");
             packet.ReadInt32("unk2");
         }
+
+        [Parser(Opcode.SMSG_PLAY_TIME_WARNING)]
+        [Parser(Opcode.SMSG_SERVER_TIME)]
+        public static void HandleServerTime(Packet packet)
+        {
+            packet.ReadPackedTime("Server game time");
+            packet.ReadUInt32("Server last tick");
+        }
     }
 }

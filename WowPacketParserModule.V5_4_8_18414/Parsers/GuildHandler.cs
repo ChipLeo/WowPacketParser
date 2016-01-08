@@ -904,6 +904,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_GUILD_EVENT_LOG_QUERY)]
         [Parser(Opcode.CMSG_GUILD_LEAVE)]
         [Parser(Opcode.CMSG_GUILD_REQUEST_CHALLENGE_UPDATE)]
+        [Parser(Opcode.SMSG_GUILD_EVENT_BANK_CONTENTS_CHANGED)]
+        [Parser(Opcode.SMSG_GUILD_EVENT_DISBANDED)]
+        [Parser(Opcode.SMSG_GUILD_EVENT_TAB_ADDED)]
+        [Parser(Opcode.SMSG_GUILD_EVENT_TAB_DELETED)]
+        [Parser(Opcode.SMSG_GUILD_EVENT_RANKS_UPDATED)]
         public static void HandleGuildNull(Packet packet)
         {
         }

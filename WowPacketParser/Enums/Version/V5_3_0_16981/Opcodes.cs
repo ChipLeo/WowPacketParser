@@ -306,7 +306,7 @@ namespace WowPacketParser.Enums.Version.V5_3_0_16981
             {Opcode.SMSG_RESUME_COMMS, 0x0321},
             {Opcode.SMSG_RESURRECT_REQUEST, 0x0FD0},
             {Opcode.SMSG_ROLE_POLL_BEGIN, 0x0CDC},
-            {Opcode.SMSG_SERVERTIME, 0x0789},
+            {Opcode.SMSG_SERVER_TIME, 0x0789},
             {Opcode.SMSG_SERVER_INFO_RESPONSE, 0x0ED4},
             {Opcode.SMSG_CHAT_SERVER_MESSAGE, 0x0DB7},
             {Opcode.SMSG_SETUP_CURRENCY, 0x1595},

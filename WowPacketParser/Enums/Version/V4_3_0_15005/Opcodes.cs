@@ -806,7 +806,7 @@ namespace WowPacketParser.Enums.Version.V4_3_0_15005
             {Opcode.SMSG_SELL_ITEM, 19458},
             {Opcode.SMSG_MAIL_COMMAND_RESULT, 3206},
             {Opcode.SMSG_SEND_UNLEARN_SPELLS, 18592},
-            {Opcode.SMSG_SERVERTIME, 9856},
+            {Opcode.SMSG_SERVER_TIME, 9856},
             {Opcode.SMSG_SERVER_FIRST_ACHIEVEMENT, 29700},
             {Opcode.SMSG_CHAT_SERVER_MESSAGE, 4228},
             {Opcode.SMSG_SERVER_PERF, 9784},

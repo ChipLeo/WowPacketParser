@@ -1090,7 +1090,7 @@ namespace WowPacketParser.Enums.Version.V4_3_4_15595
             {Opcode.SMSG_SELL_ITEM, 0x6105},
             {Opcode.SMSG_MAIL_COMMAND_RESULT, 0x4927},
             {Opcode.SMSG_SEND_UNLEARN_SPELLS, 0x4E25},
-            {Opcode.SMSG_SERVERTIME, 0x6327},
+            {Opcode.SMSG_SERVER_TIME, 0x6327},
             {Opcode.SMSG_SERVER_FIRST_ACHIEVEMENT, 0x6424},
             {Opcode.SMSG_SERVER_INFO_RESPONSE, 0x74B5},
             {Opcode.SMSG_CHAT_SERVER_MESSAGE, 0x6C04},

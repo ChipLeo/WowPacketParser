@@ -216,5 +216,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             packet.ReadUInt32<ZoneId>("Zone Id");
         }
+
+        [Parser(Opcode.SMSG_CHAT_DOWN)]
+        [Parser(Opcode.SMSG_CHAT_IGNORED_ACCOUNT_MUTED)]
+        [Parser(Opcode.SMSG_CHAT_IS_DOWN)]
+        [Parser(Opcode.SMSG_CHAT_RECONNECT)]
+        public static void HandleChatNull(Packet packet)
+        {
+        }
     }
 }

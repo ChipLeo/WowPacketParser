@@ -198,6 +198,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
         [Parser(Opcode.CMSG_RESET_INSTANCES)]
         [Parser(Opcode.SMSG_AREA_TRIGGER_NO_CORPSE)]
+        [Parser(Opcode.SMSG_DIFFERENT_INSTANCE_FROM_PARTY)]
+        [Parser(Opcode.SMSG_RESET_FAILED_NOTIFY)]
         [Parser(Opcode.SMSG_UPDATE_DUNGEON_ENCOUNTER_FOR_LOOT)]
         public static void HandleInstanceNull(Packet packet)
         {

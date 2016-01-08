@@ -188,21 +188,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
         }
 
-        [Parser(Opcode.MSG_BATTLEGROUND_PLAYER_POSITIONS)]
-        public static void HandleBattlegrounPlayerPositions(Packet packet)
-        {
-        }
-
-        [Parser(Opcode.MSG_INSPECT_ARENA_TEAMS)]
-        public static void HandleInspectArenaTeams(Packet packet)
-        {
-        }
-
-        [Parser(Opcode.MSG_PVP_LOG_DATA)]
-        public static void HandlePvPLogData(Packet packet)
-        {
-        }
-
         [Parser(Opcode.SMSG_AREA_SPIRIT_HEALER_TIME)]
         public static void HandleAreaSpiritHealerTime(Packet packet)
         {
@@ -291,11 +276,44 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_BATTLEFIELD_MGR_EJECTED)]
         public static void HandleBattlefieldMgrEjected(Packet packet)
         {
+            var guid = new byte[8];
+            guid[5] = packet.ReadBit();
+            packet.ReadBit("Relocated"); // 17
+            guid[4] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 0, 2, 3, 4, 6, 5);
+            packet.ReadByte("unk1"); // 32
+            packet.ReadByte("unk2"); // 16
+            packet.ParseBitStream(guid, 7, 1);
+
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_BATTLEFIELD_MGR_ENTERING)]
         public static void HandleBattlefieldMgrEntered(Packet packet)
         {
+            var guid = new byte[8];
+            guid[5] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            packet.ReadBit("unk2"); // 16
+            packet.ReadBit("unk"); // 17
+            guid[7] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            packet.ReadBit("unk1"); // 32
+            guid[1] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[6] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 2, 5, 0, 6, 7, 3, 4, 1);
+
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_BATTLEFIELD_MGR_ENTRY_INVITE)]
@@ -316,6 +334,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_BATTLEFIELD_MGR_STATE_CHANGED)]
         public static void HandleBattlefieldMgrStateChanged(Packet packet)
         {
+            var guid = packet.StartBitStream(6, 1, 3, 7, 4, 2, 5, 0);
+            packet.ParseBitStream(guid, 5, 2, 1, 6, 0);
+            packet.ReadUInt32E<BattlegroundStatus>("Status");
+            packet.ParseBitStream(guid, 3, 4, 7);
+
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_BATTLEFIELD_PLAYER_POSITIONS)]

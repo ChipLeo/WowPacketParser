@@ -1502,7 +1502,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_GET_TIMEZONE_INFORMATION)]
         [Parser(Opcode.CMSG_UI_TIME_REQUEST)]
         [Parser(Opcode.MSG_MOVE_WORLDPORT_ACK)]  //0
+        [Parser(Opcode.SMSG_BONUS_ROLL_EMPTY)]
+        [Parser(Opcode.SMSG_CLEAR_LOSS_OF_CONTROL)]
+        [Parser(Opcode.SMSG_FORCED_DEATH_UPDATE)]
+        [Parser(Opcode.SMSG_INVALID_PROMOTION_CODE)]
+        [Parser(Opcode.SMSG_NUKE_ALL_OBJECTS_DUE_TO_SEAMLESS_PORT)]
+        [Parser(Opcode.SMSG_REFRESH_COMPONENT)]
         [Parser(Opcode.SMSG_SHOW_NEUTRAL_PLAYER_FACTION_SELECT_UI)]
+        [Parser(Opcode.SMSG_SOR_START_EXPERIENCE_INCOMPLETE)]
         public static void HandleCNullMisc(Packet packet)
         {
         }

@@ -191,7 +191,7 @@ namespace WowPacketParser.Enums.Version.V4_1_0_13914
             {Opcode.SMSG_RWHOIS, 0x0AF7D}, // 4.1.0 13914
             {Opcode.SMSG_MAIL_COMMAND_RESULT, 0x02D2C}, // 4.1.0 13914
             {Opcode.SMSG_SEND_UNLEARN_SPELLS, 0x0F82E}, // 4.1.0 13914
-            {Opcode.SMSG_SERVERTIME, 0x0CF2D}, // 4.1.0 13914
+            {Opcode.SMSG_SERVER_TIME, 0x0CF2D}, // 4.1.0 13914
             {Opcode.SMSG_SERVER_FIRST_ACHIEVEMENT, 0x00E3E}, // 4.1.0 13914
             {Opcode.SMSG_CHAT_SERVER_MESSAGE, 0x04B2C}, // 4.1.0 13914
             {Opcode.SMSG_SET_FACTION_AT_WAR, 0x0283D}, // 4.1.0 13914

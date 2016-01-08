@@ -41,5 +41,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             packet.ReadInt32("Status");
         }
+
+        [Parser(Opcode.SMSG_GM_TICKET_RESPONSE_ERROR)]
+        public static void HandleGMTicketNull(Packet packet)
+        {
+        }
     }
 }

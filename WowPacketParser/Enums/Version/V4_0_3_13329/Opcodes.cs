@@ -1033,7 +1033,7 @@ namespace WowPacketParser.Enums.Version.V4_0_3_13329
             {Opcode.SMSG_SELL_ITEM, 0x2F7E}, // (0x2BB5)(0x01A1) //
             {Opcode.SMSG_MAIL_COMMAND_RESULT, 0x8B23}, // (0xE351)(0x0239) //
             {Opcode.SMSG_SEND_UNLEARN_SPELLS, 0x175E}, // (0xCB58)(0x041E) //
-            {Opcode.SMSG_SERVERTIME, 0xCE55}, // (0x8AD0)(0x0049) //
+            {Opcode.SMSG_SERVER_TIME, 0xCE55}, // (0x8AD0)(0x0049) //
             {Opcode.SMSG_SERVER_BUCK_DATA, 0x041D}, // NF()(0x041D) //
             {Opcode.SMSG_SERVER_BUCK_DATA_START, 0x04A3}, // NF()(0x04A3) // // not found
             {Opcode.SMSG_SERVER_FIRST_ACHIEVEMENT, 0xA92A}, // (0xCA10)(0x0498) //

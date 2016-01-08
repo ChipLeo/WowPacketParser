@@ -102,5 +102,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 }
             }
         }
+
+        [Parser(Opcode.SMSG_DONT_AUTO_PUSH_SPELLS_TO_ACTION_BAR)]
+        public static void HandleActionBarNull(Packet packet)
+        {
+        }
     }
 }

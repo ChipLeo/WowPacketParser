@@ -745,7 +745,7 @@ namespace WowPacketParser.Enums.Version.V4_2_0_14333
             {Opcode.SMSG_RWHOIS, 0xE63A},
             {Opcode.SMSG_MAIL_COMMAND_RESULT, 0xA6FE},
             {Opcode.SMSG_SEND_UNLEARN_SPELLS, 0xAAE2},
-            {Opcode.SMSG_SERVERTIME, 0x7236},
+            {Opcode.SMSG_SERVER_TIME, 0x7236},
             {Opcode.SMSG_SERVER_FIRST_ACHIEVEMENT, 0xEE7F},
             {Opcode.SMSG_CHAT_SERVER_MESSAGE, 0xE62F},
             {Opcode.SMSG_SETUP_CURRENCY, 0xC343},

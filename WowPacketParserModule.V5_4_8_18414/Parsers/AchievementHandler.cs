@@ -15,6 +15,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_ACHIEVEMENT_DELETED)]
+        public static void HandleAchievementDeleted(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadInt32("unk2");
+        }
+
         [Parser(Opcode.SMSG_ACHIEVEMENT_EARNED)]
         public static void HandleAchievementEarned(Packet packet)
         {
@@ -27,7 +34,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             guid1[5] = packet.ReadBit();
             guid1[0] = packet.ReadBit();
             guid1[3] = packet.ReadBit();
-            packet.ReadBit("unk");
+            packet.ReadBit("unk"); // 20
             guid2[7] = packet.ReadBit();
             guid1[7] = packet.ReadBit();
             guid1[1] = packet.ReadBit();
@@ -43,7 +50,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadXORByte(guid1, 3);
             packet.ReadXORByte(guid2, 6);
             packet.ReadXORByte(guid1, 6);
-            packet.ReadPackedTime("Time");
+            packet.ReadPackedTime("Time"); // 28
             packet.ReadXORByte(guid2, 1);
             packet.ReadXORByte(guid1, 2);
             packet.ReadXORByte(guid1, 0);
@@ -51,13 +58,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadXORByte(guid2, 3);
             packet.ReadXORByte(guid1, 4);
             packet.ReadXORByte(guid2, 7);
-            packet.ReadInt32("Achievement");
+            packet.ReadInt32("Achievement"); // 24
             packet.ReadXORByte(guid2, 4);
             packet.ReadXORByte(guid1, 1);
             packet.ReadXORByte(guid2, 0);
             packet.ReadXORByte(guid1, 5);
-            packet.ReadInt32("Realm Id");
-            packet.ReadInt32("Realm Id");
+            packet.ReadInt32("Realm Id"); // 80
+            packet.ReadInt32("Realm Id"); // 16
             packet.ReadXORByte(guid2, 2);
 
             packet.WriteGuid("Guid1", guid1);

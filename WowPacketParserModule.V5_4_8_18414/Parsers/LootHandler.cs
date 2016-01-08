@@ -121,6 +121,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_AE_LOOT_TARGET_ACK)]
+        [Parser(Opcode.SMSG_LOOT_RELEASE_ALL)]
+        public static void HandleLootZero(Packet packet)
+        {
+        }
+
         [Parser(Opcode.SMSG_LOOT_MONEY_NOTIFY)]
         public static void HandleLootMoneyNotify(Packet packet)
         {
