@@ -150,6 +150,18 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_GUILD_EVENT_TAB_TEXT_CHANGED)]
+        public static void HandleGuildEventTabTextChanged(Packet packet)
+        {
+            packet.ReadInt32("unk");
+        }
+
+        [Parser(Opcode.SMSG_GUILD_EVENT_RANK_CHANGED)]
+        public static void HandleGuildEventRankChanged(Packet packet)
+        {
+            packet.ReadInt32("RankID");
+        }
+
         [Parser(Opcode.SMSG_GUILD_FLAGGED_FOR_RENAME)]
         public static void HandleGuildFlaggedForRename(Packet packet)
         {
@@ -224,6 +236,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleGuildMotd(Packet packet)
         {
             packet.ReadWoWString("Motd", packet.ReadBits(10));
+        }
+
+        [Parser(Opcode.SMSG_GUILD_NEWS_DELETED)]
+        public static void HandleGuildNewsDeleted(Packet packet)
+        {
+            packet.ReadInt32("unk");
         }
 
         [Parser(Opcode.CMSG_GUILD_NEWS_UPDATE_STICKY)]
@@ -703,6 +721,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid120);
         }
 
+        [Parser(Opcode.SMSG_GUILD_REPUTATION_WEEKLY_CAP)]
+        public static void HandleGuildReputationWeeklyCap(Packet packet)
+        {
+            packet.ReadInt32("unk");
+        }
+
         [Parser(Opcode.SMSG_GUILD_ROSTER)] // sub_6A8B6B
         public static void HandleGuildRoster(Packet packet)
         {
@@ -893,7 +917,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_GUILD_INVITE)]
         [Parser(Opcode.SMSG_GUILD_NEWS_UPDATE)]
         [Parser(Opcode.SMSG_GUILD_SEND_RANK_CHANGE)]
-        [Parser(Opcode.SMSG_GUILD_REPUTATION_WEEKLY_CAP)]
         [Parser(Opcode.SMSG_GUILD_REWARD_LIST)]
         [Parser(Opcode.SMSG_PETITION_ALREADY_SIGNED)]
         [Parser(Opcode.SMSG_PETITION_QUERY_RESPONSE)]
@@ -903,7 +926,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_PETITION_SIGN_RESULTS)]
         public static void HandleGuild(Packet packet)
         {
-            packet.ReadToEnd();
         }
 
         [Parser(Opcode.CMSG_GUILD_DISBAND)]

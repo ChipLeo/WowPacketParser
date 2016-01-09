@@ -1086,7 +1086,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.SMSG_DISENCHANT_CREDIT)]
-        public static uint HandleDisenchantCredit(Packet packet)
+        public static void HandleDisenchantCredit(Packet packet)
         {
             var guid = packet.StartBitStream(0, 5, 7, 6, 1, 3, 2, 4);
             packet.ParseBitStream(guid, 5);
@@ -1100,7 +1100,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ParseBitStream(guid, 7, 6);
 
             packet.WriteGuid("Guid", guid);
-            return entry;
         }
 
         [Parser(Opcode.SMSG_SPELL_FAILED_OTHER)]

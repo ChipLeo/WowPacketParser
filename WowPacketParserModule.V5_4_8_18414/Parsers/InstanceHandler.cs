@@ -120,6 +120,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_INSTANCE_GROUP_SIZE_CHANGED)]
+        public static void HandleInstanceGroupSizeChanged(Packet packet)
+        {
+            packet.ReadUInt32("GroupSize");
+        }
+
         [Parser(Opcode.SMSG_INSTANCE_SAVE_CREATED)]
         public static void HandleInstanceSaveCreated(Packet packet)
         {

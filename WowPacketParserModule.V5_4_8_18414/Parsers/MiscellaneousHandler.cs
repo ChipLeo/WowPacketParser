@@ -194,6 +194,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_SCRIPT_CAST)]
+        public static void HandleScriptcast(Packet packet)
+        {
+            packet.ReadInt32("unk");
+        }
+
         [Parser(Opcode.CMSG_SET_PVP)]
         public static void HandleSetPVP(Packet packet)
         {

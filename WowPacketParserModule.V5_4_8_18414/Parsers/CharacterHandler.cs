@@ -585,6 +585,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.SMSG_TITLE_EARNED)]
+        [Parser(Opcode.SMSG_TITLE_LOST)]
         public static void HandleTitleEarned(Packet packet)
         {
             packet.ReadInt32("Title");

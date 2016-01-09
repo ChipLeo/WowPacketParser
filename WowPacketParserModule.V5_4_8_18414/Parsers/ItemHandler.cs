@@ -10,6 +10,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class ItemHandler
     {
+        [Parser(Opcode.SMSG_ADD_ITEM_PASSIVE)]
+        public static void HandleAddItemPassive(Packet packet)
+        {
+            packet.ReadInt32("unk");
+        }
+
         [Parser(Opcode.CMSG_AUTOBANK_ITEM)]
         public static void HandleAutoBankItem(Packet packet)
         {
