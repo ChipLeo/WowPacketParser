@@ -543,6 +543,59 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_BATTLEFIELD_STATUS_WAIT_FOR_GROUPS)]
         public static void HandleBattlefieldStatusWaitForGroups(Packet packet)
         {
+            var guid1 = new byte[8];
+            var guid2 = new byte[8];
+
+            guid2[0] = packet.ReadBit();//40
+            guid1[6] = packet.ReadBit();//22
+            packet.ReadBit("IsRated");//56
+            guid2[4] = packet.ReadBit();//44
+            guid2[5] = packet.ReadBit();//45
+            guid2[6] = packet.ReadBit();//46
+            guid1[2] = packet.ReadBit();//18
+            guid2[3] = packet.ReadBit();//43
+            guid2[1] = packet.ReadBit();//41
+            guid1[3] = packet.ReadBit();//19
+            guid1[4] = packet.ReadBit();//20
+            guid1[5] = packet.ReadBit();//21
+            guid1[1] = packet.ReadBit();//17
+            guid2[7] = packet.ReadBit();//47
+            guid2[2] = packet.ReadBit();//42
+            guid1[0] = packet.ReadBit();//16
+            guid1[7] = packet.ReadBit();//23
+            packet.ReadByte("Unk74"); //74
+
+            packet.ReadXORByte(guid2, 1);
+            packet.ReadXORByte(guid1, 5);
+            packet.ReadXORByte(guid1, 7);
+            packet.ReadUInt32("Unk64"); //64
+            packet.ReadUInt32("Unk32"); //32
+            packet.ReadXORByte(guid1, 1);
+            packet.ReadXORByte(guid2, 3);
+            packet.ReadXORByte(guid2, 2);
+            packet.ReadByte("Unk75"); // 75
+            packet.ReadXORByte(guid1, 4);
+            packet.ReadInt32("Unk52"); //52
+            packet.ReadXORByte(guid1, 6);
+            packet.ReadUInt32("Unk68"); //68
+            packet.ReadUInt32("Unk28"); //28
+            packet.ReadXORByte(guid2, 0);
+            packet.ReadXORByte(guid2, 5);
+            packet.ReadUInt32("unk24"); //24
+            packet.ReadXORByte(guid2, 6);
+            packet.ReadByte("Unk49"); // 49
+            packet.ReadByte("Unk48"); //48
+            packet.ReadXORByte(guid2, 7);
+            packet.ReadByte("Unk72"); //72
+            packet.ReadXORByte(guid2, 4);
+            packet.ReadXORByte(guid1, 2);
+            packet.ReadByte("Unk50"); //50
+            packet.ReadXORByte(guid1, 0);
+            packet.ReadByte("Unk73"); //73 result
+            packet.ReadXORByte(guid1, 3);
+
+            packet.WriteGuid("Player Guid", guid1);
+            packet.WriteGuid("BG Guid", guid2);
         }
 
         [Parser(Opcode.SMSG_BATTLEFIELD_STATUS_QUEUED)]

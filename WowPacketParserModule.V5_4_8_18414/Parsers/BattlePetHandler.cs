@@ -16,6 +16,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_BATTLE_PET_CAGE_DATE_ERROR)]
+        public static void HandleBattlePetCageDateError(Packet packet)
+        {
+            packet.ReadInt32("unk");
+        }
+
         [Parser(Opcode.CMSG_BATTLE_PET_INITIAL_UPDATE_RESPONSE)]
         public static void HandleBattlePetInitialUpdateResponse(Packet packet)
         {

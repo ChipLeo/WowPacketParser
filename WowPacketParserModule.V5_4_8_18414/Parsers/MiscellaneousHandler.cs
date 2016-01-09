@@ -373,6 +373,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("unk16");
         }
 
+        [Parser(Opcode.SMSG_CAMERA_SHAKE)]
+        public static void HandleCameraShake(Packet packet)
+        {
+            packet.ReadInt32("Int20"); // 20
+            packet.ReadInt32("Int16"); // 16
+        }
+
         [Parser(Opcode.SMSG_CANCEL_SCENE)]
         public static void HandleCancelScene(Packet packet)
         {

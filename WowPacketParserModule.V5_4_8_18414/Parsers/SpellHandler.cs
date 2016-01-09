@@ -42,6 +42,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
         }
 
+        [Parser(Opcode.SMSG_CANCEL_ORPHAN_SPELL_VISUAL)]
+        public static void HandleCancelOrphanSpellVisual(Packet packet)
+        {
+            packet.ReadInt32("SpellVisualID");
+        }
+
         [Parser(Opcode.CMSG_CAST_SPELL)]
         public static void HandleCastSpell(Packet packet)
         {
@@ -607,7 +613,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.SMSG_CLEAR_ALL_SPELL_CHARGES)]
-        public static void HandleclearAllSpellCharges(Packet packet)
+        public static void HandleClearAllSpellCharges(Packet packet)
         {
             var guid = packet.StartBitStream(0, 2, 5, 4, 3, 7, 6, 1);
             packet.ParseBitStream(guid, 6, 0, 1, 7, 3, 2, 5, 4);
@@ -1077,6 +1083,24 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("Delay");
             packet.ParseBitStream(guid, 4);
             packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_DISENCHANT_CREDIT)]
+        public static uint HandleDisenchantCredit(Packet packet)
+        {
+            var guid = packet.StartBitStream(0, 5, 7, 6, 1, 3, 2, 4);
+            packet.ParseBitStream(guid, 5);
+            packet.ReadInt32("Unk Int32"); // 28
+            packet.ParseBitStream(guid, 0, 4, 3, 1);
+            packet.ReadInt32("Unk Int32"); // 32
+            packet.ParseBitStream(guid, 2);
+
+            uint entry = packet.ReadUInt32<ItemId>("Item Entry"); // 24
+
+            packet.ParseBitStream(guid, 7, 6);
+
+            packet.WriteGuid("Guid", guid);
+            return entry;
         }
 
         [Parser(Opcode.SMSG_SPELL_FAILED_OTHER)]

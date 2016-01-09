@@ -20,6 +20,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadUInt16("Talent Id", i);
         }
 
+        [Parser(Opcode.SMSG_LEARN_TALENT_FAILED)]
+        public static void HandleLearnTalentFailed(Packet packet)
+        {
+            packet.ReadInt32("unk");
+        }
+
         [Parser(Opcode.CMSG_SET_PRIMARY_TALENT_TREE)]
         public static void HandleSetPrimaryTalentTreeSpec(Packet packet)
         {

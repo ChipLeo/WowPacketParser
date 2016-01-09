@@ -879,6 +879,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBitsE<PetitionResultType>("Result", 4);
         }
 
+        [Parser(Opcode.SMSG_PLAYER_SAVE_GUILD_EMBLEM)]
+        public static void HandlePlayerSaveGuildEmblem(Packet packet)
+        {
+            packet.ReadInt32E<GuildEmblemError>("Error");
+        }
+
         [Parser(Opcode.SMSG_GUILD_BANK_LOG_QUERY_RESULTS)]
         [Parser(Opcode.SMSG_GUILD_BANK_QUERY_RESULTS)]
         [Parser(Opcode.SMSG_GUILD_CHALLENGE_UPDATE)]

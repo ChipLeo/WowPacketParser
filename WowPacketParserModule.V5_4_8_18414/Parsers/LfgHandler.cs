@@ -457,5 +457,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ParseBitStream(guid, 5, 1, 4, 2, 7);
             packet.WriteGuid("Guid", guid);
         }
+
+        [Parser(Opcode.SMSG_SET_LFG_TIME_WALKER)]
+        public static void HandleSetLFGTimeWalker(Packet packet)
+        {
+            packet.ReadInt32("unk");
+        }
     }
 }

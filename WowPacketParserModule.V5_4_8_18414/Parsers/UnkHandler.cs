@@ -501,6 +501,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBool("Result");
         }
 
+        /*
+        S 021B
+
+            ReadInt32
+        */
+
         [Parser(Opcode.CMSG_NULL_0060)]
         [Parser(Opcode.CMSG_NULL_0082)]
         [Parser(Opcode.CMSG_NULL_0141)]

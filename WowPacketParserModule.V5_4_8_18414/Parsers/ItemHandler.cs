@@ -233,6 +233,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("NPC Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_REMOVE_ITEM_PASSIVE)]
+        public static void HandleRemoveItemPassive(Packet packet)
+        {
+            packet.ReadInt32("unk");
+        }
+
         [Parser(Opcode.CMSG_REPAIR_ITEM)]
         public static void HandleRepairItem(Packet packet)
         {
