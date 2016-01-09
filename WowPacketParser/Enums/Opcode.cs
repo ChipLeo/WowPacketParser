@@ -750,7 +750,6 @@ namespace WowPacketParser.Enums
         CMSG_NULL_1DC3,
         CMSG_NULL_1F34,
         CMSG_NULL_1F8E,
-        CMSG_NULL_1F9F,
         CMSG_OBJECT_UPDATE_FAILED,
         CMSG_OBJECT_UPDATE_RESCUED,
         CMSG_OFFER_PETITION,

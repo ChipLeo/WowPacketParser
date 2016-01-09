@@ -72,6 +72,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_BUY_BANK_SLOT,                            0x12F2}, //+-
             {Opcode.CMSG_BUY_ITEM,                                 0x02E2}, //++
             {Opcode.CMSG_CALENDAR_ADD_EVENT,                       0x0A37}, //+-
+            {Opcode.CMSG_CALENDAR_GET_CALENDAR,                    0x1F9F}, //+-
             {Opcode.CMSG_CALENDAR_EVENT_INVITE,                    0x1D8E}, //--
             {Opcode.CMSG_CANCEL_AURA,                              0x1861}, //++
             {Opcode.CMSG_CANCEL_AUTO_REPEAT_SPELL,                 0x1272}, //+- hunter pet opcode
@@ -306,7 +307,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_NULL_1DC3,                                0x1DC3}, //+-
             {Opcode.CMSG_NULL_1F34,                                0x1F34}, //+-
             {Opcode.CMSG_NULL_1F8E,                                0x1F8E}, //+-
-            {Opcode.CMSG_NULL_1F9F,                                0x1F9F}, //+-
             {Opcode.CMSG_OBJECT_UPDATE_FAILED,                     0x1061}, //+-
             {Opcode.CMSG_OFFER_PETITION,                           0x15BE}, //+-
             {Opcode.CMSG_OPENING_CINEMATIC,                        0x0130}, //+-
@@ -1114,7 +1114,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_VOICE_CHAT_STATUS,                        0x10E2}, //+-
             {Opcode.SMSG_VOID_ITEM_SWAP_RESPONSE,                  0x1EBF}, //--
             {Opcode.SMSG_VOID_STORAGE_CONTENTS,                    0x008B}, //--
-            {Opcode.SMSG_VOID_STORAGE_FAILED,                      0x1569}, //--
+            {Opcode.SMSG_VOID_STORAGE_FAILED,                      0x19C2}, //+-
             {Opcode.SMSG_VOID_STORAGE_TRANSFER_CHANGES,            0x14BA}, //--
             {Opcode.SMSG_VOID_TRANSFER_RESULT,                     0x1C9E}, //+-
             {Opcode.SMSG_WAIT_QUEUE_FINISH,                        0x060E}, //+-

@@ -531,7 +531,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_NULL_1DC3)]
         [Parser(Opcode.CMSG_NULL_1F34)]
         [Parser(Opcode.CMSG_NULL_1F8E)]
-        [Parser(Opcode.CMSG_NULL_1F9F)]
         [Parser(Opcode.SMSG_NULL_1313)]
         public static void HandleUnkNull(Packet packet)
         {
