@@ -8,6 +8,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class TicketHandler
     {
+        [Parser(Opcode.CMSG_GM_TICKET_ACKNOWLEDGE_SURVEY)]
+        public static void HandleGMTicketAcknowledgeSurvey(Packet packet)
+        {
+            packet.ReadInt32("unk");
+        }
+
         [Parser(Opcode.SMSG_GM_TICKET_GET_TICKET)]
         public static void HandleGMTicketGetTicket(Packet packet)
         {

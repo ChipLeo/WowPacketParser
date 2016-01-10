@@ -152,6 +152,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_GET_MIRROR_IMAGE_DATA,                    0x02A3}, //++
             {Opcode.CMSG_GET_PVP_OPTIONS_ENABLED,                  0x0A22}, //++
             {Opcode.CMSG_GET_TIMEZONE_INFORMATION,                 0x18B2}, //++
+            {Opcode.CMSG_GM_TICKET_ACKNOWLEDGE_SURVEY,             0x0AB6}, //++
             {Opcode.CMSG_GM_TICKET_CREATE,                         0x1A86}, //--
             {Opcode.CMSG_GM_TICKET_DELETE_TICKET,                  0x1A23}, //+-
             {Opcode.CMSG_GM_TICKET_GET_TICKET,                     0x1F89}, //++
@@ -282,7 +283,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_NULL_0141,                                0x0141}, //+-
             {Opcode.CMSG_NULL_01C0,                                0x01C0}, //+-
             {Opcode.CMSG_NULL_02D6,                                0x02D6}, //+-
-            {Opcode.CMSG_NULL_02DA,                                0x02DA}, //+-
+            {Opcode.CMSG_NULL_02DA,                                0x02DA}, //+- auction
             {Opcode.CMSG_NULL_033D,                                0x033D}, //+-
             {Opcode.CMSG_NULL_0360,                                0x0360}, //++
             {Opcode.CMSG_NULL_03C4,                                0x03C4}, //+-
@@ -443,7 +444,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_0264,                                 0x0264}, //+-
             {Opcode.CMSG_UNK_0265,                                 0x0265}, //+-
             {Opcode.CMSG_UNK_02C4,                                 0x02C4}, //+-
-            {Opcode.CMSG_UNK_0377,                                 0x0377}, //-- battle pet
+            {Opcode.CMSG_UNK_0377,                                 0x0377}, //-- battle pet pair 022F
             {Opcode.CMSG_UNK_03E4,                                 0x03E4}, //+-
             {Opcode.CMSG_UNK_0656,                                 0x0656}, //+-
             {Opcode.CMSG_UNK_06C5,                                 0x06C5}, //++ battle pet
@@ -508,6 +509,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_AUCTION_COMMAND_RESULT,                   0x1002}, //++
             {Opcode.SMSG_AUCTION_HELLO_RESPONSE,                   0x10A7}, //++
             {Opcode.SMSG_AUCTION_LIST_BIDDER_ITEMS_RESULT,         0x0B24}, //++
+            {Opcode.SMSG_AUCTION_LIST_OWNER_ITEMS_RESULT,          0x1785}, //++
             {Opcode.SMSG_AUCTION_LIST_RESULT,                      0x0982}, //++
             {Opcode.SMSG_AUCTION_OUTBID_NOTIFICATION,              0x1A9F}, //++
             {Opcode.SMSG_AUCTION_OWNER_BID_NOTIFICATION,           0x18AE}, //--
