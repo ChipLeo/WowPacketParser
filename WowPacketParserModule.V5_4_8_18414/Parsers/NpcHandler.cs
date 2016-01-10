@@ -241,7 +241,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             gossip.ObjectEntry = guidb.GetEntry();
 
             if (guidb.GetObjectType() == ObjectType.Unit)
-                if (Storage.Objects.ContainsKey(guidb))
+                if (!Storage.Objects.IsEmpty() && Storage.Objects.ContainsKey(guidb))
                     ((Unit)Storage.Objects[guidb].Item1).GossipId = menuId;
 
             gossipOptions.ForEach(g =>

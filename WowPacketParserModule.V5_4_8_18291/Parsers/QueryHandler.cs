@@ -154,14 +154,13 @@ namespace WowPacketParserModule.V5_4_8_18291.Parsers
             var type = packet.ReadUInt32E<DB2Hash>("DB2 File");
 
             var size = packet.ReadInt32("Size");
-            var data = packet.ReadBytes(size);
-            var db2File = new Packet(data, packet.Opcode, packet.Time, packet.Direction, packet.Number, packet.Writer, packet.FileName);
-
             if ((int)entry < 0)
             {
                 packet.WriteLine("Row {0} has been removed.", -(int)entry);
                 return;
             }
+            var data = packet.ReadBytes(size);
+            var db2File = new Packet(data, packet.Opcode, packet.Time, packet.Direction, packet.Number, packet.Writer, packet.FileName);
 
             switch (type)
             {

@@ -3671,7 +3671,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             var guidUnit = new WowGuid64(BitConverter.ToUInt64(guid3, 0));
 
-            if (Storage.Objects != null && Storage.Objects.ContainsKey(guidUnit))
+            if (!Storage.Objects.IsEmpty() && Storage.Objects.ContainsKey(guidUnit))
             {
                 var obj = Storage.Objects[guidUnit].Item1;
                 UpdateField uf;

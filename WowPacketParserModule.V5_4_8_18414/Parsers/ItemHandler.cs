@@ -713,7 +713,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 case DB2Hash.Item:
                     {
                         ItemTemplate key = new ItemTemplate { Entry = entry };
-                        ItemTemplate item = Storage.ItemTemplates.ContainsKey(key) ? Storage.ItemTemplates[key].Item1 : new ItemTemplate();
+                        ItemTemplate item = (!Storage.ItemTemplates.IsEmpty() && Storage.ItemTemplates.ContainsKey(key)) ? Storage.ItemTemplates[key].Item1 : new ItemTemplate();
 
                         db2File.ReadUInt32<ItemId>("Item Entry");
                         item.Class = db2File.ReadInt32E<ItemClass>("Class");
@@ -772,7 +772,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 case DB2Hash.Item_sparse:
                     {
                         ItemTemplate key = new ItemTemplate { Entry = entry };
-                        ItemTemplate item = Storage.ItemTemplates.ContainsKey(key)
+                        ItemTemplate item = (!Storage.ItemTemplates.IsEmpty() && Storage.ItemTemplates.ContainsKey(key))
                             ? Storage.ItemTemplates[key].Item1
                             : new ItemTemplate();
 
@@ -971,8 +971,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                         break;
                     }
             }
-
-            db2File.ClosePacket();
+            db2File.ClosePacket(false);
         }
 
         [Parser(Opcode.SMSG_ENCHANTMENT_LOG)]

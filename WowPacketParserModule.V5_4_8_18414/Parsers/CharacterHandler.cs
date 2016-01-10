@@ -375,7 +375,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 }
 
                 var playerInfo = new Player { Race = race, Class = klass, Name = name, FirstLogin = firstLogins[c], Level = level };
-                if (Storage.Objects.ContainsKey(playerGuid))
+                if (!Storage.Objects.IsEmpty() && Storage.Objects.ContainsKey(playerGuid))
                     Storage.Objects[playerGuid] = new Tuple<WoWObject, TimeSpan?>(playerInfo, packet.TimeSpan);
                 else
                     Storage.Objects.Add(playerGuid, playerInfo, packet.TimeSpan);

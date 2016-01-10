@@ -145,7 +145,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             // If this is the second time we see the same object (same guid,
             // same position) update its phasemask
-            if (Storage.Objects.ContainsKey(guid))
+            if (!Storage.Objects.IsEmpty() && Storage.Objects.ContainsKey(guid))
             {
                 var existObj = Storage.Objects[guid].Item1;
                 CoreParsers.UpdateHandler.ProcessExistingObject(ref existObj, obj, guid); // can't do "ref Storage.Objects[guid].Item1 directly
