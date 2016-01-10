@@ -304,5 +304,20 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                     packet.ReadInt32("unkInt32", i, j);
             }
         }
+
+        [Parser(Opcode.CMSG_BATTLE_PAY_DISTRIBUTION_ASSIGN_TO_TARGET)]
+        public static void HandleBattlePayDistributionAssignToTarget(Packet packet)
+        {
+            packet.ReadInt32("ClientToken");
+            packet.ReadInt64("DistributionID");
+            packet.ReadPackedGuid128("TargetCharacter");
+            packet.ReadInt32("ProductChoice");
+        }
+
+        [Parser(Opcode.SMSG_CHARACTER_UPGRADE_STARTED)]
+        public static void HandleCharacterUpgradeStarted(Packet packet)
+        {
+            packet.ReadPackedGuid128("CharacterGUID");
+        }
     }
 }
