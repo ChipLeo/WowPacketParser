@@ -198,7 +198,7 @@ namespace WowPacketParser.SQL
                                 else if (Nullable.GetUnderlyingType(elemType) != null) //is nullable
                                     arr.SetValue(Convert.ChangeType(values[i + j], Nullable.GetUnderlyingType(elemType)), j);
                                 else
-                                    arr.SetValue(Convert.ChangeType(values[i + j], elemType), j); 
+                                    arr.SetValue(Convert.ChangeType(values[i + j], elemType), j);
                             }
                             field.Item2.SetValue(instance, arr);
                         }
