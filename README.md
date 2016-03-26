@@ -19,5 +19,5 @@ Usage
 Nightly Builds
 --------------
 
-- **Debug 32/64 Bits**: [AppVeyor](https://ci.appveyor.com/project/ChipLeo/wowpacketparser) -> `Configuration: Debug` -> `ARTIFACTS` -> `WPP.zip`
-- **Release 32/64 Bits**: [AppVeyor](https://ci.appveyor.com/project/ChipLeo/wowpacketparser) -> `Configuration: Release` -> `ARTIFACTS` -> `WPP.zip`
+- [Debug 32/64 Bits](https://ci.appveyor.com/project/ChipLeo/wowpacketparser) -> `Configuration: Debug` -> `ARTIFACTS` -> `WPP.zip`
+- [Release 32/64 Bits](https://ci.appveyor.com/project/ChipLeo/wowpacketparser) -> `Configuration: Release` -> `ARTIFACTS` -> `WPP.zip`
