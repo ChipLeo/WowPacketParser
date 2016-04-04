@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using WowPacketParser.Enums;
 using WowPacketParser.Enums.Version;
@@ -127,6 +128,11 @@ namespace WowPacketParser.Misc
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_3_20726,  new DateTime(2015, 11, 17)),
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_3_20779,  new DateTime(2015, 12, 1)),
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_3_20886,  new DateTime(2016, 01, 5)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21336,  new DateTime(2016, 03, 22)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21343,  new DateTime(2016, 03, 22, 15, 03, 43)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21345,  new DateTime(2016, 03, 22, 17, 41, 51)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21348,  new DateTime(2016, 03, 23)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21355,  new DateTime(2016, 03, 26)),
         };
 
         private static ClientType _expansion;
@@ -256,6 +262,12 @@ namespace WowPacketParser.Misc
                     case ClientVersionBuild.V6_2_3_20726:
                     case ClientVersionBuild.V6_2_3_20779:
                     case ClientVersionBuild.V6_2_3_20886:
+                    case ClientVersionBuild.V6_2_4_21315:
+                    case ClientVersionBuild.V6_2_4_21336:
+                    case ClientVersionBuild.V6_2_4_21343:
+                    case ClientVersionBuild.V6_2_4_21345:
+                    case ClientVersionBuild.V6_2_4_21348:
+                    case ClientVersionBuild.V6_2_4_21355:
                         return ClientVersionBuild.V6_0_2_19033;
                     default:
                         return Build;
@@ -290,11 +302,7 @@ namespace WowPacketParser.Misc
             if (time < ClientBuilds[0].Value)
                 return ClientVersionBuild.Zero;
 
-            for (var i = 1; i < ClientBuilds.Length; i++)
-                if (ClientBuilds[i].Value >= time)
-                    return ClientBuilds[i - 1].Key;
-
-            return ClientBuilds[ClientBuilds.Length - 1].Key;
+            return ClientBuilds.Last(a => a.Value <= time).Key;
         }
 
         public static void SetVersion(ClientVersionBuild version)
@@ -330,6 +338,11 @@ namespace WowPacketParser.Misc
         public static void SetVersion(DateTime time)
         {
             SetVersion(GetVersion(time));
+        }
+
+        public static bool InVersion(ClientVersionBuild build1, ClientVersionBuild build2)
+        {
+            return AddedInVersion(build1) && RemovedInVersion(build2);
         }
 
         public static bool AddedInVersion(ClientVersionBuild build)

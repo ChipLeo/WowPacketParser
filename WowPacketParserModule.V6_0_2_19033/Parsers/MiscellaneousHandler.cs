@@ -217,8 +217,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("ScrollOfResurrectionMaxRequestsPerDay");
             packet.ReadInt32("CfgRealmID");
             packet.ReadInt32("CfgRealmRecID");
-            packet.ReadInt32("Int27");
-            packet.ReadInt32("TwitterMsTillCanPost");
+            packet.ReadInt32("TwitterPostThrottleLimit");
+            packet.ReadInt32("TwitterPostThrottleCooldown");
             packet.ReadInt32("TokenPollTimeSeconds");
             packet.ReadInt32E<ConsumableTokenRedeem>("TokenRedeemIndex");
 
@@ -632,7 +632,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadUInt32("InitialValue");
             packet.ReadUInt32("MaxValue");
             packet.ReadInt32("Scale");
-            packet.ReadUInt32("SpellId");
+            packet.ReadUInt32<SpellId>("SpellID");
             packet.ReadBit("Paused");
         }
 
@@ -655,7 +655,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             packet.ReadUInt32("ResurrectOffererVirtualRealmAddress");
             packet.ReadUInt32("PetNumber");
-            packet.ReadInt32("SpellID");
+            packet.ReadInt32<SpellId>("SpellID");
 
             var len = packet.ReadBits(6);
 
