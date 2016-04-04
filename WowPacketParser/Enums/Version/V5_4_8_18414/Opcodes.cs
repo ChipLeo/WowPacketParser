@@ -325,6 +325,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_PET_CAST_SPELL,                           0x044D}, //+-
             {Opcode.CMSG_PET_RENAME,                               0x0A32}, //+-
             {Opcode.CMSG_PET_SET_ACTION,                           0x12E9}, //+-
+            {Opcode.CMSG_PET_SPELL_AUTOCAST,                       0x06F0}, //--
             {Opcode.CMSG_PET_STOP_ATTACK,                          0x065B}, //--
             {Opcode.CMSG_PING,                                     0x0012}, //++
             {Opcode.CMSG_PLAYER_LOGIN,                             0x158F}, //++
@@ -385,6 +386,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_RESET_INSTANCES,                          0x0C69}, //+-
             {Opcode.CMSG_RESUME_TOKEN_ACK,                         0x0292}, //++ pair SMSG 18BA
             {Opcode.CMSG_RESURRECT_RESPONSE,                       0x0B0C}, //++
+            {Opcode.CMSG_ROLE_POLL_BEGIN,                          0x1882}, //--
             {Opcode.CMSG_SAVE_CUF_PROFILES,                        0x06E6}, //++
             {Opcode.CMSG_SAVE_EQUIPMENT_SET,                       0x0669}, //+-
             //{Opcode.CMSG_SELECT_FACTION,                           0x0027}, //
@@ -434,6 +436,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_TRANSMOGRIFY_ITEMS,                       0x06D7}, //+-
             {Opcode.CMSG_TURN_IN_PETITION,                         0x0673}, //+-
             {Opcode.CMSG_TUTORIAL_FLAG,                            0x1D36}, //++
+            {Opcode.CMSG_TUTORIAL_RESET,                           0x0307}, //--
             {Opcode.CMSG_UI_TIME_REQUEST,                          0x15AB}, //+-
             {Opcode.CMSG_UNACCEPT_TRADE,                           0x0023}, //++
             {Opcode.CMSG_UNK_0002,                                 0x0002}, //++
