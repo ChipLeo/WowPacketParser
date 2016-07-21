@@ -22,7 +22,7 @@ namespace WowPacketParser.Store.Objects
         public uint? MapID;
 
         [DBFieldName("AreaID")]
-        public uint? AreaID;
+        public int? AreaID;
 
         [DBFieldName("MapID")]
         public uint? Icon;

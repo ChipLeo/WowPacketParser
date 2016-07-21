@@ -888,16 +888,16 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                     areaPOI.Importance = db2File.ReadUInt32("Importance");
                     areaPOI.FactionID = db2File.ReadUInt32("FactionID");
                     areaPOI.MapID = db2File.ReadUInt32("MapID");
-                    areaPOI.AreaID = db2File.ReadUInt32("AreaID");
+                    areaPOI.AreaID = db2File.ReadInt32("AreaID");
                     areaPOI.Icon = db2File.ReadUInt32("Icon");
 
                     areaPOI.PositionX = db2File.ReadSingle("PositionX");
                     areaPOI.PositionY = db2File.ReadSingle("PositionY");
 
-                    ushort len1 = db2File.ReadUInt16();
+                    uint len1 = db2File.ReadUInt32();
                     areaPOI.Name = db2File.ReadWoWString("Name", len1);
 
-                    ushort len2 = db2File.ReadUInt16();
+                    uint len2 = db2File.ReadUInt32();
                     areaPOI.Description = db2File.ReadWoWString("Description", len2);
 
                     areaPOI.WorldStateID = db2File.ReadUInt32("WorldStateID");
@@ -1119,6 +1119,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                         Storage.PhaseXPhaseGroups.Add(phaseXPhaseGroup, packet.TimeSpan);
                     break;
                 }
+                case DB2Hash.QuestV2:
+                {
+                    db2File.ReadUInt32("QuestID");
+                    db2File.ReadUInt32("unk");
+                    break;
+                }
                 default:
                 {
                     db2File.AddValue("Unknown DB2 file type", string.Format("{0} (0x{0:x})", type));
@@ -1173,6 +1179,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 hotfixData.Timestamp = packet.ReadUInt32("Timestamp", i);
 
                 Storage.HotfixDataStore.Add(Tuple.Create(tableHash, recordID), hotfixData);
+                //Storage.HotfixDatas.Add(hotfixData, packet.TimeSpan);
             }
         }
 
