@@ -214,8 +214,6 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_TRAINER_LIST)]
         public static void HandleServerTrainerList(Packet packet)
         {
-            NpcTrainer npcTrainer = new NpcTrainer();
-
             uint entry = packet.ReadPackedGuid128("TrainerGUID").GetEntry();
 
             packet.ReadInt32("TrainerType");
@@ -239,12 +237,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
                 packet.ReadByteE<TrainerSpellState>("Usable", i);
                 trainer.ReqLevel = packet.ReadByte("ReqLevel", i);
+
+                Storage.NpcTrainers.Add(trainer, packet.TimeSpan);
             }
 
             uint bits56 = packet.ReadBits(11);
             packet.ReadWoWString("Greeting", bits56);
-
-            Storage.NpcTrainers.Add(npcTrainer, packet.TimeSpan);
         }
 
         [Parser(Opcode.CMSG_TRAINER_BUY_SPELL)]
