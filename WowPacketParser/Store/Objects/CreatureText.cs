@@ -1,4 +1,4 @@
-﻿using WowPacketParser.Enums;
+using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.SQL;
 
@@ -47,5 +47,8 @@ namespace WowPacketParser.Store.Objects
         public string SenderName;
         public WowGuid ReceiverGUID;
         public string ReceiverName;
+
+        [DBFieldName("VerifiedBuild")]
+        public int? VerifiedBuild = ClientVersion.BuildInt;
     }
 }

@@ -1,4 +1,5 @@
-﻿﻿using WowPacketParser.SQL;
+﻿using WowPacketParser.Misc;
+using WowPacketParser.SQL;
 
 namespace WowPacketParser.Store.Objects
 {
@@ -24,5 +25,8 @@ namespace WowPacketParser.Store.Objects
 
         [DBFieldName("summontimer")]
         public uint? SummonTimer;
+
+        [DBFieldName("VerifiedBuild")]
+        public int? VerifiedBuild = ClientVersion.BuildInt;
     }
 }

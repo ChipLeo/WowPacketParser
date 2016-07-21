@@ -1,4 +1,4 @@
-﻿using WowPacketParser.Misc;
+using WowPacketParser.Misc;
 using WowPacketParser.SQL;
 
 namespace WowPacketParser.Store.Objects
@@ -18,8 +18,11 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("user_type")]
         public uint? UserType;
 
-
         public WowGuid CasterGUID;
+
         public WowGuid TargetGUID;
+
+        [DBFieldName("VerifiedBuild")]
+        public int? VerifiedBuild = ClientVersion.BuildInt;
     }
 }
