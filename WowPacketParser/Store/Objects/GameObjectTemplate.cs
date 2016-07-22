@@ -16,13 +16,13 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("displayId")]
         public uint? DisplayID;
 
-        [DBFieldName("name", LocaleConstant.enUS)] // ToDo: Add locale support
+        [DBFieldName("name")]
         public string Name;
 
         [DBFieldName("IconName")]
         public string IconName;
 
-        [DBFieldName("castBarCaption", LocaleConstant.enUS)] // ToDo: Add locale support
+        [DBFieldName("castBarCaption")]
         public string CastCaption;
 
         [DBFieldName("unk1")]
@@ -45,8 +45,8 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("Data", TargetedDatabase.WarlordsOfDraenor, 33, true)]
         public int?[] Data;
 
-        [DBFieldName("unkInt32", TargetedDatabase.Cataclysm)]
-        public int? UnknownInt;
+        [DBFieldName("Expansion", TargetedDatabase.Cataclysm)]
+        public uint? Expansion;
 
         [DBFieldName("VerifiedBuild")]
         public int? VerifiedBuild = ClientVersion.BuildInt;

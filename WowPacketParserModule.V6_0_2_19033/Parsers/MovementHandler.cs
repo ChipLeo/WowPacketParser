@@ -464,8 +464,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadSingle("PitchRate");
         }
 
-        [Parser(Opcode.SMSG_MOVE_ENABLE_GRAVITY)]
         [Parser(Opcode.SMSG_MOVE_DISABLE_GRAVITY)]
+        [Parser(Opcode.SMSG_MOVE_DISABLE_TRANSITION_BETWEEN_SWIM_AND_FLY)]
+        [Parser(Opcode.SMSG_MOVE_ENABLE_GRAVITY)]
+        [Parser(Opcode.SMSG_MOVE_ENABLE_TRANSITION_BETWEEN_SWIM_AND_FLY)]
         [Parser(Opcode.SMSG_MOVE_SET_LAND_WALK)]
         [Parser(Opcode.SMSG_MOVE_ROOT)]
         [Parser(Opcode.SMSG_MOVE_SET_CAN_FLY)]

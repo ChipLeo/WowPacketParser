@@ -246,5 +246,11 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32<SpellId>("SpellID");
             packet.ReadByteE<PetFeedback>("Response");
         }
+
+        [Parser(Opcode.SMSG_PET_STABLE_RESULT)]
+        public static void HandlePetStableResult(Packet packet)
+        {
+            packet.ReadByte("Result");
+        }
     }
 }

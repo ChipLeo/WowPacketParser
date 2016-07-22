@@ -228,6 +228,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_AUTOBANK_ITEM)]
         [Parser(Opcode.CMSG_AUTO_EQUIP_ITEM)]
         [Parser(Opcode.CMSG_AUTOSTORE_BANK_ITEM)]
+        [Parser(Opcode.CMSG_AUTOSTORE_BANK_REAGENT)]
         [Parser(Opcode.CMSG_SWAP_INV_ITEM)]
         public static void HandleAutoItem(Packet packet)
         {

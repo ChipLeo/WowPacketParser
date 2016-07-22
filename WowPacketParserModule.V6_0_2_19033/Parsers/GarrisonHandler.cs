@@ -426,13 +426,13 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
         [Parser(Opcode.CMSG_CREATE_SHIPMENT, ClientVersionBuild.V6_0_2_19033, ClientVersionBuild.V6_1_0_19678)]
         [Parser(Opcode.CMSG_GET_SHIPMENT_INFO)]
-        [Parser(Opcode.CMSG_OPEN_MISSION_NPC)]
         [Parser(Opcode.CMSG_GARRISON_REQUEST_SHIPMENT_INFO)]
         public static void HandleGarrisonNpcGUID(Packet packet)
         {
             packet.ReadPackedGuid128("NpcGUID");
         }
 
+        [Parser(Opcode.CMSG_OPEN_MISSION_NPC)]
         [Parser(Opcode.CMSG_CREATE_SHIPMENT, ClientVersionBuild.V6_1_0_19678)]
         public static void HandleCreateShipment61x(Packet packet)
         {

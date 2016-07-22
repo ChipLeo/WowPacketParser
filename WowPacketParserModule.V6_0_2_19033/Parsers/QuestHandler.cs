@@ -336,6 +336,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                     QuestObjectivesLocale localesQuestObjectives = new QuestObjectivesLocale
                     {
                         ID = (uint)objectiveId.Key,
+                        Locale = BinaryPacketReader.GetClientLocale(),
                         QuestId = (uint)id.Key,
                         StorageIndex = questInfoObjective.StorageIndex,
                         Description = questInfoObjective.Description

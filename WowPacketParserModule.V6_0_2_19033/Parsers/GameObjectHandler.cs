@@ -60,7 +60,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             for (int i = 0; i < length; i++)
                 gameObject.QuestItems[i] = (uint)packet.ReadInt32<ItemId>("Quest Item", i);
 
-            packet.ReadUInt32E<ClientType>("Expansion");
+            gameObject.Expansion = (uint)packet.ReadUInt32E<ClientType>("Expansion");
 
             Storage.GameObjectTemplates.Add(gameObject, packet.TimeSpan);
 
