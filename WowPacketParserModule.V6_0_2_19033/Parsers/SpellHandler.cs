@@ -999,6 +999,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadPackedGuid128("Caster");
             packet.ReadPackedGuid128("DestTransport");
             packet.ReadInt32<SpellId>("SpellID");
+            packet.ReadInt32("unk");
             packet.ReadVector3("SourceLoc");
             packet.ReadVector3("DestLoc");
             packet.ReadSingle("MissileTrajectoryPitch");

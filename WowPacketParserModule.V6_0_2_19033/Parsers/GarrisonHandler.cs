@@ -13,8 +13,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("MissionRecID", indexes);
 
             packet.ReadTime("OfferTime", indexes);
-            packet.ReadUInt32("OfferDuration", indexes);
             packet.ReadTime("StartTime", indexes);
+            packet.ReadUInt32("OfferDuration", indexes);
             packet.ReadUInt32("TravelDuration", indexes);
             packet.ReadUInt32("MissionDuration", indexes);
 
@@ -204,9 +204,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_GARRISON_ADD_MISSION_RESULT)]
         public static void HandleGarrisonAddMissionResult(Packet packet)
         {
-            ReadGarrisonMission(packet);
-
             packet.ReadInt32("Result");
+            packet.ReadByte("unk");
+            ReadGarrisonMission(packet);
+            packet.ReadBit("unkbit");
         }
 
         [Parser(Opcode.SMSG_GARRISON_UPGRADE_RESULT)]
