@@ -108,6 +108,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadUInt32("MissionRecID");
         }
 
+        [Parser(Opcode.SMSG_GARRISON_CLEAR_ALL_FOLLOWERS_EXHAUSTION)]
+        public static void HandleGarrisonClearAllFollowersExhaustion(Packet packet)
+        {
+            packet.ReadInt32("unk");
+        }
+
         [Parser(Opcode.SMSG_GARRISON_MISSION_BONUS_ROLL_RESULT)]
         public static void HandleGarrisonMissionBonusRollResult(Packet packet)
         {
@@ -706,6 +712,29 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt64("FollowerDBID");
             packet.ReadInt32("Result");
             packet.ReadInt32("Destroyed");
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_UNK4)]
+        public static void HandleGarrisonUnk4(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadInt32("unk2");
+            packet.ReadInt32("unk3");
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_UNK5)]
+        public static void HandleGarrisonUnk5(Packet packet)
+        {
+            packet.ReadInt32("CurrentBuildingID");
+            ReadGarrisonMission(packet);
+            packet.ReadInt32("CurrentMissionID");
+            var count = packet.ReadInt32("Count");
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadInt64("DbID", i);
+                packet.ReadInt32("unk5", i);
+            }
+            packet.ReadBit("unk3");
         }
     }
 }

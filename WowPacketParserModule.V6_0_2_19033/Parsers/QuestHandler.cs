@@ -940,5 +940,17 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             var len = packet.ReadBits(10);
             packet.ReadWoWString("QuestTitle", len);
         }
+
+        [Parser(Opcode.SMSG_QUEST_UNK1)]
+        public static void HandleQuestUnk1(Packet packet)
+        {
+            var count = packet.ReadInt32("Count");
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadInt32("unk1", i);
+                packet.ReadInt32("ObjectID", i);
+                packet.ReadBit("unk3", i);
+            }
+        }
     }
 }
