@@ -196,12 +196,24 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             {
                 packet.ReadInt32("MissionRecID", i);
                 packet.ReadInt64("FollowerDBID", i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_4_21742))
+                    packet.ReadInt64("unk3", i);
                 packet.ReadInt32("Unk1", i);
                 packet.ReadInt32("Unk2", i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_4_21742))
+                    packet.ReadInt32("unk4", i);
             }
         }
 
-        [Parser(Opcode.SMSG_GARRISON_ADD_MISSION_RESULT)]
+        [Parser(Opcode.SMSG_GARRISON_ADD_MISSION_RESULT, ClientVersionBuild.Zero, ClientVersionBuild.V6_2_4_21676)]
+        public static void HandleGarrisonAddMissionResultOld(Packet packet)
+        {
+            ReadGarrisonMission(packet);
+
+            packet.ReadInt32("Result");
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_ADD_MISSION_RESULT, ClientVersionBuild.V6_2_4_21742)]
         public static void HandleGarrisonAddMissionResult(Packet packet)
         {
             packet.ReadInt32("Result");
@@ -400,6 +412,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void HandleGarrisonUnk2(Packet packet)
         {
             packet.ReadInt32("Result");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_4_21742))
+                packet.ReadInt32("unk");
             ReadGarrisonFollower(packet);
             ReadGarrisonFollower(packet);
         }
@@ -411,6 +425,18 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             ReadGarrisonMission(packet);
             packet.ReadInt32("MissionRecID");
             packet.ReadBit("Succeeded");
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_MISSION_UPDATE_CAN_START)]
+        public static void HandleGarrisonMissionUpdateCanStart(Packet packet)
+        {
+            var count1 = packet.ReadInt32("Count1");
+            var count2 = packet.ReadInt32("Count2");
+
+            for (var i = 0; i < count1; i++)
+                packet.ReadInt32("MissionRecID", i);
+            for (var i = 0; i < count2; i++)
+                packet.ReadBit("CanStart", i);
         }
 
         [Parser(Opcode.SMSG_GARRISON_UNK3)] // GARRISON_MISSION_NPC_OPENED / GARRISON_MISSION_LIST_UPDATE

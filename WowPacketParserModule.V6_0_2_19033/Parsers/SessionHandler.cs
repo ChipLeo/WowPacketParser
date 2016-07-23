@@ -13,6 +13,13 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadSingle("FarClip", idx);
         }
 
+        [Parser(Opcode.CMSG_BATTLENET_REQUEST_REALM_LIST_TICKET)]
+        public static void HandleBattleNetRequestRealmListTicket(Packet packet)
+        {
+            packet.ReadUInt32("unk");
+            packet.ReadBytesTable("Data", 32);
+        }
+
         [Parser(Opcode.SMSG_AUTH_RESPONSE)]
         public static void HandleAuthResponse(Packet packet)
         {
@@ -398,6 +405,15 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             int protoSize = packet.ReadInt32();
             packet.ReadBytesTable("Data", protoSize);
+        }
+
+        [Parser(Opcode.SMSG_BATTLENET_REALM_LIST_TICKET)]
+        public static void HandleBattlenetRealmListTicket(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadBit("unk2");
+            var count = packet.ReadInt32("Count");
+            packet.ReadBytesTable("Data", count);
         }
 
         [Parser(Opcode.SMSG_BATTLENET_RESPONSE)]

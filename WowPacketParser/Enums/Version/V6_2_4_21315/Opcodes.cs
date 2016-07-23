@@ -693,6 +693,7 @@ namespace WowPacketParser.Enums.Version.V6_2_4_21315
             {Opcode.CMSG_WORLD_PORT_RESPONSE, 0x3578},
             {Opcode.CMSG_WORLD_TELEPORT, 0x3562},
             {Opcode.CMSG_WRAP_ITEM, 0x3912},
+            {Opcode.CMSG_UNK_34AF, 0x34AF},
         };
 
         private static readonly BiDictionary<Opcode, int> ServerOpcodes = new BiDictionary<Opcode, int>
@@ -750,6 +751,7 @@ namespace WowPacketParser.Enums.Version.V6_2_4_21315
             {Opcode.SMSG_BAN_REASON, 0x2633},
             {Opcode.SMSG_BARBER_SHOP_RESULT, 0x266B},
             {Opcode.SMSG_BATTLEFIELD_LIST, 0x2511},
+            {Opcode.SMSG_BATTLEFIELD_MGR_EJECTED, 0x251D},
             {Opcode.SMSG_BATTLEFIELD_PORT_DENIED, 0x2517},
             {Opcode.SMSG_BATTLEFIELD_STATUS_ACTIVE, 0x250D},
             {Opcode.SMSG_BATTLEFIELD_STATUS_FAILED, 0x2510},
@@ -794,7 +796,6 @@ namespace WowPacketParser.Enums.Version.V6_2_4_21315
             {Opcode.SMSG_BATTLE_PET_UPDATES, 0x2583},
             {Opcode.SMSG_BF_MGR_DROP_TIMER_CANCELLED, 0x251F},
             {Opcode.SMSG_BF_MGR_DROP_TIMER_STARTED, 0x251E},
-            {Opcode.SMSG_BF_MGR_EJECTED, 0x251D},
             {Opcode.SMSG_BF_MGR_EJECT_PENDING, 0x251C},
             {Opcode.SMSG_BF_MGR_ENTERING, 0x2519},
             {Opcode.SMSG_BF_MGR_ENTRY_INVITE, 0x2518},
@@ -1013,6 +1014,7 @@ namespace WowPacketParser.Enums.Version.V6_2_4_21315
             {Opcode.SMSG_GARRISON_REMOVE_FOLLOWER_RESULT, 0x287D},
             {Opcode.SMSG_GARRISON_REQUEST_BLUEPRINT_AND_SPECIALIZATION_DATA_RESULT, 0x2877},
             {Opcode.SMSG_GARRISON_START_MISSION_RESULT, 0x2880},
+            {Opcode.SMSG_GARRISON_UNK3, 0x2886},
             {Opcode.SMSG_GARRISON_UNLEARN_BLUEPRINT_RESULT, 0x2876},
             {Opcode.SMSG_GARRISON_UPGRADE_RESULT, 0x287B},
             {Opcode.SMSG_GENERATE_RANDOM_CHARACTER_NAME_RESULT, 0x2501},
@@ -1618,6 +1620,13 @@ namespace WowPacketParser.Enums.Version.V6_2_4_21315
             {Opcode.SMSG_ZONE_UNDER_ATTACK, 0x2B38},
             {Opcode.SMSG_COMPRESSED_PACKET, 0x2FCF},
             {Opcode.SMSG_MULTIPLE_PACKETS, 0x2FCE},
+            {Opcode.SMSG_UNK_CLIENT_254C, 0x254C},
+            {Opcode.SMSG_UNK_CLIENT_25C0, 0x25C0},
+            {Opcode.SMSG_UNK_CLIENT_277E, 0x277E},
+            {Opcode.SMSG_UNK_CLIENT_2785, 0x2785},
+            {Opcode.SMSG_UNK_CLIENT_2791, 0x2791},
+            {Opcode.SMSG_UNK_CLIENT_279C, 0x279C},
+            {Opcode.SMSG_TOKEN_UNK1, 0x278C},
         };
 
         private static readonly BiDictionary<Opcode, int> MiscOpcodes = new BiDictionary<Opcode, int>();

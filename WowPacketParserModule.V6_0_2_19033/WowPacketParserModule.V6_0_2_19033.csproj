@@ -69,7 +69,6 @@
     <Compile Include="Parsers\AreaTriggerHandler.cs" />
     <Compile Include="Parsers\AuctionHandler.cs" />
     <Compile Include="Parsers\BattlegroundHandler.cs" />
-    <Compile Include="Parsers\BattleNetHandler.cs" />
     <Compile Include="Parsers\BattlePetHandler.cs" />
     <Compile Include="Parsers\BattlePayHandler.cs" />
     <Compile Include="Parsers\BlackMarketHandler.cs" />
