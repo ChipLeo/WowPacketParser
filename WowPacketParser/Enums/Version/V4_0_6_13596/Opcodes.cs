@@ -543,7 +543,6 @@ namespace WowPacketParser.Enums.Version.V4_0_6_13596
             {Opcode.CMSG_STABLE_CHANGE_SLOT, 0x00291},
             {Opcode.CMSG_STABLE_REVIVE_PET, 0x100C7}, //UnknownopcodeID
             {Opcode.CMSG_STAND_STATE_CHANGE, 0x0FC88},
-            //{Opcode.CMSG_START_QUEST, 0x00613},
             {Opcode.CMSG_STOP_DANCE, 0x03080},
             {Opcode.CMSG_STORE_LOOT_IN_SLOT, 0x07FCC},
             {Opcode.CMSG_SUMMON_RESPONSE, 0x06BA0},
