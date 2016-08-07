@@ -1504,13 +1504,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk");
         }
 
-        [Parser(Opcode.CMSG_UNK_03E4)]
-        public static void HandleUnk03E4(Packet packet)
-        {
-            packet.ReadInt32("unk1");
-            packet.ReadInt32("unk2");
-        }
-
         [Parser(Opcode.CMSG_ATTACK_STOP)]
         [Parser(Opcode.CMSG_GET_TIMEZONE_INFORMATION)]
         [Parser(Opcode.CMSG_UI_TIME_REQUEST)]

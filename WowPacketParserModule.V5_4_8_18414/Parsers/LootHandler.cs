@@ -134,6 +134,40 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("Money");
         }
 
+
+        [Parser(Opcode.SMSG_LOOT_START_ROLL)]
+        public static void HandleLootStartRoll(Packet packet)
+        {
+            var guid = new byte[8];
+            var unk64 = packet.ReadBits("unk64", 3); // 64
+            var unk57 = !packet.ReadBit("!unk57"); // 57
+            var unk68 = packet.ReadBit("unk68"); // 68
+            guid = packet.StartBitStream(3, 1, 7, 6, 2, 4, 5, 0);
+            var unk56 = !packet.ReadBit("!unk56"); // 56
+            var unk60 = packet.ReadBits("unk60", 2); // 60
+            packet.ParseBitStream(guid, 7);
+            packet.ReadInt32("unk52"); // 52
+            packet.ParseBitStream(guid, 5);
+            packet.ReadInt32("unk24"); // 24
+            packet.ReadInt32("Suffix factor"); // 48
+            if (unk57)
+                packet.ReadByte("unk57");
+            packet.ParseBitStream(guid, 4, 0, 3, 2);
+            packet.ReadBytes("unk", packet.ReadInt32());
+            packet.ReadInt32("Item"); // 36
+            packet.ReadByte("unk29"); // 29
+            packet.ReadInt32("unk44"); // 44
+            packet.ReadByte("unk28"); // 28
+            packet.ReadInt32("unk32"); // 32
+            if (unk56)
+                packet.ReadByte("unk56");
+            packet.ParseBitStream(guid, 6);
+            packet.ReadInt32("unk40"); // 40
+            packet.ParseBitStream(guid, 1);
+
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_LOOT_RELEASE)]
         public static void HandleSLootRelease(Packet packet)
         {

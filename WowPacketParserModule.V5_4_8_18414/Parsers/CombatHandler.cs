@@ -17,12 +17,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_TOGGLE_PVP)]
-        public static void HandleTogglePvp(Packet packet)
-        {
-            packet.ReadBit("Value");
-        }
-
         [Parser(Opcode.SMSG_AI_REACTION)]
         public static void HandleAIReaction(Packet packet)
         {
