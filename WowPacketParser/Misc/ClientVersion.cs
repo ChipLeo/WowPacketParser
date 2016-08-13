@@ -149,6 +149,23 @@ namespace WowPacketParser.Misc
             {
                 switch (Build)
                 {
+                    case ClientVersionBuild.V1_12_1_5875:
+                    case ClientVersionBuild.V2_0_1_6180:
+                    case ClientVersionBuild.V2_0_3_6299:
+                    case ClientVersionBuild.V2_0_6_6337:
+                    case ClientVersionBuild.V2_1_0_6692:
+                    case ClientVersionBuild.V2_1_1_6739:
+                    case ClientVersionBuild.V2_1_2_6803:
+                    case ClientVersionBuild.V2_1_3_6898:
+                    case ClientVersionBuild.V2_2_0_7272:
+                    case ClientVersionBuild.V2_2_2_7318:
+                    case ClientVersionBuild.V2_2_3_7359:
+                    case ClientVersionBuild.V2_3_0_7561:
+                    case ClientVersionBuild.V2_3_2_7741:
+                    case ClientVersionBuild.V2_3_3_7799:
+                    case ClientVersionBuild.V2_4_0_8089:
+                    case ClientVersionBuild.V2_4_1_8125:
+                    case ClientVersionBuild.V2_4_2_8209:
                     case ClientVersionBuild.V2_4_3_8606:
                     case ClientVersionBuild.V3_0_2_9056:
                     case ClientVersionBuild.V3_0_3_9183:
@@ -275,8 +292,31 @@ namespace WowPacketParser.Misc
                     case ClientVersionBuild.V6_2_4_21676:
                     case ClientVersionBuild.V6_2_4_21742:
                         return ClientVersionBuild.V6_0_2_19033;
-                    default:
+                    case ClientVersionBuild.V7_0_3_22248:
+                    case ClientVersionBuild.V7_0_3_22280:                    
+                    case ClientVersionBuild.V7_0_3_22289:
+                    case ClientVersionBuild.V7_0_3_22293:
+                    case ClientVersionBuild.V7_0_3_22345:
+                        return ClientVersionBuild.V7_0_3_22248;
+                    case ClientVersionBuild.Zero:
+                    case ClientVersionBuild.BattleNetV37165:
                         return Build;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        public static ClientVersionBuild FallbackVersionDefiningBuild
+        {
+            get
+            {
+                switch (VersionDefiningBuild)
+                {
+                    case ClientVersionBuild.V7_0_3_22248:
+                        return ClientVersionBuild.V6_0_2_19033;
+                    default:
+                        return ClientVersionBuild.Zero;
                 }
             }
         }
@@ -289,6 +329,8 @@ namespace WowPacketParser.Misc
 
         private static ClientType GetExpansion(ClientVersionBuild build)
         {
+            if (build >= ClientVersionBuild.V7_0_3_22248)
+                return ClientType.Legion;
             if (build >= ClientVersionBuild.V6_0_2_19033)
                 return ClientType.WarlordsOfDraenor;
             if (build >= ClientVersionBuild.V5_0_4_16016)
@@ -322,13 +364,28 @@ namespace WowPacketParser.Misc
             Opcodes.InitializeOpcodeDictionary();
             Handler.ResetHandlers();
             UpdateFields.ResetUFDictionaries();
+
+            if (FallbackVersionDefiningBuild != ClientVersionBuild.Zero)
+            {
+                try
+                {
+                    var asm = Assembly.Load($"WowPacketParserModule.{FallbackVersionDefiningBuild}");
+                    Trace.WriteLine($"Loading module WowPacketParserModule.{FallbackVersionDefiningBuild}.dll (fallback)");
+
+                    Handler.LoadHandlers(asm, FallbackVersionDefiningBuild);
+                }
+                catch (FileNotFoundException)
+                {
+                }
+            }
+
             try
             {
                 var asm = Assembly.Load($"WowPacketParserModule.{VersionDefiningBuild}");
                 Trace.WriteLine($"Loading module WowPacketParserModule.{VersionDefiningBuild}.dll");
 
                 Handler.LoadHandlers(asm, VersionDefiningBuild);
-                Handler.LoadBattlenetHandlers(asm);
+                BattlenetHandler.LoadBattlenetHandlers(asm);
 
                 // This is a huge hack to handle the abnormal situation that appeared with builds 6.0 and 6.1 having mostly the same packet structures
                 if (!UpdateFields.LoadUFDictionaries(asm, version))

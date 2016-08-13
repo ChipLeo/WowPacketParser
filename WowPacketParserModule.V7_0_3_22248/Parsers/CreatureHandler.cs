@@ -4,16 +4,10 @@ using WowPacketParser.Parsing;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 
-namespace WowPacketParserModule.V6_0_2_19033.Parsers
+namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
     public static class CreatureHandler
     {
-        [Parser(Opcode.CMSG_QUERY_CREATURE)]
-        public static void HandleCreatureQuery(Packet packet)
-        {
-            packet.ReadInt32("Entry");
-        }
-
         [HasSniffData]
         [Parser(Opcode.SMSG_QUERY_CREATURE_RESPONSE)]
         public static void HandleCreatureQueryResponse(Packet packet)
@@ -75,6 +69,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             creature.MovementID = packet.ReadUInt32("CreatureMovementInfoID");
             creature.ExpUnk = packet.ReadUInt32E<ClientType>("RequiredExpansion");
             packet.ReadInt32("FlagQuest");
+            packet.ReadInt32("VignetteID");
 
             if (titleLen > 1)
                 creature.SubName = packet.ReadCString("Title");

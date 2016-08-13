@@ -934,7 +934,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     packet.ReadInt32("unk1052", index, i); // 1052
 
             if (hasGobjectRotation) // 512
-                packet.ReadPackedQuaternion("GameObject Rotation", index);
+                moveInfo.Rotation = packet.ReadPackedQuaternion("GameObject Rotation", index);
 
             if (hasUnk4) // 1044
                 packet.ReadInt32("unk1040", index); // 1040
