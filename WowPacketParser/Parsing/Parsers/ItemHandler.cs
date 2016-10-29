@@ -1044,7 +1044,7 @@ namespace WowPacketParser.Parsing.Parsers
                     Storage.ItemTemplates.Add(item, packet.TimeSpan);
                     break;
                 }
-                case DB2Hash.Item_sparse:
+                case DB2Hash.ItemSparse:
                 {
                     ItemTemplate key = new ItemTemplate { Entry = itemId };
                     ItemTemplate item = Storage.ItemTemplates.ContainsKey(key) ? Storage.ItemTemplates[key].Item1 : new ItemTemplate();

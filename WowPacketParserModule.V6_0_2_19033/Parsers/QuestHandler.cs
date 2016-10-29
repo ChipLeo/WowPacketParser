@@ -311,7 +311,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 questInfoObjective.ObjectID = packet.ReadInt32("ObjectID", i);
                 questInfoObjective.Amount = packet.ReadInt32("Amount", i);
                 questInfoObjective.Flags = packet.ReadUInt32("Flags", i);
-                questInfoObjective.UnkFloat = packet.ReadSingle("Float5", i);
+                questInfoObjective.ProgressBarWeight = packet.ReadSingle("ProgressBarWeight", i);
 
                 int int280 = packet.ReadInt32("VisualEffects", i);
                 for (int j = 0; j < int280; ++j)
@@ -566,9 +566,9 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             packet.ReadBit("AutoLaunched");
 
+            packet.ReadInt32("QuestPackageID");
             packet.ReadInt32("PortraitTurnIn");
             packet.ReadInt32("PortraitGiver");
-            packet.ReadInt32("QuestPackageID");
 
             packet.ResetBitReader();
 

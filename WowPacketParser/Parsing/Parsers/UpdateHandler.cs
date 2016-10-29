@@ -683,7 +683,7 @@ namespace WowPacketParser.Parsing.Parsers
                             SeatId = seat
                         };
 
-                        Storage.VehicleTemplateAccessorys.Add(vehicleAccessory, packet.TimeSpan);
+                        Storage.VehicleTemplateAccessories.Add(vehicleAccessory, packet.TimeSpan);
                     }
                 }
 
@@ -1179,7 +1179,7 @@ namespace WowPacketParser.Parsing.Parsers
                             SeatId = seat
                         };
 
-                        Storage.VehicleTemplateAccessorys.Add(vehicleAccessory, packet.TimeSpan);
+                        Storage.VehicleTemplateAccessories.Add(vehicleAccessory, packet.TimeSpan);
                     }
                 }
 
@@ -1604,7 +1604,7 @@ namespace WowPacketParser.Parsing.Parsers
                             SeatId = seat
                         };
 
-                        Storage.VehicleTemplateAccessorys.Add(vehicleAccessory, packet.TimeSpan);
+                        Storage.VehicleTemplateAccessories.Add(vehicleAccessory, packet.TimeSpan);
                     }
                 }
 
@@ -2031,7 +2031,7 @@ namespace WowPacketParser.Parsing.Parsers
                             SeatId = seat
                         };
 
-                        Storage.VehicleTemplateAccessorys.Add(vehicleAccessory, packet.TimeSpan);
+                        Storage.VehicleTemplateAccessories.Add(vehicleAccessory, packet.TimeSpan);
                     }
                 }
 
@@ -2430,7 +2430,7 @@ namespace WowPacketParser.Parsing.Parsers
                             SeatId = seat
                         };
 
-                        Storage.VehicleTemplateAccessorys.Add(vehicleAccessory, packet.TimeSpan);
+                        Storage.VehicleTemplateAccessories.Add(vehicleAccessory, packet.TimeSpan);
                     }
                 }
 

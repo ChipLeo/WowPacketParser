@@ -28,8 +28,11 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("Flags")]
         public uint? Flags;
 
-        [DBFieldName("UnkFloat")]
-        public float? UnkFloat;
+        [DBFieldName("Flags2", TargetedDatabase.Legion)] // 7.1.0
+        public uint? Flags2;
+
+        [DBFieldName("ProgressBarWeight")]
+        public float? ProgressBarWeight;
 
         [DBFieldName("Description", LocaleConstant.enUS)]
         public string Description;

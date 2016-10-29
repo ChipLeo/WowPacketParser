@@ -15,6 +15,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
         }
 
+        [Parser(Opcode.SMSG_BOSS_KILL_CREDIT)]
+        public static void HandleBossKillCredit(Packet packet)
+        {
+            packet.ReadUInt32("EncounterID");
+        }
+
         [Parser(Opcode.CMSG_SAVE_CUF_PROFILES)]
         [Parser(Opcode.SMSG_LOAD_CUF_PROFILES)]
         public static void HandleCUFProfiles(Packet packet)
@@ -114,8 +120,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
             packet.ReadByte("Type");
 
-            packet.ReadInt32("MapID");
-            packet.ReadInt32("DifficultyID");
+            packet.ReadUInt32<MapId>("MapID");
+            packet.ReadUInt32("DifficultyID");
             packet.ReadInt32("TimeLeft");
 
             packet.ReadBit("Locked");

@@ -13,6 +13,7 @@
         gameobject,
         gameobject_addon,
         gameobject_template,
+        gameobject_template_addon,
         gossip_menu,
         gossip_menu_option,
         item_template,
@@ -34,6 +35,8 @@
         SniffDataOpcodes,
         vehicle_template_accessory,
         weather_updates,
+
+        hotfix_data
         // ReSharper restore InconsistentNaming
     }
 }

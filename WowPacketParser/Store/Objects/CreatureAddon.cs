@@ -1,3 +1,4 @@
+﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.SQL;
 
@@ -5,7 +6,7 @@ namespace WowPacketParser.Store.Objects
 {
     public sealed class CreatureAddon : IDataModel
     {
-        [DBFieldName("guid", true)]
+        [DBFieldName("guid", true, noQuotes: true)]
         public string GUID;
 
         [DBFieldName("path_id")]
@@ -22,6 +23,15 @@ namespace WowPacketParser.Store.Objects
 
         [DBFieldName("emote")]
         public uint? Emote;
+
+        [DBFieldName("aiAnimKit", TargetedDatabase.Legion)]
+        public ushort? AIAnimKit;
+
+        [DBFieldName("movementAnimKit", TargetedDatabase.Legion)]
+        public ushort? MovementAnimKit;
+
+        [DBFieldName("meleeAnimKit", TargetedDatabase.Legion)]
+        public ushort? MeleeAnimKit;
 
         [DBFieldName("auras")]
         public string Auras;

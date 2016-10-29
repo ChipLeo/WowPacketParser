@@ -1,6 +1,9 @@
-﻿using WowPacketParser.Enums;
+﻿using System;
+using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
+using WowPacketParser.Store;
+using WowPacketParser.Store.Objects;
 
 namespace WowPacketParserModule.V6_0_2_19033.Parsers
 {
@@ -34,37 +37,43 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("RemoteTimeValid", idx);
 
             if (hasTransport)
-            {
-                packet.ReadPackedGuid128("TransportGuid", idx);
-                packet.ReadVector4("TransportPosition", idx);
-                packet.ReadByte("TransportSeat", idx);
-                packet.ReadInt32("TransportMoveTime", idx);
-
-                packet.ResetBitReader();
-
-                var hasPrevMoveTime = packet.ReadBit("HasPrevMoveTime", idx);
-                var hasVehicleRecID = packet.ReadBit("HasVehicleRecID", idx);
-
-                if (hasPrevMoveTime)
-                    packet.ReadUInt32("PrevMoveTime", idx);
-
-                if (hasVehicleRecID)
-                    packet.ReadUInt32("VehicleRecID", idx);
-            }
+                ReadTransportData(packet, idx, "TransportData");
 
             if (hasFall)
+                ReadFallData(packet, idx, "FallData");
+        }
+
+        public static void ReadTransportData(Packet packet, params object[] idx)
+        {
+            packet.ReadPackedGuid128("TransportGuid", idx);
+            packet.ReadVector4("TransportPosition", idx);
+            packet.ReadByte("TransportSeat", idx);
+            packet.ReadInt32("TransportMoveTime", idx);
+
+            packet.ResetBitReader();
+
+            var hasPrevMoveTime = packet.ReadBit("HasPrevMoveTime", idx);
+            var hasVehicleRecID = packet.ReadBit("HasVehicleRecID", idx);
+
+            if (hasPrevMoveTime)
+                packet.ReadUInt32("PrevMoveTime", idx);
+
+            if (hasVehicleRecID)
+                packet.ReadUInt32("VehicleRecID", idx);
+        }
+
+        public static void ReadFallData(Packet packet, params object[] idx)
+        {
+            packet.ReadUInt32("FallTime", idx);
+            packet.ReadSingle("JumpVelocity", idx);
+
+            packet.ResetBitReader();
+
+            var bit20 = packet.ReadBit("HasFallDirection", idx);
+            if (bit20)
             {
-                packet.ReadUInt32("FallTime", idx);
-                packet.ReadSingle("JumpVelocity", idx);
-
-                packet.ResetBitReader();
-
-                var bit20 = packet.ReadBit("HasFallDirection", idx);
-                if (bit20)
-                {
-                    packet.ReadVector2("Direction", idx);
-                    packet.ReadSingle("HorizontalSpeed", idx);
-                }
+                packet.ReadVector2("Direction", idx);
+                packet.ReadSingle("HorizontalSpeed", idx);
             }
         }
 
@@ -73,6 +82,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             ReadMovementStats(packet);
             packet.ReadInt32("AckIndex");
         }
+
         public static void ReadMovementForce(Packet packet, params object[] idx)
         {
             packet.ReadPackedGuid128("ID", idx);
@@ -342,7 +352,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         }
 
         [Parser(Opcode.SMSG_VIGNETTE_UPDATE)]
-        public static void HandleUnknown177(Packet packet)
+        public static void HandleVignetteUpdate(Packet packet)
         {
             packet.ReadBit("ForceUpdate");
 
@@ -820,8 +830,16 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_SET_MOVEMENT_ANIM_KIT)]
         public static void HandleSetMovementAnimKit(Packet packet)
         {
-            packet.ReadPackedGuid128("Unit");
-            packet.ReadInt16("AnimKitID");
+            var guid = packet.ReadPackedGuid128("Unit");
+            var animKitID = packet.ReadUInt16("AnimKitID");
+
+            if (guid.GetObjectType() == ObjectType.Unit)
+                if (Storage.Objects.ContainsKey(guid))
+                {
+                    var timeSpan = Storage.Objects[guid].Item2 - packet.TimeSpan;
+                    if (timeSpan != null && timeSpan.Value.Duration() <= TimeSpan.FromSeconds(1))
+                        ((Unit)Storage.Objects[guid].Item1).MovementAnimKit = animKitID;
+                }
         }
 
         [Parser(Opcode.CMSG_MOVE_CHANGE_VEHICLE_SEATS)]

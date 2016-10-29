@@ -46,6 +46,9 @@ namespace WowPacketParser.Store.Objects
         public uint? Model;
         public uint? Mount;
         public uint? Bytes1;
+        public ushort? AIAnimKit;
+        public ushort? MovementAnimKit;
+        public ushort? MeleeAnimKit;
         public UnitDynamicFlags? DynamicFlags;
         public UnitDynamicFlagsWOD? DynamicFlagsWod;
         public NPCFlags? NpcFlags;
@@ -57,7 +60,7 @@ namespace WowPacketParser.Store.Objects
         public float? CombatReach;
         public float? HoverHeight;
         public uint? InteractSpellID;
-        public uint[] Resistances;
+        public short[] Resistances;
 
         // Fields calculated with bytes0
         public PowerType? PowerType;
@@ -112,14 +115,12 @@ namespace WowPacketParser.Store.Objects
                 DynamicFlags  = UpdateFields.GetEnum<UnitField, UnitDynamicFlags?>(UnitField.UNIT_DYNAMIC_FLAGS);
             NpcFlags      = UpdateFields.GetEnum<UnitField, NPCFlags?>(UnitField.UNIT_NPC_FLAGS);
             EmoteState    = UpdateFields.GetEnum<UnitField, EmoteType?>(UnitField.UNIT_NPC_EMOTESTATE);
-            Resistances   = UpdateFields.GetArray<UnitField, uint>(UnitField.UNIT_FIELD_RESISTANCES, 7);
+            Resistances   = UpdateFields.GetArray<UnitField, short>(UnitField.UNIT_FIELD_RESISTANCES, 7);
             ManaMod       = UpdateFields.GetValue<UnitField, uint?>(UnitField.UNIT_FIELD_BASE_MANA);
             HealthMod     = UpdateFields.GetValue<UnitField, uint?>(UnitField.UNIT_FIELD_BASE_HEALTH);
             BoundingRadius= UpdateFields.GetValue<UnitField, float?>(UnitField.UNIT_FIELD_BOUNDINGRADIUS);
             CombatReach   = UpdateFields.GetValue<UnitField, float?>(UnitField.UNIT_FIELD_COMBATREACH);
-            HoverHeight   = UpdateFields.GetValue<UnitField, float?>(UnitField.UNIT_FIELD_HOVERHEIGHT);
-
-
+            HoverHeight = UpdateFields.GetValue<UnitField, float?>(UnitField.UNIT_FIELD_HOVERHEIGHT);
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V5_4_0_17359))
             {

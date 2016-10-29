@@ -3,7 +3,6 @@ using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
-using ChatMessageType540 = WowPacketParserModule.V5_4_1_17538.Enums.ChatMessageType;
 
 namespace WowPacketParserModule.V5_4_1_17538.Parsers
 {

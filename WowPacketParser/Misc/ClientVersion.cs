@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using WowPacketParser.Enums;
 using WowPacketParser.Enums.Version;
+using WowPacketParser.Hotfix;
 using WowPacketParser.Parsing;
 
 namespace WowPacketParser.Misc
@@ -136,6 +137,18 @@ namespace WowPacketParser.Misc
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21463,  new DateTime(2016, 04, 09)),
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21676,  new DateTime(2016, 05, 18)),
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21742,  new DateTime(2016, 05, 18, 18, 0, 0)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22248,  new DateTime(2016, 07, 15)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22280,  new DateTime(2016, 07, 20)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22289,  new DateTime(2016, 07, 21)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22293,  new DateTime(2016, 07, 22)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22345,  new DateTime(2016, 08, 05)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22396,  new DateTime(2016, 08, 08)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22410,  new DateTime(2016, 08, 09)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22423,  new DateTime(2016, 08, 11)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22445,  new DateTime(2016, 08, 16)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22498,  new DateTime(2015, 08, 23)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22522,  new DateTime(2016, 08, 25)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22566,  new DateTime(2016, 09, 01)),
         };
 
         private static ClientType _expansion;
@@ -293,13 +306,27 @@ namespace WowPacketParser.Misc
                     case ClientVersionBuild.V6_2_4_21742:
                         return ClientVersionBuild.V6_0_2_19033;
                     case ClientVersionBuild.V7_0_3_22248:
-                    case ClientVersionBuild.V7_0_3_22280:                    
+                    case ClientVersionBuild.V7_0_3_22280:
                     case ClientVersionBuild.V7_0_3_22289:
                     case ClientVersionBuild.V7_0_3_22293:
                     case ClientVersionBuild.V7_0_3_22345:
+                    case ClientVersionBuild.V7_0_3_22396:
+                    case ClientVersionBuild.V7_0_3_22410:
+                    case ClientVersionBuild.V7_0_3_22423:
+                    case ClientVersionBuild.V7_0_3_22445:
+                    case ClientVersionBuild.V7_0_3_22498:
+                    case ClientVersionBuild.V7_0_3_22522:
+                    case ClientVersionBuild.V7_0_3_22566:
+                    case ClientVersionBuild.V7_0_3_22594:
+                    case ClientVersionBuild.V7_0_3_22624:
+                    case ClientVersionBuild.V7_0_3_22747:
+                    case ClientVersionBuild.V7_0_3_22810:
+                    case ClientVersionBuild.V7_1_0_22900:
+                    case ClientVersionBuild.V7_1_0_22908:
                         return ClientVersionBuild.V7_0_3_22248;
-                    case ClientVersionBuild.Zero:
                     case ClientVersionBuild.BattleNetV37165:
+                        return ClientVersionBuild.BattleNetV37165;
+                    case ClientVersionBuild.Zero:
                         return Build;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -384,6 +411,7 @@ namespace WowPacketParser.Misc
                 var asm = Assembly.Load($"WowPacketParserModule.{VersionDefiningBuild}");
                 Trace.WriteLine($"Loading module WowPacketParserModule.{VersionDefiningBuild}.dll");
 
+                HotfixStoreMgr.LoadStores(asm);
                 Handler.LoadHandlers(asm, VersionDefiningBuild);
                 BattlenetHandler.LoadBattlenetHandlers(asm);
 

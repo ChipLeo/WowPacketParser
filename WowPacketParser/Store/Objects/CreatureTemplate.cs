@@ -25,10 +25,10 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("femaleName", TargetedDatabase.Cataclysm)]
         public string FemaleName;
 
-        [DBFieldName("subname")]
+        [DBFieldName("subname", nullable: true)]
         public string SubName;
 
-        [DBFieldName("IconName")]
+        [DBFieldName("IconName", nullable: true)]
         public string IconName;
 
         [DBFieldName("gossip_menu_id")]
@@ -41,10 +41,16 @@ namespace WowPacketParser.Store.Objects
         public int? MaxLevel;
 
         [DBFieldName("exp")]
-        public ClientType? Expansion;
+        public ClientType? Expansion = ClientType.WorldOfWarcraft;
 
-        [DBFieldName("exp_unk", TargetedDatabase.Cataclysm)]
-        public ClientType? ExpUnk;
+        [DBFieldName("HealthScalingExpansion", TargetedDatabase.WarlordsOfDraenor)]
+        public ClientType? HealthScalingExpansion;
+
+        [DBFieldName("RequiredExpansion", TargetedDatabase.Cataclysm)]
+        public ClientType? RequiredExpansion;
+
+        [DBFieldName("VignetteID", TargetedDatabase.Legion)]
+        public uint? VignetteID;
 
         [DBFieldName("faction")]
         public uint? Faction;
@@ -128,7 +134,7 @@ namespace WowPacketParser.Store.Objects
         public uint? SkinLoot;
 
         [DBFieldName("resistance", 6)]
-        public uint?[] Resistances;
+        public short?[] Resistances;
 
         [DBFieldName("spell", 8)]
         public uint?[] Spells;
@@ -197,6 +203,22 @@ namespace WowPacketParser.Store.Objects
         public string ScriptName;
 
         [DBFieldName("VerifiedBuild")]
+        public int? VerifiedBuild = ClientVersion.BuildInt;
+    }
+
+    [DBTableName("creature_questitem")]
+    public sealed class CreatureTemplateQuestItem : IDataModel
+    {
+        [DBFieldName("CreatureEntry", true)]
+        public uint? CreatureEntry;
+
+        [DBFieldName("Idx", true)]
+        public uint? Idx;
+
+        [DBFieldName("ItemId")]
+        public uint? ItemId;
+
+        [DBFieldName("VerifiedBuild", TargetedDatabase.WarlordsOfDraenor)]
         public int? VerifiedBuild = ClientVersion.BuildInt;
     }
 }

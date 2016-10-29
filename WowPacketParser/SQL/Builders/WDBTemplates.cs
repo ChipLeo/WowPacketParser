@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
@@ -39,7 +40,7 @@ namespace WowPacketParser.SQL.Builders
 
             var templatesDb = SQLDatabase.Get(Storage.QuestObjectives);
 
-            return SQLUtil.Compare(Storage.QuestObjectives, templatesDb, StoreNameType.QuestObjective);  
+            return SQLUtil.Compare(Storage.QuestObjectives, templatesDb, StoreNameType.QuestObjective);
         }
 
         [BuilderMethod(true)]
@@ -71,16 +72,22 @@ namespace WowPacketParser.SQL.Builders
 
             var templatesDb = SQLDatabase.Get(Storage.CreatureTemplates);
 
-            foreach (var cre in Storage.CreatureTemplates) // set some default values
+            IEnumerable<Tuple<CreatureTemplate, TimeSpan?>> creatures;
+            if (Settings.SkipIncompleteTemplateRows)
+                creatures = Storage.CreatureTemplates.Where(a => (units.FirstOrDefault(p => p.Key.GetEntry() == a.Item1.Entry.GetValueOrDefault()).Value != null));
+            else
+                creatures = Storage.CreatureTemplates;
+
+            foreach (var cre in creatures) // set some default values
             {
                 Unit unit = units.FirstOrDefault(p => p.Key.GetEntry() == cre.Item1.Entry.GetValueOrDefault()).Value;
                 var levels = UnitMisc.GetLevels(units);
 
+                cre.Item1.GossipMenuID = 0;
+
                 if (unit != null)
                 {
                     if (unit.GossipId == 0)
-                        cre.Item1.GossipMenuID = null;
-                    else
                         cre.Item1.GossipMenuID = unit.GossipId;
 
                     cre.Item1.MinLevel = (int)levels[cre.Item1.Entry.GetValueOrDefault()].Item1;
@@ -131,9 +138,11 @@ namespace WowPacketParser.SQL.Builders
                     //TODO: set TrainerType from SMSG_TRAINER_LIST
                     cre.Item1.TrainerType = 0;
 
-                    cre.Item1.Resistances = new uint?[] {0, 0, 0, 0, 0, 0};
-                    for (int i = 0; i < unit.Resistances.Length - 1; i++)
-                        cre.Item1.Resistances[i] = unit.Resistances[i + 1];
+                    cre.Item1.Resistances = new short?[] {0, 0, 0, 0, 0, 0};
+
+                    if (unit.Resistances != null)
+                        for (int i = 0; i < unit.Resistances.Length - 1; i++)
+                            cre.Item1.Resistances[i] = unit.Resistances[i + 1];
                 }
 
                 // has trainer flag but doesn't have prof nor class trainer flag
@@ -155,27 +164,58 @@ namespace WowPacketParser.SQL.Builders
                     }
                 }
 
-                cre.Item1.DifficultyEntries = new uint?[] {null, null, null};
+                // Set some defaults
+                cre.Item1.DifficultyEntries = new uint?[] {0, 0, 0};
+                cre.Item1.FemaleName = "";
                 cre.Item1.Scale = 1;
                 cre.Item1.DmgSchool = 0;
                 cre.Item1.BaseVariance = 1;
                 cre.Item1.RangeVariance = 1;
-                cre.Item1.Resistances = new uint?[] {null, null, null, null, null, null};
+                cre.Item1.TrainerType = TrainerType.Class;
+                cre.Item1.TrainerSpell = 0;
+                cre.Item1.TrainerRace = Race.None;
+                cre.Item1.LootID = 0;
+                cre.Item1.PickPocketLoot = 0;
+                cre.Item1.SkinLoot = 0;
+                cre.Item1.Resistances = new short?[] {0, 0, 0, 0, 0, 0};
                 cre.Item1.Spells = new uint?[] {0, 0, 0, 0, 0, 0, 0, 0};
+                cre.Item1.AIName = "";
                 cre.Item1.HealthModifierExtra = 1;
                 cre.Item1.ManaModifierExtra = 1;
                 cre.Item1.ArmorModifier = 1;
+                cre.Item1.ExperienceModifier = 1;
+                cre.Item1.RegenHealth = 1;
+                cre.Item1.MechanicImmuneMask = 0;
+                cre.Item1.FlagsExtra = 0;
+                cre.Item1.ScriptName = "";
             }
 
             foreach (
                 var cre in
-                    Storage.CreatureTemplates.Where(
+                    creatures.Where(
                         cre => Storage.SpellsX.ContainsKey(cre.Item1.Entry.GetValueOrDefault())))
             {
                 cre.Item1.Spells = Storage.SpellsX[cre.Item1.Entry.GetValueOrDefault()].Item1.ToArray();
             }
 
-            return SQLUtil.Compare(Storage.CreatureTemplates, templatesDb, StoreNameType.Unit);
+            return SQLUtil.Compare(creatures, templatesDb, StoreNameType.Unit);
+        }
+
+        [BuilderMethod(true)]
+        public static string CreatureTemplateQuestItem()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.creature_template))
+                return string.Empty;
+
+            if (Settings.TargetedDatabase <= TargetedDatabase.WarlordsOfDraenor)
+                return string.Empty;
+
+            if (Storage.CreatureTemplateQuestItems.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.CreatureTemplateQuestItems);
+
+            return SQLUtil.Compare(Storage.CreatureTemplateQuestItems, templatesDb, StoreNameType.Unit);
         }
 
         [BuilderMethod(true, Gameobjects = true)]
@@ -192,25 +232,31 @@ namespace WowPacketParser.SQL.Builders
             foreach (var goT in Storage.GameObjectTemplates)
             {
                 GameObject go = gameobjects.FirstOrDefault(p => p.Key.GetEntry() == goT.Item1.Entry.GetValueOrDefault()).Value;
-
                 if (go != null)
                 {
                     if (goT.Item1.Size == null) // only true for 3.x and 4.x. WDB field since 5.x
                         goT.Item1.Size = go.Size.GetValueOrDefault(1.0f);
-
-                    HashSet<uint> playerFactions = new HashSet<uint> { 1, 2, 3, 4, 5, 6, 115, 116, 1610, 1629, 2203, 2204 };
-                    goT.Item1.Faction = go.Faction.GetValueOrDefault(0);
-                    if (playerFactions.Contains(go.Faction.GetValueOrDefault()))
-                        goT.Item1.Faction = 0;
-
-                    goT.Item1.Flags = go.Flags.GetValueOrDefault(GameObjectFlag.None);
-                    goT.Item1.Flags &= ~GameObjectFlag.Triggered;
-                    goT.Item1.Flags &= ~GameObjectFlag.Damaged;
-                    goT.Item1.Flags &= ~GameObjectFlag.Destroyed;
                 }
             }
 
             return SQLUtil.Compare(Storage.GameObjectTemplates, templatesDb, StoreNameType.GameObject);
+        }
+
+        [BuilderMethod(true)]
+        public static string GameObjectTemplateQuestItem()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.gameobject_template))
+                return string.Empty;
+
+            if (Settings.TargetedDatabase <= TargetedDatabase.WarlordsOfDraenor)
+                return string.Empty;
+
+            if (Storage.GameObjectTemplateQuestItems.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.GameObjectTemplateQuestItems);
+
+            return SQLUtil.Compare(Storage.GameObjectTemplateQuestItems, templatesDb, StoreNameType.GameObject);
         }
 
         [BuilderMethod(true)]

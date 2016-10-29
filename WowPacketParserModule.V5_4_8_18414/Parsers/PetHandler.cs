@@ -451,7 +451,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             var guid = packet.StartBitStream(2, 7, 6, 0, 5, 1, 3, 4);
             packet.ParseBitStream(guid, 7, 4, 6, 1);
-            packet.ReadUInt32E<PetTalk>("Talk Type"); // 24
+            packet.ReadUInt32("Talk Type"); // 24
             packet.ParseBitStream(guid, 2, 3, 5, 0);
             packet.WriteGuid("Guid", guid);
         }
