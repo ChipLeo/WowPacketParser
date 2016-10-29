@@ -255,7 +255,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ParseBitStream(guid, 6, 4, 1, 2, 7, 3, 0, 5);
 
             packet.WriteGuid("Guid", guid);
-            LoginGuid = new WowGuid64(0);
+            CoreParsers.SessionHandler.LoginGuid = new WowGuid64(BitConverter.ToUInt64(guid, 0));
         }
 
         [Parser(Opcode.SMSG_MOTD)]

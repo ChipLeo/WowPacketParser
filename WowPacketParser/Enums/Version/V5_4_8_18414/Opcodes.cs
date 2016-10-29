@@ -93,7 +93,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_CANCEL_TRADE,                             0x1941}, //++
             {Opcode.CMSG_CAST_SPELL,                               0x0206}, //++
             {Opcode.CMSG_CHALLENGE_MODE_REQUEST_LEADERS,           0x15DB}, //++
-            {Opcode.CMSG_CHANGE_SEATS_ON_CONTROLLED_VEHICLE,       0x08F8}, //+-
+            {Opcode.CMSG_CHANGE_SEATS_ON_CONTROLLED_VEHICLE,       0x08F8}, //++
             {Opcode.CMSG_CHARACTER_RENAME_REQUEST,                 0x0963}, //+-
             {Opcode.CMSG_CHAR_CUSTOMIZE,                           0x0A13}, //+-
             {Opcode.CMSG_CHAR_DELETE,                              0x04E2}, //+-
@@ -153,6 +153,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_ENUM_CHARACTERS,                          0x00E0}, //++
             {Opcode.CMSG_EQUIPMENT_SET_DELETE,                     0x02E8}, //+-
             {Opcode.CMSG_EQUIPMENT_SET_USE,                        0x036E}, //+-
+            {Opcode.CMSG_FAR_SIGHT,                                0x1341}, //++
             {Opcode.CMSG_FORCE_MOVE_ROOT_ACK,                      0x107A}, //++
             {Opcode.CMSG_FORCE_MOVE_UNROOT_ACK,                    0x1051}, //++
             {Opcode.CMSG_GAME_OBJ_REPORT_USE,                      0x06D9}, //++ ??
@@ -482,7 +483,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_10C3,                                 0x10C3}, //++
             {Opcode.CMSG_UNK_10D3,                                 0x10D3}, //++
             {Opcode.CMSG_UNK_12B3,                                 0x12B3}, //++
-            {Opcode.CMSG_UNK_1341,                                 0x1341}, //++
             {Opcode.CMSG_UNK_1370,                                 0x1370}, //++
             {Opcode.CMSG_UNK_1446,                                 0x1446}, //+-
             {Opcode.CMSG_UNK_178A,                                 0x178A}, //++ raid

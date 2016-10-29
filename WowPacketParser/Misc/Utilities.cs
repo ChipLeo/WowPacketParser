@@ -112,8 +112,7 @@ namespace WowPacketParser.Misc
             // var weekDay = (packedDate >> 11) & 7;
             var day = (packedDate >> 14) & 0x3F;
             var month = (packedDate >> 20) & 0xF;
-            var year = (packedDate >> 24) & 0x1F;
-            // var something2 = (packedDate >> 29) & 3; always 0
+            var year = (packedDate >> 24) & 0xFF;
 
             return new DateTime(2000, 1, 1).AddYears(year).AddMonths(month).AddDays(day).AddHours(hour).AddMinutes(minute);
         }

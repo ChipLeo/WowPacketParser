@@ -359,6 +359,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var pos = new Vector4();
             var guid184 = new byte[8];
 
+            packet.ReadByte("unk176"); // 176
             pos.Y = packet.ReadSingle(); // 40
             pos.Z = packet.ReadSingle(); // 44
             pos.X = packet.ReadSingle(); // 36

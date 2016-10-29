@@ -16,9 +16,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class PetHandler
     {
-        public static void ReadPetFlags(ref Packet packet)
+        public static void ReadPetFlags(Packet packet)
         {
-            var petModeFlag = packet.ReadUInt32();
+            var petModeFlag = packet.ReadUInt32("PetModeAndOrders");
             packet.AddValue("React state", (ReactState)((petModeFlag) & 0xFF));
             packet.AddValue("Command state", (CommandState)((petModeFlag >> 8) & 0xFF));
             packet.AddValue("Flag", (PetModeFlags)((petModeFlag >> 16) & 0xFFFF));
@@ -516,7 +516,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandlePetMode(Packet packet)
         {
             var guid = packet.StartBitStream(5, 0, 6, 3, 7, 2, 4, 1);
-            ReadPetFlags(ref packet); // 24
+            ReadPetFlags(packet); // 24
             packet.ParseBitStream(guid, 2, 5, 4, 0, 1, 7, 3, 6);
             packet.WriteGuid("Guid", guid);
         }
@@ -587,7 +587,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             for (var i = 0; i < count16; i++)
             {
                 packet.ReadInt32("unk28", i);
-                packet.ReadInt32("unk20", i);
+                packet.ReadInt32("SpellID", i);
                 packet.ReadInt16("unk32", i);
                 packet.ReadInt32("unk24", i);
             }
@@ -610,7 +610,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadXORByte(guid, 6);
             packet.ReadInt32("unk36");
             packet.ReadXORByte(guid, 5);
-            packet.ReadInt32("unk32");
+            ReadPetFlags(packet);  //32
+
             packet.WriteGuid("Guid", guid);
         }
 

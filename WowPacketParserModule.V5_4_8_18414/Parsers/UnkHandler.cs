@@ -96,12 +96,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("Str", packet.ReadBits(9));
         }
 
-        [Parser(Opcode.CMSG_UNK_1341)]
-        public static void HandleUnk1341(Packet packet)
-        {
-            packet.ReadBool("Unk");
-        }
-
         [Parser(Opcode.CMSG_UNK_1370)]
         public static void HandleUnk1370(Packet packet)
         {

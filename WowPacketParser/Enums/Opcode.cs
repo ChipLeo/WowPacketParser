@@ -1181,7 +1181,6 @@ namespace WowPacketParser.Enums
         CMSG_UNK_10C3,
         CMSG_UNK_10D3,
         CMSG_UNK_12B3,
-        CMSG_UNK_1341,
         CMSG_UNK_1370,
         CMSG_UNK_1446,
         CMSG_UNK_178A,
