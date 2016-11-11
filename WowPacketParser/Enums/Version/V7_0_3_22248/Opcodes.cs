@@ -681,6 +681,8 @@ namespace WowPacketParser.Enums.Version.V7_0_3_22248
             {Opcode.CMSG_TWITTER_CONNECT, 0x3127},
             {Opcode.CMSG_TWITTER_DISCONNECT, 0x312B},
             {Opcode.CMSG_TWITTER_POST, 0x3307},
+            {Opcode.CMSG_TWITTER_UNK1, 0x3128},
+            {Opcode.CMSG_TWITTER_UNK2, 0x3129},
             {Opcode.CMSG_UI_TIME_REQUEST, 0x36A0},
             {Opcode.CMSG_UNACCEPT_TRADE, 0x315B},
             {Opcode.CMSG_UNDELETE_CHARACTER, 0x36E4},
