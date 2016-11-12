@@ -449,9 +449,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         */
 
         [Parser(Opcode.CMSG_NULL_01C0)]
-        [Parser(Opcode.CMSG_NULL_02D6)]
         [Parser(Opcode.CMSG_NULL_02DA)]
-        [Parser(Opcode.CMSG_NULL_03C4)]
         [Parser(Opcode.CMSG_NULL_05E1)]
         [Parser(Opcode.CMSG_NULL_06D4)]
         [Parser(Opcode.CMSG_NULL_0813)]

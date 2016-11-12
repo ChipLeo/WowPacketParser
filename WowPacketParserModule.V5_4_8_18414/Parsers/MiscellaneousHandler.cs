@@ -1499,9 +1499,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
         [Parser(Opcode.CMSG_ATTACK_STOP)]
         [Parser(Opcode.CMSG_COMMENTATOR_EXIT_INSTANCE)]
+        [Parser(Opcode.CMSG_GAME_TIME_GET_DAY_PROGRESSION)]
         [Parser(Opcode.CMSG_GET_TIMEZONE_INFORMATION)]
         [Parser(Opcode.CMSG_MOVE_JUMP_OR_ASCEND_START)]
         [Parser(Opcode.CMSG_REQUEST_VEHICLE_NEXT_SEAT)]
+        [Parser(Opcode.CMSG_REQUEST_VEHICLE_PREV_SEAT)]
         [Parser(Opcode.CMSG_UI_TIME_REQUEST)]
         [Parser(Opcode.MSG_MOVE_WORLDPORT_ACK)]  //0
         [Parser(Opcode.SMSG_BONUS_ROLL_EMPTY)]
