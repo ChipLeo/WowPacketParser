@@ -1001,6 +1001,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadByteE<ItemClass>("Class");
         }
 
+        [Parser(Opcode.CMSG_USE_SOULSTONE)]
         [Parser(Opcode.SMSG_READ_ITEM_RESULT_FAILED)]
         public static void HandleItemNull(Packet packet)
         {

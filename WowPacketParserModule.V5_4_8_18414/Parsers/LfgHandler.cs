@@ -32,6 +32,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("Comment", commentLen);
         }
 
+        [Parser(Opcode.CMSG_SET_LFG_BONUS_FACTION_ID)]
+        public static void HandleSetLFGBonusFactionID(Packet packet)
+        {
+            packet.ReadInt32("FactionID");
+        }
+
         [Parser(Opcode.SMSG_LF_GUILD_APPLICATIONS_LIST_UPDATED)]
         public static void HandleLFGuildApplicationsListUpdated(Packet packet)
         {

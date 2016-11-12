@@ -15,6 +15,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.CMSG_SHOW_ACCOUNT_ACHIEVEMENTS)]
+        public static void HandleShowAccountAchievements(Packet packet)
+        {
+            packet.ReadBit("unk");
+        }
+
         [Parser(Opcode.SMSG_ACHIEVEMENT_DELETED)]
         public static void HandleAchievementDeleted(Packet packet)
         {

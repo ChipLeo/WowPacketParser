@@ -350,8 +350,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk");
         }
 
-        [Parser(Opcode.CMSG_UNK_10A7)]
-        public static void HandleUnk10A7(Packet packet)
+        [Parser(Opcode.CMSG_SET_PET_SLOT)]
+        public static void HandleSetPetSlot(Packet packet)
         {
             packet.ReadInt32("unk24");
             packet.ReadByte("unk28");
@@ -360,8 +360,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_UNK_1841)]
-        public static void HandleUnk1841(Packet packet)
+        [Parser(Opcode.CMSG_UNLEARN_SPECIALIZATION)]
+        public static void HandleUnlearnSpecialization(Packet packet)
         {
             packet.ReadByte("unk");
         }
@@ -1490,13 +1490,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk20");
         }
 
-        [Parser(Opcode.CMSG_UNK_10A2)]
-        public static void HandleUnk10A2(Packet packet)
-        {
-            packet.ReadInt32("unk");
-        }
-
-        [Parser(Opcode.CMSG_UNK_0247)]
         [Parser(Opcode.CMSG_UNK_0656)]
         [Parser(Opcode.CMSG_UNK_1446)]
         public static void HandleUnk1446(Packet packet)
@@ -1505,7 +1498,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.CMSG_ATTACK_STOP)]
+        [Parser(Opcode.CMSG_COMMENTATOR_EXIT_INSTANCE)]
         [Parser(Opcode.CMSG_GET_TIMEZONE_INFORMATION)]
+        [Parser(Opcode.CMSG_MOVE_JUMP_OR_ASCEND_START)]
+        [Parser(Opcode.CMSG_REQUEST_VEHICLE_NEXT_SEAT)]
         [Parser(Opcode.CMSG_UI_TIME_REQUEST)]
         [Parser(Opcode.MSG_MOVE_WORLDPORT_ACK)]  //0
         [Parser(Opcode.SMSG_BONUS_ROLL_EMPTY)]

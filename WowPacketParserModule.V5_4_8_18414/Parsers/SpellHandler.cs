@@ -773,6 +773,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("unk24"); // 24
         }
 
+        [Parser(Opcode.CMSG_CANCEL_QUEUED_SPELL)]
         [Parser(Opcode.SMSG_PET_CLEAR_SPELLS)]
         [Parser(Opcode.SMSG_FEIGN_DEATH_RESISTED)]
         public static void HandleSpellZero(Packet packet)

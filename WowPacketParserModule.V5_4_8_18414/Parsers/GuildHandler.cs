@@ -554,6 +554,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("GUID", guid);
         }
 
+        [Parser(Opcode.CMSG_REQUEST_GUILD_PARTY_STATE)]
+        public static void HandleRequestGuildPartyState(Packet packet)
+        {
+            var guid = packet.StartBitStream(1, 5, 7, 2, 6, 3, 0, 4);
+            packet.ParseBitStream(guid, 2, 5, 4, 6, 1, 0, 7, 3);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.CMSG_REQUEST_GUILD_XP)]
         public static void HandleRequestGuildXp(Packet packet)
         {
