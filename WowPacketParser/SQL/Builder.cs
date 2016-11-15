@@ -104,11 +104,20 @@ namespace WowPacketParser.SQL
 
                     if (attr.CheckVersionMismatch)
                     {
-                        if (!((ClientVersion.Expansion == ClientType.WrathOfTheLichKing &&
+                        if (!((ClientVersion.Expansion == ClientType.WorldOfWarcraft &&
+                             Settings.TargetedDatabase == TargetedDatabase.Zero)
+                            ||
+                            (ClientVersion.Expansion == ClientType.TheBurningCrusade &&
+                             Settings.TargetedDatabase == TargetedDatabase.TheBurningCrusade)
+                            ||
+                            (ClientVersion.Expansion == ClientType.WrathOfTheLichKing &&
                              Settings.TargetedDatabase == TargetedDatabase.WrathOfTheLichKing)
                             ||
                             (ClientVersion.Expansion == ClientType.Cataclysm &&
                              Settings.TargetedDatabase == TargetedDatabase.Cataclysm)
+                            ||
+                            (ClientVersion.Expansion == ClientType.MistsOfPandaria &&
+                             Settings.TargetedDatabase == TargetedDatabase.MistsOfPandaria)
                             ||
                             (ClientVersion.Expansion == ClientType.WarlordsOfDraenor &&
                              Settings.TargetedDatabase == TargetedDatabase.WarlordsOfDraenor)
@@ -131,7 +140,8 @@ namespace WowPacketParser.SQL
                     Trace.WriteLine($"{++i}/{builderMethods.Count} - Write {method.Name}");
                     try
                     {
-                        store.WriteData(method.Invoke(null, parameters.ToArray()).ToString());
+                        if (parameters.Count>0)
+                            store.WriteData(method.Invoke(null, parameters.ToArray()).ToString());
                     }
                     catch (TargetInvocationException e)
                     {
