@@ -126,29 +126,41 @@ namespace WowPacketParser.Misc
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_2_20444,  new DateTime(2015, 09, 01)),
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_2a_20490, new DateTime(2015, 09, 09)),
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_2a_20574, new DateTime(2015, 10, 05)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_3_20726,  new DateTime(2015, 11, 17)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_3_20779,  new DateTime(2015, 12, 1)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_3_20886,  new DateTime(2016, 01, 5)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21336,  new DateTime(2016, 03, 22)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21343,  new DateTime(2016, 03, 22, 15, 03, 43)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21345,  new DateTime(2016, 03, 22, 17, 41, 51)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21348,  new DateTime(2016, 03, 23)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21355,  new DateTime(2016, 03, 26)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21463,  new DateTime(2016, 04, 09)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21676,  new DateTime(2016, 05, 18)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21742,  new DateTime(2016, 05, 18, 18, 0, 0)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22248,  new DateTime(2016, 07, 15)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22280,  new DateTime(2016, 07, 20)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22289,  new DateTime(2016, 07, 21)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22293,  new DateTime(2016, 07, 22)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22345,  new DateTime(2016, 08, 05)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22396,  new DateTime(2016, 08, 08)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22410,  new DateTime(2016, 08, 09)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22423,  new DateTime(2016, 08, 11)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22445,  new DateTime(2016, 08, 16)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22498,  new DateTime(2015, 08, 23)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22522,  new DateTime(2016, 08, 25)),
-            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22566,  new DateTime(2016, 09, 01)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_3_20726, new DateTime(2015, 11, 17)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_3_20779, new DateTime(2015, 12, 1)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_3_20886, new DateTime(2016, 01, 5)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21336, new DateTime(2016, 03, 22)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21343, new DateTime(2016, 03, 22, 15, 03, 43)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21345, new DateTime(2016, 03, 22, 17, 41, 51)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21348, new DateTime(2016, 03, 23)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21355, new DateTime(2016, 03, 26)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21463, new DateTime(2016, 04, 09)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21676, new DateTime(2016, 05, 18)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V6_2_4_21742, new DateTime(2016, 05, 18, 18, 0, 0)),
+
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22248, new DateTime(2016, 07, 15)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22280, new DateTime(2016, 07, 20)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22289, new DateTime(2016, 07, 21)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22293, new DateTime(2016, 07, 22)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22345, new DateTime(2016, 08, 05)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22396, new DateTime(2016, 08, 08)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22410, new DateTime(2016, 08, 09)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22423, new DateTime(2016, 08, 11)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22445, new DateTime(2016, 08, 16)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22498, new DateTime(2015, 08, 23)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22522, new DateTime(2016, 08, 25)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22566, new DateTime(2016, 09, 01)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22594, new DateTime(2016, 09, 14)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22624, new DateTime(2016, 09, 20)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22747, new DateTime(2016, 10, 04)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_0_3_22810, new DateTime(2016, 10, 12)),
+
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_1_0_22900, new DateTime(2016, 10, 25)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_1_0_22908, new DateTime(2016, 10, 25)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_1_0_22950, new DateTime(2016, 11, 03)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_1_0_22989, new DateTime(2016, 11, 07)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_1_0_22995, new DateTime(2016, 11, 08)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V7_1_0_22996, new DateTime(2016, 11, 14)),
         };
 
         private static ClientType _expansion;
@@ -326,6 +338,7 @@ namespace WowPacketParser.Misc
                     case ClientVersionBuild.V7_1_0_22950:
                     case ClientVersionBuild.V7_1_0_22989:
                     case ClientVersionBuild.V7_1_0_22995:
+                    case ClientVersionBuild.V7_1_0_22996:
                         return ClientVersionBuild.V7_0_3_22248;
                     case ClientVersionBuild.BattleNetV37165:
                         return ClientVersionBuild.BattleNetV37165;
