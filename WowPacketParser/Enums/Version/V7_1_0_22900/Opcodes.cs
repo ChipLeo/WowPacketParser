@@ -518,6 +518,7 @@ namespace WowPacketParser.Enums.Version.V7_1_0_22900
             {Opcode.CMSG_QUERY_SCENARIO_POI, 0x3659},
             {Opcode.CMSG_QUERY_TIME, 0x34CE},
             {Opcode.CMSG_QUERY_VOID_STORAGE, 0x319B},
+            {Opcode.CMSG_QUEST_CLOSE_AUTOACCEPT_QUEST, 0x353D},
             {Opcode.CMSG_QUEST_CONFIRM_ACCEPT, 0x34A1},
             {Opcode.CMSG_QUEST_GIVER_ACCEPT_QUEST, 0x3498},
             {Opcode.CMSG_QUEST_GIVER_CHOOSE_REWARD, 0x349D},
