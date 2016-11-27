@@ -1066,6 +1066,7 @@ namespace WowPacketParser.Enums.Version.V7_1_0_22900
             {Opcode.SMSG_GOSSIP_MESSAGE, 0x2A97},
             {Opcode.SMSG_GOSSIP_POI, 0x27D4},
             {Opcode.SMSG_GROUP_ACTION_THROTTLED, 0x259C},
+            {Opcode.SMSG_GROUP_CANCEL, 0x27D2},
             {Opcode.SMSG_GROUP_DECLINE, 0x27CF},
             {Opcode.SMSG_GROUP_DESTROYED, 0x27D1},
             {Opcode.SMSG_GROUP_INVITE_CONFIRMATION, 0x2847},
