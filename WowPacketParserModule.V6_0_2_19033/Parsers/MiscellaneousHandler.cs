@@ -92,13 +92,6 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadPackedGuid128("Guid");
         }
 
-        [Parser(Opcode.CMSG_TUTORIAL_FLAG)]
-        public static void HandleTutorialFlag(Packet packet)
-        {
-            if (packet.ReadBits("unk", 2) == 0)
-                packet.ReadInt32("Flags");
-        }
-
         [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS_GLUE_SCREEN)]
         public static void HandleFeatureSystemStatusGlueScreen(Packet packet)
         {
@@ -935,12 +928,6 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
             packet.ReadUInt32("ItemID");
             packet.ReadBit("Favorite");
-        }
-
-        [Parser(Opcode.SMSG_BOSS_KILL_CREDIT)]
-        public static void HandleBossKillCredit(Packet packet)
-        {
-            packet.ReadUInt32("EncounterID");
         }
 
         [Parser(Opcode.SMSG_GAME_TIME_SET)]
