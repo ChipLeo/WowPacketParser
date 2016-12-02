@@ -63,5 +63,30 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             packet.ReadWoWString("Signature", signatureLen);
         }
+
+        [Parser(Opcode.SMSG_GET_ACCOUNT_CHARACTER_LIST_RESULT)]
+        public static void HandleGetAccountCharacterListResult(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            var cnt = packet.ReadInt32("Count");
+            packet.ReadBit("unk2");
+            for (var i = 0; i < cnt; ++i)
+            {
+                packet.ReadPackedGuid128("Acc", i);
+                packet.ReadPackedGuid128("Player", i);
+                packet.ReadInt32("VirtualRealmAddress", i);
+                packet.ReadByte("unk4", i);
+                packet.ReadByteE<Class>("ClassID", i);
+                packet.ReadByteE<Gender>("Gender", i);
+                packet.ReadByte("Level", i);
+                packet.ReadInt32("unk8", i);
+
+                packet.ResetBitReader();
+                var len1 = packet.ReadBits(6);
+                var len2 = packet.ReadBits(9);
+                packet.ReadWoWString("Name", len1, i);
+                packet.ReadWoWString("str2", len2, i);
+            }
+        }
     }
 }

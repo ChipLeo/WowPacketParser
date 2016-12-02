@@ -195,6 +195,18 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadUInt16("PvPTalentID", idx, i);
         }
 
+        [Parser(Opcode.SMSG_ACTIVE_GLYPHS)]
+        public static void HandleActiveGlyphs(Packet packet)
+        {
+            var cnt = packet.ReadInt32("Count");
+            for (int i = 0; i < cnt; i++)
+            {
+                packet.ReadInt32("unk1", i);
+                packet.ReadInt16("unk2", i);
+            }
+            packet.ReadBit("unk");
+        }
+
         [Parser(Opcode.SMSG_SPELL_PREPARE)]
         public static void SpellPrepare(Packet packet)
         {

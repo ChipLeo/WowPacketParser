@@ -60,5 +60,12 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32<ItemId>("ItemID");
             SpellHandler.ReadSpellCastRequest(packet, "Cast");
         }
+
+        [Parser(Opcode.SMSG_CHARACTER_ITEM_FIXUP)]
+        public static void HandleCharacterItemFixup(Packet packet)
+        {
+            packet.ReadBit("unk1");
+            packet.ReadBit("unk2");
+        }
     }
 }

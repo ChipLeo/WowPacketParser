@@ -204,5 +204,47 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             if (hasEuropaTicketSystemStatus)
                 V6_0_2_19033.Parsers.MiscellaneousHandler.ReadCliEuropaTicketConfig(packet, "EuropaTicketSystemStatus");
         }
+
+        [Parser(Opcode.SMSG_TRANSMOG_COLLECTION_UPDATE)]
+        public static void HandleTransmogCollectionUpdate(Packet packet)
+        {
+            packet.ReadBit("unk");
+            packet.ReadBit("unk2");
+            var cnt = packet.ReadInt32("Count");
+            for (int i = 0; i < cnt; i++)
+                packet.ReadInt32("unk1", i);
+        }
+
+        [Parser(Opcode.SMSG_WOW_TOKEN_CAN_VETERAN_BUY_RESULT)]
+        public static void HandleWOWTokenCanVeteranBuyResult(Packet packet)
+        {
+            packet.ReadInt64("unk1");
+            packet.ReadInt32("unk2");
+            packet.ReadInt32("unk3");
+        }
+
+        [Parser(Opcode.SMSG_WOW_TOKEN_DISTRIBUTION_GLUE_UPDATE)]
+        public static void HandleWOWTokenDistributionGlueUpdate(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadInt32("unk2");
+            var cnt1 = packet.ReadInt32("Count1");
+            var cnt2 = packet.ReadInt32("Count2");
+            for (int i = 0; i < cnt1; i++)
+                packet.ReadInt64("unk3", i);
+            for (int i = 0; i < cnt2; i++)
+                packet.ReadInt64("unk4", i);
+        }
+
+        [Parser(Opcode.SMSG_WOW_TOKEN_DISTRIBUTION_UPDATE)]
+        public static void HandleWOWTokenDistributionUpdate(Packet packet)
+        {
+            var cnt1 = packet.ReadInt32("Count1");
+            var cnt2 = packet.ReadInt32("Count2");
+            for (int i = 0; i < cnt1; i++)
+                packet.ReadInt64("unk1", i);
+            for (int i = 0; i < cnt2; i++)
+                packet.ReadInt64("unk2", i);
+        }
     }
 }

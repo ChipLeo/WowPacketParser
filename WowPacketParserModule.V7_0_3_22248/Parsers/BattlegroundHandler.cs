@@ -77,5 +77,40 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             for (int i = 0; i < playersCount; i++)
                 ReadPlayerData(packet, "Players", i);
         }
+
+        [Parser(Opcode.SMSG_RATED_BATTLEFIELD_INFO)]
+        public static void HandleRatedBattlefieldInfo(Packet packet)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                packet.ReadInt32("unk1", i);
+                packet.ReadInt32("unk2", i);
+                packet.ReadInt32("unk3", i);
+                packet.ReadInt32("unk4", i);
+                packet.ReadInt32("unk5", i);
+                packet.ReadInt32("unk6", i);
+                packet.ReadInt32("unk7", i);
+                packet.ReadInt32("unk8", i);
+                packet.ReadInt32("unk9", i);
+                packet.ReadInt32("unk10", i);
+                packet.ReadInt32("unk11", i);
+            }
+        }
+
+        [Parser(Opcode.SMSG_BATTLE_PAY_VAS_PURCHASE_LIST)]
+        public static void HandleBattlePayWasPurchaseList(Packet packet)
+        {
+            var cnt = packet.ReadBits("Count", 6);
+            for (int i = 0; i < cnt; i++)
+            {
+                packet.ReadPackedGuid128("Guid", i);
+                packet.ReadInt32("unk1", i);
+                packet.ReadInt32("unk2", i);
+                packet.ResetBitReader();
+                var cnt2 = packet.ReadBits("cnt2", i);
+                for (int j = 0; j < cnt2; ++j)
+                    packet.ReadInt32("unk3", j, i);
+            }
+        }
     }
 }
