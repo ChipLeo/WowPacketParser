@@ -237,11 +237,13 @@
     <Compile Include="Parsers\AuctionHouseHandler.cs" />
     <Compile Include="Parsers\AuthenticationHandler.cs" />
     <Compile Include="Parsers\BattlegroundHandler.cs" />
+    <Compile Include="Parsers\BattlePayHandler.cs" />
     <Compile Include="Parsers\BattlePetHandler.cs" />
     <Compile Include="Parsers\BlackMarketHandler.cs" />
     <Compile Include="Parsers\CalendarHandler.cs" />
     <Compile Include="Parsers\CharacterHandler.cs" />
     <Compile Include="Parsers\CombatLogHandler.cs" />
+    <Compile Include="Parsers\CorpseHandler.cs" />
     <Compile Include="Parsers\CreatureHandler.cs" />
     <Compile Include="Parsers\CurrencyHandler.cs" />
     <Compile Include="Parsers\EquipmentSetHandler.cs" />
@@ -251,6 +253,7 @@
     <Compile Include="Parsers\HotfixHandler.cs" />
     <Compile Include="Parsers\InstanceHandler.cs" />
     <Compile Include="Parsers\ItemHandler.cs" />
+    <Compile Include="Parsers\LfgHandler.cs" />
     <Compile Include="Parsers\LootHandler.cs" />
     <Compile Include="Parsers\MailHandler.cs" />
     <Compile Include="Parsers\MiscellaneousHandler.cs" />

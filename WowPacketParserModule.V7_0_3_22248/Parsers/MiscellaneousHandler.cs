@@ -8,6 +8,22 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
     public static class MiscellaneousHandler
     {
+        [Parser(Opcode.CMSG_TUTORIAL_FLAG)]
+        public static void HandleTutorialFlag(Packet packet)
+        {
+            var action = packet.ReadBitsE<TutorialAction>("TutorialAction", 2);
+
+            if (action == TutorialAction.Update)
+                packet.ReadInt32E<Tutorial>("TutorialBit");
+        }
+
+        [Parser(Opcode.CMSG_UNK_36BB)]
+        public static void HandleUnk36BB(Packet packet)
+        {
+            packet.ReadInt32("unk32");
+            packet.ReadBit("unk");
+        }
+
         [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS_GLUE_SCREEN, ClientVersionBuild.V7_0_3_22248, ClientVersionBuild.V7_1_0_22900)]
         public static void HandleFeatureSystemStatusGlueScreen(Packet packet)
         {
@@ -245,6 +261,22 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadInt64("unk1", i);
             for (int i = 0; i < cnt2; i++)
                 packet.ReadInt64("unk2", i);
+        }
+
+        [Parser(Opcode.SMSG_UNK_CLIENT_25C8)]
+        public static void HandleUnkClient25C8(Packet packet)
+        {
+            packet.ReadInt32("unk32");
+            packet.ReadByte("unk1");
+        }
+
+        [Parser(Opcode.SMSG_UNK_CLIENT_2805)]
+        public static void HandleUnkClient2805(Packet packet)
+        {
+            var cnt1 = packet.ReadInt32("Count1");
+            packet.ReadBytes("unk1", cnt1);
+            var cnt2 = packet.ReadInt32("Count2");
+            packet.ReadBytes("unk2", cnt2);
         }
     }
 }

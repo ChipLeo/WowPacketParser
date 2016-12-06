@@ -533,5 +533,17 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             Storage.QuestGreetings.Add(questGreeting, packet.TimeSpan);
         }
+
+        [Parser(Opcode.SMSG_QUEST_UNK1)]
+        public static void HandleQuestUnk1(Packet packet)
+        {
+            var count = packet.ReadInt32("Count");
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadInt32("unk1", i);
+                packet.ReadInt32("ObjectID", i);
+                packet.ReadBit("unk3", i);
+            }
+        }
     }
 }

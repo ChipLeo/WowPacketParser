@@ -106,6 +106,21 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadInt32("CurrencyID");
         }
 
+
+        [Parser(Opcode.SMSG_GARRISON_REQUEST_BLUEPRINT_AND_SPECIALIZATION_DATA_RESULT)]
+        public static void HandleGarrisonRequestBlueprintAndSpecializationDataResult(Packet packet)
+        {
+            packet.ReadInt32("unk16");
+            var int20 = packet.ReadInt32("SpecializationsKnownCount");
+            var int36 = packet.ReadInt32("BlueprintsKnownCount");
+
+            for (var i = 0; i < int20; i++)
+                packet.ReadInt32("SpecializationsKnown", i);
+
+            for (var i = 0; i < int36; i++)
+                packet.ReadInt32("BlueprintsKnown", i);
+        }
+
         [Parser(Opcode.SMSG_GET_GARRISON_INFO_RESULT)]
         public static void HandleGetGarrisonInfoResult(Packet packet)
         {
