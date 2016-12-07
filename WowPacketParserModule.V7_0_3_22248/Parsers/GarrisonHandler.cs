@@ -7,6 +7,17 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
     public static class GarrisonHandler
     {
+        public static void ReadGarrisonMissionOvermaxReward(Packet packet, params object[] indexes) //65CD05 22996
+        {
+            packet.ReadInt32<ItemId>("ItemID", indexes);
+            packet.ReadUInt32("Quantity", indexes);
+            packet.ReadInt32("CurrencyID", indexes);
+            packet.ReadUInt32("CurrencyQuantity", indexes);
+            packet.ReadUInt32("FollowerXP", indexes);
+            packet.ReadUInt32("BonusAbilityID", indexes);
+            packet.ReadInt32("Unknown", indexes);
+        }
+
         public static void ReadGarrisonMission(Packet packet, params object[] indexes)
         {
             packet.ReadUInt64("DbID", indexes);
@@ -70,8 +81,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             packet.ResetBitReader();
 
-            var len = packet.ReadBits(7);
-            packet.ReadWoWString("CustomName", len, indexes);
+            packet.ReadWoWString("CustomName", packet.ReadBits(7), indexes);
         }
 
         public static void ReadGarrisonTalents(Packet packet, params object[] indexes)
@@ -79,6 +89,12 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32("GarrTalentID", indexes);
             packet.ReadInt32("ResearchStartTime", indexes);
             packet.ReadInt32("Flags", indexes);
+        }
+
+        [Parser(Opcode.CMSG_GARRISON_CHECK_UPGRADEABLE)]
+        public static void HandleGarrisonCheckUpgradeable(Packet packet)
+        {
+            packet.ReadInt32("unk");
         }
 
         [Parser(Opcode.SMSG_DISPLAY_TOAST)]
@@ -106,6 +122,76 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadInt32("CurrencyID");
         }
 
+        [Parser(Opcode.SMSG_GARRISON_ADD_FOLLOWER_RESULT)]
+        public static void HandleGarrisonAddFollowerResult(Packet packet)
+        {
+            packet.ReadInt32("Result");
+            packet.ReadInt32("unk");
+            ReadGarrisonFollower(packet);
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_ADD_MISSION_RESULT)]
+        public static void HandleGarrisonAddMissionResult(Packet packet)
+        {
+            packet.ReadInt32("Result");
+            packet.ReadByte("unk");
+            packet.ReadInt32("unk2");
+            ReadGarrisonMission(packet);
+            var cnt1 = packet.ReadInt32("cnt1");
+            var cnt2 = packet.ReadInt32("cnt2");
+            for (var i = 0; i < cnt1; ++i)
+                ReadGarrisonMissionOvermaxReward(packet, i);
+            for (var i = 0; i < cnt2; ++i)
+                ReadGarrisonMissionOvermaxReward(packet, i);
+            packet.ReadBit("unkbit");
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_CLEAR_ALL_FOLLOWERS_EXHAUSTION)]
+        public static void HandleGarrisonClearAllFollowersExhaustion(Packet packet)
+        {
+            packet.ReadInt32("unk");
+            packet.ReadInt32("unk2");
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_XP)] // GARRISON_FOLLOWER_XP_CHANGED
+        public static void HandleGarrisonUnk2(Packet packet)
+        {
+            packet.ReadInt32("Result");
+            packet.ReadInt32("unk");
+            ReadGarrisonFollower(packet);
+            ReadGarrisonFollower(packet);
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_LEARN_BLUEPRINT_RESULT)]
+        public static void HandleGarrisonLearnBlueprintResult(Packet packet)
+        {
+            packet.ReadInt32("Result");
+            packet.ReadInt32("BuildingID");
+            packet.ReadInt32("unk");
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_MISSION_BONUS_ROLL_RESULT)]
+        public static void HandleGarrisonMissionBonusRollResult(Packet packet)
+        {
+            ReadGarrisonMission(packet);
+
+            packet.ReadInt32("MissionRecID");
+            packet.ReadInt32("Result");
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_NUM_FOLLOWER_ACTIVATIONS_REMAINING)]
+        public static void HandleGarrisonNumFollowerActivationsRemaining(Packet packet)
+        {
+            packet.ReadInt32("Activated");
+            packet.ReadInt32("unk2");
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_OPEN_MISSION_NPC)]
+        public static void HandleGarrisonOpenMissionNpc(Packet packet)
+        {
+            packet.ReadPackedGuid128("Guid");
+            packet.ReadInt32("unk1");
+        }
 
         [Parser(Opcode.SMSG_GARRISON_REQUEST_BLUEPRINT_AND_SPECIALIZATION_DATA_RESULT)]
         public static void HandleGarrisonRequestBlueprintAndSpecializationDataResult(Packet packet)
@@ -119,6 +205,18 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             for (var i = 0; i < int36; i++)
                 packet.ReadInt32("BlueprintsKnown", i);
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_START_MISSION_RESULT)]
+        public static void HandleGarrisonStartMissionResult(Packet packet)
+        {
+            packet.ReadInt32("Result");
+            packet.ReadInt16("unk");
+            ReadGarrisonMission(packet);
+
+            var followerCount = packet.ReadInt32("FollowerCount");
+            for (int i = 0; i < followerCount; i++)
+                packet.ReadInt64("FollowerDBIDs");
         }
 
         [Parser(Opcode.SMSG_GET_GARRISON_INFO_RESULT)]

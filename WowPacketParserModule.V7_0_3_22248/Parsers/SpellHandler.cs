@@ -418,6 +418,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadInt16("Talents");
         }
 
+        [Parser(Opcode.SMSG_MODIFY_COOLDOWN_RECOVERY_SPEED)]
+        public static void HandleModifyCooldownRecoverySpeed(Packet packet)
+        {
+            packet.ReadUInt32<SpellId>("SpellID");
+            packet.ReadInt32("unk");
+        }
+
         [Parser(Opcode.SMSG_RESYNC_RUNES)]
         public static void HandleResyncRunes(Packet packet)
         {
@@ -472,8 +479,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             }
         }
 
-
-        [Parser(Opcode.SMSG_SEND_SPELL_CHARGES, ClientVersionBuild.V7_1_0_22900)]
+        [Parser(Opcode.SMSG_SEND_SPELL_CHARGES, ClientVersionBuild.V7_1_0_22900, ClientVersionBuild.V7_1_0_22996)]
         public static void HandleSendSpellCharges(Packet packet)
         {
             var int4 = packet.ReadInt32("SpellChargeEntryCount");
@@ -485,6 +491,19 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadSingle("ChargeModRate", i);
 
                 packet.ReadBit("IsPet");
+            }
+        }
+
+        [Parser(Opcode.SMSG_SEND_SPELL_CHARGES, ClientVersionBuild.V7_1_0_22996)]
+        public static void HandleSendSpellCharges2(Packet packet)
+        {
+            var int4 = packet.ReadInt32("SpellChargeEntryCount");
+            for (int i = 0; i < int4; i++)
+            {
+                packet.ReadUInt32("Category", i);
+                packet.ReadUInt32("NextRecoveryTime", i);
+                packet.ReadSingle("ChargeModRate", i);
+                packet.ReadByte("ConsumedCharges", i);
             }
         }
 

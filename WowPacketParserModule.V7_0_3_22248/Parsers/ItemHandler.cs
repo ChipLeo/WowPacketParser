@@ -12,6 +12,14 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             V6_0_2_19033.Parsers.ItemHandler.ReadItemInstance(packet, "Item", idx);
         }
 
+        [Parser(Opcode.CMSG_CHANGE_BAG_SLOT_FLAG)]
+        public static void HandleChangeBagSlotFlag(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadInt32("unk2");
+            packet.ReadBit("unk3");
+        }
+
         [Parser(Opcode.SMSG_ITEM_PUSH_RESULT)]
         public static void HandleItemPushResult(Packet packet)
         {
