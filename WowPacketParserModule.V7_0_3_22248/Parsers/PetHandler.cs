@@ -35,6 +35,12 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadSByte("ConsumedCharges", idx);
         }
 
+        [Parser(Opcode.CMSG_REQUEST_STABLED_PETS)]
+        public static void HandleRequestStabledPets(Packet packet)
+        {
+            packet.ReadPackedGuid128("GUID");
+        }
+
         [Parser(Opcode.SMSG_PET_SPELLS_MESSAGE)]
         public static void HandlePetSpells(Packet packet)
         {

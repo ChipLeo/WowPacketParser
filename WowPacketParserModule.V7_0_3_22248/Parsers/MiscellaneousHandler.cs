@@ -24,6 +24,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("unk");
         }
 
+        [Parser(Opcode.SMSG_CUSTOM_LOAD_SCREEN)]
+        public static void HandleCustomLoadScreen(Packet packet)
+        {
+            packet.ReadInt32("TeleportSpellID");
+            packet.ReadInt32("unk");
+        }
+
         [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS_GLUE_SCREEN, ClientVersionBuild.V7_0_3_22248, ClientVersionBuild.V7_1_0_22900)]
         public static void HandleFeatureSystemStatusGlueScreen(Packet packet)
         {

@@ -193,6 +193,18 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32("unk1");
         }
 
+        [Parser(Opcode.SMSG_GARRISON_PLACE_BUILDING_RESULT)]
+        public static void HandleGarrisonPlaceBuildingResult(Packet packet)
+        {
+            packet.ReadInt32("Result");
+            packet.ReadInt32("unk");
+            ReadGarrisonBuildingInfo(packet, "BuildingInfo");
+
+            packet.ResetBitReader();
+
+            packet.ReadBit("UnkBit");
+        }
+
         [Parser(Opcode.SMSG_GARRISON_REQUEST_BLUEPRINT_AND_SPECIALIZATION_DATA_RESULT)]
         public static void HandleGarrisonRequestBlueprintAndSpecializationDataResult(Packet packet)
         {
@@ -277,6 +289,45 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 for (int j = 0; j < canStartMissionCount; j++)
                     packet.ReadBit("CanStartMission", i, j);
             }
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_UNK3)] // GARRISON_MISSION_NPC_OPENED / GARRISON_MISSION_LIST_UPDATE
+        public static void HandleGarrisonUnk3(Packet packet)
+        {
+            packet.ReadInt32("Result");
+            packet.ReadInt32("unk");
+
+            var count = packet.ReadInt32("MissionsCount");
+            for (int i = 0; i < count; i++)
+                packet.ReadInt32("Missions", i);
+
+            packet.ResetBitReader();
+            packet.ReadBit("Succeeded");
+            packet.ReadBit("unk");
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_UNK4)]
+        public static void HandleGarrisonUnk4(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadInt32("unk2");
+            packet.ReadInt32("unk3");
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_UNK5)]
+        public static void HandleGarrisonUnk5(Packet packet)
+        {
+            packet.ReadInt32("CurrentBuildingID");
+            ReadGarrisonMission(packet);
+            packet.ReadInt32("CurrentMissionID");
+            var count = packet.ReadInt32("Count");
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadInt64("DbID", i);
+                packet.ReadInt32("unk5", i);
+            }
+            packet.ResetBitReader();
+            packet.ReadBit("unk3");
         }
     }
 }

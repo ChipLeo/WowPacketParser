@@ -536,5 +536,22 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ResetBitReader();
             packet.ReadBit("CannotDismiss");
         }
+
+        [Parser(Opcode.SMSG_SUPERCEDED_SPELLS)]
+        public static void HandleSupercededSpells(Packet packet)
+        {
+            var spellCount = packet.ReadInt32();
+            var supercededCount = packet.ReadInt32();
+            var cnt3 = packet.ReadInt32("cnt3");
+
+            for (int i = 0; i < spellCount; i++)
+                packet.ReadInt32("SpellID", i);
+
+            for (int i = 0; i < supercededCount; i++)
+                packet.ReadInt32("Superceded", i);
+
+            for (int i = 0; i < cnt3; ++i)
+                packet.ReadInt32("unk3", i);
+        }
     }
 }
