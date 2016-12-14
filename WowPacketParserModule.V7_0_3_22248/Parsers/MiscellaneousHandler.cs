@@ -114,6 +114,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_ARTIFACT_XP_GAIN)]
+        public static void HandleArtifactXPGain(Packet packet)
+        {
+            packet.ReadPackedGuid128("Item");
+            packet.ReadInt32("Quantity");
+        }
+
         [HasSniffData]
         [Parser(Opcode.SMSG_QUERY_PAGE_TEXT_RESPONSE)]
         public static void HandlePageTextResponse(Packet packet)

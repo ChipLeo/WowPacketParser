@@ -75,5 +75,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("unk1");
             packet.ReadBit("unk2");
         }
+
+        [Parser(Opcode.SMSG_SET_ITEM_PURCHASE_DATA)]
+        public static void HandleSetItemPurchaseData(Packet packet)
+        {
+            packet.ReadPackedGuid128("ItemGUID");
+            packet.ReadInt32("Flags");
+            packet.ReadInt32("PurchaseTime");
+        }
     }
 }

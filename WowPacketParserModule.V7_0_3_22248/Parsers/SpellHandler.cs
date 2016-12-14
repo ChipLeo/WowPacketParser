@@ -195,6 +195,15 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadUInt16("PvPTalentID", idx, i);
         }
 
+        [Parser(Opcode.CMSG_MISSILE_TRAJECTORY_COLLISION)]
+        public static void HandleMissileTrajectoryCollision(Packet packet)
+        {
+            packet.ReadPackedGuid128("CasterGUID");
+            packet.ReadInt32<SpellId>("SpellID");
+            packet.ReadPackedGuid128("CastID");
+            packet.ReadVector3("CollisionPos");
+        }
+
         [Parser(Opcode.SMSG_ACTIVE_GLYPHS)]
         public static void HandleActiveGlyphs(Packet packet)
         {
@@ -205,6 +214,23 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadInt16("unk2", i);
             }
             packet.ReadBit("unk");
+        }
+
+        [Parser(Opcode.SMSG_NOTIFY_MISSILE_TRAJECTORY_COLLISION)]
+        public static void HandleNotifyMissileTrajectoryCollision(Packet packet)
+        {
+            packet.ReadPackedGuid128("Caster");
+            packet.ReadPackedGuid128("CastID");
+            packet.ReadVector3("CollisionPos");
+        }
+
+        [Parser(Opcode.SMSG_SCENARIO_BOOT)]
+        public static void HandleScenarioBoot(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadInt32("unk2");
+            packet.ResetBitReader();
+            packet.ReadBits("unk3", 2);
         }
 
         [Parser(Opcode.SMSG_SPELL_PREPARE)]
@@ -225,6 +251,31 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
             packet.ReadPackedGuid128("PetGUID");
             ReadSpellCastRequest(packet, "Cast");
+        }
+
+        [Parser(Opcode.SMSG_MIRROR_IMAGE_COMPONENTED_DATA)]
+        public static void HandleMirrorImageData(Packet packet)
+        {
+            packet.ReadPackedGuid128("UnitGUID");
+            packet.ReadInt32("DisplayID");
+
+            packet.ReadByte("RaceID");
+            packet.ReadByte("Gender");
+            packet.ReadByte("ClassID");
+            packet.ReadByte("BeardVariation");  // SkinID
+            packet.ReadByte("FaceVariation");   // FaceID
+            packet.ReadByte("HairVariation");   // HairStyle
+            packet.ReadByte("HairColor");       // HairColor
+            packet.ReadByte("SkinColor");       // FacialHairStyle
+
+            for (var i = 0; i < 3; i++)
+                packet.ReadByte("unk", i);
+
+            packet.ReadPackedGuid128("GuildGUID");
+
+            var count = packet.ReadInt32("ItemDisplayCount");
+            for (var i = 0; i < count; i++)
+                packet.ReadInt32("ItemDisplayID", i);
         }
 
         [Parser(Opcode.SMSG_SPELL_START)]

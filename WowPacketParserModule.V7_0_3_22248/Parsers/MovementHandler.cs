@@ -407,5 +407,15 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             packet.ReadBits("Reason", 2);
         }
+
+        [Parser(Opcode.SMSG_TRANSFER_ABORTED)]
+        public static void HandleTransferAborted(Packet packet)
+        {
+            packet.ReadInt32<MapId>("MapID");
+            packet.ReadByte("Arg");
+            packet.ReadInt32("unk");
+            packet.ResetBitReader();
+            packet.ReadBitsE<TransferAbortReason>("TransfertAbort", 5);
+        }
     }
 }

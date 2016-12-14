@@ -61,5 +61,16 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                     packet.ReadVector3("Center");
             }
         }
+
+        [Parser(Opcode.SMSG_UNK_CLIENT_263A)]
+        public static void HandleUnkClient263A(Packet packet)
+        {
+            packet.ReadPackedGuid128("TriggerGUID");
+            packet.ReadInt32("unk1");
+            packet.ReadInt32("unk2");
+            packet.ReadInt32("unk3");
+            packet.ReadInt32("unk4");
+            ReadAreaTriggerSpline(packet);
+        }
     }
 }

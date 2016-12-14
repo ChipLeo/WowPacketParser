@@ -1634,6 +1634,7 @@ namespace WowPacketParser.Enums.Version.V7_1_0_22900
             {Opcode.SMSG_TWITTER_STATUS, 0x2FFD},
             {Opcode.SMSG_UI_TIME, 0x274E},
             {Opcode.SMSG_UNK_CLIENT_25C8, 0x25C8},
+            {Opcode.SMSG_UNK_CLIENT_263A, 0x263A},
             {Opcode.SMSG_UNK_CLIENT_2805, 0x2805},
             {Opcode.SMSG_UNDELETE_CHARACTER_RESPONSE, 0x2806},
             {Opcode.SMSG_UNDELETE_COOLDOWN_STATUS_RESPONSE, 0x2807},
