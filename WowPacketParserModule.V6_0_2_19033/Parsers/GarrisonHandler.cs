@@ -445,8 +445,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadBit("CanStart", i);
         }
 
-        [Parser(Opcode.SMSG_GARRISON_UNK3)] // GARRISON_MISSION_NPC_OPENED / GARRISON_MISSION_LIST_UPDATE
-        public static void HandleGarrisonUnk3(Packet packet)
+        [Parser(Opcode.SMSG_GARRISON_MISSION_LIST_UPDATE)]
+        public static void HandleGarrisonMissionListUpdate(Packet packet)
         {
             packet.ReadInt32("Result");
 
@@ -722,8 +722,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("unk3");
         }
 
-        [Parser(Opcode.SMSG_GARRISON_UNK5)]
-        public static void HandleGarrisonUnk5(Packet packet)
+        [Parser(Opcode.SMSG_GARRISON_MISSION_COMPLETE_RESPONSE)]
+        public static void HandleGarrisonMissionCompleteResponse(Packet packet)
         {
             packet.ReadInt32("CurrentBuildingID");
             ReadGarrisonMission(packet);

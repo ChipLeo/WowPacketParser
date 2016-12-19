@@ -51,7 +51,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadUInt32("Unk UInt 2");
                 packet.ReadSingle("Radius");
                 packet.ReadSingle("BlendFromRadius");
-                packet.ReadSingle("InitialAngel");
+                packet.ReadSingle("InitialAngle");
                 packet.ReadSingle("ZOffset");
 
                 if (unk1)
