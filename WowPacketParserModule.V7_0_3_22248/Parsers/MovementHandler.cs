@@ -51,7 +51,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadPackedGuid128("ID", idx);
             packet.ReadVector3("Origin", idx);
             packet.ReadVector3("Direction", idx);
-            packet.ReadVector3("TransportPosition", idx);
+            //packet.ReadVector3("TransportPosition", idx);
             packet.ReadInt32("TransportID", idx);
             packet.ReadSingle("Magnitude", idx);
 
@@ -182,6 +182,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 };
                 packet.AddValue("WayPoints", vec, indexes, i);
             }
+        }
+
+        [Parser(Opcode.CMSG_MOVE_APPLY_MOVEMENT_FORCE_ACK)]
+        public static void HandleMoveApplyMovementForceAck(Packet packet)
+        {
+            ReadMovementAck(packet);
+            ReadMovementForce(packet, "MovementForce");
         }
 
         [Parser(Opcode.SMSG_ON_MONSTER_MOVE)]

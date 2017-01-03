@@ -17,6 +17,12 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadInt32E<Tutorial>("TutorialBit");
         }
 
+        [Parser(Opcode.CMSG_UNK_322A)]
+        public static void HandleUnk322A(Packet packet)
+        {
+            packet.ReadInt32("unk32");
+        }
+
         [Parser(Opcode.CMSG_UNK_36BB)]
         public static void HandleUnk36BB(Packet packet)
         {
@@ -154,6 +160,19 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             }
         }
 
+        [Parser(Opcode.CMSG_QUICK_JOIN_SIGNAL_TOAST_DISPLAYED)]
+        public static void HandleQuickJoinSignalToastDisplayed(Packet packet)
+        {
+            packet.ReadPackedGuid128("Guid");
+            packet.ReadSingle("unk1");
+            var cnt = packet.ReadInt32("cnt");
+            for (var i = 0; i < cnt; ++i)
+                packet.ReadPackedGuid128("Guid2", i);
+            packet.ResetBitReader();
+            packet.ReadBit("unk2");
+            packet.ReadBit("unk3");
+        }
+
         [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS, ClientVersionBuild.V7_1_0_22900)]
         public static void HandleFeatureSystemStatus(Packet packet)
         {
@@ -235,6 +254,97 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 V6_0_2_19033.Parsers.MiscellaneousHandler.ReadCliEuropaTicketConfig(packet, "EuropaTicketSystemStatus");
         }
 
+        [Parser(Opcode.SMSG_SHOW_ADVENTURE_MAP)]
+        public static void HandleShowAdventureMap(Packet packet)
+        {
+            packet.ReadPackedGuid128("Creature");
+        }
+
+        [Parser(Opcode.SMSG_SOCIAL_QUEUE_UPDATE)]
+        public static void HandleSocialQueueUpdate(Packet packet)
+        {
+            packet.ReadInt64("unk64");
+            packet.ReadPackedGuid128("Player");
+            {//64FE42 22996
+                packet.ReadPackedGuid128("Party");
+                var cnt = packet.ReadInt32("Cnt");
+                packet.ReadBit("unkb");
+
+                for (var i = 0; i < cnt; ++i)
+                {//64FEB8 22996
+                    packet.ResetBitReader();
+                    var v6 = packet.ReadBits("unkbc", 2, i);
+                    if (v6==2)
+                    {//64FD9E 22996
+                        packet.ReadInt32("unk");
+                        packet.ReadInt32("unk");
+                        packet.ReadInt32("unk");
+                        packet.ReadByte("unk");
+                        packet.ReadInt32("unk");
+                        packet.ResetBitReader();
+                        packet.ReadBit("unk");
+                        packet.ReadBit("unk");
+                    }
+                    if (v6==1)
+                    {//650E43 22996
+                        {//64FF95 22996
+                            packet.ReadPackedGuid128("guid");
+                            packet.ReadInt32("unk16");
+                            packet.ReadInt32("unk20");
+                            packet.ReadInt32("unk24");
+                        }
+                        packet.ReadInt32("unk");
+                        packet.ReadPackedGuid128("guid1336");
+                        packet.ReadPackedGuid128("guid1352");
+                        packet.ReadPackedGuid128("guid1368");
+                        packet.ReadPackedGuid128("guid1384");
+                        packet.ReadInt32("unk1400");
+                        var cnt1404 = packet.ReadInt32("cnt1404");
+                        var cnt1420 = packet.ReadInt32("cnt1420");
+                        var cnt1436 = packet.ReadInt32("cnt1436");
+                        var cnt1452 = packet.ReadInt32("cnt1452");
+                        packet.ReadInt32("unk1468");
+                        packet.ReadInt32("unk1472");
+                        packet.ReadByte("unk1476");
+                        for (var j = 0; j < cnt1404; ++j)
+                            packet.ReadPackedGuid128("guid1408", i, j);
+                        for (var j = 0; j < cnt1420; ++j)
+                            packet.ReadPackedGuid128("guid1424", i, j);
+                        for (var j = 0; j < cnt1436; ++j)
+                            packet.ReadPackedGuid128("guid1440", i, j);
+                        for (var j = 0; j < cnt1452; ++j)
+                        {//679F95 22996
+                            packet.ReadByte("unk",i,j);
+                            packet.ReadByte("unk1",i,j);
+                        }
+                        {//650D44 22996
+                            packet.ReadInt32("unk");
+                            packet.ReadInt32("unk");
+                            packet.ReadInt32("unk");
+                            packet.ResetBitReader();
+                            var len12 = packet.ReadBits(8);
+                            var len141 = packet.ReadBits(11);
+                            var len1166 = packet.ReadBits(8);
+                            packet.ReadBit("unkbit");
+                            packet.ReadWoWString("str", len12);
+                            packet.ReadWoWString("str2", len141);
+                            packet.ReadWoWString("str3", len1166);
+                        }
+                    }
+                    if (v6==0)
+                    {//64F765 22996
+                        packet.ReadInt32("LFG Slot", i);
+                        var cnt2 = packet.ReadInt32("cnt2", i);
+                        for (var j = 0; j < cnt2; ++j)
+                            packet.ReadByte("unkb", i, j);
+                        packet.ResetBitReader();
+                        packet.ReadBit("unkb1", i);
+                        packet.ReadBit("unkb2", i);
+                    }
+                }
+            }
+        }
+
         [Parser(Opcode.SMSG_TRANSMOG_COLLECTION_UPDATE)]
         public static void HandleTransmogCollectionUpdate(Packet packet)
         {
@@ -291,6 +401,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBytes("unk1", cnt1);
             var cnt2 = packet.ReadInt32("Count2");
             packet.ReadBytes("unk2", cnt2);
+        }
+
+        [Parser(Opcode.SMSG_UNK_CLIENT_282E)]
+        public static void HandleUnkClient282E(Packet packet)
+        {
+            packet.ReadInt32("unk32");
+            packet.ReadBit("unk1");
         }
     }
 }

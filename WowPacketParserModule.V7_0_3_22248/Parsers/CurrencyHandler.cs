@@ -6,6 +6,26 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
     public static class CurrencyHandler
     {
+        [Parser(Opcode.SMSG_SET_CURRENCY)]
+        public static void HandleSetCurrency(Packet packet)
+        {
+            packet.ReadInt32("Type");
+            packet.ReadInt32("Quantity");
+            packet.ReadInt32("Flags");
+
+            var bit28 = packet.ReadBit("HasTrackedQuantity");
+            var bit36 = packet.ReadBit("HasWeeklyQuantity");
+            var bit44 = packet.ReadBit("hasUnk");
+            packet.ReadBit("SuppressChatLog");
+
+            if (bit28)
+                packet.ReadInt32("TrackedQuantity");
+            if (bit36)
+                packet.ReadInt32("WeeklyQuantity");
+            if (bit44)
+                packet.ReadInt32("Unk");
+        }
+
         [Parser(Opcode.SMSG_SETUP_CURRENCY)]
         public static void HandleSetupCurrency(Packet packet)
         {
