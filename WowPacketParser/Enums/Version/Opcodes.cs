@@ -342,6 +342,7 @@ namespace WowPacketParser.Enums.Version
                         return opcode;
                     break;
                 case Direction.ServerToClient:
+                case Direction.Bidirectional:
                     if (_serverDict.TryGetBySecond(opcodeId, out opcode))
                         return opcode;
                     if (_miscDict.TryGetBySecond(opcodeId, out opcode))
@@ -363,6 +364,7 @@ namespace WowPacketParser.Enums.Version
                         return opcode;
                     break;
                 case Direction.ServerToClient:
+                case Direction.Bidirectional:
                     if (_serverDict.TryGetByFirst(opcodeId, out opcode))
                         return opcode;
                     if (_miscDict.TryGetByFirst(opcodeId, out opcode))
