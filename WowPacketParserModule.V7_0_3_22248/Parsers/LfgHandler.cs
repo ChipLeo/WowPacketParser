@@ -6,6 +6,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
     public static class LfgHandler
     {
+        //64FF95 22996
         public static void ReadCliRideTicket(Packet packet, params object[] idx)
         {
             packet.ReadPackedGuid128("RequesterGuid", idx);
@@ -198,17 +199,14 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadByte("SubType");
             packet.ReadByte("Reason");
 
-            for (int i = 0; i < 3; i++)
-                packet.ReadByte("Needs", i);
-
-            var int8 = packet.ReadInt32("SlotsCount");
+            var int56 = packet.ReadInt32("SlotsCount");
             packet.ReadInt32("RequestedRoles");
-            var int4 = packet.ReadInt32("SuspendedPlayersCount");
+            var int76 = packet.ReadInt32("SuspendedPlayersCount");
 
-            for (int i = 0; i < int8; i++)
+            for (int i = 0; i < int56; i++)
                 packet.ReadInt32("Slots", i);
 
-            for (int i = 0; i < int4; i++)
+            for (int i = 0; i < int76; i++)
                 packet.ReadPackedGuid128("SuspendedPlayers", i);
 
             packet.ResetBitReader();
@@ -218,9 +216,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("Joined");
             packet.ReadBit("LfgJoined");
             packet.ReadBit("Queued");
-
-            var bits56 = packet.ReadBits(8);
-            packet.ReadWoWString("Comment", bits56);
         }
 
         [Parser(Opcode.CMSG_DF_GET_SYSTEM_INFO)]
@@ -483,6 +478,86 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         public static void HandleSetLFGBonusFactionID(Packet packet)
         {
             packet.ReadInt32("FactionID");
+        }
+
+        [Parser(Opcode.SMSG_SOCIAL_QUEUE_UPDATE)]
+        public static void HandleSocialQueueUpdate(Packet packet)
+        {
+            packet.ReadInt64("unk64");
+            packet.ReadPackedGuid128("Player");
+            {//64FE42 22996
+                packet.ReadPackedGuid128("Party");
+                var cnt = packet.ReadInt32("Cnt");
+                packet.ReadBit("unkb");
+
+                for (var i = 0; i < cnt; ++i)
+                {//64FEB8 22996
+                    packet.ResetBitReader();
+                    var v6 = packet.ReadBits("unkbc", 2, i);
+                    if (v6 == 2)
+                    {//64FD9E 22996
+                        packet.ReadInt32("unk");
+                        packet.ReadInt32("unk");
+                        packet.ReadInt32("unk");
+                        packet.ReadByte("unk");
+                        packet.ReadInt32("unk");
+                        packet.ResetBitReader();
+                        packet.ReadBit("unk");
+                        packet.ReadBit("unk");
+                    }
+                    if (v6 == 1)
+                    {//650E43 22996
+                        ReadCliRideTicket(packet, "RideTicket");
+                        packet.ReadInt32("unk");
+                        packet.ReadPackedGuid128("guid1336");
+                        packet.ReadPackedGuid128("guid1352");
+                        packet.ReadPackedGuid128("guid1368");
+                        packet.ReadPackedGuid128("guid1384");
+                        packet.ReadInt32("unk1400");
+                        var cnt1404 = packet.ReadInt32("cnt1404");
+                        var cnt1420 = packet.ReadInt32("cnt1420");
+                        var cnt1436 = packet.ReadInt32("cnt1436");
+                        var cnt1452 = packet.ReadInt32("cnt1452");
+                        packet.ReadInt32("unk1468");
+                        packet.ReadInt32("unk1472");
+                        packet.ReadByte("unk1476");
+                        for (var j = 0; j < cnt1404; ++j)
+                            packet.ReadPackedGuid128("guid1408", i, j);
+                        for (var j = 0; j < cnt1420; ++j)
+                            packet.ReadPackedGuid128("guid1424", i, j);
+                        for (var j = 0; j < cnt1436; ++j)
+                            packet.ReadPackedGuid128("guid1440", i, j);
+                        for (var j = 0; j < cnt1452; ++j)
+                        {//679F95 22996
+                            packet.ReadByte("unk", i, j);
+                            packet.ReadByte("unk1", i, j);
+                        }
+                        {//650D44 22996
+                            packet.ReadInt32("unk");
+                            packet.ReadInt32("unk");
+                            packet.ReadInt32("unk");
+                            packet.ResetBitReader();
+                            var len12 = packet.ReadBits(8);
+                            var len141 = packet.ReadBits(11);
+                            var len1166 = packet.ReadBits(8);
+                            packet.ReadBit("unkbit");
+                            packet.ReadWoWString("str", len12);
+                            packet.ReadWoWString("str2", len141);
+                            packet.ReadWoWString("str3", len1166);
+                        }
+                    }
+                    if (v6 == 0)
+                    {//64F765 22996
+                        packet.ReadInt32("LFG Slot", i);
+                        var cnt2 = packet.ReadInt32("cnt2", i);
+                        for (var j = 0; j < cnt2; ++j)
+                            packet.ReadByte("unkb", i, j);
+                        packet.ResetBitReader();
+                        packet.ReadBit("unkb1", i);
+                        packet.ReadBit("unkb2", i);
+                    }
+                }
+            }
         }
     }
 }

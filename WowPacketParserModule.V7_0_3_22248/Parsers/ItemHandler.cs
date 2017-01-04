@@ -6,6 +6,31 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
     public static class ItemHandler
     {
+        //650932 22996
+        public static void ReadBonuses(Packet packet, params object[] idx)
+        {
+            packet.ReadByte("Context", idx);
+            ReadBonusList(packet, idx);
+        }
+
+        //650963 22996
+        public static void ReadBonusList(Packet packet, params object[] idx)
+        {
+            var bonusCount = packet.ReadUInt32();
+            for (var j = 0; j < bonusCount; ++j)
+                packet.ReadUInt32("BonusListID", idx, j);
+        }
+
+        //6509B1 22996
+        public static byte sub_6509B1(Packet packet, params object[] idx)
+        {
+            packet.ReadInt32("unk1", idx);
+            packet.ReadInt32("unk2", idx);
+            packet.ReadInt32("unk3", idx);
+            return packet.ReadByte("unk4", idx);
+        }
+
+        //650B42 22996
         public static int ReadItemInstance(Packet packet, params object[] indexes)
         {
             var itemId = packet.ReadInt32<ItemId>("ItemID", indexes);
@@ -17,16 +42,10 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             var hasBonuses = packet.ReadBit("HasItemBonus", indexes);
             var hasModifications = packet.ReadBit("HasModifications", indexes);
             if (hasBonuses)
-            {
-                packet.ReadByte("Context", indexes);
-
-                var bonusCount = packet.ReadUInt32();
-                for (var j = 0; j < bonusCount; ++j)
-                    packet.ReadUInt32("BonusListID", indexes, j);
-            }
+                ReadBonuses(packet, indexes);
 
             if (hasModifications)
-            {
+            {//0064E5B1 22996 not decoded
                 var mask = packet.ReadUInt32();
                 for (var j = 0; mask != 0; mask >>= 1, ++j)
                     if ((mask & 1) != 0)
@@ -41,7 +60,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         public static void ReadItemGemInstanceData(Packet packet, params object[] idx)
         {
             packet.ReadByte("Slot", idx);
-            V6_0_2_19033.Parsers.ItemHandler.ReadItemInstance(packet, "Item", idx);
+            Parsers.ItemHandler.ReadItemInstance(packet, "Item", idx);
         }
 
         public static void ReadItemPurchaseContents(Packet packet, params object[] indexes)
@@ -98,7 +117,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("IsBonusRoll");
             packet.ReadBit("IsEncounterLoot");
 
-            V6_0_2_19033.Parsers.ItemHandler.ReadItemInstance(packet, "ItemInstance");
+            Parsers.ItemHandler.ReadItemInstance(packet, "ItemInstance");
         }
 
         [Parser(Opcode.CMSG_USE_ITEM)]
