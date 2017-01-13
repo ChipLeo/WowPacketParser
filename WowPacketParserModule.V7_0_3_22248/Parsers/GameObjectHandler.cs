@@ -14,5 +14,12 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadPackedGuid128("GO");
             packet.ReadByte("State");
         }
+
+        [Parser(Opcode.SMSG_GAME_OBJECT_UI_ACTION)]
+        public static void HandleGameObjectUIAction(Packet packet)
+        {
+            packet.ReadPackedGuid128("Guid");
+            packet.ReadInt32("Action");
+        }
     }
 }

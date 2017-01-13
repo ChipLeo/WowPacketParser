@@ -6,6 +6,90 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
     public static class BattlePayHandler
     {
+        //65BA82 22996
+        private static byte ReadBattlePayProduct(Packet packet, params object[] idx)
+        {
+            packet.ReadInt32("ProductID", idx);
+
+            packet.ReadByte("Type", idx);
+
+            packet.ReadInt64("NormalPriceFixedPoint", idx);
+            packet.ReadInt64("CurrentPriceFixedPoint", idx);
+
+            packet.ReadInt32("Flags", idx);
+
+            packet.ResetBitReader();
+
+            packet.ReadBit("HasPet", idx);
+            var bit32 = packet.ReadBit("HasBATTLEPETRESULT", idx);
+
+            var int40 = packet.ReadBits("BattlepayProductItemCount", 7, idx);
+
+            var bit5228 = packet.ReadBit("HasBattlepayDisplayInfo", idx);
+            byte v10 = bit5228;
+                //packet.ReadInt32("ID", idx, j);
+                //packet.ReadInt32("ItemID", idx, j);
+                //packet.ReadInt32("Quantity", idx, j);
+
+            if (bit32)
+                    packet.ReadBits("PetResult", 4, idx);
+
+            for (var i = 0; i < int40; ++i)
+                v10 = sub_65BBCD(packet, idx, i);
+
+            if (bit5228)
+                ReadBattlepayDisplayInfo(packet, idx, "DisplayInfo");
+
+            return v10;
+        }
+
+        //65BBCD 22996
+        private static byte sub_65BBCD(Packet packet, params object[] idx)
+        {
+            packet.ReadInt32("unk", idx);
+            packet.ReadByte("unk", idx);
+            packet.ReadInt32("unk", idx);
+            packet.ReadInt32("unk", idx);
+            packet.ReadInt32("unk", idx);
+            packet.ReadInt32("unk", idx);
+            packet.ResetBitReader();
+            packet.ReadBit("unk", idx);
+            var byte32 = packet.ReadBit("unk", idx);
+            var byte5208 = packet.ReadBit("unk", idx);
+            byte v5 = byte5208;
+            if (byte32)
+                v5 = (byte)packet.ReadBits("unk", 4, idx);
+            if (byte5208)
+                ReadBattlepayDisplayInfo(packet, idx, "DisplayInfo");
+            return v5;
+        }
+
+        //65BCC2 22996
+        private static byte ReadBattlePayDistributionObject(Packet packet, params object[] index)
+        {
+            packet.ReadInt64("DistributionID", index);
+
+            packet.ReadInt32("Status", index);
+            packet.ReadInt32("ProductID", index);
+
+            packet.ReadPackedGuid128("TargetPlayer", index);
+            packet.ReadInt32("TargetVirtualRealm", index);
+            packet.ReadInt32("TargetNativeRealm", index);
+
+            packet.ReadInt64("PurchaseID", index);
+
+            packet.ResetBitReader();
+
+            var bit5280 = packet.ReadBit("HasBattlePayProduct", index);
+
+            var result = packet.ReadBit("Revoked", index);
+
+            if (bit5280)
+                ReadBattlePayProduct(packet, index, "Product");
+
+            return result;
+        }
+
         [Parser(Opcode.CMSG_BATTLE_PAY_GET_PRODUCT_LIST)]
         [Parser(Opcode.CMSG_BATTLE_PAY_GET_PURCHASE_LIST)]
         [Parser(Opcode.CMSG_UPDATE_VAS_PURCHASE_STATES)]
@@ -82,7 +166,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 var bit5220 = packet.ReadBit("bit5220", i);
 
                 if (bit5220)
-                    ReadBattlepayDisplayInfo(packet, i);
+                    ReadBattlepayDisplayInfo(packet, i, "DisplayInfo");
             }
 
             //sub_65BA82 22996
@@ -130,7 +214,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 }
 
                 if (bit5228)
-                    ReadBattlepayDisplayInfo(packet, i);
+                    ReadBattlepayDisplayInfo(packet, i, "DisplayInfo");
             }
 
             //sub_65BE65 22996
@@ -155,8 +239,14 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadByte("unk45", i);
                 packet.ResetBitReader();
                 if (packet.ReadBit())
-                    ReadBattlepayDisplayInfo(packet, i);
+                    ReadBattlepayDisplayInfo(packet, i, "DisplayInfo");
             }
+        }
+
+        [Parser(Opcode.SMSG_BATTLE_PAY_DISTRIBUTION_UPDATE)]
+        public static void HandleBattlePayDistributionUpdate(Packet packet)
+        {
+            ReadBattlePayDistributionObject(packet);
         }
     }
 }

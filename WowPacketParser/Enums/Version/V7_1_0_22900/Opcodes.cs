@@ -1640,6 +1640,7 @@ namespace WowPacketParser.Enums.Version.V7_1_0_22900
             {Opcode.SMSG_UNK_CLIENT_263A, 0x263A},
             {Opcode.SMSG_UNK_CLIENT_2805, 0x2805},
             {Opcode.SMSG_UNK_CLIENT_282E, 0x282E},
+            {Opcode.SMSG_UNK_SPELL_2C58, 0x2C58},
             {Opcode.SMSG_UNDELETE_CHARACTER_RESPONSE, 0x2806},
             {Opcode.SMSG_UNDELETE_COOLDOWN_STATUS_RESPONSE, 0x2807},
             {Opcode.SMSG_UNLEARNED_SPELLS, 0x2C4E},

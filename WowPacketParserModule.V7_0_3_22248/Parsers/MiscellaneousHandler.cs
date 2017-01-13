@@ -83,6 +83,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadByte("ServerExpansionTier");
         }
 
+        [Parser(Opcode.SMSG_LEVEL_UPDATE)]
+        public static void HandleLevelUpdate(Packet packet)
+        {
+            packet.ReadPackedGuid128("Guid");
+            packet.ReadBit("unk");
+        }
+
         [Parser(Opcode.SMSG_WORLD_SERVER_INFO)]
         public static void HandleWorldServerInfo(Packet packet)
         {
@@ -323,6 +330,52 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
             packet.ReadInt32("unk32");
             packet.ReadBit("unk1");
+        }
+
+        [Parser(Opcode.SMSG_WHO)]
+        public static void HandleWho(Packet packet)
+        {
+            var bits568 = packet.ReadBits("List count", 6);
+
+            for (var i = 0; i < bits568; ++i)
+            {
+                {//065D123 22996
+                    packet.ResetBitReader();
+                    packet.ReadBit("IsDeleted", i);
+                    var bits15 = packet.ReadBits(6);
+
+                    var declinedNamesLen = new int[5];
+                    for (var j = 0; j < 5; ++j)
+                        declinedNamesLen[j] = (int)packet.ReadBits(7);
+
+                    for (var j = 0; j < 5; ++j)
+                        packet.ReadWoWString("DeclinedNames", declinedNamesLen[j], i, j);
+
+                    packet.ReadPackedGuid128("AccountID", i);
+                    packet.ReadPackedGuid128("BnetAccountID", i);
+                    packet.ReadPackedGuid128("GuidActual", i);
+
+                    packet.ReadInt32("VirtualRealmAddress", i);
+
+                    packet.ReadByteE<Race>("Race", i);
+                    packet.ReadByteE<Gender>("Sex", i);
+                    packet.ReadByteE<Class>("ClassId", i);
+                    packet.ReadByte("Level", i);
+
+                    packet.ReadWoWString("Name", bits15, i);
+                }
+
+                packet.ReadPackedGuid128("GuildGUID", i);
+
+                packet.ReadInt32("GuildVirtualRealmAddress", i);
+                packet.ReadInt32("AreaID", i);
+
+                packet.ResetBitReader();
+                var bits460 = packet.ReadBits(7);
+                packet.ReadBit("IsGM", i);
+
+                packet.ReadWoWString("GuildName", bits460, i);
+            }
         }
     }
 }

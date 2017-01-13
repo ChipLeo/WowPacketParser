@@ -34,7 +34,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         }
 
         public static void ReadLFGListBlacklistEntry(Packet packet, params object[] indexes)
-        {
+        {//653291 22996
             packet.ReadInt32("ActivityID", indexes);
             packet.ReadInt32("Reason", indexes);
         }
@@ -55,15 +55,17 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         }
 
         public static void ReadLFGListJoinRequest(Packet packet, params object[] idx)
-        {
+        {//650D44 22996
             packet.ReadInt32("ActivityID", idx);
             packet.ReadSingle("RequiredItemLevel", idx);
+            packet.ReadInt32("unk3", idx);
 
             packet.ResetBitReader();
 
             var lenName = packet.ReadBits(8);
             var lenComment = packet.ReadBits(11);
             var lenVoiceChat = packet.ReadBits(8);
+            packet.ReadBit("unkb", idx);
 
             packet.ReadWoWString("Name", lenName, idx);
             packet.ReadWoWString("Comment", lenComment, idx);
@@ -117,10 +119,65 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadInt32("Unk40", idx);
         }
 
+        public static void sub_650E43(Packet packet, params object[] idx)
+        {//650E43 22996
+            ReadCliRideTicket(packet, idx, "RideTicket");
+            packet.ReadInt32("unk", idx);
+            packet.ReadPackedGuid128("guid1336", idx);
+            packet.ReadPackedGuid128("guid1352", idx);
+            packet.ReadPackedGuid128("guid1368", idx);
+            packet.ReadPackedGuid128("guid1384", idx);
+            packet.ReadInt32("VirtualRealmAddress", idx);//1400
+            var cnt1404 = packet.ReadInt32("cnt1404", idx);
+            var cnt1420 = packet.ReadInt32("cnt1420", idx);
+            var cnt1436 = packet.ReadInt32("cnt1436", idx);
+            var cnt1452 = packet.ReadInt32("cnt1452", idx);
+            packet.ReadInt32("unk1468", idx);
+            packet.ReadInt32("unk1472", idx);
+            packet.ReadByte("unk1476", idx);
+            for (var j = 0; j < cnt1404; ++j)
+                packet.ReadPackedGuid128("guid1408", idx, j);
+            for (var j = 0; j < cnt1420; ++j)
+                packet.ReadPackedGuid128("guid1424", idx, j);
+            for (var j = 0; j < cnt1436; ++j)
+                packet.ReadPackedGuid128("guid1440", idx, j);
+            for (var j = 0; j < cnt1452; ++j)
+            {//679F95 22996
+                packet.ReadByte("unk", idx, j);
+                packet.ReadByte("unk1", idx, j);
+            }
+            {//650D44 22996
+                packet.ReadInt32("unk", idx);
+                packet.ReadInt32("unk", idx);
+                packet.ReadInt32("unk", idx);
+                packet.ResetBitReader();
+                var len12 = packet.ReadBits(8);
+                var len141 = packet.ReadBits(11);
+                var len1166 = packet.ReadBits(8);
+                packet.ReadBit("unkbit", idx);
+                packet.ReadWoWString("str", len12, idx);
+                packet.ReadWoWString("str2", len141, idx);
+                packet.ReadWoWString("str3", len1166, idx);
+            }
+        }
+
         [Parser(Opcode.CMSG_LFG_LIST_GET_STATUS)]
         [Parser(Opcode.CMSG_REQUEST_LFG_LIST_BLACKLIST)]
         public static void HandleLfgZero(Packet packet)
         {
+        }
+
+        [Parser(Opcode.CMSG_LFG_LIST_APPLY_TO_GROUP)]
+        public static void HandleLfgListApplyToGroup(Packet packet)
+        {//063AC1E 22996
+            //652C07 22996
+            ReadCliRideTicket(packet, "RideTicket2");
+
+            packet.ReadInt32("unk48");
+            packet.ReadByte("unk52");
+            packet.ResetBitReader();
+            int cnt = (int)packet.ReadBits("unkb", 8);
+            packet.ReadBytes(cnt);
         }
 
         [Parser(Opcode.SMSG_LFG_PLAYER_INFO)]
@@ -328,6 +385,15 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ResetBitReader();
         }
 
+        [Parser(Opcode.SMSG_LFG_LIST_SEARCH_RESULTS)]
+        public static void HandleLfgListSearchResults(Packet packet)
+        {
+            packet.ReadInt16("unk16");
+            var count = packet.ReadInt32("Count");
+            for (var i = 0; i < count; ++i)
+                sub_650E43(packet, i);
+        }
+
         [Parser(Opcode.SMSG_LFG_ROLE_CHECK_UPDATE)]
         public static void HandleLfgRoleCheck(Packet packet)
         {
@@ -456,28 +522,35 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         public static void HandleLFGListSearch(Packet packet)
         {
             var len = packet.ReadBits(6);
-            var bits92 = packet.ReadBits("Bits92", 7);
 
             packet.ReadInt32("Int64");
             packet.ReadInt32("Int68");
             packet.ReadInt32("Int72");
-            if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173))
-                packet.ReadInt32("Int76");
-            var int72 = packet.ReadInt32("BlacklistEntryCount");
+            packet.ReadInt32("Int76");
+            var int80 = packet.ReadInt32("BlacklistEntryCount");
+            var int96 = packet.ReadInt32("int96");
 
             packet.ReadWoWString("String", len);
 
-            for (int i = 0; i < bits92; i++)
-                packet.ReadPackedGuid128("SmartGuid96", i); // PartyMember?
-
-            for (int i = 0; i < int72; i++)
+            for (int i = 0; i < int80; ++i)
                 ReadLFGListBlacklistEntry(packet, i, "ListBlacklistEntry");
+
+            for (int i = 0; i < int96; ++i)
+                packet.ReadPackedGuid128("SmartGuid96", i); // PartyMember?
         }
 
         [Parser(Opcode.CMSG_SET_LFG_BONUS_FACTION_ID)]
         public static void HandleSetLFGBonusFactionID(Packet packet)
         {
             packet.ReadInt32("FactionID");
+        }
+
+        [Parser(Opcode.SMSG_LFG_LIST_SEARCH_STATUS)]
+        public static void HandleLfgListSearchStatus(Packet packet)
+        {
+            ReadCliRideTicket(packet);
+            packet.ReadByte("unk48");
+            packet.ReadBit("unk49");
         }
 
         [Parser(Opcode.SMSG_SOCIAL_QUEUE_UPDATE)]
@@ -506,46 +579,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                         packet.ReadBit("unk");
                     }
                     if (v6 == 1)
-                    {//650E43 22996
-                        ReadCliRideTicket(packet, "RideTicket");
-                        packet.ReadInt32("unk");
-                        packet.ReadPackedGuid128("guid1336");
-                        packet.ReadPackedGuid128("guid1352");
-                        packet.ReadPackedGuid128("guid1368");
-                        packet.ReadPackedGuid128("guid1384");
-                        packet.ReadInt32("unk1400");
-                        var cnt1404 = packet.ReadInt32("cnt1404");
-                        var cnt1420 = packet.ReadInt32("cnt1420");
-                        var cnt1436 = packet.ReadInt32("cnt1436");
-                        var cnt1452 = packet.ReadInt32("cnt1452");
-                        packet.ReadInt32("unk1468");
-                        packet.ReadInt32("unk1472");
-                        packet.ReadByte("unk1476");
-                        for (var j = 0; j < cnt1404; ++j)
-                            packet.ReadPackedGuid128("guid1408", i, j);
-                        for (var j = 0; j < cnt1420; ++j)
-                            packet.ReadPackedGuid128("guid1424", i, j);
-                        for (var j = 0; j < cnt1436; ++j)
-                            packet.ReadPackedGuid128("guid1440", i, j);
-                        for (var j = 0; j < cnt1452; ++j)
-                        {//679F95 22996
-                            packet.ReadByte("unk", i, j);
-                            packet.ReadByte("unk1", i, j);
-                        }
-                        {//650D44 22996
-                            packet.ReadInt32("unk");
-                            packet.ReadInt32("unk");
-                            packet.ReadInt32("unk");
-                            packet.ResetBitReader();
-                            var len12 = packet.ReadBits(8);
-                            var len141 = packet.ReadBits(11);
-                            var len1166 = packet.ReadBits(8);
-                            packet.ReadBit("unkbit");
-                            packet.ReadWoWString("str", len12);
-                            packet.ReadWoWString("str2", len141);
-                            packet.ReadWoWString("str3", len1166);
-                        }
-                    }
+                        sub_650E43(packet);
                     if (v6 == 0)
                     {//64F765 22996
                         packet.ReadInt32("LFG Slot", i);
