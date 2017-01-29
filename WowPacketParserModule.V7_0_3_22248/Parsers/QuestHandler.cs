@@ -106,6 +106,11 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             packet.ReadInt32("unk60", idx);
         }
+        [Parser(Opcode.CMSG_ADVENTURE_JOURNAL_OPEN_QUEST)]
+        public static void HandleAdventureJournalOpenQuest(Packet packet)
+        {
+            packet.ReadInt32("QuestID");
+        }
 
         [Parser(Opcode.CMSG_QUERY_QUEST_REWARDS)]
         public static void HandleQuestQueryRewards(Packet packet)

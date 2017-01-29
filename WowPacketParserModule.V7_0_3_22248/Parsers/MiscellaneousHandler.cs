@@ -56,7 +56,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32E<ConsumableTokenRedeem>("TokenRedeemIndex");
         }
 
-        [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS_GLUE_SCREEN, ClientVersionBuild.V7_1_0_22900)]
+        [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS_GLUE_SCREEN, ClientVersionBuild.V7_1_0_22900, ClientVersionBuild.V7_1_5_23360)]
         public static void HandleFeatureSystemStatusGlueScreen710(Packet packet)
         {
             packet.ReadBit("BpayStoreEnabled");
@@ -76,6 +76,27 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32E<ConsumableTokenRedeem>("TokenRedeemIndex");
         }
 
+        [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS_GLUE_SCREEN, ClientVersionBuild.V7_1_5_23360)]
+        public static void HandleFeatureSystemStatusGlueScreen715(Packet packet)
+        {
+            packet.ReadBit("BpayStoreEnabled");
+            packet.ReadBit("BpayStoreAvailable");
+            packet.ReadBit("BpayStoreDisabledByParentalControls");
+            packet.ReadBit("CharUndeleteEnabled");
+            packet.ReadBit("CommerceSystemEnabled");
+            packet.ReadBit("Unk14");
+            packet.ReadBit("WillKickFromWorld");
+            packet.ReadBit("IsExpansionPreorderInStore");
+            packet.ReadBit("KioskModeEnabled");
+            packet.ReadBit("CompetitiveModeEnabled");
+            packet.ReadBit("NoHandler"); // not accessed in handler
+            packet.ReadBit("TrialBoostEnabled");
+            packet.ReadBit("unk");
+            packet.ReadInt32("TokenPollTimeSeconds");
+            packet.ReadInt32E<ConsumableTokenRedeem>("TokenRedeemIndex");
+            packet.ReadInt64("unk64");
+        }
+
         [Parser(Opcode.SMSG_INITIAL_SETUP)]
         public static void HandleInitialSetup(Packet packet)
         {
@@ -88,6 +109,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
             packet.ReadPackedGuid128("Guid");
             packet.ReadBit("unk");
+        }
+
+        [Parser(Opcode.SMSG_MODIFY_CHARGE_RECOVERY_SPEED)]
+        public static void HandleModifyChargeRecoverySpeed(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadInt32("unk2");
         }
 
         [Parser(Opcode.SMSG_WORLD_SERVER_INFO)]

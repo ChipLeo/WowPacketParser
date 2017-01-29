@@ -399,6 +399,16 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32("FailedArg2");
         }
 
+        [Parser(Opcode.SMSG_SET_SPELL_CHARGES)]
+        public static void HandleSetSpellCharges(Packet packet)
+        {
+            packet.ReadUInt32("Category");
+            packet.ReadUInt32("RecoveryTime");
+            packet.ReadByte("ConsumedCharges");
+            packet.ReadInt32("unk");
+            packet.ReadBit("IsPet");
+        }
+
         [Parser(Opcode.SMSG_SPELL_FAILURE)]
         public static void HandleSpellFailure(Packet packet)
         {

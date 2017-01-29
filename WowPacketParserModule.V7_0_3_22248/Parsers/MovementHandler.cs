@@ -250,6 +250,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         [Parser(Opcode.CMSG_MOVE_FEATHER_FALL_ACK)]
         [Parser(Opcode.CMSG_MOVE_SET_CAN_TURN_WHILE_FALLING_ACK)]
         [Parser(Opcode.CMSG_MOVE_ENABLE_DOUBLE_JUMP_ACK)]
+        [Parser(Opcode.CMSG_MOVE_SET_IGNORE_MOVEMENT_FORCES_ACK)]
         public static void HandleMovementAck(Packet packet)
         {
             ReadMovementAck(packet, "MovementAck");

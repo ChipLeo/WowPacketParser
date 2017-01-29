@@ -112,5 +112,20 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                     packet.ReadInt32("unk3", j, i);
             }
         }
+
+        [Parser(Opcode.SMSG_REQUEST_PVP_REWARDS_RESPONSE)]
+        public static void HandleRequestPVPRewardsResponse(Packet packet)
+        {
+            LfgHandler.ReadShortageReward(packet, "ShortageReward16");
+            packet.ResetBitReader();
+            packet.ReadBit("unk476");
+            packet.ReadBit("unk477");
+            packet.ReadBit("unk478");
+            packet.ReadBit("unk479");
+            LfgHandler.ReadShortageReward(packet, "ShortageReward108");
+            LfgHandler.ReadShortageReward(packet, "ShortageReward200");
+            LfgHandler.ReadShortageReward(packet, "ShortageReward292");
+            LfgHandler.ReadShortageReward(packet, "ShortageReward384");
+        }
     }
 }
