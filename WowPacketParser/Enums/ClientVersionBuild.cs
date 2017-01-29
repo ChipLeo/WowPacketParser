@@ -154,6 +154,7 @@
         V7_1_0_23171 = 23171,
         V7_1_0_23222 = 23222,
         V7_1_5_23360 = 23360,
+        V7_1_5_23420 = 23420,
 
         // Battle.net - should probably not mix this but oh well
         BattleNetV37165 = 37165,
