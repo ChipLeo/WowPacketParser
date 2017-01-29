@@ -648,8 +648,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             Storage.QuestGreetings.Add(questGreeting, packet.TimeSpan);
         }
 
-        [Parser(Opcode.SMSG_QUEST_UNK1)]
-        public static void HandleQuestUnk1(Packet packet)
+        [Parser(Opcode.SMSG_QUEST_SPAWN_TRACKING_UPDATE)]
+        public static void HandleQuestSpawnTrackingUpdate(Packet packet)
         {
             var count = packet.ReadInt32("Count");
             for (var i = 0; i < count; i++)
