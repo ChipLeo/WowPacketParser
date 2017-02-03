@@ -120,7 +120,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         }
 
         public static void sub_650E43(Packet packet, params object[] idx)
-        {//650E43 22996
+        {//650E43 22996 651B56 23420
             ReadCliRideTicket(packet, idx, "RideTicket");
             packet.ReadInt32("unk", idx);
             packet.ReadPackedGuid128("guid1336", idx);
@@ -155,9 +155,18 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 var len141 = packet.ReadBits(11);
                 var len1166 = packet.ReadBits(8);
                 packet.ReadBit("unkbit", idx);
+                Bit hasUnk518 = 0;
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_1_5_23420))
+                {
+                    packet.ReadBit("unkbit2", idx);
+                    hasUnk518 = packet.ReadBit("unkbit3", idx);
+                }
                 packet.ReadWoWString("str", len12, idx);
                 packet.ReadWoWString("str2", len141, idx);
                 packet.ReadWoWString("str3", len1166, idx);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_1_5_23420))
+                    if (hasUnk518)
+                        packet.ReadInt32("unk", idx);
             }
         }
 
@@ -558,13 +567,14 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
             packet.ReadInt64("unk64");
             packet.ReadPackedGuid128("Player");
-            {//64FE42 22996
+            {//64FE42 22996 650CB9 23420
                 packet.ReadPackedGuid128("Party");
                 var cnt = packet.ReadInt32("Cnt");
+                packet.ResetBitReader();
                 packet.ReadBit("unkb");
 
                 for (var i = 0; i < cnt; ++i)
-                {//64FEB8 22996
+                {//64FEB8 22996 650D2F 23420
                     packet.ResetBitReader();
                     var v6 = packet.ReadBits("unkbc", 2, i);
                     if (v6 == 2)
@@ -592,6 +602,88 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                     }
                 }
             }
+        }
+
+        [Parser(Opcode.SMSG_LFG_UNK_2A2C)]
+        public static void HandleLFGUnk2A2C(Packet packet)
+        {
+            var cnt = packet.ReadInt32("count");
+            for (var i = 0; i < cnt; ++i)
+            {//651043 22996
+                ReadCliRideTicket(packet, i);
+                packet.ReadInt32("unk32", i);
+                var cnt1 = packet.ReadInt32("cnt1", i);
+                for (var j = 0; j < cnt1; ++j)
+                {//679F95 22996
+                    packet.ReadByte("unkb1", i, j);
+                    packet.ReadByte("unkb2", i, j);
+                }
+
+                packet.ResetBitReader();
+                var hasUnk56 = packet.ReadBit("unk56", i);
+                var hasUnk68 = packet.ReadBit("unk68", i);
+                var hasUnk76 = packet.ReadBit("unk76", i);
+                packet.ReadBit("unk96", i);
+                var hasGuid120 = packet.ReadBit("unk120", i);
+                var hasGuid144 = packet.ReadBit("unk144", i);
+                var hasGuid168 = packet.ReadBit("unk168", i);
+                packet.ReadBit("unk1472", i);
+                packet.ReadBit("unk1473", i);
+                packet.ReadBit("unk1474", i);
+
+                //650D44
+                {
+                    packet.ReadInt32("unk1", i);
+                    packet.ReadInt32("unk2", i);
+                    packet.ReadInt32("unk3", i);
+                    packet.ResetBitReader();
+                    var len1 = packet.ReadBits(8);
+                    var len2 = packet.ReadBits(11);
+                    var len3 = packet.ReadBits(8);
+                    packet.ReadBit("unk4", i);
+                    packet.ReadWoWString("str1", len1, i);
+                    packet.ReadWoWString("str2", len2, i);
+                    packet.ReadWoWString("str3", len3, i);
+                }
+
+                if (hasUnk56)
+                    packet.ReadPackedGuid128("guid", i);
+                if (hasUnk68)
+                    packet.ReadInt32("unk64", i);
+                if (hasUnk76)
+                    packet.ReadInt32("unk72", i);
+                if (hasGuid120)
+                    packet.ReadPackedGuid128("guid104", i);
+                if (hasGuid144)
+                    packet.ReadPackedGuid128("guid128", i);
+                if (hasGuid168)
+                    packet.ReadPackedGuid128("guid152", i);
+            }
+        }
+
+        [Parser(Opcode.SMSG_LFG_UNK_2A28)]
+        public static void HandleLFGUnk2A28(Packet packet)
+        {
+            ReadCliRideTicket(packet);
+            ReadCliRideTicket(packet);
+            packet.ReadInt32("unk20");
+            packet.ReadByte("unk84");
+            packet.ReadByte("unk92");
+            packet.ResetBitReader();
+            packet.ReadBits("unk88", 4);
+        }
+
+        [Parser(Opcode.SMSG_LFG_UNK_2A29)]
+        public static void HandleLFGUnk2A29(Packet packet)
+        {
+            ReadCliRideTicket(packet);
+            ReadCliRideTicket(packet);
+            sub_650E43(packet);
+            packet.ReadInt32("unk20");
+            packet.ReadByte("unk84");
+            packet.ReadByte("unk92");
+            packet.ResetBitReader();
+            packet.ReadBits("unk88", 4);
         }
     }
 }
