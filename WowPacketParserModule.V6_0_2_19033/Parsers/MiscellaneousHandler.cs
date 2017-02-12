@@ -9,6 +9,7 @@ using CoreParsers = WowPacketParser.Parsing.Parsers;
 using TutorialAction610 = WowPacketParser.Enums.Version.V6_1_0_19678.TutorialAction;
 using TutorialAction612 = WowPacketParser.Enums.Version.V6_1_2_19802.TutorialAction;
 using TutorialAction620 = WowPacketParser.Enums.Version.V6_2_0_20173.TutorialAction;
+using TutorialAction624 = WowPacketParser.Enums.Version.V6_2_4_21742.TutorialAction;
 
 namespace WowPacketParserModule.V6_0_2_19033.Parsers
 {
@@ -634,12 +635,21 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadInt32E<Tutorial>("TutorialBit");
         }
 
-        [Parser(Opcode.CMSG_TUTORIAL_FLAG, ClientVersionBuild.V6_2_0_20173)]
+        [Parser(Opcode.CMSG_TUTORIAL_FLAG, ClientVersionBuild.V6_2_0_20173, ClientVersionBuild.V6_2_4_21742)]
         public static void HandleTutorialFlag620(Packet packet)
         {
             var action = packet.ReadBitsE<TutorialAction620>("TutorialAction", 2);
 
             if (action == TutorialAction620.Update)
+                packet.ReadInt32E<Tutorial>("TutorialBit");
+        }
+
+        [Parser(Opcode.CMSG_TUTORIAL_FLAG, ClientVersionBuild.V6_2_4_21742)]
+        public static void HandleTutorialFlag624(Packet packet)
+        {
+            var action = packet.ReadBitsE<TutorialAction624>("TutorialAction", 2);
+
+            if (action == TutorialAction624.Update)
                 packet.ReadInt32E<Tutorial>("TutorialBit");
         }
 
