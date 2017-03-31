@@ -256,10 +256,14 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             ReadMovementAck(packet, "MovementAck");
         }
 
+        [Parser(Opcode.CMSG_MOVE_FORCE_FLIGHT_BACK_SPEED_CHANGE_ACK)]
         [Parser(Opcode.CMSG_MOVE_FORCE_FLIGHT_SPEED_CHANGE_ACK)]
-        [Parser(Opcode.CMSG_MOVE_FORCE_RUN_SPEED_CHANGE_ACK)]
+        [Parser(Opcode.CMSG_MOVE_FORCE_PITCH_RATE_CHANGE_ACK)]
         [Parser(Opcode.CMSG_MOVE_FORCE_RUN_BACK_SPEED_CHANGE_ACK)]
+        [Parser(Opcode.CMSG_MOVE_FORCE_RUN_SPEED_CHANGE_ACK)]
+        [Parser(Opcode.CMSG_MOVE_FORCE_SWIM_BACK_SPEED_CHANGE_ACK)]
         [Parser(Opcode.CMSG_MOVE_FORCE_SWIM_SPEED_CHANGE_ACK)]
+        [Parser(Opcode.CMSG_MOVE_FORCE_TURN_RATE_CHANGE_ACK)]
         [Parser(Opcode.CMSG_MOVE_FORCE_WALK_SPEED_CHANGE_ACK)]
         public static void HandleMovementSpeedAck(Packet packet)
         {
@@ -401,6 +405,14 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadUInt32("SequenceId");
         }
 
+        [Parser(Opcode.SMSG_MOVE_SET_FLIGHT_BACK_SPEED)]
+        [Parser(Opcode.SMSG_MOVE_SET_SWIM_BACK_SPEED)]
+        public static void HandleMoveSetSwimBackSpeed(Packet packet)
+        {
+            packet.ReadPackedGuid128("MoverGUID");
+            packet.ReadUInt32("SequenceIndex");
+            packet.ReadSingle("Speed");
+        }
 
         [Parser(Opcode.SMSG_MOVE_SET_COLLISION_HEIGHT, ClientVersionBuild.V7_1_0_22900)]
         public static void HandleSetCollisionHeight(Packet packet)
