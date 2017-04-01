@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ChipLeo")]
 [assembly: AssemblyProduct("WowPacketParser")]
-[assembly: AssemblyCopyright("Copyright © 2010-2016")]
+[assembly: AssemblyCopyright("Copyright © 2010-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

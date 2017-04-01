@@ -214,6 +214,7 @@ namespace WowPacketParser.Enums
         Account       = 0x108,
         BattleGround2 = 0x109,
         MOTransport   = 0x10C,
+        Unknown270    = 0x10E, // pets and mounts?
         Guild         = 0x10F,
         Item          = 0x400, // Container
         Toy           = 0x408,

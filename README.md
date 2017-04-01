@@ -44,5 +44,7 @@ and `wpp_data_objectnames.sql` has some data to fill the database.
 Nightly Builds
 --------------
 
+##### .NET 4.5 (AnyCPU) by AppVeyor
+
 - [Debug 32/64 Bits](https://ci.appveyor.com/project/ChipLeo/wowpacketparser) -> `Configuration: Debug` -> `ARTIFACTS` -> `WPP.zip`
 - [Release 32/64 Bits](https://ci.appveyor.com/project/ChipLeo/wowpacketparser) -> `Configuration: Release` -> `ARTIFACTS` -> `WPP.zip`

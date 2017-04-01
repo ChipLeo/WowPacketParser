@@ -644,7 +644,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             ReadPlayerMovementInfo(packet, info.MovementSetFly); // 679E4F
         }
 
-        [Parser(Opcode.CMSG_MOVE_CHNG_TRANSPORT)]
+        [Parser(Opcode.CMSG_MOVE_CHANGE_TRANSPORT)]
         public static void HandleMoveChngTransport(Packet packet)
         {
             ReadPlayerMovementInfo(packet, info.MovementChngTransport);

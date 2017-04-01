@@ -270,7 +270,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_MAIL_TAKE_MONEY,                          0x06FA}, //++
             {Opcode.CMSG_MINIMAP_PING,                             0x0837}, //+-
             {Opcode.CMSG_MOVE_APPLY_MOVEMENT_FORCE_ACK,            0x08D3}, //++
-            {Opcode.CMSG_MOVE_CHNG_TRANSPORT,                      0x09DB}, //++
+            {Opcode.CMSG_MOVE_CHANGE_TRANSPORT,                    0x09DB}, //++
             {Opcode.CMSG_MOVE_FALL_LAND,                           0x08FA}, //++
             {Opcode.CMSG_MOVE_FEATHER_FALL_ACK,                    0x08D0}, //++ pair SMSG 0C60 08E0
             {Opcode.CMSG_MOVE_FORCE_FLIGHT_SPEED_CHANGE_ACK,       0x09DA}, //++

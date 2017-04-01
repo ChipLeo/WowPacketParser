@@ -2,32 +2,32 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// Общие сведения об этой сборке предоставляются следующим набором 
-// атрибутов. Отредактируйте значения этих атрибутов, чтобы изменить
-// общие сведения об этой сборке.
-[assembly: AssemblyTitle("WowPacketParser.Tests.Properties")]
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+[assembly: AssemblyTitle("WowPacketParser.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WowPacketParser.Tests.Properties")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCompany("TrinityCore")]
+[assembly: AssemblyProduct("WowPacketParser")]
+[assembly: AssemblyCopyright("Copyright © 2013-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// Установка значения False в параметре ComVisible делает типы в этой сборке невидимыми 
-// для COM-компонентов.  Если необходим доступ к типу в этой сборке из 
-// COM, следует установить атрибут ComVisible в TRUE для этого типа.
+// Setting ComVisible to false makes the types in this assembly not visible 
+// to COM components.  If you need to access a type in this assembly from 
+// COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
-// Следующий GUID служит для идентификации библиотеки типов, если этот проект будет видимым для COM
-[assembly: Guid("15deb903-66c7-468b-b17f-15f1a8f98b80")]
+// The following GUID is for the ID of the typelib if this project is exposed to COM
+[assembly: Guid("44225804-435d-42d2-bfa8-6600bee646c5")]
 
-// Сведения о версии сборки состоят из следующих четырех значений:
+// Version information for an assembly consists of the following four values:
 //
-//      Основной номер версии
-//      Дополнительный номер версии
-//   Номер сборки
-//      Редакция
+//      Major Version
+//      Minor Version
+//      Build Number
+//      Revision
 //
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
