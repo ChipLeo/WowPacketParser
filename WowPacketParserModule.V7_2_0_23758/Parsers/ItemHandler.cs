@@ -88,6 +88,37 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadBit("unk3");
         }
 
+        [Parser(Opcode.CMSG_AUTOBANK_ITEM)]
+        [Parser(Opcode.CMSG_AUTOBANK_REAGENT)]
+        [Parser(Opcode.CMSG_AUTO_EQUIP_ITEM)]
+        [Parser(Opcode.CMSG_AUTOSTORE_BANK_ITEM)]
+        [Parser(Opcode.CMSG_AUTOSTORE_BANK_REAGENT)]
+        [Parser(Opcode.CMSG_SWAP_INV_ITEM)]
+        public static void HandleAutoItem(Packet packet)
+        {
+            var bits2 = packet.ReadBits("InvItemCount", 2);
+            for (int i = 0; i < bits2; i++)
+            {
+                packet.ReadByte("ContainerSlot", i);
+                packet.ReadByte("Slot", i);
+            }
+
+            packet.ReadByte("Slot");
+            packet.ReadByte("PackSlot");
+        }
+
+        [Parser(Opcode.CMSG_LOOT_ITEM)]
+        public static void HandleAutoStoreLootItem(Packet packet)
+        {
+            var int16 = packet.ReadInt32("Count");
+
+            for (var i = 0; i < int16; ++i)
+            {
+                packet.ReadPackedGuid128("LootObj", i);
+                packet.ReadByte("Slot", i);
+            }
+        }
+
         [Parser(Opcode.SMSG_ITEM_PUSH_RESULT)]
         public static void HandleItemPushResult(Packet packet)
         {

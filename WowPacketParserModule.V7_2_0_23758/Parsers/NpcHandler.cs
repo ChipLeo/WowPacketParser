@@ -51,6 +51,31 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadWoWString("QuestTitle", questTitleLen, idx);
         }
 
+        [Parser(Opcode.CMSG_CLOSE_INTERACTION)] // trigger in CGGameUI::CloseInteraction
+        public static void HandleCloseInteraction(Packet packet)
+        {
+            packet.ReadPackedGuid128("Guid");
+        }
+
+        [Parser(Opcode.CMSG_BANKER_ACTIVATE)]
+        [Parser(Opcode.CMSG_BINDER_ACTIVATE)]
+        [Parser(Opcode.SMSG_BINDER_CONFIRM)]
+        [Parser(Opcode.CMSG_TALK_TO_GOSSIP)]
+        [Parser(Opcode.CMSG_LIST_INVENTORY)]
+        [Parser(Opcode.CMSG_TRAINER_LIST)]
+        [Parser(Opcode.SMSG_SHOW_BANK)]
+        public static void HandleNpcHello(Packet packet)
+        {
+            packet.ReadPackedGuid128("Guid");
+        }
+
+        [Parser(Opcode.CMSG_QUERY_NPC_TEXT)]
+        public static void HandleNpcTextQuery(Packet packet)
+        {
+            packet.ReadInt32("Entry");
+            packet.ReadPackedGuid128("Guid");
+        }
+
         [HasSniffData]
         [Parser(Opcode.SMSG_GOSSIP_MESSAGE)]
         public static void HandleNpcGossip(Packet packet)
@@ -85,6 +110,42 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             Storage.Gossips.Add(gossip, packet.TimeSpan);
 
             packet.AddSniffData(StoreNameType.Gossip, menuId, guid.GetEntry().ToString(CultureInfo.InvariantCulture));
+        }
+
+        [HasSniffData]
+        [Parser(Opcode.SMSG_QUERY_NPC_TEXT_RESPONSE)]
+        public static void HandleNpcTextUpdate(Packet packet)
+        {
+            var entry = packet.ReadEntry("Entry");
+            if (entry.Value) // Can be masked
+                return;
+
+            Bit hasData = packet.ReadBit("Has Data");
+            int size = packet.ReadInt32("Size");
+
+            if (!hasData || size == 0)
+                return; // nothing to do
+
+            NpcTextMop npcText = new NpcTextMop
+            {
+                ID = (uint)entry.Key
+            };
+
+            var data = packet.ReadBytes(size);
+
+            Packet pkt = new Packet(data, packet.Opcode, packet.Time, packet.Direction, packet.Number, packet.Writer, packet.FileName);
+            npcText.Probabilities = new float[8];
+            npcText.BroadcastTextId = new uint[8];
+            for (int i = 0; i < 8; ++i)
+                npcText.Probabilities[i] = pkt.ReadSingle("Probability", i);
+            for (int i = 0; i < 8; ++i)
+                npcText.BroadcastTextId[i] = pkt.ReadUInt32("Broadcast Text Id", i);
+
+            pkt.ClosePacket(false);
+
+            packet.AddSniffData(StoreNameType.NpcText, entry.Key, "QUERY_RESPONSE");
+
+            Storage.NpcTextsMop.Add(npcText, packet.TimeSpan);
         }
 
         [Parser(Opcode.SMSG_VENDOR_INVENTORY)]

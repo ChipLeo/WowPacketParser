@@ -32,6 +32,12 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadByte("LootListID", indexes);
         }
 
+        [Parser(Opcode.CMSG_LOOT_RELEASE)]
+        public static void HandleLootRelease(Packet packet)
+        {
+            packet.ReadPackedGuid128("Object GUID");
+        }
+
         [Parser(Opcode.SMSG_LOOT_RESPONSE)]
         public static void HandleLootResponse(Packet packet)
         {
@@ -69,6 +75,14 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadByte("ValidRolls");
             packet.ReadByteE<LootMethod>("Method");
             ReadLootItem(packet, "LootItem");
+        }
+
+        [Parser(Opcode.SMSG_LOOT_REMOVED)]
+        public static void HandleLootRemoved(Packet packet)
+        {
+            packet.ReadPackedGuid128("Loot Owner");
+            packet.ReadPackedGuid128("LootObj");
+            packet.ReadByte("LootListId");
         }
 
         [Parser(Opcode.SMSG_LOOT_ROLL)]

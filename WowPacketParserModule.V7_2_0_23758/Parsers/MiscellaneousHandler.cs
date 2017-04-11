@@ -33,6 +33,13 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadInt32("DisplayTime", idx);
         }
 
+        [Parser(Opcode.CMSG_QUERY_PAGE_TEXT)]
+        public static void HandlePageTextQuery(Packet packet)
+        {
+            packet.ReadInt32("Entry");
+            packet.ReadPackedGuid128("Guid");
+        }
+
         [Parser(Opcode.CMSG_TUTORIAL_FLAG)]
         public static void HandleTutorialFlag(Packet packet)
         {
@@ -109,6 +116,13 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
         {
             packet.ReadInt32("unk1");
             packet.ReadInt32("unk2");
+        }
+
+        [Parser(Opcode.SMSG_PLAY_ONE_SHOT_ANIM_KIT)]
+        public static void HandlePlayOneShotAnimKit(Packet packet)
+        {
+            packet.ReadPackedGuid128("Unit");
+            packet.ReadUInt16("AnimKitID");
         }
 
         [Parser(Opcode.SMSG_WORLD_SERVER_INFO)]

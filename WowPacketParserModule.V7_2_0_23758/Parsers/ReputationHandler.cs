@@ -24,6 +24,23 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                 packet.ReadBit("FactionHasBonus", i);
         }
 
+        [Parser(Opcode.SMSG_SET_FACTION_STANDING)]
+        public static void HandleSetFactionStanding(Packet packet)
+        {
+            packet.ReadSingle("BonusFromAchievementSystem");
+            packet.ReadSingle("ReferAFriendBonus");
+
+            var count = packet.ReadInt32("");
+            for (int i = 0; i < count; i++)
+            {
+                packet.ReadInt32("Index");
+                packet.ReadInt32("Standing");
+            }
+
+            packet.ResetBitReader();
+            packet.ReadBit("ShowVisual");
+        }
+
         [Parser(Opcode.SMSG_SET_FORCED_REACTIONS)]
         public static void HandleForcedReactions(Packet packet)
         {

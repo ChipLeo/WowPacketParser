@@ -232,6 +232,19 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                 packet.ReadUInt16("Talents");
         }
 
+        [Parser(Opcode.SMSG_LOG_XP_GAIN)]
+        public static void HandleLogXPGain(Packet packet)
+        {
+            packet.ReadPackedGuid128("Victim");
+            packet.ReadInt32("Original");
+
+            packet.ReadByte("Reason");
+            packet.ReadInt32("Amount");
+            packet.ReadSingle("GroupBonus");
+
+            packet.ReadBit("ReferAFriend");
+        }
+
         [Parser(Opcode.SMSG_QUERY_PLAYER_NAME_RESPONSE)]
         public static void HandleNameQueryResponse(Packet packet)
         {

@@ -247,6 +247,22 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             ReadAttackRoundInfo(packet, "AttackRoundInfo");
         }
 
+        [Parser(Opcode.SMSG_ENVIRONMENTAL_DAMAGE_LOG)]
+        public static void HandleEnvirenmentalDamageLog(Packet packet)
+        {
+            packet.ReadPackedGuid128("Victim");
+
+            packet.ReadByteE<EnvironmentDamage>("Type");
+
+            packet.ReadInt32("Amount");
+            packet.ReadInt32("Resisted");
+            packet.ReadInt32("Absorbed");
+
+            var bit76 = packet.ReadBit("HasLogData");
+            if (bit76)
+                SpellHandler.ReadSpellCastLogData(packet);
+        }
+
         [Parser(Opcode.SMSG_PARTY_KILL_LOG)]
         public static void HandlePartyKillLog(Packet packet)
         {

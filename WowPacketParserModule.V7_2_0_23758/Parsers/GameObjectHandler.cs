@@ -8,11 +8,25 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
 {
     public static class GameObjectHandler
     {
+        [Parser(Opcode.CMSG_GAME_OBJ_REPORT_USE)]
+        [Parser(Opcode.CMSG_GAME_OBJ_USE)]
+        [Parser(Opcode.SMSG_PAGE_TEXT)]
+        public static void HandleGoMisc(Packet packet)
+        {
+            packet.ReadPackedGuid128("GameObjectGUID");
+        }
+
         [Parser(Opcode.CMSG_QUERY_GAME_OBJECT)]
         public static void HandleGameObjectQuery(Packet packet)
         {
             packet.ReadInt32("Entry");
             packet.ReadPackedGuid128("GUID");
+        }
+
+        [Parser(Opcode.SMSG_GAME_OBJECT_DESPAWN)]
+        public static void HandleGameObjectDespawn(Packet packet)
+        {
+            packet.ReadPackedGuid128("ObjectGUID");
         }
 
         [Parser(Opcode.SMSG_GAME_OBJECT_SET_STATE)]
