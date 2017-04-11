@@ -85,6 +85,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("ShipmentDuration", indexes);
             packet.ReadInt32("Unk8", indexes);
         }
+
         public static void ReadGarrisonMissionAreaBonus(Packet packet, params object[] indexes)
         {
             packet.ReadInt32("GarrMssnBonusAbilityID", indexes);
