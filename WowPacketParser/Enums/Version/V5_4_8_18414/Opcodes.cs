@@ -591,6 +591,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BATTLE_PAY_DELIVERY_ENDED,                0x020B}, //--
             {Opcode.SMSG_BATTLE_PAY_DELIVERY_STARTED,              0x1E32}, //--
             {Opcode.SMSG_BATTLE_PAY_GET_DISTRIBUTION_LIST_RESPONSE, 0x043F}, //--
+            {Opcode.SMSG_BATTLE_PAY_GET_PRODUCT_LIST_RESPONSE,     0x1ABF}, //--
             {Opcode.SMSG_BATTLE_PAY_PURCHASE_UPDATE,               0x14E2}, //++ pair+ 1886
             {Opcode.SMSG_BATTLE_PAY_START_DISTRIBUTION_ASSIGN_TO_TARGET_RESPONSE, 0x08AF}, //--
             {Opcode.SMSG_BATTLE_PAY_START_PURCHASE_RESPONSE,       0x0612}, //++ pair 1886
@@ -777,7 +778,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GAME_OBJECT_CUSTOM_ANIM,                  0x001F}, //++
             {Opcode.SMSG_GAME_OBJECT_PLAY_SPELL_VISUAL,            0x1942}, //--
             {Opcode.SMSG_GAME_OBJECT_RESET_STATE,                  0x100E}, //--
-            {Opcode.SMSG_GAME_SHOP_QUERY_RESPONSE,                 0x1ABF}, //--
             {Opcode.SMSG_GAME_SPEED_SET,                           0x1042}, //--
             {Opcode.SMSG_GAME_STORE_INGAME_BUY_FAILED,             0x023A}, //++
             {Opcode.SMSG_GAME_TIME_SET,                            0x0A0F}, //--
