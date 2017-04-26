@@ -591,7 +591,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BATTLE_PAY_DELIVERY_ENDED,                0x020B}, //--
             {Opcode.SMSG_BATTLE_PAY_DELIVERY_STARTED,              0x1E32}, //--
             {Opcode.SMSG_BATTLE_PAY_GET_DISTRIBUTION_LIST_RESPONSE, 0x043F}, //--
-            {Opcode.SMSG_BATTLE_PAY_GET_PRODUCT_LIST_RESPONSE,     0x1ABF}, //--
+            {Opcode.SMSG_BATTLE_PAY_GET_PRODUCT_LIST_RESPONSE,     0x1ABF}, //++
             {Opcode.SMSG_BATTLE_PAY_PURCHASE_UPDATE,               0x14E2}, //++ pair+ 1886
             {Opcode.SMSG_BATTLE_PAY_START_DISTRIBUTION_ASSIGN_TO_TARGET_RESPONSE, 0x08AF}, //--
             {Opcode.SMSG_BATTLE_PAY_START_PURCHASE_RESPONSE,       0x0612}, //++ pair 1886
