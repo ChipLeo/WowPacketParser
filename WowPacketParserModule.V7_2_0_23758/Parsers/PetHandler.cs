@@ -102,5 +102,11 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadPackedGuid128("PetGUID");
             ReadPetFlags(packet, "PetMode");
         }
+
+        [Parser(Opcode.SMSG_PET_STABLE_RESULT)]
+        public static void HandlePetStableResult(Packet packet)
+        {
+            packet.ReadByte("Result");
+        }
     }
 }
