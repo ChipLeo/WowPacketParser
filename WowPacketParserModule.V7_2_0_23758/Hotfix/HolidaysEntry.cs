@@ -15,10 +15,10 @@ namespace WowPacketParserModule.V7_2_0_23758.Hotfix
         public byte Looping { get; set; }
         [HotfixArray(10)]
         public byte[] CalendarFlags { get; set; }
-        public byte HolidayNameID { get; set; }
-        public byte HolidayDescriptionID { get; set; }
         public byte Priority { get; set; }
         public sbyte CalendarFilterType { get; set; }
         public byte Flags { get; set; }
+        public uint HolidayNameID { get; set; }
+        public uint HolidayDescriptionID { get; set; }
     }
 }

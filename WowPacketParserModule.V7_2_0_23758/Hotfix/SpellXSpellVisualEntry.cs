@@ -7,12 +7,17 @@ namespace WowPacketParserModule.V7_2_0_23758.Hotfix
     public class SpellXSpellVisualEntry
     {
         public uint SpellID { get; set; }
-        public float Unk620 { get; set; }
-        [HotfixArray(2)]
-        public ushort[] SpellVisualID { get; set; }
-        public ushort PlayerConditionID { get; set; }
-        public byte DifficultyID { get; set; }
-        public byte Flags { get; set; }
+        public uint SpellVisualID { get; set; }
         public uint ID { get; set; }
+        public float Chance { get; set; }
+        public ushort CasterPlayerConditionID { get; set; }
+        public ushort CasterUnitConditionID { get; set; }
+        public ushort PlayerConditionID { get; set; }
+        public ushort UnitConditionID { get; set; }
+        public uint IconFileDataID { get; set; }
+        public uint ActiveIconFileDataID { get; set; }
+        public byte Flags { get; set; }
+        public byte DifficultyID { get; set; }
+        public byte Priority { get; set; }
     }
 }

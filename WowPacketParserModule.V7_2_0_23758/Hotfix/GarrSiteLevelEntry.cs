@@ -10,11 +10,11 @@ namespace WowPacketParserModule.V7_2_0_23758.Hotfix
         public float[] TownHall { get; set; }
         public ushort MapID { get; set; }
         public ushort SiteID { get; set; }
+        public ushort MovieID { get; set; }
         public ushort UpgradeResourceCost { get; set; }
         public ushort UpgradeMoneyCost { get; set; }
         public byte Level { get; set; }
         public byte UITextureKitID { get; set; }
-        public byte MovieID { get; set; }
         public byte Level2 { get; set; }
     }
 }

@@ -7,6 +7,9 @@ namespace WowPacketParserModule.V7_2_0_23758.Hotfix
     public class DifficultyEntry
     {
         public string Name { get; set; }
+        public ushort GroupSizeHealthCurveID { get; set; }
+        public ushort GroupSizeDmgCurveID { get; set; }
+        public ushort GroupSizeSpellPointsCurveID { get; set; }
         public byte FallbackDifficultyID { get; set; }
         public byte InstanceType { get; set; }
         public byte MinPlayers { get; set; }
@@ -14,9 +17,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Hotfix
         public sbyte OldEnumValue { get; set; }
         public byte Flags { get; set; }
         public byte ToggleDifficultyID { get; set; }
-        public byte GroupSizeHealthCurveID { get; set; }
-        public byte GroupSizeDmgCurveID { get; set; }
-        public byte GroupSizeSpellPointsCurveID { get; set; }
         public byte ItemBonusTreeModID { get; set; }
         public byte OrderIndex { get; set; }
     }

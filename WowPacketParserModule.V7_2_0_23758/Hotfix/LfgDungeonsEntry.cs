@@ -10,7 +10,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Hotfix
         public uint Flags { get; set; }
         public string TextureFilename { get; set; }
         public string Description { get; set; }
-        public uint PlayerConditionID { get; set; }
         public ushort MaxLevel { get; set; }
         public ushort TargetLevelMax { get; set; }
         public short MapID { get; set; }
@@ -19,6 +18,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Hotfix
         public ushort LastBossJournalEncounterID { get; set; }
         public ushort BonusReputationAmount { get; set; }
         public ushort MentorItemLevel { get; set; }
+        public ushort PlayerConditionID { get; set; }
         public byte MinLevel { get; set; }
         public byte TargetLevel { get; set; }
         public byte TargetLevelMin { get; set; }

@@ -10,7 +10,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Hotfix
         public string NameFemale { get; set; }
         public string NameGenderless { get; set; }
         public ushort ClassAtlasID { get; set; }
-        public byte GarrFollItemSetID { get; set; }
+        public uint GarrFollItemSetID { get; set; }
         public byte Limit { get; set; }
         public byte Flags { get; set; }
         public uint ID { get; set; }

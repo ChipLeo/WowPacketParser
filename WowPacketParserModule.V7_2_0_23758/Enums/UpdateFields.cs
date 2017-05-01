@@ -169,7 +169,8 @@
     {
         UNIT_DYNAMIC_FIELD_PASSIVE_SPELLS                      = ObjectDynamicField.OBJECT_DYNAMIC_END + 0x000, // Flags: PUBLIC, URGENT
         UNIT_DYNAMIC_FIELD_WORLD_EFFECTS                       = ObjectDynamicField.OBJECT_DYNAMIC_END + 0x001, // Flags: PUBLIC, URGENT
-        UNIT_DYNAMIC_END                                       = ObjectDynamicField.OBJECT_DYNAMIC_END + 0x002,
+        UNIT_DYNAMIC_FIELD_CHANNEL_OBJECTS                     = ObjectDynamicField.OBJECT_DYNAMIC_END + 0x002, // Flags: PUBLIC, URGENT
+        UNIT_DYNAMIC_END                                       = ObjectDynamicField.OBJECT_DYNAMIC_END + 0x003,
     }
 
     public enum PlayerField
@@ -281,7 +282,7 @@
         PLAYER_FIELD_OVERRIDE_ZONE_PVP_TYPE                    = UnitField.UNIT_END + 0x9F7, // Size: 1, Flags: PRIVATE, URGENT_SELF_ONLY
         PLAYER_FIELD_BAG_SLOT_FLAGS                            = UnitField.UNIT_END + 0x9F8, // Size: 4, Flags: PRIVATE
         PLAYER_FIELD_BANK_BAG_SLOT_FLAGS                       = UnitField.UNIT_END + 0x9FC, // Size: 7, Flags: PRIVATE
-        PLAYER_FIELD_BYTES4                                    = UnitField.UNIT_END + 0xA03, // Size: 1, Flags: PRIVATE  'CGPlayerData::local.backpackAutoSortDisabled', 'CGPlayerData::local.bankAutoSortDisabled', 'CGPlayerData::local.sortBagsRightToLeft', 'CGPlayerData::local.insertItemsLeftToRight'
+        PLAYER_FIELD_INSERT_ITEMS_LEFT_TO_RIGHT                = UnitField.UNIT_END + 0xA03, // Size: 1, Flags: PRIVATE  'CGPlayerData::local.backpackAutoSortDisabled', 'CGPlayerData::local.bankAutoSortDisabled', 'CGPlayerData::local.sortBagsRightToLeft', 'CGPlayerData::local.insertItemsLeftToRight'
         PLAYER_FIELD_QUEST_COMPLETED                           = UnitField.UNIT_END + 0xA04, // Size: 1750, Flags: PRIVATE
         PLAYER_FIELD_HONOR                                     = UnitField.UNIT_END + 0x10DA, // Size: 1, Flags: PRIVATE
         PLAYER_FIELD_HONOR_NEXT_LEVEL                          = UnitField.UNIT_END + 0x10DB, // Size: 1, Flags: PRIVATE
@@ -302,7 +303,8 @@
         PLAYER_DYNAMIC_FIELD_CHARACTER_RESTRICTIONS            = UnitDynamicField.UNIT_DYNAMIC_END + 0x009, // Flags: PRIVATE
         PLAYER_DYNAMIC_FIELD_SPELL_PCT_MOD_BY_LABEL            = UnitDynamicField.UNIT_DYNAMIC_END + 0x00A, // Flags: PRIVATE
         PLAYER_DYNAMIC_FIELD_SPELL_FLAT_MOD_BY_LABEL           = UnitDynamicField.UNIT_DYNAMIC_END + 0x00B, // Flags: PRIVATE
-        PLAYER_DYNAMIC_END                                     = UnitDynamicField.UNIT_DYNAMIC_END + 0x00C,
+        PLAYER_DYNAMIC_FIELD_ARENA_COOLDOWNS                   = UnitDynamicField.UNIT_DYNAMIC_END + 0x00C, // Flags: PUBLIC
+        PLAYER_DYNAMIC_END                                     = UnitDynamicField.UNIT_DYNAMIC_END + 0x00D,
     }
 
     public enum GameObjectField

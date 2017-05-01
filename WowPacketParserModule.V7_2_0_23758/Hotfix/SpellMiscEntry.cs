@@ -25,8 +25,8 @@ namespace WowPacketParserModule.V7_2_0_23758.Hotfix
         public ushort CastingTimeIndex { get; set; }
         public ushort DurationIndex { get; set; }
         public ushort RangeIndex { get; set; }
-        public ushort SpellIconID { get; set; }
-        public ushort ActiveIconID { get; set; }
         public byte SchoolMask { get; set; }
+        public uint IconFileDataID { get; set; }
+        public uint ActiveIconFileDataID { get; set; }
     }
 }

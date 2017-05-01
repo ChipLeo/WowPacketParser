@@ -8,7 +8,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Hotfix
     {
         public uint ItemID { get; set; }
         public ushort QuestPackageID { get; set; }
-        public byte ItemCount { get; set; }
         public byte FilterType { get; set; }
+        public uint ItemCount { get; set; }
     }
 }

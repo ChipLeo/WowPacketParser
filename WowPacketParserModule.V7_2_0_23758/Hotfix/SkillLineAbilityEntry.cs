@@ -9,7 +9,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Hotfix
         public uint SpellID { get; set; }
         public uint RaceMask { get; set; }
         public uint SupercedesSpell { get; set; }
-        public uint Unknown703 { get; set; }
         public ushort SkillLine { get; set; }
         public ushort MinSkillLineRank { get; set; }
         public ushort TrivialSkillLineRankHigh { get; set; }
@@ -18,6 +17,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Hotfix
         public ushort TradeSkillCategoryID { get; set; }
         public byte AcquireMethod { get; set; }
         public byte NumSkillUps { get; set; }
+        public byte Unknown703 { get; set; }
         public uint ClassMask { get; set; }
     }
 }

@@ -8,6 +8,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Hotfix
     {
         public int Duration { get; set; }
         public int MaxDuration { get; set; }
-        public short DurationPerLevel { get; set; }
+        public uint DurationPerLevel { get; set; }
     }
 }
