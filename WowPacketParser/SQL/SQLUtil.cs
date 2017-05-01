@@ -133,6 +133,9 @@ namespace WowPacketParser.SQL
             if (value is uint && isFlag)
                 value = Hexify((uint)value);
 
+            if (value is float)
+                value = string.Format("{0:F20}", value).Substring(0, 20).TrimEnd('0').TrimEnd('.');
+
             return value;
         }
 

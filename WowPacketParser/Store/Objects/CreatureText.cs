@@ -10,11 +10,11 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("entry", true)]
         public uint? Entry;
 
-        [DBFieldName("groupid", true)]
-        public uint? GroupId;
+        [DBFieldName("groupid", true, true)]
+        public string GroupId;
 
-        [DBFieldName("id", true)]
-        public uint? ID;
+        [DBFieldName("id", true, true)]
+        public string ID;
 
         [DBFieldName("text")]
         public string Text;
@@ -37,8 +37,8 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("sound")]
         public uint? Sound;
 
-        [DBFieldName("BroadcastTextId")]
-        public string BroadcastTextID;
+        [DBFieldName("BroadcastTextId", false, true)]
+        public object BroadcastTextID;
 
         [DBFieldName("comment")]
         public string Comment;
@@ -48,7 +48,6 @@ namespace WowPacketParser.Store.Objects
         public WowGuid ReceiverGUID;
         public string ReceiverName;
 
-        [DBFieldName("VerifiedBuild")]
-        public int? VerifiedBuild = ClientVersion.BuildInt;
+        public string BroadcastTextIDHelper;
     }
 }

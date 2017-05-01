@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -73,6 +74,7 @@
     <Compile Include="Hotfix\ChrClassesXPowerTypesEntry.cs" />
     <Compile Include="Hotfix\ChrRacesEntry.cs" />
     <Compile Include="Hotfix\ChrSpecializationEntry.cs" />
+    <Compile Include="Hotfix\CinematicCameraEntry.cs" />
     <Compile Include="Hotfix\CinematicSequencesEntry.cs" />
     <Compile Include="Hotfix\CreatureEntry.cs" />
     <Compile Include="Hotfix\CreatureDifficultyEntry.cs" />
@@ -264,6 +266,7 @@
     <Compile Include="Parsers\BlackMarketHandler.cs" />
     <Compile Include="Parsers\CalendarHandler.cs" />
     <Compile Include="Parsers\CharacterHandler.cs" />
+    <Compile Include="Parsers\ChatHandler.cs" />
     <Compile Include="Parsers\CombatLogHandler.cs" />
     <Compile Include="Parsers\CorpseHandler.cs" />
     <Compile Include="Parsers\CreatureHandler.cs" />

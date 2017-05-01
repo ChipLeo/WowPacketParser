@@ -136,8 +136,9 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             creature.ModelIDs = new uint?[4];
             creature.ModelIDs[3] = packet.ReadUInt32("Display Id 4");
             creature.ModelIDs[1] = packet.ReadUInt32("Display Id 2");
-			
-            creature.Expansion = packet.ReadUInt32E<ClientType>("Expansion");
+
+            //creature.Expansion = 
+            packet.ReadUInt32E<ClientType>("Expansion");
 			
             creature.Type = packet.ReadInt32E<CreatureType>("Type");
 			

@@ -55,7 +55,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             for (int j = 0; j < int11; j++)
             {
                 packet.ReadInt32("ID", idx, j);
-                packet.ReadInt32("ItemID", idx, j);
+                packet.ReadInt32<ItemId>("ItemID", idx, j);
                 packet.ReadInt32("Quantity", idx, j);
 
                 packet.ResetBitReader();
@@ -99,7 +99,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             for (var j = 0; j < int11; j++)
             {
                 packet.ReadInt32("ID", idx, j);
-                packet.ReadInt32("ItemID", idx, j);
+                packet.ReadInt32<ItemId>("ItemID", idx, j);
                 packet.ReadInt32("Quantity", idx, j);
 
                 packet.ResetBitReader();

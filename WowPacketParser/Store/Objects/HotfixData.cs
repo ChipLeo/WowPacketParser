@@ -7,14 +7,14 @@ namespace WowPacketParser.Store.Objects
     [DBTableName("hotfix_data")]
     public sealed class HotfixData : IDataModel
     {
-        [DBFieldName("RecordID", true)]
-        public int RecordID;
+        [DBFieldName("Id", true)]
+        public int? ID;
 
         [DBFieldName("TableHash", true)]
-        public DB2Hash TableHash;
+        public DB2Hash? TableHash;
 
-        [DBFieldName("Timestamp", true)]
-        public uint Timestamp;
+        [DBFieldName("RecordId", true)]
+        public int? RecordID;
 
         [DBFieldName("Deleted")]
         public bool? Deleted;

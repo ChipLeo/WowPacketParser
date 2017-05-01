@@ -76,8 +76,8 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadInt32("unk");
         }
 
-        [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS_GLUE_SCREEN, ClientVersionBuild.V7_1_5_23360)]
-        public static void HandleFeatureSystemStatusGlueScreen715(Packet packet)
+        [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS_GLUE_SCREEN)]
+        public static void HandleFeatureSystemStatusGlueScreen(Packet packet)
         {
             packet.ReadBit("BpayStoreEnabled");
             packet.ReadBit("BpayStoreAvailable");
