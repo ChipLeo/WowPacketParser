@@ -440,6 +440,15 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadInt32("FailedArg2");
         }
 
+        [Parser(Opcode.SMSG_PLAY_SPELL_VISUAL_KIT)]
+        public static void HandlePlaySpellVisualKit(Packet packet)
+        {
+            packet.ReadPackedGuid128("Unit");
+            packet.ReadInt32("KitRecID");
+            packet.ReadInt32("KitType");
+            packet.ReadUInt32("Duration");
+        }
+
         [Parser(Opcode.SMSG_PET_CAST_FAILED)]
         public static void HandlePetCastFailed(Packet packet)
         {
