@@ -53,10 +53,12 @@ Nightly Builds
 Docker (experimental)
 ---------------------
 
-It is possible run WPP on Docker by running the following commands:
+It is possible run WPP on Docker using the `trinitycore/wpp` image:
 
-- Build the image: `docker build -t wpp .`
-- Run it: `docker run -it --rm -v /place/where/sniffs/are/kept:/usr/src/app/build/sniffs wpp:latest sniffs/sniffname.pkt # Run`
+```
+docker run -v /place/where/sniffs/are/kept:/usr/src/app/build/sniffs trinitycore/wpp sniffs/sniffname.pkt
+```
 
 */place/where/sniffs/are/kept* should your local directory containing the .pkt file and *sniffname.pkt* the file to be parsed.
-Output of the parser will be added to */place/where/sniffs/are/kept*
+
+Output (.txt/.sql) of the parser will be added to */place/where/sniffs/are/kept*.

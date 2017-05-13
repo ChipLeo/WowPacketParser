@@ -81,31 +81,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadBit("IsBoostSpell", idx);
         }
 
-        public static void sub_67A776(Packet packet, params object[] idx)
-        {//67A776 22996
-            {//650B42 22996
-                packet.ReadInt32("Id", idx);
-                packet.ReadInt32("DisplayID", idx);
-                packet.ReadInt32("Quantity", idx);
-
-                packet.ResetBitReader();
-
-                var bit32 = packet.ReadBit("HasBit32", idx);
-                var bit56 = packet.ReadBit("HasBit56", idx);
-
-                if (bit32)
-                    ItemHandler.ReadBonuses(packet, idx);
-
-                if (bit56)
-                {
-                    // sub_5ECDA0
-                    var int4 = packet.ReadInt32("", idx);
-                    packet.ReadWoWString("", int4, idx);
-                }
-            }
-
-            packet.ReadInt32("unk60", idx);
-        }
         [Parser(Opcode.CMSG_ADVENTURE_JOURNAL_OPEN_QUEST)]
         public static void HandleAdventureJournalOpenQuest(Packet packet)
         {
@@ -179,68 +154,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                     packet.ReadInt32("unk7", i);
                 }
             }
-        }
-
-        [Parser(Opcode.SMSG_DISPLAY_PLAYER_CHOICE)]
-        public static void HandleDisplayPlayerChoice(Packet packet)
-        {
-            packet.ReadInt32("ChoiceID");
-            var int5 = packet.ReadInt32("PlayerChoiceResponseCount");
-            packet.ReadPackedGuid128("Guid");
-
-            packet.ResetBitReader();
-
-            var len = packet.ReadBits(8);
-
-            for (int i = 0; i < int5; i++)
-            {//67A481 22996
-                packet.ReadInt32("ResponseID", i);
-                packet.ReadInt32("ChoiceArtFileID", i);
-
-                packet.ResetBitReader();
-
-                var bits4 = packet.ReadBits(9);
-                var bits404 = packet.ReadBits(9);
-                var bits804 = packet.ReadBits(11);
-                var bits2404 = packet.ReadBits(7);
-                var bit2640 = packet.ReadBit("HasPlayerChoiceResponseReward", i);
-
-                if (bit2640)
-                {//67A5BD 22996
-                    packet.ReadInt32("TitleID", i);
-                    packet.ReadInt32("PackageID", i);
-                    packet.ReadInt32("SkillLineID", i);
-                    packet.ReadInt32("SkillPointCount", i);
-                    packet.ReadInt32("ArenaPointCount", i);
-                    packet.ReadInt32("HonorPointCount", i);
-                    packet.ReadInt64("Money", i);
-                    packet.ReadInt32("Xp", i);
-
-                    var int36 = packet.ReadInt32("ItemsCount", i);
-                    var int52 = packet.ReadInt32("CurrenciesCount", i);
-                    var int68 = packet.ReadInt32("FactionsCount", i);
-                    var int84 = packet.ReadInt32("ItemChoicesCount", i);
-
-                    for (int j = 0; j < int36; j++) // @To-Do: need verification
-                        sub_67A776(packet, j);
-
-                    for (int j = 0; j < int52; j++)
-                        sub_67A776(packet, j);
-
-                    for (int j = 0; j < int68; j++)
-                        sub_67A776(packet, j);
-
-                    for (int j = 0; j < int84; j++)
-                        sub_67A776(packet, j);
-                }
-
-                packet.ReadWoWString("Answer", bits4);
-                packet.ReadWoWString("Description", bits404);
-                packet.ReadWoWString("unks1", bits804);
-                packet.ReadWoWString("unks2", bits2404);
-            }
-
-            packet.ReadWoWString("Question", len);
         }
 
         [Parser(Opcode.SMSG_DISPLAY_QUEST_POPUP)]
