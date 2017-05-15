@@ -282,6 +282,7 @@ namespace WowPacketParser.SQL.Builders
                     badTransport = !GetTransportMap(go, out mapId);
                     if (mapId != -1)
                         row.Data.Map = (uint)mapId;
+                    else row.Data.Map = go.Map;
                 }
 
                 row.Data.ZoneID = 0;

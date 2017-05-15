@@ -11,19 +11,19 @@ namespace WowPacketParser.Store.Objects
         public string GUID;
 
         [DBFieldName("id")]
-        public uint? ID;
+        public uint ID;
 
         [DBFieldName("map")]
-        public uint? Map;
+        public uint Map;
 
         [DBFieldName("zoneId")]
-        public uint? ZoneID;
+        public uint ZoneID;
 
         [DBFieldName("areaId")]
-        public uint? AreaID;
+        public uint AreaID;
 
         [DBFieldName("spawnMask")]
-        public uint? SpawnMask;
+        public uint SpawnMask;
 
         [DBFieldName("phaseMask", TargetedDatabase.Zero, TargetedDatabase.WarlordsOfDraenor)]
         public uint? PhaseMask;
