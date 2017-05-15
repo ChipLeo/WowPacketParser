@@ -489,5 +489,10 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             if (hasEuropaTicketSystemStatus)
                 V6_0_2_19033.Parsers.MiscellaneousHandler.ReadCliEuropaTicketConfig(packet, "EuropaTicketSystemStatus");
         }
+
+        [Parser(Opcode.SMSG_ARTIFACT_POWERS_UPDATED)]
+        public static void HandleMiscZero(Packet packet)
+        {
+        }
     }
 }
