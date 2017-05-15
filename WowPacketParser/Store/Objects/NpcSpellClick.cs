@@ -13,16 +13,13 @@ namespace WowPacketParser.Store.Objects
         public uint? SpellID;
 
         [DBFieldName("cast_flags")]
-        public uint? CastFlags;
+        public uint CastFlags;
 
         [DBFieldName("user_type")]
-        public uint? UserType;
+        public uint UserType;
 
         public WowGuid CasterGUID;
 
         public WowGuid TargetGUID;
-
-        [DBFieldName("VerifiedBuild")]
-        public int? VerifiedBuild = ClientVersion.BuildInt;
     }
 }

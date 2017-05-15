@@ -38,8 +38,5 @@ namespace WowPacketParser.Store.Objects
         public string Auras;
 
         public string CommentAuras;
-
-        [DBFieldName("VerifiedBuild")]
-        public int? VerifiedBuild = ClientVersion.BuildInt;
     }
 }

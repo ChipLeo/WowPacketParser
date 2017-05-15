@@ -47,7 +47,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
         }
 
         [Parser(Opcode.CMSG_CHAT_MESSAGE_CHANNEL)]
-        public static void HandleClientChatMessageChannel434(Packet packet)
+        public static void HandleClientChatMessageChannel(Packet packet)
         {
             packet.ReadInt32E<Language>("Language");
             var channelNameLen = packet.ReadBits(9);
@@ -101,7 +101,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             var prefixLen = packet.ReadBits(5);
             var channelLen = packet.ReadBits(7);
             var textLen = packet.ReadBits(12);
-            packet.ReadBits("ChatFlags", ClientVersion.AddedInVersion(ClientVersionBuild.V6_1_2_19802) ? 11 : 10);
+            packet.ReadBits("ChatFlags", 11);
 
             packet.ReadBit("HideChatLog");
             packet.ReadBit("FakeSenderName");
@@ -147,23 +147,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
 
             if (guid.GetObjectType() == ObjectType.Unit)
                 Storage.Emotes.Add(guid, emote, packet.TimeSpan);
-        }
-
-        [Parser(Opcode.CMSG_SEND_TEXT_EMOTE, ClientVersionBuild.V6_0_2_19033, ClientVersionBuild.V6_0_3_19103)]
-        public static void HandleTextEmote602(Packet packet)
-        {
-            packet.ReadPackedGuid128("Guid");
-
-            packet.ReadInt32E<EmoteType>("Emote ID");
-            packet.ReadInt32E<EmoteTextType>("Text Emote ID");
-        }
-
-        [Parser(Opcode.CMSG_SEND_TEXT_EMOTE, ClientVersionBuild.V6_0_3_19103)]
-        public static void HandleTextEmote603(Packet packet)
-        {
-            packet.ReadPackedGuid128("TargetGUID");
-            packet.ReadInt32E<EmoteTextType>("Emote ID");
-            packet.ReadInt32("SoundIndex");
         }
 
         [Parser(Opcode.SMSG_TEXT_EMOTE)]

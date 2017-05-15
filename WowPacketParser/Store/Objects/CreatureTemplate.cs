@@ -16,7 +16,7 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("modelid", 4)]
         public uint?[] ModelIDs;
 
-        [DBFieldName("name")]
+        [DBFieldName("name", nullable: true)]
         public string Name;
 
         [DBFieldName("femaleName", TargetedDatabase.Cataclysm, nullable: true)]
@@ -114,10 +114,10 @@ namespace WowPacketParser.Store.Objects
         public UnitFlags2? UnitFlags2;
 
         [DBFieldName("dynamicflags", TargetedDatabase.Zero, TargetedDatabase.WarlordsOfDraenor)]
-        public UnitDynamicFlags? DynamicFlags;
+        public uint DynamicFlags;
 
         [DBFieldName("dynamicflags", TargetedDatabase.WarlordsOfDraenor)]
-        public UnitDynamicFlagsWOD? DynamicFlagsWod;
+        public uint DynamicFlagsWod;
 
         [DBFieldName("VehicleId")]
         public uint? VehicleID;

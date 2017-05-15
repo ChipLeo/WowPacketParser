@@ -20,7 +20,7 @@ namespace WowPacketParser.Store.Objects
         public Gender? Gender;
 
         [DBFieldName("DisplayID_Other_Gender")]
-        public uint? DisplayIDOtherGender;
+        public uint DisplayIDOtherGender;
 
         [DBFieldName("VerifiedBuild", TargetedDatabase.Legion)]
 

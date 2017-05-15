@@ -93,6 +93,8 @@ namespace WowPacketParser.SQL.Builders
                     badTransport = !GetTransportMap(creature, out mapId);
                     if (mapId != -1)
                         row.Data.Map = (uint)mapId;
+                    else
+                        row.Data.Map = creature.Map;
                 }
 
                 if (creature.Area != -1)
@@ -104,13 +106,12 @@ namespace WowPacketParser.SQL.Builders
                 row.Data.SpawnMask = (uint)creature.GetDefaultSpawnMask();
                 row.Data.PhaseMask = creature.PhaseMask;
 
+                row.Data.PhaseID = "0";
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_3_4_15595) && creature.Phases != null)
                 {
                     string data = string.Join(" - ", creature.Phases);
-                    if (string.IsNullOrEmpty(data))
-                        data = "0";
-
-                    row.Data.PhaseID = data;
+                    if (!string.IsNullOrEmpty(data))
+                        row.Data.PhaseID = data;
                 }
 
                 if (!creature.IsOnTransport())
@@ -295,6 +296,7 @@ namespace WowPacketParser.SQL.Builders
                 row.Data.SpawnMask = (uint)go.GetDefaultSpawnMask();
                 row.Data.PhaseMask = go.PhaseMask;
 
+                row.Data.PhaseID = "0";
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_3_4_15595) && go.Phases != null)
                     row.Data.PhaseID = string.Join(" - ", go.Phases);
 

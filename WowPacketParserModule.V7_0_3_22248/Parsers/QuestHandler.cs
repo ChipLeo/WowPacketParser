@@ -463,7 +463,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("DisplayPopup");
             packet.ReadBit("StartCheat");
             packet.ReadBit("AutoLaunched");
-            if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_2_0_23826))
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_1_5_23420))
             {
                 packet.ReadBit("CanIgnoreQuest");
                 packet.ReadBit("IsQuestIgnored");
@@ -628,14 +628,14 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32("SkillLineIDReward");
             packet.ReadInt32("NumSkillUpsReward");
 
+            V6_0_2_19033.Parsers.ItemHandler.ReadItemInstance(packet, "ItemReward"); // 23420
+
             packet.ResetBitReader();
 
             packet.ReadBit("UseQuestReward");
             packet.ReadBit("LaunchGossip");
             packet.ReadBit("LaunchQuest");
             packet.ReadBit("HideChatMessage");
-
-            V6_0_2_19033.Parsers.ItemHandler.ReadItemInstance(packet, "ItemReward");
         }
 
         [Parser(Opcode.SMSG_DISPLAY_PLAYER_CHOICE)]

@@ -529,6 +529,11 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             packet.ReadBit("UseQuestReward");
             packet.ReadBit("LaunchGossip");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_1_0_19702))
+            {
+                packet.ReadBit("LaunchQuest");
+                packet.ReadBit("HideChatMessage");
+            }
         }
 
         [Parser(Opcode.SMSG_QUEST_GIVER_OFFER_REWARD_MESSAGE)]

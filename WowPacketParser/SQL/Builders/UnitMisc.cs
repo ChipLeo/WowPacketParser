@@ -432,7 +432,7 @@ namespace WowPacketParser.SQL.Builders
                     UnitClass = (uint)npc.Class.GetValueOrDefault(Class.Warrior),
                     UnitFlags = npc.UnitFlags.GetValueOrDefault(UnitFlags.None),
                     UnitFlags2 = npc.UnitFlags2.GetValueOrDefault(UnitFlags2.None),
-                    DynamicFlags = npc.DynamicFlags.GetValueOrDefault(UnitDynamicFlags.None),
+                    DynamicFlags = (uint)npc.DynamicFlags.GetValueOrDefault(UnitDynamicFlags.None),
                     VehicleID = npc.Movement.VehicleId,
                     HoverHeight = npc.HoverHeight.GetValueOrDefault(1.0f)
                 };
@@ -462,17 +462,17 @@ namespace WowPacketParser.SQL.Builders
 
                 if (!ClientVersion.AddedInVersion(ClientType.WarlordsOfDraenor))
                 {
-                    template.DynamicFlags &= ~UnitDynamicFlags.Lootable;
-                    template.DynamicFlags &= ~UnitDynamicFlags.Tapped;
-                    template.DynamicFlags &= ~UnitDynamicFlags.TappedByPlayer;
-                    template.DynamicFlags &= ~UnitDynamicFlags.TappedByAllThreatList;
+                    template.DynamicFlags &= ~(uint)UnitDynamicFlags.Lootable;
+                    template.DynamicFlags &= ~(uint)UnitDynamicFlags.Tapped;
+                    template.DynamicFlags &= ~(uint)UnitDynamicFlags.TappedByPlayer;
+                    template.DynamicFlags &= ~(uint)UnitDynamicFlags.TappedByAllThreatList;
                 }
                 else
                 {
-                    template.DynamicFlagsWod &= ~UnitDynamicFlagsWOD.Lootable;
-                    template.DynamicFlagsWod &= ~UnitDynamicFlagsWOD.Tapped;
-                    template.DynamicFlagsWod &= ~UnitDynamicFlagsWOD.TappedByPlayer;
-                    template.DynamicFlagsWod &= ~UnitDynamicFlagsWOD.TappedByAllThreatList;
+                    template.DynamicFlagsWod &= ~(uint)UnitDynamicFlagsWOD.Lootable;
+                    template.DynamicFlagsWod &= ~(uint)UnitDynamicFlagsWOD.Tapped;
+                    template.DynamicFlagsWod &= ~(uint)UnitDynamicFlagsWOD.TappedByPlayer;
+                    template.DynamicFlagsWod &= ~(uint)UnitDynamicFlagsWOD.TappedByAllThreatList;
                 }
 
                 // has trainer flag but doesn't have prof nor class trainer flag
