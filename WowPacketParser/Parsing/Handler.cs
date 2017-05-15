@@ -168,6 +168,7 @@ namespace WowPacketParser.Parsing
                     packet.WriteLine(ex.StackTrace);
 
                     status = ParsedStatus.WithErrors;
+                    packet.AsHex();
                 }
             }
             else
