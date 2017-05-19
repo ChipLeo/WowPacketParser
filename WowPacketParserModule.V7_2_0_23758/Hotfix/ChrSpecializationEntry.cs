@@ -11,8 +11,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Hotfix
         public string Name { get; set; }
         public string Name2 { get; set; }
         public string Description { get; set; }
-        public string BackgroundFile { get; set; }
-        public ushort SpellIconID { get; set; }
         public byte ClassID { get; set; }
         public byte OrderIndex { get; set; }
         public byte PetTalentType { get; set; }

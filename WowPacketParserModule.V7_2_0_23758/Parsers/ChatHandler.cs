@@ -77,6 +77,14 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadWoWString("Message", len);
         }
 
+        [Parser(Opcode.CMSG_SEND_TEXT_EMOTE)]
+        public static void HandleTextEmote(Packet packet)
+        {
+            packet.ReadPackedGuid128("TargetGUID");
+            packet.ReadInt32E<EmoteTextType>("Emote ID");
+            packet.ReadInt32("SoundIndex");
+        }
+
         [Parser(Opcode.SMSG_CHAT)]
         public static void HandleServerChatMessage(Packet packet)
         {

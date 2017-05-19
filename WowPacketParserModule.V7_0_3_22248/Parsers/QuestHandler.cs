@@ -463,7 +463,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("DisplayPopup");
             packet.ReadBit("StartCheat");
             packet.ReadBit("AutoLaunched");
-            if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_1_5_23420))
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_1_0_23171))
             {
                 packet.ReadBit("CanIgnoreQuest");
                 packet.ReadBit("IsQuestIgnored");
