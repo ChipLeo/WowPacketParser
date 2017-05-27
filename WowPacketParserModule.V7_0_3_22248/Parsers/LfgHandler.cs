@@ -65,11 +65,15 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             var lenName = packet.ReadBits(8);
             var lenComment = packet.ReadBits(11);
             var lenVoiceChat = packet.ReadBits(8);
-            packet.ReadBit("unkb", idx);
+            packet.ReadBit("unkb1", idx);
+            packet.ReadBit("unkb2", idx);
+            var unk3 = packet.ReadBit("unkb3", idx);
 
             packet.ReadWoWString("Name", lenName, idx);
             packet.ReadWoWString("Comment", lenComment, idx);
             packet.ReadWoWString("VoiceChat", lenVoiceChat, idx);
+            if (unk3)
+                packet.ReadInt32("unk", idx);
         }
 
         public static void ReadShortageReward(Packet packet, params object[] idx)
@@ -156,7 +160,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 var len1166 = packet.ReadBits(8);
                 packet.ReadBit("unkbit", idx);
                 Bit hasUnk518 = 0;
-                if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_1_5_23420))
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_1_5_23360))
                 {
                     packet.ReadBit("unkbit2", idx);
                     hasUnk518 = packet.ReadBit("unkbit3", idx);
@@ -164,7 +168,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadWoWString("str", len12, idx);
                 packet.ReadWoWString("str2", len141, idx);
                 packet.ReadWoWString("str3", len1166, idx);
-                if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_1_5_23420))
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_1_5_23360))
                     if (hasUnk518)
                         packet.ReadInt32("unk", idx);
             }
@@ -187,6 +191,14 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ResetBitReader();
             int cnt = (int)packet.ReadBits("unkb", 8);
             packet.ReadBytes(cnt);
+        }
+
+        [Parser(Opcode.SMSG_LFG_LIST_ACTIVE_ENTRY)]
+        public static void HandleLfgListActiveEntry(Packet packet)
+        {
+            ReadCliRideTicket(packet, "RideTicket");
+            packet.ReadInt32("unk48");
+            packet.ReadByte("unk52");
         }
 
         [Parser(Opcode.SMSG_LFG_PLAYER_INFO)]
@@ -367,18 +379,22 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         public static void HandleDFJoin(Packet packet)
         {
             packet.ReadBit("QueueAsGroup");
-            var commentLength = packet.ReadBits("UnkBits8", 8);
-
+            uint commentLength = 0;
+            if (ClientVersion.RemovedInVersion(ClientVersionBuild.V7_1_5_23360))
+                commentLength = packet.ReadBits("UnkBits8", 8);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_1_5_23360))
+                packet.ReadBit("unk");
             packet.ResetBitReader();
 
             packet.ReadByte("PartyIndex");
             packet.ReadInt32E<LfgRoleFlag>("Roles");
             var slotsCount = packet.ReadInt32();
 
-            for (var i = 0; i < 3; ++i) // Needs
-                packet.ReadUInt32("Need", i);
-
-            packet.ReadWoWString("Comment", commentLength);
+            if (ClientVersion.RemovedInVersion(ClientVersionBuild.V7_1_5_23360))
+                for (var i = 0; i < 3; ++i) // Needs
+                    packet.ReadUInt32("Need", i);
+            if (ClientVersion.RemovedInVersion(ClientVersionBuild.V7_1_5_23360))
+                packet.ReadWoWString("Comment", commentLength);
 
             for (var i = 0; i < slotsCount; ++i) // Slots
                 packet.ReadUInt32("Slot", i);
@@ -554,6 +570,42 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32("FactionID");
         }
 
+        [Parser(Opcode.SMSG_LFG_LIST_APPLICANT)]
+        public static void HandleLfgListApplicant(Packet packet)
+        {
+            ReadCliRideTicket(packet,"Ticket");
+            var count = packet.ReadInt32();
+            packet.ReadInt32("unk1");
+            for (int i = 0; i < count; i++)
+            {
+                ReadCliRideTicket(packet, i, "Tickets");
+                packet.ReadPackedGuid128("Player", i);
+                var cnt = packet.ReadInt32("cnt2", i);
+                for (int j = 0; j < cnt; j++)
+                {
+                    packet.ReadPackedGuid128("guid", i, j);
+                    packet.ReadInt32("VirtualRealmAddress", i, j);
+                    packet.ReadInt32("unk4", i, j);
+                    packet.ReadInt32("Level", i, j);
+                    packet.ReadInt32("unk6", i, j);
+                    packet.ReadByte("unk7", i, j);
+                    packet.ReadByte("unk8", i, j);
+                    {
+                        var cnt2 = packet.ReadInt32("cnt", i, j);
+                        for (var k = 0; k < cnt2; k++)
+                        {
+                            packet.ReadInt32("unk", i, j, k);
+                            packet.ReadInt32("unk", i, j, k);
+                        }
+                    }
+                }
+                packet.ResetBitReader();
+                packet.ReadBits("unkb1", 4, i);
+                packet.ReadBit("unkb2", i);
+                packet.ReadWoWString("Name", packet.ReadBits(8), i);
+            }
+        }
+
         [Parser(Opcode.SMSG_LFG_LIST_SEARCH_STATUS)]
         public static void HandleLfgListSearchStatus(Packet packet)
         {
@@ -567,7 +619,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
             packet.ReadInt64("unk64");
             packet.ReadPackedGuid128("Player");
-            {//64FE42 22996 650CB9 23420
+            {//64FE42:22996 650CB9:23420 65011E:23360
                 packet.ReadPackedGuid128("Party");
                 var cnt = packet.ReadInt32("Cnt");
                 packet.ResetBitReader();

@@ -6,6 +6,14 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 {
     public static class GroupHandler
     {
+        [Parser(Opcode.CMSG_READY_CHECK_RESPONSE)]
+        public static void HandleClientReadyCheckResponse(Packet packet)
+        {
+            packet.ReadByte("PartyIndex");
+            packet.ReadBit("IsReady");
+            packet.ResetBitReader();
+        }
+
         [Parser(Opcode.SMSG_PARTY_MEMBER_STATE)]
         public static void HandlePartyMemberState(Packet packet)
         {

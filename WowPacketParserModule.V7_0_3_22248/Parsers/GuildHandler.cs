@@ -6,6 +6,41 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
     public static class GuildHandler
     {
+
+        [Parser(Opcode.CMSG_GUILD_GET_ACHIEVEMENT_MEMBERS)]
+        public static void HandleGuildGetAchievementMembers(Packet packet)
+        {
+            packet.ReadPackedGuid128("Player");
+            packet.ReadPackedGuid128("Guild");
+            packet.ReadInt32("Achievement");
+        }
+
+        [Parser(Opcode.SMSG_GUILD_ACHIEVEMENT_MEMBERS)]
+        public static void HandleGuildAchievementMembersResponse(Packet packet)
+        {
+            packet.ReadPackedGuid128("Guild");
+            packet.ReadInt32("Achievement");
+            var cnt = packet.ReadInt32("Count");
+            for (var i = 0; i < cnt; i++)
+                packet.ReadPackedGuid128("Player", i);
+        }
+
+        [Parser(Opcode.SMSG_GUILD_CRITERIA_UPDATE)]
+        public static void HandleGuildCriteriaUpdate(Packet packet)
+        {
+            var int16 = packet.ReadUInt32("ProgressCount");
+            for (int i = 0; i < int16; i++)
+            {
+                packet.ReadInt32("CriteriaID", i);
+                packet.ReadTime("DateCreated", i);
+                packet.ReadTime("DateStarted", i);
+                packet.ReadTime("DateUpdated", i);
+                packet.ReadInt64("Quantity", i);
+                packet.ReadPackedGuid128("PlayerGUID", i);
+
+                packet.ReadInt32("Flags", i);
+            }
+        }
         [Parser(Opcode.SMSG_QUERY_GUILD_INFO_RESPONSE)]
         public static void HandleGuildQueryResponse(Packet packet)
         {
@@ -143,6 +178,15 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             packet.ResetBitReader();
             packet.ReadBit("FullUpdate");
+        }
+
+        [Parser(Opcode.SMSG_GUILD_ITEM_LOOTED)]
+        public static void HandleGuildItemLooted(Packet packet)
+        {
+            packet.ReadPackedGuid128("Player");
+            packet.ReadInt32("VirtualRealmAddress");
+            ItemHandler.ReadItemInstance(packet, "Item");
+            packet.ReadWoWString("Name", packet.ReadBits(6));
         }
     }
 }

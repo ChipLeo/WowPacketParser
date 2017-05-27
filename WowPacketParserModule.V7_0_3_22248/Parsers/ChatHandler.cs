@@ -73,7 +73,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         [Parser(Opcode.CMSG_CHAT_MESSAGE_AFK)]
         public static void HandleMessageChat(Packet packet)
         {
-            var len = packet.ReadBits(9);
+            var len = packet.ReadBits(8);
             packet.ReadWoWString("Message", len);
         }
     }

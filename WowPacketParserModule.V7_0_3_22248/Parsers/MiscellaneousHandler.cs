@@ -9,6 +9,57 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
     public static class MiscellaneousHandler
     {
+        public static void ReadClientSessionAlertConfig(Packet packet, params object[] idx)
+        {
+            packet.ReadInt32("Delay", idx);
+            packet.ReadInt32("Period", idx);
+            packet.ReadInt32("DisplayTime", idx);
+        }
+        public static void ReadCliSavedThrottleObjectState(Packet packet, params object[] idx)
+        {
+            packet.ReadUInt32("MaxTries", idx);
+            packet.ReadUInt32("PerMilliseconds", idx);
+            packet.ReadUInt32("TryCount", idx);
+            packet.ReadUInt32("LastResetTimeBeforeNow", idx);
+        }
+
+        public static void ReadCliEuropaTicketConfig(Packet packet, params object[] idx)
+        {
+            packet.ReadBit("TicketsEnabled", idx);
+            packet.ReadBit("BugsEnabled", idx);
+            packet.ReadBit("ComplaintsEnabled", idx);
+            packet.ReadBit("SuggestionsEnabled", idx);
+
+            ReadCliSavedThrottleObjectState(packet, idx, "ThrottleState");
+        }
+
+        [Parser(Opcode.CMSG_ARTIFACT_ADD_POWER)]
+        public static void HandleArtifactAddPower(Packet packet)
+        {
+            packet.ReadPackedGuid128("Item");
+            packet.ReadPackedGuid128("GO");
+            var cnt = packet.ReadInt32("count");
+            for (var i = 0; i < cnt; i++)
+            {
+                packet.ReadInt32("PowerType", i);
+                packet.ReadByte("value", i);
+            }
+        }
+
+        [Parser(Opcode.CMSG_RIDE_VEHICLE_INTERACT)]
+        public static void HandleRideVehicleInteract(Packet packet)
+        {
+            packet.ReadPackedGuid128("Player");
+        }
+
+        [Parser(Opcode.CMSG_SET_BANK_BAG_SLOT_FLAG)]
+        public static void HandleSetBankBagSlotFlag(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadInt32("unk2");
+            packet.ReadBit("unkb");
+        }
+
         [Parser(Opcode.CMSG_TUTORIAL_FLAG)]
         public static void HandleTutorialFlag(Packet packet)
         {
@@ -24,11 +75,25 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32("unk32");
         }
 
+        [Parser(Opcode.CMSG_UNK_353A)]
+        public static void HandleUnk353A(Packet packet)
+        {
+            packet.ReadPackedGuid128("guid");
+            packet.ReadInt32("unk");
+        }
+
         [Parser(Opcode.CMSG_UNK_36BB)]
         public static void HandleUnk36BB(Packet packet)
         {
             packet.ReadInt32("unk32");
             packet.ReadBit("unk");
+        }
+
+        [Parser(Opcode.SMSG_ARTIFACT_RESPEC_CONFIRM)]
+        public static void HandleArtifactRespecConfirm(Packet packet)
+        {
+            packet.ReadPackedGuid128("Item");
+            packet.ReadPackedGuid128("Creature");
         }
 
         [Parser(Opcode.SMSG_CUSTOM_LOAD_SCREEN)]
@@ -103,6 +168,14 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
             packet.ReadByte("ServerExpansionLevel");
             packet.ReadByte("ServerExpansionTier");
+        }
+
+        [Parser(Opcode.SMSG_ITEM_CHANGED)]
+        public static void HandleItemChanged(Packet packet)
+        {
+            packet.ReadPackedGuid128("Player");
+            ItemHandler.ReadItemInstance(packet, "Item");
+            ItemHandler.ReadItemInstance(packet, "Item2");
         }
 
         [Parser(Opcode.SMSG_LEVEL_UPDATE)]
@@ -475,7 +548,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             }
 
             if (hasSessionAlert)
-                V6_0_2_19033.Parsers.MiscellaneousHandler.ReadClientSessionAlertConfig(packet, "SessionAlert");
+                MiscellaneousHandler.ReadClientSessionAlertConfig(packet, "SessionAlert");
 
             if (hasRaceClassExpansionLevels)
             {
@@ -487,10 +560,63 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ResetBitReader();
 
             if (hasEuropaTicketSystemStatus)
-                V6_0_2_19033.Parsers.MiscellaneousHandler.ReadCliEuropaTicketConfig(packet, "EuropaTicketSystemStatus");
+                MiscellaneousHandler.ReadCliEuropaTicketConfig(packet, "EuropaTicketSystemStatus");
         }
 
+        [Parser(Opcode.SMSG_ARTIFACT_FORGE_OPENED)]
+        public static void HandleArtifactForgeOpened(Packet packet)
+        {
+            packet.ReadPackedGuid128("guid1");
+            packet.ReadPackedGuid128("guid2");
+        }
+
+        [Parser(Opcode.SMSG_CAMERA_EFFECT)]
+        public static void HandleCameraEffect(Packet packet)
+        {
+            packet.ReadPackedGuid128("guid1");
+            packet.ReadInt32("unk1");
+            packet.ReadInt32("unk2");
+        }
+
+        [Parser(Opcode.SMSG_UNK_CLIENT_2578)]
+        public static void HandleUnkClient2578(Packet packet)
+        {
+            packet.ReadInt32("MapID");
+        }
+
+        [Parser(Opcode.SMSG_UNK_CLIENT_25E0)]
+        public static void HandleUnkClient25E0(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadInt32("unk2");
+        }
+
+        [Parser(Opcode.SMSG_UNK_CLIENT_2639)]
+        public static void HandleUnkClient2639(Packet packet)
+        {
+            packet.ReadPackedGuid128("guid1");
+            packet.ReadInt32("unk1");
+            packet.ReadBit("unkb");
+        }
+
+        [Parser(Opcode.SMSG_UNK_SOCIAL_2FF8)]
+        public static void HandleUnkSocial2FF8(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadInt16("unk2");
+        }
+
+        [Parser(Opcode.SMSG_UNK_SOCIAL_2FFA)]
+        public static void HandleUnkSocial2FFA(Packet packet)
+        {
+            int cnt = (int)packet.ReadBits(9);
+            packet.ReadBytes(cnt);
+        }
+
+        [Parser(Opcode.CMSG_TWITTER_CONNECT)]
         [Parser(Opcode.SMSG_ARTIFACT_POWERS_UPDATED)]
+        [Parser(Opcode.SMSG_UNK_CLIENT_2819)]
+        [Parser(Opcode.SMSG_UNK_CLIENT_2844)]
         public static void HandleMiscZero(Packet packet)
         {
         }

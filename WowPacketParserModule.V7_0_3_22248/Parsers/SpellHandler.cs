@@ -531,6 +531,23 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32("unk");
         }
 
+        [Parser(Opcode.SMSG_NOTIFY_DEST_LOC_SPELL_CAST)]
+        public static void HandleNotifyDestLocSpellCast(Packet packet)
+        {
+            packet.ReadPackedGuid128("Caster");
+            packet.ReadPackedGuid128("DestTransport");
+            packet.ReadInt32<SpellId>("SpellID");
+            packet.ReadInt32("unk");
+            packet.ReadVector3("SourceLoc");
+            packet.ReadVector3("DestLoc");
+            packet.ReadSingle("MissileTrajectoryPitch");
+            packet.ReadSingle("MissileTrajectorySpeed");
+            packet.ReadInt32("TravelTime");
+            packet.ReadByte("DestLocSpellCastIndex");
+            //packet.ReadByte("CastID");
+            packet.ReadPackedGuid128("unk");
+        }
+
         [Parser(Opcode.SMSG_RESYNC_RUNES)]
         public static void HandleResyncRunes(Packet packet)
         {
@@ -701,6 +718,32 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadUInt32("SchoolImmunities");
                 packet.ReadUInt32("Immunities");
             }
+        }
+
+        [Parser(Opcode.SMSG_SPELL_HEAL_ABSORB_LOG)]
+        public static void HandleSpellHealAbsorbLog(Packet packet)
+        {
+            packet.ReadPackedGuid128("guid1");
+            packet.ReadPackedGuid128("guid2");
+            packet.ReadPackedGuid128("guid3");
+            packet.ReadInt32("unk1");
+            packet.ReadInt32("unk2");
+            packet.ReadInt32("unk3");
+            var hasSandboxScalingData = packet.ReadBit("has SandboxScalingData");
+            if (hasSandboxScalingData)
+                ReadSandboxScalingData(packet, "Sandbox");
+        }
+
+        [Parser(Opcode.SMSG_TUTORIAL_HIGHLIGHT_SPELL)]
+        public static void HandleTutorialHighlightSepll(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadWoWString("str", packet.ReadBits(7));
+        }
+
+        [Parser(Opcode.SMSG_TUTORIAL_UNHIGHLIGHT_SPELL)]
+        public static void HandleSpellZero(Packet packet)
+        {
         }
     }
 }

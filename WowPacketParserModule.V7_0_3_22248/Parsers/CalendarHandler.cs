@@ -6,6 +6,14 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
     public static class CalendarHandler
     {
+        [Parser(Opcode.SMSG_CALENDAR_RAID_LOCKOUT_REMOVED)]
+        public static void HandleRaidLockoutRemoved(Packet packet)
+        {
+            packet.ReadGuid("Instance ID");
+            packet.ReadInt32<MapId>("Map ID");
+            packet.ReadInt32E<MapDifficulty>("Difficulty");
+        }
+
         [Parser(Opcode.SMSG_CALENDAR_SEND_CALENDAR)]
         public static void HandleCalendarSendCalendar(Packet packet)
         {

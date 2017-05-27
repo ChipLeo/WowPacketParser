@@ -301,6 +301,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadSingle("Speed");
         }
 
+        [Parser(Opcode.CMSG_MOVE_REMOVE_MOVEMENT_FORCE_ACK)]
+        public static void HandleMoveRemoveMovementForceAck(Packet packet)
+        {
+            ReadMovementAck(packet);
+            packet.ReadPackedGuid128("TriggerGUID");
+        }
+
         [Parser(Opcode.CMSG_MOVE_SPLINE_DONE)]
         public static void HandleMoveSplineDone(Packet packet)
         {
@@ -326,6 +333,25 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ResetBitReader();
 
             packet.ReadBits("Reason", 2);
+        }
+
+        [Parser(Opcode.CMSG_UPDATE_MISSILE_TRAJECTORY)]
+        public static void HandleUpdateMissileTrajectory(Packet packet)
+        {
+            packet.ReadPackedGuid128("GUID");
+            packet.ReadInt16("unk1");
+            packet.ReadInt32<SpellId>("Spell ID");
+            packet.ReadSingle("Elevation");
+            packet.ReadSingle("Missile speed");
+            packet.ReadVector3("Current Position");
+            packet.ReadVector3("Targeted Position");
+
+            packet.ResetBitReader();
+            var hasMovementStats = packet.ReadBit("HasMovementStats");
+
+            packet.ResetBitReader();
+            if (hasMovementStats)
+                ReadMovementStats(packet, "Stats");
         }
 
         [Parser(Opcode.SMSG_MOVE_UPDATE_TELEPORT, ClientVersionBuild.V7_0_3_22248, ClientVersionBuild.V7_2_0_23826)]

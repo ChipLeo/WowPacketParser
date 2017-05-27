@@ -210,6 +210,68 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadUInt16("Talents");
         }
 
+        [Parser(Opcode.SMSG_INSPECT_RESULT)]
+        public static void HandleInspectResult(Packet packet)
+        {
+            packet.ReadPackedGuid128("InspecteeGUID");
+
+            var int32 = packet.ReadInt32("ClassID");
+            var int48 = packet.ReadInt32("GlyphsCount");
+            var int64 = packet.ReadInt32("TalentsCount");
+            var int80 = packet.ReadInt32("ItemsCount");//80
+            packet.ReadInt32("SpecializationID");//96
+            packet.ReadInt32("Gender");//100
+            packet.ReadInt32("unk1");//104
+
+            for (int i = 0; i < int48; i++)
+                packet.ReadInt16("Glyphs", i);
+
+            for (int i = 0; i < int64; i++)
+                packet.ReadInt16("Talents", i);
+
+            for (int i = 0; i < int80; i++)
+                packet.ReadInt16("Items", i);
+
+            packet.ResetBitReader();
+
+            var bit88 = packet.ReadBit("HasGuildData");
+
+            for (int i = 0; i < int32; i++)
+            {
+                // sub_614FDF
+                packet.ReadPackedGuid128("CreatorGUID", i);
+
+                packet.ReadByte("Index", i);
+
+                ItemHandler.ReadItemInstance(packet, i);
+
+                packet.ResetBitReader();
+
+                packet.ReadBit("Usable", i);
+
+                var int50 = packet.ReadBits("unkCount", 4, i);
+                var int60 = packet.ReadBits("EnchantsCount", 2, i);
+                for (int j = 0; j < int60; j++)
+                {
+                    packet.ReadByte("Index", i, j);
+                    ItemHandler.ReadItemInstance(packet, i, j);
+                }
+                for (int j = 0; j < int50; j++)
+                {
+                    packet.ReadInt32("Id", i, j);
+                    packet.ReadByte("Index", i, j);
+                }
+            }
+
+            if (bit88)
+            {
+                // sub_5F9390
+                packet.ReadPackedGuid128("GuildGUID");
+                packet.ReadInt32("NumGuildMembers");
+                packet.ReadInt32("GuildAchievementPoints");
+            }
+        }
+
         [Parser(Opcode.SMSG_LEARN_PVP_TALENTS_FAILED)]
         public static void HandleLearnPvPTalentsFailed(Packet packet)
         {

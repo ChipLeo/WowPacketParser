@@ -7,6 +7,16 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
     public static class GarrisonHandler
     {
+        private static void ReadCharacterShipment(Packet packet, params object[] indexes)
+        {
+            packet.ReadInt32("ShipmentRecID", indexes);
+            packet.ReadInt64("ShipmentID", indexes);
+            packet.ReadInt64("Unk2", indexes);
+            packet.ReadTime("CreationTime", indexes);
+            packet.ReadInt32("ShipmentDuration", indexes);
+            packet.ReadInt32("Unk8", indexes);
+        }
+
         public static void ReadGarrisonMissionOvermaxReward(Packet packet, params object[] indexes) //65CD05 22996
         {
             packet.ReadInt32<ItemId>("ItemID", indexes);
@@ -158,6 +168,15 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("unkbit");
         }
 
+        [Parser(Opcode.SMSG_GARRISON_BUILDING_REMOVED)]
+        public static void HandleGarrBuildingID(Packet packet)
+        {
+            packet.ReadInt32("Result");
+            packet.ReadInt32("CurrentGarSpecID");
+            packet.ReadInt32("GarrPlotInstanceID");
+            packet.ReadInt32("GarrBuildingID");
+        }
+
         [Parser(Opcode.SMSG_GARRISON_CLEAR_ALL_FOLLOWERS_EXHAUSTION)]
         public static void HandleGarrisonClearAllFollowersExhaustion(Packet packet)
         {
@@ -178,6 +197,12 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             ReadGarrisonFollower(packet);
         }
 
+        [Parser(Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_ITEM_LEVEL)]
+        public static void HandleGarrisonFollowerChangedItemLevel(Packet packet)
+        {
+            ReadGarrisonFollower(packet);
+        }
+
         [Parser(Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_XP)] // GARRISON_FOLLOWER_XP_CHANGED
         public static void HandleGarrisonUnk2(Packet packet)
         {
@@ -192,6 +217,14 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
             packet.ReadInt32("Result");
             packet.ReadInt32("BuildingID");
+            packet.ReadInt32("unk");
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_MISSION_AREA_BONUS_ADDED)]
+        public static void HandleGarrisonMissionAreaBonusAdded(Packet packet)
+        {
+            packet.ReadInt32("Result");
+            packet.ReadInt32("unk");
             packet.ReadInt32("unk");
         }
 
@@ -346,6 +379,25 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("unk");
         }
 
+        [Parser(Opcode.SMSG_GARRISON_UNK28FE)]
+        public static void HandleGarrisonUnk28FE(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadInt32("unk2");
+            {
+                packet.ReadInt32("unk3");
+                packet.ReadInt32("unk4");
+                packet.ReadInt32("unk5");
+            }
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_UNK28FF)]
+        public static void HandleGarrisonUnk28FF(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadInt32("unk2");
+        }
+
         [Parser(Opcode.SMSG_GARRISON_UNK4)]
         public static void HandleGarrisonUnk4(Packet packet)
         {
@@ -364,6 +416,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadInt32("unk6", i);
                 packet.ReadInt32("unk7", i);
             }
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_UNK2924)]
+        public static void HandleGarrisonUnk2924(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            ReadCharacterShipment(packet, "Shipment");
         }
 
         [Parser(Opcode.SMSG_GARRISON_MISSION_COMPLETE_RESPONSE)]
