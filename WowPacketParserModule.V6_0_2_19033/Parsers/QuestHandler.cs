@@ -854,6 +854,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             {
                 packet.ReadInt32("unk1", i);
                 packet.ReadInt32("ObjectID", i);
+                packet.ResetBitReader();
                 packet.ReadBit("unk3", i);
             }
         }

@@ -50,10 +50,10 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadBit("RemoteTimeValid", idx);
 
             if (hasTransport)
-                Parsers.MovementHandler.ReadTransportData(packet, idx, "TransportData");
+                ReadTransportData(packet, idx, "TransportData");
 
             if (hasFall)
-                Parsers.MovementHandler.ReadFallData(packet, idx, "FallData");
+                ReadFallData(packet, idx, "FallData");
         }
 
         public static void ReadMovementAck(Packet packet, params object[] idx)
