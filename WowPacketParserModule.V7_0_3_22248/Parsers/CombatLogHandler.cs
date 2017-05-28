@@ -165,6 +165,15 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             ReadAttackRoundInfo(packet, "AttackRoundInfo");
         }
 
+        [Parser(Opcode.SMSG_PVP_CREDIT)]
+        public static void HandlePvPCredit(Packet packet)
+        {
+            packet.ReadInt32("Honor");
+            packet.ReadInt32("unk");
+            packet.ReadPackedGuid128("Target");
+            packet.ReadInt32("Rank");
+        }
+
         [Parser(Opcode.SMSG_SPELL_PERIODIC_AURA_LOG, ClientVersionBuild.V7_0_3_22248, ClientVersionBuild.V7_2_0_23826)]
         public static void HandleSpellPeriodicAuraLog(Packet packet)
         {

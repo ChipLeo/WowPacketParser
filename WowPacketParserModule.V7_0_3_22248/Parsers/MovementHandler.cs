@@ -7,6 +7,21 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
     public static class MovementHandler
     {
+        public static void ReadFallData(Packet packet, params object[] idx)
+        {
+            packet.ReadUInt32("FallTime", idx);
+            packet.ReadSingle("JumpVelocity", idx);
+
+            packet.ResetBitReader();
+
+            var bit20 = packet.ReadBit("HasFallDirection", idx);
+            if (bit20)
+            {
+                packet.ReadVector2("Direction", idx);
+                packet.ReadSingle("HorizontalSpeed", idx);
+            }
+        }
+
         public static void ReadMovementStats(Packet packet, params object[] idx)
         {
             packet.ReadPackedGuid128("MoverGUID", idx);
@@ -35,10 +50,10 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("RemoteTimeValid", idx);
 
             if (hasTransport)
-                V6_0_2_19033.Parsers.MovementHandler.ReadTransportData(packet, idx, "TransportData");
+                ReadTransportData(packet, idx, "TransportData");
 
             if (hasFall)
-                V6_0_2_19033.Parsers.MovementHandler.ReadFallData(packet, idx, "FallData");
+                ReadFallData(packet, idx, "FallData");
         }
 
         public static void ReadMovementAck(Packet packet, params object[] idx)
@@ -184,6 +199,24 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.AddValue("WayPoints", vec, indexes, i);
             }
         }
+        public static void ReadTransportData(Packet packet, params object[] idx)
+        {
+            packet.ReadPackedGuid128("TransportGuid", idx);
+            packet.ReadVector4("TransportPosition", idx);
+            packet.ReadByte("TransportSeat", idx);
+            packet.ReadInt32("TransportMoveTime", idx);
+
+            packet.ResetBitReader();
+
+            var hasPrevMoveTime = packet.ReadBit("HasPrevMoveTime", idx);
+            var hasVehicleRecID = packet.ReadBit("HasVehicleRecID", idx);
+
+            if (hasPrevMoveTime)
+                packet.ReadUInt32("PrevMoveTime", idx);
+
+            if (hasVehicleRecID)
+                packet.ReadUInt32("VehicleRecID", idx);
+        }
 
         [Parser(Opcode.CMSG_MOVE_APPLY_MOVEMENT_FORCE_ACK)]
         public static void HandleMoveApplyMovementForceAck(Packet packet)
@@ -233,6 +266,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         [Parser(Opcode.SMSG_MOVE_UPDATE_KNOCK_BACK)]
         [Parser(Opcode.SMSG_MOVE_UPDATE)]
         [Parser(Opcode.CMSG_MOVE_DOUBLE_JUMP)]
+        [Parser(Opcode.CMSG_UNK_3A3F)]
         public static void HandlePlayerMove(Packet packet)
         {
             ReadMovementStats(packet, "MovementStats");
@@ -354,6 +388,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 ReadMovementStats(packet, "Stats");
         }
 
+        [Parser(Opcode.SMSG_MOVE_UPDATE_APPLY_MOVEMENT_FORCE)]
+        public static void HandleMoveUpdateApplyMovementForce(Packet packet)
+        {
+            ReadMovementStats(packet);
+            ReadMovementForce(packet, "MovementForce");
+        }
+
         [Parser(Opcode.SMSG_MOVE_UPDATE_TELEPORT, ClientVersionBuild.V7_0_3_22248, ClientVersionBuild.V7_2_0_23826)]
         public static void HandleMoveUpdateTeleport(Packet packet)
         {
@@ -462,19 +503,28 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadSingle("Facing");
             packet.ReadByte("PreloadWorld");
 
-            var hasVehicleTeleport = packet.ReadBit("HasVehicleTeleport");
+            packet.ResetBitReader();
             var hasTransport = packet.ReadBit("HasTransport");
+            var hasVehicleTeleport = packet.ReadBit("HasVehicleTeleport");
 
             // VehicleTeleport
             if (hasVehicleTeleport)
             {
                 packet.ReadByte("VehicleSeatIndex");
+                packet.ResetBitReader();
                 packet.ReadBit("VehicleExitVoluntary");
                 packet.ReadBit("VehicleExitTeleport");
             }
 
             if (hasTransport)
                 packet.ReadPackedGuid128("TransportGUID");
+        }
+
+        [Parser(Opcode.SMSG_MOVE_UPDATE_REMOVE_MOVEMENT_FORCE)]
+        public static void HandleMoveUpdateRemoveMovementForce(Packet packet)
+        {
+            ReadMovementStats(packet);
+            packet.ReadPackedGuid128("TriggerGUID");
         }
 
         [HasSniffData]

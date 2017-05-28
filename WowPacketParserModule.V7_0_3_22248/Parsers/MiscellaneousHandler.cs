@@ -60,6 +60,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("unkb");
         }
 
+        [Parser(Opcode.CMSG_TIME_ADJUSTMENT_RESPONSE)]
+        public static void HandleTimeAdjustementResp(Packet packet)
+        {
+            packet.ReadSingle("unk1");
+            packet.ReadInt32("unk2");
+        }
+
         [Parser(Opcode.CMSG_TUTORIAL_FLAG)]
         public static void HandleTutorialFlag(Packet packet)
         {
@@ -367,6 +374,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         public static void HandleShowAdventureMap(Packet packet)
         {
             packet.ReadPackedGuid128("Creature");
+        }
+
+        [Parser(Opcode.SMSG_TIME_ADJUSTMENT)]
+        public static void HandleTimeAdjustement(Packet packet)
+        {
+            packet.ReadSingle("unk1");
+            packet.ReadInt32("unk2");
         }
 
         [Parser(Opcode.SMSG_TRANSMOG_COLLECTION_UPDATE)]

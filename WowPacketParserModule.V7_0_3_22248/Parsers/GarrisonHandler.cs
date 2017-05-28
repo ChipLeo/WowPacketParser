@@ -203,6 +203,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             ReadGarrisonFollower(packet);
         }
 
+        [Parser(Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_STATUS)]
+        public static void HandleGarrisonFollowerChangedStatus(Packet packet)
+        {
+            packet.ReadInt32("Result");
+            ReadGarrisonFollower(packet);
+        }
+
         [Parser(Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_XP)] // GARRISON_FOLLOWER_XP_CHANGED
         public static void HandleGarrisonUnk2(Packet packet)
         {
@@ -267,6 +274,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ResetBitReader();
 
             packet.ReadBit("UnkBit");
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_REMOVE_FOLLOWER_FROM_BUILDING_RESULT)]
+        public static void HandleGarrisonRemoveFollowerFromBuildingResult(Packet packet)
+        {
+            packet.ReadInt64("FollowerDBID");
+            packet.ReadInt32("unk1");
         }
 
         [Parser(Opcode.SMSG_GARRISON_REMOVE_FOLLOWER_RESULT)]

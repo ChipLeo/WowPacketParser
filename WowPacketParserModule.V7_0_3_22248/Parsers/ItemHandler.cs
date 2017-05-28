@@ -88,6 +88,24 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("unk3");
         }
 
+        [Parser(Opcode.CMSG_ITEM_PURCHASE_REFUND)]
+        public static void HandleReadItem(Packet packet)
+        {
+            packet.ReadPackedGuid128("Item GUID");
+        }
+
+        [Parser(Opcode.SMSG_ITEM_PURCHASE_REFUND_RESULT)]
+        public static void HandleItemPurchaseRefundResult(Packet packet)
+        {
+            packet.ReadPackedGuid128("ItemGUID");
+            packet.ReadByte("Result");
+            var hasContents = packet.ReadBit("HasContents");
+            packet.ResetBitReader();
+
+            if (hasContents)
+                ReadItemPurchaseContents(packet, "Contents");
+        }
+
         [Parser(Opcode.SMSG_ITEM_PUSH_RESULT)]
         public static void HandleItemPushResult(Packet packet)
         {

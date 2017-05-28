@@ -35,6 +35,14 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadSByte("ConsumedCharges", idx);
         }
 
+        [Parser(Opcode.CMSG_SET_PET_SLOT)]
+        public static void HandleSetPetSlot(Packet packet)
+        {
+            packet.ReadInt32("PetNumber");
+            packet.ReadByte("Slot");
+            packet.ReadPackedGuid128("Unit");
+        }
+
         [Parser(Opcode.CMSG_REQUEST_STABLED_PETS)]
         public static void HandleRequestStabledPets(Packet packet)
         {
@@ -85,6 +93,21 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
             packet.ReadPackedGuid128("PetGUID");
             ReadPetFlags(packet, "PetMode");
+        }
+
+        [Parser(Opcode.SMSG_PET_SLOT_UPDATED)]
+        public static void HandlePetSlotUpdated(Packet packet)
+        {
+            packet.ReadInt32("PetNumber");
+            packet.ReadInt32("Slot");
+            packet.ReadInt32("unk3");
+            packet.ReadInt32("unk4");
+        }
+
+        [Parser(Opcode.SMSG_SET_PET_SPECIALIZATION)]
+        public static void HandleSetPetSpecialization(Packet packet)
+        {
+            packet.ReadInt16("Specialization");
         }
     }
 }

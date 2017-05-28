@@ -25,6 +25,45 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadPackedGuid128("Player", i);
         }
 
+        [Parser(Opcode.SMSG_GUILD_BANK_LOG_QUERY_RESULTS)]
+        public static void HandleGuildBankLogQueryResult(Packet packet)
+        {
+            packet.ReadInt32("Tab");
+            var int32 = packet.ReadInt32("GuildBankLogEntryCount");
+            packet.ResetBitReader();
+            var bit24 = packet.ReadBit("HasWeeklyBonusMoney");
+
+            for (int i = 0; i < int32; i++)
+            {
+                packet.ReadPackedGuid128("PlayerGUID", i);
+                packet.ReadInt32("TimeOffset", i);
+                packet.ReadSByte("EntryType", i);
+
+                packet.ResetBitReader();
+
+                var bit33 = packet.ReadBit("HasMoney", i);
+                var bit44 = packet.ReadBit("HasItemID", i);
+                var bit52 = packet.ReadBit("HasCount", i);
+                var bit57 = packet.ReadBit("HasOtherTab", i);
+
+                if (bit33)
+                    packet.ReadInt64("Money", i);
+
+                if (bit44)
+                    packet.ReadInt32<ItemId>("ItemID", i);
+
+                if (bit52)
+                    packet.ReadInt32("Count", i);
+
+                if (bit57)
+                    packet.ReadSByte("OtherTab", i);
+
+            }
+
+            if (bit24)
+                packet.ReadInt64("WeeklyBonusMoney");
+        }
+
         [Parser(Opcode.SMSG_GUILD_CRITERIA_UPDATE)]
         public static void HandleGuildCriteriaUpdate(Packet packet)
         {
@@ -130,7 +169,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadWoWString("InfoText", bits9);
         }
 
-        [Parser(Opcode.SMSG_GUILD_BANK_QUERY_RESULTS, ClientVersionBuild.V7_2_0_23826)]
+        [Parser(Opcode.SMSG_GUILD_BANK_QUERY_RESULTS)]
         public static void HandleGuildBankQueryResults(Packet packet)
         {
             packet.ReadUInt64("Money");
@@ -139,7 +178,9 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             var tabInfoCount = packet.ReadInt32("TabInfoCount");
             var itemInfoCount = packet.ReadInt32("ItemInfoCount");
-
+            packet.ResetBitReader();
+            packet.ReadBit("FullUpdate");
+            packet.ResetBitReader();
             for (int i = 0; i < tabInfoCount; i++)
             {
                 packet.ReadInt32("TabIndex", i);
@@ -157,27 +198,23 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             {
                 packet.ReadInt32("Slot", i);
 
+                ItemHandler.ReadItemInstance(packet, i, "ItemInstance");
+
                 packet.ReadInt32("Count", i);
                 packet.ReadInt32("EnchantmentID", i);
                 packet.ReadInt32("Charges", i);
                 packet.ReadInt32("OnUseEnchantmentID", i);
-                var int76 = packet.ReadInt32("SocketEnchant", i);
                 packet.ReadInt32("Flags", i);
 
-                V6_0_2_19033.Parsers.ItemHandler.ReadItemInstance(packet, i, "ItemInstance");
-
+                packet.ResetBitReader();
+                var int76 = packet.ReadBits("SocketEnchant", 2, i);
+                packet.ReadBit("Locked", i);
                 for (int j = 0; j < int76; j++)
                 {
-                    packet.ReadInt32("SocketIndex", i, j);
-                    packet.ReadInt32("SocketEnchantID", i, j);
+                    packet.ReadByte("SocketIndex", i, j);
+                    ItemHandler.ReadItemInstance(packet, i, j, "ItemInstance");
                 }
-
-                packet.ResetBitReader();
-                packet.ReadBit("Locked");
             }
-
-            packet.ResetBitReader();
-            packet.ReadBit("FullUpdate");
         }
 
         [Parser(Opcode.SMSG_GUILD_ITEM_LOOTED)]
