@@ -43,22 +43,22 @@ namespace WowPacketParserModule.V6_0_2_19033.Hotfix
         public int Delay { get; set; }
         public int RangedMod { get; set; }
         public int Bonding { get; set; }
-        [HotfixVersion(ClientVersionBuild.V6_2_4_21742, true)]
+        [HotfixVersion(ClientVersionBuild.V6_1_0_19702, true)]
         [HotfixArray(5)]
         public int[] TriggeredSpell { get; set; }
-        [HotfixVersion(ClientVersionBuild.V6_2_4_21742, true)]
+        [HotfixVersion(ClientVersionBuild.V6_1_0_19702, true)]
         [HotfixArray(5)]
         public int[] TriggeredSpellType { get; set; }
-        [HotfixVersion(ClientVersionBuild.V6_2_4_21742, true)]
+        [HotfixVersion(ClientVersionBuild.V6_1_0_19702, true)]
         [HotfixArray(5)]
         public int[] TriggeredSpellCharge { get; set; }
-        [HotfixVersion(ClientVersionBuild.V6_2_4_21742, true)]
+        [HotfixVersion(ClientVersionBuild.V6_1_0_19702, true)]
         [HotfixArray(5)]
         public int[] TriggeredSpellCooldown { get; set; }
-        [HotfixVersion(ClientVersionBuild.V6_2_4_21742, true)]
+        [HotfixVersion(ClientVersionBuild.V6_1_0_19702, true)]
         [HotfixArray(5)]
         public int[] TriggeredSpellCategories { get; set; }
-        [HotfixVersion(ClientVersionBuild.V6_2_4_21742, true)]
+        [HotfixVersion(ClientVersionBuild.V6_1_0_19702, true)]
         [HotfixArray(5)]
         public int[] TriggeredSpellCategoryCooldown { get; set; }
         [HotfixArray(4)]
@@ -80,7 +80,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Hotfix
         public int TotemCategory { get; set; }
         [HotfixArray(3)]
         public int[] SocketColor { get; set; }
-        [HotfixVersion(ClientVersionBuild.V6_2_4_21742, true)]
+        [HotfixVersion(ClientVersionBuild.V6_1_0_19702, true)]
         [HotfixArray(3)]
         public int[] SocketItem { get; set; }
         public int SocketBonus { get; set; }

@@ -1592,6 +1592,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19802
             {Opcode.SMSG_UNDELETE_CHARACTER_RESPONSE, 0x0CA5},
             {Opcode.SMSG_UNDELETE_COOLDOWN_STATUS_RESPONSE, 0x0B9F},
             {Opcode.SMSG_UNLEARNED_SPELLS, 0x151E},
+            {Opcode.SMSG_UNK_1B24, 0x1965},
             {Opcode.SMSG_UPDATE_ACCOUNT_DATA, 0x1698},
             {Opcode.SMSG_UPDATE_ACTION_BUTTONS, 0x03C0},
             {Opcode.SMSG_UPDATE_CAPTURE_POINT, 0x06A0},

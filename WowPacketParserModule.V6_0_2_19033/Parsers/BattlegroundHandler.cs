@@ -28,6 +28,22 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
         }
 
+        [Parser(Opcode.SMSG_BATTLEFIELD_RATED_INFO)]
+        public static void HandleBattlefieldRatedInfo(Packet packet)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                packet.ReadInt32("PersonalRating", i);
+                packet.ReadInt32("Ranking", i);
+                packet.ReadInt32("SeasonPlayed", i);
+                packet.ReadInt32("SeasonWon", i);
+                packet.ReadInt32("WeeklyPlayed", i);
+                packet.ReadInt32("WeeklyWon", i);
+                packet.ReadInt32("BestWeeklyRating", i);
+                packet.ReadInt32("BestSeasonRating", i);
+            }
+        }
+
         [Parser(Opcode.SMSG_RATED_BATTLEFIELD_INFO)]
         public static void HandleRatedBattlefieldInfo(Packet packet)
         {
