@@ -61,6 +61,9 @@ namespace WowPacketParser.Parsing.Parsers
                     packet.ReadBytes("Seed", 16);
                     break;
                 }
+                default:
+                    packet.ReadToEnd();
+                    break;
             }
         }
 
@@ -84,6 +87,9 @@ namespace WowPacketParser.Parsing.Parsers
                     packet.ReadBytes("SHA1 Seed", 20);
                     break;
                 }
+                default:
+                    packet.ReadToEnd();
+                    break;
             }
         }
 
