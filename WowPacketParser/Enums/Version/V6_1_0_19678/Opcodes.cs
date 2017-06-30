@@ -1077,7 +1077,7 @@ namespace WowPacketParser.Enums.Version.V6_1_0_19678
             {Opcode.SMSG_SHOW_TRADE_SKILL_RESPONSE, 0x151B},
             {Opcode.SMSG_SOCIAL_UNK0213, 0x0213},
             {Opcode.SMSG_SOCKET_GEMS, 0x0A32},
-            {Opcode.SMSG_SORT_BAGS_ACK, 0x0921},
+            {Opcode.SMSG_SORT_BAGS_RESULT, 0x0921},
             {Opcode.SMSG_SPECIAL_MOUNT_ANIM, 0x19B1},
             {Opcode.SMSG_SPELL_ABSORB_LOG, 0x12C1},
             {Opcode.SMSG_CATEGORY_COOLDOWN, 0x0E5B},
