@@ -43,7 +43,8 @@ namespace WowPacketParser.Misc
             { HighGuidTypeLegacy.Corpse, HighGuidType.Corpse },
             { HighGuidTypeLegacy.AreaTrigger, HighGuidType.AreaTrigger },
             { HighGuidTypeLegacy.Account, HighGuidType.WowAccount },
-            { HighGuidTypeLegacy.Unknown270, HighGuidType.Null }
+            { HighGuidTypeLegacy.Unknown270, HighGuidType.Null },
+            { HighGuidTypeLegacy.Pet2, HighGuidType.BattlePet }
         };
 
         public HighGuidLegacy(HighGuidTypeLegacy high)

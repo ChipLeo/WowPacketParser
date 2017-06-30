@@ -226,6 +226,7 @@ namespace WowPacketParser.Enums
         Vehicle       = 0xF05,
         SceneObject   = 0xF06,
         Loot          = 0xF09,
+        Pet2          = 0xF0A,
         AreaTrigger   = 0xF0B,
         Corpse        = 0xF0C,
     }
