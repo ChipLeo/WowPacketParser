@@ -1496,6 +1496,13 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadInt32("Cooldown Mod");
         }
 
+        [Parser(Opcode.SMSG_CLEAR_EXTRA_AURA_INFO_OBSOLETE)]
+        public static void HandleClearAuraInfoObsolete(Packet packet)
+        {
+            var casterGUID = packet.ReadPackedGuid("Caster GUID");
+            var spellId = packet.ReadInt32<SpellId>("Spell ID");
+        }
+
         [Parser(Opcode.SMSG_ON_CANCEL_EXPECTED_RIDE_VEHICLE_AURA)]
         [Parser(Opcode.CMSG_CANCEL_AUTO_REPEAT_SPELL)]
         [Parser(Opcode.CMSG_CANCEL_GROWTH_AURA)]
