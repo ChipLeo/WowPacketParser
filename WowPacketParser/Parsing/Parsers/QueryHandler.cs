@@ -143,7 +143,8 @@ namespace WowPacketParser.Parsing.Parsers
             else // Did they stop sending pet spell data after 3.1?
             {
                 packet.ReadInt32("Unk Int");
-                creature.PetSpellDataID = packet.ReadUInt32("Pet Spell Data Id");
+                if (ClientVersion.RemovedInVersion(ClientVersionBuild.V3_0_8a_9506))
+                    creature.PetSpellDataID = packet.ReadUInt32("Pet Spell Data Id");
             }
 
             creature.ModelIDs = new uint?[4];
