@@ -99,7 +99,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             }
 
             if (hasSandboxScaling)
-                ReadSandboxScalingData(packet, idx, "SandboxScalingData");
+                SpellHandler.ReadSandboxScalingData(packet, idx, "SandboxScalingData");
         }
 
         [Parser(Opcode.SMSG_SPELL_NON_MELEE_DAMAGE_LOG)]
@@ -149,7 +149,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 SpellHandler.ReadSpellCastLogData(packet, "SpellCastLogData");
 
             if (hasSandboxScaling)
-                ReadSandboxScalingData(packet, "SandboxScalingData");
+                SpellHandler.ReadSandboxScalingData(packet, "SandboxScalingData");
         }
 
         [Parser(Opcode.SMSG_ATTACKER_STATE_UPDATE)]
@@ -251,7 +251,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             }
 
             if (hasSandboxScaling)
-                ReadSandboxScalingData(packet, "SandboxScalingData");
+                SpellHandler.ReadSandboxScalingData(packet, "SandboxScalingData");
         }
 
         [Parser(Opcode.SMSG_SPELL_ENERGIZE_LOG, ClientVersionBuild.V7_2_0_23826)]

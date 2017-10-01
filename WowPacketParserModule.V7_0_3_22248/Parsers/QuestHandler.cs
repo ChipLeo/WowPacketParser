@@ -88,6 +88,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         public static void HandleAdventureJournalOpenQuest(Packet packet)
         {
             packet.ReadInt32("QuestID");
+            packet.ReadInt32("QuestType");
+            packet.ReadInt32("QuestLevel");
+
+            for (int i = 0; i < 2; i++)
+                packet.ReadUInt32("QuestFlags", i);
+
+            packet.ResetBitReader();
         }
 
         [Parser(Opcode.CMSG_ADVENTURE_JOURNAL_START_QUEST)]
@@ -236,7 +243,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             uint questTurnTargetNameLen = packet.ReadBits(8);
             uint questCompletionLogLen = packet.ReadBits(11);
 
-            for (int i = 0; i < int2946; ++i)
+            for (uint i = 0; i < int2946; ++i)
             {
                 var objectiveId = packet.ReadEntry("Id", i);
 
@@ -247,6 +254,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 };
                 questInfoObjective.Type = packet.ReadByteE<QuestRequirementType>("Quest Requirement Type", i);
                 questInfoObjective.StorageIndex = packet.ReadSByte("StorageIndex", i);
+                questInfoObjective.Order = i;
                 questInfoObjective.ObjectID = packet.ReadInt32("ObjectID", i);
                 questInfoObjective.Amount = packet.ReadInt32("Amount", i);
                 questInfoObjective.Flags = packet.ReadUInt32("Flags", i);
@@ -255,12 +263,12 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 questInfoObjective.ProgressBarWeight = packet.ReadSingle("ProgressBarWeight", i);
 
                 int visualEffectsCount = packet.ReadInt32("VisualEffects", i);
-                for (int j = 0; j < visualEffectsCount; ++j)
+                for (uint j = 0; j < visualEffectsCount; ++j)
                 {
                     QuestVisualEffect questVisualEffect = new QuestVisualEffect
                     {
                         ID = questInfoObjective.ID,
-                        Index = (uint) j,
+                        Index = j,
                         VisualEffect = packet.ReadInt32("VisualEffectId", i, j)
                     };
 
@@ -712,6 +720,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
             V6_0_2_19033.Parsers.ItemHandler.ReadItemInstance(packet, indexes);
             packet.ReadInt32("Quantity", indexes);
+        }
+
+        [Parser(Opcode.SMSG_QUEST_GIVER_QUEST_MESSAGE)]
+        public static void HandleQuestgiverQuestMessage(Packet packet)
+        {
+            packet.ReadPackedGuid128("QuestGiverGUID");
+            ReadGossipText(packet);
         }
     }
 }

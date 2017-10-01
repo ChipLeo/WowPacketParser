@@ -130,7 +130,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
 
             HotfixData hotfixData = new HotfixData
             {
-                ID = hotfixId,
+                ID = (uint)hotfixId,
                 TableHash = type,
                 RecordID = entry,
                 Deleted = !allow

@@ -349,6 +349,7 @@
     <Compile Include="Enums\UnitDynamicFlags.cs" />
     <Compile Include="Enums\UnitFlags2.cs" />
     <Compile Include="Enums\UnitFlags.cs" />
+    <Compile Include="Enums\UnitFlags3.cs" />
     <Compile Include="Enums\UnknownFlags.cs" />
     <Compile Include="Enums\UpdateFields.cs" />
     <Compile Include="Enums\UpdateFlag.cs" />
@@ -545,6 +546,7 @@
     <Compile Include="Store\Objects\BroadcastTextLocale.cs" />
     <Compile Include="Store\Objects\Creature.cs" />
     <Compile Include="Store\Objects\CreatureAddon.cs" />
+    <Compile Include="Store\Objects\CreatureDefaultTrainer.cs" />
     <Compile Include="Store\Objects\CreatureEquipment.cs" />
     <Compile Include="Store\Objects\CreatureTemplateAddon.cs" />
     <Compile Include="Store\Objects\CreatureTemplateScaling.cs" />
@@ -556,6 +558,9 @@
     <Compile Include="Store\Objects\GameObjectTemplateAddon.cs" />
     <Compile Include="Store\Objects\GossipMenu.cs" />
     <Compile Include="Store\Objects\GossipMenuOption.cs" />
+    <Compile Include="Store\Objects\GossipMenuOptionAction.cs" />
+    <Compile Include="Store\Objects\GossipMenuOptionBox.cs" />
+    <Compile Include="Store\Objects\GossipMenuOptionTrainer.cs" />
     <Compile Include="Store\Objects\IBroadcastTextEntry.cs" />
     <Compile Include="Store\Objects\PointsOfInterest.cs" />
     <Compile Include="Store\Objects\HotfixData.cs" />
@@ -588,6 +593,8 @@
     <Compile Include="Store\Objects\PlayerCreateInfo.cs" />
     <Compile Include="Store\Objects\SpellTargetPosition.cs" />
     <Compile Include="Store\Objects\SpellAreaTrigger.cs" />
+    <Compile Include="Store\Objects\Trainer.cs" />
+    <Compile Include="Store\Objects\TrainerSpell.cs" />
     <Compile Include="Store\Objects\Unit.cs" />
     <Compile Include="Store\Objects\CreatureTemplate.cs" />
     <Compile Include="Store\Objects\VehicleTemplateAccessory.cs" />
