@@ -696,6 +696,7 @@ namespace WowPacketParser.Enums.Version.V7_2_5_24330
             {Opcode.CMSG_UI_TIME_REQUEST, 0x369D},
             {Opcode.CMSG_UNACCEPT_TRADE, 0x315B},
             {Opcode.CMSG_UNDELETE_CHARACTER, 0x36E1},
+            {Opcode.CMSG_UNK_36BA, 0x36BA},
             {Opcode.CMSG_UNLEARN_SKILL, 0x34DB},
             {Opcode.CMSG_UNLEARN_SPECIALIZATION, 0x31A0},
             {Opcode.CMSG_UNLOCK_VOID_STORAGE, 0x319C},

@@ -33,6 +33,38 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadInt32("DisplayTime", idx);
         }
 
+        [Parser(Opcode.CMSG_ENGINE_SURVEY)]
+        public static void HandleEngineSurvey(Packet packet)
+        {
+            packet.ReadInt64("unk1");
+            packet.ReadInt64("unk2");
+            packet.ReadInt64("unk3");
+            packet.ReadInt64("unk4");
+            packet.ReadUInt32("GPUVendorID");
+            packet.ReadUInt32("GPUModelID");
+            packet.ReadUInt32("Unk1C");
+            packet.ReadUInt32("Unk10");
+            packet.ReadUInt32("Unk38");
+            packet.ReadUInt32("DisplayResWidth");
+            packet.ReadUInt32("DisplayResHeight");
+            packet.ReadUInt32("Unk2C");
+            packet.ReadUInt32("MemoryCapacity");
+            packet.ReadUInt32("Unk30");
+            packet.ReadUInt32("Unk18");
+            packet.ReadUInt32("Unk30");
+            packet.ReadUInt32("Unk18");
+            packet.ReadUInt32("Unk30");
+            packet.ReadInt16("unk5");
+            packet.ReadInt16("unk6");
+            packet.ReadByte("HasHDPlayerModels");
+            packet.ReadByte("Is64BitSystem");
+            packet.ReadByte("Unk3C");
+            packet.ReadByte("Unk3F");
+            packet.ReadByte("Unk3E");
+            packet.ReadByte("Unk3F");
+            packet.ReadByte("Unk3E");
+        }
+
         [Parser(Opcode.CMSG_QUERY_PAGE_TEXT)]
         public static void HandlePageTextQuery(Packet packet)
         {
@@ -62,6 +94,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadInt32("unk32");
         }
 
+        [Parser(Opcode.CMSG_UNK_36BA)]
         [Parser(Opcode.CMSG_UNK_36BB)]
         public static void HandleUnk36BB(Packet packet)
         {

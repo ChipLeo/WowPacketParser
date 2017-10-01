@@ -1217,6 +1217,7 @@ namespace WowPacketParser.Enums
         CMSG_UNK_322A,
         CMSG_UNK_34AF,
         CMSG_UNK_353A,
+        CMSG_UNK_36BA,
         CMSG_UNK_36BB,
         CMSG_UNK_3A3F,
         CMSG_UNLEARN_DANCE_MOVE,

@@ -299,12 +299,21 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             for (int i = 0; i < followerCount; i++)
                 packet.ReadInt64("FollowerDBIDs");
         }
+        public static void ReadFollowerSoftCapInfo(Packet packet, params object[] indexes)
+        {
+            packet.ReadInt32("GarrFollowerTypeID", indexes);
+            packet.ReadUInt32("Count", indexes);
+        }
 
         [Parser(Opcode.SMSG_GET_GARRISON_INFO_RESULT)]
         public static void HandleGetGarrisonInfoResult(Packet packet)
         {
             packet.ReadInt32("FactionIndex");
             var garrisonCount = packet.ReadUInt32("GarrisonCount");
+
+            var followerSoftcapCount = packet.ReadUInt32("FollowerSoftCapCount");
+            for (var i = 0u; i < followerSoftcapCount; ++i)
+                ReadFollowerSoftCapInfo(packet, i);
 
             for (int i = 0; i < garrisonCount; i++)
             {
