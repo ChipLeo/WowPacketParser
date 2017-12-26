@@ -430,6 +430,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_SET_ACTION_BAR_TOGGLES,                   0x0672}, //++
             {Opcode.CMSG_SET_ACTION_BUTTON,                        0x1F8C}, //++
             {Opcode.CMSG_SET_ACTIVE_MOVER,                         0x09F0}, //++
+            {Opcode.CMSG_SET_ACTIVE_VOICE_CHANNEL,                 0x1F88}, //--
             {Opcode.CMSG_SET_CONTACT_NOTES,                        0x0937}, //+-
             {Opcode.CMSG_SET_CURRENCY_FLAGS,                       0x03E4}, //+-
             {Opcode.CMSG_SET_DUNGEON_DIFFICULTY,                   0x1A36}, //+-
