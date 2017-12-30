@@ -98,22 +98,22 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 guid[i][1] = packet.ReadBit(); // 29
                 guid[i][2] = packet.ReadBit(); // 30
                 guid[i][6] = packet.ReadBit(); // 34
-                packet.ReadBit("unk37", i); // 37
+                packet.ReadBit("Locked", i); // 37
                 guid[i][0] = packet.ReadBit(); // 28
                 guid[i][5] = packet.ReadBit(); // 33
                 guid[i][4] = packet.ReadBit(); // 32
-                packet.ReadBit("unk36", i); // 36
+                packet.ReadBit("Extended", i); // 36
                 guid[i][7] = packet.ReadBit(); // 35
                 guid[i][3] = packet.ReadBit(); // 31
             }
             for (var i = 0; i < count; i++)
             {
                 packet.ParseBitStream(guid[i], 7, 6, 4, 2, 0);
-                packet.ReadInt32("unk40", i); // 40
-                packet.ReadInt32("unk44", i); // 44
+                packet.ReadInt32("Reset time", i); // 40
+                packet.ReadInt32("Completed_mask", i); // 44
                 packet.ParseBitStream(guid[i], 1);
-                packet.ReadInt32("unk20", i); // 20
-                packet.ReadInt32("unk24", i); // 24
+                packet.ReadInt32<MapId>("MapID", i); // 20
+                packet.ReadInt32<DifficultyId>("DifficultyID", i); // 24
                 packet.ParseBitStream(guid[i], 3, 5);
 
                 packet.WriteGuid("Guid", guid[i], i);
