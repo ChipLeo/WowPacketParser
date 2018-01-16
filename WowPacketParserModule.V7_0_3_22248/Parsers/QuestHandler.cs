@@ -103,13 +103,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32("QuestID");
         }
 
-        [Parser(Opcode.CMSG_QUERY_QUEST_REWARDS)]
-        public static void HandleQuestQueryRewards(Packet packet)
-        {
-            packet.ReadInt32("QuestID");
-            packet.ReadInt32("unk2");
-        }
-
         [HasSniffData]
         [Parser(Opcode.SMSG_QUERY_QUEST_INFO_RESPONSE)]
         public static void HandleQuestQueryResponse(Packet packet)
@@ -326,29 +319,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             }
 
             Storage.QuestTemplates.Add(quest, packet.TimeSpan);
-        }
-
-        [Parser(Opcode.SMSG_QUERY_QUEST_REWARD_RESPONSE)]
-        public static void HandleQuestRewardResponce(Packet packet)
-        {
-            packet.ReadInt32("QuestID");
-            packet.ReadInt32("unk2");
-            {//67A0F2 22996
-                var cnt1 = packet.ReadInt32("Cnt1");
-                var cnt2 = packet.ReadInt32("cnt2");
-                packet.ReadInt64("unk");
-                for (var i = 0; i < cnt1; ++i)
-                {//67A0A2 22996
-                    packet.ReadInt32("Item", i);
-                    packet.ReadInt32("unk5", i);
-                    packet.ReadByte("unk6byte", i);
-                }
-                for (var i = 0; i < cnt2; ++i)
-                {//65169D 22996
-                    packet.ReadInt32("unk6", i);
-                    packet.ReadInt32("unk7", i);
-                }
-            }
         }
 
         [Parser(Opcode.SMSG_DISPLAY_QUEST_POPUP)]
