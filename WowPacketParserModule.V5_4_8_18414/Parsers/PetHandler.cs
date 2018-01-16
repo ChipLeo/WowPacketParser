@@ -638,5 +638,28 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ParseBitStream(guid, 3, 5, 7, 2, 0, 4, 1, 6);
             packet.WriteGuid("Guid", guid);
         }
+
+        [Parser(Opcode.SMSG_PET_NAME_INVALID)]
+        public static void HandlePetNameInvalid(Packet packet)
+        {
+            var hasName = packet.ReadBit("hasName");
+            uint bits20 = 0;
+            if (hasName)
+                bits20 = packet.ReadBits(8);
+            var bit149 = packet.ReadBit("HasDeclinedNames");
+            if (bit149)
+            {
+                var count = new int[5];
+                for (var i = 0; i < 5; ++i)
+                    count[i] = (int)packet.ReadBits(7);
+
+                for (var i = 0; i < 5; ++i)
+                    packet.ReadWoWString("DeclinedNames", count[i], i);
+            }
+            if (hasName)
+                packet.ReadWoWString("NewName", bits20);
+            packet.ReadByte("Result");
+            packet.ReadInt32("PetNumber");
+        }
     }
 }

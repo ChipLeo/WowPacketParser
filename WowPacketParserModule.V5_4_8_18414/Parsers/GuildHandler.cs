@@ -917,6 +917,78 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32E<GuildEmblemError>("Error");
         }
 
+        [Parser(Opcode.SMSG_PETITION_SHOW_LIST)]
+        public static void HandlePetitionShowList(Packet packet)
+        {
+            var guid = packet.StartBitStream(3, 5, 7, 6, 1, 0, 2, 4);
+            packet.ParseBitStream(guid, 6, 0, 1);
+            packet.ReadUInt32("Price");
+            packet.ParseBitStream(guid, 4, 3, 5, 2, 7);
+            packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_PETITION_QUERY_RESPONSE)]
+        public static void HandlePetitionQueryResponse(Packet packet)
+        {
+            packet.ReadUInt32("low Guild/Team GUID");
+            var hasData = packet.ReadBit("HasData");
+
+            var NameLen = new uint[10];
+
+            var guid = new byte[8];
+
+            uint strlen42 = 0;
+            uint strlen10 = 0;
+
+            if (hasData)
+            {
+                for (var i = 0; i < 10; ++i)
+                    NameLen[i] = packet.ReadBits(6);
+                guid[2] = packet.ReadBit();
+                guid[4] = packet.ReadBit();
+                strlen42 = packet.ReadBits(12);
+                guid[0] = packet.ReadBit();
+                guid[7] = packet.ReadBit();
+                guid[3] = packet.ReadBit();
+                guid[6] = packet.ReadBit();
+                guid[5] = packet.ReadBit();
+                strlen10 = packet.ReadBits(7);
+                guid[1] = packet.ReadBit();
+            }
+
+            if (hasData)
+            {
+                packet.ParseBitStream(guid, 5);
+                packet.ReadInt32("unk1076"); // 1076
+                packet.ReadWoWString("str10", strlen10); // 10
+                packet.ReadInt32("unk1068"); // 1068
+                packet.ReadWoWString("str42", strlen42); // 42
+                packet.ParseBitStream(guid, 4);
+                packet.ReadInt32("Type"); // 1067
+                packet.ParseBitStream(guid, 6);
+                packet.ReadInt32("unk1070"); // 1070
+                packet.ReadInt32("Signs"); // 1066
+                for (var i = 0; i < 10; ++i)
+                    packet.ReadWoWString("str", NameLen[i], i);
+                packet.ParseBitStream(guid, 1);
+                packet.ParseBitStream(guid, 7);
+                packet.ParseBitStream(guid, 0);
+                packet.ReadInt32("unk1074"); // 1074
+                packet.ReadInt32("unk1075"); // 1075
+                packet.ParseBitStream(guid, 2);
+                packet.ReadTime("Time"); // 6
+                packet.ReadInt16("unk2146"); // 2146
+                packet.ReadInt32("unk1077"); // 1077
+                packet.ParseBitStream(guid, 3);
+                packet.ReadInt32("unk1071"); // 1071
+                packet.ReadInt32("unk1072"); // 1072
+                packet.ReadInt32("unk1069"); // 1069
+                packet.ReadInt32("unk1078"); // 1078
+
+                packet.WriteGuid("Guid", guid);
+            }
+        }
+
         [Parser(Opcode.SMSG_GUILD_BANK_LOG_QUERY_RESULTS)]
         [Parser(Opcode.SMSG_GUILD_BANK_QUERY_RESULTS)]
         [Parser(Opcode.SMSG_GUILD_CHALLENGE_UPDATE)]
@@ -927,9 +999,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_GUILD_SEND_RANK_CHANGE)]
         [Parser(Opcode.SMSG_GUILD_REWARD_LIST)]
         [Parser(Opcode.SMSG_PETITION_ALREADY_SIGNED)]
-        [Parser(Opcode.SMSG_PETITION_QUERY_RESPONSE)]
         [Parser(Opcode.SMSG_PETITION_RENAME_RESPONSE)]
-        [Parser(Opcode.SMSG_PETITION_SHOW_LIST)]
         [Parser(Opcode.SMSG_PETITION_SHOW_SIGNATURES)]
         [Parser(Opcode.SMSG_PETITION_SIGN_RESULTS)]
         public static void HandleGuild(Packet packet)

@@ -922,6 +922,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.CMSG_PLAYER_VEHICLE_ENTER)]
+        public static void HandlePlayerVehicleEnter(Packet packet)
+        {
+            var guid = packet.StartBitStream(5, 7, 3, 0, 2, 4, 6, 1);
+            packet.ParseBitStream(guid, 5, 3, 1, 2, 7, 0, 6, 4);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_PONG)]
         public static void HandleServerPong(Packet packet)
         {
@@ -1453,16 +1461,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             packet.ReadInt32("unk1");
             packet.ReadInt32("unk2");
-        }
-
-        [Parser(Opcode.SMSG_UNK_0EAB)]
-        public static void HandleUnk0EAB(Packet packet)
-        {
-            packet.ReadInt32("unk24");
-            packet.ReadSingle("unk32");
-            packet.ReadSingle("unk28");
-            packet.ReadInt32("unk16");
-            packet.ReadSingle("unk");
         }
 
         [Parser(Opcode.SMSG_SET_FLAT_SPELL_MODIFIER)]

@@ -102,6 +102,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             if (hitInfo.HasAnyFlag(SpellHitInfo.HITINFO_BLOCK | SpellHitInfo.HITINFO_UNK12))
                 packet.ReadSingle("Unk Float");
         }
+
         [Parser(Opcode.SMSG_ATTACK_START)]
         public static void HandleAttackStartStart(Packet packet)
         {
@@ -189,6 +190,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Victim GUID", victimGUID);
         }
 
+        [Parser(Opcode.SMSG_ATTACK_SWING_ERROR)]
+        public static void HandleAttackSwingError(Packet packet)
+        {
+            packet.ReadBitsE<AttackSwingErr>("Reason", 2);
+        }
+
         [Parser(Opcode.SMSG_CANCEL_AUTO_REPEAT)]
         public static void HandleCancelAutoRepeat(Packet packet)
         {
@@ -196,12 +203,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ParseBitStream(guid, 7, 6, 2, 5, 0, 4, 1, 3);
 
             packet.WriteGuid("Guid", guid);
-        }
-
-        [Parser(Opcode.SMSG_CANCEL_COMBAT)]
-        public static void HandleCancelCombat(Packet packet)
-        {
-            packet.ReadBits("Unk16", 2);
         }
 
         [Parser(Opcode.SMSG_CAN_DUEL_RESULT)]

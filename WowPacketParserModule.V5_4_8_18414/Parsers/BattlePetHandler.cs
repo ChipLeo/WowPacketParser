@@ -465,6 +465,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.CMSG_BATTLE_PET_REQUEST_JOURNAL)]
         [Parser(Opcode.SMSG_BATTLE_PETS_HEALED)]
         [Parser(Opcode.SMSG_BATTLE_PET_FINISHED)]
         [Parser(Opcode.SMSG_BATTLE_PET_LICENSE_CHANGED)]

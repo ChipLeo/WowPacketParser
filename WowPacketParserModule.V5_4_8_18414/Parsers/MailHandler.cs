@@ -281,5 +281,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadUInt32("Item Low GUID");
             packet.ReadUInt32("Item count");
         }
+
+        [Parser(Opcode.SMSG_NOTIFY_RECEIVED_MAIL)]
+        public static void HandleNotifyReceivedMail(Packet packet)
+        {
+            packet.ReadSingle("Delay");
+        }
     }
 }

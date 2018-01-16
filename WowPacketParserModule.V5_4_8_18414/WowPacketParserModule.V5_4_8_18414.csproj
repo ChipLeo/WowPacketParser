@@ -100,6 +100,7 @@
     <Compile Include="Parsers\GameObjectHandler.cs" />
     <Compile Include="Parsers\GameShop.cs" />
     <Compile Include="Parsers\GameStoreHandler.cs" />
+    <Compile Include="Parsers\GarrisonHandler.cs" />
     <Compile Include="Parsers\GroupHandler.cs" />
     <Compile Include="Parsers\GuildHandler.cs" />
     <Compile Include="Parsers\HotfixHandler.cs" />

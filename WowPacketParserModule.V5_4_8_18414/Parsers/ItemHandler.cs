@@ -283,7 +283,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid32", guid32);
         }
 
-        [Parser(Opcode.CMSG_REQUEST_HOTFIX)]
+        [Parser(Opcode.CMSG_DB_QUERY_BULK)]
         public static void HandleItemRequestHotfix(Packet packet)
         {
             packet.ReadUInt32E<WowPacketParser.Enums.DB2Hash>("Type");

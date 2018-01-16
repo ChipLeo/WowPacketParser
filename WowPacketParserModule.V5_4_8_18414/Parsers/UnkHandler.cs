@@ -98,6 +98,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadByte("unk");
         }
 
+        [Parser(Opcode.CMSG_UNK_1D8D)]
+        public static void HandleUnk1D8D(Packet packet)
+        {
+            packet.ReadSingle("unk");
+        }
+
         [Parser(Opcode.CMSG_UNK_1D9D)]
         public static void HandleUnk1D9D(Packet packet)
         {
@@ -145,28 +151,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var guid = packet.StartBitStream(3, 2, 6, 0, 4, 5, 7, 1);
             packet.ParseBitStream(guid, 6, 1, 5, 7, 3, 4, 2, 0);
             packet.WriteGuid("Guid", guid);
-        }
-
-        [Parser(Opcode.SMSG_UNK_001B)]
-        public static void HandleSUnk001B(Packet packet)
-        {
-            packet.ReadBit("unk16");
-            var unk20 = packet.ReadBits("unk20", 2);
-            var unk52 = !packet.ReadBit("!unk52");
-            if (unk20==0 && !packet.ReadBit("unk44"))
-            {
-                packet.ReadInt32("unk40"); // 40
-                packet.ReadInt32("Suffix factor"); // 24
-                packet.ReadInt32("unk36"); // 36
-                packet.ReadInt32("unk32"); // 32
-                packet.ReadUInt32<ItemId>("Entry"); // 48
-                packet.ReadInt32("unk28"); // 28
-            }
-            packet.ReadInt32("unk56"); // 56
-            if (unk52)
-                packet.ReadByte("unk52"); // 52
-            if (unk20 == 2)
-                packet.ReadInt32("unk60"); // 60
         }
 
         [Parser(Opcode.SMSG_UNK_0B81)]
@@ -260,7 +244,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("CriteriaID");
         }
 
-        [Parser(Opcode.SMSG_UNK_1E1B)]
+        [Parser(Opcode.SMSG_BATTLE_PAY_DISTRIBUTION_UPDATE)]
         public static void HandleSUnk1E1B(Packet packet)
         {
             var guid = new byte[8];
@@ -452,8 +436,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_NULL_02DA)]
         [Parser(Opcode.CMSG_NULL_05E1)]
         [Parser(Opcode.CMSG_NULL_06D4)]
-        [Parser(Opcode.CMSG_NULL_0813)]
-        [Parser(Opcode.CMSG_NULL_0A23)]
         [Parser(Opcode.CMSG_NULL_1063)]
         [Parser(Opcode.CMSG_NULL_1124)]
         [Parser(Opcode.CMSG_NULL_135B)]

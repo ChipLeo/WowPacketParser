@@ -58,6 +58,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_BATTLE_PET_DELETE_PET,                    0x18B6}, //+-
             {Opcode.CMSG_BATTLE_PET_INITIAL_UPDATE_RESPONSE,       0x1A07}, //+-
             {Opcode.CMSG_BATTLE_PET_MODIFY_NAME,                   0x1887}, //+-
+            {Opcode.CMSG_BATTLE_PET_REQUEST_JOURNAL,               0x0A23}, //++
             {Opcode.CMSG_BATTLE_PET_ROUND,                         0x17BA}, //++
             {Opcode.CMSG_BATTLE_PET_SET_BATTLE_SLOT,               0x0163}, //+-
             {Opcode.CMSG_BATTLE_PET_SET_FLAGS,                     0x17AC}, //+-
@@ -84,6 +85,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_CALENDAR_EVENT_STATUS,                    0x1AB3}, //--
             {Opcode.CMSG_CALENDAR_GET_CALENDAR,                    0x1F9F}, //+-
             {Opcode.CMSG_CALENDAR_GET_EVENT,                       0x030C}, //--
+            {Opcode.CMSG_CALENDAR_GET_NUM_PENDING,                 0x0813}, //++
             {Opcode.CMSG_CALENDAR_REMOVE_EVENT,                    0x0C61}, //--
             {Opcode.CMSG_CALENDAR_UPDATE_EVENT,                    0x1F8D}, //--
             {Opcode.CMSG_CANCEL_AURA,                              0x1861}, //++
@@ -321,8 +323,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_REQUEST_VEHICLE_PREV_SEAT,                0x03C4}, //+-- VehiclePrevSeat
             {Opcode.CMSG_NULL_05E1,                                0x05E1}, //+-
             {Opcode.CMSG_NULL_06D4,                                0x06D4}, //+-
-            {Opcode.CMSG_NULL_0813,                                0x0813}, //+-
-            {Opcode.CMSG_NULL_0A23,                                0x0A23}, //+-
             {Opcode.CMSG_NULL_1063,                                0x1063}, //++ battle pet
             {Opcode.CMSG_NULL_1124,                                0x1124}, //+-
             {Opcode.CMSG_NULL_135B,                                0x135B}, //+-
@@ -405,7 +405,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_REQUEST_GUILD_PARTY_STATE,                0x10C3}, //+++
             {Opcode.CMSG_REQUEST_GUILD_REWARDS_LIST,               0x06C4}, //+-
             {Opcode.CMSG_REQUEST_GUILD_XP,                         0x05F8}, //+-
-            {Opcode.CMSG_REQUEST_HOTFIX,                           0x158D}, //+-
+            {Opcode.CMSG_DB_QUERY_BULK,                            0x158D}, //+-
             {Opcode.CMSG_REQUEST_INSPECT_RATED_BG_STATS,           0x0882}, //++
             {Opcode.CMSG_REQUEST_PARTY_MEMBER_STATS,               0x0806}, //+-
             {Opcode.CMSG_REQUEST_PLAYED_TIME,                      0x03F6}, //++
@@ -509,6 +509,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_178A,                                 0x178A}, //++ raid
             {Opcode.CMSG_UNK_185B,                                 0x185B}, //++
             {Opcode.CMSG_UNK_19C2,                                 0x19C2}, //+-
+            {Opcode.CMSG_UNK_1D8D,                                 0x1D8D}, //++ настройки/основные/окружающая среда/видимость [200,600,800,1000,1300]
             {Opcode.CMSG_UNK_1D9D,                                 0x1D9D}, //++ LFG
             {Opcode.CMSG_UNLEARN_SKILL,                            0x0268}, //++
             {Opcode.CMSG_UNLEARN_SPECIALIZATION,                   0x1841}, //+-+
@@ -552,6 +553,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_ATTACKER_STATE_UPDATE,                    0x06AA}, //++
             {Opcode.SMSG_ATTACK_START,                             0x1A9E}, //++
             {Opcode.SMSG_ATTACK_STOP,                              0x12AF}, //++
+            {Opcode.SMSG_ATTACK_SWING_ERROR,                       0x11E1}, //++
             {Opcode.SMSG_ATTACK_SWING_LANDED_LOG,                  0x0C9E}, //--
             {Opcode.SMSG_AUCTION_BIDDER_NOTIFICATION,              0x11C1}, //++
             {Opcode.SMSG_AUCTION_COMMAND_RESULT,                   0x1002}, //++
@@ -591,6 +593,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BATTLE_PAY_CONFIRM_PURCHASE,              0x14E3}, //--
             {Opcode.SMSG_BATTLE_PAY_DELIVERY_ENDED,                0x020B}, //--
             {Opcode.SMSG_BATTLE_PAY_DELIVERY_STARTED,              0x1E32}, //--
+            {Opcode.SMSG_BATTLE_PAY_DISTRIBUTION_UPDATE,           0x1E1B}, //++ levelup 90
             {Opcode.SMSG_BATTLE_PAY_GET_DISTRIBUTION_LIST_RESPONSE, 0x043F}, //--
             {Opcode.SMSG_BATTLE_PAY_GET_PRODUCT_LIST_RESPONSE,     0x1ABF}, //++
             {Opcode.SMSG_BATTLE_PAY_PURCHASE_UPDATE,               0x14E2}, //++ pair+ 1886
@@ -664,7 +667,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_CALENDAR_SEND_NUM_PENDING,                0x0A3F}, //++
             {Opcode.SMSG_CAMERA_SHAKE,                             0x0C3A}, //+-
             {Opcode.SMSG_CANCEL_AUTO_REPEAT,                       0x1E0F}, //++
-            {Opcode.SMSG_CANCEL_COMBAT,                            0x11E1}, //++
             {Opcode.SMSG_CANCEL_ORPHAN_SPELL_VISUAL,               0x1412}, //+-
             {Opcode.SMSG_CANCEL_SCENE,                             0x120E}, //++
             {Opcode.SMSG_CANCEL_SPELL_VISUAL,                      0x1E9F}, //--
@@ -710,7 +712,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_COMBAT_EVENT_FAILED,                      0x18C3}, //++
             {Opcode.SMSG_COMPLAINT_RESULT,                         0x128F}, //--
             {Opcode.SMSG_CONNECT_TO,                               0x1149}, //--
-            {Opcode.SMSG_CONQUEST_FORMULA_CONSTANTS,               0x18AF}, //--
+            {Opcode.SMSG_CONQUEST_FORMULA_CONSTANTS,               0x0EAB}, //++
             {Opcode.SMSG_CONSOLE_WRITE,                            0x18E0}, //--
             {Opcode.SMSG_CONTACT_LIST,                             0x1F22}, //++
             {Opcode.SMSG_CONTROL_UPDATE,                           0x1043}, //++
@@ -743,6 +745,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_DISPLAY_PLAYER_CHOICE,                    0x1282}, //--
             {Opcode.SMSG_DISPLAY_PROMOTION,                        0x00A3}, //++
             {Opcode.SMSG_DISPLAY_QUEST_POPUP,                      0x1C9F}, //+-
+            {Opcode.SMSG_DISPLAY_TOAST,                            0x001B}, //++
             {Opcode.SMSG_DONT_AUTO_PUSH_SPELLS_TO_ACTION_BAR,      0x1C8B}, //+-
             {Opcode.SMSG_DUEL_COMPLETE,                            0x1C0A}, //--
             {Opcode.SMSG_DUEL_COUNTDOWN,                           0x129F}, //+-
@@ -1012,6 +1015,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_NOTIFY_DEST_LOC_SPELL_CAST,               0x1E0E}, //--
             {Opcode.SMSG_NOTIFY_MISSILE_TRAJECTORY_COLLISION,      0x120A}, //++
             {Opcode.SMSG_NOTIFY_MONEY,                             0x0C0F}, //--
+            {Opcode.SMSG_NOTIFY_RECEIVED_MAIL,                     0x0086}, //+-
             {Opcode.SMSG_NUKE_ALL_OBJECTS_DUE_TO_SEAMLESS_PORT,    0x0C9A}, //++
             {Opcode.SMSG_NULL_1313,                                0x1313}, //++
             {Opcode.SMSG_OFFER_PETITION_ERROR,                     0x161E}, //--
@@ -1106,7 +1110,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_QUEST_UPDATE_FAILED,                      0x07DD}, //+-
             {Opcode.SMSG_QUEST_UPDATE_FAILED_TIMER,                0x06FF}, //+-
             {Opcode.SMSG_RAF_EMAIL_ENABLED_RESPONSE,               0x149E}, //--
-            {Opcode.SMSG_RAID_DIFFICULTY_SET,                      0x0591}, //+-
             {Opcode.SMSG_RAID_INSTANCE_MESSAGE,                    0x0CAF}, //++
             {Opcode.SMSG_RAID_MARKERS_CHANGED,                     0x0283}, //++
             {Opcode.SMSG_RAID_TARGET_UPDATE,                       0x008A}, //++
@@ -1279,14 +1282,12 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_TUTORIAL_FLAGS,                           0x1B90}, //++
             {Opcode.SMSG_UI_TIME,                                  0x0027}, //+-
             {Opcode.SMSG_UNK_000F,                                 0x000f}, //++
-            {Opcode.SMSG_UNK_001B,                                 0x001B}, //++
             {Opcode.SMSG_UNK_0332,                                 0x0332}, //++
             {Opcode.SMSG_UNK_043A,                                 0x043A}, //+-
             {Opcode.SMSG_UNK_0470,                                 0x0470}, //+- spell
             {Opcode.SMSG_UNK_0B81,                                 0x0B81}, //++ pair 02DA auction
             {Opcode.SMSG_UNK_0C44,                                 0x0C44}, //+-
             {Opcode.SMSG_UNK_0E8E,                                 0x0E8E}, //+-
-            {Opcode.SMSG_UNK_0EAB,                                 0x0EAB}, //++
             {Opcode.SMSG_UNK_103E,                                 0x103E}, //++
             {Opcode.SMSG_UNK_10BA,                                 0x10BA}, //+-
             {Opcode.SMSG_UNK_10D8,                                 0x10D8}, //+- spell
@@ -1296,7 +1297,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_UNK_162A,                                 0x162A}, //++
             {Opcode.SMSG_UNK_188F,                                 0x188F}, //++
             {Opcode.SMSG_UNK_1904,                                 0x1904}, //++
-            {Opcode.SMSG_UNK_1E1B,                                 0x1E1B}, //++ levelup 90
             {Opcode.SMSG_UNK_1E3F,                                 0x1E3F}, //+-
             {Opcode.SMSG_UNLEARNED_SPELLS,                         0x14C3}, //+-
             {Opcode.SMSG_UPDATE_ACCOUNT_DATA,                      0x0AAE}, //++
@@ -1343,6 +1343,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
         private static readonly BiDictionary<Opcode, int> MiscOpcodes = new BiDictionary<Opcode, int>
         {
             {Opcode.MSG_MOVE_WORLDPORT_ACK,                        0x1FAD}, //++
+            {Opcode.MSG_SET_RAID_DIFFICULTY,                       0x0591}, //--
             {Opcode.MSG_VERIFY_CONNECTIVITY,                       0x4F57}, //++
         };
     }
