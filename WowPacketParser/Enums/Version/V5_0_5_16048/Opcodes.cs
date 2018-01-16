@@ -861,7 +861,7 @@ namespace WowPacketParser.Enums.Version.V5_0_5_16048
             //{Opcode.SMSG_GUILD_XP_UPDATE, 0x0}, // Not found in 4.3.4
             {Opcode.SMSG_HEALTH_UPDATE, 0x0841},
             {Opcode.SMSG_HIGHEST_THREAT_UPDATE, 0x0D1A},
-            {Opcode.SMSG_HOTFIXES, 0x0F86},
+            {Opcode.SMSG_HOTFIX_MESSAGE, 0x0F86},
             {Opcode.SMSG_HOTFIX_NOTIFY, 0x0EE0},
             {Opcode.SMSG_INITIALIZE_FACTIONS, 0x0824},
             //{Opcode.SMSG_INITIAL_SPELLS, 0x0000}, Deprecated

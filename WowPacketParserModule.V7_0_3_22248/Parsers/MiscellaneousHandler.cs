@@ -508,6 +508,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadUInt32("TokenPollTimeSeconds");
             packet.ReadUInt32E<ConsumableTokenRedeem>("TokenRedeemIndex");
             packet.ReadUInt64("TokenBalanceAmount");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_3_0_24920))
+                packet.ReadUInt32("BpayStoreProductDeliveryDelay");
 
             packet.ResetBitReader();
 

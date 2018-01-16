@@ -46,6 +46,7 @@
     <Compile Include="Enums\UpdateFields715.cs" />
     <Compile Include="Enums\UpdateFields720.cs" />
     <Compile Include="Enums\UpdateFields725.cs" />
+    <Compile Include="Enums\UpdateFields732.cs" />
     <Compile Include="Hotfix\AchievementEntry.cs" />
     <Compile Include="Hotfix\AnimKitEntry.cs" />
     <Compile Include="Hotfix\AreaGroupMemberEntry.cs" />
@@ -255,6 +256,10 @@
     <Compile Include="Hotfix\TaxiPathNodeEntry.cs" />
     <Compile Include="Hotfix\TotemCategoryEntry.cs" />
     <Compile Include="Hotfix\ToyEntry.cs" />
+    <Compile Include="Hotfix\TransmogHolidayEntry.cs" />
+    <Compile Include="Hotfix\TransmogSetEntry.cs" />
+    <Compile Include="Hotfix\TransmogSetGroupEntry.cs" />
+    <Compile Include="Hotfix\TransmogSetItemEntry.cs" />
     <Compile Include="Hotfix\TransportAnimationEntry.cs" />
     <Compile Include="Hotfix\TransportRotationEntry.cs" />
     <Compile Include="Hotfix\UnitPowerBarEntry.cs" />

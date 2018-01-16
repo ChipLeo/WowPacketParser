@@ -418,6 +418,8 @@
     <Compile Include="Enums\Version\V7_1_5_23360\Opcodes.cs" />
     <Compile Include="Enums\Version\V7_2_0_23758\Opcodes.cs" />
     <Compile Include="Enums\Version\V7_2_5_24330\Opcodes.cs" />
+    <Compile Include="Enums\Version\V7_3_0_24920\Opcodes.cs" />
+    <Compile Include="Enums\Version\V7_3_2_25383\Opcodes.cs" />
     <Compile Include="Enums\VictimStates.cs" />
     <Compile Include="Enums\VoidTransferError.cs" />
     <Compile Include="Enums\WardenCheckType.cs" />
@@ -509,6 +511,7 @@
     <Compile Include="Parsing\Parsers\VoidStorageHandler.cs" />
     <Compile Include="Parsing\Parsers\WardenHandler.cs" />
     <Compile Include="Parsing\Parsers\WorldStateHandler.cs" />
+    <Compile Include="Enums\PetStableResult.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Saving\BinaryPacketWriter.cs" />
@@ -519,6 +522,7 @@
     <Compile Include="SQL\Builder.cs" />
     <Compile Include="SQL\Builders\AreaTriggers.cs" />
     <Compile Include="SQL\Builders\BuilderAttributes.cs" />
+    <Compile Include="SQL\Builders\Conversations.cs" />
     <Compile Include="SQL\Builders\GameObjectMisc.cs" />
     <Compile Include="SQL\Builders\HotfixBuilder.cs" />
     <Compile Include="SQL\Builders\Locales.cs" />
@@ -544,11 +548,16 @@
     <Compile Include="Store\Objects\Aura.cs" />
     <Compile Include="Store\Objects\BroadcastText.cs" />
     <Compile Include="Store\Objects\BroadcastTextLocale.cs" />
+    <Compile Include="Store\Objects\ConversationActor.cs" />
+    <Compile Include="Store\Objects\ConversationActorTemplate.cs" />
+    <Compile Include="Store\Objects\ConversationLineTemplate.cs" />
+    <Compile Include="Store\Objects\ConversationTemplate.cs" />
     <Compile Include="Store\Objects\Creature.cs" />
     <Compile Include="Store\Objects\CreatureAddon.cs" />
     <Compile Include="Store\Objects\CreatureDefaultTrainer.cs" />
     <Compile Include="Store\Objects\CreatureEquipment.cs" />
     <Compile Include="Store\Objects\CreatureTemplateAddon.cs" />
+    <Compile Include="Store\Objects\CreatureTemplateLocale.cs" />
     <Compile Include="Store\Objects\CreatureTemplateScaling.cs" />
     <Compile Include="Store\Objects\CreatureText.cs" />
     <Compile Include="Store\Objects\GameObjectAddon.cs" />

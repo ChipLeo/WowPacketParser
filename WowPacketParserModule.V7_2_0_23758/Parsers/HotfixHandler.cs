@@ -23,8 +23,8 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             }
         }
 
-        [Parser(Opcode.CMSG_HOTFIX_QUERY)]
-        public static void HandleHotfixQuery(Packet packet)
+        [Parser(Opcode.CMSG_HOTFIX_REQUEST)]
+        public static void HandleHotfixRequest(Packet packet)
         {
             var hotfixCount = packet.ReadUInt32();
             for (var i = 0u; i < hotfixCount; ++i)
@@ -92,7 +92,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_HOTFIX_LIST)]
+        [Parser(Opcode.SMSG_AVAILABLE_HOTFIXES)]
         public static void HandleHotfixList(Packet packet)
         {
             packet.ReadInt32("HotfixCacheVersion");
@@ -148,8 +148,8 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_HOTFIXES)]
-        [Parser(Opcode.SMSG_HOTFIX_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_HOTFIX_MESSAGE)]
+        [Parser(Opcode.SMSG_HOTFIX_RESPONSE)]
         public static void HandleHotixData(Packet packet)
         {
             var hotfixCount = packet.ReadUInt32();

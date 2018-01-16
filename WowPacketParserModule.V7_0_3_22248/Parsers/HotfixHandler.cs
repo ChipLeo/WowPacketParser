@@ -1,6 +1,7 @@
 ﻿using System;
 using WowPacketParser.Enums;
 using WowPacketParser.Hotfix;
+using WowPacketParser.Loading;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
@@ -61,6 +62,17 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                         bct.PlayerConditionID = db2File.ReadUInt32("PlayerConditionID");
 
                         Storage.BroadcastTexts.Add(bct, packet.TimeSpan);
+
+                        if (BinaryPacketReader.GetLocale() != LocaleConstant.enUS)
+                        {
+                            BroadcastTextLocale lbct = new BroadcastTextLocale
+                            {
+                                ID = bct.ID,
+                                MaleTextLang = bct.MaleText,
+                                FemaleTextLang = bct.FemaleText
+                            };
+                            Storage.BroadcastTextLocales.Add(lbct, packet.TimeSpan);
+                        }
                         break;
                     }
                     default:
@@ -72,7 +84,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             }
         }
 
-        [Parser(Opcode.CMSG_HOTFIX_QUERY)]
+        [Parser(Opcode.CMSG_HOTFIX_REQUEST)]
         public static void HandleHotfixQuery(Packet packet)
         {
             var hotfixCount = packet.ReadUInt32("HotfixCount");
@@ -90,7 +102,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_HOTFIX_LIST)]
+        [Parser(Opcode.SMSG_AVAILABLE_HOTFIXES)]
         public static void HandleHotfixList(Packet packet)
         {
             packet.ReadInt32("HotfixCacheVersion");
@@ -207,8 +219,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_HOTFIXES)]
-        [Parser(Opcode.SMSG_HOTFIX_QUERY_RESPONSE)]
+        [Parser(Opcode.SMSG_HOTFIX_MESSAGE)]
+        [Parser(Opcode.SMSG_HOTFIX_RESPONSE)]
         public static void HandleHotixData(Packet packet)
         {
             var hotfixCount = packet.ReadUInt32("HotfixCount");

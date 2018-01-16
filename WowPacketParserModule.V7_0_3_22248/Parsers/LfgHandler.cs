@@ -326,18 +326,23 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
             ReadCliRideTicket(packet);
 
-            packet.ReadInt64("InstanceID");
+            packet.ReadUInt64("InstanceID");
+            packet.ReadUInt32("ProposalID");
+            packet.ReadUInt32("Slot");
+            packet.ReadSByte("State");
+            packet.ReadUInt32("CompletedMask");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_3_0_24920))
+                packet.ReadUInt32("EncounterMask");
 
-            packet.ReadInt32("ProposalID");
-            packet.ReadInt32("Slot");
+            var playerCount = packet.ReadUInt32("PlayersCount");
+            packet.ReadByte();
+            packet.ReadBit("ValidCompletedMask");
+            packet.ReadBit("ProposalSilent");
+            packet.ReadBit("IsRequeue");
 
-            packet.ReadByte("State");
-
-            packet.ReadInt32("CompletedMask");
-            var int68 = packet.ReadInt32("PlayersCount");
-            for (int i = 0; i < int68; i++)
+            for (var i = 0u; i < playerCount; i++)
             {
-                packet.ReadInt32("Roles", i);
+                packet.ReadUInt32("Roles", i);
 
                 packet.ResetBitReader();
 
@@ -347,11 +352,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadBit("Responded", i);
                 packet.ReadBit("Accepted", i);
             }
-
-            packet.ResetBitReader();
-
-            packet.ReadBit("ValidCompletedMask");
-            packet.ReadBit("ProposalSilent");
         }
 
         public static void ReadLFGPlayerRewards(Packet packet, params object[] indexes)

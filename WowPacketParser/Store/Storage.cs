@@ -22,6 +22,10 @@ namespace WowPacketParser.Store
         // Templates
         public static readonly DataBag<AreaTriggerTemplate> AreaTriggerTemplates = new DataBag<AreaTriggerTemplate>(new List<SQLOutput> { SQLOutput.areatrigger_template });
         public static readonly DataBag<AreaTriggerTemplateVertices> AreaTriggerTemplatesVertices = new DataBag<AreaTriggerTemplateVertices>(new List<SQLOutput> { SQLOutput.areatrigger_template_polygon_vertices });
+        public static readonly DataBag<ConversationActor> ConversationActors = new DataBag<ConversationActor>(new List<SQLOutput> { SQLOutput.conversation_actors });
+        public static readonly DataBag<ConversationActorTemplate> ConversationActorTemplates = new DataBag<ConversationActorTemplate>(new List<SQLOutput> { SQLOutput.conversation_actor_template });
+        public static readonly DataBag<ConversationLineTemplate> ConversationLineTemplates = new DataBag<ConversationLineTemplate>(new List<SQLOutput> { SQLOutput.conversation_line_template });
+        public static readonly DataBag<ConversationTemplate> ConversationTemplates = new DataBag<ConversationTemplate>(new List<SQLOutput> { SQLOutput.conversation_template });
         public static readonly DataBag<GameObjectTemplate> GameObjectTemplates = new DataBag<GameObjectTemplate>(new List<SQLOutput> { SQLOutput.gameobject_template });
         public static readonly DataBag<GameObjectTemplateQuestItem> GameObjectTemplateQuestItems = new DataBag<GameObjectTemplateQuestItem>(new List<SQLOutput> { SQLOutput.gameobject_template });
         public static readonly DataBag<ItemTemplate> ItemTemplates = new DataBag<ItemTemplate>(new List<SQLOutput> { SQLOutput.item_template });
@@ -93,7 +97,8 @@ namespace WowPacketParser.Store
         public static readonly StoreBag<WowGuid> NpcSpellClicks = new StoreBag<WowGuid>(new List<SQLOutput> { SQLOutput.npc_spellclick_spells });
         public static readonly DataBag<NpcSpellClick> SpellClicks = new DataBag<NpcSpellClick>(new List<SQLOutput> { SQLOutput.npc_spellclick_spells });
 
-        // Quest Misc
+        // Locales
+        public static readonly DataBag<CreatureTemplateLocale> LocalesCreatures = new DataBag<CreatureTemplateLocale>(new List<SQLOutput> { SQLOutput.creature_template_locale });
         public static readonly DataBag<LocalesQuest> LocalesQuests = new DataBag<LocalesQuest>(new List<SQLOutput> { SQLOutput.locales_quest });
         public static readonly DataBag<QuestObjectivesLocale> LocalesQuestObjectives = new DataBag<QuestObjectivesLocale>(new List<SQLOutput> { SQLOutput.locales_quest_objectives });
 
@@ -106,6 +111,7 @@ namespace WowPacketParser.Store
         public static readonly DataBag<SceneTemplate> Scenes = new DataBag<SceneTemplate>(new List<SQLOutput> { SQLOutput.scene_template });
 
         public static readonly DataBag<BroadcastText> BroadcastTexts = new DataBag<BroadcastText>(new List<SQLOutput> { SQLOutput.broadcast_text });
+        public static readonly DataBag<BroadcastTextLocale> BroadcastTextLocales = new DataBag<BroadcastTextLocale>(new List<SQLOutput> { SQLOutput.broadcast_text_locale });
 
         public static void ClearContainers()
         {
@@ -115,6 +121,10 @@ namespace WowPacketParser.Store
 
             AreaTriggerTemplates.Clear();
             AreaTriggerTemplatesVertices.Clear();
+            ConversationActors.Clear();
+            ConversationActorTemplates.Clear();
+            ConversationLineTemplates.Clear();
+            ConversationTemplates.Clear();
             GameObjectTemplates.Clear();
             GameObjectTemplateQuestItems.Clear();
             ItemTemplates.Clear();
@@ -172,6 +182,7 @@ namespace WowPacketParser.Store
 
             SpellTargetPositions.Clear();
 
+            LocalesCreatures.Clear();
             LocalesQuests.Clear();
             LocalesQuestObjectives.Clear();
 
@@ -180,6 +191,7 @@ namespace WowPacketParser.Store
             Scenes.Clear();
 
             BroadcastTexts.Clear();
+            BroadcastTextLocales.Clear();
         }
     }
 }
