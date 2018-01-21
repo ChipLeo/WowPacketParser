@@ -232,6 +232,65 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("Name", packet.ReadBits(9));
         }
 
+        [Parser(Opcode.SMSG_GUILD_INVITE)]
+        public static void HandleServerGuildInvite(Packet packet)
+        {
+            var guid16 = new byte[8];
+            var guid136 = new byte[8];
+
+            guid16[4] = packet.ReadBit();
+            var bits152 = packet.ReadBits(7);
+            guid136[4] = packet.ReadBit();
+            guid16[6] = packet.ReadBit();
+            guid136[2] = packet.ReadBit();
+            guid136[1] = packet.ReadBit();
+            guid136[5] = packet.ReadBit();
+            guid136[7] = packet.ReadBit();
+            guid16[0] = packet.ReadBit();
+            guid136[3] = packet.ReadBit();
+            guid16[5] = packet.ReadBit();
+            guid136[6] = packet.ReadBit();
+            var bits264 = packet.ReadBits(6);
+            guid16[1] = packet.ReadBit();
+            guid16[3] = packet.ReadBit();
+            guid136[0] = packet.ReadBit();
+            guid16[2] = packet.ReadBit();
+            var bits32 = packet.ReadBits(7);
+            guid16[7] = packet.ReadBit();
+
+            packet.ReadXORByte(guid16, 1);
+            packet.ReadInt32("BackgroundColor"); //256
+            packet.ReadXORByte(guid16, 4);
+            packet.ReadWoWString("Inviter", bits264);
+            packet.ReadInt32("BorderStyle"); //316
+            packet.ReadXORByte(guid136, 7);
+            packet.ReadXORByte(guid16, 0);
+            packet.ReadXORByte(guid16, 2);
+            packet.ReadInt32("EmblemColor"); //28
+            packet.ReadXORByte(guid136, 2);
+            packet.ReadXORByte(guid136, 5);
+            packet.ReadInt32("Level"); //252
+            packet.ReadInt32("OldGuildVirtualRealmAddress"); //24
+            packet.ReadXORByte(guid16, 7);
+            packet.ReadXORByte(guid16, 3);
+            packet.ReadXORByte(guid136, 4);
+            packet.ReadInt32("BorderColor"); //144
+            packet.ReadWoWString("GuildName", bits152);
+            packet.ReadInt32("InviterVirtualRealmAddress"); //260
+            packet.ReadInt32("EmblemStyle"); //148
+            packet.ReadXORByte(guid136, 0);
+            packet.ReadWoWString("oldGuildName", bits32);
+            packet.ReadXORByte(guid16, 5);
+            packet.ReadInt32("GuildVirtualRealmAddress"); //320
+            packet.ReadXORByte(guid136, 1);
+            packet.ReadXORByte(guid16, 6);
+            packet.ReadXORByte(guid136, 3);
+            packet.ReadXORByte(guid136, 6);
+
+            packet.WriteGuid("Guild", guid16);
+            packet.WriteGuid("oldGuild", guid136);
+        }
+
         [Parser(Opcode.CMSG_GUILD_MOTD)]
         public static void HandleGuildMotd(Packet packet)
         {
@@ -994,7 +1053,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_GUILD_CHALLENGE_UPDATE)]
         [Parser(Opcode.SMSG_GUILD_COMMAND_RESULT)]
         [Parser(Opcode.SMSG_GUILD_EVENT_LOG_QUERY_RESULTS)]
-        [Parser(Opcode.SMSG_GUILD_INVITE)]
         [Parser(Opcode.SMSG_GUILD_NEWS_UPDATE)]
         [Parser(Opcode.SMSG_GUILD_SEND_RANK_CHANGE)]
         [Parser(Opcode.SMSG_GUILD_REWARD_LIST)]

@@ -836,7 +836,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_GUILD_EVENT_TAB_MODIFIED,                 0x0BF1}, //--
             {Opcode.SMSG_GUILD_EVENT_TAB_TEXT_CHANGED,             0x0A70}, //+-
             {Opcode.SMSG_GUILD_FLAGGED_FOR_RENAME,                 0x0FE9}, //+-
-            {Opcode.SMSG_GUILD_INVITE,                             0x0F71}, //--
+            {Opcode.SMSG_GUILD_INVITE,                             0x0F71}, //++
             {Opcode.SMSG_GUILD_INVITE_ACCEPT,                      0x0B69}, //--
             {Opcode.SMSG_GUILD_INVITE_CANCEL,                      0x0FE1}, //++
             {Opcode.SMSG_GUILD_KNOWN_RECIPES,                      0x0FF1}, //--
