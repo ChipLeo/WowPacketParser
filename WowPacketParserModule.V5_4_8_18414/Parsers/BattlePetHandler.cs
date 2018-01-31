@@ -206,16 +206,37 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_BATTLE_PET_FINAL_ROUND)]
         public static void HandleBattlePetFinalRound(Packet packet)
         {
-        }
-
-        [Parser(Opcode.SMSG_BATTLE_PET_FIRST_ROUND)]
-        public static void HandleBattlePetFirstRound(Packet packet)
-        {
-        }
-
-        [Parser(Opcode.SMSG_BATTLE_PET_INITIAL_UPDATE)]
-        public static void HandleBattlePetInitialUpdate(Packet packet)
-        {
+            packet.ReadBit("unk17");//17
+            packet.ReadBit("unk36");//36
+            packet.ReadBit("unk37");//37
+            var unk20 = packet.ReadBits("unk20", 20);
+            var dat = new Bit[unk20][];
+            for (var i = 0; i < unk20; ++i)
+            {
+                dat[i] = new Bit[3];
+                dat[i][0] = !packet.ReadBit("!unk28", i);
+                packet.ReadBit("unk25", i);
+                packet.ReadBit("unk27", i);
+                dat[i][1] = !packet.ReadBit("!unk30", i);
+                packet.ReadBit("unk24", i);
+                dat[i][2] = !packet.ReadBit("!unk40", i);
+                packet.ReadBit("unk26", i);
+            }
+            packet.ReadBit("unk16");//16
+            for (var i = 0; i < unk20; ++i)
+            {
+                packet.ReadInt32("unk32", i);//32
+                if (dat[i][2])
+                    packet.ReadInt16("unk40", i);
+                if (dat[i][1])
+                    packet.ReadInt16("unk30", i);
+                packet.ReadByte("unk42", i);
+                if (dat[i][0])
+                    packet.ReadInt16("unk28", i);
+                packet.ReadInt32("unk24", i);
+            }
+            packet.ReadInt32("unk40");
+            packet.ReadInt32("unk44");
         }
 
         [Parser(Opcode.SMSG_BATTLE_PET_JOURNAL)]
@@ -343,29 +364,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_BATTLE_PET_REPLACEMENTS_MADE)]
-        public static void HandleBattlePetReplacementMade(Packet packet)
-        {
-        }
-
         [Parser(Opcode.SMSG_BATTLE_PET_REQUEST_FAILED)]
         public static void HandleBattlePetRequestFailed(Packet packet)
         {
-        }
-
-        [Parser(Opcode.SMSG_BATTLE_PET_ROUND_RESULT)]
-        public static void HandleBattlePetRoundResult(Packet packet)
-        {
-        }
-
-        [Parser(Opcode.SMSG_BATTLE_PET_SCENE_OBJECT_FINAL_ROUND)]
-        public static void HandleBattlePetSceneObjectFinalRound(Packet packet)
-        {
-        }
-
-        [Parser(Opcode.SMSG_BATTLE_PET_SCENE_OBJECT_ROUND_RESULT)]
-        public static void HandleBattlePetSceneObjectRoundresult(Packet packet)
-        {
+            var hasUnk = !packet.ReadBit("!hasUnk");
+            if (hasUnk)
+                packet.ReadByte("unk");
         }
 
         [Parser(Opcode.SMSG_BATTLE_PET_SLOT_UPDATE)]
