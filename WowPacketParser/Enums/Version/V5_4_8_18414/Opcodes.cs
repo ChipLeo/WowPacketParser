@@ -518,7 +518,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UPDATE_RAID_TARGET,                       0x0886}, //++
             {Opcode.CMSG_UPGRADE_ITEM,                             0x1042}, //++
             {Opcode.CMSG_USED_FOLLOW,                              0x0374}, //++
-            {Opcode.CMSG_USE_ITEM,                                 0x1CC1}, //-- sub_696A02
+            {Opcode.CMSG_USE_ITEM,                                 0x1CC1}, //++
             {Opcode.CMSG_USE_SOULSTONE,                            0x0360}, //+++
             {Opcode.CMSG_VIOLENCE_LEVEL,                           0x0040}, //+-
             {Opcode.CMSG_VOICE_SESSION_ENABLE,                     0x15A9}, //++
