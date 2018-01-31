@@ -559,10 +559,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var guid = new byte[8];
             guid[7] = packet.ReadBit();
             guid[4] = packet.ReadBit();
-            var count68 = packet.ReadBits("unk68", 21);
-            var count40 = packet.ReadBits("unk40", 22);
+            var count68 = packet.ReadBits("SpellHistory count", 21);
+            var count40 = packet.ReadBits("Spells count", 22);
             guid[2] = packet.ReadBit();
-            var count16 = packet.ReadBits("unk16", 20);
+            var count16 = packet.ReadBits("Cooldown count", 20);
             guid[5] = packet.ReadBit();
             guid[3] = packet.ReadBit();
             guid[6] = packet.ReadBit();
@@ -586,10 +586,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             for (var i = 0; i < count16; i++)
             {
-                packet.ReadInt32("unk28", i);
+                packet.ReadInt32("Category cooldown", i); //28
                 packet.ReadInt32("SpellID", i);
-                packet.ReadInt16("unk32", i);
-                packet.ReadInt32("unk24", i);
+                packet.ReadInt16("Spell category", i); //32
+                packet.ReadInt32("Spell cooldown", i); //24
             }
             packet.ReadXORByte(guid, 2);
             for (var i = 0; i < count40; i++)
@@ -597,18 +597,18 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadXORByte(guid, 7);
             packet.ReadXORByte(guid, 0);
             packet.ReadXORByte(guid, 3);
-            packet.ReadInt16("unk66");
+            packet.ReadInt16("Pet family"); //66
             for (var i = 0; i < count68; i++)
             {
                 packet.ReadInt32("unk76", i);
                 packet.ReadByte("unk80", i);
                 packet.ReadInt32("unk72", i);
             }
-            packet.ReadInt16("unk64");
+            packet.ReadInt16("Specialization"); //64
             packet.ReadXORByte(guid, 1);
             packet.ReadXORByte(guid, 4);
             packet.ReadXORByte(guid, 6);
-            packet.ReadInt32("unk36");
+            packet.ReadInt32("Duration"); //36
             packet.ReadXORByte(guid, 5);
             ReadPetFlags(packet);  //32
 
