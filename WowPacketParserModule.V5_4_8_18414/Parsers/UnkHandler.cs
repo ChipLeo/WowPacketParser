@@ -20,6 +20,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_UNK_0377)]
         public static void HandleUnk0377(Packet packet)
         {
+            var guid24 = new byte[8];
+            packet.StartBitStream(guid24, 4, 6, 7, 5);
+            packet.ReadBit("unk16");
+            packet.StartBitStream(guid24, 0, 2, 1, 3);
+            packet.ParseBitStream(guid24, 7, 1, 0, 5, 6, 2, 4, 3);
+            packet.WriteGuid("guid24", guid24);
         }
 
         [Parser(Opcode.CMSG_UNK_06C5)]

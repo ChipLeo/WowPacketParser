@@ -497,7 +497,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_0264,                                 0x0264}, //+-
             {Opcode.CMSG_UNK_0265,                                 0x0265}, //+-
             {Opcode.CMSG_UNK_02C4,                                 0x02C4}, //+-
-            {Opcode.CMSG_UNK_0377,                                 0x0377}, //-- battle pet pair 022F
+            {Opcode.CMSG_UNK_0377,                                 0x0377}, //++ battle pet pair 022F
             {Opcode.CMSG_UNK_0656,                                 0x0656}, //+-
             {Opcode.CMSG_UNK_06C5,                                 0x06C5}, //++ battle pet
             {Opcode.CMSG_UNK_09FA,                                 0x09FA}, //++
