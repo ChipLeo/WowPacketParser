@@ -951,7 +951,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_MESSAGE_BOX,                              0x02AE}, //--
             {Opcode.SMSG_MINIMAP_PING,                             0x168F}, //+-
             {Opcode.SMSG_MIRROR_IMAGE_COMPONENTED_DATA,            0x04D9}, //++ pair CMSG 02A3
-            {Opcode.SMSG_MIRROR_IMAGE_CREATURE_DATA,               0x04D0}, //--
+            {Opcode.SMSG_MIRROR_IMAGE_CREATURE_DATA,               0x04D0}, //++
             {Opcode.SMSG_MISSILE_CANCEL,                           0x1203}, //++
             {Opcode.SMSG_MODIFY_COOLDOWN,                          0x1E2E}, //++
             {Opcode.SMSG_MOTD,                                     0x183B}, //++

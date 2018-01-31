@@ -730,6 +730,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_MIRROR_IMAGE_CREATURE_DATA)]
         public static void HandleSMirrorimageCreatureData(Packet packet)
         {
+            var guid = packet.StartBitStream(0, 1, 3, 5, 7, 6, 4, 2);
+            packet.ParseBitStream(guid, 0, 3, 6, 5, 7);
+            packet.ReadInt32("DisplayID");
+            packet.ParseBitStream(guid, 4, 2, 1);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_MIRROR_IMAGE_COMPONENTED_DATA)]
