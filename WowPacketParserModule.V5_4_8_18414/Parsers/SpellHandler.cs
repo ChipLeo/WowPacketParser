@@ -411,6 +411,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [HasSniffData]
         [Parser(Opcode.SMSG_AURA_UPDATE)]
         public static void HandleAuraUpdate(Packet packet)
         {
@@ -427,54 +428,77 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             guid[5] = packet.ReadBit();
 
             var guid2 = new byte[count][];
-            var unk164 = new byte[count];
-            var unk156 = new byte[count];
+            var unk164 = new bool[count];
+            var unk156 = new bool[count];
             var unk336 = new uint[count];
             var unk144 = new byte[count];
             var unk400 = new uint[count];
             var unk200 = new byte[count];
-            for (var i = 0 ; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
-                unk200[i] = packet.ReadBitVisible("unk200", i);
+                unk200[i] = packet.ReadBitVisible("hasAura", i);
                 if (unk200[i] > 0)
                 {
-                    unk336[i] = packet.ReadBits("unk336", 22, i);
-                    unk144[i] = packet.ReadBitVisible("unk144", i);
+                    unk336[i] = packet.ReadBits("effectCount", 22, i);
+                    unk144[i] = packet.ReadBitVisible("hasCaster", i);
                     if (unk144[i] > 0)
                         guid2[i] = packet.StartBitStream(3, 4, 6, 1, 5, 2, 0, 7);
 
                     unk400[i] = packet.ReadBits("unk400", 22, i);
-                    unk164[i] = packet.ReadBitVisible("unk164", i);
-                    unk156[i] = packet.ReadBitVisible("unk156", i);
+                    unk164[i] = packet.ReadBitVisible("hasMaxDuration", i);
+                    unk156[i] = packet.ReadBitVisible("hasDuration", i);
                 }
             }
+            var auras = new List<Aura>();
             for (var i = 0; i < count; i++)
             {
                 if (unk200[i] > 0)
                 {
+                    var aura = new Aura();
                     if (unk144[i] > 0)
                     {
                         packet.ParseBitStream(guid2[i], 3, 2, 1, 6, 4, 0, 5, 7);
-                        packet.WriteGuid("Guid2", guid2[i], i);
+                        packet.WriteGuid("CasterGUID", guid2[i], i);
+                        aura.CasterGuid = new WowGuid64(BitConverter.ToUInt64(guid2[i], 0));
                     }
-                    packet.ReadByteVisible("unk124", i);
-                    packet.ReadInt16("unk152", i);
-                    packet.ReadInt32Visible("unk144", i);
-                    if (unk156[i] > 0)
-                        packet.ReadInt32("unk272", i);
-                    if (unk164[i] > 0)
-                        packet.ReadInt32("unk304", i);
+                    aura.AuraFlags = packet.ReadByteE<AuraFlagMoP>("Flags", i); //124
+                    aura.Level = packet.ReadUInt16("Caster Level", i); //152
+                    var id = packet.ReadInt32<SpellId>("Spell ID", i); //144
+                    aura.SpellId = (uint)id;
+
+                    aura.MaxDuration = unk156[i] ? packet.ReadInt32("Max Duration", i) : 0;
+                    aura.Duration = unk164[i] ? packet.ReadInt32("Duration", i) : 0; //304
                     for (var j = 0; j < unk400[i]; j++)
-                        packet.ReadSingle("unk416", i, j);
-                    packet.ReadByteVisible("unk134", i);
-                    packet.ReadInt32Visible("unk176", i);
+                        packet.ReadSingle("FloatEM", i, j); //416
+                    aura.Charges = packet.ReadByte("Charges", i); //134
+                    packet.ReadInt32("Effect Mask", i); //176
                     for (var j = 0; j < unk336[i]; j++)
-                        packet.ReadSingle("unk352", i, j);
+                        packet.ReadSingle("Effect Value", i, j); //352
+
+                    auras.Add(aura);
+                    packet.AddSniffData(StoreNameType.Spell, (int)aura.SpellId, "AURA_UPDATE");
                 }
-                packet.ReadByte("unk112", i);
+                packet.ReadByte("Slot", i); //112
             }
             packet.ParseBitStream(guid, 2, 6, 7, 1, 3, 4, 0, 5);
-            packet.WriteGuid("Guid", guid);
+            var GUID = packet.WriteGuid("Guid", guid);
+
+            if (Storage.Objects.ContainsKey(GUID))
+            {
+                var unit = Storage.Objects[GUID].Item1 as Unit;
+                if (unit != null)
+                {
+                    // If this is the first packet that sends auras
+                    // (hopefully at spawn time) add it to the "Auras" field,
+                    // if not create another row of auras in AddedAuras
+                    // (similar to ChangedUpdateFields)
+
+                    if (unit.Auras == null)
+                        unit.Auras = auras;
+                    else
+                        unit.AddedAuras.Add(auras);
+                }
+            }
         }
 
         [Parser(Opcode.SMSG_BREAK_TARGET)]
