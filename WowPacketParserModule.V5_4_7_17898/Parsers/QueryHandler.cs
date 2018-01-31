@@ -396,9 +396,9 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.ReadInt32("int2964");
             packet.ReadInt32("int19");
 
-            packet.ReadSingle("float27");
+            packet.ReadSingle("PointX");//27
 
-            packet.ReadInt32("int14");
+            packet.ReadInt32("NextQuestIDChain");//14
             packet.ReadInt32("int2970");
 
             packet.ReadSingle("float22");
@@ -414,19 +414,19 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.ReadInt32("int15");
             packet.ReadInt32("int2966");
             packet.ReadInt32("int2960");
-            packet.ReadInt32("int8");
+            packet.ReadInt32("Level");//8
             packet.ReadInt32("int1789");
 
             packet.ReadWoWString("string2433", bits2433);
             packet.ReadWoWString("string1658", bits1658);
 
-            packet.ReadInt32("int2946");
+            packet.ReadInt32("SoundAccept");//2946
             packet.ReadInt32("int2945");
             packet.ReadInt32("int17");
             packet.ReadInt32("int2968");
-            packet.ReadInt32("int2947");
+            packet.ReadInt32("SoundTurnIn");//2947
 
-            packet.ReadSingle("float28");
+            packet.ReadSingle("PointY");//28
 
             packet.ReadInt32("int18");
             packet.ReadInt32("int29");
@@ -435,11 +435,11 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
 
             for (var i = 0; i < 4; ++i)
             {
-                packet.ReadInt32("int3001+16");
-                packet.ReadInt32("int3001+0");
+                packet.ReadInt32("int3001+16", i);
+                packet.ReadInt32("int3001+0", i);
             }
 
-            packet.ReadWoWString("string158", bits158);
+            packet.ReadWoWString("Objectives", bits158);//158
 
             packet.ReadInt32("int2963");
             packet.ReadInt32("int2965");
@@ -447,9 +447,9 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
 
             for (var i = 0; i < 5; ++i)
             {
-                packet.ReadInt32("int2986+20");
-                packet.ReadInt32("int2986+0");
-                packet.ReadInt32("int2986+40");
+                packet.ReadInt32("RewardFactionValueID", i);//2986+20
+                packet.ReadInt32("RewardFactionValueIDOverride", i);//2986+0
+                packet.ReadInt32("RewardFactionID", i);//2986+40
             }
 
             packet.ReadWoWString("string2369", bits2369);
@@ -458,7 +458,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.ReadInt32("int1791");
             packet.ReadInt32("int1787");
             packet.ReadInt32("int2952");
-            packet.ReadInt32("int11");
+            packet.ReadInt32("ZoneOrSort");//int11
             packet.ReadInt32("int21");
             packet.ReadInt32("int2979");
             packet.ReadInt32("int16");
@@ -472,7 +472,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.ReadInt32("int2984");
             packet.ReadInt32("int2973");
             packet.ReadInt32("int25");
-            packet.ReadInt32("int10");
+            packet.ReadInt32("MinLevel");//10
             packet.ReadInt32("int2961");
             packet.ReadInt32("int1788");
             packet.ReadInt32("int9");
@@ -483,9 +483,9 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.ReadInt32("int2956");
             packet.ReadInt32("int2972");
             packet.ReadInt32("int13");
-            packet.ReadInt32("int26");
+            packet.ReadInt32("PointMapID");//26
 
-            packet.ReadWoWString("string30", bits30);
+            packet.ReadWoWString("Title", bits30);//30
 
             packet.ReadInt32("int2954");
             packet.ReadInt32("int2982");
@@ -498,10 +498,10 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.ReadInt32("int2953");
             packet.ReadInt32("int2958");
             packet.ReadInt32("int2969");
-            packet.ReadInt32("int24");
+            packet.ReadInt32("Flags");//24
             packet.ReadInt32("int1790");
             packet.ReadInt32("int2971");
-            packet.ReadInt32("int7");
+            packet.ReadInt32("Method");//7
             packet.ReadInt32("int2978");
         }
 
