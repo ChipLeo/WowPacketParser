@@ -226,7 +226,7 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadXORByte(guildGuid[c], 5);
 
                 packet.ReadByte("Face", c);
-                var mapId = packet.ReadInt32("Map", c);
+                var mapId = packet.ReadInt32<MapId>("MapID", c);
 
                 packet.ReadXORByte(playerGuid[c], 1);
                 packet.ReadXORByte(playerGuid[c], 4);
@@ -396,7 +396,7 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadXORByte(charGuids[c], 7);
 
                 pos.Z = packet.ReadSingle("Position Z", c);
-                var mapId = packet.ReadInt32("Map", c);
+                var mapId = packet.ReadInt32<MapId>("MapID", c);
                 packet.ReadXORByte(guildGuids[c], 4);
 
                 packet.ReadByte("Hair Color", c);
@@ -579,7 +579,7 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadByte("Skin", c);
                 packet.ReadByte("Hair Color", c);
                 packet.ReadByte("Face", c);
-                var mapId = packet.ReadInt32("Map", c);
+                var mapId = packet.ReadInt32<MapId>("MapID", c);
                 var name = packet.ReadWoWString("Name", (int)nameLenghts[c], c);
 
                 var playerGuid = new WowGuid64(BitConverter.ToUInt64(charGuids[c], 0));
@@ -679,7 +679,7 @@ namespace WowPacketParser.Parsing.Parsers
 
                 packet.ReadXORByte(charGuids[c], 4);
 
-                var mapId = packet.ReadInt32("Map", c);
+                var mapId = packet.ReadInt32<MapId>("MapID", c);
                 packet.ReadXORByte(guildGuids[c], 5);
 
                 pos.Z = packet.ReadSingle("Position Z", c);

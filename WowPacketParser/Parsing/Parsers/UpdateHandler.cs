@@ -19,7 +19,7 @@ namespace WowPacketParser.Parsing.Parsers
         {
             uint map = MovementHandler.CurrentMapId;
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_0_1_13164))
-                map = packet.ReadUInt16("Map");
+                map = packet.ReadUInt16<MapId>("MapID");
 
             var count = packet.ReadUInt32("Count");
 

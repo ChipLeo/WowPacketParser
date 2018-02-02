@@ -413,7 +413,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ParseBitStream(guid, 4);
             packet.ReadByte("unk64");
             packet.ParseBitStream(guid, 6);
-            packet.ReadInt32("Map"); // 16
+            packet.ReadInt32<MapId>("MapID"); // 16
             packet.ParseBitStream(guid, 0, 5, 7);
             packet.ParseBitStream(guid2, 4);
             packet.ReadInt32("unk272"); // 272
@@ -534,7 +534,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ParseBitStream(guid2, 3);
             packet.ParseBitStream(guid, 0);
             packet.ParseBitStream(guid2, 5);
-            packet.ReadInt32("Map"); // 288
+            packet.ReadInt32<MapId>("MapID"); // 288
 
             packet.WriteGuid("Guid", guid);
             packet.WriteGuid("Guid2", guid2);

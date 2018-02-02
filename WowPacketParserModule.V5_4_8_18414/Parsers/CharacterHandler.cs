@@ -341,7 +341,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadXORByte(charGuids[c], 5); //5
                 packet.ReadInt32("PetFamily", c); //120
                 packet.ReadXORByte(guildGuids[c], 4); //92
-                var mapId = packet.ReadUInt32("Map", c); //72
+                var mapId = packet.ReadUInt32<MapId>("MapID", c); //72
                 var race = packet.ReadByteE<Race>("Race", c); //58
                 packet.ReadByte("Skin", c); //61
                 packet.ReadXORByte(guildGuids[c], 1); //89

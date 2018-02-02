@@ -86,7 +86,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_LOADING_SCREEN_NOTIFY)]
         public static void HandleClientEnterWorld(Packet packet)
         {
-            var mapId = packet.ReadUInt32<MapId>("Map Id");
+            var mapId = packet.ReadUInt32<MapId>("MapID");
             packet.ReadBit("Loading");
             CoreParsers.MovementHandler.CurrentMapId = (uint)mapId;
             packet.AddSniffData(StoreNameType.Map, (int)mapId, "LOAD_SCREEN");
@@ -263,7 +263,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             pos.X = packet.ReadSingle();
             pos.Z = packet.ReadSingle();
             pos.O = packet.ReadSingle();
-            packet.ReadInt32("Map ID");
+            packet.ReadInt32("MapID");
             var length = packet.ReadBits(10);
             packet.ReadWoWString("Text", length);
             packet.AddValue("Position", pos);

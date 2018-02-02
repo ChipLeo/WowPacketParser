@@ -13,7 +13,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             var pos = new Vector4();
 
             pos.O = packet.ReadSingle();
-            CoreParsers.MovementHandler.CurrentMapId = (uint)packet.ReadInt32<MapId>("Map");
+            CoreParsers.MovementHandler.CurrentMapId = (uint)packet.ReadInt32<MapId>("MapID");
             pos.Z = packet.ReadSingle();
             pos.X = packet.ReadSingle();
             pos.Y = packet.ReadSingle();
@@ -28,7 +28,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
         {
             var pos = new Vector4();
 
-            packet.ReadInt32<MapId>("Map");
+            packet.ReadInt32<MapId>("MapID");
             pos.Y = packet.ReadSingle();
             pos.Z = packet.ReadSingle();
             pos.O = packet.ReadSingle();
@@ -42,7 +42,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
         {
             var pos = new Vector3();
 
-            CoreParsers.MovementHandler.CurrentMapId = (uint)packet.ReadInt32<MapId>("Map");
+            CoreParsers.MovementHandler.CurrentMapId = (uint)packet.ReadInt32<MapId>("MapID");
 
             pos.X = packet.ReadSingle();
             pos.Z = packet.ReadSingle();

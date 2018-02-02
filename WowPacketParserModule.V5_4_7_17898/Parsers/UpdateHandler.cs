@@ -44,7 +44,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
         [Parser(Opcode.SMSG_UPDATE_OBJECT)]
         public static void HandleUpdateObject(Packet packet)
         {
-            uint map = packet.ReadUInt16("Map");
+            uint map = packet.ReadUInt16<MapId>("MapID");
             var count = packet.ReadUInt32("Count");
 
             for (var i = 0; i < count; i++)

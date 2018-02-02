@@ -609,7 +609,7 @@ namespace WowPacketParser.Parsing.Parsers
             item.AreaID = packet.ReadUInt32<AreaId>("Area");
 
             // In this single (?) case, map 0 means no map
-            item.MapID = packet.ReadInt32<MapId>("Map");
+            item.MapID = packet.ReadInt32<MapId>("MapID");
 
             item.BagFamily = packet.ReadInt32E<BagFamilyMask>("Bag Family");
 

@@ -122,7 +122,7 @@ namespace WowPacketParser.Parsing.Parsers
                     packet.ReadPackedGuid("Guid");
                     break;
                 case DifficultyChangeType434.DifficultyChanged:
-                    packet.ReadInt32("Map");
+                    packet.ReadInt32<MapId>("MapID");
                     packet.ReadInt32E<MapDifficulty>("Difficulty");
                     break;
             }

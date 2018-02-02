@@ -431,7 +431,7 @@ namespace WowPacketParser.Parsing.Parsers
         public static void HandleNewWorld422(Packet packet)
         {
             packet.ReadVector3("Position");
-            CurrentMapId = (uint) packet.ReadInt32<MapId>("Map");
+            CurrentMapId = (uint) packet.ReadInt32<MapId>("MapID");
             packet.ReadSingle("Orientation");
 
             packet.AddSniffData(StoreNameType.Map, (int)CurrentMapId, "NEW_WORLD");
@@ -441,7 +441,7 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_NEW_WORLD, ClientVersionBuild.V5_1_0_16309)]
         public static void HandleNewWorld510(Packet packet)
         {
-            CurrentMapId = (uint)packet.ReadInt32<MapId>("Map");
+            CurrentMapId = (uint)packet.ReadInt32<MapId>("MapID");
             packet.ReadSingle("Y");
             packet.ReadSingle("Orientation");
             packet.ReadSingle("X");

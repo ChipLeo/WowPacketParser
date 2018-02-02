@@ -108,7 +108,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ParseBitStream(guid, 6);
             packet.ReadInt32E<MapDifficulty>("Difficulty");//28
             packet.ParseBitStream(guid, 0, 4, 5, 3, 2);
-            packet.ReadInt32<MapId>("Map ID");//36
+            packet.ReadInt32<MapId>("MapID");//36
             packet.ParseBitStream(guid, 1);
             packet.ReadPackedTime("Time");//32
             packet.ReadInt32("Reset Time");//24

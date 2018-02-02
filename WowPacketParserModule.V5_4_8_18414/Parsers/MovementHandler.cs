@@ -3492,7 +3492,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             packet.ReadVector3("Position");
             packet.ReadInt32<ZoneId>("Zone Id");
-            packet.ReadInt32<MapId>("Map Id");
+            packet.ReadInt32<MapId>("MapID");
         }
 
         [Parser(Opcode.SMSG_CONTROL_UPDATE)]

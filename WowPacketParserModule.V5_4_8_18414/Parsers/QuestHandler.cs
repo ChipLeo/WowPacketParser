@@ -318,7 +318,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     packet.ReadInt32("Unk14*4", i, j);
                     packet.ReadInt32("Unk42*4", i, j);
 
-                    questPoi.MapID = (int)packet.ReadUInt32<MapId>("Map Id", i, j);
+                    questPoi.MapID = (int)packet.ReadUInt32<MapId>("MapID", i, j);
                     packet.ReadInt32("Points Counter", i, j);
                     questPoi.WorldMapAreaId = (int)packet.ReadUInt32("World Map Area", i, j);
                     packet.ReadInt32("Unk200", i, j);

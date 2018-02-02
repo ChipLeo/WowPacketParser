@@ -44,6 +44,7 @@ namespace WowPacketParser.Misc
             { HighGuidTypeLegacy.AreaTrigger, HighGuidType.AreaTrigger },
             { HighGuidTypeLegacy.Account, HighGuidType.WowAccount },
             { HighGuidTypeLegacy.Unknown270, HighGuidType.Null },
+            { HighGuidTypeLegacy.SceneObject, HighGuidType.SceneObject },
             { HighGuidTypeLegacy.Pet2, HighGuidType.BattlePet }
         };
 

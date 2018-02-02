@@ -23,7 +23,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_DEATH_RELEASE_LOC)]
         public static void HandleDeathReleaseLoc(Packet packet)
         {
-            packet.ReadInt32<MapId>("Map Id");
+            packet.ReadInt32<MapId>("MapID");
             var pos = new Vector3();
             pos.Y = packet.ReadSingle();
             pos.X = packet.ReadSingle();
@@ -51,7 +51,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadXORByte(guid, 5);
             pos.Z = packet.ReadSingle();
             packet.ReadXORByte(guid, 1);
-            packet.ReadInt32<MapId>("Map ID");
+            packet.ReadInt32<MapId>("MapID");
             packet.ReadXORByte(guid, 6);
             packet.ReadXORByte(guid, 4);
             pos.X = packet.ReadSingle();
@@ -59,7 +59,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadXORByte(guid, 7);
             packet.ReadXORByte(guid, 2);
             packet.ReadXORByte(guid, 0);
-            packet.ReadInt32<MapId>("Corpse Map ID");
+            packet.ReadInt32<MapId>("Corpse MapID");
             pos.Y = packet.ReadSingle();
 
             packet.AddValue("Position", pos);

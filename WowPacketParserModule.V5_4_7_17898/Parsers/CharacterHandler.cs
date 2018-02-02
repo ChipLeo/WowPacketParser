@@ -106,7 +106,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
                 packet.ReadUInt32("Unk 3", c);
                 pos.X = packet.ReadSingle();
                 var name = packet.ReadWoWString("Name", (int)nameLenghts[c], c);
-                var mapId = packet.ReadInt32("Map", c);
+                var mapId = packet.ReadInt32<MapId>("MapID", c);
                 packet.ReadInt32("Pet Family", c); // v4+116
                 packet.ReadByte("Hair Color", c);
                 var klass = packet.ReadByteE<Class>("Class", c);

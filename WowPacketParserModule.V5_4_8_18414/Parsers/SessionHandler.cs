@@ -239,7 +239,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             pos.X = packet.ReadSingle();
             pos.O = packet.ReadSingle();
             pos.Y = packet.ReadSingle();
-            CoreParsers.MovementHandler.CurrentMapId = (uint)packet.ReadInt32<MapId>("Map");
+            CoreParsers.MovementHandler.CurrentMapId = (uint)packet.ReadInt32<MapId>("MapID");
             pos.Z = packet.ReadSingle();
 
             packet.AddValue("Position", pos);
@@ -279,11 +279,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_NEW_WORLD)]
         public static void HandleNewWorld(Packet packet)
         {
-            packet.ReadSingle("X");
-            packet.ReadUInt32("Map");
-            packet.ReadSingle("Y");
-            packet.ReadSingle("Z");
-            packet.ReadSingle("O");
+            Vector4 pos = new Vector4();
+            pos.X = packet.ReadSingle();
+            CoreParsers.MovementHandler.CurrentMapId = (uint)packet.ReadInt32<MapId>("MapID");
+            pos.Y = packet.ReadSingle();
+            pos.Z = packet.ReadSingle();
+            pos.O = packet.ReadSingle();
+            packet.AddValue("Position", pos);
+
+            packet.AddSniffData(StoreNameType.Map, (int)CoreParsers.MovementHandler.CurrentMapId, "NEW_WORLD");
         }
 
         [Parser(Opcode.SMSG_CONNECT_TO)]
@@ -313,11 +317,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             if (isTransport)
             {
-                packet.ReadUInt32("MapID"); // 28
+                packet.ReadUInt32<MapId>("Transport MapID"); // 28
                 packet.ReadUInt32("TransportID"); // 24
             }
 
-            packet.ReadUInt32("Map"); // 36
+            packet.ReadUInt32<MapId>("MapID"); // 36
 
             if (unkbit)
             {

@@ -59,7 +59,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_UPDATE_OBJECT)]
         public static void HandleUpdateObject(Packet packet)
         {
-            uint map = packet.ReadUInt16("Map");
+            uint map = packet.ReadUInt16<MapId>("MapID");
             var count = packet.ReadUInt32("Count");
             //var type = packet.ReadByte();
             //var typeString = ((UpdateType2)type).ToString();
