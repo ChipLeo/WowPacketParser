@@ -104,11 +104,17 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_CALENDAR_RAID_LOCKOUT_ADDED)]
         public static void HandleRaidLockoutAdded(Packet packet)
         {
-        }
+            var guid = packet.StartBitStream(3, 1, 2, 0, 4, 7, 5, 6);
+            packet.ParseBitStream(guid, 6);
+            packet.ReadInt32E<MapDifficulty>("Difficulty");//28
+            packet.ParseBitStream(guid, 0, 4, 5, 3, 2);
+            packet.ReadInt32<MapId>("Map ID");//36
+            packet.ParseBitStream(guid, 1);
+            packet.ReadPackedTime("Time");//32
+            packet.ReadInt32("Reset Time");//24
+            packet.ParseBitStream(guid, 7);
 
-        [Parser(Opcode.SMSG_CALENDAR_SEND_CALENDAR)]
-        public static void HandleSendCalendar(Packet packet)
-        {
+            packet.WriteGuid("guid", guid);
         }
 
         [Parser(Opcode.SMSG_CALENDAR_EVENT_INVITE)]

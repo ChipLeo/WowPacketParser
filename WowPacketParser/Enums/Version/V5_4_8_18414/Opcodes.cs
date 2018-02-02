@@ -594,7 +594,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_BATTLE_PAY_DELIVERY_ENDED,                0x020B}, //--
             {Opcode.SMSG_BATTLE_PAY_DELIVERY_STARTED,              0x1E32}, //--
             {Opcode.SMSG_BATTLE_PAY_DISTRIBUTION_UPDATE,           0x1E1B}, //++ levelup 90
-            {Opcode.SMSG_BATTLE_PAY_GET_DISTRIBUTION_LIST_RESPONSE, 0x043F}, //--
+            {Opcode.SMSG_BATTLE_PAY_GET_DISTRIBUTION_LIST_RESPONSE, 0x043F}, //++
             {Opcode.SMSG_BATTLE_PAY_GET_PRODUCT_LIST_RESPONSE,     0x1ABF}, //++
             {Opcode.SMSG_BATTLE_PAY_PURCHASE_UPDATE,               0x14E2}, //++ pair+ 1886
             {Opcode.SMSG_BATTLE_PAY_START_DISTRIBUTION_ASSIGN_TO_TARGET_RESPONSE, 0x08AF}, //--
@@ -659,7 +659,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_CALENDAR_EVENT_INVITE_STATUS_ALERT,       0x0412}, //--
             {Opcode.SMSG_CALENDAR_EVENT_REMOVED_ALERT,             0x049B}, //--
             {Opcode.SMSG_CALENDAR_EVENT_UPDATED_ALERT,             0x0A0E}, //--
-            {Opcode.SMSG_CALENDAR_RAID_LOCKOUT_ADDED,              0x0CAB}, //--
+            {Opcode.SMSG_CALENDAR_RAID_LOCKOUT_ADDED,              0x0CAB}, //++
             {Opcode.SMSG_CALENDAR_RAID_LOCKOUT_REMOVED,            0x11E0}, //--
             {Opcode.SMSG_CALENDAR_RAID_LOCKOUT_UPDATED,            0x0E1F}, //--
             {Opcode.SMSG_CALENDAR_SEND_CALENDAR,                   0x1A0A}, //--
