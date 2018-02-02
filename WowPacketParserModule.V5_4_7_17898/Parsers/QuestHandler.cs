@@ -640,7 +640,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
 
         [HasSniffData]
         [Parser(Opcode.SMSG_QUERY_QUEST_INFO_RESPONSE)]
-        public static void HandleQuestQueryResp(Packet packet)
+        public static void HandleQuestQueryResponce(Packet packet)
         {
             var id = packet.ReadEntry("Quest ID");
             if (id.Value) // entry is masked

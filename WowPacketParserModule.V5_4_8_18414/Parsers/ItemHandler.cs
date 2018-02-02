@@ -736,7 +736,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.WriteGuid("guid80", guid80);
             }
             if (hasUnk44)
-                packet.ReadInt32("unk44");
+                packet.ReadInt32("SpellID");//44
             packet.ParseBitStream(guid64, 1, 4, 3, 6, 2, 0, 7, 5);
             packet.WriteGuid("guid64", guid64);
             if (str144>0)

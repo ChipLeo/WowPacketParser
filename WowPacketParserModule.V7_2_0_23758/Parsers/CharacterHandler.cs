@@ -250,7 +250,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
         {
             var hasData = packet.ReadByte("HasData");
 
-            packet.ReadPackedGuid128("Player Guid");
+            var guid = packet.ReadPackedGuid128("Player Guid");
 
             if (hasData == 0)
             {
@@ -275,7 +275,8 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                 packet.ReadByteE<Class>("Class");
                 packet.ReadByte("Level");
 
-                packet.ReadWoWString("Name", bits15);
+                var name = packet.ReadWoWString("Name", bits15);
+                StoreGetters.AddOrUpdateName(guid, name);
             }
         }
 

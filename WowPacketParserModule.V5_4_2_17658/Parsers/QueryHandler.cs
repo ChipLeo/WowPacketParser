@@ -302,7 +302,9 @@ namespace WowPacketParserModule.V5_4_2_17658.Parsers
                 for (var i = 0; i < 5; ++i)
                     packet.ReadWoWString("Name Declined", count[i], i);
 
-                packet.ReadWoWString("Name", bits38);
+                var name = packet.ReadWoWString("Name", bits38);
+                var playerGuid = new WowGuid64(BitConverter.ToUInt64(guid1, 0));
+                StoreGetters.AddOrUpdateName(playerGuid, name);
 
                 packet.ReadXORByte(accountId, 2);
                 packet.ReadXORByte(accountId, 5);
@@ -320,7 +322,6 @@ namespace WowPacketParserModule.V5_4_2_17658.Parsers
 
                 packet.AddValue("Account", BitConverter.ToUInt64(accountId, 0));
                 packet.WriteGuid("Guid2", guid2);
-
             }
 
             packet.WriteGuid("Guid1", guid1);

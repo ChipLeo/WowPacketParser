@@ -99,6 +99,16 @@ namespace WowPacketParser.Misc
             NameDict.TryAdd(guid, name);
         }
 
+        public static void AddOrUpdateName(WowGuid guid, string name)
+        {
+            string nameOld;
+            if (!NameDict.TryAdd(guid, name))
+            {
+                NameDict.TryGetValue(guid, out nameOld);
+                NameDict.TryUpdate(guid, name, nameOld);
+            }
+        }
+
         public static string GetName(WowGuid guid)
         {
             string name;

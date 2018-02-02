@@ -730,12 +730,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                     packet.ReadInt32("Creation Order", i);
                     packet.ReadWoWString("Rank Name", rankName[i], i);
                 }
-                packet.ReadWoWString("Guild Name", nameLen);
+                var name = packet.ReadWoWString("Guild Name", nameLen);
                 packet.ReadInt32("Emblem Background Color");
                 packet.ParseBitStream(guid2, 5, 4);
                 packet.ReadInt32("Emblem Border Color");
                 packet.ParseBitStream(guid2, 1, 6, 0, 3);
                 packet.WriteGuid("Guid2", guid2);
+                var Guid = new WowGuid64(BitConverter.ToUInt64(guid2, 0));
+                StoreGetters.AddOrUpdateName(Guid, name);
             }
             packet.ParseBitStream(guid, 2, 6, 4, 0, 7, 3, 5, 1);
 

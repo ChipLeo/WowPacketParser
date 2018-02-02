@@ -159,7 +159,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
 
             if (hasData)
             {
-                packet.ReadWoWString("Guild Name", nameLen);
+                var name = packet.ReadWoWString("Guild Name", nameLen);
                 packet.ReadInt32("Emblem Style");
                 packet.ReadInt32("Emblem Color");
                 packet.ReadXORByte(guid1, 1);
@@ -184,6 +184,8 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
                 packet.ReadXORByte(guid1, 7);
 
                 packet.WriteGuid("Guid1", guid1);
+                var Guid = new WowGuid64(BitConverter.ToUInt64(guid1, 0));
+                StoreGetters.AddOrUpdateName(Guid, name);
             }
 
             packet.ReadXORByte(guid2, 1);

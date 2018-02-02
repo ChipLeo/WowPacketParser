@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using WowPacketParser.Enums;
 using WowPacketParser.Hotfix;
@@ -179,7 +180,7 @@ namespace WowPacketParserModule.V5_3_0_16981.Parsers
             packet.StartBitStream(guid, 5, 7);
 
             packet.ReadXORByte(guid, 1);
-            packet.ReadWoWString("Name: ", bits32);
+            var name = packet.ReadWoWString("Name: ", bits32);
             packet.ReadXORBytes(guid, 0, 7);
 
             packet.ReadByte("Race");
@@ -196,6 +197,8 @@ namespace WowPacketParserModule.V5_3_0_16981.Parsers
             packet.ReadXORBytes(guid, 3, 2);
 
             packet.WriteGuid("Guid", guid);
+            var playerGuid = new WowGuid64(BitConverter.ToUInt64(guid, 0));
+            StoreGetters.AddOrUpdateName(playerGuid, name);
         }
 
         [HasSniffData]

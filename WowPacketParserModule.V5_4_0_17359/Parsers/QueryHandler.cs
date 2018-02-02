@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using WowPacketParser.Enums;
 using WowPacketParser.Hotfix;
@@ -306,7 +307,9 @@ namespace WowPacketParserModule.V5_4_0_17359.Parsers
                 guid1[2] = packet.ReadBit();
                 guid1[6] = packet.ReadBit();
 
-                packet.ReadWoWString("Name", bits38);
+                var name = packet.ReadWoWString("Name", bits38);
+                var playerGuid = new WowGuid64(BitConverter.ToUInt64(guid, 0));
+                StoreGetters.AddOrUpdateName(playerGuid, name);
 
                 packet.ReadXORByte(guid2, 4);
                 packet.ReadXORByte(guid1, 3);

@@ -513,13 +513,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleCastFailed(Packet packet)
         {
             packet.ReadUInt32<SpellId>("Spell ID");
-            packet.ReadInt32("unk28");
-            packet.ReadByte("unk32");
-            var unk16 = packet.ReadBit("-unk16");
-            var unk24 = packet.ReadBit("-unk24");
-            if (!unk16)
+            packet.ReadInt32E<SpellCastFailureReason>("Reason");//28
+            packet.ReadByte("Cast count");//32
+            var unk16 = !packet.ReadBit("!hasUnk16");
+            var unk24 = !packet.ReadBit("!hasUnk24");
+            if (unk16)
                 packet.ReadInt32("unk16");
-            if (!unk24)
+            if (unk24)
                 packet.ReadInt32("unk24");
         }
 

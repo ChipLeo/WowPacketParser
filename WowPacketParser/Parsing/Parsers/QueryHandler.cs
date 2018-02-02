@@ -50,7 +50,7 @@ namespace WowPacketParser.Parsing.Parsers
                 guid = packet.ReadGuid("GUID");
 
             var name = packet.ReadCString("Name");
-            StoreGetters.AddName(guid, name);
+            StoreGetters.AddOrUpdateName(guid, name);
             packet.ReadCString("Realm Name");
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_1_0_9767))

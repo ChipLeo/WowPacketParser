@@ -220,7 +220,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             var name = packet.ReadWoWString("Name", len56);
             var playerGuid = new WowGuid64(BitConverter.ToUInt64(guid, 0));
-            StoreGetters.AddName(playerGuid, name);
+            StoreGetters.AddOrUpdateName(playerGuid, name);
 
             packet.ReadXORByte(guid2, 5);
             packet.ReadXORByte(guid2, 2);
