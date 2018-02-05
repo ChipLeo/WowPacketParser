@@ -1480,6 +1480,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk");
         }
 
+        [Parser(Opcode.SMSG_GM_SUMMON)]
+        public static void HandleGMSummon6(Packet packet)
+        {
+            packet.ReadBool("unk");
+        }
+
         [Parser(Opcode.CMSG_ATTACK_STOP)]
         [Parser(Opcode.CMSG_COMMENTATOR_EXIT_INSTANCE)]
         [Parser(Opcode.CMSG_GAME_TIME_GET_DAY_PROGRESSION)]

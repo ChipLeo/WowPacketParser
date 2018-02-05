@@ -202,6 +202,36 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk32"); // 32
         }
 
+        [Parser(Opcode.SMSG_UPDATE_INSTANCE_ENCOUNTER_UNIT)]
+        public static void HandleUpdateInstanceEncounterUnit(Packet packet)
+        {
+            packet.AsHex();
+            var select = packet.ReadInt32("select");
+            switch (select)
+            {
+                case 2:
+                case 3:
+                case 4:
+                    packet.ReadPackedGuid("Guid");
+                    packet.ReadByte("unk");
+                    break;
+                case 1:
+                case 9:
+                case 10:
+                    break;
+                case 7:
+                    packet.ReadByte("unk1");
+                    packet.ReadByte("unk2");
+                    break;
+                case 0:
+                case 5:
+                case 6:
+                case 8:
+                    packet.ReadByte("unk");
+                    break;
+            }
+        }
+
         [Parser(Opcode.CMSG_RESET_INSTANCES)]
         [Parser(Opcode.SMSG_AREA_TRIGGER_NO_CORPSE)]
         [Parser(Opcode.SMSG_DIFFERENT_INSTANCE_FROM_PARTY)]

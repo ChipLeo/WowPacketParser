@@ -75,6 +75,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Auctioneer GUID", guid);
         }
 
+        [Parser(Opcode.SMSG_AUCTION_LIST_PENDING_SALES)]
+        public static void HandleAuctionListPendingSales(Packet packet)
+        {
+            packet.ReadInt32("unk");
+        }
+
         [Parser(Opcode.CMSG_AUCTION_PLACE_BID)]
         public static void HandleAuctionPlaceBid(Packet packet)
         {

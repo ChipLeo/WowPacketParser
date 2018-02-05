@@ -251,6 +251,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.AddValue("Counter", BitConverter.ToInt64(counter, 0));
         }
 
+        [Parser(Opcode.SMSG_CRITERIA_DELETED)]
+        public static void HandleCriteriaDeleted(Packet packet)
+        {
+            packet.ReadInt32("CriteriaID");
+        }
+
         [Parser(Opcode.SMSG_CRITERIA_UPDATE)]
         public static void HandleCriteria(Packet packet)
         {

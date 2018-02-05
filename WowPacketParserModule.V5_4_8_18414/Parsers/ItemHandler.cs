@@ -978,6 +978,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid56", guid56);
         }
 
+        [Parser(Opcode.SMSG_ITEM_COOLDOWN)]
+        public static void HandleItemCooldown(Packet packet)
+        {
+            packet.ReadGuid("unk");
+            packet.ReadInt32("unk4");
+        }
+
         [Parser(Opcode.SMSG_ITEM_ENCHANT_TIME_UPDATE)]
         public static void HandleItemEnchantTimeUpdate(Packet packet)
         {

@@ -623,7 +623,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_GROUP_DECLINE)]
         [Parser(Opcode.CMSG_REQUEST_RAID_INFO)]
         [Parser(Opcode.SMSG_GROUP_ACTION_THROTTLED)]
-        [Parser(Opcode.SMSG_GROUP_UNINVITE)]
         public static void HandleGroupNull(Packet packet)
         {
         }
