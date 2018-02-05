@@ -156,8 +156,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             var guid = new byte[8];
 
             uint[] titleLen;
-            uint[] BoxTextLen;
-            uint[] OptionTextLen;
 
             var questgossips = packet.ReadBits(19);
 

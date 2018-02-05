@@ -16,6 +16,61 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.CMSG_PET_BATTLE_QUEUE_PROPOSE_MATCH_RESULT)]
+        public static void HandlePetBattleQueueProposeMatchResult(Packet packet)
+        {
+            packet.ReadBit("unkb");
+        }
+
+        [Parser(Opcode.CMSG_PET_BATTLE_REQUEST_UPDATE)]
+        public static void HandlePetBattleRequestUpdate(Packet packet)
+        {
+            var guid24 = new byte[8];
+            packet.StartBitStream(guid24, 4, 6, 7, 5);
+            packet.ReadBit("Cancelled");
+            packet.StartBitStream(guid24, 0, 2, 1, 3);
+            packet.ParseBitStream(guid24, 7, 1, 0, 5, 6, 2, 4, 3);
+            packet.WriteGuid("Target", guid24);
+        }
+
+        [Parser(Opcode.CMSG_PET_BATTLE_REQUEST_WILD)]
+        public static void HandlePetBattleRequestWild(Packet packet)
+        {
+            for (var i = 0; i < 2; i++)
+            {
+                var poz = new Vector3();
+                poz.X = packet.ReadSingle();
+                poz.Z = packet.ReadSingle();
+                poz.Y = packet.ReadSingle();
+                packet.AddValue("Poz", poz, i);
+            }
+            var pos = new Vector4();
+            pos.Z = packet.ReadSingle();
+            pos.Y = packet.ReadSingle();
+            pos.X = packet.ReadSingle();
+
+            var guid = new byte[8];
+            guid[0] = packet.ReadBit();
+            var hasO = !packet.ReadBit("!hasO");
+            guid[6] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            var unk24 = !packet.ReadBit("unk24!=-1");
+
+            packet.ParseBitStream(guid, 3, 6, 5, 2, 7, 1, 0, 4);
+            if (hasO)
+                pos.O = packet.ReadSingle();
+            if (unk24)
+                packet.ReadInt32("unk24");
+
+            packet.AddValue("Position", pos);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.SMSG_BATTLE_PET_CAGE_DATE_ERROR)]
         public static void HandleBattlePetCageDateError(Packet packet)
         {

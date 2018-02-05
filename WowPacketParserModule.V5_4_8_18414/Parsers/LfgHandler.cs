@@ -249,6 +249,47 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.CMSG_LFG_PROPOSAL_RESULT)]
+        public static void HandleLFGProposalResult(Packet packet)
+        {
+            packet.ReadInt32("unk16"); // 16
+            packet.ReadInt32("unk32"); // 16
+            packet.ReadInt32("unk36"); // 16
+            packet.ReadInt32("unk40"); // 16
+
+            var guid = new byte[8];
+            var guid2 = new byte[8];
+            packet.ReadBit("unk20"); // 20
+            guid[6] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            guid2[6] = packet.ReadBit();
+            guid2[7] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid2[4] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+            guid2[1] = packet.ReadBit();
+            guid[5] = packet.ReadBit();
+            guid2[0] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid2[2] = packet.ReadBit();
+            guid2[3] = packet.ReadBit();
+            guid2[5] = packet.ReadBit();
+
+            packet.ParseBitStream(guid, 3, 6, 4, 1);
+            packet.ParseBitStream(guid2, 7, 0);
+            packet.ParseBitStream(guid, 7);
+            packet.ParseBitStream(guid2, 6);
+            packet.ParseBitStream(guid, 5);
+            packet.ParseBitStream(guid2, 3, 1, 5, 4);
+            packet.ParseBitStream(guid, 0, 2);
+            packet.ParseBitStream(guid2, 2);
+
+            packet.WriteGuid("Guid", guid);
+            packet.WriteGuid("Guid2", guid2);
+        }
+
         [Parser(Opcode.SMSG_LFG_PROPOSAL_UPDATE)]
         public static void HandleLfgProposalUpdate(Packet packet)
         {

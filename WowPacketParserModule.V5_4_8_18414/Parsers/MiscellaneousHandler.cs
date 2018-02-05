@@ -46,6 +46,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt32("unk24"); // 24
         }
 
+        [Parser(Opcode.CMSG_QUERY_CORPSE_TRANSPORT)]
+        public static void HandleQuesryCorpseTransport(Packet packet)
+        {
+            var guid = packet.StartBitStream(7, 6, 3, 0, 4, 1, 5, 2);
+            packet.ParseBitStream(guid, 1, 6, 0, 5, 3, 2, 4, 7);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.CMSG_DEL_FRIEND)]
         public static void HandleDelFriend(Packet packet)
         {
@@ -322,32 +330,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        [Parser(Opcode.CMSG_UNK_0087)]
-        public static void HandleUnk0087(Packet packet)
-        {
-            var val = packet.ReadBit("unkb");
-            if (!val)
-                packet.ReadInt32("unk");
-        }
-
-        [Parser(Opcode.CMSG_UNK_0264)]
-        public static void HandleUnk0264(Packet packet)
+        [Parser(Opcode.CMSG_KEYBOUND_OVERRIDE)]
+        public static void HandleKeyBoundOverride(Packet packet)
         {
             packet.ReadInt16("unk16");
-        }
-
-        [Parser(Opcode.CMSG_UNK_0265)]
-        public static void HandleUnk0265(Packet packet)
-        {
-            packet.ReadBit("unkb");
-        }
-
-        [Parser(Opcode.CMSG_UNK_02C4)]
-        public static void HandleUnk02C4(Packet packet)
-        {
-            packet.ReadBit("unkb");
-            packet.ReadWoWString("Str", packet.ReadBits(6));
-            packet.ReadInt32("unk");
         }
 
         [Parser(Opcode.CMSG_SET_PET_SLOT)]
@@ -364,12 +350,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleUnlearnSpecialization(Packet packet)
         {
             packet.ReadByte("unk");
-        }
-
-        [Parser(Opcode.CMSG_UNK_19C2)]
-        public static void HandleUnk19C2(Packet packet)
-        {
-            packet.ReadBit("unkb");
         }
 
         [Parser(Opcode.SMSG_AREA_TRIGGER_DENIED)]

@@ -4714,7 +4714,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
             MovementStatusElements.MSEEnd
         };
 
-        public MovementStatusElements[] CUnk00D9 = // 00D9
+        public MovementStatusElements[] MovementFallReset = // 00D9
         {
             MovementStatusElements.MSEPositionZ,              // 44
             MovementStatusElements.MSEPositionX,              // 36
@@ -4870,7 +4870,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
             MovementStatusElements.MSEEnd
         };
 
-        public MovementStatusElements[] CUnk09FA = // 09FA
+        public MovementStatusElements[] MovementDismissVehicle = // 09FA
         {
             MovementStatusElements.MSEPositionZ,              // 44
             MovementStatusElements.MSEPositionY,              // 40
@@ -5050,7 +5050,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Misc
             MovementStatusElements.MSEEnd
         };
 
-        public MovementStatusElements[] CUnk185B = // 185B +8
+        public MovementStatusElements[] MovementSetVehicleRecID = // 185B +8
         {
             MovementStatusElements.MSEPositionY,              // 48  30h
             MovementStatusElements.MSECount,                  // 184

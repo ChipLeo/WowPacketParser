@@ -576,7 +576,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 var spell16 = packet.ReadUInt16();
                 var spell8 = packet.ReadByte();
                 var spellId = spell16 + (spell8 << 16);
-                var slot = packet.ReadByte();
+                var slot = packet.ReadByte("Slot", i);
 
                 if (spellId <= 4)
                     packet.AddValue("Action", spellId, i);

@@ -625,11 +625,11 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
-        [Parser(Opcode.CMSG_UNK_00D9)]
-        public static void HandleCUnk00D9(Packet packet)
+        [Parser(Opcode.CMSG_MOVE_FALL_RESET)]
+        public static void HandleMoveFallReset(Packet packet)
         {
             // шлеться при невдалій спробі підстрибнути (в кутку де низька стеля)
-            ReadPlayerMovementInfo(packet, info.CUnk00D9);
+            ReadPlayerMovementInfo(packet, info.MovementFallReset);
         }
 
         [Parser(Opcode.CMSG_MOVE_KNOCK_BACK_ACK)]
@@ -650,16 +650,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             ReadPlayerMovementInfo(packet, info.MovementChngTransport);
         }
 
-        [Parser(Opcode.CMSG_UNK_09FA)]
-        public static void HandleCUnk09FA(Packet packet)
+        [Parser(Opcode.CMSG_MOVE_SET_VEHICLE_REC_ID_ACK)]
+        public static void HandleMoveVehicleRecID(Packet packet)
         {
-            ReadPlayerMovementInfo(packet, info.CUnk09FA);
+            ReadPlayerMovementInfo(packet, info.MovementSetVehicleRecID);
         }
 
-        [Parser(Opcode.CMSG_UNK_185B)]
-        public static void HandleCUnk185B(Packet packet)
+        [Parser(Opcode.CMSG_MOVE_DISMISS_VEHICLE)]
+        public static void HandleMoveDismissVehicle(Packet packet)
         {
-            ReadPlayerMovementInfo(packet, info.CUnk185B);
+            ReadPlayerMovementInfo(packet, info.MovementDismissVehicle);
         }
 
         [Parser(Opcode.CMSG_MOVE_FALL_LAND)]

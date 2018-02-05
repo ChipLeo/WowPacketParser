@@ -90,6 +90,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("Convert");
         }
 
+        [Parser(Opcode.CMSG_GROUP_REQUEST_JOIN_UPDATES)]
+        public static void HandleGroupRequestJoinUpdates(Packet packet)
+        {
+            packet.ReadByte("unk");
+        }
+
         [Parser(Opcode.CMSG_GROUP_SET_LEADER)]
         public static void HandleCGroupSetLeader(Packet packet)
         {
@@ -616,7 +622,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
         [Parser(Opcode.CMSG_GROUP_DECLINE)]
         [Parser(Opcode.CMSG_REQUEST_RAID_INFO)]
-        [Parser(Opcode.CMSG_GROUP_REQUEST_JOIN_UPDATES)]
         [Parser(Opcode.SMSG_GROUP_ACTION_THROTTLED)]
         [Parser(Opcode.SMSG_GROUP_UNINVITE)]
         public static void HandleGroupNull(Packet packet)

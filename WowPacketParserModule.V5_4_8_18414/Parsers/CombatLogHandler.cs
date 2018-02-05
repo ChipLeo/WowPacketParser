@@ -12,6 +12,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class CombatLogHandler
     {
+        [Parser(Opcode.CMSG_SET_ADVANCED_COMBAT_LOGGING)]
+        public static void HandleSetAdvancedCombatLogging(Packet packet)
+        {
+            packet.ReadBit("Enable");
+        }
+
         [Parser(Opcode.SMSG_SPELL_PERIODIC_AURA_LOG)]
         public static void HandlePeriodicAuraLog(Packet packet)
         {

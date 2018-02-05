@@ -8,72 +8,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class UnkHandler
     {
-        [Parser(Opcode.CMSG_UNK_009A)]
-        public static void HandleUnk009A(Packet packet)
-        {
-            var len1 = packet.ReadBits("len1", 5);
-            var len2 = packet.ReadBits("len2", 8);
-            packet.ReadWoWString("Str", len2);
-            packet.ReadWoWString("Addon", len1);
-        }
-
-        [Parser(Opcode.CMSG_UNK_0377)]
-        public static void HandleUnk0377(Packet packet)
-        {
-            var guid24 = new byte[8];
-            packet.StartBitStream(guid24, 4, 6, 7, 5);
-            packet.ReadBit("unk16");
-            packet.StartBitStream(guid24, 0, 2, 1, 3);
-            packet.ParseBitStream(guid24, 7, 1, 0, 5, 6, 2, 4, 3);
-            packet.WriteGuid("guid24", guid24);
-        }
-
-        [Parser(Opcode.CMSG_UNK_06C5)]
-        public static void HandleUnk06C5(Packet packet)
-        {
-            for (var i = 0; i < 2; i++)
-            {
-                var poz = new Vector3();
-                poz.X = packet.ReadSingle();
-                poz.Z = packet.ReadSingle();
-                poz.Y = packet.ReadSingle();
-                packet.AddValue("Poz", poz, i);
-            }
-            var pos = new Vector4();
-            pos.Z = packet.ReadSingle();
-            pos.Y = packet.ReadSingle();
-            pos.X = packet.ReadSingle();
-
-            var guid = new byte[8];
-            guid[0] = packet.ReadBit();
-            var hasO = !packet.ReadBit("!hasO");
-            guid[6] = packet.ReadBit();
-            guid[3] = packet.ReadBit();
-            guid[5] = packet.ReadBit();
-            guid[2] = packet.ReadBit();
-            guid[7] = packet.ReadBit();
-            guid[1] = packet.ReadBit();
-            guid[4] = packet.ReadBit();
-            var unk24 = !packet.ReadBit("unk24!=-1");
-
-            packet.ParseBitStream(guid, 3, 6, 5, 2, 7, 1, 0, 4);
-            if (hasO)
-                pos.O = packet.ReadSingle();
-            if (unk24)
-                packet.ReadInt32("unk24");
-
-            packet.AddValue("Position", pos);
-            packet.WriteGuid("Guid", guid);
-        }
-
-        [Parser(Opcode.CMSG_UNK_0A16)]
-        public static void HandleUnk0A16(Packet packet)
-        {
-            var guid = packet.StartBitStream(7, 6, 3, 0, 4, 1, 5, 2);
-            packet.ParseBitStream(guid, 1, 6, 0, 5, 3, 2, 4, 7);
-            packet.WriteGuid("Guid", guid);
-        }
-
         [Parser(Opcode.CMSG_UNK_10D3)]
         public static void HandleUnk10D3(Packet packet)
         {
@@ -88,67 +22,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadWoWString("Str", packet.ReadBits(9));
         }
 
-        [Parser(Opcode.CMSG_UNK_1370)]
-        public static void HandleUnk1370(Packet packet)
-        {
-            packet.ReadUInt32<QuestId>("Quest ID"); // 24
-            packet.ReadByte("unk28"); // 28
-            var guid = packet.StartBitStream(5, 3, 0, 6, 1, 2, 7, 4);
-            packet.ParseBitStream(guid, 1, 2, 0, 5, 6, 4, 7, 3);
-            packet.WriteGuid("Guid", guid);
-        }
-
-        [Parser(Opcode.CMSG_UNK_178A)]
-        public static void HandleUnk178A(Packet packet)
-        {
-            packet.ReadByte("unk");
-        }
-
         [Parser(Opcode.CMSG_UNK_1D8D)]
         public static void HandleUnk1D8D(Packet packet)
         {
             packet.ReadSingle("unk");
-        }
-
-        [Parser(Opcode.CMSG_UNK_1D9D)]
-        public static void HandleUnk1D9D(Packet packet)
-        {
-            packet.ReadInt32("unk16"); // 16
-            packet.ReadInt32("unk32"); // 16
-            packet.ReadInt32("unk36"); // 16
-            packet.ReadInt32("unk40"); // 16
-
-            var guid = new byte[8];
-            var guid2 = new byte[8];
-            packet.ReadBit("unk20"); // 20
-            guid[6] = packet.ReadBit();
-            guid[0] = packet.ReadBit();
-            guid[2] = packet.ReadBit();
-            guid[4] = packet.ReadBit();
-            guid2[6] = packet.ReadBit();
-            guid2[7] = packet.ReadBit();
-            guid[3] = packet.ReadBit();
-            guid2[4] = packet.ReadBit();
-            guid[7] = packet.ReadBit();
-            guid2[1] = packet.ReadBit();
-            guid[5] = packet.ReadBit();
-            guid2[0] = packet.ReadBit();
-            guid[1] = packet.ReadBit();
-            guid2[2] = packet.ReadBit();
-            guid2[3] = packet.ReadBit();
-            guid2[5] = packet.ReadBit();
-
-            packet.ParseBitStream(guid, 3, 6, 4, 1);
-            packet.ParseBitStream(guid2, 7, 0);
-            packet.ParseBitStream(guid, 7);
-            packet.ParseBitStream(guid2, 6);
-            packet.ParseBitStream(guid, 5);
-            packet.ParseBitStream(guid2, 3, 1, 5, 4);
-            packet.ParseBitStream(guid, 0, 2);
-            packet.ParseBitStream(guid2, 2);
-
-            packet.WriteGuid("Guid", guid);
-            packet.WriteGuid("Guid2", guid2);
         }
 
         [Parser(Opcode.SMSG_UNK_000F)]
@@ -439,19 +316,13 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         */
 
         [Parser(Opcode.CMSG_NULL_01C0)]
-        [Parser(Opcode.CMSG_NULL_02DA)]
         [Parser(Opcode.CMSG_NULL_05E1)]
-        [Parser(Opcode.CMSG_NULL_06D4)]
         [Parser(Opcode.CMSG_NULL_1063)]
-        [Parser(Opcode.CMSG_NULL_1124)]
         [Parser(Opcode.CMSG_NULL_135B)]
-        [Parser(Opcode.CMSG_NULL_1362)]
         [Parser(Opcode.CMSG_NULL_14E0)]
         [Parser(Opcode.CMSG_NULL_1A87)]
         [Parser(Opcode.CMSG_NULL_1C45)]
         [Parser(Opcode.CMSG_NULL_1C5A)]
-        [Parser(Opcode.CMSG_NULL_1DC3)]
-        [Parser(Opcode.CMSG_NULL_1F34)]
         [Parser(Opcode.CMSG_NULL_1F8E)]
         [Parser(Opcode.SMSG_NULL_1313)]
         public static void HandleUnkNull(Packet packet)

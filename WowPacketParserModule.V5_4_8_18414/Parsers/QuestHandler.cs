@@ -33,6 +33,16 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.AddValue("Quest ID", StoreGetters.GetName(StoreNameType.Quest, quest[i]));
         }
 
+        [Parser(Opcode.CMSG_QUEST_PUSH_RESULT)]
+        public static void HandleQuestPushResult(Packet packet)
+        {
+            packet.ReadUInt32<QuestId>("Quest ID"); // 24
+            packet.ReadByteE<QuestPartyResult>("Result"); // 28
+            var guid = packet.StartBitStream(5, 3, 0, 6, 1, 2, 7, 4);
+            packet.ParseBitStream(guid, 1, 2, 0, 5, 6, 4, 7, 3);
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.CMSG_QUERY_QUEST_INFO)]
         public static void HandleQuestQuery(Packet packet)
         {
@@ -905,7 +915,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         }
 
         [Parser(Opcode.SMSG_QUEST_PUSH_RESULT)]
-        public static void HandleQuestPushResult(Packet packet)
+        public static void HandleServerQuestPushResult(Packet packet)
         {
             var guid = packet.StartBitStream(3, 0, 1, 4, 7, 5, 6, 2);
             packet.ParseBitStream(guid, 4);

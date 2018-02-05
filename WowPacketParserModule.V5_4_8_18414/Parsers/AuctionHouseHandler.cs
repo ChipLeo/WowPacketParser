@@ -267,5 +267,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadInt64("unk24"); // 24
             packet.ReadBit("unk16"); // 16
         }
+
+        [Parser(Opcode.CMSG_AUCTION_LIST_PENDING_SALES)]
+        public static void HandleAuctionZero(Packet packet)
+        {
+        }
     }
 }

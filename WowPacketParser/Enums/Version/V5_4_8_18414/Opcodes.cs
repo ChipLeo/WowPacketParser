@@ -34,6 +34,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_AUCTION_LIST_BIDDER_ITEMS,                0x12D0}, //++
             {Opcode.CMSG_AUCTION_LIST_ITEMS,                       0x02EA}, //++
             {Opcode.CMSG_AUCTION_LIST_OWNER_ITEMS,                 0x0361}, //++
+            {Opcode.CMSG_AUCTION_LIST_PENDING_SALES,               0x02DA}, //+-
             {Opcode.CMSG_AUCTION_PLACE_BID,                        0x03C8}, //++
             {Opcode.CMSG_AUCTION_REMOVE_ITEM,                      0x0259}, //+-
             {Opcode.CMSG_AUCTION_SELL_ITEM,                        0x02EB}, //+-
@@ -106,6 +107,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_CHAT_ADDON_MESSAGE_INSTANCE_CHAT,         0x08AF}, //++ addon
             {Opcode.CMSG_CHAT_ADDON_MESSAGE_GUILD,                 0x0E3B}, //++ addon
             {Opcode.CMSG_CHAT_ADDON_MESSAGE_PARTY,                 0x028E}, //++ addon
+            {Opcode.CMSG_CHAT_ADDON_MESSAGE_RAID,                  0x009A}, //++ like CMSG_MESSAGECHAT_ADDON...
             {Opcode.CMSG_CHAT_ADDON_MESSAGE_WHISPER,               0x0EBB}, //++
             {Opcode.CMSG_CHAT_CHANNEL_ANNOUNCEMENTS,               0x06AF}, //--
             {Opcode.CMSG_CHAT_CHANNEL_BAN,                         0x08BF}, //--
@@ -144,6 +146,8 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_COMMENTATOR_START_WARGAME,                0x1DB9}, //--+
             {Opcode.CMSG_COMMENTATOR_UPDATE_MAP_INFO,              0x073D}, //--+
             {Opcode.CMSG_COMMENTATOR_UPDATE_PLAYER_INFO,           0x031D}, //--+
+            {Opcode.CMSG_COMPLETE_CINEMATIC,                       0x1F34}, //+-
+            {Opcode.CMSG_COMPLETE_MOVIE,                           0x1362}, //++
             {Opcode.CMSG_CONFIRM_RESPEC_WIPE,                      0x0275}, //--
             {Opcode.CMSG_CONTACT_LIST,                             0x0BB4}, //+-
             {Opcode.CMSG_CORPSE_QUERY,                             0x1FBE}, //++
@@ -193,6 +197,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_GROUP_INVITE,                             0x072D}, //+-
             {Opcode.CMSG_GROUP_INVITE_RESPONSE,                    0x0D61}, //+-
             {Opcode.CMSG_GROUP_RAID_CONVERT,                       0x032C}, //+-
+            {Opcode.CMSG_GROUP_REQUEST_JOIN_UPDATES,               0x178A}, //++ raid
             {Opcode.CMSG_GROUP_SET_LEADER,                         0x15BB}, //+-
             {Opcode.CMSG_GROUP_SET_ROLES,                          0x1A92}, //+-
             {Opcode.CMSG_GROUP_UNINVITE_GUID,                      0x0CE1}, //+-
@@ -243,8 +248,10 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_INSPECT,                                  0x1259}, //++
             {Opcode.CMSG_INSPECT_HONOR_STATS,                      0x19C3}, //++
             {Opcode.CMSG_ITEM_TEXT_QUERY,                          0x0123}, //++
+            {Opcode.CMSG_KEYBOUND_OVERRIDE,                        0x0264}, //+-
             {Opcode.CMSG_LEARN_TALENT,                             0x02A7}, //+-
             {Opcode.CMSG_LFG_JOIN,                                 0x046B}, //++
+            {Opcode.CMSG_LFG_PROPOSAL_RESULT,                      0x1D9D}, //++ LFG
             {Opcode.CMSG_LFG_SET_BOOT_VOTE,                        0x17BE}, //--+
             {Opcode.CMSG_LFG_TELEPORT,                             0x1AA6}, //+-
             {Opcode.CMSG_LF_GUILD_ADD_APPLICATION,                 0x0C63}, //+-
@@ -273,7 +280,9 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_MINIMAP_PING,                             0x0837}, //+-
             {Opcode.CMSG_MOVE_APPLY_MOVEMENT_FORCE_ACK,            0x08D3}, //++
             {Opcode.CMSG_MOVE_CHANGE_TRANSPORT,                    0x09DB}, //++
+            {Opcode.CMSG_MOVE_DISMISS_VEHICLE,                     0x09FA}, //++
             {Opcode.CMSG_MOVE_FALL_LAND,                           0x08FA}, //++
+            {Opcode.CMSG_MOVE_FALL_RESET,                          0x00D9}, //++ PENDING_STRAFE_STOP
             {Opcode.CMSG_MOVE_FEATHER_FALL_ACK,                    0x08D0}, //++ pair SMSG 0C60 08E0
             {Opcode.CMSG_MOVE_FORCE_FLIGHT_SPEED_CHANGE_ACK,       0x09DA}, //++
             {Opcode.CMSG_MOVE_FORCE_RUN_BACK_SPEED_CHANGE_ACK,     0x0158}, //++
@@ -294,6 +303,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_MOVE_SET_FACING,                          0x1050}, //++
             {Opcode.CMSG_MOVE_SET_PITCH,                           0x017A}, //++
             {Opcode.CMSG_MOVE_SET_RUN_MODE,                        0x0979}, //++
+            {Opcode.CMSG_MOVE_SET_VEHICLE_REC_ID_ACK,              0x185B}, //++
             {Opcode.CMSG_MOVE_SET_WALK_MODE,                       0x08D1}, //++
             {Opcode.CMSG_MOVE_SPLINE_DONE,                         0x11D9}, //++
             {Opcode.CMSG_MOVE_START_ASCEND,                        0x11FA}, //++
@@ -318,21 +328,16 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_MOVE_WATER_WALK_ACK,                      0x10F2}, //++
             {Opcode.CMSG_NAME_QUERY,                               0x0328}, //++
             {Opcode.CMSG_NEUTRAL_PLAYER_SELECT_FACTION,            0x0027}, //+-
+            {Opcode.CMSG_NEXT_CINEMATIC_CAMERA,                    0x1124}, //+-
             {Opcode.CMSG_NULL_01C0,                                0x01C0}, //+-
-            {Opcode.CMSG_NULL_02DA,                                0x02DA}, //+- auction
             {Opcode.CMSG_REQUEST_VEHICLE_PREV_SEAT,                0x03C4}, //+-- VehiclePrevSeat
             {Opcode.CMSG_NULL_05E1,                                0x05E1}, //+-
-            {Opcode.CMSG_NULL_06D4,                                0x06D4}, //+-
             {Opcode.CMSG_NULL_1063,                                0x1063}, //++ battle pet
-            {Opcode.CMSG_NULL_1124,                                0x1124}, //+-
             {Opcode.CMSG_NULL_135B,                                0x135B}, //+-
-            {Opcode.CMSG_NULL_1362,                                0x1362}, //++
             {Opcode.CMSG_NULL_14E0,                                0x14E0}, //+-
             {Opcode.CMSG_NULL_1A87,                                0x1A87}, //+-
             {Opcode.CMSG_NULL_1C45,                                0x1C45}, //+-
             {Opcode.CMSG_NULL_1C5A,                                0x1C5A}, //+-
-            {Opcode.CMSG_NULL_1DC3,                                0x1DC3}, //+-
-            {Opcode.CMSG_NULL_1F34,                                0x1F34}, //+-
             {Opcode.CMSG_NULL_1F8E,                                0x1F8E}, //+-
             {Opcode.CMSG_OBJECT_UPDATE_FAILED,                     0x1061}, //+-
             {Opcode.CMSG_OFFER_PETITION,                           0x15BE}, //+-
@@ -348,6 +353,10 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_PETITION_SIGN,                            0x06DA}, //+-
             {Opcode.CMSG_PET_ABANDON,                              0x07D0}, //+-
             {Opcode.CMSG_PET_ACTION,                               0x025B}, //+-
+            {Opcode.CMSG_PET_BATTLE_QUEUE_JOIN,                    0x06D4}, //+-
+            {Opcode.CMSG_PET_BATTLE_QUEUE_PROPOSE_MATCH_RESULT,    0x19C2}, //+-
+            {Opcode.CMSG_PET_BATTLE_REQUEST_UPDATE,                0x0377}, //++ battle pet pair 022F
+            {Opcode.CMSG_PET_BATTLE_REQUEST_WILD,                  0x06C5}, //++ battle pet
             {Opcode.CMSG_PET_CAST_SPELL,                           0x044D}, //+-
             {Opcode.CMSG_PET_RENAME,                               0x0A32}, //+-
             {Opcode.CMSG_PET_SET_ACTION,                           0x12E9}, //+-
@@ -358,6 +367,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_PLAYER_VEHICLE_ENTER,                     0x0277}, //--
             {Opcode.CMSG_PVP_LOG_DATA,                             0x14C2}, //+-
             {Opcode.CMSG_QUERY_BATTLE_PET_NAME,                    0x1CE0}, //+-
+            {Opcode.CMSG_QUERY_CORPSE_TRANSPORT,                   0x0A16}, //++
             {Opcode.CMSG_QUERY_COUNTDOWN_TIMER,                    0x044E}, //++
             {Opcode.CMSG_QUERY_CREATURE,                           0x0842}, //++
             {Opcode.CMSG_QUERY_GAME_OBJECT,                        0x1461}, //++
@@ -384,6 +394,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_QUEST_LOG_REMOVE_QUEST,                   0x0779}, //+-
             {Opcode.CMSG_QUEST_NPC_QUERY,                          0x1DAE}, //++
             {Opcode.CMSG_QUEST_POI_QUERY,                          0x10C2}, //++
+            {Opcode.CMSG_QUEST_PUSH_RESULT,                        0x1370}, //++
             {Opcode.CMSG_RANDOM_ROLL,                              0x08A3}, //+-
             {Opcode.CMSG_READY_CHECK_RESPONSE,                     0x158B}, //+-
             {Opcode.CMSG_READY_FOR_ACCOUNT_DATA_TIMES,             0x031C}, //++
@@ -413,6 +424,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_REQUEST_RAID_INFO,                        0x0A87}, //+-
             {Opcode.CMSG_REQUEST_RATED_INFO,                       0x0826}, //+-
             {Opcode.CMSG_REQUEST_RESEARCH_HISTORY,                 0x15E2}, //++
+            {Opcode.CMSG_REQUEST_VEHICLE_EXIT,                     0x1DC3}, //+-
             {Opcode.CMSG_REQUEST_VEHICLE_NEXT_SEAT,                0x0141}, //+--
             {Opcode.CMSG_RESET_CHALLENGE_MODE,                     0x1D61}, //+-+
             {Opcode.CMSG_RESET_FACTION_CHEAT,                      0x10B6}, //+-
@@ -422,6 +434,8 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_ROLE_POLL_BEGIN,                          0x1882}, //--
             {Opcode.CMSG_SAVE_CUF_PROFILES,                        0x06E6}, //++
             {Opcode.CMSG_SAVE_EQUIPMENT_SET,                       0x0669}, //+-
+            {Opcode.CMSG_SCENE_PLAYBACK_COMPLETE,                  0x0087}, //++
+            {Opcode.CMSG_SCENE_TRIGGER_EVENT,                      0x02C4}, //+-
             {Opcode.CMSG_SEARCH_LFG_LEAVE,                         0x00E3}, //--+
             {Opcode.CMSG_SELL_ITEM,                                0x1358}, //+-
             {Opcode.CMSG_SEND_MAIL,                                0x1DBA}, //++
@@ -431,6 +445,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_SET_ACTION_BUTTON,                        0x1F8C}, //++
             {Opcode.CMSG_SET_ACTIVE_MOVER,                         0x09F0}, //++
             {Opcode.CMSG_SET_ACTIVE_VOICE_CHANNEL,                 0x1F88}, //--
+            {Opcode.CMSG_SET_ADVANCED_COMBAT_LOGGING,              0x0265}, //+-
             {Opcode.CMSG_SET_CONTACT_NOTES,                        0x0937}, //+-
             {Opcode.CMSG_SET_CURRENCY_FLAGS,                       0x03E4}, //+-
             {Opcode.CMSG_SET_DUNGEON_DIFFICULTY,                   0x1A36}, //+-
@@ -491,26 +506,11 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_TUTORIAL_RESET,                           0x0307}, //--
             {Opcode.CMSG_UI_TIME_REQUEST,                          0x15AB}, //+-
             {Opcode.CMSG_UNACCEPT_TRADE,                           0x0023}, //++
-            {Opcode.CMSG_UNK_0087,                                 0x0087}, //++
-            {Opcode.CMSG_UNK_009A,                                 0x009A}, //++ like CMSG_MESSAGECHAT_ADDON...
-            {Opcode.CMSG_UNK_00D9,                                 0x00D9}, //++ PENDING_STRAFE_STOP
-            {Opcode.CMSG_UNK_0264,                                 0x0264}, //+-
-            {Opcode.CMSG_UNK_0265,                                 0x0265}, //+-
-            {Opcode.CMSG_UNK_02C4,                                 0x02C4}, //+-
-            {Opcode.CMSG_UNK_0377,                                 0x0377}, //++ battle pet pair 022F
             {Opcode.CMSG_UNK_0656,                                 0x0656}, //+-
-            {Opcode.CMSG_UNK_06C5,                                 0x06C5}, //++ battle pet
-            {Opcode.CMSG_UNK_09FA,                                 0x09FA}, //++
-            {Opcode.CMSG_UNK_0A16,                                 0x0A16}, //++
             {Opcode.CMSG_UNK_10D3,                                 0x10D3}, //++
             {Opcode.CMSG_UNK_12B3,                                 0x12B3}, //++
-            {Opcode.CMSG_UNK_1370,                                 0x1370}, //++
             {Opcode.CMSG_UNK_1446,                                 0x1446}, //+-
-            {Opcode.CMSG_UNK_178A,                                 0x178A}, //++ raid
-            {Opcode.CMSG_UNK_185B,                                 0x185B}, //++
-            {Opcode.CMSG_UNK_19C2,                                 0x19C2}, //+-
             {Opcode.CMSG_UNK_1D8D,                                 0x1D8D}, //++ настройки/основные/окружающая среда/видимость [200,600,800,1000,1300]
-            {Opcode.CMSG_UNK_1D9D,                                 0x1D9D}, //++ LFG
             {Opcode.CMSG_UNLEARN_SKILL,                            0x0268}, //++
             {Opcode.CMSG_UNLEARN_SPECIALIZATION,                   0x1841}, //+-+
             {Opcode.CMSG_UNLOCK_VOID_STORAGE,                      0x0444}, //+-

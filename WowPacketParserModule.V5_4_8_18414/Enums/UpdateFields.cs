@@ -181,7 +181,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Enums
         UNIT_FIELD_CHANNEL_OBJECT2,
         UNIT_FIELD_CHANNEL_SPELL                                 = ObjectField.OBJECT_END + 0x14, // Size: 1, Flags: UF_FLAG_PUBLIC, UF_FLAG_URGENT
         UNIT_FIELD_SUMMONED_BY_HOME_REALM                        = ObjectField.OBJECT_END + 0x15, // Size: 1, Flags: UF_FLAG_PUBLIC
-        UNIT_FIELD_SEX                                           = ObjectField.OBJECT_END + 0x16, // Size: 1, Flags: UF_FLAG_PUBLIC
+        UNIT_FIELD_BYTES_0                                       = ObjectField.OBJECT_END + 0x16, // Size: 1, Flags: UF_FLAG_PUBLIC
         UNIT_FIELD_DISPLAY_POWER                                 = ObjectField.OBJECT_END + 0x17, // Size: 1, Flags: UF_FLAG_PUBLIC
         UNIT_FIELD_OVERRIDE_DISPLAY_POWER_ID                     = ObjectField.OBJECT_END + 0x18, // Size: 1, Flags: UF_FLAG_PUBLIC
         UNIT_FIELD_HEALTH                                        = ObjectField.OBJECT_END + 0x19, // Size: 1, Flags: UF_FLAG_PUBLIC

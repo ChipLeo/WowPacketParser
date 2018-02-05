@@ -11,6 +11,15 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
     public static class ChatHandler
     {
+        [Parser(Opcode.CMSG_CHAT_ADDON_MESSAGE_RAID)]
+        public static void HandleChatAddonMessageRaid(Packet packet)
+        {
+            var len1 = packet.ReadBits("len1", 5);
+            var len2 = packet.ReadBits("len2", 8);
+            packet.ReadWoWString("Str", len2);
+            packet.ReadWoWString("Addon", len1);
+        }
+
         [Parser(Opcode.CMSG_CHAT_REPORT_IGNORED)]
         public static void HandleClientReportIgnored(Packet packet)
         {
