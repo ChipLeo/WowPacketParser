@@ -58,6 +58,7 @@
     <Compile Include="Enums\MovementFlagExtra.cs" />
     <Compile Include="Enums\PetModeFlags.cs" />
     <Compile Include="Enums\PlayerMovementInfo.cs" />
+    <Compile Include="Enums\TaxiStatus.cs" />
     <Compile Include="Enums\TradeStatus.cs" />
     <Compile Include="Enums\MapDifficulty.cs" />
     <Compile Include="Enums\UpdateFields.cs" />

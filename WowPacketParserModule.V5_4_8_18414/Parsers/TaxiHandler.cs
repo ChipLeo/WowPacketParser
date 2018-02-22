@@ -2,6 +2,7 @@ using System;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
+using TaxiStatus = WowPacketParserModule.V5_4_8_18414.Enums.TaxiStatus;
 
 namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
@@ -105,7 +106,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             guid[5] = packet.ReadBit();
             guid[4] = packet.ReadBit();
             guid[1] = packet.ReadBit();
-            packet.ReadBits("Status", 2);
+            packet.ReadBitsE<TaxiStatus>("Status", 2);
             guid[3] = packet.ReadBit();
             guid[0] = packet.ReadBit();
 

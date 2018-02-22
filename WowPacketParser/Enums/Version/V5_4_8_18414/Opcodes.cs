@@ -75,6 +75,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_BUY_BACK_ITEM,                            0x0661}, //+-
             {Opcode.CMSG_BUY_BANK_SLOT,                            0x12F2}, //+-
             {Opcode.CMSG_BUY_ITEM,                                 0x02E2}, //++
+            {Opcode.CMSG_CAGE_BATTLE_PET,                          0x1561}, //--
             {Opcode.CMSG_CALENDAR_ADD_EVENT,                       0x0A37}, //+-
             {Opcode.CMSG_CALENDAR_COMPLAIN,                        0x1F8F}, //--
             {Opcode.CMSG_CALENDAR_COPY_EVENT,                      0x1A97}, //--
