@@ -7,8 +7,8 @@ namespace WowPacketParserModule.V7_2_0_23758.Hotfix
     [HotfixStructure(DB2Hash.BroadcastText, HasIndexInData = false)]
     public class BroadcastTextEntry : IBroadcastTextEntry
     {
-        public string MaleText { get; set; }
-        public string FemaleText { get; set; }
+        public string Text { get; set; }
+        public string Text1 { get; set; }
         [HotfixArray(3)]
         public ushort[] EmoteID { get; set; }
         [HotfixArray(3)]

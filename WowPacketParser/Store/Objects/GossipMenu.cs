@@ -13,13 +13,13 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("TextId", true)]
         public uint? TextID;
 
+        [DBFieldName("VerifiedBuild")]
+        public int? VerifiedBuild = ClientVersion.BuildInt;
+
         public ObjectType ObjectType;
 
         public uint ObjectEntry;
 
         //public ICollection<GossipMenuOption> GossipOptions;
-
-        [DBFieldName("VerifiedBuild")]
-        public int? VerifiedBuild = ClientVersion.BuildInt;
     }
 }

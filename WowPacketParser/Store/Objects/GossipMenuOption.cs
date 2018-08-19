@@ -1,4 +1,4 @@
-using WowPacketParser.Enums;
+﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.SQL;
 
@@ -21,6 +21,9 @@ namespace WowPacketParser.Store.Objects
 
         [DBFieldName("OptionBroadcastTextId")]
         public int? OptionBroadcastTextId;
+
+        [DBFieldName("VerifiedBuild")]
+        public int? VerifiedBuild = ClientVersion.BuildInt;
 
         public string BroadcastTextIDHelper;
     }

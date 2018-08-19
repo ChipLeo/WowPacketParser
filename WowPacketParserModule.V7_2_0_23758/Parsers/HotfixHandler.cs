@@ -59,8 +59,8 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                             var bct = new BroadcastText()
                             {
                                 ID = (uint)entry,
-                                MaleText = db2File.ReadCString("MaleText"),
-                                FemaleText = db2File.ReadCString("FemaleText"),
+                                Text = db2File.ReadCString("MaleText"),
+                                Text1 = db2File.ReadCString("FemaleText"),
                             };
 
                             bct.EmoteID = new ushort?[3];
@@ -71,15 +71,15 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                             for (int i = 0; i < 3; ++i)
                                 bct.EmoteDelay[i] = db2File.ReadUInt16("EmoteDelay", i);
 
-                            bct.UnkEmoteID = db2File.ReadUInt16("UnkEmoteID");
-                            bct.Language = db2File.ReadByte("Language");
-                            bct.Type = db2File.ReadByte("Type");
+                            bct.EmotesID = db2File.ReadUInt16("EmotesID");
+                            bct.LanguageID = db2File.ReadByte("LanguageID");
+                            bct.Flags = db2File.ReadByte("Flags");
 
-                            bct.SoundID = new uint?[2];
+                            bct.SoundEntriesID = new uint?[2];
                             for (int i = 0; i < 2; ++i)
-                                bct.SoundID[i] = db2File.ReadUInt32("SoundID", i);
+                                bct.SoundEntriesID[i] = db2File.ReadUInt32("SoundID", i);
 
-                            bct.PlayerConditionID = db2File.ReadUInt32("PlayerConditionID");
+                            bct.ConditionID = db2File.ReadUInt32("PlayerConditionID");
 
                             Storage.BroadcastTexts.Add(bct, packet.TimeSpan);
                             break;
