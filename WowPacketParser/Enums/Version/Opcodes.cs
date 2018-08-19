@@ -333,6 +333,7 @@ namespace WowPacketParser.Enums.Version
                 {
                     return Opcodes_7_1_5.Opcodes(direction);
                 }
+                case ClientVersionBuild.V7_2_0_23706:
                 case ClientVersionBuild.V7_2_0_23758:
                 case ClientVersionBuild.V7_2_0_23826:
                 case ClientVersionBuild.V7_2_0_23835:
@@ -390,6 +391,12 @@ namespace WowPacketParser.Enums.Version
                 case ClientVersionBuild.V7_3_5_25950:
                 case ClientVersionBuild.V7_3_5_25961:
                 case ClientVersionBuild.V7_3_5_25996:
+                case ClientVersionBuild.V7_3_5_26124:
+                case ClientVersionBuild.V7_3_5_26365:
+                case ClientVersionBuild.V7_3_5_26654:
+                case ClientVersionBuild.V7_3_5_26755:
+                case ClientVersionBuild.V7_3_5_26822:
+                case ClientVersionBuild.V7_3_5_26899:
                 {
                     return Opcodes_7_3_5.Opcodes(direction);
                 }

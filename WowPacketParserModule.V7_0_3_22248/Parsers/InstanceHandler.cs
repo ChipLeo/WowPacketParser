@@ -66,10 +66,10 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadBit("AutoActivate40Players", i);
                 packet.ReadBit("AutoActivateSpec1", i);
                 packet.ReadBit("AutoActivateSpec2", i);
+                packet.ReadBit("AutoActivateSpec3", i);
+                packet.ReadBit("AutoActivateSpec4", i);
                 packet.ReadBit("AutoActivatePvP", i);
                 packet.ReadBit("AutoActivatePvE", i);
-                packet.ReadBit("unk1", i);
-                packet.ReadBit("unk2", i);
 
                 packet.ReadInt16("FrameHeight", i);
                 packet.ReadInt16("FrameWidth", i);

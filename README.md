@@ -8,6 +8,11 @@ WowPacketParser (WPP)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ri0232rf4bqtmd7l)](https://ci.appveyor.com/project/ChipLeo/wowpacketparser)
 [![GitHub license](https://img.shields.io/github/license/TrinityCore/WowPacketParser.svg?style=flat-square)](https://github.com/TrinityCore/WowPacketParser/blob/WowPacketParser/COPYING)
+[![Coverity Scan Build Status](https://img.shields.io/coverity/scan/2618.svg?style=flat-square)](https://scan.coverity.com/projects/2618)
+[![Build Status TravisCI](https://img.shields.io/travis/TrinityCore/WowPacketParser/master.svg?style=flat-square)](https://travis-ci.org/TrinityCore/WowPacketParser)
+[![Build Status AppVeyor](https://img.shields.io/appveyor/ci/DDuarte/wowpacketparser-191/master.svg?style=flat-square)](https://ci.appveyor.com/project/DDuarte/wowpacketparser-191)
+[![Docker Pulls](https://img.shields.io/docker/pulls/trinitycore/wpp.svg?style=flat-square)](https://hub.docker.com/r/trinitycore/wpp/)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0154074816634467883a601e6c23188c)](https://www.codacy.com/app/TrinityCore/WowPacketParser?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=TrinityCore/WowPacketParser&amp;utm_campaign=Badge_Grade)
 
 Usage
 -----
@@ -24,7 +29,7 @@ Optionally, WPP can connect to two kinds of MySQL databases: `world` from [Trini
 and its own database, `WPP`. This can be enabled by setting `<add key="DBEnabled" value="true" />`
 in the `.config` file. Remember to set `<add key="TargetedDatabase" value="1"/>` in accordance with the targeted version of the core. 
 
-The `world` database is used when creating SQL files after parsing to produce the mimimum number of
+The `world` database is used when creating SQL files after parsing to produce the minimum number of
 changes needed to update the database. For example, if only the faction of a creature that appears
 in the sniff needs to be updated, the produced SQL files will contain an UPDATE query, instead of
 a full INSERT to the table `creature_template`. WPP does not modify this database directly, all the

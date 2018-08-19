@@ -7,10 +7,10 @@ namespace WowPacketParser.Store.Objects
     [DBTableName("gossip_menu")]
     public class GossipMenu : IDataModel
     {
-        [DBFieldName("entry", true)]
+        [DBFieldName("MenuId", true)]
         public uint? Entry;
 
-        [DBFieldName("text_id", true)]
+        [DBFieldName("TextId", true)]
         public uint? TextID;
 
         public ObjectType ObjectType;

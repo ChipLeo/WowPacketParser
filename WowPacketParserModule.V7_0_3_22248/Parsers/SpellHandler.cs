@@ -289,31 +289,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             ReadSpellCastRequest(packet, "Cast");
         }
 
-        [Parser(Opcode.SMSG_MIRROR_IMAGE_COMPONENTED_DATA)]
-        public static void HandleMirrorImageData(Packet packet)
-        {
-            packet.ReadPackedGuid128("UnitGUID");
-            packet.ReadInt32("DisplayID");
-
-            packet.ReadByte("RaceID");
-            packet.ReadByte("Gender");
-            packet.ReadByte("ClassID");
-            packet.ReadByte("BeardVariation");  // SkinID
-            packet.ReadByte("FaceVariation");   // FaceID
-            packet.ReadByte("HairVariation");   // HairStyle
-            packet.ReadByte("HairColor");       // HairColor
-            packet.ReadByte("SkinColor");       // FacialHairStyle
-
-            for (var i = 0; i < 3; i++)
-                packet.ReadByte("unk", i);
-
-            packet.ReadPackedGuid128("GuildGUID");
-
-            var count = packet.ReadInt32("ItemDisplayCount");
-            for (var i = 0; i < count; i++)
-                packet.ReadInt32("ItemDisplayID", i);
-        }
-
         [Parser(Opcode.SMSG_SPELL_START)]
         public static void HandleSpellStart(Packet packet)
         {
@@ -744,6 +719,31 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         [Parser(Opcode.SMSG_TUTORIAL_UNHIGHLIGHT_SPELL)]
         public static void HandleSpellZero(Packet packet)
         {
+        }
+
+        [Parser(Opcode.SMSG_MIRROR_IMAGE_COMPONENTED_DATA)]
+        public static void HandleMirrorImageData(Packet packet)
+        {
+            packet.ReadPackedGuid128("UnitGUID");
+            packet.ReadInt32("DisplayID");
+
+            packet.ReadByte("RaceID");
+            packet.ReadByte("Gender");
+            packet.ReadByte("ClassID");
+            packet.ReadByte("SkinColor");
+            packet.ReadByte("FaceVariation");
+            packet.ReadByte("HairVariation");
+            packet.ReadByte("HairColor");
+            packet.ReadByte("BeardVariation");
+
+            for (var i = 0; i < 3; i++)
+                packet.ReadByte("CustomDisplayOption", i);
+
+            packet.ReadPackedGuid128("GuildGUID");
+
+            var count = packet.ReadInt32("ItemDisplayCount");
+            for (var i = 0; i < count; i++)
+                packet.ReadInt32("ItemDisplayID", i);
         }
     }
 }

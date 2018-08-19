@@ -185,7 +185,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                     packet.ResetBitReader();
                     moveInfo.TransportGuid = packet.ReadPackedGuid128("Transport Guid", index);
                     moveInfo.TransportOffset = packet.ReadVector4("Transport Position", index);
-                    packet.ReadSByte("Transport Seat", index);
+                    var seat = packet.ReadSByte("Transport Seat", index);
                     packet.ReadInt32("Transport Time", index);
 
                     var hasPrevMoveTime = packet.ReadBit("HasPrevMoveTime", index);
@@ -196,6 +196,18 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
                     if (hasVehicleRecID)
                         packet.ReadUInt32("VehicleRecID", index);
+
+                    if (moveInfo.TransportGuid.HasEntry() && moveInfo.TransportGuid.GetHighType() == HighGuidType.Vehicle &&
+                        guid.HasEntry() && guid.GetHighType() == HighGuidType.Creature)
+                    {
+                        VehicleTemplateAccessory vehicleAccessory = new VehicleTemplateAccessory
+                        {
+                            Entry = moveInfo.TransportGuid.GetEntry(),
+                            AccessoryEntry = guid.GetEntry(),
+                            SeatId = seat
+                        };
+                        Storage.VehicleTemplateAccessories.Add(vehicleAccessory, packet.TimeSpan);
+                    }
                 }
 
                 if (hasFall)
@@ -722,6 +734,9 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 }
 
                 // HACK...
+                if (key == UnitField.UNIT_FIELD_SCALING_LEVEL_DELTA.ToString())
+                    value = (int)blockVal.UInt32Value + "/" + blockVal.SingleValue;
+
                 if (key == UnitField.UNIT_FIELD_FACTIONTEMPLATE.ToString())
                     packet.AddValue(key, value + $" ({ StoreGetters.GetName(StoreNameType.Faction, (int)blockVal.UInt32Value, false) })", index);
                 else
@@ -732,7 +747,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             return dict;
         }
- 
+
         private static Dictionary<int, List<UpdateField>> ReadDynamicValuesUpdateBlock(Packet packet, ObjectType type, object index, bool isCreating)
         {
             var dict = new Dictionary<int, List<UpdateField>>();
