@@ -1,11 +1,9 @@
-using System;
+п»їusing System;
 using WowPacketParser.Enums;
-using WowPacketParser.Enums.Version;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
-using Guid = WowPacketParser.Misc.WowGuid;
 
 namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
@@ -272,7 +270,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_ENUM_CHARACTERS_RESULT)]
         public static void HandleCharEnum(Packet packet)
         {
-            // імена не перевірено, лише послідовність типів данних
+            // С–РјРµРЅР° РЅРµ РїРµСЂРµРІС–СЂРµРЅРѕ, Р»РёС€Рµ РїРѕСЃР»С–РґРѕРІРЅС–СЃС‚СЊ С‚РёРїС–РІ РґР°РЅРЅРёС…
             var unkCounter = packet.ReadBits("Unk Counter", 21);//[DW5]
             var count = packet.ReadBits("Char count", 16);//[DW9]
 

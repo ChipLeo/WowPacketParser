@@ -1,12 +1,10 @@
-using System;
+п»їusing System;
 using WowPacketParser.Enums;
-using WowPacketParser.Enums.Version;
 using WowPacketParserModule.V5_4_8_18414.Misc;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
 using CoreParsers = WowPacketParser.Parsing.Parsers;
-using Guid = WowPacketParser.Misc.WowGuid;
 using UpdateFields = WowPacketParser.Enums.Version.UpdateFields;
 using MovementFlag = WowPacketParserModule.V5_4_8_18414.Enums.MovementFlag;
 using MovementFlagExtra = WowPacketParserModule.V5_4_8_18414.Enums.MovementFlagExtra;
@@ -628,7 +626,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_MOVE_FALL_RESET)]
         public static void HandleMoveFallReset(Packet packet)
         {
-            // шлеться при невдалій спробі підстрибнути (в кутку де низька стеля)
+            // С€Р»РµС‚СЊСЃСЏ РїСЂРё РЅРµРІРґР°Р»С–Р№ СЃРїСЂРѕР±С– РїС–РґСЃС‚СЂРёР±РЅСѓС‚Рё (РІ РєСѓС‚РєСѓ РґРµ РЅРёР·СЊРєР° СЃС‚РµР»СЏ)
             ReadPlayerMovementInfo(packet, info.MovementFallReset);
         }
 
@@ -3672,7 +3670,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             var guidUnit = new WowGuid64(BitConverter.ToUInt64(guid3, 0));
 
-            if (!Storage.Objects.IsEmpty() && Storage.Objects.ContainsKey(guidUnit))
+            if (!Storage.Objects.IsEmpty() && Storage.Objects.ContainsKey(guidUnit) && (guidUnit.GetObjectType()==ObjectType.Unit))
             {
                 var obj = Storage.Objects[guidUnit].Item1;
                 UpdateField uf;

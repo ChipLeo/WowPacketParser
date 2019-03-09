@@ -1,4 +1,4 @@
-using WowPacketParser.SQL;
+﻿using WowPacketParser.SQL;
 
 namespace WowPacketParser.Store.Objects
 {

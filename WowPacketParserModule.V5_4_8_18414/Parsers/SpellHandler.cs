@@ -1,13 +1,10 @@
-using System;
-using System.Text;
+п»їusing System;
 using System.Collections.Generic;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 using WowPacketParser.Parsing;
-//using CoreParsers = WowPacketParser.Parsing.Parsers;
-using Guid = WowPacketParser.Misc.WowGuid;
 
 namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
@@ -750,10 +747,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleMissileCancel(Packet packet)
         {
             /*
-             Після
+             РџС–СЃР»СЏ
              ServerToClient: SMSG_SPELL_CHANNEL_START (0x10F9) Length: 16
              Spell ID: 115175 (0x1C1E7)
-             йде
+             Р№РґРµ
              ServerToClient: SMSG_UNK_1203 (0x1203) Length: 12
              unk20: False
              Spell ID: 117899 (0x1CC8B)
@@ -1861,7 +1858,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         public static void HandleSupercededSpell(Packet packet)
         {
             /*
-             Зявляється при підвищенні рангу бонус спела (53040 - 74496)
+             Р—СЏРІР»СЏС”С‚СЊСЃСЏ РїСЂРё РїС–РґРІРёС‰РµРЅРЅС– СЂР°РЅРіСѓ Р±РѕРЅСѓСЃ СЃРїРµР»Р° (53040 - 74496)
              */
             var count16 = packet.ReadBits("count16", 22);
             var count32 = packet.ReadBits("count32", 22);

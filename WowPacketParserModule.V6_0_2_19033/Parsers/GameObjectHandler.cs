@@ -1,4 +1,4 @@
-using WowPacketParser.Enums;
+﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
@@ -135,9 +135,16 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         }
 
         [Parser(Opcode.SMSG_GAME_OBJECT_UI_ACTION)]
-        public static void HandleGameObjectUIAction(Packet packet)
+        public static void HandleGameObjectUiAction(Packet packet)
         {
-            packet.ReadInt32("Action");
+            packet.ReadPackedGuid128("GUID");
+            packet.ReadInt32("UILink");
+        }
+
+        [Parser(Opcode.SMSG_FORCE_OBJECT_RELINK)]
+        public static void HandleForceObjectRelink(Packet packet)
+        {
+            packet.ReadPackedGuid128("ObjectGUID");
         }
     }
 }

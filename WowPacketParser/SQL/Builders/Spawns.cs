@@ -104,6 +104,16 @@ namespace WowPacketParser.SQL.Builders
                     row.Data.ZoneID = (uint)creature.Zone;
 
                 row.Data.SpawnMask = (uint)creature.GetDefaultSpawnMask();
+
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_0_3_22248))
+                {
+                    string data = string.Join(",", creature.GetDefaultSpawnDifficulties());
+                    if (string.IsNullOrEmpty(data))
+                        data = "0";
+
+                    row.Data.spawnDifficulties = data;
+                }
+
                 row.Data.PhaseMask = creature.PhaseMask;
 
                 row.Data.PhaseID = "0";
@@ -295,6 +305,17 @@ namespace WowPacketParser.SQL.Builders
                     row.Data.ZoneID = (uint)go.Zone;
 
                 row.Data.SpawnMask = (uint)go.GetDefaultSpawnMask();
+
+
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_0_3_22248))
+                {
+                    string data = string.Join(",", go.GetDefaultSpawnDifficulties());
+                    if (string.IsNullOrEmpty(data))
+                        data = "0";
+
+                    row.Data.spawnDifficulties = data;
+                }
+
                 row.Data.PhaseMask = go.PhaseMask;
 
                 row.Data.PhaseID = "0";

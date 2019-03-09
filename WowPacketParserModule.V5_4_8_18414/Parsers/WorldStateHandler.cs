@@ -1,7 +1,4 @@
-using System;
-using System.Text;
-using WowPacketParser.Enums;
-using WowPacketParserModule.V5_4_8_18414.Enums;
+﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using CoreParsers = WowPacketParser.Parsing.Parsers;
@@ -15,8 +12,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         {
             packet.ReadInt32<MapId>("MapID");
             CoreParsers.WorldStateHandler.CurrentAreaId = packet.ReadInt32<AreaId>("Area Id");
-            packet.ReadInt32<ZoneId>("Zone Id");
-
+            CoreParsers.WorldStateHandler.CurrentZoneId = packet.ReadInt32<ZoneId>("Zone Id");
 
             var numFields = packet.ReadBits("Field Count", 21);
 

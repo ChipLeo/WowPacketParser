@@ -1,15 +1,12 @@
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using WowPacketParser.Enums;
-using WowPacketParser.Enums.Version;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 using CoreParsers = WowPacketParser.Parsing.Parsers;
 using Guid = WowPacketParser.Misc.WowGuid;
-using UpdateFields = WowPacketParser.Enums.Version.UpdateFields;
 
 namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
@@ -73,29 +70,22 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ResetBitReader();
 
                 packet.WriteLine("[" + i + "] UpdateType: " + typeString);
+
+                packet.AddValue("UpdateType", typeString, i);
+
                 switch (typeString)
                 {
                     case "Values":
                     {
                         var guid = packet.ReadPackedGuid("GUID", i);
-
-                        WoWObject obj;
-                        var updates = CoreParsers.UpdateHandler.ReadValuesUpdateBlock(packet, guid.GetObjectType(), i, false);
-
-                        if (Storage.Objects.TryGetValue(guid, out obj))
-                        {
-                            if (obj.ChangedUpdateFieldsList == null)
-                                obj.ChangedUpdateFieldsList = new List<Dictionary<int, UpdateField>>();
-                            obj.ChangedUpdateFieldsList.Add(updates);
-                        }
-
+                        CoreParsers.UpdateHandler.ReadValuesUpdateBlock(packet, guid, i);
                         break;
                     }
                     case "CreateObject1":
                     case "CreateObject2":
                     {
                         var guid = packet.ReadPackedGuid("GUID", i);
-                        ReadCreateObjectBlock(ref packet, guid, map, i);
+                        ReadCreateObjectBlock(packet, guid, map, i);
                         break;
                     }
                     case "DestroyObjects":
@@ -107,13 +97,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
-        private static void ReadCreateObjectBlock(ref Packet packet, Guid guid, uint map, int index)
+        private static void ReadCreateObjectBlock(Packet packet, WowGuid guid, uint map, object index)
         {
-            var objType = packet.ReadByteE<ObjectType>("Object Type", index);
+            ObjectType objType = ObjectTypeConverter.Convert(packet.ReadByteE<ObjectTypeLegacy>("Object Type", index));
             packet.ResetBitReader();
-            var moves = ReadMovementUpdateBlock548(ref packet, guid, index);
+            var moves = ReadMovementUpdateBlock548(packet, guid, index);
             packet.ResetBitReader();
-            var updates = CoreParsers.UpdateHandler.ReadValuesUpdateBlock(packet, objType, index, true);
+            var updates = CoreParsers.UpdateHandler.ReadValuesUpdateBlockOnCreate(packet, objType, index);
+            var dynamicUpdates = CoreParsers.UpdateHandler.ReadDynamicValuesUpdateBlockOnCreate(packet, objType, index);
 
             WoWObject obj;
             switch (objType)
@@ -138,8 +129,10 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             obj.Type = objType;
             obj.Movement = moves;
             obj.UpdateFields = updates;
+            obj.DynamicUpdateFields = dynamicUpdates;
             obj.Map = map;
             obj.Area = CoreParsers.WorldStateHandler.CurrentAreaId;
+            obj.Zone = CoreParsers.WorldStateHandler.CurrentZoneId;
             obj.PhaseMask = (uint)CoreParsers.MovementHandler.CurrentPhaseMask;
             obj.Phases = new HashSet<ushort>(CoreParsers.MovementHandler.ActivePhases);
 
@@ -157,7 +150,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.AddSniffData(Utilities.ObjectTypeToStore(objType), (int)guid.GetEntry(), "SPAWN");
         }
 
-        private static MovementInfo ReadMovementUpdateBlock548(ref Packet packet, Guid guid, int index)
+        private static MovementInfo ReadMovementUpdateBlock548(Packet packet, WowGuid guid, object index)
         {
             var moveInfo = new MovementInfo();
             

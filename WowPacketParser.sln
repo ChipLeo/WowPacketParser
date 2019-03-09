@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Express 15 for Windows Desktop
+VisualStudioVersion = 15.0.27703.2018
 MinimumVisualStudioVersion = 14.0.23107.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowPacketParser", "WowPacketParser\WowPacketParser.csproj", "{0BF6F270-0B6F-4705-8E1A-F57DB76DB407}"
 EndProject
@@ -17,6 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowPacketParser.Tests", "Wo
 		{11543CDB-D1FC-454B-A977-D6F40D08CB09} = {11543CDB-D1FC-454B-A977-D6F40D08CB09}
 		{B53A76DC-BA47-4364-AE96-6BEA96E3DF0F} = {B53A76DC-BA47-4364-AE96-6BEA96E3DF0F}
 		{422AC0F6-A8DF-4FFF-8A98-A830F4002C53} = {422AC0F6-A8DF-4FFF-8A98-A830F4002C53}
+		{44804391-9951-4143-ACFF-1B2F65E61D53} = {44804391-9951-4143-ACFF-1B2F65E61D53}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandlerQuery", "HandlerQuery\HandlerQuery.csproj", "{1D77131D-E0DC-4229-995A-5D972B4F5E9C}"
@@ -51,6 +52,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowPacketParserModule.V7_0_3_22248", "WowPacketParserModule.V7_0_3_22248\WowPacketParserModule.V7_0_3_22248.csproj", "{7A7109FD-A819-4906-9406-1BE84C6A527C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowPacketParserModule.V7_2_0_23758", "WowPacketParserModule.V7_2_0_23758\WowPacketParserModule.V7_2_0_23758.csproj", "{9EECD375-A422-4560-BE79-51D9E970DB57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowPacketParserModule.V8_0_1_27101", "WowPacketParserModule.V8_0_1_27101\WowPacketParserModule.V8_0_1_27101.csproj", "{749EA02D-C727-4697-B979-9ED80FB98085}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -122,6 +125,10 @@ Global
 		{9EECD375-A422-4560-BE79-51D9E970DB57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EECD375-A422-4560-BE79-51D9E970DB57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EECD375-A422-4560-BE79-51D9E970DB57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{749EA02D-C727-4697-B979-9ED80FB98085}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{749EA02D-C727-4697-B979-9ED80FB98085}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{749EA02D-C727-4697-B979-9ED80FB98085}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{749EA02D-C727-4697-B979-9ED80FB98085}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

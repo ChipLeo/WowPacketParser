@@ -1,4 +1,4 @@
-namespace WowPacketParser.Enums
+﻿namespace WowPacketParser.Enums
 {
     public enum LfgProposalState
     {

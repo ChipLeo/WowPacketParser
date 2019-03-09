@@ -1,13 +1,10 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
-using WowPacketParser.Store;
-using WowPacketParser.Store.Objects;
-using Guid = WowPacketParser.Misc.WowGuid;
 using PetModeFlags = WowPacketParserModule.V5_4_8_18414.Enums.PetModeFlags;
 using ReactState = WowPacketParserModule.V5_4_8_18414.Enums.ReactState;
 using CommandState = WowPacketParserModule.V5_4_8_18414.Enums.CommandState;
@@ -472,12 +469,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_PET_DISMISS_SOUND)]
         public static void HandlePetDismissSound(Packet packet)
         {
-            /* пакет зявляється при рухові паровим танком новолунія.
-             Якщо unk28=110, після нього йде пакет
+            /* РїР°РєРµС‚ Р·СЏРІР»СЏС”С‚СЊСЃСЏ РїСЂРё СЂСѓС…РѕРІС– РїР°СЂРѕРІРёРј С‚Р°РЅРєРѕРј РЅРѕРІРѕР»СѓРЅС–СЏ.
+             РЇРєС‰Рѕ unk28=110, РїС–СЃР»СЏ РЅСЊРѕРіРѕ Р№РґРµ РїР°РєРµС‚
              ServerToClient: SMSG_DESTROY_OBJECT (0x14C2) Length: 9
              Despawn Animation: False
              Object Guid: Full: 0xF141743FAE000E1D Type: Pet Low: 2919239197 Name: 0
-             Якщо unk28=2201,  після нього йде пакет
+             РЇРєС‰Рѕ unk28=2201,  РїС–СЃР»СЏ РЅСЊРѕРіРѕ Р№РґРµ РїР°РєРµС‚
              ServerToClient: SMSG_CANCEL_AUTO_REPEAT (0x1E0F) Length: 8
              Guid: Full: 0xF150D53C000573CC Type: Vehicle Entry: 54588 Low: 357324
              */

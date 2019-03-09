@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using WowPacketParser.Enums;
 using WowPacketParser.Enums.Version;
@@ -158,6 +158,7 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_DUEL_CANCELLED)]
         [Parser(Opcode.SMSG_REFER_A_FRIEND_EXPIRED)]
         [Parser(Opcode.CMSG_PLAYER_VEHICLE_ENTER)]
+        [Parser(Opcode.CMSG_RIDE_VEHICLE_INTERACT)]
         [Parser(Opcode.CMSG_EJECT_PASSENGER)]
         public static void HandleReadGuid(Packet packet)
         {
@@ -630,7 +631,7 @@ namespace WowPacketParser.Parsing.Parsers
         {
             packet.ReadUInt32("Unk time"); // Time online?
 
-            if (ClientVersion.AddedInVersion(ClientType.WrathOfTheLichKing)) // no idea when this was added exactly, doesn't exist in 2.4.0
+            if (packet.CanRead()) // no idea when this was added exactly, doesn't exist in 2.4.0
                 packet.ReadUInt32("Unk int32");
         }
 
@@ -1097,6 +1098,15 @@ namespace WowPacketParser.Parsing.Parsers
         public static void HandleQueryCountdownTimer(Packet packet)
         {
             packet.ReadInt32("TimerType");
+        }
+
+        [Parser(Opcode.SMSG_REFER_A_FRIEND_FAILURE)]
+        public static void HandleRaFFailure(Packet packet)
+        {
+            packet.ReadInt32("Reason");
+            packet.ResetBitReader();
+            var len = packet.ReadBits(6);
+            packet.ReadWoWString("Str", len);
         }
 
         [Parser(Opcode.SMSG_MINIGAME_STATE)]

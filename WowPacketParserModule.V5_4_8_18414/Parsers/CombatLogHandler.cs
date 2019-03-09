@@ -1,12 +1,6 @@
-using System;
-using System.IO;
-using WowPacketParser.Enums;
-using WowPacketParser.Enums.Version;
+﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
-using WowPacketParser.Store;
-using WowPacketParser.Store.Objects;
 using WowPacketParser.Parsing;
-using SpellHitInfo = WowPacketParser.Enums.SpellHitInfo;
 
 namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {

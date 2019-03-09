@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection;
-using System.Reflection.Emit;
 using Sigil;
 using WowPacketParser.Hotfix;
 using WowPacketParser.Misc;
 
-namespace WowPacketParserModule.V5_4_8_18291.Hotfix
+namespace WowPacketParserModule.V5_4_8_18414.Hotfix
 {
     [HotfixSerializer]
     public class HotfixSerializer<T> : IHotfixSerializer<T> where T : class, new()

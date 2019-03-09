@@ -67,7 +67,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
                         Storage.BroadcastTexts.Add(bct, packet.TimeSpan);
 
-                        if (BinaryPacketReader.GetLocale() != LocaleConstant.enUS)
+                        if (ClientLocale.PacketLocale != LocaleConstant.enUS)
                         {
                             BroadcastTextLocale lbct = new BroadcastTextLocale
                             {
@@ -174,6 +174,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             var type = packet.AddValue("TableHash", (DB2Hash)Utilities.PAIR64_HIPART(id), indexes);
 
             var entry = packet.ReadInt32("RecordID", indexes);
+            packet.ResetBitReader();
             var allow = packet.ReadBit("Allow", indexes);
             var dataSize = packet.ReadInt32("Size", indexes);
             var data = packet.ReadBytes(dataSize);

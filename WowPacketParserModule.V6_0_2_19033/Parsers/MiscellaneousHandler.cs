@@ -1,6 +1,7 @@
 ﻿
 using System;
 using WowPacketParser.Enums;
+using WowPacketParser.Loading;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
@@ -546,6 +547,16 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             packet.AddSniffData(StoreNameType.PageText, (int)entry, "QUERY_RESPONSE");
             Storage.PageTexts.Add(pageText, packet.TimeSpan);
+
+            if (ClientLocale.PacketLocale != LocaleConstant.enUS && pageText.Text != string.Empty)
+            {
+                PageTextLocale localesPageText = new PageTextLocale
+                {
+                    ID = pageText.ID,
+                    Text = pageText.Text
+                };
+                Storage.LocalesPageText.Add(localesPageText, packet.TimeSpan);
+            }
         }
 
         [Parser(Opcode.SMSG_PLAY_ONE_SHOT_ANIM_KIT)]
@@ -993,6 +1004,29 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 for (var j = 0; j < cnt; j++)
                     packet.ReadInt32("unk3", j, i);
             }
+        }
+
+        [Parser(Opcode.CMSG_WHO_IS)]
+        public static void HandleWhoIsRequest(Packet packet)
+        {
+            var len = packet.ReadBits(6);
+            packet.ReadWoWString("CharName", len);
+        }
+
+        [Parser(Opcode.SMSG_WHO_IS)]
+        public static void HandleWhoIsResponse(Packet packet)
+        {
+            var accNameLen = packet.ReadBits(11);
+            packet.ReadWoWString("AccountName", accNameLen);
+        }
+
+        [Parser(Opcode.CMSG_COLLECTION_ITEM_SET_FAVORITE)]
+        public static void HandleCollectionItemSetFavorite(Packet packet)
+        {
+            packet.ReadInt32E<CollectionType>("CollectionType");
+            packet.ReadUInt32("ID");
+            packet.ResetBitReader();
+            packet.ReadBit("IsFavorite");
         }
     }
 }

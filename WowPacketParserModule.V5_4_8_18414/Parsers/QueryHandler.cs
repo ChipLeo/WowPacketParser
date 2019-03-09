@@ -1,15 +1,14 @@
-using System;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using WowPacketParser.Enums;
-using WowPacketParser.Enums.Version;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
-using WowPacketParserModule.V5_4_8_18414.Enums;
-using Guid = WowPacketParser.Misc.WowGuid;
 
 namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
+    [SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer")]
     public static class QueryHandler
     {
         [Parser(Opcode.CMSG_QUERY_CREATURE)]
@@ -124,13 +123,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             for (var i = 0; i < 4; i++)
             {
                 if (lengthName[i][1] > 1)
-                    packet.ReadCString("Female Name", i);
+                    name[i+4] = packet.ReadCString("Female Name", i);
 
                 if (lengthName[i][0] > 1)
                     name[i] = packet.ReadCString("Male name", i);
             }
             creature.Name = name[0];
-			
+            creature.FemaleName = name[4];
+
             if (lengthSubname > 1)
                 creature.SubName = packet.ReadCString("Sub Name");
 				
@@ -152,15 +152,34 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             creature.Family = packet.ReadInt32E<CreatureFamily>("Family");//13
 
+            for (int i = 0; i < 4; ++i)
+                packet.AddValue("Display ID", creature.ModelIDs[i], i);
+            for (int i = 0; i < 2; ++i)
+                packet.AddValue("Kill Credit", creature.KillCredits[i], i);
+
             packet.AddSniffData(StoreNameType.Unit, entry.Key, "QUERY_RESPONSE");
 
             Storage.CreatureTemplates.Add(creature, packet.TimeSpan);
 
-            var objectName = new ObjectName
+            if (ClientLocale.PacketLocale != LocaleConstant.enUS)
+            {
+                CreatureTemplateLocale localesCreature = new CreatureTemplateLocale
+                {
+                    ID = (uint)entry.Key,
+                    Name = creature.Name,
+                    NameAlt = creature.FemaleName,
+                    Title = creature.SubName,
+                    TitleAlt = creature.TitleAlt
+                };
+
+                Storage.LocalesCreatures.Add(localesCreature, packet.TimeSpan);
+            }
+
+            ObjectName objectName = new ObjectName
             {
                 ObjectType = ObjectType.Unit,
-                Name = creature.Name,
-                ID = entry.Key
+                ID = entry.Key,
+                Name = creature.Name
             };
             Storage.ObjectNames.Add(objectName, packet.TimeSpan);
         }

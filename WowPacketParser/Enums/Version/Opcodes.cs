@@ -32,11 +32,12 @@ using WowPacketParser.Enums.Version.V6_2_4_21315;
 using WowPacketParser.Enums.Version.V7_0_3_22248;
 using WowPacketParser.Enums.Version.V7_1_0_22900;
 using WowPacketParser.Enums.Version.V7_1_5_23360;
-using WowPacketParser.Enums.Version.V7_2_0_23758;
+using WowPacketParser.Enums.Version.V7_2_0_23826;
 using WowPacketParser.Enums.Version.V7_2_5_24330;
 using WowPacketParser.Enums.Version.V7_3_0_24920;
 using WowPacketParser.Enums.Version.V7_3_2_25383;
 using WowPacketParser.Enums.Version.V7_3_5_25848;
+using WowPacketParser.Enums.Version.V8_0_1_27101;
 using WowPacketParser.Misc;
 
 namespace WowPacketParser.Enums.Version
@@ -400,6 +401,28 @@ namespace WowPacketParser.Enums.Version
                 case ClientVersionBuild.V7_3_5_26972:
                 {
                     return Opcodes_7_3_5.Opcodes(direction);
+                }
+                case ClientVersionBuild.V8_0_1_27101:
+                case ClientVersionBuild.V8_0_1_27144:
+                case ClientVersionBuild.V8_0_1_27165:
+                case ClientVersionBuild.V8_0_1_27178:
+                case ClientVersionBuild.V8_0_1_27219:
+                case ClientVersionBuild.V8_0_1_27291:
+                case ClientVersionBuild.V8_0_1_27326:
+                case ClientVersionBuild.V8_0_1_27355:
+                case ClientVersionBuild.V8_0_1_27356:
+                case ClientVersionBuild.V8_0_1_27366:
+                case ClientVersionBuild.V8_0_1_27377:
+                case ClientVersionBuild.V8_0_1_27404:
+                case ClientVersionBuild.V8_0_1_27481:
+                case ClientVersionBuild.V8_0_1_27547:
+                case ClientVersionBuild.V8_0_1_27602:
+                case ClientVersionBuild.V8_0_1_27791:
+                case ClientVersionBuild.V8_0_1_27843:
+                case ClientVersionBuild.V8_0_1_27980:
+                case ClientVersionBuild.V8_0_1_28153:
+                {
+                    return Opcodes_8_0_1.Opcodes(direction);
                 }
                 default:
                 {

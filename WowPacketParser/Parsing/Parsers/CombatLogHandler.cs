@@ -253,7 +253,7 @@ namespace WowPacketParser.Parsing.Parsers
 
                         packet.ReadUInt32("Spell Proto", index);
                         packet.ReadUInt32("Absorb", index);
-                        packet.ReadUInt32("Resist", index);
+                        packet.ReadInt32("Resist", index);
 
                         if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_1_2_9901))
                             packet.ReadByte("Critical", index);
@@ -307,7 +307,7 @@ namespace WowPacketParser.Parsing.Parsers
 
             packet.ReadByte("SchoolMask", index);
             packet.ReadUInt32("Absorb", index);
-            packet.ReadUInt32("Resist", index);
+            packet.ReadInt32("Resist", index);
             packet.ReadBool("Show spellname in log", index);
             packet.ReadByte("Unk byte", index);
             packet.ReadUInt32("Blocked", index);
@@ -352,7 +352,7 @@ namespace WowPacketParser.Parsing.Parsers
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_3_9183))
                 packet.ReadUInt32("Overheal", index);
 
-            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_3_9183)) // no idea when this was added exactly
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_2_0_10192)) // no idea when this was added exactly
                 packet.ReadUInt32("Absorb", index);
 
             packet.ReadBool("Critical", index);

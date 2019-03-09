@@ -1,4 +1,4 @@
-using WowPacketParser.Enums;
+﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 
@@ -6,21 +6,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
     public static class InstanceHandler
     {
-        public static void sub_650A48(Packet packet, params object[] idx)
-        {
-            packet.ReadInt32("unk", idx);
-            packet.ReadInt32("unk4", idx);
-            var unk8 = packet.ReadInt32("unk8", idx);
-            var unk24 = packet.ReadInt32("unk24", idx);
-            var unk40 = packet.ReadInt32("unk40", idx);
-            for (var i = 0; i < unk8; ++i)
-                packet.ReadInt32("unk12", idx, i);
-            for (var i = 0; i < unk24; ++i)
-                packet.ReadInt32("unk28", idx, i);
-            for (var i = 0; i < unk40; ++i)
-                sub_650A48(packet, idx, i);
-        }
-
         [Parser(Opcode.SMSG_RAID_INSTANCE_MESSAGE)]
         public static void HandleRaidInstanceMessage(Packet packet)
         {
@@ -29,6 +14,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadUInt32<MapId>("MapID");
             packet.ReadUInt32("DifficultyID");
 
+            packet.ResetBitReader();
             packet.ReadBit("Locked");
             packet.ReadBit("Extended");
         }
@@ -41,6 +27,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             for (int i = 0; i < count; ++i)
             {
+                packet.ResetBitReader();
+
                 var strlen = packet.ReadBits(7);
 
                 packet.ReadBit("KeepGroupsTogether", i);
@@ -88,48 +76,129 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             }
         }
 
+        public static void ReadEncounterItemInfo(Packet packet, params object[] idx)
+        {
+            packet.ReadInt32("ItemID", idx);
+            packet.ReadInt32("ItemLevel", idx);
+
+            var enchantmentCount = packet.ReadUInt32("PermanentEnchantmentID", idx);
+            var bonusListCount = packet.ReadUInt32("TemporaryEnchantmentID", idx);
+            var gemCount = packet.ReadUInt32("GemCount", idx);
+
+            for (var j = 0; j < enchantmentCount; ++j)
+                packet.ReadInt32("EnchantmentID", idx, j);
+
+            for (var j = 0; j < bonusListCount; ++j)
+                packet.ReadInt32("ItemBonusListID", idx, j);
+
+            for (var j = 0; j < gemCount; ++j)
+                ReadEncounterItemInfo(packet, idx, "Gem", j);
+        }
+
+        static readonly string[] FilteredRatingList =
+        {
+            "Dodge",
+            "Parry",
+            "Block",
+            "CritMelee",
+            "CritRanged",
+            "CritSpell",
+            "Speed",
+            "Lifesteal",
+            "HasteMelee",
+            "HasteRanged",
+            "HasteSpell",
+            "Avoidance",
+            "Mastery",
+            "VersatilityDamageDone",
+            "VersatilityHealingDone",
+            "VersatilityDamageTaken",
+            "Armor"
+        };
+
         [Parser(Opcode.SMSG_ENCOUNTER_START)]
         public static void HandleEncounterStart(Packet packet)
         {
             packet.ReadInt32("EncounterID");
-            packet.ReadInt32("DifficultyID");
+            packet.ReadInt32<DifficultyId>("DifficultyID");
             packet.ReadInt32("GroupSize");
-            var cnt = packet.ReadInt32("Count");
-            for (var k = 0; k < cnt; ++k)
-            {//64E732 22996
-                packet.ReadPackedGuid128("Guid", k);
-                var unk16 = packet.ReadInt32("unk16", k);
-                var unk32 = packet.ReadInt32("unk32", k);
-                var unk48 = packet.ReadInt32("unk48", k);
-                {//650404 22996
-                    packet.ReadInt32("unk0", k);
-                    var unk4 = packet.ReadInt32("unk4", k);
-                    var unk20 = packet.ReadInt32("unk20", k);
-                    for (var i = 0; i < unk4; ++i)
-                        packet.ReadInt32("unk8", k, i);
-                    for (var i = 0; i < unk20; ++i)
-                        packet.ReadInt32("unk24", k, i);
-                }
-                var unk100 = packet.ReadInt32("unk100", k);
-                var unk116 = packet.ReadInt32("unk116", k);
-                for (var i = 0; i < unk16; ++i)
-                    packet.ReadInt32("unk20", k, i);
-                for (var j = 0; j < unk32; ++j)
-                    packet.ReadInt32("unk36", k, j);
-                for (var i = 0; i < unk48; ++i)
-                {//658C5B 22996
-                    packet.ReadPackedGuid128("guid", k, i);
-                    packet.ReadInt32("unk", k, i);
-                }
-                for (var i = 0; i < unk100; ++i)
-                {//689B7C 22996
-                    packet.ReadInt32("unk", k, i);
-                    packet.ReadByte("unk", k, i);
-                }
-                for (var i = 0; i < unk116; ++i)
-                    sub_650A48(packet, k, i);
-            }
 
+            var playerCount = packet.ReadUInt32("Players");
+            for (var i = 0; i < playerCount; ++i)
+            {
+                packet.ReadPackedGuid128("Guid", i);
+
+                var statCount = packet.ReadUInt32("StatCount", i);
+                var combatRatingCount = packet.ReadUInt32("CombatRatingCount", i);
+                var auraCount = packet.ReadUInt32("AuraCount", i);
+
+                packet.ReadInt32("SpecID", i);
+
+                var talentCount = packet.ReadUInt32("TalentCount", i);
+                var pvpTalentCount = packet.ReadUInt32("PvPTalentCount", i);
+
+                for (var j = 0; j < talentCount; ++j)
+                    packet.ReadInt32("TalentSpellID", i, j);
+
+                for (var j = 0; j < pvpTalentCount; ++j)
+                    packet.ReadInt32("PvPTalentSpellID", i, j);
+
+                var artifactPowerCount = packet.ReadUInt32("ArtifactPowerCount", i);
+                var itemCount = packet.ReadUInt32("ItemCount", i);
+
+                for (var j = 0; j < statCount; ++j)
+                    packet.ReadInt32(((StatType)j).ToString(), i);
+
+                for (var j = 0; j < combatRatingCount; ++j)
+                    packet.ReadInt32(j < FilteredRatingList.Length ? FilteredRatingList[j] : $"[{j}] CombatRatingValue", i);
+
+                for (var j = 0; j < auraCount; ++j)
+                {
+                    packet.ReadPackedGuid128("CasterGUID", i, j);
+                    packet.ReadInt32("SpellID", i, j);
+                }
+
+                for (var j = 0; j < artifactPowerCount; ++j)
+                {
+                    packet.ReadInt32("ArtifactPowerID", i, j);
+                    packet.ReadInt16("Rank", i, j);
+                }
+
+                for (var j = 0; j < itemCount; ++j)
+                    ReadEncounterItemInfo(packet, i, j);
+            }
+        }
+
+        [Parser(Opcode.SMSG_INSTANCE_ENCOUNTER_START)]
+        public static void HandleInstanceEncounterStart(Packet packet)
+        {
+            packet.ReadInt32("InCombatResCount");
+            packet.ReadInt32("MaxInCombatResCount");
+            packet.ReadInt32("CombatResChargeRecovery");
+            packet.ReadInt32("NextCombatResChargeTime");
+
+            packet.ResetBitReader();
+            packet.ReadBit("InProgress");
+        }
+
+        [Parser(Opcode.SMSG_INSTANCE_ENCOUNTER_SET_SUPPRESSING_RELEASE)]
+        public static void HandleInstanceEncounterSetSuppressingRelease(Packet packet)
+        {
+            packet.ReadBit("ReleaseSuppressed");
+        }
+
+        [Parser(Opcode.SMSG_INSTANCE_ENCOUNTER_SET_ALLOWING_RELEASE)]
+        public static void HandleInstanceEncounterSetAllowingRelease(Packet packet)
+        {
+            packet.ReadBit("ReleaseAllowed");
+        }
+
+        [Parser(Opcode.CMSG_START_CHALLENGE_MODE)]
+        public static void HandleStartChallengeMode(Packet packet)
+        {
+            packet.ReadByte("Bag");
+            packet.ReadInt32("Slot");
+            packet.ReadPackedGuid128("GobGUID");
         }
     }
 }

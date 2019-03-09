@@ -12,8 +12,9 @@ namespace WowPacketParser.Enums.Version.V7_2_0_23826
                     return ClientOpcodes;
                 case Direction.ServerToClient:
                     return ServerOpcodes;
+                default:
+                    return MiscOpcodes;
             }
-            return MiscOpcodes;
         }
 
         private static readonly BiDictionary<Opcode, int> ClientOpcodes = new BiDictionary<Opcode, int>
@@ -521,7 +522,7 @@ namespace WowPacketParser.Enums.Version.V7_2_0_23826
             {Opcode.CMSG_QUERY_PLAYER_NAME, 0x368C},
             {Opcode.CMSG_QUERY_QUEST_COMPLETION_NPCS, 0x3173},
             {Opcode.CMSG_QUERY_QUEST_INFO, 0x3258},
-            {Opcode.CMSG_QUERY_QUEST_REWARDS, 0x332D},
+            {Opcode.CMSG_QUERY_TREASURE_PICKER, 0x332D},
             {Opcode.CMSG_QUERY_REALM_NAME, 0x368D},
             {Opcode.CMSG_QUERY_SCENARIO_POI, 0x3657},
             {Opcode.CMSG_QUERY_TIME, 0x34CC},
@@ -616,7 +617,7 @@ namespace WowPacketParser.Enums.Version.V7_2_0_23826
             {Opcode.CMSG_SET_ASSISTANT_LEADER, 0x3650},
             {Opcode.CMSG_SET_BACKPACK_AUTOSORT_DISABLED, 0x330A},
             {Opcode.CMSG_SET_BANK_AUTOSORT_DISABLED, 0x330B},
-            {Opcode.CMSG_SET_BANK_BAG_SLOT_FLAG, 0x3309},
+            {Opcode.CMSG_CHANGE_BANK_BAG_SLOT_FLAG, 0x3309},
             {Opcode.CMSG_SET_CONTACT_NOTES, 0x36D2},
             {Opcode.CMSG_SET_CURRENCY_FLAGS, 0x3169},
             {Opcode.CMSG_SET_DIFFICULTY_ID, 0x320E},
@@ -1029,6 +1030,7 @@ namespace WowPacketParser.Enums.Version.V7_2_0_23826
             {Opcode.SMSG_GARRISON_COMPLETE_MISSION_RESULT, 0x2909},
             {Opcode.SMSG_GARRISON_CREATE_RESULT, 0x28FC},
             {Opcode.SMSG_GARRISON_DELETE_RESULT, 0x2920},
+            {Opcode.SMSG_GARRISON_FOLLOWER_CATEGORIES, 0x2901},
             {Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_ABILITIES, 0x2914},
             {Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_DURABILITY, 0x2904},
             {Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_ITEM_LEVEL, 0x2913},
@@ -1079,6 +1081,7 @@ namespace WowPacketParser.Enums.Version.V7_2_0_23826
             {Opcode.SMSG_GOSSIP_COMPLETE, 0x2A96},
             {Opcode.SMSG_GOSSIP_MESSAGE, 0x2A97},
             {Opcode.SMSG_GOSSIP_POI, 0x27D9},
+            {Opcode.SMSG_GOSSIP_TEXT_UPDATE, 0x2A98},
             {Opcode.SMSG_GROUP_ACTION_THROTTLED, 0x259C},
             {Opcode.SMSG_GROUP_DECLINE, 0x27D4},
             {Opcode.SMSG_GROUP_DESTROYED, 0x27D6},
@@ -1436,7 +1439,7 @@ namespace WowPacketParser.Enums.Version.V7_2_0_23826
             {Opcode.SMSG_QUERY_PET_NAME_RESPONSE, 0x2702},
             {Opcode.SMSG_QUERY_PLAYER_NAME_RESPONSE, 0x26FF},
             {Opcode.SMSG_QUERY_QUEST_INFO_RESPONSE, 0x2A95},
-            {Opcode.SMSG_QUERY_QUEST_REWARD_RESPONSE, 0x283F},
+            {Opcode.SMSG_QUERY_TREASURE_PICKER_RESPONSE, 0x283F},
             {Opcode.SMSG_QUERY_TIME_RESPONSE, 0x271A},
             {Opcode.SMSG_QUEST_COMPLETION_NPC_RESPONSE, 0x2A81},
             {Opcode.SMSG_QUEST_CONFIRM_ACCEPT, 0x2A8E},
@@ -1447,7 +1450,6 @@ namespace WowPacketParser.Enums.Version.V7_2_0_23826
             {Opcode.SMSG_QUEST_GIVER_QUEST_DETAILS, 0x2A91},
             {Opcode.SMSG_QUEST_GIVER_QUEST_FAILED, 0x2A85},
             {Opcode.SMSG_QUEST_GIVER_QUEST_LIST_MESSAGE, 0x2A99},
-            {Opcode.SMSG_QUEST_GIVER_QUEST_MESSAGE, 0x2A98},
             {Opcode.SMSG_QUEST_GIVER_QUEST_TURN_IN_FAILURE, 0x284B},
             {Opcode.SMSG_QUEST_GIVER_REQUEST_ITEMS, 0x2A92},
             {Opcode.SMSG_QUEST_GIVER_STATUS, 0x2A9A},
@@ -1491,7 +1493,7 @@ namespace WowPacketParser.Enums.Version.V7_2_0_23826
             {Opcode.SMSG_REQUEST_PVP_BRAWL_INFO_RESPONSE, 0x25D5},
             {Opcode.SMSG_REQUEST_PVP_REWARDS_RESPONSE, 0x25D4},
             {Opcode.SMSG_RESEARCH_COMPLETE, 0x2585},
-            {Opcode.SMSG_RESET_AREA_TRIGGER, 0x2640},
+            {Opcode.SMSG_AREA_TRIGGER_RESET, 0x2640},
             {Opcode.SMSG_RESET_COMPRESSION_CONTEXT, 0x304F},
             {Opcode.SMSG_RESET_FAILED_NOTIFY, 0x26E1},
             {Opcode.SMSG_RESET_RANGED_COMBAT_TIMER, 0x2713},

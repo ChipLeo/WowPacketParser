@@ -42,16 +42,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                     {
                         var guid = packet.ReadPackedGuid128("Object Guid", i);
 
-                        WoWObject obj;
                         var updates = ReadValuesUpdateBlock(packet, guid.GetObjectType(), i, false);
-
-                        if (Storage.Objects.TryGetValue(guid, out obj))
-                        {
-                            if (obj.ChangedUpdateFieldsList == null)
-                                obj.ChangedUpdateFieldsList = new List<Dictionary<int, UpdateField>>();
-                            obj.ChangedUpdateFieldsList.Add(updates);
-                        }
-
                         break;
                     }
                     case "CreateObject1":
@@ -413,13 +404,13 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                 bool hasMoveCurveID = packet.ReadBit("HasMoveCurveID", index);
 
                 if (packet.ReadBit("unkbit4C", index))
-                    areaTriggerTemplate.Flags |= (uint)AreaTriggerFlags.Unk2;
+                    areaTriggerTemplate.Flags |= (uint)AreaTriggerFlags.HasAnimId;
 
                 if (packet.ReadBit("unkbit50", index))
                     areaTriggerTemplate.Flags |= (uint)AreaTriggerFlags.Unk3;
 
                 if (packet.ReadBit("unkbit58", index))
-                    areaTriggerTemplate.Flags |= (uint)AreaTriggerFlags.Unk4;
+                    areaTriggerTemplate.Flags |= (uint)AreaTriggerFlags.HasAnimKitId;
 
                 if (packet.ReadBit("HasAreaTriggerSphere", index))
                     areaTriggerTemplate.Type = (byte)AreaTriggerType.Sphere;
@@ -459,10 +450,10 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                 if (hasMoveCurveID)
                     spellAreaTrigger.MoveCurveId = packet.ReadInt32("MoveCurveID", index);
 
-                if ((areaTriggerTemplate.Flags & (int)AreaTriggerFlags.Unk2) != 0)
+                if ((areaTriggerTemplate.Flags & (int)AreaTriggerFlags.HasAnimId) != 0)
                     packet.ReadInt32();
 
-                if ((areaTriggerTemplate.Flags & (int)AreaTriggerFlags.Unk4) != 0)
+                if ((areaTriggerTemplate.Flags & (int)AreaTriggerFlags.HasAnimKitId) != 0)
                     packet.ReadUInt32();
 
                 if (areaTriggerTemplate.Type == (byte)AreaTriggerType.Sphere)
@@ -645,7 +636,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                     continue;
 
                 string key = "Block Value " + i;
-                string value = blockVal.UInt32Value + "/" + blockVal.SingleValue;
+                string value = blockVal.UInt32Value + "/" + blockVal.FloatValue;
 
                 if (i < objectEnd)
                     key = UpdateFields.GetUpdateFieldName<ObjectField>(i);
@@ -812,7 +803,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                             continue;
 
                         var blockVal = packet.ReadUpdateField();
-                        string value = blockVal.UInt32Value + "/" + blockVal.SingleValue;
+                        string value = blockVal.UInt32Value + "/" + blockVal.FloatValue;
                         packet.AddValue(key, value, index, j);
                     }
                 }

@@ -1,4 +1,5 @@
 ﻿using WowPacketParser.Enums;
+using WowPacketParser.Loading;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
@@ -52,7 +53,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadPackedGuid128("Player");
         }
 
-        [Parser(Opcode.CMSG_SET_BANK_BAG_SLOT_FLAG)]
+        [Parser(Opcode.CMSG_CHANGE_BANK_BAG_SLOT_FLAG)]
         public static void HandleSetBankBagSlotFlag(Packet packet)
         {
             packet.ReadInt32("unk1");
@@ -147,27 +148,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             packet.ReadInt32("TokenPollTimeSeconds");
             packet.ReadInt32E<ConsumableTokenRedeem>("TokenRedeemIndex");
-        }
-
-        [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS_GLUE_SCREEN, ClientVersionBuild.V7_1_5_23360)]
-        public static void HandleFeatureSystemStatusGlueScreen715(Packet packet)
-        {
-            packet.ReadBit("BpayStoreEnabled");
-            packet.ReadBit("BpayStoreAvailable");
-            packet.ReadBit("BpayStoreDisabledByParentalControls");
-            packet.ReadBit("CharUndeleteEnabled");
-            packet.ReadBit("CommerceSystemEnabled");
-            packet.ReadBit("Unk14");
-            packet.ReadBit("WillKickFromWorld");
-            packet.ReadBit("IsExpansionPreorderInStore");
-            packet.ReadBit("KioskModeEnabled");
-            packet.ReadBit("CompetitiveModeEnabled");
-            packet.ReadBit("NoHandler"); // not accessed in handler
-            packet.ReadBit("TrialBoostEnabled");
-            packet.ReadBit("unk");
-            packet.ReadInt32("TokenPollTimeSeconds");
-            packet.ReadInt32E<ConsumableTokenRedeem>("TokenRedeemIndex");
-            packet.ReadInt64("TokenBalanceAmount");
         }
 
         [Parser(Opcode.SMSG_INITIAL_SETUP)]
@@ -273,6 +253,16 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
                 packet.AddSniffData(StoreNameType.PageText, (int)entry, "QUERY_RESPONSE");
                 Storage.PageTexts.Add(pageText, packet.TimeSpan);
+
+                if (ClientLocale.PacketLocale != LocaleConstant.enUS && pageText.Text != string.Empty)
+                {
+                    PageTextLocale localesPageText = new PageTextLocale
+                    {
+                        ID = pageText.ID,
+                        Text = pageText.Text
+                    };
+                    Storage.LocalesPageText.Add(localesPageText, packet.TimeSpan);
+                }
             }
         }
 
@@ -586,6 +576,30 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadPackedGuid128("guid2");
         }
 
+        [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS_GLUE_SCREEN, ClientVersionBuild.V7_1_5_23360)]
+        public static void HandleFeatureSystemStatusGlueScreen715(Packet packet)
+        {
+            packet.ReadBit("BpayStoreEnabled");
+            packet.ReadBit("BpayStoreAvailable");
+            packet.ReadBit("BpayStoreDisabledByParentalControls");
+            packet.ReadBit("CharUndeleteEnabled");
+            packet.ReadBit("CommerceSystemEnabled");
+            packet.ReadBit("Unk14");
+            packet.ReadBit("WillKickFromWorld");
+            packet.ReadBit("IsExpansionPreorderInStore");
+            packet.ReadBit("KioskModeEnabled");
+            packet.ReadBit("CompetetiveModeEnabled");
+            packet.ReadBit("NoHandler"); // not accessed in handler
+            packet.ReadBit("TrialBoostEnabled");
+            packet.ReadBit("TokenBalanceEnabled");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_3_0_24920))
+            {
+                packet.ReadBit("LiveRegionCharacterListEnabled");
+                packet.ReadBit("LiveRegionCharacterCopyEnabled");
+                packet.ReadBit("LiveRegionAccountCopyEnabled");
+            }
+        }
+
         [Parser(Opcode.SMSG_CAMERA_EFFECT)]
         public static void HandleCameraEffect(Packet packet)
         {
@@ -642,6 +656,34 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
             packet.ReadPackedGuid128("GUID"); // Creature or GameObject
             packet.ReadInt32("RaceID");
+        }
+
+        public static void ReadAreaPoiData(Packet packet, params object[] idx)
+        {
+            packet.ReadTime("StartTime", idx);
+            packet.ReadInt32("AreaPoiID", idx);
+            packet.ReadInt32("DurationSec", idx);
+            packet.ReadUInt32("WorldStateVariableID", idx);
+            packet.ReadUInt32("WorldStateValue", idx);
+        }
+
+        [Parser(Opcode.SMSG_AREA_POI_UPDATE)]
+        public static void HandleAreaPoiUpdate(Packet packet)
+        {
+            var count = packet.ReadInt32("Count");
+
+            for (var i = 0; i < count; i++)
+                ReadAreaPoiData(packet, i);
+        }
+
+        [Parser(Opcode.CMSG_REQUEST_AREA_POI_UPDATE)]
+        public static void HandleAreaPoiZero(Packet packet) { }
+
+        [Parser(Opcode.SMSG_SET_MOVEMENT_ANIM_KIT)]
+        public static void HandlePlayOneShotAnimKit(Packet packet)
+        {
+            packet.ReadPackedGuid128("Unit");
+            packet.ReadUInt16("AnimKitID");
         }
     }
 }

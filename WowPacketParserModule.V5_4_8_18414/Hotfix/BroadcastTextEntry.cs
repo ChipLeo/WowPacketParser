@@ -2,7 +2,7 @@
 using WowPacketParser.Hotfix;
 using WowPacketParser.Store.Objects;
 
-namespace WowPacketParserModule.V5_4_8_18291.Hotfix
+namespace WowPacketParserModule.V5_4_8_18414.Hotfix
 {
     [HotfixStructure(DB2Hash.BroadcastText)]
     public class BroadcastTextEntry : IBroadcastTextEntry

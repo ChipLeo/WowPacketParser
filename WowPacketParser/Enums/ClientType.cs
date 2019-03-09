@@ -1,4 +1,4 @@
-namespace WowPacketParser.Enums
+﻿namespace WowPacketParser.Enums
 {
     public enum ClientType
     {
@@ -8,6 +8,7 @@ namespace WowPacketParser.Enums
         Cataclysm          = 3,
         MistsOfPandaria    = 4,
         WarlordsOfDraenor  = 5,
-        Legion             = 6
+        Legion             = 6,
+        BattleForAzeroth   = 7
     }
 }

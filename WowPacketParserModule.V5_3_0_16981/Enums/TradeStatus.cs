@@ -1,4 +1,4 @@
-namespace WowPacketParserModule.V5_3_0_16981.Enums
+﻿namespace WowPacketParserModule.V5_3_0_16981.Enums
 {
     public enum TradeStatus
     {

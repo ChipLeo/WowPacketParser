@@ -1,4 +1,4 @@
-using WowPacketParser.Enums;
+﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 
@@ -80,7 +80,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             for (int i = 0; i < spellHistoryCount; i++)
             {
-
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_1_0_22900))
                     ReadPetSpellHistoryData(packet, i, "PetSpellHistory");
                 else
@@ -92,7 +91,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         public static void HandlePetMode(Packet packet)
         {
             packet.ReadPackedGuid128("PetGUID");
-            ReadPetFlags(packet, "PetMode");
+            ReadPetFlags(packet, "PetModeAndOrders");
         }
 
         [Parser(Opcode.SMSG_SET_PET_SPECIALIZATION)]
@@ -114,6 +113,29 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         public static void HandlePetStableResult(Packet packet)
         {
             packet.ReadByteE<PetStableResult>("Result");
+        }
+
+        [Parser(Opcode.SMSG_PET_NAME_INVALID)]
+        public static void HandlePetNameInvalid(Packet packet)
+        {
+            V6_0_2_19033.Parsers.PetHandler.ReadPetRenameData(packet);
+        }
+
+        [Parser(Opcode.CMSG_PET_SPELL_AUTOCAST)]
+        public static void HandlePetSpellAutocast(Packet packet)
+        {
+            packet.ReadPackedGuid128("PetGUID");
+            packet.ReadUInt32<SpellId>("SpellID");
+            packet.ResetBitReader();
+            packet.ReadBit("AutocastEnabled");
+        }
+
+        [Parser(Opcode.SMSG_LEVEL_UPDATE)]
+        public static void HandleLevelUpdate(Packet packet)
+        {
+            packet.ReadPackedGuid128("GUID");
+            packet.ResetBitReader();
+            packet.ReadBit("SuppressLevelUpAnim");
         }
     }
 }

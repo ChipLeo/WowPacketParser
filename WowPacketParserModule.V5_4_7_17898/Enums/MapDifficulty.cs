@@ -1,4 +1,4 @@
-namespace WowPacketParserModule.V5_4_7_17898.Enums
+﻿namespace WowPacketParserModule.V5_4_7_17898.Enums
 {
     public enum MapDifficulty
     {

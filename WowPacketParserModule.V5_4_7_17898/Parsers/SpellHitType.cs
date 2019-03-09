@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace WowPacketParserModule.V5_4_7_17898.Enums
 {

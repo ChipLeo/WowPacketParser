@@ -1,4 +1,4 @@
-namespace WowPacketParser.Misc
+﻿namespace WowPacketParser.Misc
 {
     public enum MovementStatusElements
     {

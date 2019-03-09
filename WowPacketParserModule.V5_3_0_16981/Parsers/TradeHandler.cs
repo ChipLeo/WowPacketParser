@@ -1,4 +1,4 @@
-using WowPacketParser.Enums;
+﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using TradeStatus530 = WowPacketParserModule.V5_3_0_16981.Enums.TradeStatus;

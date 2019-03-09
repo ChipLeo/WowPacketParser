@@ -1,4 +1,4 @@
-using WowPacketParser.Enums;
+﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using SpellParsers = WowPacketParserModule.V7_2_0_23758.Parsers.SpellHandler;

@@ -1,4 +1,4 @@
-using WowPacketParser.Enums;
+﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 
@@ -57,27 +57,18 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             return itemId;
         }
 
+        public static void ItemEnchantInstanceData(Packet packet, params object[] idx)
+        {
+            packet.ReadUInt32("ID");
+            packet.ReadUInt32("Expiration");
+            packet.ReadUInt32("Charges");
+            packet.ReadByte("Slot");
+        }
+
         public static void ReadItemGemInstanceData(Packet packet, params object[] idx)
         {
             packet.ReadByte("Slot", idx);
             Parsers.ItemHandler.ReadItemInstance(packet, "Item", idx);
-        }
-
-        public static void ReadItemPurchaseContents(Packet packet, params object[] indexes)
-        {
-            packet.ReadInt64("Money");
-
-            for (int i = 0; i < 5; i++)
-                ReadItemPurchaseRefundItem(packet, indexes, i, "ItemPurchaseRefundItem");
-
-            for (int i = 0; i < 5; i++)
-                ReadItemPurchaseRefundItem(packet, indexes, i, "ItemPurchaseRefundCurrency");
-        }
-
-        public static void ReadItemPurchaseRefundItem(Packet packet, params object[] indexes)
-        {
-            packet.ReadInt32<ItemId>("ItemID", indexes);
-            packet.ReadInt32("ItemCount", indexes);
         }
 
         [Parser(Opcode.CMSG_CHANGE_BAG_SLOT_FLAG)]
@@ -164,15 +155,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("unk2");
         }
 
-        [Parser(Opcode.SMSG_SET_ITEM_PURCHASE_DATA)]
-        public static void HandleSetItemPurchaseData(Packet packet)
-        {
-            packet.ReadPackedGuid128("ItemGUID");
-            ReadItemPurchaseContents(packet, "ItemPurchaseContents");
-            packet.ReadInt32("Flags");
-            packet.ReadInt32("PurchaseTime");
-        }
-
         [Parser(Opcode.CMSG_BUY_ITEM)]
         public static void HandleBuyItem(Packet packet)
         {
@@ -198,6 +180,28 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         public static void HandleSocketGemsResult(Packet packet)
         {
             packet.ReadPackedGuid128("Item");
+        }
+
+        public static void ReadItemPurchaseContents(Packet packet, params object[] indexes)
+        {
+            packet.ReadUInt64("Money");
+
+            for (int i = 0; i < 5; i++)
+                V6_0_2_19033.Parsers.ItemHandler.ReadItemPurchaseRefundItem(packet, indexes, i, "ItemPurchaseRefundItem");
+
+            for (int i = 0; i < 5; i++)
+                V6_0_2_19033.Parsers.ItemHandler.ReadItemPurchaseRefundCurrency(packet, indexes, i, "ItemPurchaseRefundCurrency");
+        }
+
+        [Parser(Opcode.SMSG_SET_ITEM_PURCHASE_DATA)]
+        public static void HandleSetItemPurchaseData(Packet packet)
+        {
+            packet.ReadPackedGuid128("ItemGUID");
+
+            ReadItemPurchaseContents(packet, "ItemPurchaseContents");
+
+            packet.ReadInt32("Flags");
+            packet.ReadInt32("PurchaseTime");
         }
     }
 }

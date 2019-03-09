@@ -1,4 +1,4 @@
-using WowPacketParser.Enums;
+﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
@@ -11,7 +11,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         [Parser(Opcode.SMSG_GAME_OBJECT_SET_STATE)]
         public static void HandleGameObjectSetState(Packet packet)
         {
-            packet.ReadPackedGuid128("GO");
+            packet.ReadPackedGuid128("GUID");
             packet.ReadByte("State");
         }
 

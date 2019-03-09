@@ -1,4 +1,4 @@
-using WowPacketParser.Enums;
+﻿using WowPacketParser.Enums;
 using WowPacketParser.Loading;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
@@ -94,7 +94,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadPackedGuid128("Guid");
         }
 
-        [Parser(Opcode.CMSG_QUERY_QUEST_REWARDS)]
+        [Parser(Opcode.CMSG_QUERY_TREASURE_PICKER)]
         public static void HandleQuestQueryRewards(Packet packet)
         {
             packet.ReadInt32("QuestID");
@@ -133,7 +133,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                 packet.ReadInt32<QuestId>("QuestID", i);
         }
 
-        [Parser(Opcode.SMSG_QUERY_QUEST_REWARD_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_TREASURE_PICKER_RESPONSE)]
         public static void HandleQuestRewardResponce(Packet packet)
         {
             packet.ReadInt32("QuestID");
@@ -330,7 +330,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                 uint bits6 = packet.ReadBits(8);
                 questInfoObjective.Description = packet.ReadWoWString("Description", bits6, i);
 
-                if (BinaryPacketReader.GetLocale() != LocaleConstant.enUS && questInfoObjective.Description != string.Empty)
+                if (ClientLocale.PacketLocale != LocaleConstant.enUS && questInfoObjective.Description != string.Empty)
                 {
                     QuestObjectivesLocale localesQuestObjectives = new QuestObjectivesLocale
                     {
@@ -356,12 +356,11 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             quest.QuestTurnTargetName = packet.ReadWoWString("PortraitTurnInName", questTurnTargetNameLen);
             quest.QuestCompletionLog = packet.ReadWoWString("QuestCompletionLog", questCompletionLogLen);
 
-            if (BinaryPacketReader.GetLocale() != LocaleConstant.enUS)
+            if (ClientLocale.PacketLocale != LocaleConstant.enUS)
             {
                 LocalesQuest localesQuest = new LocalesQuest
                 {
                     ID = (uint)id.Key,
-                    Locale = BinaryPacketReader.GetClientLocale(),
                     LogTitle = quest.LogTitle,
                     LogDescription = quest.LogDescription,
                     QuestDescription = quest.QuestDescription,
@@ -693,7 +692,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                     if (ClientVersion.RemovedInVersion(ClientVersionBuild.V6_2_0_20173))
                         packet.ReadInt32("NumPoints", i, j);
 
-                    questPoi.WoDUnk1 = packet.ReadInt32("WoDUnk1", i, j);
+                    questPoi.SpawnTrackingID = packet.ReadInt32("WoDUnk1", i, j);
 
                     int int13 = packet.ReadInt32("QuestPOIBlobPoint", i, j);
                     for (int k = 0; k < int13; ++k)

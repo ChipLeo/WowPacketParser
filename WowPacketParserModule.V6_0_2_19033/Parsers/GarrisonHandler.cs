@@ -1,4 +1,4 @@
-using System.Reflection.Emit;
+﻿using System.Reflection.Emit;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
@@ -250,7 +250,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_GARRISON_IS_UPGRADEABLE_RESULT)]
         public static void HandleClientGarrisonUpgradeableResult(Packet packet)
         {
-            packet.ReadInt32("Result");
+            packet.ReadUInt32E<GarrisonResult>("Result");
         }
 
         [Parser(Opcode.SMSG_DISPLAY_TOAST, ClientVersionBuild.V6_0_2_19033, ClientVersionBuild.V6_1_0_19678)]
@@ -471,7 +471,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void HandleCreateShipment61x(Packet packet)
         {
             packet.ReadPackedGuid128("NpcGUID");
-            packet.ReadUInt32("Unk4");
+            packet.ReadUInt32("ShipmentsToCreate");
         }
 
         [Parser(Opcode.CMSG_COMPLETE_ALL_READY_SHIPMENTS)]
@@ -692,8 +692,15 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_GARRISON_CREATE_RESULT)]
         public static void HandleGarrisonCreateResult(Packet packet)
         {
-            packet.ReadInt32("Result");
-            packet.ReadInt32("GarrSiteID");
+            packet.ReadUInt32("Result");
+            packet.ReadUInt32("GarrSiteLevelID");
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_DELETE_RESULT)]
+        public static void HandleGarrisonDeleteResult(Packet packet)
+        {
+            packet.ReadUInt32("Result");
+            packet.ReadUInt32("GarrSiteID");
         }
 
         [Parser(Opcode.SMSG_GARRISON_BUILDING_LANDMARKS)]

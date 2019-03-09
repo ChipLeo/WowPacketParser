@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.IO;
 using WowPacketParser.Enums;
@@ -21,7 +21,7 @@ namespace WowPacketParser.Parsing.Parsers
 
         public static MovementInfo ReadMovementInfo(Packet packet, WowGuid guid, object index = null)
         {
-            if (ClientVersion.Build == ClientVersionBuild.V4_2_0_14333)
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_2_0_14333))
                 return ReadMovementInfo420(packet, index);
 
             return ReadMovementInfoGen(packet, guid, index);
@@ -179,7 +179,7 @@ namespace WowPacketParser.Parsing.Parsers
         {
             WowGuid guid = packet.ReadPackedGuid("GUID");
 
-            if (Storage.Objects != null && Storage.Objects.ContainsKey(guid))
+            if (guid.GetHighType() == HighGuidType.Creature && Storage.Objects != null && Storage.Objects.ContainsKey(guid))
             {
                 WoWObject obj = Storage.Objects[guid].Item1;
                 UpdateField uf;

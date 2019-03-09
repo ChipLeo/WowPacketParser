@@ -1,4 +1,4 @@
-namespace WowPacketParserModule.V5_4_8_18291.Enums
+﻿namespace WowPacketParserModule.V5_4_8_18291.Enums
 {
     public enum ChatMessageType : byte
     {

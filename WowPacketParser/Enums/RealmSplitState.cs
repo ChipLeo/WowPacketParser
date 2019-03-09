@@ -1,4 +1,4 @@
-namespace WowPacketParser.Enums
+﻿namespace WowPacketParser.Enums
 {
     // From GlueParent.lua
     public enum ClientSplitState

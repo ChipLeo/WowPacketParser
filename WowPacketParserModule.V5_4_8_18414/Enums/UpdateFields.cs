@@ -1,4 +1,4 @@
-namespace WowPacketParserModule.V5_4_8_18414.Enums
+﻿namespace WowPacketParserModule.V5_4_8_18414.Enums
 {
     public enum ObjectField
     {

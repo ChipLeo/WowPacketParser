@@ -1,4 +1,4 @@
-namespace WowPacketParser.Enums.Version.V6_1_0_19678
+﻿namespace WowPacketParser.Enums.Version.V6_1_0_19678
 {
     public enum SpellCastFailureReason : uint
     {

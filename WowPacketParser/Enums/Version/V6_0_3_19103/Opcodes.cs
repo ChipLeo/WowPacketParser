@@ -1,4 +1,4 @@
-using WowPacketParser.Misc;
+﻿using WowPacketParser.Misc;
 
 namespace WowPacketParser.Enums.Version.V6_0_3_19103
 {
@@ -6,11 +6,17 @@ namespace WowPacketParser.Enums.Version.V6_0_3_19103
     {
         public static BiDictionary<Opcode, int> Opcodes(Direction direction)
         {
-            if (direction == Direction.ClientToServer || direction == Direction.BNClientToServer)
-                return ClientOpcodes;
-            if (direction == Direction.ServerToClient || direction == Direction.BNServerToClient)
-                return ServerOpcodes;
-            return MiscOpcodes;
+            switch (direction)
+            {
+                case Direction.ClientToServer:
+                case Direction.BNClientToServer:
+                    return ClientOpcodes;
+                case Direction.ServerToClient:
+                case Direction.BNServerToClient:
+                    return ServerOpcodes;
+                default:
+                    return MiscOpcodes;
+            }
         }
 
         private static readonly BiDictionary<Opcode, int> ClientOpcodes = new BiDictionary<Opcode, int>
@@ -117,6 +123,8 @@ namespace WowPacketParser.Enums.Version.V6_0_3_19103
             {Opcode.CMSG_CHALLENGE_MODE_REQUEST_LEADERS, 0x0E66},
             {Opcode.CMSG_CHALLENGE_MODE_REQUEST_MAP_STATS, 0x0E78},
             {Opcode.CMSG_CHANGE_BAG_SLOT_FLAG, 0x1959},
+            {Opcode.CMSG_CHANGE_BANK_BAG_SLOT_FLAG, 0x0ADE},
+            {Opcode.CMSG_CHANGE_SUB_GROUP, 0x0BA4},
             {Opcode.CMSG_CHANGE_MONUMENT_APPEARANCE, 0x0B91},
             {Opcode.CMSG_CHANGE_SUB_GROUP, 0x0BA4},
             {Opcode.CMSG_CHARACTER_RENAME_REQUEST, 0x038B},
@@ -564,7 +572,7 @@ namespace WowPacketParser.Enums.Version.V6_0_3_19103
             {Opcode.CMSG_SET_ASSISTANT_LEADER, 0x0B26},
             {Opcode.CMSG_SET_BACKPACK_AUTOSORT_DISABLED, 0x0C9C},
             {Opcode.CMSG_SET_BANK_AUTOSORT_DISABLED, 0x1393},
-            {Opcode.CMSG_SET_BANK_BAG_SLOT_FLAG, 0x0ADE},
+            {Opcode.CMSG_CHANGE_BANK_BAG_SLOT_FLAG, 0x0ADE},
             {Opcode.CMSG_SET_CONTACT_NOTES, 0x03AC},
             {Opcode.CMSG_SET_CURRENCY_FLAGS, 0x14A1},
             {Opcode.CMSG_SET_DIFFICULTY_ID, 0x01F6},

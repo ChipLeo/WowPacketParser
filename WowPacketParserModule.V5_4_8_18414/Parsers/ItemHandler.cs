@@ -1,11 +1,7 @@
-using System;
-using WowPacketParser.Enums;
+﻿using WowPacketParser.Enums;
 using WowPacketParser.Hotfix;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
-using WowPacketParser.Store;
-using WowPacketParser.Store.Objects;
-using WowPacketParserModule.V5_4_8_18414.Enums;
 
 namespace WowPacketParserModule.V5_4_8_18414.Parsers
 {
@@ -813,7 +809,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             if (entry < 0)
             {
                 packet.WriteLine("Row {0} has been removed.", -entry);
-                return;
+                HotfixStoreMgr.RemoveRecord(type, entry);
             }
             else
             {

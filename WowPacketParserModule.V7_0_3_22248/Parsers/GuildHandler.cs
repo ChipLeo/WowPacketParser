@@ -1,4 +1,4 @@
-using WowPacketParser.Enums;
+﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 
@@ -224,6 +224,30 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32("VirtualRealmAddress");
             ItemHandler.ReadItemInstance(packet, "Item");
             packet.ReadWoWString("Name", packet.ReadBits(6));
+        }
+
+        [Parser(Opcode.SMSG_GUILD_REWARD_LIST)]
+        public static void HandleGuildRewardsList(Packet packet)
+        {
+            packet.ReadTime("Version");
+
+            var size = packet.ReadUInt32("RewardItemsCount");
+            for (int i = 0; i < size; i++)
+            {
+                packet.ReadUInt32<ItemId>("ItemID", i);
+                packet.ReadUInt32("Unk4", i);
+                var achievementReqCount = packet.ReadInt32("AchievementsRequiredCount", i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_3_5_25848))
+                    packet.ReadUInt64("RaceMask", i);
+                else
+                    packet.ReadUInt32("RaceMask", i);
+                packet.ReadInt32("MinGuildLevel", i);
+                packet.ReadInt32("MinGuildRep", i);
+                packet.ReadInt64("Cost", i);
+
+                for (int j = 0; j < achievementReqCount; j++)
+                    packet.ReadInt32("AchievementsRequired", i, j);
+            }
         }
     }
 }
