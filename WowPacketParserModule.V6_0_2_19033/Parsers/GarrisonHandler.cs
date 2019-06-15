@@ -264,7 +264,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             if (type == 3)
             {
                 packet.ReadBit("BonusRoll");
-                ItemHandler.ReadItemInstance(packet);
+                Substructures.ItemHandler.ReadItemInstance(packet);
                 packet.ReadInt32("SpecializationID");
                 packet.ReadInt32("ItemQuantity?");
             }
@@ -284,7 +284,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             if (type == 0)
             {
                 packet.ReadBit("BonusRoll");
-                ItemHandler.ReadItemInstance(packet);
+                Substructures.ItemHandler.ReadItemInstance(packet);
                 packet.ReadInt32("SpecializationID");
                 packet.ReadInt32("ItemQuantity?");
             }
@@ -304,7 +304,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             if (type == 3)
             {
                 packet.ReadBit("BonusRoll");
-                ItemHandler.ReadItemInstance(packet);
+                Substructures.ItemHandler.ReadItemInstance(packet);
                 packet.ReadInt32("SpecializationID");
                 packet.ReadInt32("ItemQuantity?");
             }
@@ -324,7 +324,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             if (type == 2)
             {
                 packet.ReadBit("BonusRoll");
-                ItemHandler.ReadItemInstance(packet);
+                Substructures.ItemHandler.ReadItemInstance(packet);
                 packet.ReadInt32("SpecializationID");
                 packet.ReadInt32("ItemQuantity?");
             }
@@ -344,7 +344,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             if (type == 2)
             {
                 packet.ReadBit("BonusRoll");
-                ItemHandler.ReadItemInstance(packet);
+                Substructures.ItemHandler.ReadItemInstance(packet);
                 packet.ReadInt32("SpecializationID");
                 packet.ReadInt32("ItemQuantity?");
             }
@@ -364,7 +364,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             if (type == 0)
             {
                 packet.ReadBit("BonusRoll");
-                ItemHandler.ReadItemInstance(packet);
+                Substructures.ItemHandler.ReadItemInstance(packet);
                 packet.ReadInt32("SpecializationID");
                 packet.ReadInt32("ItemQuantity?");
             }

@@ -206,14 +206,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadInt32("OnUseEnchantmentID", i);
                 packet.ReadInt32("Flags", i);
 
-                packet.ResetBitReader();
-                var int76 = packet.ReadBits("SocketEnchant", 2, i);
-                packet.ReadBit("Locked", i);
-                for (int j = 0; j < int76; j++)
-                {
-                    packet.ReadByte("SocketIndex", i, j);
-                    ItemHandler.ReadItemInstance(packet, i, j, "ItemInstance");
-                }
+                Substructures.ItemHandler.ReadItemInstance(packet, i, "ItemInstance");
             }
         }
 

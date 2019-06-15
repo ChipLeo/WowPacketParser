@@ -113,7 +113,7 @@ namespace WowPacketParser.Enums.Version
                     return fieldValue;
             }
 
-            return Convert.ToInt32(field);
+            return -1;
         }
 
         public static string GetUpdateFieldName<T>(int field) // where T: System.Enum // C# 7.3
@@ -490,6 +490,36 @@ namespace WowPacketParser.Enums.Version
                 case ClientVersionBuild.V8_0_1_28153:
                 {
                     return "V8_0_1_27101";
+                }
+                case ClientVersionBuild.V8_1_0_28724:
+                case ClientVersionBuild.V8_1_0_28768:
+                case ClientVersionBuild.V8_1_0_28807:
+                case ClientVersionBuild.V8_1_0_28822:
+                case ClientVersionBuild.V8_1_0_28833:
+                case ClientVersionBuild.V8_1_0_29088:
+                case ClientVersionBuild.V8_1_0_29139:
+                case ClientVersionBuild.V8_1_0_29235:
+                case ClientVersionBuild.V8_1_0_29285:
+                case ClientVersionBuild.V8_1_0_29297:
+                case ClientVersionBuild.V8_1_0_29482:
+                case ClientVersionBuild.V8_1_0_29600:
+                case ClientVersionBuild.V8_1_0_29621:
+                {
+                    return "V8_1_0_28724";
+                }
+                case ClientVersionBuild.V8_1_5_29683:
+                case ClientVersionBuild.V8_1_5_29701:
+                case ClientVersionBuild.V8_1_5_29718:
+                case ClientVersionBuild.V8_1_5_29732:
+                case ClientVersionBuild.V8_1_5_29737:
+                case ClientVersionBuild.V8_1_5_29814:
+                case ClientVersionBuild.V8_1_5_29869:
+                case ClientVersionBuild.V8_1_5_29896:
+                case ClientVersionBuild.V8_1_5_29981:
+                case ClientVersionBuild.V8_1_5_30477:
+                case ClientVersionBuild.V8_1_5_30706:
+                {
+                    return "V8_1_5_29683";
                 }
                 default:
                 {

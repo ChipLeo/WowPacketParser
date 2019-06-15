@@ -285,7 +285,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             var itemCount = packet.ReadInt32("ItemCount");
             for (int i = 0; i < itemCount; i++)
-                ItemHandler.ReadItemInstance(packet, i);
+                Substructures.ItemHandler.ReadItemInstance(packet, i);
         }
 
         [Parser(Opcode.SMSG_UPDATE_VAS_PURCHASE_STATES_RESPONSE)]

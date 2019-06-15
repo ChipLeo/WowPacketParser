@@ -91,6 +91,9 @@
     <LangVersion>6</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DB2FileReaderLib">
+      <HintPath>..\packages\DB2FileReaderLib.1.0.0.0\lib\DB2FileReaderLib.dll</HintPath>
+    </Reference>
     <Reference Include="DotNetZip, Version=1.12.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetZip.1.12.0\lib\net20\DotNetZip.dll</HintPath>
     </Reference>
@@ -116,9 +119,6 @@
     <Reference Include="Tamir.SharpSSH, Version=1.1.1.13, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Tamir.SharpSSH.1.1.1.13\lib\Tamir.SharpSSH.dll</HintPath>
-    </Reference>
-    <Reference Include="WDCReaderLib">
-      <HintPath>..\packages\WDCReaderLib.1.0.0.0\lib\WDCReaderLib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -391,6 +391,7 @@
     <Compile Include="Enums\UnitFlags.cs" />
     <Compile Include="Enums\UnitFlags3.cs" />
     <Compile Include="Enums\UnknownFlags.cs" />
+    <Compile Include="Enums\UpdateFieldFlag.cs" />
     <Compile Include="Enums\UpdateFields.cs" />
     <Compile Include="Enums\UpdateFlag.cs" />
     <Compile Include="Enums\UpdateType.cs" />
@@ -463,7 +464,9 @@
     <Compile Include="Enums\Version\V7_3_0_24920\Opcodes.cs" />
     <Compile Include="Enums\Version\V7_3_2_25383\Opcodes.cs" />
     <Compile Include="Enums\Version\V7_3_5_25848\Opcodes.cs" />
+    <Compile Include="Enums\Version\V8_1_0_28724\Opcodes.cs" />
     <Compile Include="Enums\Version\V8_0_1_27101\Opcodes.cs" />
+    <Compile Include="Enums\Version\V8_1_5_29620\Opcodes.cs" />
     <Compile Include="Enums\VictimStates.cs" />
     <Compile Include="Enums\VoidTransferError.cs" />
     <Compile Include="Enums\WardenCheckType.cs" />
@@ -486,6 +489,7 @@
     <Compile Include="Misc\ClientVersion.cs" />
     <Compile Include="Misc\ConcurrentPriorityQueue.cs" />
     <Compile Include="Misc\Configuration.cs" />
+    <Compile Include="Misc\DynamicUpdateField.cs" />
     <Compile Include="Misc\Extensions.cs" />
     <Compile Include="Misc\FileCompressionAttribute.cs" />
     <Compile Include="Misc\Filters.cs" />
@@ -609,6 +613,9 @@
     <Compile Include="Store\Objects\CreatureTemplateLocale.cs" />
     <Compile Include="Store\Objects\CreatureTemplateScaling.cs" />
     <Compile Include="Store\Objects\CreatureText.cs" />
+    <Compile Include="Store\Objects\UpdateFields\LegacyImplementation\ConversationData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\LegacyImplementation\UnitData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\LegacyImplementation\UpdateFieldExtensions.cs" />
     <Compile Include="Store\Objects\GameObjectAddon.cs" />
     <Compile Include="Store\Objects\GameObject.cs" />
     <Compile Include="Store\Objects\GameObjectModel.cs" />
@@ -619,6 +626,7 @@
     <Compile Include="Store\Objects\GossipMenuOptionAction.cs" />
     <Compile Include="Store\Objects\GossipMenuOptionBox.cs" />
     <Compile Include="Store\Objects\GossipMenuOptionTrainer.cs" />
+    <Compile Include="Store\Objects\HotfixBlob.cs" />
     <Compile Include="Store\Objects\IBroadcastTextEntry.cs" />
     <Compile Include="Store\Objects\Item.cs" />
     <Compile Include="Store\Objects\PageTextLocale.cs" />
@@ -661,6 +669,40 @@
     <Compile Include="Store\Objects\TrainerSpell.cs" />
     <Compile Include="Store\Objects\Unit.cs" />
     <Compile Include="Store\Objects\CreatureTemplate.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IActivePlayerData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IAreaTriggerData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IArenaCooldown.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IArtifactPower.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IAzeriteEmpoweredItemData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IAzeriteItemData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\ICharacterRestriction.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IContainerData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IConversationActor.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IConversationData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IConversationLine.cs" />
+    <Compile Include="Store\Objects\UpdateFields\ICorpseData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IDynamicObjectData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IGameObjectData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IItemData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IItemEnchantment.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IObjectData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IPassiveSpellHistory.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IPlayerData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IPVPInfo.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IQuestLog.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IResearch.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IRestInfo.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IScaleCurve.cs" />
+    <Compile Include="Store\Objects\UpdateFields\ISceneObjectData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\ISkillInfo.cs" />
+    <Compile Include="Store\Objects\UpdateFields\ISocketedGem.cs" />
+    <Compile Include="Store\Objects\UpdateFields\ISpellFlatModByLabel.cs" />
+    <Compile Include="Store\Objects\UpdateFields\ISpellPctModByLabel.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IUnitChannel.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IUnitData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\IVisibleItem.cs" />
+    <Compile Include="Store\Objects\UpdateFields\LegacyImplementation\GameObjectData.cs" />
+    <Compile Include="Store\Objects\UpdateFields\LegacyImplementation\ObjectData.cs" />
     <Compile Include="Store\Objects\VehicleTemplateAccessory.cs" />
     <Compile Include="Store\Objects\WeatherUpdate.cs" />
     <Compile Include="Store\Objects\WoWObject.cs" />

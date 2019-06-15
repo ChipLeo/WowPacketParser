@@ -68,7 +68,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         public static void ReadItemGemInstanceData(Packet packet, params object[] idx)
         {
             packet.ReadByte("Slot", idx);
-            Parsers.ItemHandler.ReadItemInstance(packet, "Item", idx);
+            Substructures.ItemHandler.ReadItemInstance(packet, "Item", idx);
         }
 
         [Parser(Opcode.CMSG_CHANGE_BAG_SLOT_FLAG)]
@@ -126,7 +126,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("IsBonusRoll");
             packet.ReadBit("IsEncounterLoot");
 
-            Parsers.ItemHandler.ReadItemInstance(packet, "ItemInstance");
+            Substructures.ItemHandler.ReadItemInstance(packet, "ItemInstance");
         }
 
         [Parser(Opcode.CMSG_USE_ITEM)]
@@ -162,14 +162,14 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadPackedGuid128("ContainerGUID");
 
             if (ClientVersion.RemovedInVersion(ClientVersionBuild.V7_2_0_23826))
-                V6_0_2_19033.Parsers.ItemHandler.ReadItemInstance(packet, "ItemInstance");
+                Substructures.ItemHandler.ReadItemInstance(packet, "ItemInstance");
 
             packet.ReadInt32("Quantity");
             packet.ReadUInt32("Muid");
             packet.ReadUInt32("Slot");
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_2_0_23826))
-                V6_0_2_19033.Parsers.ItemHandler.ReadItemInstance(packet, "ItemInstance");
+                Substructures.ItemHandler.ReadItemInstance(packet, "ItemInstance");
 
             packet.ResetBitReader();
 

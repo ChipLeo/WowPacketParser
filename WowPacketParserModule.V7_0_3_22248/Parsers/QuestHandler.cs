@@ -654,7 +654,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32("SkillLineIDReward");
             packet.ReadInt32("NumSkillUpsReward");
 
-            V6_0_2_19033.Parsers.ItemHandler.ReadItemInstance(packet, "ItemReward"); // 23420
+            Substructures.ItemHandler.ReadItemInstance(packet, "ItemReward"); // 23420
 
             packet.ResetBitReader();
 
@@ -662,6 +662,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("LaunchGossip");
             packet.ReadBit("LaunchQuest");
             packet.ReadBit("HideChatMessage");
+
+            Substructures.ItemHandler.ReadItemInstance(packet, "ItemReward");
         }
 
         [Parser(Opcode.SMSG_DISPLAY_PLAYER_CHOICE)]
@@ -735,7 +737,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
         public static void ReadPlayerChoiceResponseRewardEntry(Packet packet, params object[] indexes)
         {
-            V6_0_2_19033.Parsers.ItemHandler.ReadItemInstance(packet, indexes);
+            Substructures.ItemHandler.ReadItemInstance(packet, indexes);
             packet.ReadInt32("Quantity", indexes);
         }
 
@@ -774,7 +776,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
                 for (var i = 0; i < itemCount; ++i)
                 {
-                    V6_0_2_19033.Parsers.ItemHandler.ReadItemInstance(packet, i);
+                    Substructures.ItemHandler.ReadItemInstance(packet, i);
                     packet.ReadInt32("Quantity", i);
                 }
             }

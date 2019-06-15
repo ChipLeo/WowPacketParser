@@ -115,6 +115,11 @@ namespace WowPacketParser.Misc
             return new Quaternion(packed);
         }
 
+        public Quaternion ReadQuaternion()
+        {
+            return new Quaternion(ReadSingle(), ReadSingle(), ReadSingle(), ReadSingle());
+        }
+
         public string ReadWoWString(int len)
         {
             Encoding encoding = Encoding.UTF8;
@@ -511,6 +516,11 @@ namespace WowPacketParser.Misc
             return AddValue(name, ReadPackedQuaternion(), indexes);
         }
 
+        public Quaternion ReadQuaternion(string name, params object[] indexes)
+        {
+            return AddValue(name, ReadQuaternion(), indexes);
+        }
+
         public DateTime ReadTime(string name, params object[] indexes)
         {
             return AddValue(name, ReadTime(), indexes);
@@ -603,16 +613,20 @@ namespace WowPacketParser.Misc
 
         public Bit ReadBit()
         {
-            ++_bitpos;
-
-            if (_bitpos > 7)
+            if (_bitpos == 8)
             {
                 _bitpos = 0;
                 _curbitval = ReadByte();
             }
 
             var bit = ((_curbitval >> (7 - _bitpos)) & 1) != 0;
+            ++_bitpos;
             return bit;
+        }
+
+        public bool HasUnreadBitsInBuffer()
+        {
+            return _bitpos != 8;
         }
 
         public void ResetBitReader()
