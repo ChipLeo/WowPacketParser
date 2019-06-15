@@ -1,14 +1,8 @@
 WowPacketParser (WPP)
 =====================
 
-<a href="https://scan.coverity.com/projects/3190">
-  <img alt="Coverity Scan Build Status"
-       src="https://scan.coverity.com/projects/3190/badge.svg"/>
-</a>
-
 [![Build status](https://ci.appveyor.com/api/projects/status/ri0232rf4bqtmd7l)](https://ci.appveyor.com/project/ChipLeo/wowpacketparser)
 [![GitHub license](https://img.shields.io/github/license/TrinityCore/WowPacketParser.svg?style=flat-square)](https://github.com/ChipLeo/WowPacketParser/blob/master/COPYING)
-[![Coverity Scan Build Status](https://img.shields.io/coverity/scan/2618.svg?style=flat-square)](https://scan.coverity.com/projects/2618)
 
 Usage
 -----
