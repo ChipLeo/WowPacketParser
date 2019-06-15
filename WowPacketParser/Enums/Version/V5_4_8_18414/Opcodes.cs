@@ -517,7 +517,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_UNK_10D3,                                 0x10D3}, //++
             {Opcode.CMSG_UNK_12B3,                                 0x12B3}, //++
             {Opcode.CMSG_UNK_1446,                                 0x1446}, //+-
-            {Opcode.CMSG_UNK_1D8D,                                 0x1D8D}, //++ настройки/основные/окружающая среда/видимость [200,600,800,1000,1300]
+            {Opcode.CMSG_UNK_1D8D,                                 0x1D8D}, //++ РЅР°СЃС‚СЂРѕР№РєРё/РѕСЃРЅРѕРІРЅС‹Рµ/РѕРєСЂСѓР¶Р°СЋС‰Р°СЏ СЃСЂРµРґР°/РІРёРґРёРјРѕСЃС‚СЊ [200,600,800,1000,1300]
             {Opcode.CMSG_UNLEARN_SKILL,                            0x0268}, //++
             {Opcode.CMSG_UNLEARN_SPECIALIZATION,                   0x1841}, //+-+
             {Opcode.CMSG_UNLOCK_VOID_STORAGE,                      0x0444}, //+-

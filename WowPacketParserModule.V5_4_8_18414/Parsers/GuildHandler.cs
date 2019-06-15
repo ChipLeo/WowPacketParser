@@ -1050,6 +1050,51 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_PETITION_SHOW_SIGNATURES)]
+        public static void HandlePetitionShowSignaturesServer(Packet packet)
+        {
+            var guid40 = new byte[8];
+            var guid48 = new byte[8];
+
+            packet.StartBitStream(guid40, 1);
+            packet.StartBitStream(guid48, 3);
+            packet.StartBitStream(guid40, 3);
+            packet.StartBitStream(guid48, 4, 0);
+            packet.StartBitStream(guid40, 7, 5);
+            packet.StartBitStream(guid48, 1, 5, 7);
+            packet.StartBitStream(guid40, 0, 6);
+            packet.StartBitStream(guid48, 6);
+            packet.StartBitStream(guid40, 2, 4);
+
+            var count = packet.ReadBits("count", 21);
+            var guids = new byte[count][];
+            for (var i = 0; i < count; i++)
+                guids[i] = packet.StartBitStream(2, 0, 4, 7, 5, 1, 6, 3);
+
+            packet.StartBitStream(guid48, 2);
+
+            for (var i = 0; i < count; i++)
+            {
+                packet.ParseBitStream(guids[i], 6, 0, 1, 3, 2, 5, 7, 4);
+                packet.ReadInt32("Choise", i);
+                packet.WriteGuid("Guid", guids[i], i);
+            }
+
+            packet.ParseBitStream(guid48, 6, 5, 4);
+            packet.ParseBitStream(guid40, 4);
+            packet.ParseBitStream(guid48, 1);
+
+            packet.ReadInt32("PetitionID");
+
+            packet.ParseBitStream(guid48, 2, 3, 7);
+            packet.ParseBitStream(guid40, 5, 6, 3, 7, 1, 0);
+            packet.ParseBitStream(guid48, 0);
+            packet.ParseBitStream(guid40, 2);
+
+            packet.WriteGuid("Owner", guid40);
+            packet.WriteGuid("Item", guid48);
+        }
+
         [Parser(Opcode.SMSG_GUILD_BANK_LOG_QUERY_RESULTS)]
         [Parser(Opcode.SMSG_GUILD_BANK_QUERY_RESULTS)]
         [Parser(Opcode.SMSG_GUILD_CHALLENGE_UPDATE)]
@@ -1060,7 +1105,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_GUILD_REWARD_LIST)]
         [Parser(Opcode.SMSG_PETITION_ALREADY_SIGNED)]
         [Parser(Opcode.SMSG_PETITION_RENAME_RESPONSE)]
-        [Parser(Opcode.SMSG_PETITION_SHOW_SIGNATURES)]
         [Parser(Opcode.SMSG_PETITION_SIGN_RESULTS)]
         public static void HandleGuild(Packet packet)
         {
