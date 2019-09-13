@@ -1,18 +1,8 @@
 WowPacketParser (WPP)
 =====================
 
-<a href="https://scan.coverity.com/projects/3190">
-  <img alt="Coverity Scan Build Status"
-       src="https://scan.coverity.com/projects/3190/badge.svg"/>
-</a>
-
 [![Build status](https://ci.appveyor.com/api/projects/status/ri0232rf4bqtmd7l)](https://ci.appveyor.com/project/ChipLeo/wowpacketparser)
-[![GitHub license](https://img.shields.io/github/license/TrinityCore/WowPacketParser.svg?style=flat-square)](https://github.com/TrinityCore/WowPacketParser/blob/WowPacketParser/COPYING)
-[![Coverity Scan Build Status](https://img.shields.io/coverity/scan/2618.svg?style=flat-square)](https://scan.coverity.com/projects/2618)
-[![Build Status TravisCI](https://img.shields.io/travis/TrinityCore/WowPacketParser/master.svg?style=flat-square)](https://travis-ci.org/TrinityCore/WowPacketParser)
-[![Build Status AppVeyor](https://img.shields.io/appveyor/ci/DDuarte/wowpacketparser-191/master.svg?style=flat-square)](https://ci.appveyor.com/project/DDuarte/wowpacketparser-191)
-[![Docker Pulls](https://img.shields.io/docker/pulls/trinitycore/wpp.svg?style=flat-square)](https://hub.docker.com/r/trinitycore/wpp/)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0154074816634467883a601e6c23188c)](https://www.codacy.com/app/TrinityCore/WowPacketParser?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=TrinityCore/WowPacketParser&amp;utm_campaign=Badge_Grade)
+[![GitHub license](https://img.shields.io/github/license/TrinityCore/WowPacketParser.svg?style=flat-square)](https://github.com/ChipLeo/WowPacketParser/blob/master/COPYING)
 
 Usage
 -----
