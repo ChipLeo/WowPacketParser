@@ -218,8 +218,7 @@ namespace WowPacketParser.Enums.Version
                 case ClientVersionBuild.V4_1_0_13914:
                 case ClientVersionBuild.V4_1_0a_14007:
                 {
-                    // This is not named V4_1_0_13914 because I didn't dump against 13914 - Warpten.
-                    return "V4_1_0_14007";
+                    return "V4_1_0_13914";
                 }
                 case ClientVersionBuild.V4_2_0_14333:
                 case ClientVersionBuild.V4_2_0a_14480:
@@ -509,6 +508,8 @@ namespace WowPacketParser.Enums.Version
                 }
                 case ClientVersionBuild.V8_1_5_29683:
                 case ClientVersionBuild.V8_1_5_29701:
+                case ClientVersionBuild.V8_1_5_29704:
+                case ClientVersionBuild.V8_1_5_29705:
                 case ClientVersionBuild.V8_1_5_29718:
                 case ClientVersionBuild.V8_1_5_29732:
                 case ClientVersionBuild.V8_1_5_29737:
@@ -520,6 +521,17 @@ namespace WowPacketParser.Enums.Version
                 case ClientVersionBuild.V8_1_5_30706:
                 {
                     return "V8_1_5_29683";
+                }
+                case ClientVersionBuild.V8_2_0_30898:
+                case ClientVersionBuild.V8_2_0_30918:
+                case ClientVersionBuild.V8_2_0_30920:
+                case ClientVersionBuild.V8_2_0_30948:
+                case ClientVersionBuild.V8_2_0_30993:
+                case ClientVersionBuild.V8_2_0_31229:
+                case ClientVersionBuild.V8_2_0_31429:
+                case ClientVersionBuild.V8_2_0_31478:
+                {
+                    return "V8_2_0_30898";
                 }
                 default:
                 {

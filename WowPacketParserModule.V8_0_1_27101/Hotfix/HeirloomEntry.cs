@@ -3,11 +3,11 @@ using WowPacketParser.Hotfix;
 
 namespace WowPacketParserModule.V8_0_1_27101.Hotfix
 {
-    [HotfixStructure(DB2Hash.Heirloom)]
+    [HotfixStructure(DB2Hash.Heirloom, ClientVersionBuild.V8_0_1_27101, ClientVersionBuild.V8_1_5_29683)]
     public class HeirloomEntry
     {
         public string SourceText { get; set; }
-        public int ID { get; set; }
+        public uint ID { get; set; }
         public int ItemID { get; set; }
         public int LegacyUpgradedItemID { get; set; }
         public int StaticUpgradedItemID { get; set; }

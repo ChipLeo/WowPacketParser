@@ -55,6 +55,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
             packet.ReadInt32("ScenarioID");
             packet.ReadInt32("Unk1");
+            packet.ResetBitReader();
             packet.ReadBits("Unk2", 2);
         }
     }

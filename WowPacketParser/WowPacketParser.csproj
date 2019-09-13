@@ -232,9 +232,12 @@
     <Compile Include="Enums\GarrisonType.cs" />
     <Compile Include="Enums\ItemFieldFlags.cs" />
     <Compile Include="Enums\ItemModifier.cs" />
+    <Compile Include="Enums\LfgListApplicationStatus.cs" />
+    <Compile Include="Enums\LfgListFilter.cs" />
+    <Compile Include="Enums\LfgLockStatus.cs" />
     <Compile Include="Enums\LootError.cs" />
-    <Compile Include="Enums\QuestFlags2.cs" />
-    <Compile Include="Enums\QuestFlags3.cs" />
+    <Compile Include="Enums\QuestFlagsEx.cs" />
+    <Compile Include="Enums\QuestFlagsEx2.cs" />
     <Compile Include="Enums\QuestRequirementType.cs" />
     <Compile Include="Enums\CreatureFamily.cs" />
     <Compile Include="Enums\CreatureRank.cs" />
@@ -283,6 +286,7 @@
     <Compile Include="Enums\MountResult.cs" />
     <Compile Include="Enums\RaidSummonFail.cs" />
     <Compile Include="Enums\ReportPvPAFKResult.cs" />
+    <Compile Include="Enums\SecureAddonStatus.cs" />
     <Compile Include="Enums\StandState.cs" />
     <Compile Include="Enums\TalentErrors.cs" />
     <Compile Include="Enums\TargetedDatabase.cs" />
@@ -409,6 +413,7 @@
     </Compile>
     <Compile Include="Enums\Version\V4_0_6_13596\UpdateFields.cs" />
     <Compile Include="Enums\Version\V4_1_0_13914\Opcodes.cs" />
+    <Compile Include="Enums\Version\V4_1_0_13914\UpdateFields.cs" />
     <Compile Include="Enums\Version\V4_2_0_14333\Opcodes.cs" />
     <Compile Include="Enums\Version\V4_2_0_14333\UpdateFields.cs" />
     <Compile Include="Enums\Version\V4_2_2_14545\Opcodes.cs" />
@@ -467,6 +472,7 @@
     <Compile Include="Enums\Version\V8_1_0_28724\Opcodes.cs" />
     <Compile Include="Enums\Version\V8_0_1_27101\Opcodes.cs" />
     <Compile Include="Enums\Version\V8_1_5_29620\Opcodes.cs" />
+    <Compile Include="Enums\Version\V8_2_0_30898\Opcodes.cs" />
     <Compile Include="Enums\VictimStates.cs" />
     <Compile Include="Enums\VoidTransferError.cs" />
     <Compile Include="Enums\WardenCheckType.cs" />
@@ -613,6 +619,7 @@
     <Compile Include="Store\Objects\CreatureTemplateLocale.cs" />
     <Compile Include="Store\Objects\CreatureTemplateScaling.cs" />
     <Compile Include="Store\Objects\CreatureText.cs" />
+    <Compile Include="Store\Objects\UpdateFields\LegacyImplementation\AreaTriggerData.cs" />
     <Compile Include="Store\Objects\UpdateFields\LegacyImplementation\ConversationData.cs" />
     <Compile Include="Store\Objects\UpdateFields\LegacyImplementation\UnitData.cs" />
     <Compile Include="Store\Objects\UpdateFields\LegacyImplementation\UpdateFieldExtensions.cs" />

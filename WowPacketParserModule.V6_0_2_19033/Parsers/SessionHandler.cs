@@ -13,13 +13,6 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadSingle("FarClip", idx);
         }
 
-        [Parser(Opcode.CMSG_BATTLENET_REQUEST_REALM_LIST_TICKET)]
-        public static void HandleBattleNetRequestRealmListTicket(Packet packet)
-        {
-            packet.ReadUInt32("unk");
-            packet.ReadBytesTable("Data", 32);
-        }
-
         [Parser(Opcode.SMSG_AUTH_RESPONSE)]
         public static void HandleAuthResponse(Packet packet)
         {

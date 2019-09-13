@@ -34,19 +34,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             ReadCliSavedThrottleObjectState(packet, idx, "ThrottleState");
         }
 
-        [Parser(Opcode.CMSG_ARTIFACT_ADD_POWER)]
-        public static void HandleArtifactAddPower(Packet packet)
-        {
-            packet.ReadPackedGuid128("Item");
-            packet.ReadPackedGuid128("GO");
-            var cnt = packet.ReadInt32("count");
-            for (var i = 0; i < cnt; i++)
-            {
-                packet.ReadInt32("PowerType", i);
-                packet.ReadByte("value", i);
-            }
-        }
-
         [Parser(Opcode.CMSG_RIDE_VEHICLE_INTERACT)]
         public static void HandleRideVehicleInteract(Packet packet)
         {
@@ -95,13 +82,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
             packet.ReadInt32("unk32");
             packet.ReadBit("unk");
-        }
-
-        [Parser(Opcode.SMSG_ARTIFACT_RESPEC_CONFIRM)]
-        public static void HandleArtifactRespecConfirm(Packet packet)
-        {
-            packet.ReadPackedGuid128("Item");
-            packet.ReadPackedGuid128("Creature");
         }
 
         [Parser(Opcode.SMSG_CUSTOM_LOAD_SCREEN)]
@@ -157,21 +137,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadByte("ServerExpansionTier");
         }
 
-        [Parser(Opcode.SMSG_ITEM_CHANGED)]
-        public static void HandleItemChanged(Packet packet)
-        {
-            packet.ReadPackedGuid128("Player");
-            ItemHandler.ReadItemInstance(packet, "Item");
-            ItemHandler.ReadItemInstance(packet, "Item2");
-        }
-
-        [Parser(Opcode.SMSG_LEVEL_UPDATE)]
-        public static void HandleLevelUpdate(Packet packet)
-        {
-            packet.ReadPackedGuid128("Guid");
-            packet.ReadBit("unk");
-        }
-
         [Parser(Opcode.SMSG_MODIFY_CHARGE_RECOVERY_SPEED)]
         public static void HandleModifyChargeRecoverySpeed(Packet packet)
         {
@@ -214,13 +179,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ResetBitReader();
                 packet.ReadBits("MountIsFavorite", 2, i);
             }
-        }
-
-        [Parser(Opcode.SMSG_ARTIFACT_XP_GAIN)]
-        public static void HandleArtifactXPGain(Packet packet)
-        {
-            packet.ReadPackedGuid128("Item");
-            packet.ReadInt32("Quantity");
         }
 
         [HasSniffData]
@@ -371,16 +329,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
             packet.ReadSingle("unk1");
             packet.ReadInt32("unk2");
-        }
-
-        [Parser(Opcode.SMSG_TRANSMOG_COLLECTION_UPDATE)]
-        public static void HandleTransmogCollectionUpdate(Packet packet)
-        {
-            packet.ReadBit("unk");
-            packet.ReadBit("unk2");
-            var cnt = packet.ReadInt32("Count");
-            for (int i = 0; i < cnt; i++)
-                packet.ReadInt32("unk1", i);
         }
 
         [Parser(Opcode.SMSG_WOW_TOKEN_CAN_VETERAN_BUY_RESULT)]
@@ -567,13 +515,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             if (hasEuropaTicketSystemStatus)
                 MiscellaneousHandler.ReadCliEuropaTicketConfig(packet, "EuropaTicketSystemStatus");
-        }
-
-        [Parser(Opcode.SMSG_ARTIFACT_FORGE_OPENED)]
-        public static void HandleArtifactForgeOpened(Packet packet)
-        {
-            packet.ReadPackedGuid128("guid1");
-            packet.ReadPackedGuid128("guid2");
         }
 
         [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS_GLUE_SCREEN, ClientVersionBuild.V7_1_5_23360)]

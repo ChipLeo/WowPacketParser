@@ -50,7 +50,7 @@ namespace WowPacketParser.SQL
             {
                 if (objectName.Item1.ObjectType != null && objectName.Item1.ID != null)
                 {
-                    var type = FromObjectType(objectName.Item1.ObjectType.Value);
+                    var type = objectName.Item1.ObjectType.Value;
                     Dictionary<int, string> names;
                     if (!SQLDatabase.NameStores.TryGetValue(type, out names))
                     {

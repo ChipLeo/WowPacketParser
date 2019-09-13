@@ -230,15 +230,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadUInt16("PvPTalentID", idx, i);
         }
 
-        [Parser(Opcode.SMSG_SCENARIO_BOOT)]
-        public static void HandleScenarioBoot(Packet packet)
-        {
-            packet.ReadInt32("unk1");
-            packet.ReadInt32("unk2");
-            packet.ResetBitReader();
-            packet.ReadBits("unk3", 2);
-        }
-
         [Parser(Opcode.SMSG_SPELL_PREPARE)]
         public static void SpellPrepare(Packet packet)
         {

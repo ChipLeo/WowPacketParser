@@ -213,7 +213,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
 
             quest.StartItem = packet.ReadUInt32("StartItem");
             quest.Flags = packet.ReadUInt32E<QuestFlags>("Flags");
-            quest.FlagsEx = packet.ReadUInt32E<QuestFlags2>("FlagsEx");
+            quest.FlagsEx = packet.ReadUInt32E<QuestFlagsEx>("FlagsEx");
 
             quest.RewardItem = new uint?[4];
             quest.RewardAmount = new uint?[4];

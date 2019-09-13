@@ -102,12 +102,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ResetBitReader();
         }
 
-        [Parser(Opcode.CMSG_ADVENTURE_JOURNAL_START_QUEST)]
-        public static void HandleAdventureJournalStartQuest(Packet packet)
-        {
-            packet.ReadInt32("QuestID");
-        }
-
         [HasSniffData]
         [Parser(Opcode.SMSG_QUERY_QUEST_INFO_RESPONSE)]
         public static void HandleQuestQueryResponse(Packet packet)
@@ -161,7 +155,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             quest.StartItem = packet.ReadUInt32("StartItem");
             quest.Flags = packet.ReadUInt32E<QuestFlags>("Flags");
-            quest.FlagsEx = packet.ReadUInt32E<QuestFlags2>("FlagsEx");
+            quest.FlagsEx = packet.ReadUInt32E<QuestFlagsEx>("FlagsEx");
 
             quest.RewardItem = new uint?[4];
             quest.RewardAmount = new uint?[4];
@@ -603,19 +597,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_QUEST_SPAWN_TRACKING_UPDATE)]
-        public static void HandleQuestSpawnTrackingUpdate(Packet packet)
-        {
-            var count = packet.ReadInt32("Count");
-            for (var i = 0; i < count; i++)
-            {
-                packet.ReadInt32("unk1", i);
-                packet.ReadInt32("ObjectID", i);
-                packet.ResetBitReader();
-                packet.ReadBit("unk3", i);
-            }
-        }
-
         [Parser(Opcode.SMSG_WORLD_QUEST_UPDATE)]
         public static void HandleWorldQuestUpdate(Packet packet)
         {
@@ -653,6 +634,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt64("MoneyReward");
             packet.ReadInt32("SkillLineIDReward");
             packet.ReadInt32("NumSkillUpsReward");
+            if (ClientVersion.RemovedInVersion(ClientVersionBuild.V7_2_0_23706))
+                Substructures.ItemHandler.ReadItemInstance(packet, "ItemReward");
 
             Substructures.ItemHandler.ReadItemInstance(packet, "ItemReward"); // 23420
 
@@ -663,7 +646,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("LaunchQuest");
             packet.ReadBit("HideChatMessage");
 
-            Substructures.ItemHandler.ReadItemInstance(packet, "ItemReward");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_2_0_23706))
+                Substructures.ItemHandler.ReadItemInstance(packet, "ItemReward");
         }
 
         [Parser(Opcode.SMSG_DISPLAY_PLAYER_CHOICE)]
@@ -672,7 +656,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32("ChoiceID");
             var responseCount = packet.ReadUInt32();
             packet.ReadPackedGuid128("SenderGUID");
-            packet.ReadInt32("UiTextureKitID");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_3_5_25848))
+                packet.ReadInt32("UiTextureKitID");
             packet.ResetBitReader();
             var questionLength = packet.ReadBits(8);
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_2_5_24330))
@@ -859,6 +844,22 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
             packet.ReadInt32<QuestId>("Quest ID");
             packet.ReadUInt16("Count");
+        }
+
+        [Parser(Opcode.SMSG_QUEST_SPAWN_TRACKING_UPDATE)]
+        public static void HandleQuestSpawnTrackingUpdate(Packet packet)
+        {
+            var count = packet.ReadUInt32();
+
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadInt32("SpawnTrackingID", i);
+                packet.ReadInt32("QuestObjectID", i);
+
+                packet.ResetBitReader();
+
+                packet.ReadBit("Visible", i);
+            }
         }
     }
 }

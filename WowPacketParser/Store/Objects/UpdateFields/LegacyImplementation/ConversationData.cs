@@ -22,7 +22,7 @@ namespace WowPacketParser.Store.Objects.UpdateFields.LegacyImplementation
             {
                 var lines = DynamicUpdateFields.GetValue<ConversationDynamicField, uint>(ConversationDynamicField.CONVERSATION_DYNAMIC_FIELD_LINES).ToArray();
                 var LineSize = 4;
-                var structuredLines = new IConversationLine[lines.Length + (LineSize - 1) / LineSize];
+                var structuredLines = new IConversationLine[lines.Length / LineSize];
                 for (var i = 0; i + LineSize <= lines.Length; i += LineSize)
                 {
                     var line = new Line();
@@ -48,6 +48,8 @@ namespace WowPacketParser.Store.Objects.UpdateFields.LegacyImplementation
                 var field = new DynamicUpdateField<IConversationActor>();
                 var actors = DynamicUpdateFields.GetValue<ConversationDynamicField, uint>(ConversationDynamicField.CONVERSATION_DYNAMIC_FIELD_ACTORS).ToList();
                 var ActorSize = 6;
+                field.Resize((uint)(actors.Count / ActorSize));
+
                 for (var i = 0; i + ActorSize <= actors.Count; i += ActorSize)
                 {
                     var actor = new Actor();
@@ -61,8 +63,18 @@ namespace WowPacketParser.Store.Objects.UpdateFields.LegacyImplementation
                     }
                     if (actor.Type == (uint)ActorType.CreatureActor)
                     {
-                        actor.CreatureID = actors[i + 0];
-                        actor.CreatureDisplayInfoID = actors[i + 1];
+                        if (ClientVersion.AddedInVersion(ClientVersionBuild.V8_0_1_27101))
+                        {
+                            actor.Id = actors[i + 0];
+                            actor.CreatureID = actors[i + 0];
+                            actor.CreatureDisplayInfoID = actors[i + 1];
+                        }
+                        else
+                        {
+                            actor.Id = actors[i + 0];
+                            actor.CreatureID = actors[i + 1];
+                            actor.CreatureDisplayInfoID = actors[i + 2];
+                        }
                     }
 
                     field[i / ActorSize] = actor;
@@ -83,6 +95,7 @@ namespace WowPacketParser.Store.Objects.UpdateFields.LegacyImplementation
 
         public class Actor : IConversationActor
         {
+            public uint Id { get; set; }
             public uint CreatureID { get; set; }
             public uint CreatureDisplayInfoID { get; set; }
             public WowGuid ActorGUID { get; set; }

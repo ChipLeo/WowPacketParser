@@ -40,12 +40,6 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadByte("unk 3Ch");
         }
 
-        [Parser(Opcode.CMSG_KEYBOUND_OVERRIDE)]
-        public static void HandleKeyboundOverride(Packet packet)
-        {
-            packet.ReadInt16("unk");
-        }
-
         [Parser(Opcode.CMSG_REQUEST_ARTIFACT_COMPLETION_HISTORY)]
         [Parser(Opcode.CMSG_TWITTER_CHECK_STATUS)]
         [Parser(Opcode.SMSG_FORCED_DEATH_UPDATE)]
@@ -88,7 +82,6 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         }
 
         [Parser(Opcode.CMSG_SET_SELECTION)]
-        [Parser(Opcode.SMSG_FORCE_OBJECT_RELINK)]
         public static void HandleSetSelection(Packet packet)
         {
             packet.ReadPackedGuid128("Guid");

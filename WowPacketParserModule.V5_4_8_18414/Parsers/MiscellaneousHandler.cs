@@ -331,7 +331,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_KEYBOUND_OVERRIDE)]
         public static void HandleKeyBoundOverride(Packet packet)
         {
-            packet.ReadInt16("unk16");
+            packet.ReadInt16("OverrideID");
         }
 
         [Parser(Opcode.CMSG_SET_PET_SLOT)]
@@ -506,8 +506,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBool("Result");
         }
 
-        [Parser(Opcode.SMSG_CLIENTCACHE_VERSION)]
-        public static void HandleClientCacheVersion(Packet packet)
+        [Parser(Opcode.SMSG_CACHE_VERSION)]
+        public static void HandleCacheVersion(Packet packet)
         {
             packet.ReadUInt32("Version");
         }

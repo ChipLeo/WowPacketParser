@@ -718,7 +718,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.SMSG_CLEAR_QUEST_COMPLETED_BITS,               0x0364}, //++
             {Opcode.SMSG_CLEAR_SPELL_CHARGES,                      0x00F2}, //+-
             {Opcode.SMSG_CLEAR_TARGET,                             0x1061}, //++
-            {Opcode.SMSG_CLIENTCACHE_VERSION,                      0x002A}, //++
+            {Opcode.SMSG_CACHE_VERSION,                            0x002A}, //++
             {Opcode.SMSG_COMBAT_EVENT_FAILED,                      0x18C3}, //++
             {Opcode.SMSG_COMPLAINT_RESULT,                         0x128F}, //--
             {Opcode.SMSG_CONNECT_TO,                               0x1149}, //--

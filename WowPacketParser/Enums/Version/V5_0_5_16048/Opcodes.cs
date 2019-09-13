@@ -700,7 +700,7 @@ namespace WowPacketParser.Enums.Version.V5_0_5_16048
             {Opcode.SMSG_CLEAR_COOLDOWNS, 0x0EB2},
             {Opcode.SMSG_CLEAR_FAR_SIGHT_IMMEDIATE, 0x0CDE},
             {Opcode.SMSG_CLEAR_TARGET, 0x0D0B},
-            {Opcode.SMSG_CLIENTCACHE_VERSION, 0x0EB4},
+            {Opcode.SMSG_CACHE_VERSION, 0x0EB4},
             //{Opcode.SMSG_CONTROL_UPDATE, 0x0}, // 0x2837 in 4.3.4 @todo : Find me and BACON !
             {Opcode.SMSG_COIN_REMOVED, 0x0BB1},
             {Opcode.SMSG_COMBAT_EVENT_FAILED, 0x09EF},

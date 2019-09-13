@@ -30,7 +30,7 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ReadUInt32("BpayStoreProductDeliveryDelay");
             packet.ReadUInt32("ClubsPresenceUpdateTimer");
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V8_1_0_28724))
-                packet.ReadUInt32("UnkUInt_810");
+                packet.ReadUInt32("HiddenUIClubsPresenceUpdateTimer");
 
             packet.ResetBitReader();
             packet.ReadBit("VoiceEnabled");
@@ -59,6 +59,8 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ReadBit("ClubsEnabled");
             packet.ReadBit("ClubsBattleNetClubTypeAllowed");
             packet.ReadBit("ClubsCharacterClubTypeAllowed");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V8_1_5_29683))
+                packet.ReadBit("ClubsPresenceUpdateEnabled");
             packet.ReadBit("VoiceChatDisabledByParentalControl");
             packet.ReadBit("VoiceChatMutedByParentalControl");
 
@@ -227,29 +229,76 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_ACCOUNT_TOYS_UPDATE)]
-        public static void HandleAccountToysUpdate(Packet packet)
+        [Parser(Opcode.SMSG_MULTIPLE_PACKETS)]
+        public static void HandleMultiplePackets(Packet packet)
         {
-            packet.ReadBit("IsFullUpdate");
+            packet.WriteLine("{");
+            int i = 0;
+            while (packet.CanRead())
+            {
+                int opcode = 0;
+                int len = 0;
+                byte[] bytes = null;
 
-            var itemIdCount = packet.ReadUInt32("ToyItemIDsCount");
-            var isFavoriteCount = packet.ReadUInt32("ToyIsFavoriteCount");
-            uint isUnkCount = 0;
+                len = packet.ReadUInt16();
+                opcode = packet.ReadUInt16();
+                bytes = packet.ReadBytes(len);
+
+                if (bytes == null || len == 0)
+                    continue;
+
+                if (i > 0)
+                    packet.WriteLine();
+
+                packet.Write("[{0}] ", i++);
+
+                using (Packet newpacket = new Packet(bytes, opcode, packet.Time, packet.Direction, packet.Number, packet.Writer, packet.FileName))
+                    Handler.Parse(newpacket, true);
+
+            }
+            packet.WriteLine("}");
+        }
+
+        [Parser(Opcode.SMSG_SET_CURRENCY)]
+        public static void HandleSetCurrency(Packet packet)
+        {
+            packet.ReadInt32("Type");
+            packet.ReadInt32("Quantity");
+            packet.ReadUInt32("Flags");
+
+            var hasWeeklyQuantity = packet.ReadBit("HasWeeklyQuantity");
+            var hasTrackedQuantity = packet.ReadBit("HasTrackedQuantity");
+            var hasMaxQuantity = packet.ReadBit("HasMaxQuantity");
+            packet.ReadBit("SuppressChatLog");
+            var hasQuantityChange = false;
+            var hasQuantityGainSource = false;
+            var hasQuantityLostSource = false;
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V8_1_5_29683))
-                isUnkCount = packet.ReadUInt32("Unk");
+            {
+                hasQuantityChange = packet.ReadBit("HasQuantityChange");
+                hasQuantityGainSource = packet.ReadBit("HasQuantityGainSource");
+                hasQuantityLostSource = packet.ReadBit("HasQuantityLostSource");
+            }
 
-            for (int i = 0; i < itemIdCount; i++)
-                packet.ReadInt32("ToyItemID", i);
+            if (hasWeeklyQuantity)
+                packet.ReadInt32("WeeklyQuantity");
 
-            packet.ResetBitReader();
+            if (hasTrackedQuantity)
+                packet.ReadInt32("TrackedQuantity");
 
-            for (int i = 0; i < isFavoriteCount; i++)
-                packet.ReadBit("ToyIsFavorite", i);
+            if (hasMaxQuantity)
+                packet.ReadInt32("MaxQuantity");
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V8_1_5_29683))
             {
-                for (int i = 0; i < isUnkCount; i++)
-                    packet.ReadBit("Unk", i);
+                if (hasQuantityChange)
+                    packet.ReadInt32("QuantityChange");
+
+                if (hasQuantityGainSource)
+                    packet.ReadInt32("QuantityGainSource");
+
+                if (hasQuantityLostSource)
+                    packet.ReadInt32("QuantityLostSource");
             }
         }
     }

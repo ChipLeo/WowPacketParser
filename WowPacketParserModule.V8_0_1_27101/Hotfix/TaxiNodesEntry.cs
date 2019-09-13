@@ -3,7 +3,7 @@ using WowPacketParser.Hotfix;
 
 namespace WowPacketParserModule.V8_0_1_27101.Hotfix
 {
-    [HotfixStructure(DB2Hash.TaxiNodes)]
+    [HotfixStructure(DB2Hash.TaxiNodes, ClientVersionBuild.V8_0_1_27101, ClientVersionBuild.V8_1_5_29683)]
     public class TaxiNodesEntry
     {
         public string Name { get; set; }

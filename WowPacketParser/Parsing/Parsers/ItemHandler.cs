@@ -30,7 +30,7 @@ namespace WowPacketParser.Parsing.Parsers
 
             var objectName = new ObjectName
             {
-                ObjectType = ObjectType.Item,
+                ObjectType = StoreNameType.Item,
                 ID = (int)entry,
                 Name = name
             };
@@ -998,7 +998,7 @@ namespace WowPacketParser.Parsing.Parsers
                 item.CurrencySubstitutionID = packet.ReadUInt32("Currency Substitution Id");
                 item.CurrencySubstitutionCount = packet.ReadUInt32("Currency Substitution Count");
 
-                Storage.ObjectNames.Add(new ObjectName { ObjectType = ObjectType.Item, ID = (int)entry, Name = item.Name }, packet.TimeSpan);
+                Storage.ObjectNames.Add(new ObjectName { ObjectType = StoreNameType.Item, ID = (int)entry, Name = item.Name }, packet.TimeSpan);
             }
 
             packet.ReadUInt32("Type");
@@ -1167,7 +1167,7 @@ namespace WowPacketParser.Parsing.Parsers
                     item.CurrencySubstitutionID = packet.ReadUInt32("Currency Substitution Id");
                     item.CurrencySubstitutionCount = packet.ReadUInt32("Currency Substitution Count");
 
-                    Storage.ObjectNames.Add(new ObjectName { ObjectType = ObjectType.Item, ID = (int)itemId, Name = item.Name }, packet.TimeSpan);
+                    Storage.ObjectNames.Add(new ObjectName { ObjectType = StoreNameType.Item, ID = (int)itemId, Name = item.Name }, packet.TimeSpan);
                     break;
                 }
                 case DB2Hash.KeyChain:

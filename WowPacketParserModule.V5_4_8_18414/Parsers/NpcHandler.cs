@@ -192,7 +192,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadInt32("Level", i);//8
                 packet.ReadUInt32("Icon", i);//4
                 packet.ReadUInt32<QuestId>("Quest ID", i); //528
-                packet.ReadUInt32E<QuestFlags2>("Flags 2", i);//532
+                packet.ReadUInt32E<QuestFlagsEx>("FlagsEx", i);//532
             }
 
             packet.ReadXORByte(guid, 1);

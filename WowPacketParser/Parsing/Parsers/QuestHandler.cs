@@ -120,17 +120,19 @@ namespace WowPacketParser.Parsing.Parsers
             }
             else
             {
-                packet.ReadUInt32("Honor Points");
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_3_0_7561))
+                    packet.ReadUInt32("Honor Points");
 
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_3_0_10958))
                     packet.ReadSingle("Honor Multiplier");
 
                 if (readFlags)
-                        packet.ReadUInt32E<QuestFlags>("Quest Flags");
+                    packet.ReadUInt32E<QuestFlags>("Quest Flags");
 
                 packet.ReadInt32<SpellId>("Spell Id");
                 packet.ReadInt32<SpellId>("Spell Cast Id");
-                packet.ReadUInt32("Title Id");
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                    packet.ReadUInt32("Title Id");
 
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_2_9056))
                     packet.ReadUInt32("Bonus Talents");
@@ -414,7 +416,7 @@ namespace WowPacketParser.Parsing.Parsers
             quest.RewardKillHonor = packet.ReadSingle("RewardKillHonor");
             quest.StartItem = packet.ReadUInt32<ItemId>("StartItem");
             quest.Flags = packet.ReadUInt32E<QuestFlags>("Flags");
-            quest.FlagsEx = packet.ReadUInt32E<QuestFlags2>("FlagsEx");
+            quest.FlagsEx = packet.ReadUInt32E<QuestFlagsEx>("FlagsEx");
             quest.MinimapTargetMark = packet.ReadUInt32("MinimapTargetMark"); // missing enum. 1- Skull, 16 - Unknown, but exists
             quest.RewardTitle = packet.ReadUInt32("RewardTitle");
             quest.RequiredPlayerKills = packet.ReadUInt32("RequiredPlayerKills");
@@ -717,7 +719,7 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadInt32("QuestTurn Portrait");
             packet.ReadByte("Unk Byte");
             packet.ReadUInt32E<QuestFlags>("Quest Flags");
-            packet.ReadUInt32E<QuestFlags2>("Quest Flags 2");
+            packet.ReadUInt32E<QuestFlagsEx>("Quest Flags 2");
             packet.ReadInt32("Unk Int32");
 
             var emoteCount = packet.ReadUInt32("Quest Emote Count");
@@ -767,7 +769,7 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadInt32("Quest Level", i);
                 packet.ReadUInt32E<QuestFlags>("Quest Flags", i);
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V5_1_0_16309))
-                    packet.ReadUInt32E<QuestFlags2>("Quest Flags 2", i);
+                    packet.ReadUInt32E<QuestFlagsEx>("Quest Flags 2", i);
 
                 packet.ReadBool("Change icon", i);
                 packet.ReadCString("Title", i);
@@ -832,8 +834,12 @@ namespace WowPacketParser.Parsing.Parsers
 
             if (ClientVersion.RemovedInVersion(ClientVersionBuild.V3_3_3a_11723))
             {
-                packet.ReadByte("Unk");
-                packet.ReadByte("Unk");
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_1_0_9767))
+                {
+                    var questAccepted = packet.ReadByte("QuestAccepted");
+                    if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_3_3_11685))
+                        packet.ReadByte("Unk");
+                }
             }
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_0_1_13164))
@@ -880,7 +886,7 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadUInt32("QuestTurn Portrait");
             packet.ReadBool("Auto Accept");
             packet.ReadUInt32E<QuestFlags>("Quest Flags");
-            packet.ReadUInt32E<QuestFlags2>("Quest Flags 2");
+            packet.ReadUInt32E<QuestFlagsEx>("Quest Flags 2");
             packet.ReadUInt32("Suggested Players");
             packet.ReadByte("Unknown byte");
             packet.ReadBool("Starts at AreaTrigger");
@@ -931,8 +937,8 @@ namespace WowPacketParser.Parsing.Parsers
                 CompletionText = text
             };
 
-            requestItems.EmoteOnComplete = packet.ReadUInt32("Emote");
-            packet.ReadUInt32("Unk UInt32 1");
+            uint emoteDelay = packet.ReadUInt32("Emote Delay");
+            uint emoteID = packet.ReadUInt32("Emote");
             packet.ReadUInt32("Close Window on Cancel");
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_3_3_11685))
@@ -950,7 +956,17 @@ namespace WowPacketParser.Parsing.Parsers
             }
 
             // flags
-            packet.ReadUInt32("Unk flags 1");
+            var flags = packet.ReadUInt32("Unk flags 1");
+            if ((flags & 0x3) == 0) // not completable
+            {
+                requestItems.EmoteOnIncompleteDelay = emoteDelay;
+                requestItems.EmoteOnIncomplete = emoteID;
+            }
+            else
+            {
+                requestItems.EmoteOnCompleteDelay = emoteDelay;
+                requestItems.EmoteOnComplete = emoteID;
+            }
             packet.ReadUInt32("Unk flags 2");
             packet.ReadUInt32("Unk flags 3");
             packet.ReadUInt32("Unk flags 4");
@@ -1030,7 +1046,7 @@ namespace WowPacketParser.Parsing.Parsers
             requestItems.EmoteOnCompleteDelay = packet.ReadUInt32("Delay");
             packet.ReadUInt32("Close Window on Cancel");
             packet.ReadUInt32E<QuestFlags>("Quest Flags");
-            packet.ReadUInt32E<QuestFlags2>("Quest Flags 2");
+            packet.ReadUInt32E<QuestFlagsEx>("Quest Flags 2");
             packet.ReadUInt32("Suggested Players");
             packet.ReadUInt32("Money");
 
