@@ -192,7 +192,7 @@ namespace WowPacketParser.Parsing.Parsers
                 WowGuid transportGuid = packet.ReadPackedGuid("Transport GUID");
 
                 int seat = -1;
-                if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_1_0_9767)) // no idea when this was added exactly
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_3_9183)) // no idea when this was added exactly
                     seat = packet.ReadByte("Transport Seat");
 
                 if (transportGuid.HasEntry() && transportGuid.GetHighType() == HighGuidType.Vehicle &&
@@ -254,9 +254,16 @@ namespace WowPacketParser.Parsing.Parsers
 
             var flags = packet.ReadInt32E<SplineFlag>("Spline Flags");
 
-            if (flags.HasAnyFlag(SplineFlag.AnimationTier))
+            //removed for 309
+            /*if (flags.HasAnyFlag(SplineFlag.AnimationTier))
             {
                 packet.ReadByteE<MovementAnimationState>("Animation State");
+                packet.ReadInt32("Async-time in ms");
+            }*/
+
+            if (flags.HasAnyFlag(SplineFlag.Frozen))
+            {
+                packet.ReadByte("unk1");
                 packet.ReadInt32("Async-time in ms");
             }
 
@@ -268,9 +275,15 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadInt32("Async-time in ms");
             }
 
+            if (flags.HasAnyFlag(SplineFlag.Unk8))
+            {
+                packet.ReadSingle("unk8f");
+                packet.ReadInt32("unk8i");
+            }
+
             var waypoints = packet.ReadInt32("Waypoints");
 
-            if (flags.HasAnyFlag(SplineFlag.Flying | SplineFlag.CatmullRom))
+            if (flags.HasAnyFlag(SplineFlag.Flying | SplineFlag.CatmullRom | SplineFlag.Falling))
             {
                 for (var i = 0; i < waypoints; i++)
                     packet.ReadVector3("Waypoint", i);
@@ -493,7 +506,12 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.MSG_MOVE_TELEPORT_ACK, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleTeleportAck(Packet packet)
         {
-            var guid = packet.ReadPackedGuid("Guid");
+            WowGuid guid;
+
+            if ((packet.Direction == Direction.ClientToServer) && ClientVersion.RemovedInVersion(ClientVersionBuild.V4_3_4_15595))
+                guid = packet.ReadGuid("Guid"); // ok in 3.0.9
+            else
+                guid = packet.ReadPackedGuid("Guid");
             packet.ReadInt32("Movement Counter");
 
             if (packet.Direction == Direction.ServerToClient)
@@ -1273,6 +1291,10 @@ namespace WowPacketParser.Parsing.Parsers
             else
                 guid = new WowGuid64();
 
+            if ((packet.Opcode == Opcodes.GetOpcode(Opcode.CMSG_MOVE_NOT_ACTIVE_MOVER, Direction.ClientToServer)) &&
+                ClientVersion.RemovedInVersion(ClientVersionBuild.V4_3_4_15595))
+                guid = packet.ReadGuid("Guid"); // ok for 3.0.9
+
             ReadMovementInfo(packet, guid);
 
             if (packet.Opcode != Opcodes.GetOpcode(Opcode.MSG_MOVE_KNOCK_BACK, Direction.Bidirectional))
@@ -1287,7 +1309,7 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_MOVE_SPLINE_DONE, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleMoveSplineDone(Packet packet)
         {
-            var guid = packet.ReadPackedGuid("Guid");
+            WowGuid guid = new WowGuid64(); // = packet.ReadPackedGuid("Guid");
             ReadMovementInfo(packet, guid);
             packet.ReadInt32("Movement Counter"); // Possibly
         }
@@ -1379,7 +1401,11 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE_ACK)]
         public static void HandleSpeedChangeMessage(Packet packet)
         {
-            var guid = packet.ReadPackedGuid("Guid");
+            WowGuid guid;
+            if (ClientVersion.Build <= ClientVersionBuild.V3_0_9_9551)
+                guid = packet.ReadGuid("Guid");
+            else
+                guid = packet.ReadPackedGuid("Guid");
             packet.ReadInt32("Movement Counter");
 
             ReadMovementInfo(packet, guid);
@@ -1443,7 +1469,11 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_MOVE_SET_CAN_TRANSITION_BETWEEN_SWIM_AND_FLY_ACK, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleSpecialMoveAckMessages(Packet packet)
         {
-            var guid = packet.ReadPackedGuid("Guid");
+            WowGuid guid;
+            if (ClientVersion.Build <= ClientVersionBuild.V3_0_9_9551)
+                guid = packet.ReadGuid("Guid");
+            else
+                guid = packet.ReadPackedGuid("Guid");
             packet.ReadInt32("Movement Counter");
             ReadMovementInfo(packet, guid);
             packet.ReadSingle("Unk float");
@@ -1455,7 +1485,7 @@ namespace WowPacketParser.Parsing.Parsers
         public static void HandleSpecialMoveAckMessages2(Packet packet)
         {
             WowGuid guid;
-            if (ClientVersion.Build < ClientVersionBuild.V3_0_2_9056)
+            if (ClientVersion.Build <= ClientVersionBuild.V3_0_9_9551)
                 guid = packet.ReadGuid("Guid");
             else
                 guid = packet.ReadPackedGuid("Guid");
@@ -1736,7 +1766,7 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_MOVE_TIME_SKIPPED, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleMoveTimeSkipped(Packet packet)
         {
-            if (ClientVersion.Build < ClientVersionBuild.V3_0_2_9056)
+            if (ClientVersion.Build <= ClientVersionBuild.V3_0_9_9551)
                 packet.ReadGuid("GUID");
             else
                 packet.ReadPackedGuid("GUID");

@@ -101,7 +101,7 @@ namespace WowPacketParser.Parsing.Parsers
         public static void HandleLootResponse(Packet packet)
         {
             packet.ReadGuid("GUID");
-            if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_3_4_15595)) // might have been added before 4.3.4.15595
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_1_0_9767)) // might have been added before 4.3.4.15595
             {
                 packet.ReadByteE<LootMethod>("LootMethod");
                 packet.ReadUInt32("Gold");
@@ -114,6 +114,8 @@ namespace WowPacketParser.Parsing.Parsers
                     packet.ReadByte("Slot");
                     return;
                 }
+                //if (lootType == LootType.Corpse)
+                    packet.ReadUInt32("Gold");
             }
 
             var count = packet.ReadByte("Drop Count");
@@ -163,7 +165,8 @@ namespace WowPacketParser.Parsing.Parsers
             else
                 packet.ReadByte("Roll Number");
             packet.ReadByteE<LootRollType>("Roll Type");
-            packet.ReadBool("Auto Pass");
+            if (packet.CanRead())
+                packet.ReadBool("Auto Pass");
         }
 
         [Parser(Opcode.SMSG_LOOT_ROLL_WON)]
@@ -192,9 +195,11 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadUInt32<ItemId>("Entry");
             packet.ReadInt32("Random Suffix");
             packet.ReadInt32("Random Property Id");
-            packet.ReadUInt32("Count");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_3_3_11685))
+                packet.ReadUInt32("Count");
             packet.ReadUInt32("Roll time");
-            packet.ReadByteE<LootVoteFlags>("Roll Vote Mask");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_3_3_11685))
+                packet.ReadByteE<LootVoteFlags>("Roll Vote Mask");
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_2_0_14333))
                 packet.ReadByte("unk"); //amount of players? need verification.
         }

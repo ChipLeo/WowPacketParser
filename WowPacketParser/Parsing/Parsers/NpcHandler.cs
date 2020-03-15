@@ -196,7 +196,8 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadInt32("Price", i);
                 packet.ReadInt32("Max Durability", i);
                 uint buyCount = packet.ReadUInt32("Buy Count", i);
-                vendor.ExtendedCost = packet.ReadUInt32("Extended Cost", i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                    vendor.ExtendedCost = packet.ReadUInt32("Extended Cost", i);
 
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_0_3_13329))
                     packet.ReadByte("Unk Byte", i);
@@ -353,7 +354,9 @@ namespace WowPacketParser.Parsing.Parsers
         {
             packet.ReadGuid("GUID");
             var menuEntry = packet.ReadUInt32("Menu Id");
-            var gossipId = packet.ReadUInt32("GossipMenu Id");
+            uint gossipId = 0;
+            if (packet.CanRead())
+                packet.ReadUInt32("GossipMenu Id");
 
             if (packet.CanRead()) // if ( byte_F3777C[v3] & 1 )
                 packet.ReadCString("Box Text");
@@ -371,14 +374,15 @@ namespace WowPacketParser.Parsing.Parsers
 
             gossip.ObjectType = guid.GetObjectType();
             gossip.ObjectEntry = guid.GetEntry();
+            gossip.TextID = 0;
 
             uint menuId = packet.ReadUInt32("Menu Id");
             gossip.Entry = menuId;
 
             if (ClientVersion.AddedInVersion(ClientType.MistsOfPandaria))
                 packet.ReadUInt32("Friendship Faction");
-
-            gossip.TextID = packet.ReadUInt32("Text Id");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                gossip.TextID = packet.ReadUInt32("Text Id");
 
             uint count = packet.ReadUInt32("Amount of Options");
 
@@ -394,35 +398,45 @@ namespace WowPacketParser.Parsing.Parsers
                 };
 
                 gossipOption.OptionIndex = gossipMenuOptionBox.OptionIndex = packet.ReadUInt32("Index", i);
-                gossipOption.OptionIcon = packet.ReadByteE<GossipOptionIcon>("Icon", i);
-                gossipMenuOptionBox.BoxCoded = packet.ReadBool("Box", i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_3_0_7561))
+                    gossipOption.OptionIcon = packet.ReadByteE<GossipOptionIcon>("Icon", i);
+                else gossipOption.OptionIcon = packet.ReadUInt32E<GossipOptionIcon>("Icon", i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_3_0_7561))
+                    gossipMenuOptionBox.BoxCoded = packet.ReadBool("Box", i);
                 gossipMenuOptionBox.BoxMoney = packet.ReadUInt32("Required money", i);
                 gossipOption.OptionText = packet.ReadCString("Text", i);
-                gossipMenuOptionBox.BoxText = packet.ReadCString("Box Text", i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_3_0_7561))
+                    gossipMenuOptionBox.BoxText = packet.ReadCString("Box Text", i);
 
                 Storage.GossipMenuOptions.Add(gossipOption, packet.TimeSpan);
                 if (!gossipMenuOptionBox.IsEmpty)
                     Storage.GossipMenuOptionBoxes.Add(gossipMenuOptionBox, packet.TimeSpan);
             }
 
-            uint questgossips = packet.ReadUInt32("Amount of Quest gossips");
+            uint questgossips = 0;
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_3_0_7561))
+                questgossips = packet.ReadUInt32("Amount of Quest gossips");
             for (int i = 0; i < questgossips; i++)
             {
                 packet.ReadUInt32<QuestId>("Quest ID", i);
 
                 packet.ReadUInt32("Icon", i);
                 packet.ReadInt32("Level", i);
-                packet.ReadUInt32E<QuestFlags>("Flags", i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                    packet.ReadUInt32E<QuestFlags>("Flags", i);
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V5_1_0_16309))
                     packet.ReadUInt32E<QuestFlagsEx>("Flags 2", i);
-
-                packet.ReadBool("Change Icon", i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                    packet.ReadBool("Change Icon", i);
                 packet.ReadCString("Title", i);
             }
 
-            if (guid.GetObjectType() == ObjectType.Unit)
+            if (gossip.TextID != 0)
+                packet.ReadCString("Text");
+
+            /*if (guid.GetObjectType() == ObjectType.Unit)
                 if (Storage.Objects.ContainsKey(guid))
-                    ((Unit)Storage.Objects[guid].Item1).GossipId = menuId;
+                    ((Unit)Storage.Objects[guid].Item1).GossipId = menuId;*/
 
             Storage.Gossips.Add(gossip, packet.TimeSpan);
             if (LastGossipOption.HasSelection)

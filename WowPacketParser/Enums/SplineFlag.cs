@@ -10,6 +10,7 @@ namespace WowPacketParser.Enums
         AnimTierHover       = 0x00000002,
         AnimTierFly         = 0x00000003,
         AnimTierSubmerged   = 0x00000004,
+        Unk8                = 0x00000008,
         Done                = 0x00000100,
         Falling             = 0x00000200,
         NoSpline            = 0x00000400,

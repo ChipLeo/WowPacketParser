@@ -70,8 +70,8 @@ namespace WowPacketParser.Parsing.Parsers
 
         [Parser(Opcode.SMSG_INSPECT_TALENT)]
         public static void HandleInspectTalent(Packet packet)
-        {
-            if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_0_6a_13623))
+        { // wrong for 2.3.3 and 308 and 303
+            if (ClientVersion.RemovedInVersion(ClientVersionBuild.V3_0_3_9183))
                 packet.ReadGuid("GUID");
             else
                 packet.ReadPackedGuid("GUID");
@@ -93,12 +93,13 @@ namespace WowPacketParser.Parsing.Parsers
         {
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_3_4_15595)) // confirmed for 4.3.4
                 packet.ReadPackedGuid("GUID");
-            else if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_0_6a_13623))
+            else //if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_9_9551))
                 packet.ReadGuid("GUID");
-            else
-                packet.ReadPackedGuid("GUID");
+            //            else
+            //                packet.ReadPackedGuid("GUID");
 
-            ReadInspectPart(packet);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_3_4_15595))
+                ReadInspectPart(packet);
         }
 
         [Parser(Opcode.MSG_TALENT_WIPE_CONFIRM)]

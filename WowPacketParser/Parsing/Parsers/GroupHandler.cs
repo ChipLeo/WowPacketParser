@@ -66,7 +66,7 @@ namespace WowPacketParser.Parsing.Parsers
 
             packet.ReadGuid("Leader GUID");
 
-            if (numFields <= 0)
+            if (!packet.CanRead())
                 return;
 
             packet.ReadByteE<LootMethod>("Loot Method");
@@ -227,7 +227,12 @@ namespace WowPacketParser.Parsing.Parsers
             var updateFlags = packet.ReadUInt32E<GroupUpdateFlag>("Update Flags");
 
             if (updateFlags.HasFlag(GroupUpdateFlag.Status))
-                packet.ReadInt16E<GroupMemberStatusFlag>("Status");
+            {
+                if (ClientVersion.AddedInVersion(ClientType.WrathOfTheLichKing))// &&
+                    //packet.Opcode == Opcodes.GetOpcode(Opcode.SMSG_PARTY_MEMBER_STATS_FULL, Direction.ServerToClient))
+                    packet.ReadInt16E<GroupMemberStatusFlag>("Status");
+                else packet.ReadByteE<GroupMemberStatusFlag>("Status");
+            }
 
             if (updateFlags.HasFlag(GroupUpdateFlag.CurrentHealth))
             {
@@ -341,6 +346,10 @@ namespace WowPacketParser.Parsing.Parsers
             if (ClientVersion.AddedInVersion(ClientType.WrathOfTheLichKing) && // no idea when this was added exactly, doesn't exist in 2.4.1
                 updateFlags.HasFlag(GroupUpdateFlag.VehicleSeat))
                 packet.ReadInt32("Vehicle Seat");
+            if (ClientVersion.RemovedInVersion(ClientVersionBuild.V3_0_8_9464))
+                if (updateFlags == 0) packet.ReadByte("unk");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_8_9464))
+                if (updateFlags == 0) packet.ReadInt16("unk");
         }
 
         [Parser(Opcode.CMSG_GROUP_SET_LEADER)]
@@ -360,7 +369,9 @@ namespace WowPacketParser.Parsing.Parsers
         public static void HandleGroupInvite(Packet packet)
         {
             packet.ReadCString("Name");
-            packet.ReadInt32("Unk Int32");
+            // not needed for 232
+            //if (ClientVersion.RemovedInVersion(ClientVersionBuild.V3_0_9_9551))
+            //    packet.ReadInt32("Unk Int32");
         }
 
         [Parser(Opcode.CMSG_GROUP_INVITE, ClientVersionBuild.V4_2_2_14545, ClientVersionBuild.V4_3_0_15005)]
@@ -420,8 +431,15 @@ namespace WowPacketParser.Parsing.Parsers
             packet.WriteGuid("Guid", guid); // Non-zero in cross realm parties
         }
 
-        [Parser(Opcode.SMSG_GROUP_INVITE, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
+
+        [Parser(Opcode.SMSG_GROUP_INVITE, ClientVersionBuild.Zero, ClientVersionBuild.V2_4_1_8125)]
         public static void HandleGroupInviteResponse(Packet packet)
+        {
+            packet.ReadCString("Player inviter Name");
+        }
+
+        [Parser(Opcode.SMSG_GROUP_INVITE, ClientVersionBuild.V2_4_1_8125, ClientVersionBuild.V3_0_3_9183)]
+        public static void HandleGroupInviteResponse1(Packet packet)
         {
             packet.ReadBool("invited/already in group flag?");
             packet.ReadCString("Name");
@@ -431,6 +449,13 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadUInt32("Unk Uint32", i);
 
             packet.ReadInt32("Unk Int32 2");
+        }
+
+        [Parser(Opcode.SMSG_GROUP_INVITE, ClientVersionBuild.V3_0_3_9183, ClientVersionBuild.V4_3_4_15595)]
+        public static void HandleGroupInviteResponse309(Packet packet)
+        {
+            packet.ReadBool("invited/already in group flag?");
+            packet.ReadCString("Name");
         }
 
         [Parser(Opcode.SMSG_GROUP_INVITE, ClientVersionBuild.V4_3_4_15595)]
@@ -491,7 +516,8 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_GROUP_ACCEPT)]
         public static void HandleGroupAccept(Packet packet)
         {
-            packet.ReadInt32("Unk Int32");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_3_0_10958))
+                packet.ReadInt32("Unk Int32");
         }
 
         [Parser(Opcode.CMSG_GROUP_ACCEPT_DECLINE)]

@@ -63,7 +63,8 @@ namespace WowPacketParser.Parsing.Parsers
                     packet.ReadGuid("GUID");
                     break;
                 case TradeStatus.OpenWindow:
-                    packet.ReadUInt32("Trade Id");
+                    if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_3_2_7741))
+                        packet.ReadUInt32("Trade Id");
                     break;
                 case TradeStatus.CloseWindow:
                     packet.ReadUInt32("Unk UInt32 1");
@@ -161,7 +162,8 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadUInt32("Unk Slot 1");
             packet.ReadUInt32("Unk Slot 2");
             packet.ReadUInt32("Gold");
-            packet.ReadInt32<SpellId>("Spell ID");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                packet.ReadInt32<SpellId>("Spell ID");
 
             while (packet.CanRead())
             {

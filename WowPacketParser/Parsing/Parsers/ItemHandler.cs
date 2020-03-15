@@ -75,8 +75,23 @@ namespace WowPacketParser.Parsing.Parsers
             }
         }
 
-        [Parser(Opcode.CMSG_USE_ITEM, ClientVersionBuild.Zero, ClientVersionBuild.V3_0_3_9183)]
+        [Parser(Opcode.CMSG_USE_ITEM, ClientVersionBuild.Zero, ClientVersionBuild.V2_4_0_8089)]
         public static void HandleUseItem(Packet packet)
+        {
+            packet.ReadSByte("Bag");
+            packet.ReadByte("Slot");
+            packet.ReadByte("Spell Count");
+            packet.ReadByte("Cast Count");
+            var flag1 = packet.ReadByte("Flag1");
+            var flag2 = packet.ReadByte("flag2");
+            if ((flag1 & 64) > 0) packet.ReadVector3("Pos");
+            if ((flag1 & 2) > 0) packet.ReadPackedGuid("Guid2");
+            if ((flag1 & 16) > 0) packet.ReadPackedGuid("Guid16");
+            if ((flag2 & 8) > 0) packet.ReadPackedGuid("Guid8");
+        }
+
+        [Parser(Opcode.CMSG_USE_ITEM, ClientVersionBuild.V2_4_0_8089, ClientVersionBuild.V3_0_3_9183)]
+        public static void HandleUseItem1(Packet packet)
         {
             packet.ReadSByte("Bag");
             packet.ReadByte("Slot");
@@ -122,6 +137,14 @@ namespace WowPacketParser.Parsing.Parsers
         public static void HandleAutoStoreLootItem(Packet packet)
         {
             packet.ReadByte("Slot");
+        }
+
+        [Parser(Opcode.CMSG_AUTO_STORE_BAG_ITEM)]
+        public static void HandleAutoBagItem(Packet packet)
+        {
+            packet.ReadByte("ContainerSlotB");
+            packet.ReadByte("ContainerSlotA");
+            packet.ReadByte("SlotA");
         }
 
         [Parser(Opcode.CMSG_AUTOSTORE_LOOT_ITEM, ClientVersionBuild.V5_1_0_16309)]
@@ -200,6 +223,12 @@ namespace WowPacketParser.Parsing.Parsers
         {
             packet.ReadGuid("Vendor GUID");
             packet.ReadUInt32("Slot");
+        }
+
+        [Parser(Opcode.SMSG_OPEN_CONTAINER)]
+        public static void HandleOpenContainer(Packet packet)
+        {
+            packet.ReadGuid("Guid");
         }
 
         [Parser(Opcode.CMSG_GET_ITEM_PURCHASE_DATA)]
@@ -355,7 +384,10 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadUInt32("Count");
             }
             else
-                packet.ReadByte("Count");
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_3_9183))
+                    packet.ReadUInt32("Count");
+                else
+                    packet.ReadByte("Count");
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_0_6a_13623)) // not verified
                 packet.ReadGuid("Bag GUID");
@@ -439,10 +471,19 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_ENCHANTMENT_LOG)]
         public static void HandleEnchantmentLog(Packet packet)
         {
-            packet.ReadPackedGuid("Target");
-            packet.ReadPackedGuid("Caster");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+            {
+                packet.ReadPackedGuid("Target");
+                packet.ReadPackedGuid("Caster");
+            } else
+            {
+                packet.ReadGuid("Target");
+                packet.ReadGuid("Caster");
+            }
             packet.ReadInt32<ItemId>("Item Entry");
             packet.ReadUInt32("Enchantment ID?");
+            if (ClientVersion.RemovedInVersion(ClientVersionBuild.V2_4_0_8089))
+                packet.ReadByte("unk");
         }
 
         [Parser(Opcode.CMSG_ITEM_QUERY_SINGLE)]
@@ -454,6 +495,8 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadByteE<UnknownFlags>("Unknown Byte");
                 packet.ReadInt32("Unknown Int32");
             }
+            else if (ClientVersion.RemovedInVersion(ClientVersionBuild.V2_3_2_7741)) // Might be earlier
+                packet.ReadGuid("Guid");
         }
 
         [HasSniffData]
@@ -580,7 +623,7 @@ namespace WowPacketParser.Parsing.Parsers
 
             item.Bonding = packet.ReadInt32E<ItemBonding>("Bonding");
 
-            item.Description = packet.ReadCString();
+            item.Description = packet.ReadCString("Description");
 
             item.PageText = packet.ReadUInt32("Page Text");
 
@@ -626,6 +669,12 @@ namespace WowPacketParser.Parsing.Parsers
             item.SocketBonus = packet.ReadInt32("Socket Bonus");
 
             item.GemProperties = packet.ReadInt32("Gem Properties");
+
+            if (ClientVersion.RemovedInVersion(ClientVersionBuild.V2_4_0_8089))
+            {
+                packet.ReadUInt32("unk1");
+                packet.ReadUInt32("unk2");
+            }
 
             item.RequiredDisenchantSkill = packet.ReadInt32("Required Disenchant Skill");
 
@@ -1223,8 +1272,21 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadBit("Successful");
         }
 
-        [Parser(Opcode.SMSG_QUERY_ITEM_TEXT_RESPONSE)]
+        [Parser(Opcode.SMSG_QUERY_ITEM_TEXT_RESPONSE, ClientVersionBuild.Zero, ClientVersionBuild.V2_4_3_8606)]
         public static void HandleItemTextQueryResult(Packet packet)
+        {
+            if (packet.Length>1)
+            {
+                packet.ReadUInt32("TextID");
+                packet.ReadCString("Item Text");
+            } else
+            {
+                packet.ReadByte("unk");
+            }
+        }
+
+        [Parser(Opcode.SMSG_QUERY_ITEM_TEXT_RESPONSE, ClientVersionBuild.V2_4_3_8606, ClientVersionBuild.V3_0_8_9464)]
+        public static void HandleItemTextQueryResult243(Packet packet)
         {
             if (!packet.ReadBool("Empty"))
             {
@@ -1233,10 +1295,18 @@ namespace WowPacketParser.Parsing.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_QUERY_ITEM_TEXT_RESPONSE, ClientVersionBuild.V3_0_8_9464)]
+        public static void HandleItemTextQueryResult309(Packet packet)
+        {
+            packet.ReadInt32("TextID");
+            packet.ReadCString("Text");
+        }
+
         [Parser(Opcode.CMSG_ITEM_TEXT_QUERY)]
         public static void HandleItemTextQuery(Packet packet)
         {
-            packet.ReadGuid("Item Guid");
+            packet.ReadUInt32("TextID");
+            packet.ReadGuid("MailID");
         }
 
         [Parser(Opcode.CMSG_TRANSMOGRIFY_ITEMS, ClientVersionBuild.V4_3_4_15595)]

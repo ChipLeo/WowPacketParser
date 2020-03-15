@@ -71,8 +71,15 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadUInt32("Slot");
         }
 
-        [Parser(Opcode.SMSG_SUPERCEDED_SPELLS)]
+        [Parser(Opcode.SMSG_SUPERCEDED_SPELLS, ClientVersionBuild.Zero, ClientVersionBuild.V3_1_0_9767)]
         public static void HandleSupercededSpell(Packet packet)
+        {
+            packet.ReadInt16<SpellId>("Spell ID");
+            packet.ReadInt16<SpellId>("Next Spell ID");
+        }
+
+        [Parser(Opcode.SMSG_SUPERCEDED_SPELLS, ClientVersionBuild.V3_1_0_9767)]
+        public static void HandleSupercededSpell310(Packet packet)
         {
             packet.ReadInt32<SpellId>("Spell ID");
             packet.ReadInt32<SpellId>("Next Spell ID");
@@ -357,7 +364,8 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_CAST_SPELL)]
         public static void HandleCastSpell(Packet packet)
         {
-            packet.ReadByte("Cast Count");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_2_9056))
+                packet.ReadByte("Cast Count");
             packet.ReadInt32<SpellId>("Spell ID");
 
             if (ClientVersion.AddedInVersion(ClientType.Cataclysm))
@@ -381,7 +389,10 @@ namespace WowPacketParser.Parsing.Parsers
 
         public static TargetFlag ReadSpellCastTargets(Packet packet)
         {
-            var targetFlags = packet.ReadInt32E<TargetFlag>("Target Flags");
+            TargetFlag targetFlags;
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                targetFlags = packet.ReadUInt32E<TargetFlag>("Target Flags");
+            else targetFlags = packet.ReadUInt16E<TargetFlag>("Target Flags");
 
             if (targetFlags.HasAnyFlag(TargetFlag.Unit | TargetFlag.CorpseEnemy | TargetFlag.GameObject |
                 TargetFlag.CorpseAlly | TargetFlag.UnitMinipet))
@@ -710,16 +721,18 @@ namespace WowPacketParser.Parsing.Parsers
 
             var spellId = packet.ReadInt32<SpellId>("Spell ID");
 
-            if (ClientVersion.RemovedInVersion(ClientVersionBuild.V3_0_2_9056) && !isSpellGo)
+            if (!isSpellGo && ClientVersion.RemovedInVersion(ClientVersionBuild.V3_0_2_9056))
                 packet.ReadByte("Cast Count");
 
             CastFlag flags;
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_2_9056))
-                flags = packet.ReadInt32E<CastFlag>("Cast Flags");
+                flags = packet.ReadUInt32E<CastFlag>("Cast Flags");
             else
                 flags = packet.ReadUInt16E<CastFlag>("Cast Flags");
 
-            packet.ReadUInt32("Time");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089) ||
+               (ClientVersion.AddedInVersion(ClientVersionBuild.V2_3_0_7561) && !isSpellGo))
+                packet.ReadUInt32("Time");
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_3_0_15005))
                 packet.ReadUInt32("Time2");
 
@@ -740,7 +753,10 @@ namespace WowPacketParser.Parsing.Parsers
                 }
             }
 
-            var targetFlags = packet.ReadInt32E<TargetFlag>("Target Flags");
+            TargetFlag targetFlags;
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                targetFlags = packet.ReadUInt32E<TargetFlag>("Target Flags");
+            else targetFlags = packet.ReadUInt16E<TargetFlag>("Target Flags");
 
             WowGuid targetGUID = new WowGuid64();
             if (targetFlags.HasAnyFlag(TargetFlag.Unit | TargetFlag.CorpseEnemy | TargetFlag.GameObject |
@@ -1101,20 +1117,32 @@ namespace WowPacketParser.Parsing.Parsers
         }
 
         [Parser(Opcode.SMSG_SPELL_FAILURE)]
+        public static void HandleSpellFailure(Packet packet)
+        {
+            packet.ReadPackedGuid("Guid");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_2_9056))
+                packet.ReadByte("Cast count");
+            packet.ReadUInt32<SpellId>("Spell ID");
+            packet.ReadByteE<SpellCastFailureReason>("Reason");
+        }
+
         [Parser(Opcode.SMSG_SPELL_FAILED_OTHER)]
         public static void HandleSpellFailedOther(Packet packet)
         {
             packet.ReadPackedGuid("Guid");
-            packet.ReadByte("Cast count");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_2_9056))
+                packet.ReadByte("Cast count");
             packet.ReadUInt32<SpellId>("Spell ID");
-            packet.ReadByteE<SpellCastFailureReason>("Reason");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_2_9056))
+                packet.ReadInt32E<SpellCastFailureReason>("Reason");
         }
 
         [Parser(Opcode.SMSG_SPELL_INSTAKILL_LOG)]
         public static void HandleSpellInstakillLog(Packet packet)
         {
             packet.ReadGuid("Target GUID");
-            packet.ReadGuid("Caster GUID");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                packet.ReadGuid("Caster GUID");
             packet.ReadUInt32<SpellId>("Spell ID");
         }
 
@@ -1341,7 +1369,8 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_CANCEL_CAST)]
         public static void HandlePlayerCancelCast(Packet packet)
         {
-            packet.ReadByte("Count");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_1_8125))
+                packet.ReadByte("Count");
             packet.ReadUInt32<SpellId>("Spell Id");
         }
 
@@ -1361,11 +1390,38 @@ namespace WowPacketParser.Parsing.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_INIT_EXTRA_AURA_INFO_OBSOLETE)]
+        [Parser(Opcode.SMSG_SET_EXTRA_AURA_INFO_OBSOLETE)]
+        [Parser(Opcode.SMSG_SET_EXTRA_AURA_INFO_NEED_UPDATE_OBSOLETE)]
+        public static void HandleSetExtraAuraInfoObsolete(Packet packet)
+        {
+            packet.ReadPackedGuid("Caster GUID");
+            while (packet.CanRead())
+            {
+                packet.ReadByte("Position");
+                packet.ReadUInt32("Aura");
+                packet.ReadInt32("MaxDuration");
+                packet.ReadInt32("Duration");
+            }
+        }
+
         [Parser(Opcode.SMSG_SPELL_DELAYED)]
         public static void HandleSpellDelayed(Packet packet)
         {
             packet.ReadPackedGuid("Caster GUID");
             packet.ReadInt32("Delay Time");
+        }
+
+        [Parser(Opcode.SMSG_RESISTLOG)]
+        public static void HandleresistLog(Packet packet)
+        {
+            packet.ReadGuid("Caster GUID");
+            packet.ReadGuid("Target GUID");
+            packet.ReadInt32("Spell");
+            packet.ReadSingle("unk1");
+            packet.ReadSingle("unk2");
+            packet.ReadUInt32("unk3");
+            packet.ReadUInt32("unk4");
         }
 
         [Parser(Opcode.SMSG_SPELL_UPDATE_CHAIN_TARGETS)]
@@ -1507,6 +1563,7 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_CANCEL_AUTO_REPEAT_SPELL)]
         [Parser(Opcode.CMSG_CANCEL_GROWTH_AURA)]
         [Parser(Opcode.CMSG_CANCEL_MOUNT_AURA)]
+        [Parser(Opcode.CMSG_NO_SPELL_VARIANCE)]
         [Parser(Opcode.CMSG_REQUEST_CATEGORY_COOLDOWNS)]
         public static void HandleSpellNull(Packet packet)
         {

@@ -83,11 +83,11 @@ namespace WowPacketParser.Parsing.Parsers
                 for (var i = 0; i < bannedCount; i++)
                 {
                     packet.ReadInt32("ID", i);
-                    packet.ReadBytes("Name MD5", 16);
-                    packet.ReadBytes("Version MD5", 16);
+                    packet.ReadBytes("   Name MD5", 16, i);
+                    packet.ReadBytes("Version MD5", 16, i);
                     packet.ReadTime("Time", i);
 
-                    if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_3_3a_11723))
+                    if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_8_9464))
                         packet.ReadInt32("Is banned", i);
                 }
             }

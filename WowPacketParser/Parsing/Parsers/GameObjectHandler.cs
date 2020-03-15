@@ -46,7 +46,7 @@ namespace WowPacketParser.Parsing.Parsers
             for (int i = 0; i < gameObject.Data.Length; i++)
                 gameObject.Data[i] = packet.ReadInt32("Data", i);
 
-            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_2_9056)) // not sure when it was added exactly - did not exist in 2.4.1 sniff
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_3_8606)) // not sure when it was added exactly - did not exist in 2.4.1 sniff
                 gameObject.Size = packet.ReadSingle("Size");
 
             gameObject.QuestItems = new uint?[ClientVersion.AddedInVersion(ClientVersionBuild.V3_2_0_10192) ? 6 : 4];

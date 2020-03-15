@@ -19,7 +19,7 @@ namespace WowPacketParser.Parsing.Parsers
 
         [Parser(Opcode.SMSG_PET_SPELLS_MESSAGE)]
         public static void HandlePetSpells(Packet packet)
-        {
+        { // wrong for 308
             WowGuid guid = packet.ReadGuid("GUID");
             // Equal to "Clear spells" pre cataclysm
             if (guid.IsEmpty())
@@ -38,7 +38,10 @@ namespace WowPacketParser.Parsing.Parsers
             bool isPet = guid.GetHighType() == HighGuidType.Pet;
             bool isVehicle = guid.GetHighType() == HighGuidType.Vehicle;
             bool isMinion = guid.GetHighType() == HighGuidType.Creature;
-            const int maxCreatureSpells = 10;
+            int maxCreatureSpells = 10;
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_3_9183))
+                maxCreatureSpells = 11;
+
             var spells = new List<uint?>(maxCreatureSpells);
             for (int i = 0; i < maxCreatureSpells; i++) // Read pet/vehicle spell ids
             {
@@ -129,13 +132,16 @@ namespace WowPacketParser.Parsing.Parsers
                 StoreGetters.NameDict[guid] = petName;
 
             packet.ReadTime("Time");
-            var declined = packet.ReadBool("Declined");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+            {
+                var declined = packet.ReadBool("Declined");
 
-            const int maxDeclinedNameCases = 5;
+                const int maxDeclinedNameCases = 5;
 
-            if (declined)
-                for (var i = 0; i < maxDeclinedNameCases; i++)
-                    packet.ReadCString("Declined name", i);
+                if (declined)
+                    for (var i = 0; i < maxDeclinedNameCases; i++)
+                        packet.ReadCString("Declined name", i);
+            }
         }
 
         [Parser(Opcode.SMSG_PET_MODE)]

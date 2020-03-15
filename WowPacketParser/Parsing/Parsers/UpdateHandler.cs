@@ -2843,9 +2843,14 @@ namespace WowPacketParser.Parsing.Parsers
                         if (splineFlags.HasAnyFlag(SplineFlag.FinalTarget))
                             packet.ReadGuid("Final Spline Target GUID", index);
                         else if (splineFlags.HasAnyFlag(SplineFlag.FinalOrientation))
+                        {
                             packet.ReadSingle("Final Spline Orientation", index);
+                            packet.ReadInt32("unk"); // for 2.4.3
+                        }
                         else if (splineFlags.HasAnyFlag(SplineFlag.FinalPoint))
                             packet.ReadVector3("Final Spline Coords", index);
+                        else if (splineFlags.HasAnyFlag(SplineFlag.CatmullRom))
+                            packet.ReadSingle("unk");
                     }
 
                     packet.ReadInt32("Spline Time", index);
@@ -2860,7 +2865,7 @@ namespace WowPacketParser.Parsing.Parsers
                         packet.ReadInt32("Spline Start Time", index);
                     }
 
-                    var splineCount = packet.ReadInt32();
+                    var splineCount = packet.ReadInt32("Spline count");
                     for (var i = 0; i < splineCount; i++)
                         packet.ReadVector3("Spline Waypoint", index, i);
 
@@ -2947,6 +2952,7 @@ namespace WowPacketParser.Parsing.Parsers
         {
             using (var packet2 = packet.Inflate(packet.ReadInt32()))
             {
+                packet2.AsHex();
                 HandleUpdateObject(packet2);
             }
         }

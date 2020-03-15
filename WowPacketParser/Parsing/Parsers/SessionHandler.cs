@@ -309,7 +309,8 @@ namespace WowPacketParser.Parsing.Parsers
             {
                 case ResponseCode.AUTH_OK:
                 {
-                    ReadAuthResponseInfo(packet);
+                    if (packet.CanRead())
+                        ReadAuthResponseInfo(packet);
                     break;
                 }
                 case ResponseCode.AUTH_WAIT_QUEUE:
@@ -392,7 +393,8 @@ namespace WowPacketParser.Parsing.Parsers
         public static void ReadQueuePositionInfo(Packet packet)
         {
             packet.ReadInt32("Queue Position");
-            packet.ReadBool("Realm Has Free Character Migration");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089) && packet.CanRead()) // not exist in 309
+                packet.ReadBool("Realm Has Free Character Migration");
         }
 
         [Parser(Opcode.CMSG_PLAYER_LOGIN, ClientVersionBuild.Zero, ClientVersionBuild.V4_2_2_14545)]

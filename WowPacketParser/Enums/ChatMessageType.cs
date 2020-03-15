@@ -54,6 +54,14 @@
         GuildAchievement     = 49,
         ArenaPoints          = 50,
         PartyLeader          = 51,
+        unk82                = 82, // 230
+        unk83                = 83, // 230
+        unk84                = 84, // 230
+        unk87                = 87, // 233
+        unk88                = 88, // 233
+        unk89                = 89, // 230
+        unk90                = 90, // 230
+        unk94                = 94, // 230
         Addon                = uint.MaxValue
     }
 

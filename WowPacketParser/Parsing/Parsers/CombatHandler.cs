@@ -49,7 +49,8 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_RESET_RANGED_COMBAT_TIMER)]
         public static void HandleResetRangedCombatTimer(Packet packet)
         {
-            packet.ReadInt32("Timer");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_9_9551))
+                packet.ReadInt32("Timer");
         }
 
         [Parser(Opcode.CMSG_TOGGLE_PVP)]
@@ -108,7 +109,8 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_CANCEL_AUTO_REPEAT)]
         public static void HandleCancelAutoRepeat(Packet packet)
         {
-            packet.ReadPackedGuid("Target GUID");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_2_9056))
+                packet.ReadPackedGuid("Target GUID");
         }
 
         [Parser(Opcode.SMSG_ATTACK_START)]
@@ -185,8 +187,8 @@ namespace WowPacketParser.Parsing.Parsers
                     packet.ReadSingle("Unk Float");
         }
 
-        [Parser(Opcode.SMSG_ATTACKER_STATE_UPDATE, ClientVersionBuild.Zero, ClientVersionBuild.V4_0_6_13596)]
-        public static void HandleAttackerStateUpdate(Packet packet)
+        [Parser(Opcode.SMSG_ATTACKER_STATE_UPDATE, ClientVersionBuild.V3_0_2_9056, ClientVersionBuild.V4_0_6_13596)]
+        public static void HandleAttackerStateUpdate302(Packet packet)
         {
             var hitInfo = packet.ReadInt32E<SpellHitInfo>("HitInfo");
             packet.ReadPackedGuid("AttackerGUID");
@@ -244,6 +246,62 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadInt32("Unk Attacker State 3 12");
                 packet.ReadInt32("Unk Attacker State 3 13");
                 packet.ReadInt32("Unk Attacker State 3 14");
+            }
+        }
+
+        [Parser(Opcode.SMSG_ATTACKER_STATE_UPDATE, ClientVersionBuild.Zero, ClientVersionBuild.V3_0_2_9056)]
+        public static void HandleAttackerStateUpdate(Packet packet)
+        {
+            var hitInfo = packet.ReadInt32E<SpellHitInfo>("HitInfo");
+            packet.ReadPackedGuid("AttackerGUID");
+            packet.ReadPackedGuid("TargetGUID");
+            packet.ReadInt32("Damage");
+
+            var subDmgCount = packet.ReadByte();
+            for (var i = 0; i < subDmgCount; ++i)
+            {
+                packet.ReadInt32("SchoolMask", i);
+                packet.ReadSingle("Float Damage", i);
+                packet.ReadInt32("Int Damage", i);
+                packet.ReadInt32("Damage Absorbed", i);
+                packet.ReadInt32("Damage Resisted", i);
+            }
+
+            packet.ReadInt32E<VictimStates>("VictimState");
+            packet.ReadInt32("Unk Attacker State 0");
+
+            packet.ReadInt32<SpellId>("Melee Spell ID ");
+            packet.ReadInt32("Block Amount");
+
+            if (hitInfo.HasAnyFlag(SpellHitInfo.HITINFO_UNK0))
+            {
+                packet.ReadInt32("Unk Attacker State 3 1");
+                packet.ReadSingle("Unk Attacker State 3 2");
+                packet.ReadSingle("Unk Attacker State 3 3");
+                packet.ReadSingle("Unk Attacker State 3 4");
+                packet.ReadSingle("Unk Attacker State 3 5");
+
+                packet.ReadSingle("Unk Attacker State 3 6");
+                packet.ReadSingle("Unk Attacker State 3 7");
+                packet.ReadSingle("Unk Attacker State 3 8");
+                packet.ReadSingle("Unk Attacker State 3 9");
+
+                packet.ReadSingle("Unk Attacker State 3 10");
+                packet.ReadSingle("Unk Attacker State 3 11");
+
+                packet.ReadSingle("Unk Attacker State 3 12");
+                packet.ReadSingle("Unk Attacker State 3 13");
+
+                packet.ReadSingle("Unk Attacker State 3 14");
+                packet.ReadSingle("Unk Attacker State 3 15");
+
+                packet.ReadSingle("Unk Attacker State 3 16");
+                packet.ReadSingle("Unk Attacker State 3 17");
+
+                packet.ReadSingle("Unk Attacker State 3 18");
+                packet.ReadSingle("Unk Attacker State 3 19");
+
+                packet.ReadInt32("Unk Attacker State 3 20");
             }
         }
 

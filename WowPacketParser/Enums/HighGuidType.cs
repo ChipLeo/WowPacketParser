@@ -49,6 +49,7 @@
         BattlePet,
         CommerceObj,
         ClientSession,
+        Elevator,
         Cast
     };
 
@@ -209,18 +210,27 @@
         Player        = 0x000, // Seen 0x280 for players too
         Player2       = 0x008,
         BattleGround1 = 0x101,
+        Guild2        = 0x102,
         InstanceSave  = 0x104,
         Group         = 0x105,
         Account       = 0x108,
         BattleGround2 = 0x109,
+        Elevator      = 0x10A,
+        Mail          = 0x10B,
         MOTransport   = 0x10C,
         Unknown270    = 0x10E, // pets and mounts?
         Guild         = 0x10F,
         Item          = 0x400, // Container
         Toy           = 0x408,
+        Group1        = 0x500,
+        Unk607        = 0x607,
+        Group2        = 0xE00,
+        Group3        = 0xE03,
+        Group5        = 0xE05,
+        Group9        = 0xE09,
         DynObject     = 0xF00, // Corpses
         GameObject    = 0xF01,
-        Transport     = 0xF02,
+        Unit2         = 0xF02,
         Unit          = 0xF03,
         Pet           = 0xF04,
         Vehicle       = 0xF05,

@@ -264,7 +264,7 @@ namespace WowPacketParser.Parsing.Parsers
 
         [Parser(Opcode.SMSG_RESURRECT_REQUEST)]
         public static void HandleResurrectRequest(Packet packet)
-        {
+        { // bad for 309 and 308 and 232
             packet.ReadGuid("GUID");
             packet.ReadUInt32("Name length");
             packet.ReadCString("Resurrector Name");
@@ -361,14 +361,14 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_PING)]
         public static void HandleClientPing(Packet packet)
         {
-            packet.ReadInt32("Ping");
-            packet.ReadInt32("Ping Count");
+            packet.ReadInt32("PingID");
+            packet.ReadInt32("Ping Delay");
         }
 
         [Parser(Opcode.SMSG_PONG)]
         public static void HandleServerPong(Packet packet)
         {
-            packet.ReadInt32("Ping");
+            packet.ReadInt32("PingID");
         }
 
         [Parser(Opcode.SMSG_CACHE_VERSION)]
@@ -599,7 +599,8 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadUInt32("Level", i);
                 packet.ReadUInt32E<Class>("Class", i);
                 packet.ReadUInt32E<Race>("Race", i);
-                packet.ReadByteE<Gender>("Gender", i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                    packet.ReadByteE<Gender>("Gender", i);
                 packet.ReadUInt32<ZoneId>("Zone Id", i);
             }
         }
@@ -820,7 +821,8 @@ namespace WowPacketParser.Parsing.Parsers
         public static void HandleSummonResponse(Packet packet)
         {
             packet.ReadGuid("Summoner GUID");
-            packet.ReadBool("Accept");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                packet.ReadBool("Accept");
         }
 
         [Parser(Opcode.CMSG_SPELL_CLICK)]
@@ -1032,6 +1034,22 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadByte("Unk Byte", i);
         }
 
+        [Parser(Opcode.MSG_DEV_SHOWLABEL)] // 2.3.0
+        public static void HandleDevShowLabel(Packet packet)
+        {
+            packet.ReadPackedGuid("GUID");
+            packet.ReadByte("unk0");
+            packet.ReadByte("unk1");
+            packet.ReadByte("unk2");
+            packet.ReadByte("unk3");
+            packet.ReadByte("unk4");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_3_9183))
+                packet.ReadByte("unk4a");
+            packet.ReadUInt32("unk5");
+            packet.ReadVector4("Position");
+            packet.ReadUInt32("unk6");
+            packet.AsHex();
+        }
 
         [Parser(Opcode.SMSG_DISPLAY_GAME_ERROR)] // 4.3.4
         public static void HandleDisplayGameError(Packet packet)
@@ -1109,6 +1127,64 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadWoWString("Str", len);
         }
 
+        [Parser(Opcode.SMSG_TEST_DROP_RATE_RESULT)]
+        public static void HandleTestDropRateResult(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadByte("unk2");
+        }
+
+        [Parser(Opcode.CMSG_UNK_01FF)]
+        public static void HandleUnk1FF(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadInt32("unk2");
+            packet.ReadInt32("unk3");
+        }
+
+        [Parser(Opcode.SMSG_UNKNOWN_107)]
+        public static void HandleUnknown107(Packet packet)
+        {
+            var count1 = packet.ReadByte("Count 1");
+            for (int i = 0; i < count1; ++i)
+                packet.ReadGuid("Guid1", i);
+            var count2 = packet.ReadByte("Count 2");
+            for (int i = 0; i < count2; ++i)
+                packet.ReadGuid("Guid2", i);
+        }
+
+        [Parser(Opcode.SMSG_UNKNOWN_1189)]
+        public static void HandleUnknown1189(Packet packet)
+        {
+            var count = packet.ReadInt32("count");
+            for (int i = 0; i < count; ++i)
+                packet.ReadGuid("Creature Guid", i);
+        }
+
+        [Parser(Opcode.SMSG_UNK_036C)]
+        public static void HandleUnk36C(Packet packet)
+        {
+            packet.ReadByte("unk1");
+            packet.ReadByte("unk2");
+            var unk3 = packet.ReadByte("unk3");
+            if (unk3!=0)
+                packet.ReadInt32("unk4");
+        }
+
+        [Parser(Opcode.SMSG_GOD_MODE)] // exist 230
+        [Parser(Opcode.SMSG_PETGODMODE)] // not exist 230, exist 243
+        public static void HandleGodMode(Packet packet)
+        {
+            packet.ReadBool("GodMode");
+        }
+
+        [Parser(Opcode.SMSG_FORCEACTIONSHOW)]
+        public static void HandleForceAction(Packet packet)
+        {
+            packet.ReadInt32("unk1");
+            packet.ReadInt32("unk2");
+        }
+
         [Parser(Opcode.SMSG_MINIGAME_STATE)]
         [Parser(Opcode.CMSG_KEEP_ALIVE)]
         [Parser(Opcode.CMSG_TUTORIAL_RESET)]
@@ -1141,6 +1217,8 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_NEW_WORLD_ABORT)]
         [Parser(Opcode.CMSG_ROLE_POLL_BEGIN)]
         [Parser(Opcode.CMSG_UPDATE_VAS_PURCHASE_STATES)]
+        [Parser(Opcode.CMSG_UNK_0363)]
+        [Parser(Opcode.CMSG_UNKNOWN_1020)]
         public static void HandleZeroLengthPackets(Packet packet)
         {
         }

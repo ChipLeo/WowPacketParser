@@ -20,10 +20,24 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_CONTACT_LIST)]
         public static void HandleContactListClient(Packet packet)
         {
-            packet.ReadInt32E<ContactListFlag>("List Flags?");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                packet.ReadInt32E<ContactListFlag>("List Flags?");
         }
 
-        [Parser(Opcode.SMSG_CONTACT_LIST)]
+
+        [Parser(Opcode.SMSG_CONTACT_LIST, ClientVersionBuild.Zero, ClientVersionBuild.V2_4_0_8089)]
+        public static void HandleContactListZero(Packet packet)
+        {
+            var count = packet.ReadByte("Count");
+
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadGuid("GUID", i);
+                ReadSingleContactBlock(packet, true);
+            }
+        }
+
+        [Parser(Opcode.SMSG_CONTACT_LIST, ClientVersionBuild.V2_4_0_8089)]
         public static void HandleContactList(Packet packet)
         {
             packet.ReadInt32E<ContactListFlag>("List Flags");

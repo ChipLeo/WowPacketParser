@@ -782,7 +782,8 @@ namespace WowPacketParser.Parsing.Parsers
         {
             packet.ReadGuid("GUID");
             packet.ReadUInt32<QuestId>("Quest ID");
-            packet.ReadByte("Start/End (1/2)");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_1_8125))
+                packet.ReadByte("Start/End (1/2)");
         }
 
         [Parser(Opcode.CMSG_QUEST_GIVER_ACCEPT_QUEST)]
@@ -1145,15 +1146,40 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadUInt32E<QuestReasonType>("Reason");
         }
 
-        [Parser(Opcode.SMSG_QUEST_GIVER_QUEST_COMPLETE, ClientVersionBuild.Zero, ClientVersionBuild.V4_0_6a_13623)]
+        [Parser(Opcode.SMSG_QUEST_GIVER_QUEST_COMPLETE, ClientVersionBuild.Zero, ClientVersionBuild.V3_0_2_9056)]
         public static void HandleQuestCompleted(Packet packet)
+        {
+            packet.ReadInt32<QuestId>("Quest ID");
+            packet.ReadInt32("unk 3");
+            packet.ReadInt32("Reward");
+            packet.ReadInt32("Money");
+            packet.ReadInt32("Honor");
+             var count = packet.ReadInt32("Reward Count");
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadInt32<ItemId>("Item", i);
+                packet.ReadInt32("Item count", i);
+            }
+        }
+
+        [Parser(Opcode.SMSG_QUEST_GIVER_QUEST_COMPLETE, ClientVersionBuild.V3_0_2_9056, ClientVersionBuild.V4_0_6a_13623)]
+        public static void HandleQuestCompleted302(Packet packet)
         {
             packet.ReadInt32<QuestId>("Quest ID");
             packet.ReadInt32("Reward");
             packet.ReadInt32("Money");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_8_9464))
+                packet.ReadInt32("BonusMoney at 80");
             packet.ReadInt32("Honor");
-            packet.ReadInt32("Talents");
-            packet.ReadInt32("Arena Points");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_1_0_9767))
+                packet.ReadInt32("Talents");
+            //packet.ReadInt32("Arena Points");
+            var count = packet.ReadInt32("Reward Count");
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadInt32<ItemId>("Item", i);
+                packet.ReadInt32("Item count", i);
+            }
         }
 
         [Parser(Opcode.SMSG_QUEST_GIVER_QUEST_COMPLETE, ClientVersionBuild.V4_0_6a_13623, ClientVersionBuild.V4_2_2_14545)]
@@ -1220,20 +1246,47 @@ namespace WowPacketParser.Parsing.Parsers
         }
 
         [Parser(Opcode.SMSG_QUEST_UPDATE_ADD_KILL)]
-        [Parser(Opcode.SMSG_QUEST_UPDATE_ADD_ITEM)]
         public static void HandleQuestUpdateAdd(Packet packet)
         {
             packet.ReadInt32<QuestId>("Quest ID");
-            var entry = packet.ReadEntry();
-            packet.AddValue("Entry", StoreGetters.GetName(entry.Value ? StoreNameType.GameObject : StoreNameType.Unit, entry.Key));
-
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_3_0_7561))
+            {
+                var entry = packet.ReadEntry();
+                packet.AddValue("Entry", StoreGetters.GetName(entry.Value ? StoreNameType.GameObject : StoreNameType.Unit, entry.Key));
+            }
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V5_1_0_16309))
                 packet.ReadInt16("Count");
             else
                 packet.ReadInt32("Count");
 
-            packet.ReadInt32("Required Count");
-            packet.ReadGuid("GUID");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_3_0_7561))
+            {
+                packet.ReadInt32("Required Count");
+                packet.ReadGuid("GUID");
+            }
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V5_1_0_16309))
+                packet.ReadByteE<QuestRequirementType>("Quest Requirement Type");
+        }
+
+        [Parser(Opcode.SMSG_QUEST_UPDATE_ADD_ITEM)]
+        public static void HandleQuestUpdateAddItem(Packet packet)
+        {
+            packet.ReadInt32<QuestId>("Quest ID");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_1_0_9767))
+            {
+                var entry = packet.ReadEntry();
+                packet.AddValue("Entry", StoreGetters.GetName(entry.Value ? StoreNameType.GameObject : StoreNameType.Unit, entry.Key));
+            }
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V5_1_0_16309))
+                packet.ReadInt16("Count");
+            else
+                packet.ReadInt32("Count");
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_1_0_9767))
+            {
+                packet.ReadInt32("Required Count");
+                packet.ReadGuid("GUID");
+            }
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V5_1_0_16309))
                 packet.ReadByteE<QuestRequirementType>("Quest Requirement Type");
         }
@@ -1252,11 +1305,16 @@ namespace WowPacketParser.Parsing.Parsers
                     packet.ReadGuid("GUID", i);
                     packet.ReadInt32E<QuestGiverStatus4x>("Status", i);
                 }
-            else
+            else if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
                 for (var i = 0; i < count; i++)
                 {
                     packet.ReadGuid("GUID", i);
                     packet.ReadByteE<QuestGiverStatus>("Status", i);
+                }
+            else for (var i = 0; i < count; i++)
+                {
+                    packet.ReadGuid("GUID", i);
+                    packet.ReadInt32E<QuestGiverStatus>("Status", i);
                 }
         }
 

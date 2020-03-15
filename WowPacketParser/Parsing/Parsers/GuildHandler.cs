@@ -145,11 +145,12 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadUInt32("Rank Id", i);
                 packet.ReadByte("Level", i);
                 packet.ReadByte("Class", i);
-                packet.ReadByte("Gender", i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_3_8606))
+                    packet.ReadByte("Gender", i);
                 packet.ReadInt32<ZoneId>("Zone Id", i);
 
                 if (!online)
-                    packet.ReadUInt32("Last Online", i);
+                    packet.ReadSingle("Last Online", i);
 
                 packet.ReadCString("Public Note", i);
                 packet.ReadCString("Officer Note", i);
@@ -635,9 +636,12 @@ namespace WowPacketParser.Parsing.Parsers
                 if (entry > 0)
                 {
                     packet.ReadUInt32E<UnknownFlags>("Unk mask", i);
-                    var ramdonEnchant = packet.ReadInt32("Random Item Property Id", i);
-                    if (ramdonEnchant != 0)
-                        packet.ReadUInt32("Item Suffix Factor", i);
+                    if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_0_6a_13623))
+                    {
+                        var ramdonEnchant = packet.ReadInt32("Random Item Property Id", i);
+                        if (ramdonEnchant != 0)
+                            packet.ReadUInt32("Item Suffix Factor", i);
+                    }
                     packet.ReadUInt32("Stack Count", i);
                     packet.ReadUInt32("Unk Uint32 2", i); // Only seen 0
                     packet.ReadByte("Spell Charges", i);
@@ -882,8 +886,14 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadUInt32("Money");
         }
 
-        [Parser(Opcode.CMSG_GUILD_BANK_TEXT_QUERY, ClientVersionBuild.V4_3_3_15354)]
+        [Parser(Opcode.CMSG_GUILD_BANK_TEXT_QUERY, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_3_15354)]
         public static void HandleQueryGuildBankText(Packet packet)
+        {
+            packet.ReadByte("Tab Id");
+        }
+
+        [Parser(Opcode.CMSG_GUILD_BANK_TEXT_QUERY, ClientVersionBuild.V4_3_3_15354)]
+        public static void HandleQueryGuildBankText433(Packet packet)
         {
             packet.ReadUInt32("Tab Id");
         }
@@ -908,6 +918,12 @@ namespace WowPacketParser.Parsing.Parsers
         {
             if (packet.Direction == Direction.ClientToServer)
                 return;
+
+            if (ClientVersion.RemovedInVersion(ClientVersionBuild.V2_3_0_7561))
+            {
+                packet.ReadUInt32("unk");
+                return;
+            }
 
             packet.ReadUInt32("Rank Id");
             packet.ReadUInt32E<GuildRankRightsFlag>("Rights");
@@ -1443,6 +1459,7 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_GUILD_INVITE_CANCEL)]
         [Parser(Opcode.CMSG_GUILD_AUTO_DECLINE_INVITATION)] // 4.3.4, sent if player has PLAYER_FLAGS_AUTO_DECLINE_GUILD
         [Parser(Opcode.CMSG_GUILD_PERMISSIONS_QUERY)]
+        [Parser(Opcode.CMSG_MAELSTROM_RENAME_GUILD)]
         public static void HandleGuildNull(Packet packet)
         {
             // Just to have guild opcodes together

@@ -52,31 +52,34 @@ namespace WowPacketParser.Parsing.Parsers
 
             packet.ReadTime("Constant Date");
 
-            var raidResetCount = packet.ReadInt32("Raid Reset Count");
-
-            for (var i = 0; i < raidResetCount; i++)
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_8_9464))
             {
-                packet.ReadInt32<MapId>("Map ID", i);
-                packet.ReadInt32("Time left", i);
-                packet.ReadInt32("Unk Time", i);
-            }
+                var raidResetCount = packet.ReadInt32("Raid Reset Count");
 
-            var holidayCount = packet.ReadInt32("Holiday Count");
+                for (var i = 0; i < raidResetCount; i++)
+                {
+                    packet.ReadInt32<MapId>("Map ID", i);
+                    packet.ReadInt32("Time left", i);
+                    packet.ReadInt32("Unk Time", i);
+                }
 
-            for (var i = 0; i < holidayCount; i++)
-            {
-                packet.ReadInt32("ID", i);
-                packet.ReadInt32("Region (Looping?)", i);
-                packet.ReadInt32("Looping (Region?)", i);
-                packet.ReadInt32("Priority", i);
-                packet.ReadInt32("Calendar FilterType", i);
-                for (var j = 0; j < 26; j++)
-                    packet.ReadPackedTime("Start Date", i, j);
-                for (var j = 0; j < 10; j++)
-                    packet.ReadInt32("Duration", i, j);
-                for (var j = 0; j < 10; j++)
-                    packet.ReadInt32E<CalendarFlag>("Calendar Flags", i, j);
-                packet.ReadCString("Holiday Name", i);
+                var holidayCount = packet.ReadInt32("Holiday Count");
+
+                for (var i = 0; i < holidayCount; i++)
+                {
+                    packet.ReadInt32("ID", i);
+                    packet.ReadInt32("Region (Looping?)", i);
+                    packet.ReadInt32("Looping (Region?)", i);
+                    packet.ReadInt32("Priority", i);
+                    packet.ReadInt32("Calendar FilterType", i);
+                    for (var j = 0; j < 26; j++)
+                        packet.ReadPackedTime("Start Date", i, j);
+                    for (var j = 0; j < 10; j++)
+                        packet.ReadInt32("Duration", i, j);
+                    for (var j = 0; j < 10; j++)
+                        packet.ReadInt32E<CalendarFlag>("Calendar Flags", i, j);
+                    packet.ReadCString("Holiday Name", i);
+                }
             }
         }
 

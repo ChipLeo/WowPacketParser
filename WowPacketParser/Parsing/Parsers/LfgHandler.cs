@@ -184,13 +184,40 @@ namespace WowPacketParser.Parsing.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_LFG_PLAYER_REWARD, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
+        [Parser(Opcode.SMSG_LFG_PLAYER_REWARD, ClientVersionBuild.Zero, ClientVersionBuild.V3_0_3_9183)]
         public static void HandleLfgCompletionReward(Packet packet)
-        {
+        { // bad for 309 and 308
             packet.ReadLfgEntry("Random LFG Entry");
             packet.ReadLfgEntry("Actual LFG Entry");
 
             ReadLfgRewardBlock(packet, -1);
+        }
+
+        [Parser(Opcode.SMSG_LFG_PLAYER_REWARD, ClientVersionBuild.V3_0_3_9183, ClientVersionBuild.V3_1_0_9767)]
+        public static void HandleLfgCompletionReward303(Packet packet)
+        {
+            packet.ReadLfgEntry("Random LFG Entry");
+            packet.ReadLfgEntry("Actual LFG Entry");
+            packet.ReadInt32("unk1");
+            var count = packet.ReadInt32("count");
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadPackedGuid("Guid", i);
+                packet.ReadInt32("unk1", i);
+                packet.ReadInt32("unk2", i);
+                packet.ReadInt32("unk3", i);
+                packet.ReadInt32("unk4", i);
+                packet.ReadInt32("unk5", i);
+                packet.ReadByte("unk6", i);
+                packet.ReadCString("s2", i);
+                var count2 = packet.ReadInt32("unk7", i);
+                if (count2 > 9) count2 = 9;
+                for( var j = 0; j < count2; j++)
+                {
+                    packet.ReadPackedGuid("Guid2", i, j);
+                    packet.ReadInt32("unk2a", i, j);
+                }
+            }
         }
 
         [Parser(Opcode.SMSG_LFG_PLAYER_REWARD, ClientVersionBuild.V4_3_4_15595)]
@@ -274,6 +301,9 @@ namespace WowPacketParser.Parsing.Parsers
         public static void HandleLfgPlayerLockInfoResponse(Packet packet)
         {
             var numFields = packet.ReadByte("Random Dungeon Count");
+            if (numFields == 0) // for 308
+                return;
+
             for (var i = 0; i < numFields; i++)
             {
                 packet.ReadLfgEntry("Random Dungeon Entry", i);

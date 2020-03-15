@@ -18,8 +18,9 @@ namespace WowPacketParser.Parsing.Parsers
                 {
                     packet.ReadByte();
                     packet.ReadBytes("Module MD5", 16);
-                    packet.ReadBytes("Module RC4", 16);
-                    packet.ReadUInt32("Module Length");
+                    //packet.ReadBytes("Module RC4", 16);
+                    //packet.ReadUInt32("Module Length");
+                    packet.ReadToEnd(); // for V2_3_0_7561
                     break;
                 }
                 case WardenServerOpcode.ModuleChunk:
@@ -33,15 +34,17 @@ namespace WowPacketParser.Parsing.Parsers
                 case WardenServerOpcode.CheatChecks:
                 {
                     packet.ReadByte();
+                    packet.ReadToEnd();
+                    break;
 
-                    byte length;
+                   /* byte length;
                     while ((length = packet.ReadByte()) != 0)
                     {
                         packet.ReadBytes("String", length);
                     }
 
                     // var rest = (int)(packet.GetLength() - packet.GetPosition());
-                    break;
+                    break;*/
                 }
                 case WardenServerOpcode.Data:
                 {
@@ -59,7 +62,8 @@ namespace WowPacketParser.Parsing.Parsers
                 {
                     packet.ReadByte();
                     packet.ReadBytes("Seed", 16);
-                    break;
+                    packet.ReadToEnd(); // for V2_3_0_7561
+                        break;
                 }
                 default:
                     packet.ReadToEnd();
@@ -85,6 +89,7 @@ namespace WowPacketParser.Parsing.Parsers
                 case WardenClientOpcode.TransformedSeed:
                 {
                     packet.ReadBytes("SHA1 Seed", 20);
+                        packet.ReadToEnd(); // for 2.3.0
                     break;
                 }
                 default:

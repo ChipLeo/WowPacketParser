@@ -97,7 +97,6 @@ namespace WowPacketParser.Parsing.Parsers
                 case ChatMessageType.Guild:
                 case ChatMessageType.Officer:
                 case ChatMessageType.Emote:
-                case ChatMessageType.TextEmote:
                 case ChatMessageType.Whisper:
                 case ChatMessageType.WhisperInform:
                 case ChatMessageType.System:
@@ -110,8 +109,8 @@ namespace WowPacketParser.Parsing.Parsers
                 case ChatMessageType.Afk:
                 case ChatMessageType.Ignored:
                 {
-                    packet.ReadGuid("Sender GUID");
-                    break;
+                     packet.ReadGuid("Sender GUID");
+                     break;
                 }
                 case ChatMessageType.BattlegroundNeutral:
                 case ChatMessageType.BattlegroundAlliance:
@@ -139,6 +138,10 @@ namespace WowPacketParser.Parsing.Parsers
                 case ChatMessageType.RaidBossEmote:
                 case ChatMessageType.RaidBossWhisper:
                 case ChatMessageType.BattleNet:
+                case ChatMessageType.TextEmote:
+                case ChatMessageType.Skill:
+                case ChatMessageType.unk90:
+                case ChatMessageType.unk94:
                 {
                     packet.ReadInt32("Name Length");
                     text.SenderName = packet.ReadCString("Name");
@@ -149,12 +152,31 @@ namespace WowPacketParser.Parsing.Parsers
                         case HighGuidType.Vehicle:
                         case HighGuidType.GameObject:
                         case HighGuidType.Transport:
+                        case HighGuidType.DynamicObject:
+                        case HighGuidType.BattlePet:
                             packet.ReadInt32("Receiver Name Length");
                             text.ReceiverName = packet.ReadCString("Receiver Name");
                             break;
                     }
                     break;
                 }
+                case ChatMessageType.WhisperForeign:
+                case ChatMessageType.unk89:
+                    {
+                        packet.ReadInt32("Len");
+                        packet.ReadCString("Name");
+                        packet.ReadGuid("Guid");
+                        break;
+                    }
+                case ChatMessageType.unk82:
+                case ChatMessageType.unk83:
+                case ChatMessageType.unk84:
+                case ChatMessageType.unk87:
+                case ChatMessageType.unk88:
+                    {
+                        packet.ReadGuid("Guid");
+                        break;
+                    }
             }
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_1_0_13914) && text.Language == Language.Addon)
@@ -200,6 +222,7 @@ namespace WowPacketParser.Parsing.Parsers
             switch (type)
             {
                 case ChatMessageType.Whisper:
+                case ChatMessageType.Yell:
                 {
                     packet.ReadCString("Recipient");
                     break;

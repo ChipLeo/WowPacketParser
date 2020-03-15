@@ -230,6 +230,7 @@
     <Compile Include="Enums\GarrisonSite.cs" />
     <Compile Include="Enums\GarrisonSiteLevel.cs" />
     <Compile Include="Enums\GarrisonType.cs" />
+    <Compile Include="Enums\InstanceResetFailedType.cs" />
     <Compile Include="Enums\ItemFieldFlags.cs" />
     <Compile Include="Enums\ItemModifier.cs" />
     <Compile Include="Enums\LfgListApplicationStatus.cs" />
@@ -400,6 +401,7 @@
     <Compile Include="Enums\UpdateFlag.cs" />
     <Compile Include="Enums\UpdateType.cs" />
     <Compile Include="Enums\VehicleFlags.cs" />
+    <Compile Include="Enums\Version\V2_4_3_8606\Opcodes.cs" />
     <Compile Include="Enums\Version\V2_4_3_8606\UpdateFields.cs" />
     <Compile Include="Enums\Version\V3_0_9_9551\UpdateFields.cs" />
     <Compile Include="Enums\Version\Opcodes.cs" />

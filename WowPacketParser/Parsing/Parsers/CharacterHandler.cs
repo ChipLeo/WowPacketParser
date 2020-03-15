@@ -158,7 +158,8 @@ namespace WowPacketParser.Parsing.Parsers
                 {
                     packet.ReadInt32("Equip Display Id");
                     packet.ReadByteE<InventoryType>("Equip Inventory Type");
-                    packet.ReadInt32("Equip Aura Id");
+                    if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                        packet.ReadInt32("Equip Aura Id");
                 }
 
                 int bagCount = ClientVersion.AddedInVersion(ClientVersionBuild.V3_3_3_11685) ? 4 : 1;
@@ -166,7 +167,8 @@ namespace WowPacketParser.Parsing.Parsers
                 {
                     packet.ReadInt32("Bag Display Id");
                     packet.ReadByteE<InventoryType>("Bag Inventory Type");
-                    packet.ReadInt32("Bag Aura Id");
+                    if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                        packet.ReadInt32("Bag Aura Id");
                 }
 
                 if (firstLogin)
@@ -1063,7 +1065,8 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadSingle("Group rate (unk)");
             }
 
-            packet.ReadBool("RAF Bonus");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_3_3_7799))
+                packet.ReadBool("RAF Bonus");
         }
 
         [Parser(Opcode.SMSG_TITLE_EARNED)]
@@ -1071,6 +1074,30 @@ namespace WowPacketParser.Parsing.Parsers
         {
             packet.ReadUInt32("Title Id");
             packet.ReadUInt32("Earned?"); // vs lost
+        }
+
+        [Parser(Opcode.CMSG_SET_PLAYER_DECLINED_NAMES)]
+        public static void HandleSetPlayerDeclinedNames(Packet packet)
+        {
+            var guid = packet.ReadGuid("Guid");
+            var pName = packet.ReadCString("Name");
+
+            if (guid.GetObjectType() == ObjectType.Player)
+                if (Storage.Objects.ContainsKey(guid))
+                    ((Player)Storage.Objects[guid].Item1).Name = pName;
+
+            StoreGetters.AddOrUpdateName(guid, pName);
+
+            for (var i = 0; i < 5; i++)
+                packet.ReadCString("Name", i);
+        }
+
+        [Parser(Opcode.SMSG_SET_PLAYER_DECLINED_NAMES_RESULT)]
+        public static void HandleSetPlayerDeclinedNamesResult(Packet packet)
+        {
+            var result = packet.ReadInt32("Result");
+            if (result == 0)
+                packet.ReadGuid("Guid");
         }
 
         [Parser(Opcode.CMSG_SET_TITLE)]
@@ -1259,7 +1286,8 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_SHOWING_HELM)]
         public static void HandleShowingCloakAndHelm434(Packet packet)
         {
-            packet.ReadBool("Showing");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                packet.ReadBool("Showing");
         }
 
         [Parser(Opcode.CMSG_AUTO_DECLINE_GUILD_INVITES)]

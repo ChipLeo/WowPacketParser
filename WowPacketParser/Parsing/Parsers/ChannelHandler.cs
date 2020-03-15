@@ -22,9 +22,18 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_CHAT_CHANNEL_VOICE_OFF)]
         [Parser(Opcode.CMSG_SET_CHANNEL_WATCH)]
         [Parser(Opcode.CMSG_CHAT_CHANNEL_DECLINE_INVITE)]
-        [Parser(Opcode.CMSG_CHAT_CHANNEL_DISPLAY_LIST)]
+        [Parser(Opcode.CMSG_GET_CHANNEL_MEMBER_COUNT)]
         public static void HandleChannelMisc(Packet packet)
         {
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_1_0_9767))
+                packet.ReadInt32("ChannelID");
+            packet.ReadCString("Channel Name");
+        }
+
+        [Parser(Opcode.CMSG_CHAT_CHANNEL_DISPLAY_LIST)]
+        public static void HandleChatChannelDisplayList(Packet packet)
+        {
+            packet.ReadInt32("ChannelID");
             packet.ReadCString("Channel Name");
         }
 

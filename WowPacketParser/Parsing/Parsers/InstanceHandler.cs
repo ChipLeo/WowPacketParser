@@ -72,7 +72,7 @@ namespace WowPacketParser.Parsing.Parsers
         {
             packet.ReadInt32E<MapDifficulty>("Difficulty");
             if (ClientVersion.AddedInVersion(ClientType.WrathOfTheLichKing)
-                && ClientVersion.RemovedInVersion(ClientType.Cataclysm))
+                && ClientVersion.RemovedInVersion(ClientType.Cataclysm) && (ClientVersion.Build != ClientVersionBuild.V3_0_9_9551))
                 packet.ReadInt32("Player Difficulty");
         }
 
@@ -148,8 +148,10 @@ namespace WowPacketParser.Parsing.Parsers
             }
 
             var test = packet.ReadBool("List target"); // false == Set Target
-            if (!test)
-                packet.ReadGuid("Owner GUID");
+            // removed for 303
+            //if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+            //    if (!test)
+            //        packet.ReadGuid("Owner GUID");
 
             for (int i = 0; packet.CanRead(); ++i)
             {
@@ -158,8 +160,16 @@ namespace WowPacketParser.Parsing.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_RAID_INSTANCE_MESSAGE)]
+        [Parser(Opcode.SMSG_RAID_INSTANCE_MESSAGE,ClientVersionBuild.Zero,ClientVersionBuild.V2_4_3_8606)]
         public static void HandleRaidInstanceMessage(Packet packet)
+        {
+            var type = packet.ReadInt32E<RaidInstanceResetWarning>("Warning Type");
+            packet.ReadInt32<MapId>("Map Id");
+            packet.ReadInt32("Reset time");
+        }
+
+        [Parser(Opcode.SMSG_RAID_INSTANCE_MESSAGE,ClientVersionBuild.V2_4_3_8606)]
+        public static void HandleRaidInstanceMessage243(Packet packet)
         {
             var type = packet.ReadInt32E<RaidInstanceResetWarning>("Warning Type");
             packet.ReadInt32<MapId>("Map Id");
@@ -171,7 +181,6 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadBool("Extended");
             }
         }
-
         [Parser(Opcode.CMSG_SET_SAVED_INSTANCE_EXTEND)]
         public static void HandleSetSavedInstanceExtend(Packet packet)
         {
@@ -193,6 +202,13 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadInt32<MapId>("Map Id");
         }
 
+        [Parser(Opcode.SMSG_INSTANCE_RESET_FAILED)]
+        public static void HandleInstanceResetFailed(Packet packet)
+        {
+            packet.ReadInt32E<InstanceResetFailedType>("ResetFailedReason");
+            packet.ReadInt32<MapId>("MapID");
+        }
+
         [Parser(Opcode.CMSG_INSTANCE_LOCK_WARNING_RESPONSE)]
         [Parser(Opcode.CMSG_INSTANCE_LOCK_RESPONSE)]
         public static void HandleInstanceLockResponse(Packet packet)
@@ -211,8 +227,21 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadBool("Locked warning"); // Displays a window asking if the player choose to join an instance which is saved.
         }
 
-        [Parser(Opcode.SMSG_RAID_INSTANCE_INFO)]
+        [Parser(Opcode.SMSG_RAID_INSTANCE_INFO,ClientVersionBuild.Zero,ClientVersionBuild.V2_4_3_8606)]
         public static void HandleRaidInstanceInfo(Packet packet)
+        {
+            var counter = packet.ReadInt32("Counter");
+            for (var i = 0; i < counter; ++i)
+            {
+                packet.ReadInt32<MapId>("MapID", i);
+                packet.ReadUInt32("Reset Time", i);
+                packet.ReadUInt32("Completed Encounters Mask", i);
+                packet.ReadUInt32E<MapDifficulty>("Map Difficulty", i);
+            }
+        }
+
+        [Parser(Opcode.SMSG_RAID_INSTANCE_INFO,ClientVersionBuild.V2_4_3_8606)]
+        public static void HandleRaidInstanceInfo243(Packet packet)
         {
             var counter = packet.ReadInt32("Counter");
             for (var i = 0; i < counter; ++i)

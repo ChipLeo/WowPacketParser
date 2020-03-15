@@ -66,11 +66,12 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadInt32E<Class>("Class");
             }
 
-            if (!packet.ReadBool("Name Declined"))
-                return;
-
-            for (var i = 0; i < 5; i++)
-                packet.ReadCString("Declined Name", i);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+            {
+                if (packet.ReadBool("Name Declined"))
+                    for (var i = 0; i < 5; i++)
+                        packet.ReadCString("Declined Name", i);
+            }
 
             var objectName = new ObjectName
             {
@@ -144,7 +145,7 @@ namespace WowPacketParser.Parsing.Parsers
             else // Did they stop sending pet spell data after 3.1?
             {
                 packet.ReadInt32("Unk Int");
-                if (ClientVersion.RemovedInVersion(ClientVersionBuild.V3_0_8a_9506))
+                if (ClientVersion.RemovedInVersion(ClientVersionBuild.V3_0_3_9183))
                     creature.PetSpellDataID = packet.ReadUInt32("Pet Spell Data Id");
             }
 

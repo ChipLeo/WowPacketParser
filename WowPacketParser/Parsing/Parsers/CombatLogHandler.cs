@@ -123,7 +123,8 @@ namespace WowPacketParser.Parsing.Parsers
             for (int i = 0; i < count; i++)
             {
                 packet.ReadInt32<SpellId>("Spell", index, i);
-                packet.ReadByte("Unknown Byte/Bool", index, i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                    packet.ReadByte("Unknown Byte/Bool", index, i);
             }
 
             if (debug)
@@ -150,41 +151,58 @@ namespace WowPacketParser.Parsing.Parsers
                         case SpellEffect.PowerDrain:
                         case SpellEffect.PowerBurn:
                         {
-                            packet.ReadPackedGuid("Target GUID", index, i, j);
+                            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                                packet.ReadPackedGuid("Target GUID", index, i, j);
+                            else packet.ReadGuid("Target GUID", index, i, j);
                             packet.ReadInt32("Power taken", index, i, j);
                             packet.ReadInt32("Power type", index, i, j);
                             packet.ReadSingle("Multiplier", index, i, j);
                             break;
                         }
                         case SpellEffect.AddExtraAttacks:
-                        {
-                            packet.ReadPackedGuid("Target GUID", index, i, j);
-                            packet.ReadInt32("Amount", index, i, j);
-                            break;
-                        }
+                            {
+                                if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                                    packet.ReadPackedGuid("Target GUID", index, i, j);
+                                else packet.ReadGuid("Target GUID", index, i, j);
+                                packet.ReadInt32("Amount", index, i, j);
+                                break;
+                            }
                         case SpellEffect.InterruptCast:
-                        {
-                            packet.ReadPackedGuid("Target GUID", index, i, j);
-                            packet.ReadInt32<SpellId>("Interrupted Spell ID", index, i, j);
-                            break;
-                        }
+                            {
+                                if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                                    packet.ReadPackedGuid("Target GUID", index, i, j);
+                                else packet.ReadGuid("Target GUID", index, i, j);
+                                packet.ReadInt32<SpellId>("Interrupted Spell ID", index, i, j);
+                                break;
+                            }
                         case SpellEffect.DurabilityDamage:
                         {
-                            packet.ReadPackedGuid("Target GUID", index, i, j);
+                            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                                packet.ReadPackedGuid("Target GUID", index, i, j);
+                            else packet.ReadGuid("Target GUID", index, i, j);
                             packet.ReadInt32<ItemId>("Item", index, i, j);
                             packet.ReadInt32("Slot", index, i, j);
                             break;
                         }
                         case SpellEffect.OpenLock:
-                        {
-                            packet.ReadPackedGuid("Target", i, j);
-                            break;
-                        }
+                            {
+                                if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                                    packet.ReadPackedGuid("Target", index, i, j);
+                                else packet.ReadGuid("Target", index, i, j);
+                                break;
+                            }
                         case SpellEffect.CreateItem:
                         case SpellEffect.CreateRandomItem:
                         case SpellEffect.CreateItem2:
                         {
-                            packet.ReadInt32<ItemId>("Created Item", index, i, j);
+                                if (type == SpellEffect.CreateRandomItem)
+                                {
+                                    if (ClientVersion.RemovedInVersion(ClientVersionBuild.V2_4_0_8089))
+                                        packet.ReadGuid("Target", index, i, j);
+                                    else packet.ReadPackedGuid("Target", index, i, j);
+                                    break;
+                                }
+                                packet.ReadInt32<ItemId>("Created Item", index, i, j);
                             break;
                         }
                         case SpellEffect.Summon:
@@ -198,15 +216,20 @@ namespace WowPacketParser.Parsing.Parsers
                         case SpellEffect.SummonObjectSlot3:
                         case SpellEffect.SummonObjectSlot4:
                         case SpellEffect.Unk171:
-                        {
-                            var guid = packet.ReadPackedGuid("Summoned GUID", index, i, j);
+                            {
+                                if ((type == SpellEffect.SummonPet) && ClientVersion.RemovedInVersion(ClientVersionBuild.V2_4_0_8089))
+                                    break;
+                                if ((type == SpellEffect.Summon) && ClientVersion.RemovedInVersion(ClientVersionBuild.V2_4_0_8089))
+                                    break;
 
-                            WoWObject obj;
-                            if (Storage.Objects.TryGetValue(guid, out obj))
-                                obj.ForceTemporarySpawn = true;
+                                var guid = packet.ReadPackedGuid("Summoned GUID", index, i, j);
 
-                            break;
-                        }
+                                WoWObject obj;
+                                if (Storage.Objects.TryGetValue(guid, out obj))
+                                    obj.ForceTemporarySpawn = true;
+
+                                break;
+                            }
                         case SpellEffect.FeedPet:
                         {
                             packet.ReadInt32("Unknown Int32", index, i, j);
@@ -214,16 +237,44 @@ namespace WowPacketParser.Parsing.Parsers
                         }
                         case SpellEffect.DismissPet:
                         {
-                            packet.ReadPackedGuid("GUID", index, i, j);
-                            break;
+                                if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                                    packet.ReadPackedGuid("Target", index, i, j);
+                                else packet.ReadGuid("Target", index, i, j);
+                                break;
                         }
                         case SpellEffect.Resurrect:
                         case SpellEffect.ResurrectNew:
                         case SpellEffect.RessurectAOE:
-                        {
-                            packet.ReadPackedGuid("GUID", index, i, j);
-                            break;
-                        }
+                            {
+                                if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
+                                    packet.ReadPackedGuid("Target", index, i, j);
+                                else packet.ReadGuid("Target", index, i, j);
+                                break;
+                            }
+                        case SpellEffect.AttackMe:
+                        case SpellEffect.Dispel:
+                        case SpellEffect.DispelMechanic:
+                        case SpellEffect.Instakill:
+                        case SpellEffect.ModifyThreatPercent:
+                        case SpellEffect.Sanctuary:
+                        case SpellEffect.Threat:
+                        case SpellEffect.Distract:
+                        case SpellEffect.StealBeneficialBuff:
+                            {
+                                packet.ReadGuid("GUID", index, i, j);
+                                break;
+                            }
+                        case SpellEffect.GameobjectDamage:
+                        case SpellEffect.GameobjectRepair:
+                        case SpellEffect.GameobjectSetDestructionState:
+                        case SpellEffect.JumpDest:
+                        case SpellEffect.KillCredit:
+                        case SpellEffect.SummonDeadPet:
+                        case SpellEffect.Jump:
+                        case SpellEffect.CastButton:
+                            {
+                                break;
+                            }
                         default:
                             throw new InvalidDataException("Unknown Spell Effect: " + type);
                     }
@@ -392,15 +443,26 @@ namespace WowPacketParser.Parsing.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_SPELL_DAMAGE_SHIELD)]
+        [Parser(Opcode.SMSG_SPELL_DAMAGE_SHIELD, ClientVersionBuild.Zero, ClientVersionBuild.V2_4_0_8089)]
         public static void ReadSpellDamageShield(Packet packet)
+        {
+            packet.ReadGuid("Victim");
+            packet.ReadGuid("Caster");
+            packet.ReadInt32("Damage");
+            packet.ReadInt32E<SpellSchools>("SpellSchool");
+        }
+
+        [Parser(Opcode.SMSG_SPELL_DAMAGE_SHIELD, ClientVersionBuild.V2_4_0_8089)]
+        public static void ReadSpellDamageShield240(Packet packet)
         {
             packet.ReadGuid("Victim");
             packet.ReadGuid("Caster");
             packet.ReadUInt32<SpellId>("Spell Id");
             packet.ReadInt32("Damage");
-            packet.ReadInt32("Overkill");
-            packet.ReadInt32("SpellSchoolMask");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_2_9056))
+                packet.ReadInt32("Overkill");
+
+            packet.ReadInt32E<SpellSchoolMask>("SpellSchoolMask");
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_0_6_13596))
                 packet.ReadInt32("Resisted Damage");

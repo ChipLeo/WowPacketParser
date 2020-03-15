@@ -31,7 +31,7 @@ namespace WowPacketParser.Parsing.Parsers
             if (ClientVersion.RemovedInVersion(ClientVersionBuild.V3_2_2a_10505))
             {
                 packet.ReadGuid("Item Guid");
-                packet.ReadUInt32("Item Count");
+                //packet.ReadUInt32("Item Count");
             }
             else
             {
@@ -146,7 +146,8 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadGuid("Bidder GUID");
             packet.ReadUInt32<ItemId>("Item Entry");
             packet.ReadUInt32("Unk UInt32 4");
-            packet.ReadSingle("Unk float 5");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_3_3_7799))
+                packet.ReadSingle("Unk float 5"); // not exist in 230 and 232
         }
 
         [Parser(Opcode.CMSG_AUCTION_LIST_BIDDER_ITEMS)]

@@ -32,10 +32,11 @@ namespace WowPacketParser.Misc
             { HighGuidTypeLegacy.BattleGround2, HighGuidType.PVPQueueGroup }, // ?? unused in wpp
             { HighGuidTypeLegacy.MOTransport, HighGuidType.Transport }, // ?? unused in wpp
             { HighGuidTypeLegacy.Guild, HighGuidType.Guild },
+            { HighGuidTypeLegacy.Guild2, HighGuidType.Guild },
             { HighGuidTypeLegacy.Item, HighGuidType.Item },
             { HighGuidTypeLegacy.DynObject, HighGuidType.DynamicObject },
             { HighGuidTypeLegacy.GameObject, HighGuidType.GameObject },
-            { HighGuidTypeLegacy.Transport, HighGuidType.Transport },
+            { HighGuidTypeLegacy.Unit2, HighGuidType.Creature },
             { HighGuidTypeLegacy.Unit, HighGuidType.Creature },
             { HighGuidTypeLegacy.Pet, HighGuidType.Pet },
             { HighGuidTypeLegacy.Vehicle, HighGuidType.Vehicle },
@@ -44,7 +45,15 @@ namespace WowPacketParser.Misc
             { HighGuidTypeLegacy.AreaTrigger, HighGuidType.AreaTrigger },
             { HighGuidTypeLegacy.Account, HighGuidType.WowAccount },
             { HighGuidTypeLegacy.Unknown270, HighGuidType.Null },
+            { HighGuidTypeLegacy.Unk607, HighGuidType.Null },
+            { HighGuidTypeLegacy.Elevator, HighGuidType.Elevator },
             { HighGuidTypeLegacy.SceneObject, HighGuidType.SceneObject },
+            { HighGuidTypeLegacy.Group1, HighGuidType.PVPQueueGroup },
+            { HighGuidTypeLegacy.Group2, HighGuidType.Player },
+            { HighGuidTypeLegacy.Group3, HighGuidType.Party },
+            { HighGuidTypeLegacy.Group5, HighGuidType.Party },
+            { HighGuidTypeLegacy.Group9, HighGuidType.Party },
+            { HighGuidTypeLegacy.Mail, HighGuidType.Mail },
             { HighGuidTypeLegacy.Pet2, HighGuidType.BattlePet }
         };
 
