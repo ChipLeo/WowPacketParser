@@ -3,7 +3,7 @@
 namespace WowPacketParser.Enums
 {
     [Flags]
-    public enum ClassMask
+    public enum ClassMask : uint
     {
         None        = 0x0000,
         Warrior     = 0x0001,
@@ -17,6 +17,8 @@ namespace WowPacketParser.Enums
         Warlock     = 0x0100,
         Monk        = 0x0200,
         Druid       = 0x0400,
-        DemonHunter = 0x0800
+        DemonHunter = 0x0800,
+        All         = 0x0FFF,
+        Any         = uint.MaxValue
     }
 }

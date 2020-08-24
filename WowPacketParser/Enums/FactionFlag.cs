@@ -12,6 +12,7 @@ namespace WowPacketParser.Enums
         Inivisible = 0x08,
         Peace      = 0x10,
         Inactive   = 0x20,
-        Rival      = 0x40
+        Rival      = 0x40,
+        Unk80      = 0x80 // Alliance Vanguard, Horde Expedition
     }
 }

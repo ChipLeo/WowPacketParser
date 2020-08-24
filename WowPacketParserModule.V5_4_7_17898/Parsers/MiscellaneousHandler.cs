@@ -187,10 +187,10 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
         [Parser(Opcode.CMSG_WHO)]
         public static void HandleWhoRequest(Packet packet)
         {
-            packet.ReadInt32("RaceMask");
+            packet.ReadUInt32E<RaceMask>("Allowed Races");
             packet.ReadInt32("Max Level");
             packet.ReadInt32("Min Level");
-            packet.ReadInt32("ClassMask");
+            packet.ReadUInt32E<ClassMask>("Allowed Classes");
             var guildNameLen = packet.ReadBits(7);
             packet.ReadBit("bit2C6");
             var patterns = packet.ReadBits(3);

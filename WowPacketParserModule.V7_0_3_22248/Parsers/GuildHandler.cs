@@ -1,6 +1,7 @@
 ﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
+using RaceMask7 = WowPacketParserModule.V7_0_3_22248.Enums.RaceMask;
 
 namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
@@ -231,9 +232,9 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadUInt32("Unk4", i);
                 var achievementReqCount = packet.ReadInt32("AchievementsRequiredCount", i);
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_3_5_25848))
-                    packet.ReadUInt64("RaceMask", i);
+                    packet.ReadUInt64E<RaceMask7>("RaceMask", i);
                 else
-                    packet.ReadUInt32("RaceMask", i);
+                    packet.ReadUInt32E<RaceMask>("RaceMask", i);
                 packet.ReadInt32("MinGuildLevel", i);
                 packet.ReadInt32("MinGuildRep", i);
                 packet.ReadInt64("Cost", i);

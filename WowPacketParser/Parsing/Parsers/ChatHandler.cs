@@ -10,7 +10,9 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_CHAT_NOT_IN_PARTY)]
         public static void HandleChatNotInParty(Packet packet)
         {
-            packet.ReadInt32("Unk UInt32");
+            // length =8 for 230
+            //packet.ReadInt32("Unk UInt32");
+            packet.ReadGuid("Guid"); //230
         }
 
         [Parser(Opcode.SMSG_DEFENSE_MESSAGE)]
@@ -108,6 +110,12 @@ namespace WowPacketParser.Parsing.Parsers
                 case ChatMessageType.Dnd:
                 case ChatMessageType.Afk:
                 case ChatMessageType.Ignored:
+                case ChatMessageType.unk82:
+                case ChatMessageType.unk83:
+                case ChatMessageType.unk84:
+                case ChatMessageType.unk87:
+                case ChatMessageType.unk88:
+                case ChatMessageType.unk92:
                 {
                      packet.ReadGuid("Sender GUID");
                      break;
@@ -154,6 +162,8 @@ namespace WowPacketParser.Parsing.Parsers
                         case HighGuidType.Transport:
                         case HighGuidType.DynamicObject:
                         case HighGuidType.BattlePet:
+                        case HighGuidType.Pet:
+                        case HighGuidType.Dragonkin:
                             packet.ReadInt32("Receiver Name Length");
                             text.ReceiverName = packet.ReadCString("Receiver Name");
                             break;
@@ -163,17 +173,11 @@ namespace WowPacketParser.Parsing.Parsers
                 case ChatMessageType.WhisperForeign:
                 case ChatMessageType.unk89:
                     {
-                        packet.ReadInt32("Len");
-                        packet.ReadCString("Name");
-                        packet.ReadGuid("Guid");
-                        break;
-                    }
-                case ChatMessageType.unk82:
-                case ChatMessageType.unk83:
-                case ChatMessageType.unk84:
-                case ChatMessageType.unk87:
-                case ChatMessageType.unk88:
-                    {
+                        if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_3_8606))
+                        {
+                            packet.ReadInt32("Len");
+                            packet.ReadCString("Name");
+                        }
                         packet.ReadGuid("Guid");
                         break;
                     }
@@ -182,8 +186,11 @@ namespace WowPacketParser.Parsing.Parsers
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_1_0_13914) && text.Language == Language.Addon)
                 packet.ReadCString("Addon Message Prefix");
 
-            packet.ReadInt32("Text Length");
-            text.Text = packet.ReadCString("Text");
+            var len = packet.ReadInt32("Text Length");
+            if (text.Language == Language.Addon)
+                text.Text = packet.ReadBytesTable("Text", len).ToString();
+            else
+                text.Text = packet.ReadCString("Text");
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V5_1_0_16309))
                 packet.ReadInt16E<ChatTag>("Chat Tag");
@@ -217,7 +224,7 @@ namespace WowPacketParser.Parsing.Parsers
         {
             var type = packet.ReadInt32E<ChatMessageType>("Type");
 
-            packet.ReadInt32E<Language>("Language");
+            var lng = packet.ReadInt32E<Language>("Language");
 
             switch (type)
             {
@@ -228,13 +235,19 @@ namespace WowPacketParser.Parsing.Parsers
                     break;
                 }
                 case ChatMessageType.Channel:
+                case ChatMessageType.MonsterYell:
                 {
                     packet.ReadCString("Channel");
                     break;
                 }
             }
 
-            packet.ReadCString("Message");
+            if (lng == Language.Addon)
+            {
+                var msg = packet.ReadToEnd();
+                packet.WriteLine("{0}", Utilities.ByteArrayToHexTable(msg, true));
+            }
+            else packet.ReadCString("Message");
         }
 
         [Parser(Opcode.CMSG_CHAT_MESSAGE_PARTY, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]

@@ -7,6 +7,7 @@ namespace WowPacketParser.Enums
     {
         None              = 0x000000,
         Normal            = 0x000001,
+        Unk2              = 0x000002,
         System            = 0x000004,
         Holiday           = 0x000008,
         InvitesLocked     = 0x000010,

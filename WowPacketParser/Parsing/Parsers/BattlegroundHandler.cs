@@ -429,7 +429,7 @@ namespace WowPacketParser.Parsing.Parsers
         {
             // First three bytes = result, 5 -> enabled, else except 6 -> disabled
             packet.ReadByte("Unk byte");
-            if (ClientVersion.Build != ClientVersionBuild.V3_0_9_9551)
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_1_0_9767))
             {
                 packet.ReadByte("Unk byte");
                 packet.ReadByte("Unk byte");
@@ -566,8 +566,51 @@ namespace WowPacketParser.Parsing.Parsers
             packet.WriteGuid("Guid", guidBytes);
         }
 
-        [Parser(Opcode.MSG_PVP_LOG_DATA, ClientVersionBuild.Zero, ClientVersionBuild.V4_0_6a_13623)]
+        [Parser(Opcode.MSG_PVP_LOG_DATA, ClientVersionBuild.Zero, ClientVersionBuild.V2_3_2_7741)]
         public static void HandlePvPLogData(Packet packet)
+        {
+            if (packet.Direction == Direction.ClientToServer)
+                return;
+
+            var arena = packet.ReadBool("Arena");
+            if (arena)
+            {
+                packet.ReadUInt32("[0] Arena rating");
+                packet.ReadCString("[0] Name");
+                packet.ReadUInt32("[1] Arena rating");
+                packet.ReadCString("[1] Name");
+            }
+
+            var finished = packet.ReadBool("Finished");
+            if (finished)
+                packet.ReadByte("Winner");
+
+            var count = packet.ReadUInt32("Score Count");
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadGuid("Player GUID", i);
+                packet.ReadUInt32("Killing Blows", i);
+                if (!arena)
+                {
+                    packet.ReadUInt32("Honorable Kills", i);
+                    packet.ReadUInt32("Deaths", i);
+                    packet.ReadUInt32("Bonus Honor", i);
+                }
+                else
+                    packet.ReadByte("BG Team", i);
+
+                packet.ReadUInt32("Damage done", i);
+                packet.ReadUInt32("Healing done", i);
+
+                var count2 = packet.ReadUInt32("Extra values counter", i);
+
+                for (var j = 0; j < count2; j++)
+                    packet.ReadUInt32("Value", i, j);
+            }
+        }
+
+        [Parser(Opcode.MSG_PVP_LOG_DATA, ClientVersionBuild.V2_3_2_7741, ClientVersionBuild.V4_0_6a_13623)]
+        public static void HandlePvPLogData231(Packet packet)
         {
             if (packet.Direction == Direction.ClientToServer)
                 return;

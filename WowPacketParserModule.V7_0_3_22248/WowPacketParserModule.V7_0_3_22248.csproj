@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\MovementFlags2.cs" />
+    <Compile Include="Enums\RaceMask.cs" />
     <Compile Include="Enums\SplineFlag.cs" />
     <Compile Include="Enums\TradeStatus.cs" />
     <Compile Include="Enums\UpdateFields.cs" />

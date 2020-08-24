@@ -11,11 +11,18 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadSingle("Time left"); // Sup with timers in float?
         }
 
-        [Parser(Opcode.SMSG_SHOW_MAILBOX)]
         [Parser(Opcode.CMSG_MAIL_GET_LIST)]
-        public static void HandleShowMailbox(Packet packet)
+        public static void HandleCShowMailbox(Packet packet)
         {
             packet.ReadGuid("GUID");
+        }
+
+        [Parser(Opcode.SMSG_SHOW_MAILBOX)]
+        public static void HandleShowMailbox(Packet packet)
+        {
+            // SMSG_SHOW_MAILBOX zero length for 230
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_3_2_7741)) // need correct version
+                packet.ReadGuid("GUID");
         }
 
         [Parser(Opcode.CMSG_MAIL_TAKE_MONEY)]

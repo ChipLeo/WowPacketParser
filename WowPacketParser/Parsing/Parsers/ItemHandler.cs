@@ -535,7 +535,7 @@ namespace WowPacketParser.Parsing.Parsers
 
             item.InventoryType = packet.ReadInt32E<InventoryType>("Inventory Type");
 
-            item.AllowedClasses = packet.ReadInt32E<ClassMask>("Allowed Classes");
+            item.AllowedClasses = packet.ReadUInt32E<ClassMask>("Allowed Classes");
 
             item.AllowedRaces = packet.ReadUInt32E<RaceMask>("Allowed Races");
 
@@ -788,8 +788,8 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadInt32("Buy Price");
                 packet.ReadUInt32("Sell Price");
                 packet.ReadInt32E<InventoryType>("Inventory Type");
-                packet.ReadInt32E<ClassMask>("Allowed Classes");
-                packet.ReadInt32E<RaceMask>("Allowed Races");
+                packet.ReadUInt32E<ClassMask>("Allowed Classes");
+                packet.ReadUInt32E<RaceMask>("Allowed Races");
                 packet.ReadUInt32("Item Level");
                 packet.ReadUInt32("Required Level");
                 packet.ReadUInt32("Required Skill ID");
@@ -939,8 +939,8 @@ namespace WowPacketParser.Parsing.Parsers
                 item.BuyPrice = packet.ReadUInt32("Buy Price");
                 item.SellPrice = packet.ReadUInt32("Sell Price");
                 item.InventoryType = packet.ReadInt32E<InventoryType>("Inventory Type");
-                item.AllowedClasses = packet.ReadInt32E<ClassMask>("Allowed Classes");
-                item.AllowedRaces = packet.ReadInt32E<RaceMask>("Allowed Races");
+                item.AllowedClasses = packet.ReadUInt32E<ClassMask>("Allowed Classes");
+                item.AllowedRaces = packet.ReadUInt32E<RaceMask>("Allowed Races");
                 item.ItemLevel = packet.ReadUInt32("Item Level");
                 item.RequiredLevel = packet.ReadUInt32("Required Level");
                 item.RequiredSkillId = packet.ReadUInt32("Required Skill ID");
@@ -1108,8 +1108,8 @@ namespace WowPacketParser.Parsing.Parsers
                     item.BuyPrice = packet.ReadUInt32("Buy Price");
                     item.SellPrice = packet.ReadUInt32("Sell Price");
                     item.InventoryType = packet.ReadInt32E<InventoryType>("Inventory Type");
-                    item.AllowedClasses = packet.ReadInt32E<ClassMask>("Allowed Classes");
-                    item.AllowedRaces = packet.ReadInt32E<RaceMask>("Allowed Races");
+                    item.AllowedClasses = packet.ReadUInt32E<ClassMask>("Allowed Classes");
+                    item.AllowedRaces = packet.ReadUInt32E<RaceMask>("Allowed Races");
                     item.ItemLevel = packet.ReadUInt32("Item Level");
                     item.RequiredLevel = packet.ReadUInt32("Required Level");
                     item.RequiredSkillId = packet.ReadUInt32("Required Skill ID");

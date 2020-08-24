@@ -300,7 +300,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                     packet.ReadUInt32("Unk4", i);
 
                 var int1 = packet.ReadInt32("AchievementsRequiredCount", i);
-                packet.ReadUInt32("RaceMask", i);
+                packet.ReadUInt32E<RaceMask>("Allowed Races", i);
                 packet.ReadInt32("MinGuildLevel", i);
                 packet.ReadInt32("MinGuildRep", i);
                 packet.ReadInt64("Cost", i);
@@ -785,8 +785,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("IssueDate", indexes);
 
             packet.ReadInt32("AllowedGuildID", indexes);
-            packet.ReadInt32("AllowedClasses", indexes);
-            packet.ReadInt32("AllowedRaces", indexes);
+            packet.ReadUInt32E<ClassMask>("Allowed Classes", indexes);
+            packet.ReadUInt32E<RaceMask>("Allowed Races", indexes);
             packet.ReadInt16("AllowedGender", indexes);
             packet.ReadInt32("AllowedMinLevel", indexes);
             packet.ReadInt32("AllowedMaxLevel", indexes);

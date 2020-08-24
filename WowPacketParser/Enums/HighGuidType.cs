@@ -50,7 +50,8 @@
         CommerceObj,
         ClientSession,
         Elevator,
-        Cast
+        Cast,
+        Dragonkin,
     };
 
     public enum HighGuidType624
@@ -239,5 +240,6 @@
         Pet2          = 0xF0A,
         AreaTrigger   = 0xF0B,
         Corpse        = 0xF0C,
+        Dragonkin     = 0xF0E,
     }
 }

@@ -114,7 +114,7 @@
         SummonDeadPet                 = 109,
         DestroyAllTotems              = 110,
         DurabilityDamage              = 111,
-        Unk112                        = 112,
+        SummonDemon                   = 112,
         ResurrectNew                  = 113,
         AttackMe                      = 114,
         DurabilityDamagePct           = 115,

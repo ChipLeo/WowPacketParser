@@ -285,8 +285,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_WHO)]
         public static void HandleWhoRequest(Packet packet)
         {
-            packet.ReadInt32("ClassMask");
-            packet.ReadInt32("RaceMask");
+            packet.ReadUInt32E<ClassMask>("Allowed Classes");
+            packet.ReadUInt32E<RaceMask>("Allowed Races");
             packet.ReadInt32("Max Level");
             packet.ReadInt32("Min Level");
 

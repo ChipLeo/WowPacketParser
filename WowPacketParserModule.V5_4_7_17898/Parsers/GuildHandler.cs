@@ -552,7 +552,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
 
                 packet.ReadUInt64("Price", i);
                 packet.ReadUInt32E<ReputationRank>("Faction Standing", i);
-                packet.ReadUInt32E<RaceMask>("Race mask", i);
+                packet.ReadUInt32E<RaceMask>("Allowed Races", i);
                 packet.ReadUInt32<ItemId>("Item Id", i);
                 packet.ReadUInt32("Unk UInt32", i);
             }

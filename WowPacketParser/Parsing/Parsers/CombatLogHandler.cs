@@ -272,6 +272,9 @@ namespace WowPacketParser.Parsing.Parsers
                         case SpellEffect.SummonDeadPet:
                         case SpellEffect.Jump:
                         case SpellEffect.CastButton:
+                        case SpellEffect.UntrainTalents:
+                        case SpellEffect.CallPet:
+                        case SpellEffect.SummonDemon:
                             {
                                 break;
                             }

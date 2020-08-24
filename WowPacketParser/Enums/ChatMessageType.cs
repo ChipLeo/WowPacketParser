@@ -61,6 +61,7 @@
         unk88                = 88, // 233
         unk89                = 89, // 230
         unk90                = 90, // 230
+        unk92                = 92, // 230
         unk94                = 94, // 230
         Addon                = uint.MaxValue
     }

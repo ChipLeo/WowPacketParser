@@ -36,8 +36,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadByte("ActiveExpansionLevel");
                 packet.ReadByte("AccountExpansionLevel");
                 packet.ReadUInt32("TimeSecondsUntilPCKick");
-                var races = packet.ReadUInt32("AvailableRaces");
-                var classes = packet.ReadUInt32("AvailableClasses");
+                var races = (uint)packet.ReadUInt32E<RaceMask>("Allowed Races");
+                var classes = (uint)packet.ReadUInt32E<ClassMask>("Allowed Classes");
                 var templates = packet.ReadUInt32("Templates");
                 packet.ReadUInt32("AccountCurrency");
 

@@ -264,7 +264,7 @@ namespace WowPacketParser.Parsing.Parsers
 
         [Parser(Opcode.SMSG_RESURRECT_REQUEST)]
         public static void HandleResurrectRequest(Packet packet)
-        { // bad for 309 and 308 and 232
+        { // bad for 309 and 308 and 232 and 230
             packet.ReadGuid("GUID");
             packet.ReadUInt32("Name length");
             packet.ReadCString("Resurrector Name");
@@ -574,8 +574,8 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadInt32("Max Level");
             packet.ReadCString("Player Name");
             packet.ReadCString("Guild Name");
-            packet.ReadInt32("RaceMask");
-            packet.ReadInt32("ClassMask");
+            packet.ReadUInt32E<RaceMask>("Allowed Races");
+            packet.ReadUInt32E<ClassMask>("Allowed Classes");
 
             var zones = packet.ReadUInt32("Zones count");
             for (var i = 0; i < zones; ++i)
@@ -1161,8 +1161,8 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadGuid("Creature Guid", i);
         }
 
-        [Parser(Opcode.SMSG_UNK_036C)]
-        public static void HandleUnk36C(Packet packet)
+        [Parser(Opcode.SMSG_LFG_UPDATE)]
+        public static void HandleLFGupd(Packet packet)
         {
             packet.ReadByte("unk1");
             packet.ReadByte("unk2");
@@ -1217,7 +1217,8 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_NEW_WORLD_ABORT)]
         [Parser(Opcode.CMSG_ROLE_POLL_BEGIN)]
         [Parser(Opcode.CMSG_UPDATE_VAS_PURCHASE_STATES)]
-        [Parser(Opcode.CMSG_UNK_0363)]
+        [Parser(Opcode.CMSG_CLEAR_LOOKING_FOR_GROUP)]
+        [Parser(Opcode.CMSG_CLEAR_LOOKING_FOR_MORE)]
         [Parser(Opcode.CMSG_UNKNOWN_1020)]
         public static void HandleZeroLengthPackets(Packet packet)
         {

@@ -46,6 +46,7 @@ namespace WowPacketParser.Misc
             { HighGuidTypeLegacy.Account, HighGuidType.WowAccount },
             { HighGuidTypeLegacy.Unknown270, HighGuidType.Null },
             { HighGuidTypeLegacy.Unk607, HighGuidType.Null },
+            { HighGuidTypeLegacy.Dragonkin, HighGuidType.Dragonkin },
             { HighGuidTypeLegacy.Elevator, HighGuidType.Elevator },
             { HighGuidTypeLegacy.SceneObject, HighGuidType.SceneObject },
             { HighGuidTypeLegacy.Group1, HighGuidType.PVPQueueGroup },

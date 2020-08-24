@@ -40,9 +40,9 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadUInt32("TimeSecondsUntilPCKick");
                 var races = 0u;
                 if (ClientVersion.RemovedInVersion(ClientVersionBuild.V7_3_5_25848))
-                    races = packet.ReadUInt32("AvailableRaces");
+                    races = (uint)packet.ReadUInt32E<RaceMask>("Allowed Races");
 
-                var classes = packet.ReadUInt32("AvailableClasses");
+                var classes = (uint)packet.ReadInt32E<ClassMask>("Allowed Classes");
                 var templates = packet.ReadUInt32("Templates");
                 packet.ReadUInt32("AccountCurrency");
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_1_0_22900))

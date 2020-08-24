@@ -184,13 +184,41 @@ namespace WowPacketParser.Parsing.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_LFG_PLAYER_REWARD, ClientVersionBuild.Zero, ClientVersionBuild.V3_0_3_9183)]
-        public static void HandleLfgCompletionReward(Packet packet)
-        { // bad for 309 and 308
-            packet.ReadLfgEntry("Random LFG Entry");
-            packet.ReadLfgEntry("Actual LFG Entry");
+        [Parser(Opcode.MSG_LOOKING_FOR_GROUP)]
+        public static void HandleLfg(Packet packet)
+        {
+            if (packet.Direction == Direction.ClientToServer)
+            {
+                packet.ReadInt32E<LfgType>("LFG_type");
+                packet.ReadInt32<LFGDungeonId>("Dungeon ID");
+                packet.ReadInt32("unk");
+                return;
+            }
 
-            ReadLfgRewardBlock(packet, -1);
+            packet.ReadInt32E<LfgType>("LFG_type");
+            packet.ReadInt32<LFGDungeonId>("Dungeon ID");
+
+            var count = packet.ReadInt32("count");
+            packet.ReadInt32("unk1");
+            if (count > 50) count = 50;
+            for (var i = 0; i < count; i++)
+            {
+                packet.ReadPackedGuid("Guid", i);
+                packet.ReadInt32("Lvl", i);
+                packet.ReadInt32("Zone", i);
+                packet.ReadByte("LFG_mode", i);
+                packet.ReadLfgEntry("Entry1", i);
+                packet.ReadLfgEntry("Entry2", i);
+                packet.ReadLfgEntry("Entry3", i);
+                packet.ReadCString("comment", i);
+                var count2 = packet.ReadInt32("cnt2", i);
+                if (count2 > 9) count2 = 9;
+                for (var j = 0; j < count2; j++)
+                {
+                    packet.ReadPackedGuid("Guid2", i, j);
+                    packet.ReadInt32("Lvl", i, j);
+                }
+            }
         }
 
         [Parser(Opcode.SMSG_LFG_PLAYER_REWARD, ClientVersionBuild.V3_0_3_9183, ClientVersionBuild.V3_1_0_9767)]
@@ -751,6 +779,19 @@ namespace WowPacketParser.Parsing.Parsers
             var guid = packet.StartBitStream(1, 5, 7, 3, 2, 4, 0, 6);
             packet.ParseBitStream(guid, 4, 7, 0, 5, 1, 6, 2, 3);
             packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.CMSG_SET_LOOKING_FOR_GROUP)]
+        public static void HandleSetLFG(Packet packet)
+        {
+            packet.ReadInt32("Slot");
+            packet.ReadLfgEntry("Entry");
+        }
+
+        [Parser(Opcode.CMSG_SET_LOOKING_FOR_MORE)]
+        public static void HandleSetLFM(Packet packet)
+        {
+            packet.ReadLfgEntry("Entry");
         }
 
         [Parser(Opcode.CMSG_DF_GET_SYSTEM_INFO)]
