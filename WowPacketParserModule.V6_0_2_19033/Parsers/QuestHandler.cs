@@ -5,6 +5,7 @@ using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
+using CoreParsers = WowPacketParser.Parsing.Parsers;
 
 namespace WowPacketParserModule.V6_0_2_19033.Parsers
 {
@@ -677,13 +678,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("QuestGiverCreatureID");
 
             int id = packet.ReadInt32("QuestID");
-            QuestRequestItems questRequestItems = new QuestRequestItems
-            {
-                ID = (uint)id
-            };
-
-            questRequestItems.EmoteOnCompleteDelay = (uint)packet.ReadInt32("CompEmoteDelay");
-            questRequestItems.EmoteOnComplete = (uint)packet.ReadInt32("CompEmoteType");
+            int delay = packet.ReadInt32("EmoteDelay");
+            int emote = packet.ReadInt32("EmoteType");
 
             for (int i = 0; i < 2; i++)
                 packet.ReadInt32("QuestFlags", i);
@@ -692,7 +688,9 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("MoneyToGet");
             int int44 = packet.ReadInt32("QuestObjectiveCollectCount");
             int int60 = packet.ReadInt32("QuestCurrencyCount");
-            packet.ReadInt32("StatusFlags");
+            QuestStatusFlags statusFlags = packet.ReadInt32E<QuestStatusFlags>("StatusFlags");
+            bool isComplete = (statusFlags & (QuestStatusFlags.Complete)) == QuestStatusFlags.Complete;
+            bool noRequestOnComplete = (statusFlags & QuestStatusFlags.NoRequestOnComplete) != 0;
 
             for (int i = 0; i < int44; i++)
             {
@@ -716,16 +714,16 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             uint bits16 = packet.ReadBits(12);
 
             packet.ReadWoWString("QuestTitle", bits3016);
-            questRequestItems.CompletionText = packet.ReadWoWString("CompletionText", bits16);
+            string completionText = packet.ReadWoWString("CompletionText", bits16);
 
-            Storage.QuestRequestItems.Add(questRequestItems, packet.TimeSpan);
+            CoreParsers.QuestHandler.QuestRequestItemHelper(id, completionText, delay, emote, isComplete, packet, noRequestOnComplete);
 
-            if (ClientLocale.PacketLocale != LocaleConstant.enUS && questRequestItems.CompletionText != string.Empty)
+            if (ClientLocale.PacketLocale != LocaleConstant.enUS && completionText != string.Empty)
             {
                 QuestRequestItemsLocale localesQuestRequestItems = new QuestRequestItemsLocale
                 {
                     ID = (uint)id,
-                    CompletionText = questRequestItems.CompletionText
+                    CompletionText = completionText
                 };
                 Storage.LocalesQuestRequestItems.Add(localesQuestRequestItems, packet.TimeSpan);
             }
@@ -795,47 +793,99 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_DISPLAY_PLAYER_CHOICE)]
         public static void HandleDisplayPlayerChoice(Packet packet)
         {
-            packet.ReadInt32("ChoiceID");
+            var choiceId = packet.ReadInt32("ChoiceID");
             var responseCount = packet.ReadUInt32();
             packet.ReadPackedGuid128("NpcGUID");
             for (var i = 0u; i < responseCount; ++i)
-                ReadPlayerChoiceResponse(packet, "PlayerChoiceResponse", i);
+                ReadPlayerChoiceResponse(packet, choiceId, i, "PlayerChoiceResponse", i);
 
             packet.ResetBitReader();
 
             var questionLength = packet.ReadBits(8);
-            packet.ReadWoWString("Question", questionLength);
+            var question = packet.ReadWoWString("Question", questionLength);
+
+            Storage.PlayerChoices.Add(new PlayerChoiceTemplate
+            {
+                ChoiceId = choiceId,
+                Question = question
+            }, packet.TimeSpan);
+
+            if (ClientLocale.PacketLocale != LocaleConstant.enUS)
+            {
+                Storage.PlayerChoiceLocales.Add(new PlayerChoiceLocaleTemplate
+                {
+                    ChoiceId = choiceId,
+                    Locale = ClientLocale.PacketLocaleString,
+                    Question = question
+                }, packet.TimeSpan);
+            }
         }
 
-        public static void ReadPlayerChoiceResponse(Packet packet, params object[] indexes)
+        public static void ReadPlayerChoiceResponse(Packet packet, int choiceId, uint index, params object[] indexes)
         {
             packet.ResetBitReader();
 
-            packet.ReadInt32("ResponseID", indexes);
-            packet.ReadInt32("ChoiceArtFileID", indexes);
+            var responseId = packet.ReadInt32("ResponseID", indexes);
+            var choiceArtFileId = packet.ReadInt32("ChoiceArtFileID", indexes);
 
             var answerLength = packet.ReadBits(9);
             var descriptionLength = packet.ReadBits(11);
             var hasReward = packet.ReadBit();
 
-            packet.ReadWoWString("Answer", answerLength, indexes);
-            packet.ReadWoWString("Description", descriptionLength, indexes);
+            var answer = packet.ReadWoWString("Answer", answerLength, indexes);
+            var description = packet.ReadWoWString("Description", descriptionLength, indexes);
 
             if (hasReward)
-                ReadPlayerChoiceResponseReward(packet, "PlayerChoiceResponseReward", indexes);
+                ReadPlayerChoiceResponseReward(packet, choiceId, responseId, "PlayerChoiceResponseReward", indexes);
+
+            Storage.PlayerChoiceResponses.Add(new PlayerChoiceResponseTemplate
+            {
+                ChoiceId = choiceId,
+                ResponseId = responseId,
+                Index = index,
+                ChoiceArtFileId = choiceArtFileId,
+                Answer = answer,
+                Description = description
+            }, packet.TimeSpan);
+
+            if (ClientLocale.PacketLocale != LocaleConstant.enUS)
+            {
+                Storage.PlayerChoiceResponseLocales.Add(new PlayerChoiceResponseLocaleTemplate
+                {
+                    ChoiceId = choiceId,
+                    ResponseId = responseId,
+                    Locale = ClientLocale.PacketLocaleString,
+                    Answer = answer,
+                    Description = description
+                }, packet.TimeSpan);
+            }
         }
 
-        public static void ReadPlayerChoiceResponseReward(Packet packet, params object[] indexes)
+        public static void ReadPlayerChoiceResponseReward(Packet packet, int choiceId, int responseId, params object[] indexes)
         {
             packet.ResetBitReader();
-            packet.ReadInt32("TitleID", indexes);
-            packet.ReadInt32("PackageID", indexes);
-            packet.ReadInt32("SkillLineID", indexes);
-            packet.ReadUInt32("SkillPointCount", indexes);
-            packet.ReadUInt32("ArenaPointCount", indexes);
-            packet.ReadUInt32("HonorPointCount", indexes);
-            packet.ReadUInt64("Money", indexes);
-            packet.ReadUInt32("Xp", indexes);
+            var titleID = packet.ReadInt32("TitleID", indexes);
+            var packageID = packet.ReadInt32("PackageID", indexes);
+            var skillLineID = packet.ReadInt32("SkillLineID", indexes);
+            var skillPointCount = packet.ReadUInt32("SkillPointCount", indexes);
+            var arenaPointCount = packet.ReadUInt32("ArenaPointCount", indexes);
+            var honorPointCount = packet.ReadUInt32("HonorPointCount", indexes);
+            var money = packet.ReadUInt64("Money", indexes);
+            var xp = packet.ReadUInt32("Xp", indexes);
+
+            Storage.PlayerChoiceResponseRewards.Add(new PlayerChoiceResponseRewardTemplate
+            {
+                ChoiceId = choiceId,
+                ResponseId = responseId,
+                TitleId = titleID,
+                PackageId = packageID,
+                SkillLineId = skillLineID,
+                SkillPointCount = skillPointCount,
+                ArenaPointCount = arenaPointCount,
+                HonorPointCount = honorPointCount,
+                Money = money,
+                Xp = xp
+            }, packet.TimeSpan);
 
             var itemCount = packet.ReadUInt32();
             var currencyCount = packet.ReadUInt32();
@@ -843,22 +893,75 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             var itemChoiceCount = packet.ReadUInt32();
 
             for (var i = 0u; i < itemCount; ++i)
-                ReadPlayerChoiceResponseRewardEntry(packet, "Item", i);
+                ReadPlayerChoiceResponseRewardItem(packet, choiceId, responseId, i, "Item", i);
 
             for (var i = 0u; i < currencyCount; ++i)
-                ReadPlayerChoiceResponseRewardEntry(packet, "Currency", i);
+                ReadPlayerChoiceResponseRewardCurrency(packet, choiceId, responseId, i, "Currency", i);
 
             for (var i = 0u; i < factionCount; ++i)
-                ReadPlayerChoiceResponseRewardEntry(packet, "Faction", i);
+                ReadPlayerChoiceResponseRewardFactions(packet, choiceId, responseId, i, "Faction", i);
 
             for (var i = 0u; i < itemChoiceCount; ++i)
-                ReadPlayerChoiceResponseRewardEntry(packet, "ItemChoice", i);
+                ReadPlayerChoiceResponseRewardItemChoice(packet, choiceId, responseId, i, "ItemChoice", i);
         }
 
-        public static void ReadPlayerChoiceResponseRewardEntry(Packet packet, params object[] indexes)
+        public static void ReadPlayerChoiceResponseRewardItemChoice(Packet packet, int choiceId, int responseId, uint index, params object[] indexes)
         {
-            Substructures.ItemHandler.ReadItemInstance(packet, indexes);
-            packet.ReadInt32("Quantity", indexes);
+            ItemInstance instance = Substructures.ItemHandler.ReadItemInstance(packet, indexes);
+            var quantity = packet.ReadInt32("Quantity", indexes);
+
+            // these fields are unused in client, last checked in 8.2.5
+        }
+
+        public static void ReadPlayerChoiceResponseRewardItem(Packet packet, int choiceId, int responseId, uint index, params object[] indexes)
+        {
+            ItemInstance instance = Substructures.ItemHandler.ReadItemInstance(packet, indexes);
+            var quantity = packet.ReadInt32("Quantity", indexes);
+
+            string bonusListIds = "";
+            for (var i = 0; i < instance.BonusListIDs.Length; i++)
+                bonusListIds += instance.BonusListIDs[i] + " ";
+            bonusListIds = bonusListIds.TrimEnd(' ');
+
+            Storage.PlayerChoiceResponseRewardItems.Add(new PlayerChoiceResponseRewardItemTemplate
+            {
+                ChoiceId = choiceId,
+                ResponseId = responseId,
+                Index = index,
+                ItemId = instance.ItemID,
+                BonusListIDs = bonusListIds,
+                Quantity = quantity
+            }, packet.TimeSpan);
+        }
+
+        public static void ReadPlayerChoiceResponseRewardCurrency(Packet packet, int choiceId, int responseId, uint index, params object[] indexes)
+        {
+            ItemInstance instance = Substructures.ItemHandler.ReadItemInstance(packet, indexes);
+            var quantity = packet.ReadInt32("Quantity", indexes);
+
+            Storage.PlayerChoiceResponseRewardCurrencies.Add(new PlayerChoiceResponseRewardCurrencyTemplate
+            {
+                ChoiceId = choiceId,
+                ResponseId = responseId,
+                Index = index,
+                CurrencyId = instance.ItemID,
+                Quantity = quantity
+            }, packet.TimeSpan);
+        }
+
+        public static void ReadPlayerChoiceResponseRewardFactions(Packet packet, int choiceId, int responseId, uint index, params object[] indexes)
+        {
+            ItemInstance instance = Substructures.ItemHandler.ReadItemInstance(packet, indexes);
+            var quantity = packet.ReadInt32("Quantity", indexes);
+
+            Storage.PlayerChoiceResponseRewardFactions.Add(new PlayerChoiceResponseRewardFactionTemplate
+            {
+                ChoiceId = choiceId,
+                ResponseId = responseId,
+                Index = index,
+                FactionId = instance.ItemID,
+                Quantity = quantity
+            }, packet.TimeSpan);
         }
 
         [Parser(Opcode.SMSG_DAILY_QUESTS_RESET)]

@@ -1,10 +1,12 @@
-﻿using System.Runtime.InteropServices;
+﻿using DBFileReaderLib.Attributes;
 
 namespace WowPacketParser.DBC.Structures.BattleForAzeroth
 {
     [DBFile("Creature")]
     public sealed class CreatureEntry
     {
+        [Index(true)]
+        public uint ID;
         public string Name;
         public string NameAlt;
         public string Title;
@@ -13,11 +15,11 @@ namespace WowPacketParser.DBC.Structures.BattleForAzeroth
         public byte CreatureType;
         public ushort CreatureFamily;
         public byte StartAnimState;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public uint[] DisplayID;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public float[] DisplayProbability;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-        public uint[] AlwaysItem;
+        [Cardinality(4)]
+        public uint[] DisplayID = new uint[4];
+        [Cardinality(4)]
+        public float[] DisplayProbability = new float[4];
+        [Cardinality(3)]
+        public uint[] AlwaysItem = new uint[3];
     }
 }

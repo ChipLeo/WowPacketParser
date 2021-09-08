@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
+using WowPacketParser.Parsing.Parsers;
 
 namespace WowPacketParser.Enums.Version
 {
@@ -26,6 +28,7 @@ namespace WowPacketParser.Enums.Version
         {
             UpdateFieldDictionary.Clear();
             UpdateFieldNameDictionary.Clear();
+            UpdateFieldsHandlers.Clear();
         }
 
         public static bool LoadUFDictionaries(Assembly asm, ClientVersionBuild build)
@@ -35,11 +38,13 @@ namespace WowPacketParser.Enums.Version
 
         private static readonly Dictionary<Type, SortedList<int, UpdateFieldInfo>> UpdateFieldDictionary;
         private static readonly Dictionary<Type, Dictionary<string, int>> UpdateFieldNameDictionary;
+        private static readonly Dictionary<ClientVersionBuild, UpdateFieldsHandlerBase> UpdateFieldsHandlers;
 
         static UpdateFields()
         {
             UpdateFieldDictionary = new Dictionary<Type, SortedList<int, UpdateFieldInfo>>();
             UpdateFieldNameDictionary = new Dictionary<Type, Dictionary<string, int>>();
+            UpdateFieldsHandlers = new Dictionary<ClientVersionBuild, UpdateFieldsHandlerBase>();
 
             LoadUFDictionariesInto(UpdateFieldDictionary, UpdateFieldNameDictionary, Assembly.GetExecutingAssembly(), ClientVersionBuild.Zero);
         }
@@ -103,7 +108,36 @@ namespace WowPacketParser.Enums.Version
             return loaded;
         }
 
-        public static int GetUpdateField<T>(T field) // where T: System.Enum // C# 7.3
+        public static void LoadUFHandlers(Assembly asm, ClientVersionBuild assemblyBuild)
+        {
+            var handlers = asm.GetTypes().Where(type => type.BaseType == typeof(UpdateFieldsHandlerBase));
+
+            var namespaceRegex = new Regex($"WowPacketParserModule\\.{assemblyBuild}\\.UpdateFields\\.(.*)$");
+            foreach (var handlerType in handlers)
+            {
+                var buildMatch = namespaceRegex.Match(handlerType.Namespace);
+                if (buildMatch.Success)
+                {
+                    var group = buildMatch.Groups[1];
+                    ClientVersionBuild handlerBuild;
+                    if (Enum.TryParse(group.Value, out handlerBuild))
+                        UpdateFieldsHandlers.Add(handlerBuild, (UpdateFieldsHandlerBase)Activator.CreateInstance(handlerType));
+                }
+            }
+        }
+
+        public static UpdateFieldsHandlerBase GetHandler()
+        {
+            ClientVersionBuild handlerBuild;
+            UpdateFieldsHandlerBase handler;
+            if (Enum.TryParse(GetUpdateFieldDictionaryBuildName(ClientVersion.Build), out handlerBuild))
+                if (UpdateFieldsHandlers.TryGetValue(handlerBuild, out handler))
+                    return handler;
+
+            return null;
+        }
+
+        public static int GetUpdateField<T>(T field) where T: Enum
         {
             Dictionary<string, int> byNamesDict;
             if (UpdateFieldNameDictionary.TryGetValue(typeof(T), out byNamesDict))
@@ -116,7 +150,7 @@ namespace WowPacketParser.Enums.Version
             return -1;
         }
 
-        public static string GetUpdateFieldName<T>(int field) // where T: System.Enum // C# 7.3
+        public static string GetUpdateFieldName<T>(int field) where T: Enum
         {
             SortedList<int, UpdateFieldInfo> infoDict;
             if (UpdateFieldDictionary.TryGetValue(typeof(T), out infoDict))
@@ -136,7 +170,7 @@ namespace WowPacketParser.Enums.Version
             return field.ToString(CultureInfo.InvariantCulture);
         }
 
-        public static UpdateFieldInfo GetUpdateFieldInfo<T>(int field) // where T: System.Enum // C# 7.3
+        public static UpdateFieldInfo GetUpdateFieldInfo<T>(int field) where T: Enum
         {
             SortedList<int, UpdateFieldInfo> infoDict;
             if (UpdateFieldDictionary.TryGetValue(typeof(T), out infoDict))
@@ -532,6 +566,70 @@ namespace WowPacketParser.Enums.Version
                 case ClientVersionBuild.V8_2_0_31478:
                 {
                     return "V8_2_0_30898";
+                }
+                case ClientVersionBuild.V8_2_5_31921:
+                case ClientVersionBuild.V8_2_5_31958:
+                case ClientVersionBuild.V8_2_5_31960:
+                case ClientVersionBuild.V8_2_5_31961:
+                case ClientVersionBuild.V8_2_5_31984:
+                case ClientVersionBuild.V8_2_5_32028:
+                case ClientVersionBuild.V8_2_5_32144:
+                case ClientVersionBuild.V8_2_5_32185:
+                case ClientVersionBuild.V8_2_5_32265:
+                case ClientVersionBuild.V8_2_5_32294:
+                case ClientVersionBuild.V8_2_5_32305:
+                case ClientVersionBuild.V8_2_5_32494:
+                case ClientVersionBuild.V8_2_5_32580:
+                case ClientVersionBuild.V8_2_5_32638:
+                case ClientVersionBuild.V8_2_5_32722:
+                case ClientVersionBuild.V8_2_5_32750:
+                case ClientVersionBuild.V8_2_5_32978:
+                {
+                    return "V8_2_5_31921";
+                }
+                case ClientVersionBuild.V8_3_0_33062:
+                case ClientVersionBuild.V8_3_0_33073:
+                case ClientVersionBuild.V8_3_0_33084:
+                case ClientVersionBuild.V8_3_0_33095:
+                case ClientVersionBuild.V8_3_0_33115:
+                case ClientVersionBuild.V8_3_0_33169:
+                case ClientVersionBuild.V8_3_0_33237:
+                case ClientVersionBuild.V8_3_0_33369:
+                case ClientVersionBuild.V8_3_0_33528:
+                case ClientVersionBuild.V8_3_0_33724:
+                case ClientVersionBuild.V8_3_0_33775:
+                case ClientVersionBuild.V8_3_0_33941:
+                case ClientVersionBuild.V8_3_0_34220:
+                case ClientVersionBuild.V8_3_0_34601:
+                case ClientVersionBuild.V8_3_0_34769:
+                case ClientVersionBuild.V8_3_0_34963:
+                case ClientVersionBuild.V8_3_7_35249:
+                case ClientVersionBuild.V8_3_7_35284:
+                case ClientVersionBuild.V8_3_7_35435:
+                {
+                    return "V8_3_0_33062";
+                }
+                case ClientVersionBuild.V1_13_2_31446:
+                case ClientVersionBuild.V1_13_2_31650:
+                case ClientVersionBuild.V1_13_2_31687:
+                case ClientVersionBuild.V1_13_2_31727:
+                case ClientVersionBuild.V1_13_2_31830:
+                case ClientVersionBuild.V1_13_2_31882:
+                case ClientVersionBuild.V1_13_2_32089:
+                case ClientVersionBuild.V1_13_2_32421:
+                case ClientVersionBuild.V1_13_2_32600:
+                case ClientVersionBuild.V1_13_3_32790:
+                case ClientVersionBuild.V1_13_3_32836:
+                case ClientVersionBuild.V1_13_3_32887:
+                case ClientVersionBuild.V1_13_3_33155:
+                case ClientVersionBuild.V1_13_3_33302:
+                case ClientVersionBuild.V1_13_3_33526:
+                case ClientVersionBuild.V1_13_4_33598:
+                case ClientVersionBuild.V1_13_4_33645:
+                case ClientVersionBuild.V1_13_4_33728:
+                case ClientVersionBuild.V1_13_4_33920:
+                {
+                    return "V1_13_2_31446";
                 }
                 default:
                 {

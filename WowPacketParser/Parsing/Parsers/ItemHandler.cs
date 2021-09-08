@@ -1351,5 +1351,11 @@ namespace WowPacketParser.Parsing.Parsers
         {
             packet.ReadBit("Result");
         }
+
+        [Parser(Opcode.CMSG_SET_AMMO)]
+        public static void HandleSetAmmo(Packet packet)
+        {
+            packet.ReadInt32("ItemId");
+        }
     }
 }

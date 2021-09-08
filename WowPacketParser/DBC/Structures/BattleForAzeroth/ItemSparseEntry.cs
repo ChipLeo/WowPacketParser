@@ -1,10 +1,12 @@
-﻿using System.Runtime.InteropServices;
+﻿using DBFileReaderLib.Attributes;
 
 namespace WowPacketParser.DBC.Structures.BattleForAzeroth
 {
     [DBFile("ItemSparse")]
     public sealed class ItemSparseEntry
     {
+        [Index(true)]
+        public uint ID;
         public long AllowableRace;
         public string Description;
         public string Display3;
@@ -16,10 +18,10 @@ namespace WowPacketParser.DBC.Structures.BattleForAzeroth
         public float QualityModifier;
         public uint BagFamily;
         public float ItemRange;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public float StatPercentageOfSocket;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public int StatPercentEditor;
+        [Cardinality(10)]
+        public float[] StatPercentageOfSocket = new float[10];
+        [Cardinality(10)]
+        public int[] StatPercentEditor = new int[10];
         public int Stackable;
         public int MaxCount;
         public uint RequiredAbility;
@@ -28,21 +30,19 @@ namespace WowPacketParser.DBC.Structures.BattleForAzeroth
         public uint VendorStackCount;
         public float PriceVariance;
         public float PriceRandomValue;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public int Flags;
-        public int OppositeFactionItemID;
+        [Cardinality(4)]
+        public int[] Flags = new int[4];
+        public int FactionRelated;
         public ushort ItemNameDescriptionID;
         public ushort RequiredTransmogHoliday;
         public ushort RequiredHoliday;
         public ushort LimitCategory;
         public ushort GemProperties;
-        public ushort SocketMatchEnchantmentID;
+        public ushort SocketMatchEnchantmentId;
         public ushort TotemCategoryID;
         public ushort InstanceBound;
         public ushort ZoneBound;
         public ushort ItemSet;
-        public ushort ItemRandomSuffixGroupID;
-        public ushort RandomSelect;
         public ushort LockID;
         public ushort StartQuestID;
         public ushort PageID;
@@ -57,16 +57,16 @@ namespace WowPacketParser.DBC.Structures.BattleForAzeroth
         public byte ArtifactID;
         public byte SpellWeight;
         public byte SpellWeightCategory;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-        public byte SocketType;
+        [Cardinality(3)]
+        public byte[] SocketType = new byte[3];
         public byte SheatheType;
         public byte Material;
         public byte PageMaterialID;
         public byte LanguageID;
         public byte Bonding;
         public byte DamageDamageType;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public byte StatModifierBonusStat;
+        [Cardinality(10)]
+        public sbyte[] StatModifierBonusStat = new sbyte[10];
         public byte ContainerSlots;
         public byte MinReputation;
         public byte RequiredPVPMedal;

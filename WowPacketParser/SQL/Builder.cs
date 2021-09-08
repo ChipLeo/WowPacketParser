@@ -104,29 +104,29 @@ namespace WowPacketParser.SQL
 
                     if (attr.CheckVersionMismatch)
                     {
-                        if (!((ClientVersion.Expansion == ClientType.WorldOfWarcraft &&
-                             Settings.TargetedDatabase == TargetedDatabase.Zero)
-                            ||
-                            (ClientVersion.Expansion == ClientType.TheBurningCrusade &&
-                             Settings.TargetedDatabase == TargetedDatabase.TheBurningCrusade)
-                            ||
-                            (ClientVersion.Expansion == ClientType.WrathOfTheLichKing &&
-                             Settings.TargetedDatabase == TargetedDatabase.WrathOfTheLichKing)
-                            ||
-                            (ClientVersion.Expansion == ClientType.Cataclysm &&
-                             Settings.TargetedDatabase == TargetedDatabase.Cataclysm)
-                            ||
-                            (ClientVersion.Expansion == ClientType.MistsOfPandaria &&
-                             Settings.TargetedDatabase == TargetedDatabase.MistsOfPandaria)
-                            ||
-                            (ClientVersion.Expansion == ClientType.WarlordsOfDraenor &&
-                             Settings.TargetedDatabase == TargetedDatabase.WarlordsOfDraenor)
-                            ||
-                            (ClientVersion.Expansion == ClientType.Legion &&
-                             Settings.TargetedDatabase == TargetedDatabase.Legion)
+                        if (!((ClientVersion.Expansion == ClientType.TheBurningCrusade &&
+                               Settings.TargetedDatabase == TargetedDatabase.TheBurningCrusade)
+                              ||
+                              (ClientVersion.Expansion == ClientType.WrathOfTheLichKing &&
+                               Settings.TargetedDatabase == TargetedDatabase.WrathOfTheLichKing)
+                              ||
+                              (ClientVersion.Expansion == ClientType.Cataclysm &&
+                               Settings.TargetedDatabase == TargetedDatabase.Cataclysm)
+                              ||
+                              (ClientVersion.Expansion == ClientType.MistsOfPandaria &&
+                               Settings.TargetedDatabase == TargetedDatabase.MistsOfPandaria)
+                              ||
+                              (ClientVersion.Expansion == ClientType.WarlordsOfDraenor &&
+                               Settings.TargetedDatabase == TargetedDatabase.WarlordsOfDraenor)
+                              ||
+                              (ClientVersion.Expansion == ClientType.Legion &&
+                               Settings.TargetedDatabase == TargetedDatabase.Legion)
                               ||
                               (ClientVersion.Expansion == ClientType.BattleForAzeroth &&
-                               Settings.TargetedDatabase == TargetedDatabase.BattleForAzeroth)))
+                               Settings.TargetedDatabase == TargetedDatabase.BattleForAzeroth)
+                              ||
+                              (ClientVersion.Expansion == ClientType.Classic &&
+                               Settings.TargetedDatabase == TargetedDatabase.Classic)))
                         {
                             Trace.WriteLine(
                                 $"{i}/{builderMethods.Count} - Error: Couldn't generate SQL output of {method.Name} since the targeted database and the sniff version don't match.");

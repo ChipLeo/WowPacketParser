@@ -7,9 +7,9 @@ WowPacketParser (WPP)
 Usage
 -----
 
-* Compile WowPacketParser using Visual Studio 2015 or higher (Windows) or Mono 4.4 or higher (Linux/OSX).
+* Compile WowPacketParser using Visual Studio 2019 (with .NET Core SDK 3.1) or .NET Core SDK 3.1 (Linux/OSX).
   Alternatively you can download compiled binaries from the links [below](#nightly-builds).
-* Edit `WowPacketParser.exe.config` to fit your needs.
+* Edit `WowPacketParser.dll.config` to fit your needs.
 * Drag one or more files (.pkt or .bin) to `WowPacketParser.exe`.
 * Command line usage: `WowPacketParser.exe [--ConfigFile path --Option1 value1 ...] filetoparse1 ...`
 
@@ -39,8 +39,9 @@ and `wpp_data_objectnames.sql` has some data to fill the database.
 
 Nightly Builds
 --------------
+.NET Core SDK 3.1 (3.1.100 or higher) or .NET Core Runtime 3.1 (3.1.100 or higher) is needed!
 
-##### .NET 4.5 (AnyCPU) by AppVeyor
+[Download .NET Core 3.1 here!](https://dotnet.microsoft.com/download/dotnet-core/3.1)
 
 - [Debug 32/64 Bits](https://ci.appveyor.com/project/ChipLeo/wowpacketparser) -> `Configuration: Debug` -> `ARTIFACTS` -> `WPP.zip`
 - [Release 32/64 Bits](https://ci.appveyor.com/project/ChipLeo/wowpacketparser) -> `Configuration: Release` -> `ARTIFACTS` -> `WPP.zip`
@@ -57,3 +58,26 @@ docker run -v /place/where/sniffs/are/kept:/usr/src/app/build/sniffs trinitycore
 */place/where/sniffs/are/kept* should your local directory containing the .pkt file and *sniffname.pkt* the file to be parsed.
 
 Output (.txt/.sql) of the parser will be added to */place/where/sniffs/are/kept*.
+
+
+Copyright & Third Party
+-----------------------
+##### WowPacketParser
+License: GPLv3
+
+Read file [COPYING](COPYING).
+
+##### Third Party 
+
+The third party libraries have their own way of addressing authorship, and the authorship of commits importing/ updating
+a third party library reflects who did the importing instead of who wrote the code within the commit.
+
+
+###### NuGet libraries:
+
+Copyright information of third party libraries provided through NuGet can be obtained by checking https://www.nuget.org/
+
+
+###### Provided third party libraries:
+
+DBFileReaderLib, 2019-2020 wowdev, located at https://github.com/wowdev/DBCD

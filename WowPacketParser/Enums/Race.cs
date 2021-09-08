@@ -39,5 +39,6 @@
         DarkIronDwarf       = 34,
         Vulpera             = 35,
         MagharOrc           = 36,
+        Mechagnome          = 37
     }
 }

@@ -66,17 +66,31 @@ namespace WowPacketParser.SQL.Builders
             if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.creature_template))
                 return string.Empty;
 
-            if (Storage.CreatureTemplates.IsEmpty())
-                return string.Empty;
-
-            foreach (var creatureTemplate in Storage.CreatureTemplates)
+            if (!Storage.CreatureTemplates.IsEmpty() && Settings.TargetedDatabase != TargetedDatabase.Classic)
             {
-                if (creatureTemplate.Item1.FemaleName == null)
-                    creatureTemplate.Item1.FemaleName = string.Empty;
+                foreach (var creatureTemplate in Storage.CreatureTemplates)
+                {
+                    if (creatureTemplate.Value.Item1.FemaleName == null)
+                        creatureTemplate.Value.Item1.FemaleName = string.Empty;
+                }
+
+                var templatesDb = SQLDatabase.Get(Storage.CreatureTemplates.Values);
+                return SQLUtil.Compare(Storage.CreatureTemplates.Values, templatesDb, StoreNameType.Unit);
             }
 
-            var templatesDb = SQLDatabase.Get(Storage.CreatureTemplates);
-            return SQLUtil.Compare(Storage.CreatureTemplates, templatesDb, StoreNameType.Unit);
+            if (!Storage.CreatureTemplatesClassic.IsEmpty() && Settings.TargetedDatabase == TargetedDatabase.Classic)
+            {
+                foreach (var creatureTemplate in Storage.CreatureTemplatesClassic)
+                {
+                    if (creatureTemplate.Item1.FemaleName == null)
+                        creatureTemplate.Item1.FemaleName = string.Empty;
+                }
+
+                var templatesDb = SQLDatabase.Get(Storage.CreatureTemplatesClassic);
+                return SQLUtil.Compare(Storage.CreatureTemplatesClassic, templatesDb, StoreNameType.Unit);
+            }
+
+            return string.Empty;
         }
 
         [BuilderMethod(true)]
@@ -169,6 +183,90 @@ namespace WowPacketParser.SQL.Builders
             var templatesDb = SQLDatabase.Get(Storage.ItemTemplates);
 
             return SQLUtil.Compare(Storage.ItemTemplates, templatesDb, StoreNameType.Item);
+        }
+
+        [BuilderMethod]
+        public static string PlayerChoice()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.playerchoice))
+                return string.Empty;
+
+            if (Storage.PlayerChoices.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.PlayerChoices);
+
+            return SQLUtil.Compare(Storage.PlayerChoices, templatesDb, StoreNameType.None);
+        }
+
+        [BuilderMethod]
+        public static string PlayerChoiceResponse()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.playerchoice))
+                return string.Empty;
+
+            if (Storage.PlayerChoiceResponses.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.PlayerChoiceResponses);
+
+            return SQLUtil.Compare(Storage.PlayerChoiceResponses, templatesDb, StoreNameType.None);
+        }
+
+        [BuilderMethod]
+        public static string PlayerChoiceResponseReward()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.playerchoice))
+                return string.Empty;
+
+            if (Storage.PlayerChoiceResponseRewards.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.PlayerChoiceResponseRewards);
+
+            return SQLUtil.Compare(Storage.PlayerChoiceResponseRewards, templatesDb, StoreNameType.None);
+        }
+
+        [BuilderMethod]
+        public static string PlayerChoiceResponseRewardCurrency()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.playerchoice))
+                return string.Empty;
+
+            if (Storage.PlayerChoiceResponseRewardCurrencies.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.PlayerChoiceResponseRewardCurrencies);
+
+            return SQLUtil.Compare(Storage.PlayerChoiceResponseRewardCurrencies, templatesDb, StoreNameType.None);
+        }
+
+        [BuilderMethod]
+        public static string PlayerChoiceResponseRewardFaction()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.playerchoice))
+                return string.Empty;
+
+            if (Storage.PlayerChoiceResponseRewardFactions.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.PlayerChoiceResponseRewardFactions);
+
+            return SQLUtil.Compare(Storage.PlayerChoiceResponseRewardFactions, templatesDb, StoreNameType.None);
+        }
+
+        [BuilderMethod]
+        public static string PlayerChoiceResponseRewardItem()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.playerchoice))
+                return string.Empty;
+
+            if (Storage.PlayerChoiceResponseRewardItems.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.PlayerChoiceResponseRewardItems);
+
+            return SQLUtil.Compare(Storage.PlayerChoiceResponseRewardItems, templatesDb, StoreNameType.None);
         }
 
         [BuilderMethod(true)]

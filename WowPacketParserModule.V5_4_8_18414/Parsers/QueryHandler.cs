@@ -159,7 +159,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
 
             packet.AddSniffData(StoreNameType.Unit, entry.Key, "QUERY_RESPONSE");
 
-            Storage.CreatureTemplates.Add(creature, packet.TimeSpan);
+            Storage.CreatureTemplates.Add(creature.Entry.Value, creature, packet.TimeSpan);
 
             if (ClientLocale.PacketLocale != LocaleConstant.enUS)
             {

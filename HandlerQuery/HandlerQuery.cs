@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using Mono.Reflection;
+//using Mono.Reflection;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 
@@ -29,12 +29,12 @@ namespace HandlerQuery
                            where parms[0].ParameterType == typeof(Packet)
                            select method).ToList();
 
-            _instructions = new Dictionary<MethodInfo, List<Instruction>>(methods.Count);
+            _instructions = new Dictionary<MethodInfo, List<ReadMethods>>(methods.Count);
             foreach (var methodInfo in methods)
             {
                 try
                 {
-                    _instructions.Add(methodInfo, new List<Instruction>(methodInfo.GetInstructions()));
+                    _instructions.Add(methodInfo, new List<ReadMethods>(methodInfo.GetInstructions()));
                 }
                 catch (ArgumentException) { }
             }
@@ -46,7 +46,7 @@ namespace HandlerQuery
             Console.WriteLine("Read dictionary built (it took: {0}).", stopwatch.Elapsed);
         }
 
-        static private readonly Dictionary<MethodInfo, List<Instruction>> _instructions;
+        static private readonly Dictionary<MethodInfo, List<ReadMethods>> _instructions;
         static private Dictionary<MethodInfo, List<ReadMethods>> _readMethods;
 
         static public Dictionary<MethodInfo, List<ReadMethods>> GetReadDictionary()

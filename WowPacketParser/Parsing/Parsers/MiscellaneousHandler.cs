@@ -69,8 +69,8 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_SUSPEND_TOKEN)]
         public static void HandleSuspendTokenResponse(Packet packet)
         {
-            packet.ReadBit("Unk");
             packet.ReadUInt32("Count");
+            packet.ReadBit("Reason");
         }
 
         [Parser(Opcode.SMSG_COMPRESSED_MULTIPLE_PACKETS)]
@@ -129,10 +129,8 @@ namespace WowPacketParser.Parsing.Parsers
 
             if (ClientVersion.AddedInVersion(ClientType.Cataclysm))
             {
-                packet.ReadToEnd();
-                throw new NotImplementedException("This opcode heavily relies on ALL" +
-                                                  "of its contained packets to be parsed successfully");
-                // Some sort of infinite loop happens here...
+                HandleMultiplePackets(packet);
+                return;
             }
 
             packet.WriteLine("{");

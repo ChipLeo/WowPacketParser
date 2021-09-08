@@ -236,6 +236,7 @@ namespace WowPacketParser.Parsing.Parsers
                             break;
                         }
                         case SpellEffect.DismissPet:
+                        case SpellEffect.CallPet:
                         {
                                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
                                     packet.ReadPackedGuid("Target", index, i, j);
@@ -273,7 +274,6 @@ namespace WowPacketParser.Parsing.Parsers
                         case SpellEffect.Jump:
                         case SpellEffect.CastButton:
                         case SpellEffect.UntrainTalents:
-                        case SpellEffect.CallPet:
                         case SpellEffect.SummonDemon:
                             {
                                 break;

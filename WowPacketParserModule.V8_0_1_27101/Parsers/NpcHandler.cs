@@ -44,6 +44,7 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 {
                     Storage.GossipMenuOptionActions.Add(new GossipMenuOptionAction { MenuId = tempGossipOptionPOI.MenuId, OptionIndex = tempGossipOptionPOI.OptionIndex, ActionMenuId = tempGossipOptionPOI.ActionMenuId, ActionPoiId = gossipPOI.ID }, packet.TimeSpan);
                     //clear temp
+                    tempGossipOptionPOI.Guid = null;
                     tempGossipOptionPOI.MenuId = null;
                     tempGossipOptionPOI.OptionIndex = null;
                     tempGossipOptionPOI.ActionMenuId = null;
@@ -75,10 +76,11 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 vendor.ExtendedCost = packet.ReadUInt32("ExtendedCostID", i);
                 vendor.PlayerConditionID = packet.ReadUInt32("PlayerConditionFailed", i);
 
-                vendor.Item = Substructures.ItemHandler.ReadItemInstance(packet, i);
+                vendor.Item = Substructures.ItemHandler.ReadItemInstance(packet, i).ItemID;
+                packet.ResetBitReader();
                 vendor.IgnoreFiltering = packet.ReadBit("DoNotFilterOnVendor", i);
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V8_1_0_28724))
-                    packet.ReadBit("Refundable");
+                    packet.ReadBit("Refundable", i);
 
                 vendor.MaxCount = maxCount == -1 ? 0 : (uint)maxCount; // TDB
                 if (vendor.Type == 2)
@@ -86,6 +88,21 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
 
                 Storage.NpcVendors.Add(vendor, packet.TimeSpan);
             }
+
+            var lastGossipOption = CoreParsers.NpcHandler.LastGossipOption;
+            var tempGossipOptionPOI = CoreParsers.NpcHandler.TempGossipOptionPOI;
+
+            lastGossipOption.Guid = null;
+            lastGossipOption.MenuId = null;
+            lastGossipOption.OptionIndex = null;
+            lastGossipOption.ActionMenuId = null;
+            lastGossipOption.ActionPoiId = null;
+
+            tempGossipOptionPOI.Guid = null;
+            tempGossipOptionPOI.MenuId = null;
+            tempGossipOptionPOI.OptionIndex = null;
+            tempGossipOptionPOI.ActionMenuId = null;
+            tempGossipOptionPOI.ActionPoiId = null;
         }
     }
 }
