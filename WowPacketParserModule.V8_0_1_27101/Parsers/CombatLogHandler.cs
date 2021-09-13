@@ -44,6 +44,7 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ReadUInt16("PlayerItemLevel", idx);
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V8_1_0_28724))
                 packet.ReadUInt16("TargetItemLevel", idx);
+            
             packet.ReadUInt16("ScalingHealthItemLevelCurveID", idx);
             packet.ReadByte("ScalesWithItemLevel", idx);
         }
@@ -225,6 +226,8 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ReadInt32("OriginalDamage"); // OriginalDamage (before HitResult -> BeforeCrit and Armor etc)
 
             packet.ResetBitReader();
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V8_3_0_33062))
+                packet.ReadBit("UnkBit");
 
             var bit100 = packet.ReadBit("HasLogData");
             if (bit100)

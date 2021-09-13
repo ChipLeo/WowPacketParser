@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Google.Protobuf.WellKnownTypes;
+using System;
 using WowPacketParser.Enums;
 using WowPacketParser.Hotfix;
-using WowPacketParser.Loading;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
+using WowPacketParser.Proto;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 
@@ -15,10 +16,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         [Parser(Opcode.SMSG_DB_REPLY)]
         public static void HandleDBReply(Packet packet)
         {
+            var dbReply = packet.Holder.DbReply = new();
             var type = packet.ReadUInt32E<DB2Hash>("TableHash");
-            var entry = packet.ReadInt32("RecordID");
+            dbReply.TableHash = (uint)type;
+            var entry = dbReply.RecordId = packet.ReadInt32("RecordID");
             var timeStamp = packet.ReadUInt32();
-            packet.AddValue("Timestamp", Utilities.GetDateTimeFromUnixTime(timeStamp));
+            var time = packet.AddValue("Timestamp", Utilities.GetDateTimeFromUnixTime(timeStamp));
+            dbReply.Time = Timestamp.FromDateTime(DateTime.SpecifyKind(time, DateTimeKind.Utc));
             var allow = packet.ReadBit("Allow");
 
             var size = packet.ReadInt32("Size");
@@ -27,11 +31,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             if (entry < 0 || !allow)
             {
+                dbReply.Status = PacketDbReplyRecordStatus.RecordStatusRecordRemoved;
                 packet.WriteLine("Row {0} has been removed.", -entry);
                 HotfixStoreMgr.RemoveRecord(type, entry);
             }
             else
             {
+                dbReply.Status = PacketDbReplyRecordStatus.RecordStatusValid;
                 switch (type)
                 {
                     case DB2Hash.BroadcastText:
@@ -77,6 +83,22 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                             };
                             Storage.BroadcastTextLocales.Add(lbct, packet.TimeSpan);
                         }
+
+                        dbReply.BroadcastText = new PacketDbReplyBroadcastText()
+                        {
+                            Id = bct.ID.Value,
+                            Text0 = bct.Text,
+                            Text1 = bct.Text1,
+                            Language = bct.LanguageID.Value,
+                            ConditionId = bct.ConditionID ?? 0,
+                            EmotesId = bct.EmotesID.Value,
+                            Flags = bct.Flags.Value,
+                            ChatBubbleDuration = 0,
+                        };
+                        dbReply.BroadcastText.Sounds.Add(bct.SoundEntriesID1.Value);
+                        dbReply.BroadcastText.Sounds.Add(bct.SoundEntriesID2.Value);
+                        for (int i = 0; i < 3; ++i)
+                            dbReply.BroadcastText.Emotes.Add(new BroadcastTextEmote(){EmoteId = bct.EmoteID[i].Value, Delay = bct.EmoteDelay[i].Value});
                         break;
                     }
                     default:
@@ -109,7 +131,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         [Parser(Opcode.SMSG_AVAILABLE_HOTFIXES)]
         public static void HandleHotfixList(Packet packet)
         {
-            packet.ReadInt32("HotfixCacheVersion");
+            packet.ReadInt32("VirtualRealmAddress");
             var hotfixCount = packet.ReadUInt32("HotfixCount");
             for (var i = 0u; i < hotfixCount; ++i)
             {
@@ -225,7 +247,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
         [HasSniffData]
         [Parser(Opcode.SMSG_HOTFIX_MESSAGE)]
-        [Parser(Opcode.SMSG_HOTFIX_RESPONSE)]
+        [Parser(Opcode.SMSG_HOTFIX_CONNECT)]
         public static void HandleHotixData(Packet packet)
         {
             var hotfixCount = packet.ReadUInt32("HotfixCount");

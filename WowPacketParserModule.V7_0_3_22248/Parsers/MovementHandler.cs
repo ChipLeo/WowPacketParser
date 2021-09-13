@@ -1,13 +1,15 @@
-﻿using System.Linq;
-using System.Collections.Concurrent;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using WowPacketParser.DBC;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
+using WowPacketParser.Proto;
 using WowPacketParserModule.V7_0_3_22248.Enums;
 using CoreParsers = WowPacketParser.Parsing.Parsers;
 using MovementFlag = WowPacketParserModule.V6_0_2_19033.Enums.MovementFlag;
+using SplineFacingType = WowPacketParserModule.V6_0_2_19033.Enums.SplineFacingType;
 using SplineFlag = WowPacketParserModule.V7_0_3_22248.Enums.SplineFlag;
 
 namespace WowPacketParserModule.V7_0_3_22248.Parsers
@@ -28,8 +30,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadSingle("HorizontalSpeed", idx);
             }
         }
-
-        public static readonly IDictionary<ushort, bool> ActivePhases = new ConcurrentDictionary<ushort, bool>();
 
         public static void ReadMovementStats(Packet packet, params object[] idx)
         {
@@ -87,8 +87,9 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
         public static void ReadMovementMonsterSpline(Packet packet, Vector3 pos, params object[] indexes)
         {
-            packet.ReadUInt32("Id", indexes);
-            packet.ReadVector3("Destination", indexes);
+            PacketMonsterMove monsterMove = packet.Holder.MonsterMove;
+            monsterMove.Id = packet.ReadUInt32("Id", indexes);
+            monsterMove.Destination = packet.ReadVector3("Destination", indexes);
 
             packet.ResetBitReader();
 
@@ -124,25 +125,32 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadUInt32("ParabolicCurveID", indexes);
         }
 
+        public static double GetDistance(Vector3 start, Vector3 end)
+        {
+            return Math.Sqrt(Math.Pow((start.X - end.X), 2) + Math.Pow((start.Y - end.Y), 2) + Math.Pow((start.Z - end.Z), 2));
+        }
+
         public static void ReadMovementSpline(Packet packet, Vector3 pos, params object[] indexes)
         {
-            packet.ReadInt32E<SplineFlag>("Flags", indexes);
+            PacketMonsterMove monsterMove = packet.Holder.MonsterMove;
+            SplineJump jump = monsterMove.Jump = new();
+            monsterMove.Flags = packet.ReadInt32E<SplineFlag>("Flags", indexes).ToUniversal();
             packet.ReadByte("AnimTier", indexes);
             packet.ReadUInt32("TierTransStartTime", indexes);
-            packet.ReadInt32("Elapsed", indexes);
-            packet.ReadUInt32("MoveTime", indexes);
-            packet.ReadSingle("JumpGravity", indexes);
-            packet.ReadUInt32("SpecialTime", indexes);
+            monsterMove.ElapsedTime = packet.ReadInt32("Elapsed", indexes);
+            var moveTime = monsterMove.MoveTime = packet.ReadUInt32("MoveTime", indexes);
+            jump.Gravity = packet.ReadSingle("JumpGravity", indexes);
+            jump.Duration = packet.ReadUInt32("SpecialTime", indexes);
 
             packet.ReadByte("Mode", indexes);
             packet.ReadByte("VehicleExitVoluntary", indexes);
 
-            packet.ReadPackedGuid128("TransportGUID", indexes);
-            packet.ReadSByte("VehicleSeat", indexes);
+            monsterMove.TransportGuid = packet.ReadPackedGuid128("TransportGUID", indexes);
+            monsterMove.VehicleSeat = packet.ReadSByte("VehicleSeat", indexes);
 
             packet.ResetBitReader();
 
-            var type = packet.ReadBits("Face", 2, indexes);
+            var type = packet.ReadBitsE<SplineFacingType>("Face", 2, indexes);
             var pointsCount = packet.ReadBits("PointsCount", 16, indexes);
             var packedDeltasCount = packet.ReadBits("PackedDeltasCount", 16, indexes);
             var hasSplineFilter = packet.ReadBit("HasSplineFilter", indexes);
@@ -153,15 +161,16 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             switch (type)
             {
-                case 1:
-                    packet.ReadVector3("FaceSpot", indexes);
+                case SplineFacingType.Spot:
+                    monsterMove.LookPosition = packet.ReadVector3("FaceSpot", indexes);
                     break;
-                case 2:
-                    packet.ReadSingle("FaceDirection", indexes);
-                    packet.ReadPackedGuid128("FacingGUID", indexes);
+                case SplineFacingType.Target:
+                    SplineLookTarget lookTarget = monsterMove.LookTarget = new();
+                    lookTarget.Orientation = packet.ReadSingle("FaceDirection", indexes);
+                    lookTarget.Target = packet.ReadPackedGuid128("FacingGUID", indexes);
                     break;
-                case 3:
-                    packet.ReadSingle("FaceDirection", indexes);
+                case SplineFacingType.Angle:
+                    monsterMove.LookOrientation = packet.ReadSingle("FaceDirection", indexes);
                     break;
             }
 
@@ -174,6 +183,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 if (i == 0)
                     endpos = spot;
 
+                monsterMove.Points.Add(spot);
                 packet.AddValue("Points", spot, indexes, i);
             }
 
@@ -197,6 +207,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 Z = (pos.Z + endpos.Z) * 0.5f
             };
 
+
+            List<Vector3> trueWaypoints = new List<Vector3>();
             for (var i = 0; i < packedDeltasCount; ++i)
             {
                 var vec = new Vector3
@@ -205,7 +217,26 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                     Y = mid.Y - waypoints[i].Y,
                     Z = mid.Z - waypoints[i].Z
                 };
+                monsterMove.PackedPoints.Add(vec);
+                trueWaypoints.Add(vec);
                 packet.AddValue("WayPoints", vec, indexes, i);
+            }
+
+            if (endpos.X != 0 && endpos.Y != 0 && endpos.Z != 0)
+            {
+                double distance = 0;
+                if (packedDeltasCount > 0)
+                {
+                    distance = GetDistance(pos, trueWaypoints[0]);
+                    for (var i = 1; i < packedDeltasCount; ++i)
+                        distance += GetDistance(trueWaypoints[i - 1], trueWaypoints[i]);
+                    distance += GetDistance(trueWaypoints[(int)(packedDeltasCount - 1)], endpos);
+                }
+                else
+                    distance = GetDistance(pos, endpos);
+
+                packet.WriteLine("(MovementMonsterSpline) Distance: " + distance.ToString());
+                packet.WriteLine("(MovementMonsterSpline) Speed: " + (distance / moveTime * 1000).ToString());
             }
         }
         public static void ReadTransportData(Packet packet, params object[] idx)
@@ -237,8 +268,9 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         [Parser(Opcode.SMSG_ON_MONSTER_MOVE)]
         public static void HandleOnMonsterMove(Packet packet)
         {
-            packet.ReadPackedGuid128("MoverGUID");
-            var pos = packet.ReadVector3("Position");
+            PacketMonsterMove monsterMove = packet.Holder.MonsterMove = new();
+            monsterMove.Mover = packet.ReadPackedGuid128("MoverGUID");
+            Vector3 pos = monsterMove.Position =  packet.ReadVector3("Position");
 
             ReadMovementMonsterSpline(packet, pos, "MovementMonsterSpline");
         }
@@ -621,18 +653,28 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         [Parser(Opcode.SMSG_PHASE_SHIFT_CHANGE)]
         public static void HandlePhaseShift(Packet packet)
         {
+            var phaseShift = packet.Holder.PhaseShift = new PacketPhaseShift();
             CoreParsers.MovementHandler.ActivePhases.Clear();
 
-            packet.ReadPackedGuid128("Client");
+            phaseShift.Client = packet.ReadPackedGuid128("Client");
 
             // PhaseShiftData
             packet.ReadInt32("PhaseShiftFlags");
             var count = packet.ReadInt32("PhaseShiftCount");
-            packet.ReadPackedGuid128("PersonalGUID");
+            phaseShift.PersonalGuid = packet.ReadPackedGuid128("PersonalGUID");
             for (var i = 0; i < count; ++i)
             {
-                var flags = packet.ReadUInt16("PhaseFlags", i);
-                var id = packet.ReadUInt16("Id", i);
+                var flags = packet.ReadUInt16E<PhaseFlags>("PhaseFlags", i);
+                var id = packet.ReadUInt16();
+                phaseShift.Phases.Add(id);
+
+                if (Settings.UseDBC && DBC.Phase.ContainsKey(id))
+                {
+                    packet.WriteLine($"[{i}] ID: {id} ({(DBCPhaseFlags)DBC.Phase[id].Flags})");
+                }
+                else
+                    packet.AddValue("ID", id, i);
+
                 CoreParsers.MovementHandler.ActivePhases.Add(id, true);
             }
 
@@ -644,15 +686,15 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             var visibleMapIDsCount = packet.ReadInt32("VisibleMapIDsCount") / 2;
             for (var i = 0; i < visibleMapIDsCount; ++i)
-                packet.ReadInt16<MapId>("VisibleMapID", i);
+                phaseShift.VisibleMaps.Add((uint)packet.ReadInt16<MapId>("VisibleMapID", i));
 
             var preloadMapIDCount = packet.ReadInt32("PreloadMapIDsCount") / 2;
             for (var i = 0; i < preloadMapIDCount; ++i)
-                packet.ReadInt16<MapId>("PreloadMapID", i);
+                phaseShift.PreloadMaps.Add((uint)packet.ReadInt16<MapId>("PreloadMapID", i));
 
             var uiWorldMapAreaIDSwapsCount = packet.ReadInt32("UiWorldMapAreaIDSwap") / 2;
             for (var i = 0; i < uiWorldMapAreaIDSwapsCount; ++i)
-                packet.ReadInt16("UiWorldMapAreaIDSwaps", i);
+                phaseShift.UiMapPhase.Add((uint)packet.ReadInt16("UiWorldMapAreaIDSwaps", i));
         }
     }
 }

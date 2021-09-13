@@ -14,10 +14,12 @@ namespace WowPacketParser.Misc
         public static readonly string[] AreaFilters = Conf.GetStringList("AreaFilters", new string[0]);
         public static readonly int FilterPacketsNum = Conf.GetInt("FilterPacketsNum", 0);
         public static readonly ClientVersionBuild ClientBuild = Conf.GetEnum("ClientBuild", ClientVersionBuild.Zero);
+        public static readonly LocaleConstant ClientLocale = Conf.GetEnum("ClientLocale", LocaleConstant.enUS);
         public static readonly TargetedDatabase TargetedDatabase = Conf.GetEnum("TargetedDatabase", TargetedDatabase.WrathOfTheLichKing);
         public static readonly DumpFormatType DumpFormat = Conf.GetEnum("DumpFormat", DumpFormatType.Text);
         public static readonly ulong SQLOutputFlag = GetSQLOutputFlag();
         public static readonly bool SQLOrderByKey = Conf.GetBoolean("SqlOrderByKey", false);
+        public static readonly bool SaveTempSpawns = Conf.GetBoolean("SaveTempSpawns", true);
         public static readonly bool SkipOnlyVerifiedBuildUpdateRows = Conf.GetBoolean("SkipOnlyVerifiedBuildUpdateRows", false);
         public static readonly bool IgnoreZeroValues = Conf.GetBoolean("IgnoreZeroValues", false);
         public static readonly bool ForceInsertQueries = Conf.GetBoolean("ForceInsertQueries", false);
@@ -32,6 +34,7 @@ namespace WowPacketParser.Misc
         public static readonly bool AllPackets = Conf.GetBoolean("AllPackets", false);
         public static readonly bool DevMode = Conf.GetBoolean("DevMode", false);
         public static readonly int Threads = Conf.GetInt("Threads", 8);
+        public static readonly bool ParseAllHotfixes = Conf.GetBoolean("ParseAllHotfixes", false);
 
         public static readonly bool SSHEnabled = Conf.GetBoolean("SSHEnabled", false);
         public static readonly string SSHHost = Conf.GetString("SSHHost", "localhost");
@@ -75,7 +78,17 @@ namespace WowPacketParser.Misc
 
         public static bool DumpFormatWithText()
         {
-            return DumpFormat != DumpFormatType.SqlOnly && DumpFormat != DumpFormatType.SniffDataOnly;
+            return DumpFormat != DumpFormatType.SqlOnly &&
+                   DumpFormat != DumpFormatType.SniffDataOnly &&
+                   DumpFormat != DumpFormatType.UniversalProto;
+        }
+
+        public static bool DumpFormatWithTextToFile()
+        {
+            return DumpFormat != DumpFormatType.SqlOnly &&
+                   DumpFormat != DumpFormatType.SniffDataOnly &&
+                   DumpFormat != DumpFormatType.UniversalProto &&
+                   DumpFormat != DumpFormatType.UniversalProtoWithText;
         }
 
         public static bool DumpFormatWithSQL()

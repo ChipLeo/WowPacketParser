@@ -1,5 +1,4 @@
-﻿using WowPacketParser.Enums;
-using WowPacketParser.Misc;
+using WowPacketParser.Enums;
 using WowPacketParser.SQL;
 
 namespace WowPacketParser.Store.Objects
@@ -24,5 +23,8 @@ namespace WowPacketParser.Store.Objects
 
         [DBFieldName("CompletionText")]
         public string CompletionText;
+
+        [DBFieldName("VerifiedBuild")]
+        public int? VerifiedBuild;
     }
 }

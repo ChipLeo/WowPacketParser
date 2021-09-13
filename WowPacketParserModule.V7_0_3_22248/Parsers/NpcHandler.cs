@@ -1,9 +1,9 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+using System;
 using System.Globalization;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
+using WowPacketParser.Proto;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 using CoreParsers = WowPacketParser.Parsing.Parsers;
@@ -12,13 +12,20 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
     public static class NpcHandler
     {
-        public static void ReadGossipQuestTextData(Packet packet, params object[] idx)
+        public static GossipQuestOption ReadGossipQuestTextData(Packet packet, params object[] idx)
         {
-            packet.ReadInt32("QuestID", idx);
+            var gossipQuest = new GossipQuestOption();
+            gossipQuest.QuestId = (uint)packet.ReadInt32("QuestID", idx);
+            if (ClientVersion.AddedInVersion(ClientType.Shadowlands))
+                packet.ReadInt32("ContentTuningID", idx);
+
             packet.ReadInt32("QuestType", idx);
-            packet.ReadInt32("QuestLevel", idx);
-            if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_3_5_25848))
-                packet.ReadInt32("QuestMaxScalingLevel", idx);
+            if (ClientVersion.RemovedInVersion(ClientType.Shadowlands))
+            {
+                packet.ReadInt32("QuestLevel", idx);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_3_5_25848))
+                    packet.ReadInt32("QuestMaxScalingLevel", idx);
+            }
 
             for (int j = 0; j < 2; ++j)
                 packet.ReadInt32("QuestFlags", idx, j);
@@ -31,35 +38,39 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             uint questTitleLen = packet.ReadBits(9);
 
-            packet.ReadWoWString("QuestTitle", questTitleLen, idx);
+            gossipQuest.Title = packet.ReadWoWString("QuestTitle", questTitleLen, idx);
+
+            return gossipQuest;
         }
 
         [HasSniffData]
         [Parser(Opcode.SMSG_GOSSIP_MESSAGE)]
         public static void HandleNpcGossip(Packet packet)
         {
+            PacketGossipMessage packetGossip = packet.Holder.GossipMessage = new();
             GossipMenu gossip = new GossipMenu();
 
             WowGuid guid = packet.ReadPackedGuid128("GossipGUID");
+            packetGossip.GossipSource = guid;
 
             gossip.ObjectType = guid.GetObjectType();
             gossip.ObjectEntry = guid.GetEntry();
 
             int menuId = packet.ReadInt32("GossipID");
-            gossip.Entry = (uint)menuId;
+            gossip.Entry = packetGossip.MenuId = (uint)menuId;
 
             packet.ReadInt32("FriendshipFactionID");
 
-            gossip.TextID = (uint)packet.ReadInt32("TextID");
+            gossip.TextID = packetGossip.TextId = (uint)packet.ReadInt32("TextID");
 
             int int44 = packet.ReadInt32("GossipOptions");
             int int60 = packet.ReadInt32("GossipText");
 
             for (int i = 0; i < int44; ++i)
-                V6_0_2_19033.Parsers.NpcHandler.ReadGossipOptionsData((uint)menuId, packet, i, "GossipOptions");
+                packetGossip.Options.Add(V6_0_2_19033.Parsers.NpcHandler.ReadGossipOptionsData((uint)menuId, packet, i, "GossipOptions"));
 
             for (int i = 0; i < int60; ++i)
-                ReadGossipQuestTextData(packet, i, "GossipQuestText");
+                packetGossip.Quests.Add(ReadGossipQuestTextData(packet, i, "GossipQuestText"));
 
             if (guid.GetObjectType() == ObjectType.Unit)
                 if (Storage.Objects.ContainsKey(guid))
@@ -68,22 +79,29 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             Storage.Gossips.Add(gossip, packet.TimeSpan);
             var lastGossipOption = CoreParsers.NpcHandler.LastGossipOption;
             var tempGossipOptionPOI = CoreParsers.NpcHandler.TempGossipOptionPOI;
+
             if (lastGossipOption.HasSelection)
             {
-                Storage.GossipMenuOptionActions.Add(new GossipMenuOptionAction { MenuId = lastGossipOption.MenuId, OptionIndex = lastGossipOption.OptionIndex, ActionMenuId = gossip.Entry, ActionPoiId = lastGossipOption.ActionPoiId }, packet.TimeSpan);
+                if ((packet.TimeSpan - lastGossipOption.TimeSpan).Duration() <= TimeSpan.FromMilliseconds(2500))
+                {
+                    Storage.GossipMenuOptionActions.Add(new GossipMenuOptionAction { MenuId = lastGossipOption.MenuId, OptionIndex = lastGossipOption.OptionIndex, ActionMenuId = gossip.Entry, ActionPoiId = lastGossipOption.ActionPoiId }, packet.TimeSpan);
 
-                //keep temp data (for case SMSG_GOSSIP_POI is delayed)
-                tempGossipOptionPOI.Guid = lastGossipOption.Guid;
-                tempGossipOptionPOI.MenuId = lastGossipOption.MenuId;
-                tempGossipOptionPOI.OptionIndex = lastGossipOption.OptionIndex;
-                tempGossipOptionPOI.ActionMenuId = gossip.Entry;
+                    //keep temp data (for case SMSG_GOSSIP_POI is delayed)
+                    tempGossipOptionPOI.Guid = lastGossipOption.Guid;
+                    tempGossipOptionPOI.MenuId = lastGossipOption.MenuId;
+                    tempGossipOptionPOI.OptionIndex = lastGossipOption.OptionIndex;
+                    tempGossipOptionPOI.ActionMenuId = gossip.Entry;
+                    tempGossipOptionPOI.TimeSpan = lastGossipOption.TimeSpan;
 
-                // clear lastgossip so no faulty linkings appear
-                lastGossipOption.Guid = null;
-                lastGossipOption.MenuId = null;
-                lastGossipOption.OptionIndex = null;
-                lastGossipOption.ActionMenuId = null;
-                lastGossipOption.ActionPoiId = null;
+                    // clear lastgossip so no faulty linkings appear
+                    lastGossipOption.Reset();
+                }
+                else
+                {
+                    lastGossipOption.Reset();
+                    tempGossipOptionPOI.Reset();
+
+                }
             }
 
             packet.AddSniffData(StoreNameType.Gossip, menuId, guid.GetEntry().ToString(CultureInfo.InvariantCulture));

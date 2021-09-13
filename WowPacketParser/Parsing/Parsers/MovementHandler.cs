@@ -5,6 +5,8 @@ using System.IO;
 using WowPacketParser.Enums;
 using WowPacketParser.Enums.Version;
 using WowPacketParser.Misc;
+using WowPacketParser.PacketStructures;
+using WowPacketParser.Proto;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 
@@ -179,7 +181,10 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_MONSTER_MOVE_TRANSPORT)]
         public static void HandleMonsterMove(Packet packet)
         {
+            PacketMonsterMove monsterMove = packet.Holder.MonsterMove = new();
             WowGuid guid = packet.ReadPackedGuid("GUID");
+            monsterMove.Mover = guid;
+            monsterMove.TransportGuid = new WowGuid64(0);
 
             if (guid.GetHighType() == HighGuidType.Creature && Storage.Objects != null && Storage.Objects.ContainsKey(guid))
             {
@@ -192,10 +197,11 @@ namespace WowPacketParser.Parsing.Parsers
             if (packet.Opcode == Opcodes.GetOpcode(Opcode.SMSG_MONSTER_MOVE_TRANSPORT, Direction.ServerToClient))
             {
                 WowGuid transportGuid = packet.ReadPackedGuid("Transport GUID");
+                monsterMove.TransportGuid = transportGuid;
 
                 int seat = -1;
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_3_9183)) // no idea when this was added exactly
-                    seat = packet.ReadByte("Transport Seat");
+                    seat = monsterMove.VehicleSeat = packet.ReadByte("Transport Seat");
 
                 if (transportGuid.HasEntry() && transportGuid.GetHighType() == HighGuidType.Vehicle &&
                     guid.HasEntry() && guid.GetHighType() == HighGuidType.Creature)
@@ -213,7 +219,7 @@ namespace WowPacketParser.Parsing.Parsers
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_1_0_9767)) // no idea when this was added exactly
                 packet.ReadBool("Toggle AnimTierInTrans");
 
-            var pos = packet.ReadVector3("Position");
+            var pos = monsterMove.Position = packet.ReadVector3("Position");
 
             packet.ReadInt32("Move Ticks");
 
@@ -223,17 +229,18 @@ namespace WowPacketParser.Parsing.Parsers
             {
                 case SplineType.FacingSpot:
                 {
-                    packet.ReadVector3("Facing Spot");
+                    monsterMove.LookPosition = packet.ReadVector3("Facing Spot");
                     break;
                 }
                 case SplineType.FacingTarget:
                 {
-                    packet.ReadGuid("Facing GUID");
+                    var lookTarget = monsterMove.LookTarget = new();
+                    lookTarget.Target = packet.ReadGuid("Facing GUID");
                     break;
                 }
                 case SplineType.FacingAngle:
                 {
-                    packet.ReadSingle("Facing Angle");
+                    monsterMove.LookOrientation = packet.ReadSingle("Facing Angle");
                     break;
                 }
                 case SplineType.Stop:
@@ -255,6 +262,7 @@ namespace WowPacketParser.Parsing.Parsers
             }
 
             var flags = packet.ReadInt32E<SplineFlag>("Spline Flags");
+            monsterMove.Flags = flags.ToUniversal();
 
             //removed for 309
             /*if (flags.HasAnyFlag(SplineFlag.AnimationTier))
@@ -269,7 +277,7 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadInt32("Async-time in ms");
             }
 
-            packet.ReadInt32("Move Time");
+            monsterMove.MoveTime = (uint)packet.ReadInt32("Move Time");
 
             if (flags.HasAnyFlag(SplineFlag.Trajectory))
             {
@@ -288,11 +296,12 @@ namespace WowPacketParser.Parsing.Parsers
             if (flags.HasAnyFlag(SplineFlag.Flying | SplineFlag.CatmullRom | SplineFlag.Falling))
             {
                 for (var i = 0; i < waypoints; i++)
-                    packet.ReadVector3("Waypoint", i);
+                    monsterMove.Points.Add(packet.ReadVector3("Waypoint", i));
             }
             else
             {
                 var newpos = packet.ReadVector3("Waypoint Endpoint");
+                monsterMove.Points.Add(newpos);
 
                 Vector3 mid = (pos + newpos) * 0.5f;
 
@@ -300,6 +309,7 @@ namespace WowPacketParser.Parsing.Parsers
                 {
                     var vec = packet.ReadPackedVector3();
                     vec = mid - vec;
+                    monsterMove.PackedPoints.Add(vec);
                     packet.AddValue("Waypoint", vec, i);
                 }
             }
@@ -307,7 +317,9 @@ namespace WowPacketParser.Parsing.Parsers
 
         private static void ReadSplineMovement510(Packet packet, Vector3 pos)
         {
+            var monsterMove = packet.Holder.MonsterMove;
             var flags = packet.ReadInt32E<SplineFlag434>("Spline Flags");
+            monsterMove.Flags = flags.ToUniversal();
 
             if (flags.HasAnyFlag(SplineFlag434.Animation))
             {
@@ -315,7 +327,7 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadInt32("Asynctime in ms"); // Async-time in ms
             }
 
-            packet.ReadInt32("Move Time");
+            monsterMove.MoveTime = (uint)packet.ReadInt32("Move Time");
 
             if (flags.HasAnyFlag(SplineFlag434.Parabolic))
             {
@@ -328,11 +340,12 @@ namespace WowPacketParser.Parsing.Parsers
             if (flags.HasAnyFlag(SplineFlag434.UncompressedPath))
             {
                 for (var i = 0; i < waypoints; i++)
-                    packet.ReadVector3("Waypoint", i);
+                    monsterMove.Points.Add(packet.ReadVector3("Waypoint", i));
             }
             else
             {
                 var newpos = packet.ReadVector3("Waypoint Endpoint");
+                monsterMove.Points.Add(newpos);
 
                 var mid = new Vector3
                 {
@@ -347,6 +360,7 @@ namespace WowPacketParser.Parsing.Parsers
                     vec.X += mid.X;
                     vec.Y += mid.Y;
                     vec.Z += mid.Z;
+                    monsterMove.PackedPoints.Add(vec);
                     packet.AddValue("Waypoint: ", vec, 0);
 
                     if (waypoints > 2)
@@ -358,6 +372,7 @@ namespace WowPacketParser.Parsing.Parsers
                             vec.Y += mid.Y;
                             vec.Z += mid.Z;
 
+                            monsterMove.PackedPoints.Add(vec);
                             packet.AddValue("Waypoint", vec, i);
                         }
                     }
@@ -383,7 +398,9 @@ namespace WowPacketParser.Parsing.Parsers
 
         private static void ReadSplineMovement422(Packet packet, Vector3 pos)
         {
+            var monsterMove = packet.Holder.MonsterMove;
             var flags = packet.ReadInt32E<SplineFlag422>("Spline Flags");
+            monsterMove.Flags = flags.ToUniversal();
 
             if (flags.HasAnyFlag(SplineFlag422.AnimationTier))
             {
@@ -391,7 +408,7 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadInt32("Asynctime in ms"); // Async-time in ms
             }
 
-            packet.ReadInt32("Move Time");
+            monsterMove.MoveTime = (uint)packet.ReadInt32("Move Time");
 
             if (flags.HasAnyFlag(SplineFlag422.Trajectory))
             {
@@ -404,11 +421,12 @@ namespace WowPacketParser.Parsing.Parsers
             if (flags.HasAnyFlag(SplineFlag422.UsePathSmoothing))
             {
                 for (var i = 0; i < waypoints; i++)
-                    packet.ReadVector3("Waypoint", i);
+                    monsterMove.Points.Add(packet.ReadVector3("Waypoint", i));
             }
             else
             {
                 var newpos = packet.ReadVector3("Waypoint Endpoint");
+                monsterMove.Points.Add(newpos);
 
                 var mid = new Vector3
                 {
@@ -424,6 +442,7 @@ namespace WowPacketParser.Parsing.Parsers
                     vec.Y += mid.Y;
                     vec.Z += mid.Z;
 
+                    monsterMove.PackedPoints.Add(vec);
                     packet.AddValue("Waypoint", vec);
                 }
             }
@@ -1291,7 +1310,7 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.Direction == Direction.ServerToClient) && ClientVersion.Build != ClientVersionBuild.V4_2_2_14545)
                 guid = packet.ReadPackedGuid("Guid");
             else
-                guid = new WowGuid64();
+                guid = WowGuid64.Empty;
 
             if ((packet.Opcode == Opcodes.GetOpcode(Opcode.CMSG_MOVE_NOT_ACTIVE_MOVER, Direction.ClientToServer)) &&
                 ClientVersion.RemovedInVersion(ClientVersionBuild.V4_3_4_15595))
@@ -1311,7 +1330,7 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_MOVE_SPLINE_DONE, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleMoveSplineDone(Packet packet)
         {
-            WowGuid guid = new WowGuid64(); // = packet.ReadPackedGuid("Guid");
+            WowGuid guid = new WowGuid64(0); // = packet.ReadPackedGuid("Guid");
             ReadMovementInfo(packet, guid);
             packet.ReadInt32("Movement Counter"); // Possibly
         }
@@ -1401,6 +1420,7 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_FORCE_TURN_RATE_CHANGE_ACK)]
         [Parser(Opcode.CMSG_FORCE_FLIGHT_SPEED_CHANGE_ACK)]
         [Parser(Opcode.CMSG_FORCE_FLIGHT_BACK_SPEED_CHANGE_ACK)]
+        [Parser(Opcode.CMSG_FORCE_PITCH_RATE_CHANGE_ACK)]
         public static void HandleSpeedChangeMessage(Packet packet)
         {
             WowGuid guid;
@@ -1456,6 +1476,10 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_MOVE_UNSET_CAN_FLY)]
         [Parser(Opcode.SMSG_MOVE_SET_CAN_TRANSITION_BETWEEN_SWIM_AND_FLY)]
         [Parser(Opcode.SMSG_MOVE_UNSET_CAN_TRANSITION_BETWEEN_SWIM_AND_FLY)]
+        [Parser(Opcode.SMSG_MOVE_ENABLE_TRANSITION_BETWEEN_SWIM_AND_FLY)]
+        [Parser(Opcode.SMSG_MOVE_DISABLE_TRANSITION_BETWEEN_SWIM_AND_FLY)]
+        [Parser(Opcode.SMSG_MOVE_DISABLE_GRAVITY)]
+        [Parser(Opcode.SMSG_MOVE_ENABLE_GRAVITY)]
         [Parser(Opcode.SMSG_MOVE_SET_FEATHER_FALL)]
         [Parser(Opcode.SMSG_MOVE_SET_NORMAL_FALL, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleSetMovementMessages(Packet packet)
@@ -1484,6 +1508,8 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_MOVE_KNOCK_BACK_ACK, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         [Parser(Opcode.CMSG_FORCE_MOVE_UNROOT_ACK, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         [Parser(Opcode.CMSG_FORCE_MOVE_ROOT_ACK, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
+        [Parser(Opcode.CMSG_MOVE_GRAVITY_ENABLE_ACK, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
+        [Parser(Opcode.CMSG_MOVE_GRAVITY_DISABLE_ACK, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleSpecialMoveAckMessages2(Packet packet)
         {
             WowGuid guid;
@@ -1789,17 +1815,11 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_MOVE_SPLINE_STOP_SWIM, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         [Parser(Opcode.SMSG_MOVE_SPLINE_SET_RUN_MODE, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         [Parser(Opcode.SMSG_MOVE_SPLINE_SET_WALK_MODE, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
+        [Parser(Opcode.SMSG_MOVE_SPLINE_SET_FLYING, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
+        [Parser(Opcode.SMSG_MOVE_SPLINE_UNSET_FLYING, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
         public static void HandleSplineMovementMessages(Packet packet)
         {
             packet.ReadPackedGuid("GUID");
-        }
-
-        [Parser(Opcode.SMSG_MOVE_SPLINE_SET_FLYING, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
-        [Parser(Opcode.SMSG_MOVE_SPLINE_UNSET_FLYING, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]
-        public static void HandleSplineFlyMovementMessages(Packet packet)
-        {
-            WowGuid guid = packet.ReadPackedGuid("Guid");
-            ReadMovementInfo(packet, guid);
         }
 
         [Parser(Opcode.SMSG_MOVE_SPLINE_SET_WALK_BACK_SPEED, ClientVersionBuild.Zero, ClientVersionBuild.V4_3_4_15595)]

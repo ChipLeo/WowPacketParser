@@ -424,8 +424,8 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ReadUInt32("Amount", indexes);
         }
 
-        [Parser(Opcode.SMSG_QUERY_TREASURE_PICKER_RESPONSE)]
-        public static void HandleQueryTreasurePickerResponse(Packet packet)
+        [Parser(Opcode.SMSG_TREASURE_PICKER_RESPONSE)]
+        public static void HandleTreasurePickerResponse(Packet packet)
         {
             packet.ReadUInt32("QuestId");
             packet.ReadUInt32("TreasurePickerID");
@@ -436,6 +436,9 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ReadUInt64("MoneyReward");
             var bonusCount = packet.ReadUInt32("BonusCount");
 
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V8_2_0_30898))
+                packet.ReadInt32("Flags");
+
             for (int i = 0; i < currencyCount; i++)
                 ReadTreasurePickCurrency(packet, i);
 
@@ -444,8 +447,8 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
 
             for (var i = 0; i < bonusCount; ++i)
             {
-                var bonusItemCount = packet.ReadInt32("BonusItemCount", i);
-                var bonusCurrencyCount = packet.ReadInt32("BonusCurrencyCount", i);
+                var bonusItemCount = packet.ReadUInt32("BonusItemCount", i);
+                var bonusCurrencyCount = packet.ReadUInt32("BonusCurrencyCount", i);
                 packet.ReadUInt64("BonusMoney", i);
 
                 for (var z = 0; z < bonusCurrencyCount; ++z)
@@ -844,6 +847,22 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 };
                 Storage.LocalesQuestGreeting.Add(localesQuestGreeting, packet.TimeSpan);
             }
+        }
+
+        [Parser(Opcode.CMSG_UI_MAP_QUEST_LINES_REQUEST)]
+        public static void HandleUiMapQuestLinesRequest(Packet packet)
+        {
+            packet.ReadInt32("UiMapID");
+        }
+
+        [Parser(Opcode.SMSG_UI_MAP_QUEST_LINES_RESPONSE)]
+        public static void HandleUiMapQuestLinesResponse(Packet packet)
+        {
+            packet.ReadInt32("UiMapID");
+            var count = packet.ReadUInt32();
+
+            for (int i = 0; i < count; i++)
+                packet.ReadUInt32("QuestLineXQuestID", i);
         }
     }
 }

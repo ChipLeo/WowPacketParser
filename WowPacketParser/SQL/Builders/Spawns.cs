@@ -140,8 +140,8 @@ namespace WowPacketParser.SQL.Builders
                 row.Data.PhaseGroup = 0;
                 row.Data.ModelID = 0;
                 row.Data.CurrentWaypoint = 0;
-                row.Data.CurHealth = 0;
-                row.Data.CurMana = 0;
+                row.Data.CurHealth = (uint)creature.UnitData.MaxHealth;
+                row.Data.CurMana = (uint)creature.UnitData.MaxPower[0];
                 row.Data.NpcFlag = 0;
                 row.Data.UnitFlag = 0;
                 row.Data.DynamicFlag = 0;
@@ -192,7 +192,7 @@ namespace WowPacketParser.SQL.Builders
                     addonRows.Add(addonRow);
                 }
 
-                if (creature.IsTemporarySpawn())
+                if (creature.IsTemporarySpawn() && !Settings.SaveTempSpawns)
                 {
                     row.CommentOut = true;
                     row.Comment += " - !!! might be temporary spawn !!!";
@@ -333,7 +333,7 @@ namespace WowPacketParser.SQL.Builders
                 var rotation = go.GetStaticRotation();
                 row.Data.Rotation = new float?[] { rotation.X, rotation.Y, rotation.Z, rotation.W };
 
-                bool add = true;
+                bool add = false;
                 var addonRow = new Row<GameObjectAddon>();
                 if (Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.gameobject_addon))
                 {
@@ -348,14 +348,18 @@ namespace WowPacketParser.SQL.Builders
                         addonRow.Data.parentRot2 = parentRotation.Value.Z;
                         addonRow.Data.parentRot3 = parentRotation.Value.W;
 
-                        if (addonRow.Data.parentRot0 == 0.0f &&
-                            addonRow.Data.parentRot1 == 0.0f &&
-                            addonRow.Data.parentRot2 == 0.0f &&
-                            addonRow.Data.parentRot3 == 1.0f)
-                            add = false;
+                        if (addonRow.Data.parentRot0 != 0.0f ||
+                            addonRow.Data.parentRot1 != 0.0f ||
+                            addonRow.Data.parentRot2 != 0.0f ||
+                            addonRow.Data.parentRot3 != 1.0f)
+                            add = true;
                     }
-                    else
-                        add = false;
+
+                    addonRow.Data.WorldEffectID = go.WorldEffectID.GetValueOrDefault(0);
+                    addonRow.Data.AIAnimKitID = go.AIAnimKitID.GetValueOrDefault(0);
+
+                    if (go.WorldEffectID != null || go.AIAnimKitID != null)
+                        add = true;
 
                     addonRow.Comment += StoreGetters.GetName(StoreNameType.GameObject, (int)gameobject.Key.GetEntry(), false);
 
@@ -374,7 +378,7 @@ namespace WowPacketParser.SQL.Builders
                 row.Comment += " (Area: " + StoreGetters.GetName(StoreNameType.Area, go.Area, false) + " - ";
                 row.Comment += "Difficulty: " + StoreGetters.GetName(StoreNameType.Difficulty, (int)go.DifficultyID, false) + ")";
 
-                if (go.IsTemporarySpawn())
+                if (go.IsTemporarySpawn() && !Settings.SaveTempSpawns)
                 {
                     row.CommentOut = true;
                     row.Comment += " - !!! might be temporary spawn !!!";

@@ -1,4 +1,5 @@
-﻿using WowPacketParser.Enums;
+using System;
+using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
@@ -40,15 +41,19 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
 
             if (tempGossipOptionPOI.HasSelection)
             {
-                if (tempGossipOptionPOI.ActionMenuId != null)
+                if ((packet.TimeSpan - tempGossipOptionPOI.TimeSpan).Duration() <= TimeSpan.FromMilliseconds(2500))
                 {
-                    Storage.GossipMenuOptionActions.Add(new GossipMenuOptionAction { MenuId = tempGossipOptionPOI.MenuId, OptionIndex = tempGossipOptionPOI.OptionIndex, ActionMenuId = tempGossipOptionPOI.ActionMenuId, ActionPoiId = gossipPOI.ID }, packet.TimeSpan);
-                    //clear temp
-                    tempGossipOptionPOI.Guid = null;
-                    tempGossipOptionPOI.MenuId = null;
-                    tempGossipOptionPOI.OptionIndex = null;
-                    tempGossipOptionPOI.ActionMenuId = null;
-                    tempGossipOptionPOI.ActionPoiId = null;
+                    if (tempGossipOptionPOI.ActionMenuId != null)
+                    {
+                        Storage.GossipMenuOptionActions.Add(new GossipMenuOptionAction { MenuId = tempGossipOptionPOI.MenuId, OptionIndex = tempGossipOptionPOI.OptionIndex, ActionMenuId = tempGossipOptionPOI.ActionMenuId, ActionPoiId = gossipPOI.ID }, packet.TimeSpan);
+                        //clear temp
+                        tempGossipOptionPOI.Reset();
+                    }
+                }
+                else
+                {
+                    lastGossipOption.Reset();
+                    tempGossipOptionPOI.Reset();
                 }
             }
         }
@@ -89,20 +94,29 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 Storage.NpcVendors.Add(vendor, packet.TimeSpan);
             }
 
-            var lastGossipOption = CoreParsers.NpcHandler.LastGossipOption;
-            var tempGossipOptionPOI = CoreParsers.NpcHandler.TempGossipOptionPOI;
+            CoreParsers.NpcHandler.LastGossipOption.Reset();
+            CoreParsers.NpcHandler.TempGossipOptionPOI.Reset();
+        }
 
-            lastGossipOption.Guid = null;
-            lastGossipOption.MenuId = null;
-            lastGossipOption.OptionIndex = null;
-            lastGossipOption.ActionMenuId = null;
-            lastGossipOption.ActionPoiId = null;
+        [Parser(Opcode.SMSG_GOSSIP_QUEST_UPDATE)]
+        public static void HandleGossipQuestUpdate(Packet packet)
+        {
+            packet.ReadPackedGuid128("GossipGUID");
 
-            tempGossipOptionPOI.Guid = null;
-            tempGossipOptionPOI.MenuId = null;
-            tempGossipOptionPOI.OptionIndex = null;
-            tempGossipOptionPOI.ActionMenuId = null;
-            tempGossipOptionPOI.ActionPoiId = null;
+            packet.ReadInt32<QuestId>("QuestID");
+            packet.ReadInt32("QuestType");
+            packet.ReadInt32("QuestLevel");
+            packet.ReadInt32("QuestMaxScalingLevel");
+
+            for (int i = 0; i < 2; ++i)
+                packet.ReadInt32("QuestFlags", i);
+
+            packet.ResetBitReader();
+
+            packet.ReadBit("Repeatable");
+            uint questTitleLen = packet.ReadBits(9);
+
+            packet.ReadWoWString("QuestTitle", questTitleLen);
         }
     }
 }

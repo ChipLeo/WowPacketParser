@@ -1,10 +1,10 @@
 ﻿using WowPacketParser.Enums;
-using WowPacketParser.Loading;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 using CoreParsers = WowPacketParser.Parsing.Parsers;
+using TutorialAction703 = WowPacketParser.Enums.Version.V7_0_3_22248.TutorialAction;
 
 namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
@@ -370,22 +370,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadByte("unk1");
         }
 
-        [Parser(Opcode.SMSG_UNK_CLIENT_2805)]
-        public static void HandleUnkClient2805(Packet packet)
-        {
-            var cnt1 = packet.ReadInt32("Count1");
-            packet.ReadBytes("unk1", cnt1);
-            var cnt2 = packet.ReadInt32("Count2");
-            packet.ReadBytes("unk2", cnt2);
-        }
-
-        [Parser(Opcode.SMSG_UNK_CLIENT_282E)]
-        public static void HandleUnkClient282E(Packet packet)
-        {
-            packet.ReadInt32("unk32");
-            packet.ReadBit("unk1");
-        }
-
         [Parser(Opcode.SMSG_WHO)]
         public static void HandleWho(Packet packet)
         {
@@ -555,7 +539,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32("MapID");
         }
 
-        [Parser(Opcode.SMSG_UNK_CLIENT_25E0)]
+        [Parser(Opcode.SMSG_SPELL_VISUAL_LOAD_SCREEN)]
         public static void HandleUnkClient25E0(Packet packet)
         {
             packet.ReadInt32("unk1");
@@ -592,8 +576,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
         }
 
-        [Parser(Opcode.SMSG_OPEN_ALLIED_RACE_DETAILS_GIVER)]
-        public static void HandleOpenAlliedRaceDetailsGiver(Packet packet)
+        [Parser(Opcode.SMSG_ALLIED_RACE_DETAILS)]
+        public static void HandleAlliedRaceDetails(Packet packet)
         {
             packet.ReadPackedGuid128("GUID"); // Creature or GameObject
             packet.ReadInt32("RaceID");
@@ -608,8 +592,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadUInt32("WorldStateValue", idx);
         }
 
-        [Parser(Opcode.SMSG_AREA_POI_UPDATE)]
-        public static void HandleAreaPoiUpdate(Packet packet)
+        [Parser(Opcode.SMSG_AREA_POI_UPDATE_RESPONSE)]
+        public static void HandleAreaPOIUpdateResponse(Packet packet)
         {
             var count = packet.ReadInt32("Count");
 
@@ -625,6 +609,15 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         {
             packet.ReadPackedGuid128("Unit");
             packet.ReadUInt16("AnimKitID");
+        }
+
+        [Parser(Opcode.CMSG_TUTORIAL_FLAG)]
+        public static void HandleTutorialFlag620(Packet packet)
+        {
+            var action = packet.ReadBitsE<TutorialAction703>("TutorialAction", 2);
+
+            if (action == TutorialAction703.Update)
+                packet.ReadInt32E<Tutorial>("TutorialBit");
         }
     }
 }

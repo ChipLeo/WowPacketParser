@@ -1,6 +1,7 @@
 ﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
+using WowPacketParser.Proto;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 
@@ -98,9 +99,10 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
         [Parser(Opcode.SMSG_QUERY_PLAYER_NAME_RESPONSE)]
         public static void HandleNameQueryResponse(Packet packet)
         {
+            PacketQueryPlayerNameResponse response = packet.Holder.QueryPlayerNameResponse = new();
             var hasData = packet.ReadByte("HasData");
 
-            packet.ReadPackedGuid128("Player Guid");
+            response.PlayerGuid = packet.ReadPackedGuid128("Player Guid");
 
             if (hasData == 0)
             {
@@ -121,12 +123,13 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 packet.ReadUInt64("GuildClubMemberID");
                 packet.ReadUInt32("VirtualRealmAddress");
 
-                packet.ReadByteE<Race>("Race");
-                packet.ReadByteE<Gender>("Gender");
-                packet.ReadByteE<Class>("Class");
-                packet.ReadByte("Level");
+                response.Race = (uint)packet.ReadByteE<Race>("Race");
+                response.Gender = (uint)packet.ReadByteE<Gender>("Gender");
+                response.Class = (uint)packet.ReadByteE<Class>("Class");
+                response.Level = packet.ReadByte("Level");
 
-                packet.ReadWoWString("Name", bits15);
+                response.PlayerName = packet.ReadWoWString("Name", bits15);
+                response.HasData = true;
             }
         }
 
@@ -182,7 +185,7 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ReadInt32("Unknown703", idx);
             packet.ReadInt32("InterfaceVersion", idx);
             packet.ReadUInt32("Flags4", idx);
-            var unknown830lengths = new uint[packet.ReadUInt32()];
+            var mailSenderLengths = new uint[packet.ReadUInt32()];
 
             packet.ResetBitReader();
 
@@ -191,12 +194,12 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ReadBit("BoostInProgress", idx);
             packet.ReadBits("UnkWod61x", 5, idx);
 
-            for (var j = 0; j < unknown830lengths.Length; ++j)
-                unknown830lengths[j] = packet.ReadBits(6);
+            for (var j = 0; j < mailSenderLengths.Length; ++j)
+                mailSenderLengths[j] = packet.ReadBits(6);
 
-            for (var j = 0; j < unknown830lengths.Length; ++j)
-                if (unknown830lengths[j] > 1)
-                    packet.ReadDynamicString("Unknown830", unknown830lengths[j], idx);
+            for (var j = 0; j < mailSenderLengths.Length; ++j)
+                if (mailSenderLengths[j] > 1)
+                    packet.ReadDynamicString("MailSender", mailSenderLengths[j], idx);
 
             packet.ReadWoWString("Character Name", nameLength, idx);
 
@@ -205,6 +208,12 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 PlayerCreateInfo startPos = new PlayerCreateInfo { Race = race, Class = klass, Map = (uint)mapId, Zone = (uint)zone, Position = pos, Orientation = 0 };
                 Storage.StartPositions.Add(startPos, packet.TimeSpan);
             }
+        }
+
+        public static void ReadUnlockedConditionalAppearance(Packet packet, params object[] indexes)
+        {
+            packet.ReadUInt32("AchievementId", indexes);
+            packet.ReadUInt32("Unused", indexes);
         }
 
         [Parser(Opcode.SMSG_ENUM_CHARACTERS_RESULT)]
@@ -233,10 +242,7 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V8_1_0_28724))
             {
                 for (uint i = 0; i < unlockedConditionalAppearanceCount; ++i)
-                {
-                    packet.ReadUInt32("AchievementId", "UnlockedConditionalAppearance", i);
-                    packet.ReadUInt32("Unused", "UnlockedConditionalAppearance", i);
-                }
+                    ReadUnlockedConditionalAppearance(packet, "UnlockedConditionalAppearance", i);
             }
 
             for (uint i = 0; i < charsCount; ++i)
@@ -342,10 +348,10 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 packet.ReadInt32("SeasonPlayed", i);
                 packet.ReadInt32("SeasonWon", i);
                 packet.ReadInt32("WeeklyBestRating", i);
-                packet.ReadInt32("Unk710", i);
-                packet.ReadInt32("Unk801_1", i);
+                packet.ReadInt32("SeasonBestRating", i);
+                packet.ReadInt32("PvpTierID", i);
                 packet.ResetBitReader();
-                packet.ReadBit("Unk801_2", i);
+                packet.ReadBit("Disqualified", i);
             }
 
             if (hasGuildData)
@@ -378,6 +384,9 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ReadByte("FacialHairStyleID");
             packet.ReadByte("OutfitID");
 
+            for (var i = 0; i < 3; i++)
+                packet.ReadByte("CustomDisplay", i);
+
             packet.ReadWoWString("Name", nameLen);
 
             if (hasTemplateSet)
@@ -401,9 +410,9 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ReadInt32("SeasonPlayed", idx);
             packet.ReadInt32("SeasonWon", idx);
             packet.ReadInt32("WeeklyBestRating", idx);
-            packet.ReadInt32("Unk710");
-            packet.ReadInt32("Unk801");
-            packet.ReadBit("Unk801_Bit");
+            packet.ReadInt32("SeasonBestRating", idx);
+            packet.ReadInt32("PvpTierID", idx);
+            packet.ReadBit("Disqualified", idx);
         }
 
         [Parser(Opcode.SMSG_INSPECT_PVP)]
@@ -432,11 +441,17 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ReadInt32("NumNewPvpTalentSlots");
         }
 
-        [Parser(Opcode.SMSG_AZERITE_XP_GAIN)]
-        public static void HandleAzeriteXpGain(Packet packet)
+        [Parser(Opcode.SMSG_PLAYER_AZERITE_ITEM_GAINS)]
+        public static void HandlePlayerAzeriteItemGains(Packet packet)
         {
             packet.ReadPackedGuid128("Item");
             packet.ReadUInt64("AzeriteXPGained");
+        }
+
+        [Parser(Opcode.SMSG_PLAYER_AZERITE_ITEM_EQUIPPED_STATUS_CHANGED)]
+        public static void HandlePlayerAzeriteItemEquippedStatusChanged(Packet packet)
+        {
+            packet.ReadBit("IsHeartEquipped");
         }
     }
 }

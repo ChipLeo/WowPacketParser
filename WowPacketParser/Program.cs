@@ -8,7 +8,6 @@ using WowPacketParser.Loading;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing.Parsers;
 using WowPacketParser.SQL;
-using WowPacketParser.DBC;
 
 namespace WowPacketParser
 {
@@ -64,6 +63,8 @@ namespace WowPacketParser
                 SessionHandler.ZStreams.Clear();
                 if (Settings.ClientBuild != Enums.ClientVersionBuild.Zero)
                     ClientVersion.SetVersion(Settings.ClientBuild);
+
+                ClientLocale.SetLocale(Settings.ClientLocale.ToString());
 
                 try
                 {

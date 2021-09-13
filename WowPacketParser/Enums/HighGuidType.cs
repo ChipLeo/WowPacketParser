@@ -52,6 +52,7 @@
         Elevator,
         Cast,
         Dragonkin,
+        Invalid
     };
 
     public enum HighGuidType624
@@ -202,7 +203,9 @@
         BattlePet        = 44,
         CommerceObj      = 45,
         ClientSession    = 46,
-        Cast             = 47
+        Cast             = 47,
+
+        Invalid          = 63
     }
 
     public enum HighGuidTypeLegacy

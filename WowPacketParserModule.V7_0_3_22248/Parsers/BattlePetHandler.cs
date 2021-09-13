@@ -153,7 +153,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             var slotsCount = packet.ReadInt32("SlotsCount");
             var petsCount = packet.ReadInt32("PetsCount");
-            packet.ReadInt32("MaxPets");
+            if (ClientVersion.RemovedInVersion(ClientVersionBuild.V9_1_0_39185))
+                packet.ReadInt32("MaxPets");
 
             packet.ReadBit("HasJournalLock");
             packet.ResetBitReader();
@@ -224,6 +225,12 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         public static void HandlePetBattleRound(Packet packet)
         {
             ReadPetBattleRoundResult(packet, "MsgData");
+        }
+
+        [Parser(Opcode.CMSG_BATTLE_PET_CLEAR_FANFARE)]
+        public static void HandleBattlePetClearFanfare(Packet packet)
+        {
+            packet.ReadPackedGuid128("BattlePetGUID");
         }
     }
 }

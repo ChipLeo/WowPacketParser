@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -32,21 +31,23 @@ namespace WowPacketParser.Misc
             }
         }
 
-        public void ReadUpdateMask(Packet packet)
+        public void ReadUpdateMask(Packet packet, int bitSizeCount = 32)
         {
-            var newSize = packet.ReadBits(32);
+            var newSize = packet.ReadBits(bitSizeCount);
             Resize(newSize);
             var rawMask = new int[(newSize + 31) / 32];
             if (newSize > 32)
             {
-                Func<int> read;
                 if (packet.HasUnreadBitsInBuffer())
-                    read = () => (int)packet.ReadBits(32);
+                {
+                    for (var i = 0; i < newSize / 32; ++i)
+                        rawMask[i] = (int)packet.ReadBits(32);
+                }
                 else
-                    read = () => (int)packet.ReadUInt32();
-
-                for (var i = 0; i < newSize / 32; ++i)
-                    rawMask[i] = read();
+                {
+                    for (var i = 0; i < newSize / 32; ++i)
+                        rawMask[i] = packet.ReadInt32();
+                }
             }
             if ((newSize % 32) != 0)
                 rawMask[newSize / 32] = (int)packet.ReadBits((int)newSize % 32);

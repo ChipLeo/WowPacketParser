@@ -1,5 +1,7 @@
-﻿using WowPacketParser.Enums;
+using WowPacketParser.Enums;
+using WowPacketParser.Enums.Version;
 using WowPacketParser.Misc;
+using WowPacketParser.Proto;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 
@@ -39,11 +41,15 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_EMOTE)]
         public static void HandleEmote(Packet packet)
         {
+            PacketEmote packetEmote = packet.Holder.Emote = new PacketEmote();
             var emote = packet.ReadInt32E<EmoteType>("Emote ID");
             var guid = packet.ReadGuid("GUID");
 
             if (guid.GetObjectType() == ObjectType.Unit)
                 Storage.Emotes.Add(guid, emote, packet.TimeSpan);
+
+            packetEmote.Emote = (int) emote;
+            packetEmote.Sender = guid.ToUniversalGuid();
         }
 
         [Parser(Opcode.CMSG_SEND_TEXT_EMOTE)]
@@ -71,8 +77,10 @@ namespace WowPacketParser.Parsing.Parsers
         }
 
         [Parser(Opcode.SMSG_CHAT)]
+        [Parser(Opcode.SMSG_GM_MESSAGECHAT)]
         public static void HandleServerChatMessage(Packet packet)
         {
+            PacketChat chatPacket = packet.Holder.Chat = new PacketChat();
             var text = new CreatureText
             {
                 Type = packet.ReadByteE<ChatMessageType>("Type"),
@@ -154,18 +162,18 @@ namespace WowPacketParser.Parsing.Parsers
                     packet.ReadInt32("Name Length");
                     text.SenderName = packet.ReadCString("Name");
                     text.ReceiverGUID = packet.ReadGuid("Receiver GUID");
-                    switch (text.ReceiverGUID.GetHighType())
-                    {
-                        case HighGuidType.Creature:
-                        case HighGuidType.Vehicle:
-                        case HighGuidType.GameObject:
-                        case HighGuidType.Transport:
-                        case HighGuidType.DynamicObject:
-                        case HighGuidType.BattlePet:
-                        case HighGuidType.Pet:
-                        case HighGuidType.Dragonkin:
-                            packet.ReadInt32("Receiver Name Length");
-                            text.ReceiverName = packet.ReadCString("Receiver Name");
+                        switch (text.ReceiverGUID.GetHighType())
+                        {
+                            case HighGuidType.Creature:
+                            case HighGuidType.Vehicle:
+                            case HighGuidType.GameObject:
+                            case HighGuidType.Transport:
+                            case HighGuidType.DynamicObject:
+                            case HighGuidType.BattlePet:
+                            //case HighGuidType.Pet:
+                            case HighGuidType.Dragonkin:
+                                packet.ReadInt32("Receiver Name Length");
+                                text.ReceiverName = packet.ReadCString("Receiver Name");
                             break;
                     }
                     break;
@@ -175,12 +183,28 @@ namespace WowPacketParser.Parsing.Parsers
                     {
                         if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_3_8606))
                         {
-                            packet.ReadInt32("Len");
+                            packet.ReadInt32("Name Length");
                             packet.ReadCString("Name");
                         }
-                        packet.ReadGuid("Guid");
+                        packet.ReadGuid("Receiver GUID");
                         break;
                     }
+                default:
+                {
+                    if (packet.Opcode == Opcodes.GetOpcode(Opcode.SMSG_GM_MESSAGECHAT, Direction.ServerToClient))
+                    {
+                        packet.ReadInt32("GMNameLength");
+                        packet.ReadCString("GMSenderName");
+                    }
+
+                    if (text.Type == ChatMessageType.Channel)
+                    {
+                        packet.ReadCString("Channel Name");
+                    }
+
+                    packet.ReadGuid("Sender GUID");
+                    break;
+                }
             }
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_1_0_13914) && text.Language == Language.Addon)
@@ -217,6 +241,12 @@ namespace WowPacketParser.Parsing.Parsers
 
             if (entry != 0)
                 Storage.CreatureTexts.Add(entry, text, packet.TimeSpan);
+
+            chatPacket.Text = text.Text;
+            chatPacket.Sender = text.SenderGUID.ToUniversalGuid();
+            chatPacket.Target = text.ReceiverGUID?.ToUniversalGuid();
+            chatPacket.Language = (int) text.Language;
+            chatPacket.Type = (int) text.Type;
         }
 
         [Parser(Opcode.CMSG_MESSAGECHAT)]
@@ -415,28 +445,6 @@ namespace WowPacketParser.Parsing.Parsers
 
             packet.ReadWoWString("Message", msgLen);
             packet.ReadWoWString("Channel Name", channelNameLen);
-        }
-
-        [Parser(Opcode.SMSG_GM_MESSAGECHAT)] // Similar to SMSG_CHAT
-        public static void HandleGMMessageChat(Packet packet)
-        {
-            var type = packet.ReadByteE<ChatMessageType>("Type");
-            packet.ReadInt32E<Language>("Language");
-            packet.ReadGuid("GUID 1");
-            packet.ReadInt32("Constant time");
-            packet.ReadInt32("GM Name Length");
-            packet.ReadCString("GM Name");
-            packet.ReadGuid("GUID 2");
-            packet.ReadInt32("Message Length");
-            packet.ReadCString("Message");
-
-            if (ClientVersion.AddedInVersion(ClientVersionBuild.V5_1_0_16309))
-                packet.ReadInt16E<ChatTag>("Chat Tag");
-            else
-                packet.ReadByteE<ChatTag>("Chat Tag");
-
-            if (type == ChatMessageType.Achievement || type == ChatMessageType.GuildAchievement)
-                packet.ReadInt32<AchievementId>("Achievement Id");
         }
 
         [Parser(Opcode.SMSG_CHAT_RESTRICTED)]

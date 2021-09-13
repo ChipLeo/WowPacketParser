@@ -27,10 +27,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             {
                 Entry = (uint)entry.Key
             };
+            var query = packet.Holder.QueryGameObjectResponse = new() { Entry = (uint)entry.Key };
 
             packet.ReadBit("Allow");
 
             int dataSize = packet.ReadInt32("DataSize");
+            query.HasData = dataSize > 0;
             if (dataSize == 0)
                 return;
 
@@ -63,10 +65,11 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                     ItemId = packet.ReadUInt32<ItemId>("QuestItem", i)
                 };
 
+                query.Items.Add(questItem.ItemId.Value);
                 Storage.GameObjectTemplateQuestItems.Add(questItem, packet.TimeSpan);
             }
 
-            gameObject.RequiredLevel = packet.ReadInt32("RequiredLevel");
+            gameObject.RequiredLevel = query.RequiredLevel = packet.ReadInt32("RequiredLevel");
 
             Storage.GameObjectTemplates.Add(gameObject, packet.TimeSpan);
 
@@ -78,6 +81,15 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             };
 
             Storage.ObjectNames.Add(objectName, packet.TimeSpan);
+
+            query.Type = (uint)gameObject.Type.Value;
+            query.Model = gameObject.DisplayID.Value;
+            query.Name = gameObject.Name;
+            query.IconName = gameObject.IconName;
+            query.CastCaption = gameObject.CastCaption;
+            query.Size = gameObject.Size.Value;
+            foreach (var data in gameObject.Data)
+                query.Data.Add(data.Value);
         }
 
         [Parser(Opcode.CMSG_GAME_OBJ_REPORT_USE)]
@@ -134,8 +146,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadPackedGuid128("ObjectGUID");
         }
 
-        [Parser(Opcode.SMSG_GAME_OBJECT_UI_ACTION)]
-        public static void HandleGameObjectUiAction(Packet packet)
+        [Parser(Opcode.SMSG_GAME_OBJECT_UI_LINK)]
+        public static void HandleGameObjectUiLink(Packet packet)
         {
             packet.ReadPackedGuid128("GUID");
             packet.ReadInt32("UILink");

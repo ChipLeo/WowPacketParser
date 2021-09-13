@@ -1,6 +1,7 @@
 ﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
+using WowPacketParser.Proto;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 using WowPacketParserModule.V6_0_2_19033.Enums;
@@ -297,7 +298,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadWoWString("CharName", bits19);
         }
 
-        [Parser(Opcode.SMSG_CHAR_CUSTOMIZE, ClientVersionBuild.V6_0_2_19033, ClientVersionBuild.V6_1_0_19678)]
+        [Parser(Opcode.SMSG_CHAR_CUSTOMIZE_SUCCESS, ClientVersionBuild.V6_0_2_19033, ClientVersionBuild.V6_1_0_19678)]
         public static void HandleServerCharCustomize60x(Packet packet)
         {
             packet.ReadPackedGuid128("CharGUID");
@@ -316,7 +317,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadWoWString("Name", bits55);
         }
 
-        [Parser(Opcode.SMSG_CHAR_CUSTOMIZE, ClientVersionBuild.V6_1_0_19678)]
+        [Parser(Opcode.SMSG_CHAR_CUSTOMIZE_SUCCESS, ClientVersionBuild.V6_1_0_19678)]
         public static void HandleServerCharCustomize61x(Packet packet)
         {
             packet.ReadPackedGuid128("CharGUID");
@@ -332,7 +333,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadWoWString("Name", bits55);
         }
 
-        [Parser(Opcode.SMSG_CHAR_CUSTOMIZE_RESULT)]
+        [Parser(Opcode.SMSG_CHAR_CUSTOMIZE_FAILURE)]
         public static void HandleServerCharCustomizeResult(Packet packet)
         {
             packet.ReadByte("Result");
@@ -389,9 +390,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_QUERY_PLAYER_NAME_RESPONSE)]
         public static void HandleNameQueryResponse(Packet packet)
         {
+            PacketQueryPlayerNameResponse response = packet.Holder.QueryPlayerNameResponse = new();
             var hasData = packet.ReadByte("HasData");
 
-            var guid = packet.ReadPackedGuid128("Player Guid");
+            response.PlayerGuid = packet.ReadPackedGuid128("Player Guid");
 
             if (hasData == 0)
             {
@@ -411,13 +413,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
                 packet.ReadUInt32("VirtualRealmAddress");
 
-                packet.ReadByteE<Race>("Race");
-                packet.ReadByteE<Gender>("Gender");
-                packet.ReadByteE<Class>("Class");
-                packet.ReadByte("Level");
+                response.Race = (uint)packet.ReadByteE<Race>("Race");
+                response.Gender = (uint)packet.ReadByteE<Gender>("Gender");
+                response.Class = (uint)packet.ReadByteE<Class>("Class");
+                response.Level = packet.ReadByte("Level");
 
-                var name = packet.ReadWoWString("Name", bits15);
-                StoreGetters.AddOrUpdateName(guid, name);
+                response.PlayerName = packet.ReadWoWString("Name", bits15);
             }
         }
 

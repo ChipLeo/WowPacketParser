@@ -132,11 +132,12 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         [Parser(Opcode.CMSG_USE_ITEM)]
         public static void HandleUseItem(Packet packet)
         {
-            packet.ReadByte("PackSlot");
-            packet.ReadByte("Slot");
-            packet.ReadPackedGuid128("CastItem");
+            var useItem = packet.Holder.ClientUseItem = new();
+            useItem.PackSlot = packet.ReadByte("PackSlot");
+            useItem.ItemSlot = packet.ReadByte("Slot");
+            useItem.CastItem = packet.ReadPackedGuid128("CastItem");
 
-            SpellHandler.ReadSpellCastRequest(packet, "Cast");
+            useItem.SpellId = SpellHandler.ReadSpellCastRequest(packet, "Cast");
         }
 
         [Parser(Opcode.CMSG_USE_TOY)]
@@ -176,8 +177,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBits("ItemType", 2);
         }
 
-        [Parser(Opcode.SMSG_SOCKET_GEMS)]
-        public static void HandleSocketGemsResult(Packet packet)
+        [Parser(Opcode.SMSG_SOCKET_GEMS_SUCCESS)]
+        public static void HandleSocketGemsSuccess(Packet packet)
         {
             packet.ReadPackedGuid128("Item");
         }

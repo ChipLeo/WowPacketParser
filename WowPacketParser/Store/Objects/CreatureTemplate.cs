@@ -43,7 +43,7 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("unit_class", TargetedDatabase.BattleForAzeroth)]
         public uint? UnitClass;
 
-        [DBFieldName("FadeRegionRadius", TargetedDatabase.BattleForAzeroth)]
+        [DBFieldName("FadeRegionRadius", TargetedDatabase.BattleForAzeroth, TargetedDatabase.Shadowlands)]
         public float? FadeRegionRadius;
 
         [DBFieldName("WidgetSetID", TargetedDatabase.BattleForAzeroth)]
@@ -81,6 +81,9 @@ namespace WowPacketParser.Store.Objects
 
         [DBFieldName("movementId")]
         public uint? MovementID;
+
+        [DBFieldName("CreatureDifficultyID", TargetedDatabase.Shadowlands)]
+        public int? CreatureDifficultyID;
 
         [DBFieldName("VerifiedBuild")]
         public int? VerifiedBuild = ClientVersion.BuildInt;
@@ -170,6 +173,9 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("KillCredit", 2)]
         public uint?[] KillCredits;
 
+        [DBFieldName("ModelId", 4)]
+        public uint?[] DisplayId;
+
         [DBFieldName("name")]
         public string Name;
 
@@ -220,6 +226,9 @@ namespace WowPacketParser.Store.Objects
 
         [DBFieldName("ManaModifier")]
         public float? ManaModifier;
+
+        [DBFieldName("Civilian")]
+        public bool? Civilian;
 
         [DBFieldName("RacialLeader")]
         public bool? RacialLeader;

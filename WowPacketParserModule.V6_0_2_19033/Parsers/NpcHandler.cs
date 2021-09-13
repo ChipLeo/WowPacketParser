@@ -4,8 +4,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using WowPacketParser.DBC;
 using WowPacketParser.Enums;
+using WowPacketParser.Enums.Version;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
+using WowPacketParser.Proto;
 using WowPacketParser.SQL;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
@@ -18,8 +20,9 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
     {
         public static uint LastGossipPOIEntry;
 
-        public static void ReadGossipOptionsData(uint menuId, Packet packet, params object[] idx)
+        public static GossipMessageOption ReadGossipOptionsData(uint menuId, Packet packet, params object[] idx)
         {
+            GossipMessageOption gossipMessageOption = new();
             GossipMenuOption gossipOption = new GossipMenuOption
             {
                 MenuId = menuId
@@ -29,17 +32,37 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 MenuId = menuId
             };
 
-            gossipOption.OptionIndex = gossipMenuOptionBox.OptionIndex = (uint)packet.ReadInt32("ClientOption", idx);
+            gossipOption.OptionIndex = gossipMenuOptionBox.OptionIndex = gossipMessageOption.OptionIndex = (uint)packet.ReadInt32("ClientOption", idx);
             gossipOption.OptionIcon = (GossipOptionIcon?)packet.ReadByte("OptionNPC", idx);
-            gossipMenuOptionBox.BoxCoded = packet.ReadByte("OptionFlags", idx) != 0;
-            gossipMenuOptionBox.BoxMoney = (uint)packet.ReadInt32("OptionCost", idx);
+            gossipMessageOption.OptionIcon = (int) gossipOption.OptionIcon;
+            gossipMenuOptionBox.BoxCoded = gossipMessageOption.BoxCoded = packet.ReadByte("OptionFlags", idx) != 0;
+            gossipMenuOptionBox.BoxMoney = gossipMessageOption.BoxCost = (uint)packet.ReadInt32("OptionCost", idx);
 
             packet.ResetBitReader();
             uint textLen = packet.ReadBits(12);
             uint confirmLen = packet.ReadBits(12);
+            bool hasSpellId = false;
+            if (ClientVersion.AddedInVersion(ClientType.Shadowlands))
+            {
+                packet.ReadBits("Status", 2, idx);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_0_2_36639))
+                    hasSpellId = packet.ReadBit();
 
-            gossipOption.OptionText = packet.ReadWoWString("Text", textLen, idx);
-            gossipMenuOptionBox.BoxText = packet.ReadWoWString("Confirm", confirmLen, idx);
+                uint rewardsCount = packet.ReadUInt32();
+                for (uint i = 0; i < rewardsCount; ++i)
+                {
+                    packet.ResetBitReader();
+                    packet.ReadBits("Type", 1, idx, "TreasureItem", i);
+                    packet.ReadInt32("ID", idx, "TreasureItem", i);
+                    packet.ReadInt32("Quantity", idx, "TreasureItem", i);
+                }
+            }
+
+            gossipOption.OptionText = gossipMessageOption.Text = packet.ReadWoWString("Text", textLen, idx);
+            gossipMenuOptionBox.BoxText = gossipMessageOption.BoxText = packet.ReadWoWString("Confirm", confirmLen, idx);
+
+            if (hasSpellId)
+                packet.ReadInt32("SpellID", idx);
 
             List<int> boxTextList;
             List<int> optionTextList;
@@ -74,11 +97,14 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             Storage.GossipMenuOptions.Add(gossipOption, packet.TimeSpan);
             if (!gossipMenuOptionBox.IsEmpty)
                 Storage.GossipMenuOptionBoxes.Add(gossipMenuOptionBox, packet.TimeSpan);
+
+            return gossipMessageOption;
         }
 
-        public static void ReadGossipQuestTextData(Packet packet, params object[] idx)
+        public static GossipQuestOption ReadGossipQuestTextData(Packet packet, params object[] idx)
         {
-            packet.ReadInt32("QuestID", idx);
+            var gossipQuest = new GossipQuestOption();
+            gossipQuest.QuestId = (uint)packet.ReadInt32("QuestID", idx);
             packet.ReadInt32("QuestType", idx);
             packet.ReadInt32("QuestLevel", idx);
 
@@ -91,7 +117,9 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             uint questTitleLen = packet.ReadBits(9);
 
-            packet.ReadWoWString("QuestTitle", questTitleLen, idx);
+            gossipQuest.Title = packet.ReadWoWString("QuestTitle", questTitleLen, idx);
+
+            return gossipQuest;
         }
 
         [Parser(Opcode.CMSG_BANKER_ACTIVATE)]
@@ -102,7 +130,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_TRAINER_LIST)]
         public static void HandleNpcHello(Packet packet)
         {
-            CoreParsers.NpcHandler.LastGossipOption.Guid = packet.ReadPackedGuid128("Guid");
+            CoreParsers.NpcHandler.LastGossipOption.Reset();
+            CoreParsers.NpcHandler.TempGossipOptionPOI.Reset();
+            var guid = CoreParsers.NpcHandler.LastGossipOption.Guid = packet.ReadPackedGuid128("Guid");
+
+            if (packet.Opcode == Opcodes.GetOpcode(Opcode.CMSG_TALK_TO_GOSSIP, Direction.ClientToServer))
+                packet.Holder.GossipHello = new PacketGossipHello { GossipSource = guid };
         }
 
         [Parser(Opcode.SMSG_SHOW_BANK)]
@@ -152,15 +185,19 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.AddSniffData(StoreNameType.NpcText, entry.Key, "QUERY_RESPONSE");
 
             Storage.NpcTextsMop.Add(npcText, packet.TimeSpan);
+            var proto = packet.Holder.NpcText = new() { Entry = npcText.ID.Value };
+            for (int i = 0; i < 8; ++i)
+                proto.Texts.Add(new PacketNpcTextEntry(){Probability = npcText.Probabilities[i], BroadcastTextId = npcText.BroadcastTextId[i]});
         }
 
         [Parser(Opcode.CMSG_GOSSIP_SELECT_OPTION)]
         public static void HandleNpcGossipSelectOption(Packet packet)
         {
-            packet.ReadPackedGuid128("GossipUnit");
+            PacketGossipSelect packetGossip = packet.Holder.GossipSelect = new();
+            packetGossip.GossipUnit = packet.ReadPackedGuid128("GossipUnit");
 
-            var menuEntry = packet.ReadUInt32("GossipID");
-            var gossipIdx = packet.ReadUInt32("GossipIndex");
+            var menuEntry = packetGossip.MenuId = packet.ReadUInt32("GossipID");
+            var gossipIdx = packetGossip.OptionId = packet.ReadUInt32("GossipIndex");
 
             var bits8 = packet.ReadBits(8);
             packet.ResetBitReader();
@@ -170,13 +207,15 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             CoreParsers.NpcHandler.LastGossipOption.OptionIndex = gossipIdx;
             CoreParsers.NpcHandler.LastGossipOption.ActionMenuId = null;
             CoreParsers.NpcHandler.LastGossipOption.ActionPoiId = null;
+            CoreParsers.NpcHandler.LastGossipOption.TimeSpan = packet.TimeSpan;
 
             CoreParsers.NpcHandler.TempGossipOptionPOI.MenuId = menuEntry;
             CoreParsers.NpcHandler.TempGossipOptionPOI.OptionIndex = gossipIdx;
             CoreParsers.NpcHandler.TempGossipOptionPOI.ActionMenuId = null;
             CoreParsers.NpcHandler.TempGossipOptionPOI.ActionPoiId = null;
+            CoreParsers.NpcHandler.TempGossipOptionPOI.TimeSpan = packet.TimeSpan;
 
-    }
+        }
 
         [Parser(Opcode.SMSG_GOSSIP_POI)]
         public static void HandleGossipPoi(Packet packet)
@@ -202,9 +241,9 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             {
                 foreach (var poi in SQLDatabase.POIs)
                 {
-                    if (gossipPOI.Name == poi.Name && (uint)gossipPOI.Icon == poi.Icon && gossipPOI.Flags == poi.Flags)
+                    if (gossipPOI.Name == poi.Name && (uint)gossipPOI.Icon == poi.Icon)
                     {
-                        if (Math.Abs(pos.X - poi.PositionX) <= 0.01f && Math.Abs(pos.Y - poi.PositionY) <= 0.01f)
+                        if (Math.Abs(pos.X - poi.PositionX) <= 0.99f && Math.Abs(pos.Y - poi.PositionY) <= 0.99f)
                         {
                             gossipPOI.ID = poi.ID;
                             break;
@@ -244,14 +283,19 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             if (tempGossipOptionPOI.HasSelection)
             {
-                if (tempGossipOptionPOI.ActionMenuId != null)
+                if ((packet.TimeSpan - tempGossipOptionPOI.TimeSpan).Duration() <= TimeSpan.FromMilliseconds(2500))
                 {
-                    Storage.GossipMenuOptionActions.Add(new GossipMenuOptionAction { MenuId = tempGossipOptionPOI.MenuId, OptionIndex = tempGossipOptionPOI.OptionIndex, ActionMenuId = tempGossipOptionPOI.ActionMenuId, ActionPoiId = gossipPOI.ID }, packet.TimeSpan);
-                    //clear temp
-                    tempGossipOptionPOI.MenuId = null;
-                    tempGossipOptionPOI.OptionIndex = null;
-                    tempGossipOptionPOI.ActionMenuId = null;
-                    tempGossipOptionPOI.ActionPoiId = null;
+                    if (tempGossipOptionPOI.ActionMenuId != null)
+                    {
+                        Storage.GossipMenuOptionActions.Add(new GossipMenuOptionAction { MenuId = tempGossipOptionPOI.MenuId, OptionIndex = tempGossipOptionPOI.OptionIndex, ActionMenuId = tempGossipOptionPOI.ActionMenuId, ActionPoiId = gossipPOI.ID }, packet.TimeSpan);
+                        //clear temp
+                        tempGossipOptionPOI.Reset();
+                    }
+                }
+                else
+                {
+                    lastGossipOption.Reset();
+                    tempGossipOptionPOI.Reset();
                 }
             }
         }
@@ -260,28 +304,30 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_GOSSIP_MESSAGE)]
         public static void HandleNpcGossip(Packet packet)
         {
+            PacketGossipMessage packetGossip = packet.Holder.GossipMessage = new();
             GossipMenu gossip = new GossipMenu();
 
             WowGuid guid = packet.ReadPackedGuid128("GossipGUID");
+            packetGossip.GossipSource = guid;
 
             gossip.ObjectType = guid.GetObjectType();
             gossip.ObjectEntry = guid.GetEntry();
 
             int menuId = packet.ReadInt32("GossipID");
-            gossip.Entry = (uint)menuId;
+            gossip.Entry = packetGossip.MenuId = (uint)menuId;
 
             packet.ReadInt32("FriendshipFactionID");
 
-            gossip.TextID = (uint)packet.ReadInt32("TextID");
+            gossip.TextID = packetGossip.TextId = (uint)packet.ReadInt32("TextID");
 
             int int44 = packet.ReadInt32("GossipOptions");
             int int60 = packet.ReadInt32("GossipText");
 
             for (int i = 0; i < int44; ++i)
-                ReadGossipOptionsData((uint)menuId, packet, i, "GossipOptions");
+                packetGossip.Options.Add(ReadGossipOptionsData((uint)menuId, packet, i, "GossipOptions"));
 
             for (int i = 0; i < int60; ++i)
-                ReadGossipQuestTextData(packet, i, "GossipQuestText");
+                packetGossip.Quests.Add(ReadGossipQuestTextData(packet, i, "GossipQuestText"));
 
             if (guid.GetObjectType() == ObjectType.Unit)
                 if (Storage.Objects.ContainsKey(guid))
@@ -290,21 +336,29 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             Storage.Gossips.Add(gossip, packet.TimeSpan);
             var lastGossipOption = CoreParsers.NpcHandler.LastGossipOption;
             var tempGossipOptionPOI = CoreParsers.NpcHandler.TempGossipOptionPOI;
+
             if (lastGossipOption.HasSelection)
             {
-                Storage.GossipMenuOptionActions.Add(new GossipMenuOptionAction { MenuId = lastGossipOption.MenuId, OptionIndex = lastGossipOption.OptionIndex, ActionMenuId = gossip.Entry, ActionPoiId = lastGossipOption.ActionPoiId }, packet.TimeSpan);
+                if ((packet.TimeSpan - lastGossipOption.TimeSpan).Duration() <= TimeSpan.FromMilliseconds(2500))
+                {
+                    Storage.GossipMenuOptionActions.Add(new GossipMenuOptionAction { MenuId = lastGossipOption.MenuId, OptionIndex = lastGossipOption.OptionIndex, ActionMenuId = gossip.Entry, ActionPoiId = lastGossipOption.ActionPoiId }, packet.TimeSpan);
 
-                //keep temp data
-                tempGossipOptionPOI.MenuId = lastGossipOption.MenuId;
-                tempGossipOptionPOI.OptionIndex = lastGossipOption.OptionIndex;
-                tempGossipOptionPOI.ActionMenuId = gossip.Entry;
-                tempGossipOptionPOI.ActionPoiId = lastGossipOption.ActionPoiId;
+                    //keep temp data (for case SMSG_GOSSIP_POI is delayed)
+                    tempGossipOptionPOI.Guid = lastGossipOption.Guid;
+                    tempGossipOptionPOI.MenuId = lastGossipOption.MenuId;
+                    tempGossipOptionPOI.OptionIndex = lastGossipOption.OptionIndex;
+                    tempGossipOptionPOI.ActionMenuId = gossip.Entry;
+                    tempGossipOptionPOI.TimeSpan = lastGossipOption.TimeSpan;
 
-                // clear lastgossip
-                lastGossipOption.MenuId = null;
-                lastGossipOption.OptionIndex = null;
-                lastGossipOption.ActionMenuId = null;
-                lastGossipOption.ActionPoiId = null;
+                    // clear lastgossip so no faulty linkings appear
+                    lastGossipOption.Reset();
+                }
+                else
+                {
+                    lastGossipOption.Reset();
+                    tempGossipOptionPOI.Reset();
+
+                }
             }
 
             packet.AddSniffData(StoreNameType.Gossip, menuId, guid.GetEntry().ToString(CultureInfo.InvariantCulture));
@@ -345,20 +399,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 Storage.NpcVendors.Add(vendor, packet.TimeSpan);
             }
 
-            var lastGossipOption = CoreParsers.NpcHandler.LastGossipOption;
-            var tempGossipOptionPOI = CoreParsers.NpcHandler.TempGossipOptionPOI;
-
-            lastGossipOption.Guid = null;
-            lastGossipOption.MenuId = null;
-            lastGossipOption.OptionIndex = null;
-            lastGossipOption.ActionMenuId = null;
-            lastGossipOption.ActionPoiId = null;
-
-            tempGossipOptionPOI.Guid = null;
-            tempGossipOptionPOI.MenuId = null;
-            tempGossipOptionPOI.OptionIndex = null;
-            tempGossipOptionPOI.ActionMenuId = null;
-            tempGossipOptionPOI.ActionPoiId = null;
+            CoreParsers.NpcHandler.LastGossipOption.Reset();
+            CoreParsers.NpcHandler.TempGossipOptionPOI.Reset();
         }
 
         [Parser(Opcode.SMSG_TRAINER_LIST)]
@@ -384,9 +426,9 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
                         ulong reputation = 0;
 
-                        if (AchievementHandler.FactionReputationStore.ContainsKey(faction))
+                        if (CoreParsers.AchievementHandler.FactionReputationStore.ContainsKey(faction))
                         {
-                            reputation = AchievementHandler.FactionReputationStore[faction];
+                            reputation = CoreParsers.AchievementHandler.FactionReputationStore[faction];
                             hasFaction = true;
                         }
 
@@ -428,9 +470,9 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 {
                     moneyCostOriginal = (uint)(Math.Round((moneyCost / discount) / 5)) * 5;
                     packet.WriteLine("[{0}] MoneyCostOriginal: {1}", i, moneyCostOriginal);
+                    trainerSpell.FactionHelper = "MoneyCost recalculated";
                 }
-
-                if (Settings.UseDBC && Settings.RecalcDiscount && !hasFaction)
+                else
                 {
                     trainerSpell.FactionHelper = "No Faction found! MoneyCost not recalculated!";
                 }
@@ -460,17 +502,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             else
                 Storage.CreatureTrainers.Add(new CreatureTrainer { CreatureId = lastGossipOption.Guid.GetEntry(), MenuID = 0, OptionIndex = 0, TrainerId = trainer.Id }, packet.TimeSpan);
 
-            lastGossipOption.Guid = null;
-            lastGossipOption.MenuId = null;
-            lastGossipOption.OptionIndex = null;
-            lastGossipOption.ActionMenuId = null;
-            lastGossipOption.ActionPoiId = null;
-
-            tempGossipOptionPOI.Guid = null;
-            tempGossipOptionPOI.MenuId = null;
-            tempGossipOptionPOI.OptionIndex = null;
-            tempGossipOptionPOI.ActionMenuId = null;
-            tempGossipOptionPOI.ActionPoiId = null;
+            lastGossipOption.Reset();
+            tempGossipOptionPOI.Reset();
         }
 
         [Parser(Opcode.CMSG_TRAINER_BUY_SPELL)]
@@ -485,6 +518,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void HandleSpellClick(Packet packet)
         {
             WowGuid guid = packet.ReadPackedGuid128("SpellClickUnitGUID");
+            packet.Holder.SpellClick = new() { Target = guid };
             packet.ReadBit("TryAutoDismount");
 
             if (guid.GetObjectType() == ObjectType.Unit)
@@ -500,7 +534,9 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_CLOSE_INTERACTION)] // trigger in CGGameUI::CloseInteraction
         public static void HandleCloseInteraction(Packet packet)
         {
-            packet.ReadPackedGuid128("Guid");
+            var packetGossip = packet.Holder.GossipClose = new PacketGossipClose();
+            CoreParsers.NpcHandler.LastGossipOption.Reset();
+            packetGossip.GossipSource = packet.ReadPackedGuid128("Guid");
         }
 
         [Parser(Opcode.SMSG_SUPPRESS_NPC_GREETINGS)]
@@ -521,6 +557,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_SPIRIT_HEALER_ACTIVATE)]
         public static void HandleSpiritHealerActivate(Packet packet)
         {
+            CoreParsers.NpcHandler.LastGossipOption.Reset();
+            CoreParsers.NpcHandler.TempGossipOptionPOI.Reset();
             CoreParsers.NpcHandler.LastGossipOption.Guid = packet.ReadPackedGuid128("Healer");
         }
 

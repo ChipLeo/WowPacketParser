@@ -75,9 +75,9 @@ namespace WowPacketParser.Misc
             return Utilities.GetDateTimeFromUnixTime(ReadInt32());
         }
 
-        public DateTime ReadMillisecondTime()
+        public DateTime ReadTime64()
         {
-            return Utilities.GetDateTimeFromUnixTime((double)ReadInt32()/1000);
+            return Utilities.GetDateTimeFromUnixTime(ReadInt64());
         }
 
         public DateTime ReadPackedTime()
@@ -254,6 +254,12 @@ namespace WowPacketParser.Misc
         public IPAddress ReadIPAddress()
         {
             byte[] val = ReadBytes(4);
+            return new IPAddress(val);
+        }
+
+        public IPAddress ReadIPv6Address()
+        {
+            byte[] val = ReadBytes(16);
             return new IPAddress(val);
         }
 
@@ -488,6 +494,10 @@ namespace WowPacketParser.Misc
         {
             return AddValue(name, ReadIPAddress(), indexes);
         }
+        public IPAddress ReadIPv6Address(string name, params object[] indexes)
+        {
+            return AddValue(name, ReadIPv6Address(), indexes);
+        }
 
         public KeyValuePair<int, bool> ReadEntry(string name, params object[] indexes)
         {
@@ -524,6 +534,11 @@ namespace WowPacketParser.Misc
         public DateTime ReadTime(string name, params object[] indexes)
         {
             return AddValue(name, ReadTime(), indexes);
+        }
+
+        public DateTime ReadTime64(string name, params object[] indexes)
+        {
+            return AddValue(name, ReadTime64(), indexes);
         }
 
         public DateTime ReadPackedTime(string name, params object[] indexes)

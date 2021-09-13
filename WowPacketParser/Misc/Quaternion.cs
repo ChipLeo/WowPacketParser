@@ -75,5 +75,11 @@ namespace WowPacketParser.Misc
             }
             return result;
         }
+
+        public static implicit operator WowPacketParser.Proto.Quat(Quaternion q) =>
+            new() {X = q.X, Y = q.Y, Z = q.Z, W = q.W};
+
+        public static implicit operator Quaternion(WowPacketParser.Proto.Quat q) =>
+            new(q.X, q.Y, q.Z, q.W);
     }
 }

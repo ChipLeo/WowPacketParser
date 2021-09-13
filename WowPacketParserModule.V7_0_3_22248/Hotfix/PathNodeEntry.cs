@@ -1,4 +1,3 @@
-﻿using System;
 using WowPacketParser.Enums;
 using WowPacketParser.Hotfix;
 

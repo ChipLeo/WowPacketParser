@@ -1,4 +1,3 @@
-﻿using System.Reflection.Emit;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
@@ -111,13 +110,19 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
         public static void ReadGarrisonMissionReward(Packet packet, params object[] indexes)
         {
-            packet.ReadInt32<ItemId>("ItemId", indexes);
-            packet.ReadUInt32("Quantity", indexes);
-            packet.ReadInt32<CurrencyId>("CurrencyId", indexes);
+            packet.ResetBitReader();
+            packet.ReadInt32<ItemId>("ItemID", indexes);
+            packet.ReadUInt32("ItemQuantity", indexes);
+            packet.ReadInt32<CurrencyId>("CurrencyID", indexes);
             packet.ReadUInt32("CurrencyQuantity", indexes);
-            packet.ReadUInt32("FollowerXp", indexes);
-            packet.ReadUInt32("BonusAbilityId", indexes);
+            packet.ReadUInt32("FollowerXP", indexes);
+            packet.ReadUInt32("GarrMssnBonusAbilityID", indexes);
             packet.ReadInt32("ItemFileDataID", indexes);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_0_2_36639))
+            {
+                if (packet.ReadBit())
+                    Substructures.ItemHandler.ReadItemInstance(packet, indexes, "ItemInstance");
+            }
         }
 
         public static void ReadGarrisonFollowerCategoryInfo(Packet packet, params object[] indexes)
@@ -414,8 +419,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32E<GarrisonFollowerType>("FollowerType"); // Indicates which type of missions
         }
 
-        [Parser(Opcode.SMSG_GARRISON_LANDING_PAGE_SHIPMENT_INFO)]
-        public static void HandleGarrisonLandingPageShipmentInfo(Packet packet)
+        [Parser(Opcode.SMSG_GET_LANDING_PAGE_SHIPMENTS_RESPONSE)]
+        public static void HandleGetLandingPageShipmentsResponse(Packet packet)
         {
             if(ClientVersion.AddedInVersion(ClientVersionBuild.V7_2_0_23706))
                 packet.ReadUInt32("UnkUInt32");
@@ -446,14 +451,14 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 for (uint i = 0; i < count; i++)
                 {
                     packet.ReadUInt64("FollowerDBID", i);
-                    packet.ReadUInt32("Flags", i); 
+                    packet.ReadUInt32("Flags", i);
                 }
                 packet.ReadBit("Succeeded");
             }
         }
 
-        [Parser(Opcode.SMSG_GARRISON_MISSION_UPDATE_CAN_START)]
-        public static void HandleGarrisonMissionUpdateCanStart(Packet packet)
+        [Parser(Opcode.SMSG_GARRISON_MISSION_START_CONDITION_UPDATE)]
+        public static void HandleGarrisonMissionStartConditionUpdate(Packet packet)
         {
             uint missionsCount = packet.ReadUInt32("MissionsCount");
             uint canStartMissionCount = packet.ReadUInt32("CanStartMissionCount");
@@ -465,8 +470,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadBit("CanStartMission", i);
         }
 
-        [Parser(Opcode.SMSG_GARRISON_FOLLOWER_CATEGORIES)]
-        public static void HandleGarrisonFollowerCategories(Packet packet)
+        [Parser(Opcode.SMSG_GARRISON_GET_CLASS_SPEC_CATEGORY_INFO_RESULT)]
+        public static void HandleGarrisonGetClassSpecCategoryInfoResult(Packet packet)
         {
             packet.ReadInt32E<GarrisonFollowerType>("FollowerTypeId");
             uint count = packet.ReadUInt32("CategoryInfoCount");
@@ -496,21 +501,21 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("CanStart");
         }
 
-        [Parser(Opcode.CMSG_ADVENTURE_JOURNAL_START_QUEST)]
-        public static void HandleAdventurejournalStartQuest(Packet packet)
+        [Parser(Opcode.CMSG_ADVENTURE_MAP_START_QUEST)]
+        public static void HandleAdventureMapStartQuest(Packet packet)
         {
             packet.ReadInt32<QuestId>("QuestID");
         }
 
-        [Parser(Opcode.SMSG_GARRISON_CLEAR_ALL_FOLLOWERS_EXHAUSTION)]
-        public static void HandleGarrisonAllFollowersExhaustion(Packet packet)
+        [Parser(Opcode.SMSG_GARRISON_FOLLOWER_FATIGUE_CLEARED)]
+        public static void HandleGarrisonFollowerFatigueCleared(Packet packet)
         {
             packet.ReadInt32E<GarrisonType>("GarrTypeID");
             packet.ReadInt32E<GarrisonResult>("Result");
         }
 
-        [Parser(Opcode.SMSG_GARRISON_MISSION_LIST_UPDATE)]
-        public static void HandleGarrisonMissionListUpdate(Packet packet)
+        [Parser(Opcode.SMSG_DELETE_EXPIRED_MISSIONS_RESULT)]
+        public static void HandleDeleteExpiredMissionsResult(Packet packet)
         {
             packet.ReadUInt32E<GarrisonType>("GarrTypeID");
             packet.ReadUInt32E<GarrisonResult>("Result");
@@ -522,15 +527,15 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("LegionUnkBit");
         }
 
-        [Parser(Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_DURABILITY)]
-        public static void HandleGarrisonFollowerChangedDurability(Packet packet)
+        [Parser(Opcode.SMSG_GARRISON_UPDATE_FOLLOWER)]
+        public static void HandleGarrisonUpdateFollower(Packet packet)
         {
             packet.ReadUInt32("Unk1");
             ReadGarrisonFollower(packet, "Follower");
         }
 
-        [Parser(Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_ABILITIES)]
-        public static void HandleGarrisonFollowerChangedAbilities(Packet packet)
+        [Parser(Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_QUALITY)]
+        public static void HandleGarrisonFollowerChangedQuality(Packet packet)
         {
             ReadGarrisonFollower(packet, "Follower");
         }
@@ -547,8 +552,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadUInt32("BuildingId");
         }
 
-        [Parser(Opcode.SMSG_GARRISON_NUM_FOLLOWER_ACTIVATIONS_REMAINING)]
-        public static void HandleGarrisonNumFollowerActivationsRemaining(Packet packet)
+        [Parser(Opcode.SMSG_GARRISON_FOLLOWER_ACTIVATIONS_SET)]
+        public static void HandleGarrisonFollowerActivationsSet(Packet packet)
         {
             packet.ReadUInt32E<GarrisonSite>("GarrSiteID");
             packet.ReadUInt32("NumActivations");
@@ -604,8 +609,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadUInt32("FollowerID");
         }
 
-        [Parser(Opcode.CMSG_GARRISON_REQUEST_CLASS_SPEC_CATEGORY_INFO)]
-        public static void HandleGarrisonRequestClassSpecCategoryInfo(Packet packet)
+        [Parser(Opcode.CMSG_GARRISON_GET_CLASS_SPEC_CATEGORY_INFO)]
+        public static void HandleGarrisonGetClassSpecCategoryInfo(Packet packet)
         {
             packet.ReadUInt32E<GarrisonFollowerType>("GarrFollowerTypeId");
         }

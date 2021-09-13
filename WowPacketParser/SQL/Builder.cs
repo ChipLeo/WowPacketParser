@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.ExceptionServices;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.SQL.Builders;
@@ -124,6 +123,9 @@ namespace WowPacketParser.SQL
                               ||
                               (ClientVersion.Expansion == ClientType.BattleForAzeroth &&
                                Settings.TargetedDatabase == TargetedDatabase.BattleForAzeroth)
+                              ||
+                              (ClientVersion.Expansion == ClientType.Shadowlands &&
+                               Settings.TargetedDatabase == TargetedDatabase.Shadowlands)
                               ||
                               (ClientVersion.Expansion == ClientType.Classic &&
                                Settings.TargetedDatabase == TargetedDatabase.Classic)))

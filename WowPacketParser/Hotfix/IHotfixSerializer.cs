@@ -280,6 +280,9 @@ namespace WowPacketParser.Hotfix
                 switch (tableName)
                 {
                     case "achievement":
+                    case "achievement_category":
+                    case "adventure_journal":
+                    case "adventure_map_poi":
                     case "area_table":
                     case "artifact_appearance":
                     case "artifact_appearance_set":
@@ -294,6 +297,8 @@ namespace WowPacketParser.Hotfix
                     case "char_titles":
                     case "chat_channels":
                     case "chr_classes":
+                    case "chr_customization_choice":
+                    case "chr_customization_option":
                     case "chr_races":
                     case "chr_specialization":
                     case "creature_family":
@@ -303,6 +308,8 @@ namespace WowPacketParser.Hotfix
                     case "difficulty":
                     case "dungeon_encounter":
                     case "faction":
+                    case "friendship_rep_reaction":
+                    case "friendship_reputation":
                     case "gameobjects":
                     case "garr_ability":
                     case "garr_building":
@@ -316,15 +323,16 @@ namespace WowPacketParser.Hotfix
                     case "item_search_name":
                     case "item_set":
                     case "item_sparse":
+                    case "languages":
                     case "lfg_dungeons":
                     case "mail_template":
                     case "map_difficulty":
                     case "map":
                     case "mount":
-                    case "names_reserved":
                     case "player_condition":
                     case "prestige_level_info":
                     case "pvp_talent":
+                    case "pvp_tier":
                     case "quest_sort":
                     case "scenario":
                     case "scenario_step":

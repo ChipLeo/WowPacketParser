@@ -43,7 +43,7 @@ namespace WowPacketParserModule.V1_13_2_31446.Parsers
                     {
                         TableHash = type,
                         RecordID = entry,
-                        Blob = "0x" + Utilities.ByteArrayToHexString(data)
+                        Blob = new Blob(data)
                     };
 
                     Storage.HotfixBlobs.Add(hotfixBlob);
@@ -84,7 +84,7 @@ namespace WowPacketParserModule.V1_13_2_31446.Parsers
 
         [HasSniffData]
         [Parser(Opcode.SMSG_HOTFIX_MESSAGE)]
-        [Parser(Opcode.SMSG_HOTFIX_RESPONSE)]
+        [Parser(Opcode.SMSG_HOTFIX_CONNECT)]
         public static void HandleHotixData(Packet packet)
         {
             var hotfixCount = packet.ReadUInt32("HotfixCount");

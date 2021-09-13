@@ -26,19 +26,19 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBit("CurrentSpecOnly");
         }
 
-        [Parser(Opcode.SMSG_TRANSMOG_SET_COLLECTION_UPDATE)]
-        [Parser(Opcode.SMSG_TRANSMOG_COLLECTION_UPDATE)]
-        public static void HandleTransmogCollectionUpdate(Packet packet)
+        [Parser(Opcode.SMSG_ACCOUNT_TRANSMOG_SET_FAVORITES_UPDATE)]
+        [Parser(Opcode.SMSG_ACCOUNT_TRANSMOG_UPDATE)]
+        public static void HandleAccountTransmogUpdate(Packet packet)
         {
             packet.ReadBit("IsFullUpdate");
             packet.ReadBit("IsSetFavorite");
             var count = packet.ReadUInt32("FavoriteAppearancesCount");
             for (int i = 0; i < count; i++)
-                packet.ReadUInt32("ItemModifiedAppearanceId");
+                packet.ReadUInt32("ItemModifiedAppearanceId", "FavoriteAppearances", i);
         }
 
-        [Parser(Opcode.SMSG_OPEN_TRANSMOGRIFIER)]
-        public static void HandleOpenTransmogrifier(Packet packet)
+        [Parser(Opcode.SMSG_TRANSMOGRIFY_NPC)]
+        public static void HandleTransmogrifyNPC(Packet packet)
         {
             packet.ReadPackedGuid128("Guid");
         }

@@ -9,7 +9,10 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         public static void ReadAuraInfos(Packet packet, params object[] index)
         {
             packet.ReadUInt32<SpellId>("Aura", index);
-            packet.ReadByte("Flags", index);
+            if (ClientVersion.AddedInVersion(ClientType.Shadowlands))
+                packet.ReadUInt16("Flags", index);
+            else
+                packet.ReadByte("Flags", index);
             packet.ReadInt32("ActiveFlags", index);
             var byte3 = packet.ReadInt32("PointsCount", index);
 
@@ -34,8 +37,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadWoWString("PetName", len, index);
         }
 
-        [Parser(Opcode.SMSG_PARTY_MEMBER_STATE)]
-        public static void HandlePartyMemberState(Packet packet)
+        [Parser(Opcode.SMSG_PARTY_MEMBER_FULL_STATE)]
+        public static void HandlePartyMemberFullState(Packet packet)
         {
             packet.ReadBit("ForEnemy");
 
@@ -66,12 +69,22 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             V6_0_2_19033.Parsers.GroupHandler.ReadPhaseInfos(packet, "Phase");
 
+            if (ClientVersion.AddedInVersion(ClientType.Shadowlands))
+            {
+                packet.ReadUInt32("ContentTuningConditionMask", "CTROptions");
+                packet.ReadInt32("Unused901", "CTROptions");
+                packet.ReadUInt32("ExpansionLevelMask", "CTROptions");
+            }
+
             for (int i = 0; i < auraCount; i++)
                 ReadAuraInfos(packet, "Aura", i);
 
             packet.ResetBitReader();
-
             var hasPet = packet.ReadBit("HasPet");
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_0_39185))
+                Substructures.MythicPlusHandler.ReadDungeonScoreSummary(packet, "DungeonScoreSummary");
+
             if (hasPet) // Pet
                 ReadPetInfos(packet, "Pet");
 
@@ -192,8 +205,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_PARTY_MEMBER_STATE_UPDATE)]
-        public static void HandlePartyMemberStateUpdate(Packet packet)
+        [Parser(Opcode.SMSG_PARTY_MEMBER_PARTIAL_STATE)]
+        public static void HandlePartyMemberPartialState(Packet packet)
         {
             packet.ReadBit("ForEnemyChanged");
             packet.ReadBit("SetPvPInactive"); // adds GroupMemberStatusFlag 0x0020 if true, removes 0x0020 if false

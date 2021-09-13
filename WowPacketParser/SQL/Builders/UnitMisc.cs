@@ -355,6 +355,7 @@ namespace WowPacketParser.SQL.Builders
 
                     row.Data.PositionX = pointOfInterest.Item1.PositionX;
                     row.Data.PositionY = pointOfInterest.Item1.PositionY;
+                    row.Data.PositionZ = pointOfInterest.Item1.PositionZ;
                     row.Data.Icon = pointOfInterest.Item1.Icon;
                     row.Data.Flags = pointOfInterest.Item1.Flags;
                     row.Data.Importance = pointOfInterest.Item1.Importance;
@@ -513,6 +514,9 @@ namespace WowPacketParser.SQL.Builders
                     case TargetedDatabase.BattleForAzeroth:
                         expansionBaseLevel = 120;
                         break;
+                    case TargetedDatabase.Shadowlands:
+                        expansionBaseLevel = 60;
+                        break;
                 }
             }
 
@@ -570,7 +574,8 @@ namespace WowPacketParser.SQL.Builders
                 if (template.Faction == 1 || template.Faction == 2 || template.Faction == 3 ||
                     template.Faction == 4 || template.Faction == 5 || template.Faction == 6 ||
                     template.Faction == 115 || template.Faction == 116 || template.Faction == 1610 ||
-                    template.Faction == 1629 || template.Faction == 2203 || template.Faction == 2204) // player factions
+                    template.Faction == 1629 || template.Faction == 2203 || template.Faction == 2204 ||
+                    template.Faction == 2395 || template.Faction == 2401 || template.Faction == 2402) // player factions
                     template.Faction = 35;
 
                 template.UnitFlags &= ~UnitFlags.IsInCombat;

@@ -1,14 +1,12 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using MySql.Data.MySqlClient;
+using WowPacketParser.DBC.Structures.Shadowlands;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
-using WowPacketParser.Store;
-using WowPacketParser.Store.Objects;
-using WowPacketParser.DBC.Structures.BattleForAzeroth;
 
 namespace WowPacketParser.SQL
 {
@@ -139,7 +137,7 @@ namespace WowPacketParser.SQL
                         broadcastText.EmoteDelay[1] = Convert.ToUInt16(reader["EmoteDelay2"]);
                         broadcastText.EmoteDelay[2] = Convert.ToUInt16(reader["EmoteDelay3"]);
                         broadcastText.EmotesID = Convert.ToUInt16(reader["EmotesID"]);
-                        broadcastText.LanguageID = Convert.ToByte(reader["LanguageID"]);
+                        broadcastText.LanguageID = Convert.ToInt32(reader["LanguageID"]);
                         broadcastText.Flags = Convert.ToByte(reader["Flags"]);
                         if (Settings.TargetedDatabase == TargetedDatabase.WrathOfTheLichKing || Settings.TargetedDatabase == TargetedDatabase.Cataclysm)
                         {
@@ -296,6 +294,8 @@ namespace WowPacketParser.SQL
                                         ? Enum.Parse(uType, values[i].ToString())
                                         : Convert.ChangeType(values[i], uType));
                             }
+                            else if (field.Item2.FieldType == typeof(Blob))
+                                field.Item2.SetValue(instance, new Blob(values[i] as byte[]));
                             else
                                 field.Item2.SetValue(instance, values[i]);
 

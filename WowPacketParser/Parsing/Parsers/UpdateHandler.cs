@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using WowPacketParser.Enums;
 using WowPacketParser.Enums.Version;
 using WowPacketParser.Misc;
+using WowPacketParser.Proto;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 using Guid=WowPacketParser.Misc.WowGuid;
@@ -17,9 +18,10 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_UPDATE_OBJECT)]
         public static void HandleUpdateObject(Packet packet)
         {
-            uint map = MovementHandler.CurrentMapId;
+            var updateObject = packet.Holder.UpdateObject = new();
+            uint map = updateObject.MapId = MovementHandler.CurrentMapId;
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_0_1_13164))
-                map = packet.ReadUInt16<MapId>("MapID");
+                map = updateObject.MapId = packet.ReadUInt16("Map");
 
             var count = packet.ReadUInt32("Count");
 
@@ -31,13 +33,16 @@ namespace WowPacketParser.Parsing.Parsers
                 var type = packet.ReadByte();
                 var typeString = ClientVersion.AddedInVersion(ClientType.Cataclysm) ? ((UpdateTypeCataclysm)type).ToString() : ((UpdateType)type).ToString();
 
+                var partWriter = new StringBuilderProtoPart(packet.Writer);
                 packet.AddValue("UpdateType", typeString, i);
                 switch (typeString)
                 {
                     case "Values":
                     {
                         var guid = packet.ReadPackedGuid("GUID", i);
-                        ReadValuesUpdateBlock(packet, guid, i);
+                        var updateValues = new UpdateValues();
+                        ReadValuesUpdateBlock(packet, updateValues, guid, i);
+                        updateObject.Updated.Add(new UpdateObject{Guid = guid, Values = updateValues, Text = partWriter.Text});
                         break;
                     }
                     case "Movement":
@@ -51,25 +56,32 @@ namespace WowPacketParser.Parsing.Parsers
                     case "CreateObject2": // Might != CreateObject1 on Cata
                     {
                         var guid = packet.ReadPackedGuid("GUID", i);
-                        ReadCreateObjectBlock(packet, guid, map, i);
+                        var createObject = new CreateObject() { Guid = guid, Values = new()};
+                        ReadCreateObjectBlock(packet, createObject, guid, map, i);
+                        createObject.Text = partWriter.Text;
+                        updateObject.Created.Add(createObject);
                         break;
                     }
                     case "FarObjects":
                     case "NearObjects":
-                    case "DestroyObjects":
                     {
                         ReadObjectsBlock(packet, i);
+                        break;
+                    }
+                    case "DestroyObjects":
+                    {
+                        ReadDestroyObjectsBlock(packet, i);
                         break;
                     }
                 }
             }
         }
 
-        private static void ReadCreateObjectBlock(Packet packet, WowGuid guid, uint map, object index)
+        private static void ReadCreateObjectBlock(Packet packet, CreateObject createObject, WowGuid guid, uint map, object index)
         {
             ObjectType objType = ObjectTypeConverter.Convert(packet.ReadByteE<ObjectTypeLegacy>("Object Type", index));
             var moves = ReadMovementUpdateBlock(packet, guid, index);
-            var updates = ReadValuesUpdateBlockOnCreate(packet, objType, index);
+            var updates = ReadValuesUpdateBlockOnCreate(packet, createObject.Values, objType, index);
             var dynamicUpdates = ReadDynamicValuesUpdateBlockOnCreate(packet, objType, index);
 
             WoWObject obj;
@@ -105,9 +117,9 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.AddSniffData(Utilities.ObjectTypeToStore(objType), (int)guid.GetEntry(), "SPAWN");
         }
 
-        public static Dictionary<int, UpdateField> ReadValuesUpdateBlockOnCreate(Packet packet, ObjectType type, object index)
+        public static Dictionary<int, UpdateField> ReadValuesUpdateBlockOnCreate(Packet packet, UpdateValues updateValues, ObjectType type, object index)
         {
-            return ReadValuesUpdateBlock(packet, type, index, true, null);
+            return ReadValuesUpdateBlock(packet, updateValues, type, index, true, null);
         }
 
         public static Dictionary<int, List<UpdateField>> ReadDynamicValuesUpdateBlockOnCreate(Packet packet, ObjectType type, object index)
@@ -134,24 +146,37 @@ namespace WowPacketParser.Parsing.Parsers
                 packet.ReadPackedGuid("Object GUID", index, j);
         }
 
-        public static void ReadValuesUpdateBlock(Packet packet, WowGuid guid, int index)
+        public static void ReadDestroyObjectsBlock(Packet packet, object index)
+        {
+            var objCount = packet.ReadInt32("Object Count", index);
+            for (var j = 0; j < objCount; j++)
+            {
+                var partWriter = new StringBuilderProtoPart(packet.Writer);
+                var guid = packet.ReadPackedGuid("Object GUID", index, j);
+                packet.Holder.UpdateObject.Destroyed.Add(new DestroyedObject(){Guid = guid, Text = partWriter.Text});
+            }
+        }
+
+        public static void ReadValuesUpdateBlock(Packet packet, UpdateValues updateValues, WowGuid guid, int index)
         {
             WoWObject obj;
             if (Storage.Objects.TryGetValue(guid, out obj))
             {
-                var updates = ReadValuesUpdateBlock(packet, obj.Type, index, false, obj.UpdateFields);
+                var updates = ReadValuesUpdateBlock(packet, updateValues, obj.Type, index, false, obj.UpdateFields);
                 var dynamicUpdates = ReadDynamicValuesUpdateBlock(packet, obj.Type, index, false, obj.DynamicUpdateFields);
                 ApplyUpdateFieldsChange(obj, updates, dynamicUpdates);
             }
             else
             {
-                ReadValuesUpdateBlock(packet, guid.GetObjectType(), index, false, null);
+                ReadValuesUpdateBlock(packet, updateValues, guid.GetObjectType(), index, false, null);
                 ReadDynamicValuesUpdateBlock(packet, guid.GetObjectType(), index, false, null);
             }
         }
 
-        private static Dictionary<int, UpdateField> ReadValuesUpdateBlock(Packet packet, ObjectType type, object index, bool isCreating, Dictionary<int, UpdateField> oldValues)
+        private static Dictionary<int, UpdateField> ReadValuesUpdateBlock(Packet packet, UpdateValues updateValues, ObjectType type, object index, bool isCreating, Dictionary<int, UpdateField> oldValues)
         {
+            bool skipDictionary = false;
+            bool missingCreateObject = !isCreating && oldValues == null;
             var maskSize = packet.ReadByte();
 
             var updateMask = new int[maskSize];
@@ -160,6 +185,43 @@ namespace WowPacketParser.Parsing.Parsers
 
             var mask = new BitArray(updateMask);
             var dict = new Dictionary<int, UpdateField>();
+
+            if (missingCreateObject)
+            {
+                switch (type)
+                {
+                    case ObjectType.Item:
+                    {
+                        if (mask.Count >= UpdateFields.GetUpdateField(ItemField.ITEM_END))
+                        {
+                            // Container MaskSize = 8 (6.1.0 - 8.0.1) 5 (2.4.3 - 6.0.3)
+                            if (maskSize == Convert.ToInt32((UpdateFields.GetUpdateField(ContainerField.CONTAINER_END) + 32) / 32))
+                                type = ObjectType.Container;
+                            // AzeriteEmpoweredItem and AzeriteItem MaskSize = 3 (8.0.1)
+                            // we can't determine them RIP
+                            else if (maskSize == Convert.ToInt32((UpdateFields.GetUpdateField(AzeriteItemField.AZERITE_ITEM_END) + 32) / 32) || maskSize == Convert.ToInt32((UpdateFields.GetUpdateField(AzeriteEmpoweredItemField.AZERITE_EMPOWERED_ITEM_END) + 32) / 32))
+                            {
+                                packet.WriteLine($"[{index}] ObjectType cannot be determined! Possible ObjectTypes: AzeriteItem, AzeriteEmpoweredItem");
+                                packet.WriteLine($"[{index}] Following data may not make sense!");
+                                skipDictionary = true;
+                            }
+                        }
+                        break;
+                    }
+                    case ObjectType.Player:
+                    {
+                        if (mask.Count >= UpdateFields.GetUpdateField(PlayerField.PLAYER_END))
+                        {
+                            // ActivePlayer MaskSize = 184 (8.0.1)
+                            if (maskSize == Convert.ToInt32((UpdateFields.GetUpdateField(ActivePlayerField.ACTIVE_PLAYER_END) + 32) / 32))
+                                type = ObjectType.ActivePlayer;
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
 
             int objectEnd = UpdateFields.GetUpdateField(ObjectField.OBJECT_END);
             for (var i = 0; i < mask.Count; ++i)
@@ -312,6 +374,7 @@ namespace WowPacketParser.Parsing.Parsers
                             if (!hasGuidValue)
                                 continue;
 
+                            var name = key + (guidCount > 1 ? " + " + guidI : "");
                             if (!ClientVersion.AddedInVersion(ClientType.WarlordsOfDraenor))
                             {
                                 ulong guid = fieldData[guidI * guidSize + 1].UInt32Value;
@@ -320,7 +383,7 @@ namespace WowPacketParser.Parsing.Parsers
                                 if (isCreating && guid == 0)
                                     continue;
 
-                                packet.AddValue(key + (guidCount > 1 ? " + " + guidI : ""), new WowGuid64(guid), index);
+                                updateValues.Guids[name] = packet.AddValue(name, new WowGuid64(guid), index);
                             }
                             else
                             {
@@ -333,7 +396,7 @@ namespace WowPacketParser.Parsing.Parsers
                                 if (isCreating && (high == 0 && low == 0))
                                     continue;
 
-                                packet.AddValue(key + (guidCount > 1 ? " + " + guidI : ""), new WowGuid128(low, high), index);
+                                updateValues.Guids[name] = packet.AddValue(name, new WowGuid128(low, high), index);
                             }
                         }
                         break;
@@ -351,7 +414,8 @@ namespace WowPacketParser.Parsing.Parsers
                             if (!hasQuatValue)
                                 continue;
 
-                            packet.AddValue(key + (quaternionCount > 1 ? " + " + quatI : ""), new Quaternion(fieldData[quatI * 4 + 0].FloatValue, fieldData[quatI * 4 + 1].FloatValue,
+                            var name = key + (quaternionCount > 1 ? " + " + quatI : "");
+                            updateValues.Quaternions[name] = packet.AddValue(name, new Quaternion(fieldData[quatI * 4 + 0].FloatValue, fieldData[quatI * 4 + 1].FloatValue,
                                 fieldData[quatI * 4 + 2].FloatValue, fieldData[quatI * 4 + 3].FloatValue), index);
                         }
                         break;
@@ -372,7 +436,8 @@ namespace WowPacketParser.Parsing.Parsers
                             long quat = fieldData[quatI * 2 + 1].UInt32Value;
                             quat <<= 32;
                             quat |= fieldData[quatI * 2 + 0].UInt32Value;
-                            packet.AddValue(key + (quaternionCount > 1 ? " + " + quatI : ""), new Quaternion(quat), index);
+                            var name = key + (quaternionCount > 1 ? " + " + quatI : "");
+                            updateValues.Quaternions[name] = packet.AddValue(name, new Quaternion(quat), index);
                         }
                         break;
                     }
@@ -380,21 +445,30 @@ namespace WowPacketParser.Parsing.Parsers
                     {
                         for (int k = 0; k < fieldData.Count; ++k)
                             if (mask[start + k] && (!isCreating || fieldData[k].UInt32Value != 0))
-                                packet.AddValue(k > 0 ? key + " + " + k : key, fieldData[k].UInt32Value, index);
+                            {
+                                var name = k > 0 ? key + " + " + k : key;
+                                updateValues.Ints[name] = packet.AddValue(name, fieldData[k].UInt32Value, index);
+                            }
                         break;
                     }
                     case UpdateFieldType.Int:
                     {
                         for (int k = 0; k < fieldData.Count; ++k)
                             if (mask[start + k] && (!isCreating || fieldData[k].UInt32Value != 0))
-                                packet.AddValue(k > 0 ? key + " + " + k : key, fieldData[k].Int32Value, index);
+                            {
+                                var name = k > 0 ? key + " + " + k : key;
+                                updateValues.Ints[name] = packet.AddValue(name, fieldData[k].Int32Value, index);
+                            }
                         break;
                     }
                     case UpdateFieldType.Float:
                     {
                         for (int k = 0; k < fieldData.Count; ++k)
                             if (mask[start + k] && (!isCreating || fieldData[k].UInt32Value != 0))
-                                packet.AddValue(k > 0 ? key + " + " + k : key, fieldData[k].FloatValue, index);
+                            {
+                                var name = k > 0 ? key + " + " + k : key;
+                                updateValues.Floats[name] = packet.AddValue(name, fieldData[k].FloatValue, index);
+                            }
                         break;
                     }
                     case UpdateFieldType.Bytes:
@@ -404,7 +478,22 @@ namespace WowPacketParser.Parsing.Parsers
                             if (mask[start + k] && (!isCreating || fieldData[k].UInt32Value != 0))
                             {
                                 byte[] intBytes = BitConverter.GetBytes(fieldData[k].UInt32Value);
-                                packet.AddValue(k > 0 ? key + " + " + k : key, intBytes[0] + "/" + intBytes[1] + "/" + intBytes[2] + "/" + intBytes[3], index);
+                                var name = k > 0 ? key + " + " + k : key;
+                                updateValues.Ints[name] = fieldData[k].UInt32Value;
+                                packet.AddValue(name, intBytes[0] + "/" + intBytes[1] + "/" + intBytes[2] + "/" + intBytes[3], index);
+                            }
+                        }
+                        break;
+                    }
+                    case UpdateFieldType.Short:
+                    {
+                        for (int k = 0; k < fieldData.Count; ++k)
+                        {
+                            if (mask[start + k] && (!isCreating || fieldData[k].UInt32Value != 0))
+                            {
+                                var name = k > 0 ? key + " + " + k : key;
+                                updateValues.Ints[name] = fieldData[k].UInt32Value;
+                                packet.AddValue(name, ((short)(fieldData[k].UInt32Value & 0xffff)) + "/" + ((short)(fieldData[k].UInt32Value >> 16)), index);
                             }
                         }
                         break;
@@ -413,7 +502,10 @@ namespace WowPacketParser.Parsing.Parsers
                     {
                         // TODO: add custom handling
                         if (key == UnitField.UNIT_FIELD_FACTIONTEMPLATE.ToString())
+                        {
                             packet.AddValue(key, value + $" ({ StoreGetters.GetName(StoreNameType.Faction, fieldData[0].Int32Value, false) })", index);
+                            updateValues.Ints[key] = fieldData[0].Int32Value;
+                        }
                         break;
                     }
                     default:
@@ -423,8 +515,9 @@ namespace WowPacketParser.Parsing.Parsers
                         break;
                 }
 
-                for (int k = 0; k < fieldData.Count; ++k)
-                    dict.Add(start + k, fieldData[k]);
+                if (!skipDictionary)
+                    for (int k = 0; k < fieldData.Count; ++k)
+                        dict.Add(start + k, fieldData[k]);
             }
 
             return dict;

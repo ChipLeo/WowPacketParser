@@ -2,7 +2,6 @@
 using System.Text;
 using WowPacketParser.Enums;
 using WowPacketParser.Hotfix;
-using WowPacketParser.Loading;
 using WowPacketParser.Misc;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
@@ -125,6 +124,17 @@ namespace WowPacketParser.SQL.Builders
             var templatesDb = SQLDatabase.Get(new RowList<Store.Objects.BroadcastTextLocale>(), Settings.HotfixesDatabase);
 
             return "SET NAMES 'utf8';" + Environment.NewLine + SQLUtil.Compare(Storage.BroadcastTextLocales, templatesDb, StoreNameType.None) + Environment.NewLine + "SET NAMES 'latin1';";
+        }
+
+        [BuilderMethod]
+        public static string HotfixOptionalData()
+        {
+            if (Storage.HotfixOptionalDatas.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(new RowList<Store.Objects.HotfixOptionalData>(), Settings.HotfixesDatabase);
+
+            return SQLUtil.Compare(Storage.HotfixOptionalDatas, templatesDb, StoreNameType.None);
         }
     }
 }

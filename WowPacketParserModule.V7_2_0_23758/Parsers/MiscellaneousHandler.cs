@@ -377,22 +377,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadByte("unk1");
         }
 
-        [Parser(Opcode.SMSG_UNK_CLIENT_2805)]
-        public static void HandleUnkClient2805(Packet packet)
-        {
-            var cnt1 = packet.ReadInt32("Count1");
-            packet.ReadBytes("unk1", cnt1);
-            var cnt2 = packet.ReadInt32("Count2");
-            packet.ReadBytes("unk2", cnt2);
-        }
-
-        [Parser(Opcode.SMSG_UNK_CLIENT_282E)]
-        public static void HandleUnkClient282E(Packet packet)
-        {
-            packet.ReadInt32("unk32");
-            packet.ReadBit("unk1");
-        }
-
         [Parser(Opcode.SMSG_WHO)]
         public static void HandleWho(Packet packet)
         {
@@ -535,7 +519,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
         [Parser(Opcode.CMSG_REQUEST_ARTIFACT_COMPLETION_HISTORY)]
         [Parser(Opcode.CMSG_TWITTER_CHECK_STATUS)]
         [Parser(Opcode.SMSG_FORCED_DEATH_UPDATE)]
-        [Parser(Opcode.SMSG_UNK_CLIENT_2785)]
+        [Parser(Opcode.SMSG_BAG_CLEANUP_FINISHED)]
         public static void HandleMiscZero(Packet packet)
         {
         }

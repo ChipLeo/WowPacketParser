@@ -9,11 +9,15 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         [Parser(Opcode.SMSG_QUERY_TIME_RESPONSE)]
         public static void HandleQueryTimeResponse(Packet packet)
         {
-            packet.ReadTime("CurrentTime");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_0_5_37503) &&
+                ClientVersion.Expansion != ClientType.Classic)
+                packet.ReadTime64("CurrentTime");
+            else
+                packet.ReadTime("CurrentTime");
         }
 
-        [Parser(Opcode.SMSG_ENABLE_ENCRYPTION)]
-        [Parser(Opcode.CMSG_ENABLE_ENCRYPTION_ACK)]
+        [Parser(Opcode.SMSG_ENTER_ENCRYPTED_MODE)]
+        [Parser(Opcode.CMSG_ENTER_ENCRYPTED_MODE_ACK)]
         public static void HandleSessionZero(Packet packet)
         {
         }
@@ -32,8 +36,9 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         [Parser(Opcode.CMSG_PLAYER_LOGIN)]
         public static void HandlePlayerLogin(Packet packet)
         {
-            packet.ReadPackedGuid128("Guid");
+            var guid = packet.ReadPackedGuid128("Guid");
             packet.ReadSingle("FarClip");
+            packet.Holder.PlayerLogin = new() { PlayerGuid = guid };
         }
     }
 }

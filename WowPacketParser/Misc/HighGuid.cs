@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WowPacketParser.Enums;
 
 namespace WowPacketParser.Misc
@@ -194,7 +191,8 @@ namespace WowPacketParser.Misc
             { HighGuidType703.BattlePet,         HighGuidType.BattlePet },
             { HighGuidType703.CommerceObj,       HighGuidType.CommerceObj },
             { HighGuidType703.ClientSession,     HighGuidType.ClientSession },
-            { HighGuidType703.Cast,              HighGuidType.Cast }
+            { HighGuidType703.Cast,              HighGuidType.Cast },
+            { HighGuidType703.Invalid,           HighGuidType.Invalid }
         };
 
         public HighGuid703(byte high)

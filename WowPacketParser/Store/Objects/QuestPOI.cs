@@ -50,11 +50,14 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("PlayerConditionID", TargetedDatabase.WarlordsOfDraenor)]
         public int? PlayerConditionID;
 
+        [DBFieldName("NavigationPlayerConditionID", TargetedDatabase.Shadowlands)]
+        public int? NavigationPlayerConditionID;
+
         [DBFieldName("SpawnTrackingID", TargetedDatabase.WarlordsOfDraenor)]
         public int? SpawnTrackingID;
 
         [DBFieldName("AlwaysAllowMergingBlobs", TargetedDatabase.Legion)]
-        public bool AlwaysAllowMergingBlobs;
+        public bool? AlwaysAllowMergingBlobs;
 
         [DBFieldName("VerifiedBuild")]
         public int? VerifiedBuild = ClientVersion.BuildInt;

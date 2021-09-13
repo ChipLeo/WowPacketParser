@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using WowPacketParser.Enums;
-using WowPacketParser.Loading;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
@@ -95,8 +94,9 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_QUEST_GIVER_COMPLETE_QUEST)]
         public static void HandleQuestGiverCompleteQuest(Packet packet)
         {
-            packet.ReadPackedGuid128("QuestGiverGUID");
-            packet.ReadUInt32("QuestID");
+            var questGiverCompleteQuest = packet.Holder.QuestGiverCompleteQuestRequest = new();
+            questGiverCompleteQuest.QuestGiver = packet.ReadPackedGuid128("QuestGiverGUID");
+            questGiverCompleteQuest.QuestId = packet.ReadUInt32("QuestID");
             packet.ReadBit("FromScript");
         }
 
@@ -111,8 +111,9 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_QUEST_GIVER_ACCEPT_QUEST)]
         public static void HandleQuestgiverAcceptQuest(Packet packet)
         {
-            packet.ReadPackedGuid128("QuestGiverGUID");
-            packet.ReadUInt32<QuestId>("QuestID");
+            var questGiverAcceptQuest = packet.Holder.QuestGiverAcceptQuest = new();
+            questGiverAcceptQuest.QuestGiver = packet.ReadPackedGuid128("QuestGiverGUID");
+            questGiverAcceptQuest.QuestId = packet.ReadUInt32<QuestId>("QuestID");
             packet.ReadBit("StartCheat");
         }
 
@@ -515,7 +516,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_QUEST_GIVER_QUEST_COMPLETE)]
         public static void HandleQuestCompleted(Packet packet)
         {
-            packet.ReadUInt32("QuestId");
+            var questComplete = packet.Holder.QuestGiverQuestComplete = new();
+            questComplete.QuestId = packet.ReadUInt32("QuestId");
             packet.ReadUInt32("SkillLineIDReward");
             packet.ReadUInt32("MoneyReward");
             packet.ReadUInt32("NumSkillUpsReward");
@@ -607,13 +609,14 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_QUEST_UPDATE_ADD_CREDIT)]
         public static void HandleQuestUpdateAddCredit(Packet packet)
         {
-            packet.ReadPackedGuid128("VictimGUID");
+            var addCredit = packet.Holder.QuestAddKillCredit = new();
+            addCredit.Victim = packet.ReadPackedGuid128("VictimGUID");
 
-            packet.ReadInt32("QuestID");
-            packet.ReadInt32("ObjectID");
+            addCredit.QuestId = (uint)packet.ReadInt32("QuestID");
+            addCredit.KillCredit = (uint)packet.ReadInt32("ObjectID");
 
-            packet.ReadUInt16("Count");
-            packet.ReadUInt16("Required");
+            addCredit.Count = packet.ReadUInt16("Count");
+            addCredit.RequiredCount = packet.ReadUInt16("Required");
 
             packet.ReadByte("ObjectiveType");
         }
@@ -674,10 +677,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_QUEST_GIVER_REQUEST_ITEMS)]
         public static void HandleQuestRequestItems(Packet packet)
         {
-            packet.ReadPackedGuid128("QuestGiverGUID");
-            packet.ReadInt32("QuestGiverCreatureID");
+            var requestItems = packet.Holder.QuestGiverRequestItems = new();
+            requestItems.QuestGiver = packet.ReadPackedGuid128("QuestGiverGUID");
+            requestItems.QuestGiverEntry = (uint)packet.ReadInt32("QuestGiverCreatureID");
 
             int id = packet.ReadInt32("QuestID");
+            requestItems.QuestId = (uint)id;
             int delay = packet.ReadInt32("EmoteDelay");
             int emote = packet.ReadInt32("EmoteType");
 
@@ -714,7 +719,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             uint bits16 = packet.ReadBits(12);
 
             packet.ReadWoWString("QuestTitle", bits3016);
-            string completionText = packet.ReadWoWString("CompletionText", bits16);
+            string completionText = requestItems.RequestItemsText = packet.ReadWoWString("CompletionText", bits16);
 
             CoreParsers.QuestHandler.QuestRequestItemHelper(id, completionText, delay, emote, isComplete, packet, noRequestOnComplete);
 
@@ -730,8 +735,14 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         }
 
         [Parser(Opcode.SMSG_QUEST_UPDATE_COMPLETE)]
+        public static void HandleQuestUpdateComplete(Packet packet)
+        {
+            var questComplete = packet.Holder.QuestComplete = new();
+            questComplete.QuestId = (uint)packet.ReadInt32<QuestId>("QuestID");
+        }
+        
         [Parser(Opcode.CMSG_QUEST_CLOSE_AUTOACCEPT_QUEST)]
-        public static void HandleQuestForceRemoved(Packet packet)
+        public static void HandleQuestCloseAutoAcceptQuest(Packet packet)
         {
             packet.ReadInt32<QuestId>("QuestID");
         }
