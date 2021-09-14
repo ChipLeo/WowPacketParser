@@ -427,7 +427,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 // CliAreaTrigger
                 packet.ReadInt32("ElapsedMs", index);
 
-                packet.ReadVector3("RollPitchYaw1", index);
+                packet.ReadVector3("RollPitchYaw", index);
 
                 areaTriggerTemplate.Flags   = 0;
 
@@ -481,7 +481,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 bool hasAreaTriggerSpline = packet.ReadBit("HasAreaTriggerSpline", index);
 
                 if (packet.ReadBit("HasAreaTriggerUnkType", index))
-                    areaTriggerTemplate.Flags |= (uint)AreaTriggerFlags.HasCircularMovement;
+                    areaTriggerTemplate.Flags |= (uint)AreaTriggerFlags.HasOrbit;
 
                 if ((areaTriggerTemplate.Flags & (uint)AreaTriggerFlags.Unk3) != 0)
                     packet.ReadBit();
@@ -535,25 +535,25 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                     var verticesCount = packet.ReadInt32("VerticesCount", index);
                     var verticesTargetCount = packet.ReadInt32("VerticesTargetCount", index);
 
-                    List<AreaTriggerTemplateVertices> verticesList = new List<AreaTriggerTemplateVertices>();
+                    List<SpellAreatriggerVertices> verticesList = new List<SpellAreatriggerVertices>();
 
                     areaTriggerTemplate.Data[0] = packet.ReadSingle("Height", index);
                     areaTriggerTemplate.Data[1] = packet.ReadSingle("HeightTarget", index);
 
                     for (uint i = 0; i < verticesCount; ++i)
                     {
-                        AreaTriggerTemplateVertices areaTriggerTemplateVertices = new AreaTriggerTemplateVertices
+                        SpellAreatriggerVertices spellAreatriggerVertices = new SpellAreatriggerVertices
                         {
-                            AreaTriggerId = guid.GetEntry(),
+                            areatriggerGuid = guid,
                             Idx = i
                         };
 
                         Vector2 vertices = packet.ReadVector2("Vertices", index, i);
 
-                        areaTriggerTemplateVertices.VerticeX = vertices.X;
-                        areaTriggerTemplateVertices.VerticeY = vertices.Y;
+                        spellAreatriggerVertices.VerticeX = vertices.X;
+                        spellAreatriggerVertices.VerticeY = vertices.Y;
 
-                        verticesList.Add(areaTriggerTemplateVertices);
+                        verticesList.Add(spellAreatriggerVertices);
                     }
 
                     for (var i = 0; i < verticesTargetCount; ++i)
@@ -564,8 +564,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                         verticesList[i].VerticeTargetY = verticesTarget.Y;
                     }
 
-                    foreach (AreaTriggerTemplateVertices vertice in verticesList)
-                        Storage.AreaTriggerTemplatesVertices.Add(vertice);
+                    foreach (SpellAreatriggerVertices vertice in verticesList)
+                        Storage.SpellAreaTriggerVertices.Add(vertice);
                 }
 
                 if (areaTriggerTemplate.Type == (byte)AreaTriggerType.Cylinder)
@@ -578,28 +578,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                     areaTriggerTemplate.Data[5] = packet.ReadSingle("LocationZOffsetTarget", index);
                 }
 
-                if ((areaTriggerTemplate.Flags & (uint)AreaTriggerFlags.HasCircularMovement) != 0)
-                {
-                    packet.ResetBitReader();
-                    var unk1 = packet.ReadBit("AreaTriggerUnk1");
-                    var hasCenter = packet.ReadBit("HasCenter", index);
-                    packet.ReadBit("Unk bit 703 1", index);
-                    packet.ReadBit("Unk bit 703 2", index);
-
-                    packet.ReadUInt32();
-                    packet.ReadInt32();
-                    packet.ReadUInt32();
-                    packet.ReadSingle("Radius", index);
-                    packet.ReadSingle("BlendFromRadius", index);
-                    packet.ReadSingle("InitialAngel", index);
-                    packet.ReadSingle("ZOffset", index);
-
-                    if (unk1)
-                        packet.ReadPackedGuid128("AreaTriggerUnkGUID", index);
-
-                    if (hasCenter)
-                        packet.ReadVector3("Center", index);
-                }
+                if ((areaTriggerTemplate.Flags & (uint)AreaTriggerFlags.HasOrbit) != 0)
+                    AreaTriggerHandler.ReadAreaTriggerOrbit(packet, index, "Orbit");
 
                 Storage.AreaTriggerTemplates.Add(areaTriggerTemplate);
             }
