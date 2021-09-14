@@ -151,12 +151,5 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadInt32("UnkInt32");
             packet.ReadInt32("UnkInt32 2");
         }
-
-        [Parser(Opcode.SMSG_TOKEN_SELL_RESULT)]
-        public static void HandleTokenSellResult(Packet packet)
-        {
-            packet.ReadUInt32("UnkInt");
-            packet.ReadUInt32("Result");
-        }
     }
 }

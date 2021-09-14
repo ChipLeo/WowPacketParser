@@ -195,7 +195,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_ACCOUNT_TOYS_UPDATE)]
+        [Parser(Opcode.SMSG_ACCOUNT_TOY_UPDATE)]
         public static void HandleAccountToysUpdate(Packet packet)
         {
             packet.ReadBit("IsFullUpdate");

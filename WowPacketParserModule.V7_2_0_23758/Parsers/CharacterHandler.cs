@@ -221,7 +221,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                 packet.ReadUInt16("Talents");
         }
 
-        [Parser(Opcode.SMSG_LEARN_PVP_TALENTS_FAILED)]
+        [Parser(Opcode.SMSG_LEARN_PVP_TALENT_FAILED)]
         public static void HandleLearnPvPTalentsFailed(Packet packet)
         {
             packet.ReadBits("Reason", 4);

@@ -427,7 +427,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                 bool hasAreaTriggerSpline = packet.ReadBit("HasAreaTriggerSpline", index);
 
                 if (packet.ReadBit("HasAreaTriggerUnkType", index))
-                    areaTriggerTemplate.Flags |= (uint)AreaTriggerFlags.Unk5;
+                    areaTriggerTemplate.Flags |= (uint)AreaTriggerFlags.HasOrbit;
 
                 if ((areaTriggerTemplate.Flags & (uint)AreaTriggerFlags.Unk3) != 0)
                     packet.ReadBit();
@@ -481,16 +481,16 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                     var verticesCount = packet.ReadInt32("VerticesCount", index);
                     var verticesTargetCount = packet.ReadInt32("VerticesTargetCount", index);
 
-                    List<AreaTriggerTemplateVertices> verticesList = new List<AreaTriggerTemplateVertices>();
+                    List<SpellAreatriggerVertices> verticesList = new List<SpellAreatriggerVertices>();
 
                     areaTriggerTemplate.Data[0] = packet.ReadSingle("Height", index);
                     areaTriggerTemplate.Data[1] = packet.ReadSingle("HeightTarget", index);
 
                     for (uint i = 0; i < verticesCount; ++i)
                     {
-                        AreaTriggerTemplateVertices areaTriggerTemplateVertices = new AreaTriggerTemplateVertices
+                        SpellAreatriggerVertices areaTriggerTemplateVertices = new SpellAreatriggerVertices
                         {
-                            AreaTriggerId = guid.GetEntry(),
+                            areatriggerGuid = guid,
                             Idx = i
                         };
 
@@ -510,8 +510,8 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                         verticesList[i].VerticeTargetY = verticesTarget.Y;
                     }
 
-                    foreach (AreaTriggerTemplateVertices vertice in verticesList)
-                        Storage.AreaTriggerTemplatesVertices.Add(vertice);
+                    foreach (SpellAreatriggerVertices vertice in verticesList)
+                        Storage.SpellAreaTriggerVertices.Add(vertice);
                 }
 
                 if (areaTriggerTemplate.Type == (byte)AreaTriggerType.Cylinder)
@@ -524,7 +524,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                     areaTriggerTemplate.Data[5] = packet.ReadSingle("LocationZOffsetTarget", index);
                 }
 
-                if ((areaTriggerTemplate.Flags & (uint)AreaTriggerFlags.Unk5) != 0)
+                if ((areaTriggerTemplate.Flags & (uint)AreaTriggerFlags.HasOrbit) != 0)
                 {
                     packet.ResetBitReader();
                     var unk1 = packet.ReadBit("AreaTriggerUnk1");
