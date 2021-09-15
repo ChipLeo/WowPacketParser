@@ -252,12 +252,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             }
         }
 
-        [Parser(Opcode.CMSG_QUICK_JOIN_AUTO_ACCEPT_REQUESTS)]
-        public static void HandleQuickJoinAutoAcceptRequests(Packet packet)
-        {
-            packet.ReadBool("unk");
-        }
-
         [Parser(Opcode.CMSG_QUICK_JOIN_SIGNAL_TOAST_DISPLAYED)]
         public static void HandleQuickJoinSignalToastDisplayed(Packet packet)
         {

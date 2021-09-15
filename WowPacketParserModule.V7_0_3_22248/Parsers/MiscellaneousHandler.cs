@@ -610,14 +610,5 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadPackedGuid128("Unit");
             packet.ReadUInt16("AnimKitID");
         }
-
-        [Parser(Opcode.CMSG_TUTORIAL_FLAG)]
-        public static void HandleTutorialFlag620(Packet packet)
-        {
-            var action = packet.ReadBitsE<TutorialAction703>("TutorialAction", 2);
-
-            if (action == TutorialAction703.Update)
-                packet.ReadInt32E<Tutorial>("TutorialBit");
-        }
     }
 }
