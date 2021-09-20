@@ -264,7 +264,7 @@ namespace WowPacketParser.Enums.Version.V6_2_2_20444
             {Opcode.CMSG_GARRISON_START_MISSION, 0x0187},
             {Opcode.CMSG_GARRISON_SWAP_BUILDINGS, 0x0997},
             {Opcode.CMSG_GENERATE_RANDOM_CHARACTER_NAME, 0x02F4},
-            {Opcode.CMSG_GET_CHALLENGE_MODE_REWARDS, 0x02A6},
+            {Opcode.CMSG_MYTHIC_PLUS_WEEKLY_REWARD_REQUEST, 0x02A6},
             {Opcode.CMSG_GET_GARRISON_INFO, 0x1235},
             {Opcode.CMSG_GET_ITEM_PURCHASE_DATA, 0x061E},
             {Opcode.CMSG_GET_LANDING_PAGE_SHIPMENTS, 0x1C0E},

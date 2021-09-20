@@ -149,13 +149,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             SpellHandler.ReadSpellCastRequest(packet, "Cast");
         }
 
-        [Parser(Opcode.SMSG_CHARACTER_ITEM_FIXUP)]
-        public static void HandleCharacterItemFixup(Packet packet)
-        {
-            packet.ReadBit("unk1");
-            packet.ReadBit("unk2");
-        }
-
         [Parser(Opcode.CMSG_BUY_ITEM)]
         public static void HandleBuyItem(Packet packet)
         {

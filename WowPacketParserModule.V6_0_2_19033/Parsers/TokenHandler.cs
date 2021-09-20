@@ -23,12 +23,6 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("Confirmed");
         }
 
-        [Parser(Opcode.CMSG_CHECK_WOW_TOKEN_VETERAN_ELIGIBILITY)]
-        public static void HandleCheckTokenVeteranEligibility(Packet packet)
-        {
-            packet.ReadUInt32("UnkInt");
-        }
-
         [Parser(Opcode.CMSG_AUCTIONABLE_TOKEN_SELL_AT_MARKET_PRICE)]
         public static void HandleAuctionableTokenSellAtMarketPrice(Packet packet)
         {

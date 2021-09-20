@@ -29,20 +29,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadPackedGuid128("ObjectGUID");
         }
 
-        [Parser(Opcode.SMSG_GAME_OBJECT_SET_STATE)]
-        public static void HandleGameObjectSetState(Packet packet)
-        {
-            packet.ReadPackedGuid128("GO");
-            packet.ReadByte("State");
-        }
-
-        [Parser(Opcode.SMSG_GAME_OBJECT_UI_ACTION)]
-        public static void HandleGameObjectUIAction(Packet packet)
-        {
-            packet.ReadPackedGuid128("Guid");
-            packet.ReadInt32("Action");
-        }
-
         [HasSniffData]
         [Parser(Opcode.SMSG_QUERY_GAME_OBJECT_RESPONSE)]
         public static void HandleGameObjectQueryResponse(Packet packet)

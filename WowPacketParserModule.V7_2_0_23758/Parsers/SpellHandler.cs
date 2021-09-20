@@ -275,15 +275,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadVector3("CollisionPos");
         }
 
-        [Parser(Opcode.SMSG_SCENARIO_BOOT)]
-        public static void HandleScenarioBoot(Packet packet)
-        {
-            packet.ReadInt32("unk1");
-            packet.ReadInt32("unk2");
-            packet.ResetBitReader();
-            packet.ReadBits("unk3", 2);
-        }
-
         [Parser(Opcode.SMSG_SPELL_PREPARE)]
         public static void SpellPrepare(Packet packet)
         {
@@ -558,11 +549,11 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_MODIFY_COOLDOWN_RECOVERY_SPEED)]
-        public static void HandleModifyCooldownRecoverySpeed(Packet packet)
+        [Parser(Opcode.SMSG_UPDATE_COOLDOWN)]
+        public static void HandleUpdateCooldown(Packet packet)
         {
             packet.ReadUInt32<SpellId>("SpellID");
-            packet.ReadInt32("unk");
+            packet.ReadSingle("Speed");
         }
 
         [Parser(Opcode.SMSG_RESYNC_RUNES)]

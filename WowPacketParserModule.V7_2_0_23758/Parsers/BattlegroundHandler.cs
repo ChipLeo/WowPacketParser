@@ -124,22 +124,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_BATTLE_PAY_VAS_PURCHASE_LIST)]
-        public static void HandleBattlePayWasPurchaseList(Packet packet)
-        {
-            var cnt = packet.ReadBits("Count", 6);
-            for (int i = 0; i < cnt; i++)
-            {
-                packet.ReadPackedGuid128("Guid", i);
-                packet.ReadInt32("unk1", i);
-                packet.ReadInt32("unk2", i);
-                packet.ResetBitReader();
-                var cnt2 = packet.ReadBits("cnt2", i);
-                for (int j = 0; j < cnt2; ++j)
-                    packet.ReadInt32("unk3", j, i);
-            }
-        }
-
         [Parser(Opcode.SMSG_REQUEST_PVP_REWARDS_RESPONSE)]
         public static void HandleRequestPVPRewardsResponse(Packet packet)
         {

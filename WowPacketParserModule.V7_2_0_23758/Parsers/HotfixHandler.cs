@@ -146,15 +146,5 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             for (var i = 0u; i < recordCount; ++i)
                 ReadHotfixRecord(packet, hotfixId, indexes, i, "HotfixRecord");
         }
-
-        [HasSniffData]
-        [Parser(Opcode.SMSG_HOTFIX_MESSAGE)]
-        [Parser(Opcode.SMSG_HOTFIX_RESPONSE)]
-        public static void HandleHotixData(Packet packet)
-        {
-            var hotfixCount = packet.ReadUInt32();
-            for (var i = 0u; i < hotfixCount; ++i)
-                ReadHotfixData(packet, i, "HotfixData");
-        }
     }
 }

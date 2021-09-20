@@ -110,12 +110,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadInt32("unk");
         }
 
-        [Parser(Opcode.CMSG_GARRISON_REQUEST_CLASS_SPEC_CATEGORY_INFO)]
-        public static void HandleGarrisonRequestClassSpecCategoryInfo(Packet packet)
-        {
-            packet.ReadInt32("unk");
-        }
-
         [Parser(Opcode.CMSG_GARRISON_RESEARCH_TALENT)]
         public static void HandleGarrisonResearchTalent(Packet packet)
         {
@@ -171,26 +165,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadBit("unkbit");
         }
 
-        [Parser(Opcode.SMSG_GARRISON_CLEAR_ALL_FOLLOWERS_EXHAUSTION)]
-        public static void HandleGarrisonClearAllFollowersExhaustion(Packet packet)
-        {
-            packet.ReadInt32("unk");
-            packet.ReadInt32("unk2");
-        }
-
-        [Parser(Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_ABILITIES)]
-        public static void HandleGarrisonFollowerChangedAbilities(Packet packet)
-        {
-            ReadGarrisonFollower(packet);
-        }
-
-        [Parser(Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_DURABILITY)]
-        public static void HandleGarrisonFollowerChangedDurability(Packet packet)
-        {
-            packet.ReadInt32("Result");
-            ReadGarrisonFollower(packet);
-        }
-
         [Parser(Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_XP)] // GARRISON_FOLLOWER_XP_CHANGED
         public static void HandleGarrisonUnk2(Packet packet)
         {
@@ -198,22 +172,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadInt32("unk");
             ReadGarrisonFollower(packet);
             ReadGarrisonFollower(packet);
-        }
-
-        [Parser(Opcode.SMSG_GARRISON_LANDING_PAGE_SHIPMENT_INFO)]
-        public static void HandleGarrisonLandingPage(Packet packet)
-        {
-            packet.ReadInt32("unk");
-            var count = packet.ReadInt32("Count");
-            for (int i = 0; i < count; i++)
-            {
-                packet.ReadInt32("MissionRecID", i);
-                packet.ReadInt64("FollowerDBID", i);
-                packet.ReadInt64("unk3", i);
-                packet.ReadInt32("Unk1", i);
-                packet.ReadInt32("Unk2", i);
-                packet.ReadInt32("unk4", i);
-            }
         }
 
         [Parser(Opcode.SMSG_GARRISON_LEARN_BLUEPRINT_RESULT)]
@@ -231,13 +189,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
 
             packet.ReadInt32("MissionRecID");
             packet.ReadInt32("Result");
-        }
-
-        [Parser(Opcode.SMSG_GARRISON_NUM_FOLLOWER_ACTIVATIONS_REMAINING)]
-        public static void HandleGarrisonNumFollowerActivationsRemaining(Packet packet)
-        {
-            packet.ReadInt32("Activated");
-            packet.ReadInt32("unk2");
         }
 
         [Parser(Opcode.SMSG_GARRISON_OPEN_MISSION_NPC)]
@@ -305,103 +256,12 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadUInt32("Count", indexes);
         }
 
-        [Parser(Opcode.SMSG_GET_GARRISON_INFO_RESULT)]
-        public static void HandleGetGarrisonInfoResult(Packet packet)
-        {
-            packet.ReadInt32("FactionIndex");
-            var garrisonCount = packet.ReadUInt32("GarrisonCount");
-
-            var followerSoftcapCount = packet.ReadUInt32("FollowerSoftCapCount");
-            for (var i = 0u; i < followerSoftcapCount; ++i)
-                ReadFollowerSoftCapInfo(packet, i);
-
-            for (int i = 0; i < garrisonCount; i++)
-            {
-                packet.ReadInt32("GarrTypeID", i);
-                packet.ReadInt32("GarrSiteID", i);
-                packet.ReadInt32("GarrSiteLevelID", i);
-
-                var garrisonBuildingInfoCount = packet.ReadUInt32("GarrisonBuildingInfoCount", i);
-                var garrisonPlotInfoCount = packet.ReadUInt32("GarrisonPlotInfoCount", i);
-                var garrisonFollowerCount = packet.ReadUInt32("GarrisonFollowerCount", i);
-                var garrisonMissionCount = packet.ReadUInt32("GarrisonMissionCount", i);
-                var garrisonMissionRewardsCount = packet.ReadUInt32("GarrisonMissionRewardsCount", i);
-                var garrisonMissionOvermaxRewardsCount = packet.ReadUInt32("GarrisonMissionOvermaxRewardsCount", i);
-                var areaBonusCount = packet.ReadUInt32("GarrisonMissionAreaBonusCount", i);
-                var talentsCount = packet.ReadUInt32("Talents", i);
-                var canStartMissionCount = packet.ReadUInt32("CanStartMission", i);
-                var archivedMissionsCount = packet.ReadUInt32("ArchivedMissionsCount", i);
-
-                packet.ReadInt32("NumFollowerActivationsRemaining", i);
-                packet.ReadUInt32("NumMissionsStartedToday", i);
-
-                for (int j = 0; j < garrisonBuildingInfoCount; j++)
-                    ReadGarrisonBuildingInfo(packet, "BuildingInfo", i, j);
-
-                for (int j = 0; j < garrisonPlotInfoCount; j++)
-                    Parsers.GarrisonHandler.ReadGarrisonPlotInfo(packet, "PlotInfo", i, j);
-
-                for (int j = 0; j < garrisonFollowerCount; j++)
-                    ReadGarrisonFollower(packet, "Follower", i, j);
-
-                for (int j = 0; j < garrisonMissionCount; j++)
-                    ReadGarrisonMission(packet, "Mission", i, j);
-
-                for (int j = 0; j < garrisonMissionRewardsCount; j++)
-                    ReadGarrisonMissionOvermaxRewards(packet, "MissionRewards", i, j);
-
-                for (int j = 0; j < garrisonMissionOvermaxRewardsCount; j++)
-                    ReadGarrisonMissionOvermaxRewards(packet, "MissionOvermaxRewards", i, j);
-
-                for (int j = 0; j < areaBonusCount; j++)
-                    Parsers.GarrisonHandler.ReadGarrisonMissionAreaBonus(packet, "MissionAreaBonus", i, j);
-
-                for (int j = 0; j < talentsCount; j++)
-                    ReadGarrisonTalents(packet, "Talents", i, j);
-
-                for (int j = 0; j < archivedMissionsCount; j++)
-                    packet.ReadInt32("ArchivedMissions", i, j);
-
-                packet.ResetBitReader();
-
-                for (int j = 0; j < canStartMissionCount; j++)
-                    packet.ReadBit("CanStartMission", i, j);
-            }
-        }
-
-        [Parser(Opcode.SMSG_GARRISON_MISSION_LIST_UPDATE)]
-        public static void HandleGarrisonListUpdate(Packet packet)
-        {
-            packet.ReadInt32("Result");
-            packet.ReadInt32("unk");
-
-            var count = packet.ReadInt32("MissionsCount");
-            for (int i = 0; i < count; i++)
-                packet.ReadInt32("Missions", i);
-
-            packet.ResetBitReader();
-            packet.ReadBit("Succeeded");
-            packet.ReadBit("unk");
-        }
-
         [Parser(Opcode.SMSG_GARRISON_UNK4)]
         public static void HandleGarrisonUnk4(Packet packet)
         {
             packet.ReadInt32("unk1");
             packet.ReadInt32("unk2");
             packet.ReadInt32("unk3");
-        }
-
-        [Parser(Opcode.SMSG_GARRISON_UNK2901)]
-        public static void HandleGarrisonUnk2901(Packet packet)
-        {
-            packet.ReadInt32("unk1");
-            var cnt = packet.ReadInt32("cnt");
-            for (var i = 0; i < cnt; ++i)
-            {//65169D 22996
-                packet.ReadInt32("unk6", i);
-                packet.ReadInt32("unk7", i);
-            }
         }
 
         [Parser(Opcode.SMSG_GARRISON_MISSION_COMPLETE_RESPONSE)]
@@ -424,7 +284,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
         [Parser(Opcode.CMSG_GARRISON_REQUEST_LANDING_PAGE_SHIPMENT_INFO)]
         [Parser(Opcode.CMSG_GARRISON_REQUEST_BLUEPRINT_AND_SPECIALIZATION_DATA)]
         [Parser(Opcode.CMSG_GARRISON_UNK1)]
-        [Parser(Opcode.CMSG_GARRISON_GET_BUILDING_LANDMARKS)]
         public static void HandleGarrisonZero(Packet packet)
         {
         }

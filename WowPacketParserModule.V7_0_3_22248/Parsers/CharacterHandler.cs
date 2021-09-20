@@ -74,7 +74,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_CHARACTER_UPGRADE_QUEUED)]
+        [Parser(Opcode.SMSG_CHARACTER_UPGRADE_COMPLETE)]
         public static void HandleCharactersUpgradeQueued(Packet packet)
         {
             packet.ReadPackedGuid128("Guid");

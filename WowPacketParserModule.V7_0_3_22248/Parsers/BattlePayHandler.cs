@@ -272,7 +272,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         [Parser(Opcode.CMSG_VAS_GET_SERVICE_STATUS)]
         [Parser(Opcode.SMSG_BATTLE_PAY_VAS_GUILD_FOLLOW_INFO)]
         [Parser(Opcode.SMSG_BATTLE_PAY_VAS_GUILD_MASTER_LIST)]
-        [Parser(Opcode.SMSG_ENUM_VAS_PURCHASE_STATES_RESPONSE)]
         [Parser(Opcode.SMSG_GET_VAS_ACCOUNT_CHARACTER_LIST_RESULT)]
         [Parser(Opcode.SMSG_GET_VAS_TRANSFER_TARGET_REALM_LIST_RESULT)]
         [Parser(Opcode.SMSG_VAS_CHECK_TRANSFER_OK_RESPONSE)]

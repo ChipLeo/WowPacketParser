@@ -137,20 +137,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadByte("ServerExpansionTier");
         }
 
-        [Parser(Opcode.SMSG_LEVEL_UPDATE)]
-        public static void HandleLevelUpdate(Packet packet)
-        {
-            packet.ReadPackedGuid128("Guid");
-            packet.ReadBit("unk");
-        }
-
-        [Parser(Opcode.SMSG_MODIFY_CHARGE_RECOVERY_SPEED)]
-        public static void HandleModifyChargeRecoverySpeed(Packet packet)
-        {
-            packet.ReadInt32("unk1");
-            packet.ReadInt32("unk2");
-        }
-
         [Parser(Opcode.SMSG_PLAY_ONE_SHOT_ANIM_KIT)]
         public static void HandlePlayOneShotAnimKit(Packet packet)
         {
@@ -299,12 +285,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             Storage.Sounds.Add(sound, packet.TimeSpan);
         }
 
-        [Parser(Opcode.SMSG_SHOW_ADVENTURE_MAP)]
-        public static void HandleShowAdventureMap(Packet packet)
-        {
-            packet.ReadPackedGuid128("Creature");
-        }
-
         [Parser(Opcode.SMSG_START_ELAPSED_TIMERS)]
         public static void HandleStartElapsedTimers(Packet packet)
         {
@@ -316,52 +296,18 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_TRANSMOG_COLLECTION_UPDATE)]
-        public static void HandleTransmogCollectionUpdate(Packet packet)
-        {
-            packet.ReadBit("unk");
-            packet.ReadBit("unk2");
-            var cnt = packet.ReadInt32("Count");
-            for (int i = 0; i < cnt; i++)
-                packet.ReadInt32("unk1", i);
-        }
-
         [Parser(Opcode.SMSG_TWITTER_STATUS)]
         public static void HandleTwitterStatus(Packet packet)
         {
             packet.ReadUInt32("StatusInt");
         }
 
-        [Parser(Opcode.SMSG_WOW_TOKEN_CAN_VETERAN_BUY_RESULT)]
-        public static void HandleWOWTokenCanVeteranBuyResult(Packet packet)
+        [Parser(Opcode.SMSG_CONSUMABLE_TOKEN_CAN_VETERAN_BUY_RESPONSE)]
+        public static void HandleConsumableTokenCanVeteranBuyResponse(Packet packet)
         {
             packet.ReadInt64("unk1");
             packet.ReadInt32("unk2");
             packet.ReadInt32("unk3");
-        }
-
-        [Parser(Opcode.SMSG_WOW_TOKEN_DISTRIBUTION_GLUE_UPDATE)]
-        public static void HandleWOWTokenDistributionGlueUpdate(Packet packet)
-        {
-            packet.ReadInt32("unk1");
-            packet.ReadInt32("unk2");
-            var cnt1 = packet.ReadInt32("Count1");
-            var cnt2 = packet.ReadInt32("Count2");
-            for (int i = 0; i < cnt1; i++)
-                packet.ReadInt64("unk3", i);
-            for (int i = 0; i < cnt2; i++)
-                packet.ReadInt64("unk4", i);
-        }
-
-        [Parser(Opcode.SMSG_WOW_TOKEN_DISTRIBUTION_UPDATE)]
-        public static void HandleWOWTokenDistributionUpdate(Packet packet)
-        {
-            var cnt1 = packet.ReadInt32("Count1");
-            var cnt2 = packet.ReadInt32("Count2");
-            for (int i = 0; i < cnt1; i++)
-                packet.ReadInt64("unk1", i);
-            for (int i = 0; i < cnt2; i++)
-                packet.ReadInt64("unk2", i);
         }
 
         [Parser(Opcode.SMSG_UNK_CLIENT_25C8)]

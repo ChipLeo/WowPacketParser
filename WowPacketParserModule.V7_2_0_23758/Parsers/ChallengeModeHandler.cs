@@ -70,12 +70,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                 packet.ReadInt16("BestSpecID", indexes, i);
         }
 
-        [Parser(Opcode.CMSG_CHALLENGE_MODE_REQUEST_MAP_STATS)]
-        [Parser(Opcode.CMSG_GET_CHALLENGE_MODE_REWARDS)]
-        public static void HandleChallengeModeZero(Packet packet)
-        {
-        }
-
         [Parser(Opcode.CMSG_CHALLENGE_MODE_REQUEST_LEADERS)]
         public static void HandleChallengeModeRequestLeaders(Packet packet)
         {
@@ -99,33 +93,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
 
             for (int i = 0; i < int9; i++)
                 ReadChallengeModeAttempt(packet, i, "RealmLeaders");
-        }
-
-        [Parser(Opcode.SMSG_CHALLENGE_MODE_REWARDS)]
-        public static void HandleChallegeModeRewards(Packet packet)
-        {
-            var int16 = packet.ReadInt32("MapChallengeModeRewardCount");
-            var int32 = packet.ReadInt32("ItemRewardCount");
-
-            for (int i = 0; i < int16; i++)
-            {
-                // sub_61BE26
-                ReadMapChallengeModeReward(packet, i, "MapChallengeModeReward");
-            }
-
-            for (int i = 0; i < int32; i++)
-            {
-                // sub_5FB0EE
-                ReadItemReward(packet, i, "ItemReward");
-            }
-        }
-
-        [Parser(Opcode.SMSG_CHALLENGE_MODE_ALL_MAP_STATS)]
-        public static void HandleChallengeModeAllMapStats(Packet packet)
-        {
-            var challengeModeMapCount = packet.ReadInt32("ChallengeModeMapCount");
-            for (int i = 0; i < challengeModeMapCount; i++)
-                ReadClientChallengeModeMap(packet, i);
         }
     }
 }

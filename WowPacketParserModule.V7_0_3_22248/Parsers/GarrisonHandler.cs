@@ -162,19 +162,34 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             ReadGarrisonFollower(packet);
         }
 
-        [Parser(Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_STATUS)]
+        [Parser(Opcode.SMSG_GARRISON_FOLLOWER_CHANGED_FLAGS)]
         public static void HandleGarrisonFollowerChangedStatus(Packet packet)
         {
             packet.ReadInt32("Result");
             ReadGarrisonFollower(packet);
         }
 
-        [Parser(Opcode.SMSG_GARRISON_MISSION_AREA_BONUS_ADDED)]
+        [Parser(Opcode.SMSG_GARRISON_ACTIVATE_MISSION_BONUS_ABILITY)]
         public static void HandleGarrisonMissionAreaBonusAdded(Packet packet)
         {
             packet.ReadInt32("Result");
             packet.ReadInt32("unk");
             packet.ReadInt32("unk");
+        }
+
+        [Parser(Opcode.SMSG_GARRISON_MISSION_LIST_UPDATE)]
+        public static void HandleGarrisonListUpdate(Packet packet)
+        {
+            packet.ReadInt32("Result");
+            packet.ReadInt32("unk");
+
+            var count = packet.ReadInt32("MissionsCount");
+            for (int i = 0; i < count; i++)
+                packet.ReadInt32("Missions", i);
+
+            packet.ResetBitReader();
+            packet.ReadBit("Succeeded");
+            packet.ReadBit("unk");
         }
 
         [Parser(Opcode.SMSG_GARRISON_OPEN_TALENT_NPC)]
@@ -305,18 +320,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32("unk1");
             packet.ReadInt32("unk2");
             packet.ReadInt32("unk3");
-        }
-
-        [Parser(Opcode.SMSG_GARRISON_UNK2901)]
-        public static void HandleGarrisonUnk2901(Packet packet)
-        {
-            packet.ReadInt32("unk1");
-            var cnt = packet.ReadInt32("cnt");
-            for (var i = 0; i < cnt; ++i)
-            {//65169D 22996
-                packet.ReadInt32("unk6", i);
-                packet.ReadInt32("unk7", i);
-            }
         }
 
         [Parser(Opcode.SMSG_GARRISON_UNK2924)]

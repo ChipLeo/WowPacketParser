@@ -28,6 +28,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Parsers\TaxiHandler.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Sigil" Version="5.0.0" />
   </ItemGroup>
 

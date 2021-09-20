@@ -211,7 +211,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_GUILD_ITEM_LOOTED)]
+        [Parser(Opcode.SMSG_GUILD_ITEM_LOOTED_NOTIFY)]
         public static void HandleGuildItemLooted(Packet packet)
         {
             packet.ReadPackedGuid128("Player");

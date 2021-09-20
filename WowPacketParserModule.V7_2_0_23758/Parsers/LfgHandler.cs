@@ -615,63 +615,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_LFG_UNK_2A2C)]
-        public static void HandleLFGUnk2A2C(Packet packet)
-        {
-            var cnt = packet.ReadInt32("count");
-            for (var i = 0; i < cnt; ++i)
-            {//651043 22996
-                ReadCliRideTicket(packet, i);
-                packet.ReadInt32("unk32", i);
-                var cnt1 = packet.ReadInt32("cnt1", i);
-                for (var j = 0; j < cnt1; ++j)
-                {//679F95 22996
-                    packet.ReadByte("unkb1", i, j);
-                    packet.ReadByte("unkb2", i, j);
-                }
-
-                packet.ResetBitReader();
-                var hasUnk56 = packet.ReadBit("unk56", i);
-                var hasUnk68 = packet.ReadBit("unk68", i);
-                var hasUnk76 = packet.ReadBit("unk76", i);
-                packet.ReadBit("unk96", i);
-                var hasGuid120 = packet.ReadBit("unk120", i);
-                var hasGuid144 = packet.ReadBit("unk144", i);
-                var hasGuid168 = packet.ReadBit("unk168", i);
-                packet.ReadBit("unk1472", i);
-                packet.ReadBit("unk1473", i);
-                packet.ReadBit("unk1474", i);
-
-                //650D44
-                {
-                    packet.ReadInt32("unk1", i);
-                    packet.ReadInt32("unk2", i);
-                    packet.ReadInt32("unk3", i);
-                    packet.ResetBitReader();
-                    var len1 = packet.ReadBits(8);
-                    var len2 = packet.ReadBits(11);
-                    var len3 = packet.ReadBits(8);
-                    packet.ReadBit("unk4", i);
-                    packet.ReadWoWString("str1", len1, i);
-                    packet.ReadWoWString("str2", len2, i);
-                    packet.ReadWoWString("str3", len3, i);
-                }
-
-                if (hasUnk56)
-                    packet.ReadPackedGuid128("guid", i);
-                if (hasUnk68)
-                    packet.ReadInt32("unk64", i);
-                if (hasUnk76)
-                    packet.ReadInt32("unk72", i);
-                if (hasGuid120)
-                    packet.ReadPackedGuid128("guid104", i);
-                if (hasGuid144)
-                    packet.ReadPackedGuid128("guid128", i);
-                if (hasGuid168)
-                    packet.ReadPackedGuid128("guid152", i);
-            }
-        }
-
         [Parser(Opcode.SMSG_LFG_UNK_2A28)]
         public static void HandleLFGUnk2A28(Packet packet)
         {

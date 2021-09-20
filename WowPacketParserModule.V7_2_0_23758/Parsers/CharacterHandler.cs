@@ -78,15 +78,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_CHARACTER_UPGRADE_QUEUED)]
-        public static void HandleCharactersUpgradeQueued(Packet packet)
-        {
-            packet.ReadPackedGuid128("Guid");
-            var cnt = packet.ReadInt32("cnt");
-            for (var i = 0; i < cnt; ++i)
-                packet.ReadInt32("Item", i);
-        }
-
         [Parser(Opcode.SMSG_ENUM_CHARACTERS_RESULT)]
         public static void HandleEnumCharactersResult(Packet packet)
         {

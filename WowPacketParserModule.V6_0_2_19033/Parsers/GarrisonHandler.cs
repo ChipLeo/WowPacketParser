@@ -108,7 +108,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadUInt32("MissionRecID");
         }
 
-        [Parser(Opcode.SMSG_GARRISON_CLEAR_ALL_FOLLOWERS_EXHAUSTION)]
+        [Parser(Opcode.SMSG_GARRISON_FOLLOWER_FATIGUE_CLEARED)]
         public static void HandleGarrisonClearAllFollowersExhaustion(Packet packet)
         {
             packet.ReadInt32("unk");
@@ -433,18 +433,6 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("Succeeded");
         }
 
-        [Parser(Opcode.SMSG_GARRISON_MISSION_UPDATE_CAN_START)]
-        public static void HandleGarrisonMissionUpdateCanStart(Packet packet)
-        {
-            var count1 = packet.ReadInt32("Count1");
-            var count2 = packet.ReadInt32("Count2");
-
-            for (var i = 0; i < count1; i++)
-                packet.ReadInt32("MissionRecID", i);
-            for (var i = 0; i < count2; i++)
-                packet.ReadBit("CanStart", i);
-        }
-
         [Parser(Opcode.SMSG_GARRISON_MISSION_LIST_UPDATE)]
         public static void HandleGarrisonMissionListUpdate(Packet packet)
         {
@@ -523,7 +511,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("Unk"); // maybe: SkillLineID?
         }
 
-        [Parser(Opcode.SMSG_GARRISON_OPEN_TRADESKILL_NPC)]
+        [Parser(Opcode.SMSG_GARRISON_OPEN_CRAFTER)]
         public static void HandleSGarrisonOpenTradeskillNpc(Packet packet)
         {
             packet.ReadPackedGuid128("GUID");
@@ -590,7 +578,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("GarrPlotInstanceID");
         }
 
-        [Parser(Opcode.SMSG_GARRISON_NUM_FOLLOWER_ACTIVATIONS_REMAINING)]
+        [Parser(Opcode.SMSG_GARRISON_FOLLOWER_ACTIVATIONS_SET)]
         public static void HandleGarrisonNumFollowerActivationsRemaining(Packet packet)
         {
             packet.ReadInt32("Activated");
@@ -669,13 +657,6 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void HandleReplaceTrophyResponse(Packet packet)
         {
             packet.ReadBit("Success");
-        }
-
-        [Parser(Opcode.SMSG_LOAD_SELECTED_TROPHY_RESULT)]
-        public static void HandleLoadSelectedTrophyResult(Packet packet)
-        {
-            packet.ReadBit("Success");
-            packet.ReadInt32("TrophyID");
         }
 
         [Parser(Opcode.SMSG_GARRISON_LEARN_BLUEPRINT_RESULT)]

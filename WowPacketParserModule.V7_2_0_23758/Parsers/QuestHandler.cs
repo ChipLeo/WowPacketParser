@@ -133,29 +133,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                 packet.ReadInt32<QuestId>("QuestID", i);
         }
 
-        [Parser(Opcode.SMSG_QUERY_TREASURE_PICKER_RESPONSE)]
-        public static void HandleQuestRewardResponce(Packet packet)
-        {
-            packet.ReadInt32("QuestID");
-            packet.ReadInt32("unk2");
-            {//67A0F2 22996
-                var cnt1 = packet.ReadInt32("Cnt1");
-                var cnt2 = packet.ReadInt32("cnt2");
-                packet.ReadInt64("unk");
-                for (var i = 0; i < cnt1; ++i)
-                {//67A0A2 22996
-                    packet.ReadInt32("Item", i);
-                    packet.ReadInt32("unk5", i);
-                    packet.ReadByte("unk6byte", i);
-                }
-                for (var i = 0; i < cnt2; ++i)
-                {//65169D 22996
-                    packet.ReadInt32("unk6", i);
-                    packet.ReadInt32("unk7", i);
-                }
-            }
-        }
-
         [Parser(Opcode.SMSG_DISPLAY_QUEST_POPUP)]
         public static void HandleQuestDisplayPopup(Packet packet)
         {
@@ -713,19 +690,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             }
         }
 
-        [Parser(Opcode.SMSG_QUEST_SPAWN_TRACKING_UPDATE)]
-        public static void HandleQuestSpawnTrackingUpdate(Packet packet)
-        {
-            var count = packet.ReadInt32("Count");
-            for (var i = 0; i < count; i++)
-            {
-                packet.ReadInt32("unk1", i);
-                packet.ReadInt32("ObjectID", i);
-                packet.ResetBitReader();
-                packet.ReadBit("unk3", i);
-            }
-        }
-
         [Parser(Opcode.SMSG_QUEST_UPDATE_ADD_CREDIT)]
         public static void HandleQuestUpdateAddCredit(Packet packet)
         {
@@ -745,21 +709,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
         public static void HandleQuestForceRemoved(Packet packet)
         {
             packet.ReadInt32<QuestId>("QuestID");
-        }
-
-        [Parser(Opcode.SMSG_WORLD_QUEST_UPDATE)]
-        public static void HandleWorldQuestUpdate(Packet packet)
-        {
-            var count = packet.ReadInt32("Count");
-
-            for (int i = 0; i < count; i++)
-            {
-                packet.ReadTime("LastUpdate", i);
-                packet.ReadUInt32<QuestId>("QuestID", i);
-                packet.ReadUInt32("Timer", i);
-                packet.ReadInt32("VariableID", i);
-                packet.ReadInt32("Value", i);
-            }
         }
     }
 }

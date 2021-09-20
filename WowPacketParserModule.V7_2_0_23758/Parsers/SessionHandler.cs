@@ -61,12 +61,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             packet.ReadBytesTable("Data", protoSize);
         }
 
-        [Parser(Opcode.SMSG_BATTLENET_SET_SESSION_STATE)]
-        public static void HandleBattlenetSetSessionState(Packet packet)
-        {
-            packet.ReadBits("State", 2); // TODO: enum
-        }
-
         [Parser(Opcode.SMSG_DANCE_STUDIO_CREATE_RESULT)]
         public static void HandleDanceStudioCreateResult(Packet packet)
         {
@@ -80,11 +74,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
         public static void HandleQueryTimeResponse(Packet packet)
         {
             packet.ReadTime("CurrentTime");
-        }
-
-        [Parser(Opcode.SMSG_ENABLE_ENCRYPTION)]
-        public static void HandleSessionZero(Packet packet)
-        {
         }
 
         [Parser(Opcode.SMSG_LOGOUT_COMPLETE, ClientVersionBuild.V7_1_0_22900)]

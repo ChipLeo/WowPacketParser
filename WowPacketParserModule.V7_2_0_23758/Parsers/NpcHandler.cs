@@ -81,42 +81,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
         }
 
         [HasSniffData]
-        [Parser(Opcode.SMSG_GOSSIP_MESSAGE)]
-        public static void HandleNpcGossip(Packet packet)
-        {
-            GossipMenu gossip = new GossipMenu();
-
-            WowGuid guid = packet.ReadPackedGuid128("GossipGUID");
-
-            gossip.ObjectType = guid.GetObjectType();
-            gossip.ObjectEntry = guid.GetEntry();
-
-            int menuId = packet.ReadInt32("GossipID");
-            gossip.Entry = (uint)menuId;
-
-            packet.ReadInt32("FriendshipFactionID");
-
-            gossip.TextID = (uint)packet.ReadInt32("TextID");
-
-            int int44 = packet.ReadInt32("GossipOptions");
-            int int60 = packet.ReadInt32("GossipText");
-
-            for (int i = 0; i < int44; ++i)
-                Parsers.NpcHandler.ReadGossipOptionsData((uint)menuId, packet, i, "GossipOptions");
-
-            for (int i = 0; i < int60; ++i)
-                ReadGossipQuestTextData(packet, i, "GossipQuestText");
-
-            if (guid.GetObjectType() == ObjectType.Unit)
-                if (Storage.Objects.ContainsKey(guid))
-                    ((Unit)Storage.Objects[guid].Item1).GossipId = (uint)menuId;
-
-            Storage.Gossips.Add(gossip, packet.TimeSpan);
-
-            packet.AddSniffData(StoreNameType.Gossip, menuId, guid.GetEntry().ToString(CultureInfo.InvariantCulture));
-        }
-
-        [HasSniffData]
         [Parser(Opcode.SMSG_QUERY_NPC_TEXT_RESPONSE)]
         public static void HandleNpcTextUpdate(Packet packet)
         {

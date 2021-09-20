@@ -17,8 +17,8 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             BattlePetHandler.ReadPetBattleRoundResult(packet, "MsgData");
         }
 
-        [Parser(Opcode.SMSG_SCENARIO_SPELL_UPDATE)]
-        public static void HandleScenarioSpellUpdate(Packet packet)
+        [Parser(Opcode.SMSG_SCENARIO_UI_UPDATE)]
+        public static void HandleScenarioUIUpdate(Packet packet)
         {
             packet.ReadInt32("unk1");
             var count = packet.ReadInt32("Count");

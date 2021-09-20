@@ -648,14 +648,14 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 ReadSandboxScalingData(packet, "Sandbox");
         }
 
-        [Parser(Opcode.SMSG_TUTORIAL_HIGHLIGHT_SPELL)]
+        [Parser(Opcode.SMSG_PLAYER_TUTORIAL_HIGHLIGHT_SPELL)]
         public static void HandleTutorialHighlightSepll(Packet packet)
         {
             packet.ReadInt32("unk1");
             packet.ReadWoWString("str", packet.ReadBits(7));
         }
 
-        [Parser(Opcode.SMSG_TUTORIAL_UNHIGHLIGHT_SPELL)]
+        [Parser(Opcode.SMSG_PLAYER_TUTORIAL_UNHIGHLIGHT_SPELL)]
         public static void HandleSpellZero(Packet packet)
         {
         }

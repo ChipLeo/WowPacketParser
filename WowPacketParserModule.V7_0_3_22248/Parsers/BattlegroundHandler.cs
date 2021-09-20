@@ -83,7 +83,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 ReadPlayerData(packet, "Players", i);
         }
 
-        [Parser(Opcode.SMSG_BATTLE_PAY_VAS_PURCHASE_LIST)]
+        [Parser(Opcode.SMSG_ENUM_VAS_PURCHASE_STATES_RESPONSE)]
         public static void HandleBattlePayWasPurchaseList(Packet packet)
         {
             var cnt = packet.ReadBits("Count", 6);

@@ -467,7 +467,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19793
             {Opcode.SMSG_INSTANCE_RESET_FAILED, 0x0F40},
             {Opcode.SMSG_INSTANCE_SAVE_CREATED, 0x0DA2},
             {Opcode.SMSG_INVALIDATE_PLAYER, 0x0B9D},
-            {Opcode.SMSG_WORLD_TEXT, 0x1CB6},
+            {Opcode.SMSG_DISPLAY_WORLD_TEXT, 0x1CB6},
             {Opcode.SMSG_ITEM_COOLDOWN, 0x0D35},
             {Opcode.SMSG_ITEM_ENCHANT_TIME_UPDATE, 0x1E30},
             {Opcode.SMSG_ITEM_EXPIRE_PURCHASE_REFUND, 0x1798},

@@ -137,13 +137,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadByte("ServerExpansionTier");
         }
 
-        [Parser(Opcode.SMSG_MODIFY_CHARGE_RECOVERY_SPEED)]
-        public static void HandleModifyChargeRecoverySpeed(Packet packet)
-        {
-            packet.ReadInt32("unk1");
-            packet.ReadInt32("unk2");
-        }
-
         [Parser(Opcode.SMSG_WORLD_SERVER_INFO)]
         public static void HandleWorldServerInfo(Packet packet)
         {
@@ -318,49 +311,11 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 V6_0_2_19033.Parsers.MiscellaneousHandler.ReadCliEuropaTicketConfig(packet, "EuropaTicketSystemStatus");
         }
 
-        [Parser(Opcode.SMSG_SHOW_ADVENTURE_MAP)]
-        public static void HandleShowAdventureMap(Packet packet)
-        {
-            packet.ReadPackedGuid128("Creature");
-        }
-
         [Parser(Opcode.SMSG_TIME_ADJUSTMENT)]
         public static void HandleTimeAdjustement(Packet packet)
         {
             packet.ReadSingle("unk1");
             packet.ReadInt32("unk2");
-        }
-
-        [Parser(Opcode.SMSG_WOW_TOKEN_CAN_VETERAN_BUY_RESULT)]
-        public static void HandleWOWTokenCanVeteranBuyResult(Packet packet)
-        {
-            packet.ReadInt64("unk1");
-            packet.ReadInt32("unk2");
-            packet.ReadInt32("unk3");
-        }
-
-        [Parser(Opcode.SMSG_WOW_TOKEN_DISTRIBUTION_GLUE_UPDATE)]
-        public static void HandleWOWTokenDistributionGlueUpdate(Packet packet)
-        {
-            packet.ReadInt32("unk1");
-            packet.ReadInt32("unk2");
-            var cnt1 = packet.ReadInt32("Count1");
-            var cnt2 = packet.ReadInt32("Count2");
-            for (int i = 0; i < cnt1; i++)
-                packet.ReadInt64("unk3", i);
-            for (int i = 0; i < cnt2; i++)
-                packet.ReadInt64("unk4", i);
-        }
-
-        [Parser(Opcode.SMSG_WOW_TOKEN_DISTRIBUTION_UPDATE)]
-        public static void HandleWOWTokenDistributionUpdate(Packet packet)
-        {
-            var cnt1 = packet.ReadInt32("Count1");
-            var cnt2 = packet.ReadInt32("Count2");
-            for (int i = 0; i < cnt1; i++)
-                packet.ReadInt64("unk1", i);
-            for (int i = 0; i < cnt2; i++)
-                packet.ReadInt64("unk2", i);
         }
 
         [Parser(Opcode.SMSG_UNK_CLIENT_25C8)]
@@ -523,6 +478,12 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadBit("LiveRegionCharacterCopyEnabled");
                 packet.ReadBit("LiveRegionAccountCopyEnabled");
             }
+
+            packet.ReadInt32("TokenPollTimeSeconds");
+            packet.ReadInt32E<ConsumableTokenRedeem>("TokenRedeemIndex");
+            packet.ReadInt64("TokenBalanceAmount");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_3_0_24920))
+                packet.ReadUInt32("BpayStoreProductDeliveryDelay");
         }
 
         [Parser(Opcode.SMSG_CAMERA_EFFECT)]
@@ -569,7 +530,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         }
 
         [Parser(Opcode.CMSG_TWITTER_CONNECT)]
-        [Parser(Opcode.SMSG_ARTIFACT_POWERS_UPDATED)]
+        [Parser(Opcode.SMSG_CLOSE_ARTIFACT_FORGE)]
         [Parser(Opcode.SMSG_UNK_CLIENT_2819)]
         [Parser(Opcode.SMSG_UNK_CLIENT_2844)]
         public static void HandleMiscZero(Packet packet)
