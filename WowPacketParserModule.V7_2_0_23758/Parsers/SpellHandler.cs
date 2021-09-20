@@ -704,12 +704,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                 packet.ReadInt32("unk3", i);
         }
 
-        [Parser(Opcode.SMSG_UNK_SPELL_2C58)]
-        public static void HandleSpellUnk2c58(Packet packet)
-        {
-            packet.ReadUInt32E<PowerType>("Type");
-        }
-
         [Parser(Opcode.SMSG_WEEKLY_SPELL_USAGE)]
         public static void HandleWeeklySpellUsage(Packet packet)
         {

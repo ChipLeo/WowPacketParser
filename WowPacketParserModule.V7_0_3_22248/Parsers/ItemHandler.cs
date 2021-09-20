@@ -170,6 +170,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadBits("ItemType", 2);
         }
 
+        [Parser(Opcode.SMSG_INVENTORY_FIXUP_COMPLETE)]
+        public static void HandleCharacterItemFixup(Packet packet)
+        {
+            packet.ReadBit("unk1");
+            packet.ReadBit("unk2");
+        }
+
         [Parser(Opcode.SMSG_SOCKET_GEMS_SUCCESS)]
         public static void HandleSocketGemsSuccess(Packet packet)
         {

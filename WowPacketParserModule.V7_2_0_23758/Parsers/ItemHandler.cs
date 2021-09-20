@@ -168,13 +168,6 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             SpellHandler.ReadSpellCastRequest(packet, "Cast");
         }
 
-        [Parser(Opcode.SMSG_INVENTORY_FIXUP_COMPLETE)]
-        public static void HandleCharacterItemFixup(Packet packet)
-        {
-            packet.ReadBit("unk1");
-            packet.ReadBit("unk2");
-        }
-
         [Parser(Opcode.SMSG_SET_ITEM_PURCHASE_DATA)]
         public static void HandleSetItemPurchaseData(Packet packet)
         {
