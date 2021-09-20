@@ -131,6 +131,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 vendor.PlayerConditionID = packet.ReadUInt32("PlayerConditionFailed", i);
 
                 vendor.Item = Substructures.ItemHandler.ReadItemInstance(packet, i).ItemID;
+                packet.ResetBitReader();
                 vendor.IgnoreFiltering = packet.ReadBit("DoNotFilterOnVendor", i);
 
                 vendor.MaxCount = maxCount == -1 ? 0 : (uint)maxCount; // TDB
