@@ -637,8 +637,6 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             if (ClientVersion.RemovedInVersion(ClientVersionBuild.V7_2_0_23706))
                 Substructures.ItemHandler.ReadItemInstance(packet, "ItemReward");
 
-            Substructures.ItemHandler.ReadItemInstance(packet, "ItemReward"); // 23420
-
             packet.ResetBitReader();
 
             packet.ReadBit("UseQuestReward");
