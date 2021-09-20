@@ -66,9 +66,16 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             var lenComment = packet.ReadBits(11);
             var lenVoiceChat = packet.ReadBits(8);
             packet.ReadBit("AutoAccept", idx);
+            Bit unkval = 0;
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_1_5_23420))
+            {
+                packet.ReadBit("unk1", idx);
+                unkval = packet.ReadBit("unk2", idx);
+            }
             packet.ReadWoWString("Name", lenName, idx);
             packet.ReadWoWString("Comment", lenComment, idx);
             packet.ReadWoWString("VoiceChat", lenVoiceChat, idx);
+            if (unkval) packet.ReadInt32("unk3", idx);
         }
 
         public static void ReadShortageReward(Packet packet, params object[] idx)
@@ -792,9 +799,9 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             var hasLeader = packet.ReadBit("ChangeLeader", idx);
             var hasVirtualRealmAddress = packet.ReadBit("ChangeVirtualRealmAddress", idx);
             var hasCompletedEncountersMask = packet.ReadBit("ChangeCompletedEncountersMask", idx);
-            packet.ReadBit("Delisted", idx);
+            //packet.ReadBit("Delisted", idx);
             packet.ReadBit("ChangeTitle", idx);
-            var hasAny = packet.ReadBit();
+            var hasAny = packet.ReadBit("Any", idx);
             var hasName = packet.ReadBit("ChangeName", idx);
             var hasComment = packet.ReadBit("ChangeComment", idx);
             var hasVoice = false;
@@ -817,7 +824,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 packet.ReadUInt32("CompletedEncountersMask", idx);
 
             if (hasAny)
-                packet.ReadPackedGuid128("LastTouchedAny");
+                packet.ReadPackedGuid128("LastTouchedAny", idx);
 
             if (hasName)
                 packet.ReadPackedGuid128("LastTouchedName", idx);
