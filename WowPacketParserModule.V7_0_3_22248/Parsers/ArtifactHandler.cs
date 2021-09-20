@@ -55,7 +55,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         public static void HandleArtifactXPGain(Packet packet)
         {
             packet.ReadPackedGuid128("ArtifactGUID");
-            packet.ReadUInt64("Amount");
+            packet.ReadUInt32("Amount");
         }
 
         [Parser(Opcode.SMSG_ARTIFACT_KNOWLEDGE)]
