@@ -80,29 +80,26 @@ namespace WowPacketParser.Parsing.Parsers
         private static void ReadCreateObjectBlock(Packet packet, CreateObject createObject, WowGuid guid, uint map, object index)
         {
             ObjectType objType = ObjectTypeConverter.Convert(packet.ReadByteE<ObjectTypeLegacy>("Object Type", index));
-            var moves = ReadMovementUpdateBlock(packet, guid, index);
-            var updates = ReadValuesUpdateBlockOnCreate(packet, createObject.Values, objType, index);
-            var dynamicUpdates = ReadDynamicValuesUpdateBlockOnCreate(packet, objType, index);
-
             WoWObject obj;
             switch (objType)
             {
                 case ObjectType.Unit:       obj = new Unit(); break;
                 case ObjectType.GameObject: obj = new GameObject(); break;
                 case ObjectType.Player:     obj = new Player(); break;
-                case ObjectType.AreaTrigger:obj = new SpellAreaTrigger(); break;
+                case ObjectType.AreaTrigger:obj = new AreaTriggerCreateProperties(); break;
                 default:                    obj = new WoWObject(); break;
             }
 
             obj.Guid = guid;
             obj.Type = objType;
-            obj.Movement = moves;
-            obj.UpdateFields = updates;
-            obj.DynamicUpdateFields = dynamicUpdates;
             obj.Map = map;
             obj.Area = WorldStateHandler.CurrentAreaId;
             obj.Zone = WorldStateHandler.CurrentZoneId;
             obj.PhaseMask = (uint) MovementHandler.CurrentPhaseMask;
+
+            obj.Movement = ReadMovementUpdateBlock(packet, guid, index);
+            obj.UpdateFields = ReadValuesUpdateBlockOnCreate(packet, createObject.Values, objType, index);
+            obj.DynamicUpdateFields = ReadDynamicValuesUpdateBlockOnCreate(packet, objType, index);
 
             // If this is the second time we see the same object (same guid,
             // same position) update its phasemask

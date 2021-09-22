@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
@@ -25,24 +26,24 @@ namespace WowPacketParser.SQL.Builders
         }
 
         [BuilderMethod]
-        public static string SpellAreaTriggersData()
+        public static string AreaTriggerCreatePropertiesData()
         {
             var spellareatriggers = Storage.Objects.IsEmpty()
-                ? new Dictionary<WowGuid, SpellAreaTrigger>()                                                   // empty dict if there are no objects
+                ? new Dictionary<WowGuid, AreaTriggerCreateProperties>()                                        // empty dict if there are no objects
                 : Storage.Objects.Where(
                     obj =>
                         obj.Value.Item1.Type == ObjectType.AreaTrigger &&
                         !obj.Value.Item1.IsTemporarySpawn())                                                    // remove temporary spawns
                     .OrderBy(pair => pair.Value.Item2)                                                          // order by spawn time
-                    .ToDictionary(obj => obj.Key, obj => obj.Value.Item1 as SpellAreaTrigger);
+                    .ToDictionary(obj => obj.Key, obj => obj.Value.Item1 as AreaTriggerCreateProperties);
 
             if (spellareatriggers.Count == 0)
                 return string.Empty;
 
-            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.spell_areatrigger))
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.areatrigger_create_properties))
                 return string.Empty;
 
-            var spellareatriggersData = new DataBag<SpellAreaTrigger>();
+            var spellareatriggersData = new DataBag<AreaTriggerCreateProperties>();
 
             foreach (var spellareatrigger in spellareatriggers)
             {
@@ -51,30 +52,124 @@ namespace WowPacketParser.SQL.Builders
 
             var templateDb = SQLDatabase.Get(spellareatriggersData);
 
-            return SQLUtil.Compare(Settings.SQLOrderByKey ? spellareatriggersData.OrderBy(x => x.Item1.AreaTriggerId).ToArray() : spellareatriggersData.ToArray(), templateDb, x => "SpellId : " + x.spellId.ToString());
+            return SQLUtil.Compare(Settings.SQLOrderByKey ? spellareatriggersData.OrderBy(x => x.Item1.AreaTriggerId).ToArray() : spellareatriggersData.ToArray(),
+                templateDb,
+                x =>
+                {
+                    var comment = "SpellId : " + x.spellId.ToString();
+                    if ((x.AreaTriggerCreatePropertiesId & 0x80000000) != 0)
+                        comment += " CANNOT FIND PROPERTIES ID, USED SPELL ID AS KEY (NEEDS MANUAL CORRECTION)";
+
+                    return comment;
+                });
         }
 
         [BuilderMethod]
-        public static string SpellAreaTriggerVerticesData()
+        public static string AreaTriggerCreatePropertiesOrbitData()
         {
-            if (Storage.SpellAreaTriggerVertices.IsEmpty())
+            if (Storage.AreaTriggerCreatePropertiesOrbits.IsEmpty())
                 return string.Empty;
 
-            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.spell_areatrigger_vertices))
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.areatrigger_create_properties_orbit))
                 return string.Empty;
 
-            var templateDb = SQLDatabase.Get(Storage.SpellAreaTriggerVertices);
+            var templateDb = SQLDatabase.Get(Storage.AreaTriggerCreatePropertiesOrbits);
 
-            foreach (var spellAreaTriggerVertice in Storage.SpellAreaTriggerVertices)
+            foreach (var orbit in Storage.AreaTriggerCreatePropertiesOrbits)
             {
-                var spellAreaTriggerTuple = Storage.Objects.Where(obj => obj.Key == spellAreaTriggerVertice.Item1.areatriggerGuid).First();
-                SpellAreaTrigger spellAreaTrigger = (SpellAreaTrigger)spellAreaTriggerTuple.Value.Item1;
+                var spellAreaTriggerTuple = Storage.Objects.Where(obj => obj.Key == orbit.Item1.areatriggerGuid).First();
+                AreaTriggerCreateProperties areaTrigger = (AreaTriggerCreateProperties)spellAreaTriggerTuple.Value.Item1;
 
-                spellAreaTriggerVertice.Item1.spellId = spellAreaTrigger.spellId;
-                spellAreaTriggerVertice.Item1.SpellMiscId = spellAreaTrigger.SpellMiscId;
+                orbit.Item1.spellId = areaTrigger.spellId;
+                orbit.Item1.AreaTriggerCreatePropertiesId = areaTrigger.AreaTriggerCreatePropertiesId;
             }
 
-            return SQLUtil.Compare(Settings.SQLOrderByKey ? Storage.SpellAreaTriggerVertices.OrderBy(x => x.Item1.SpellMiscId).ToArray() : Storage.SpellAreaTriggerVertices.ToArray(), templateDb, x => "SpellId : " + x.spellId.ToString());
+            return SQLUtil.Compare(Settings.SQLOrderByKey ? Storage.AreaTriggerCreatePropertiesOrbits.OrderBy(x => x.Item1.AreaTriggerCreatePropertiesId).ToArray() : Storage.AreaTriggerCreatePropertiesOrbits.ToArray(),
+                templateDb,
+                x =>
+                {
+                    var comment = "SpellId : " + x.spellId.ToString();
+                    if ((x.AreaTriggerCreatePropertiesId & 0x80000000) != 0)
+                        comment += " CANNOT FIND PROPERTIES ID, USED SPELL ID AS KEY (NEEDS MANUAL CORRECTION)";
+
+                    return comment;
+                });
+        }
+
+        [BuilderMethod]
+        public static string AreaTriggerCreatePropertiesPolygonVertexData()
+        {
+            if (Storage.AreaTriggerCreatePropertiesPolygonVertices.IsEmpty())
+                return string.Empty;
+
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.areatrigger_create_properties_polygon_vertex))
+                return string.Empty;
+
+            var templateDb = SQLDatabase.Get(Storage.AreaTriggerCreatePropertiesPolygonVertices);
+
+            foreach (var vertex in Storage.AreaTriggerCreatePropertiesPolygonVertices)
+            {
+                var spellAreaTriggerTuple = Storage.Objects.Where(obj => obj.Key == vertex.Item1.areatriggerGuid).First();
+                AreaTriggerCreateProperties areaTrigger = (AreaTriggerCreateProperties)spellAreaTriggerTuple.Value.Item1;
+
+                vertex.Item1.spellId = areaTrigger.spellId;
+                vertex.Item1.AreaTriggerCreatePropertiesId = areaTrigger.AreaTriggerCreatePropertiesId;
+            }
+
+            return SQLUtil.Compare(Settings.SQLOrderByKey ? Storage.AreaTriggerCreatePropertiesPolygonVertices.OrderBy(x => x.Item1.AreaTriggerCreatePropertiesId).ToArray() : Storage.AreaTriggerCreatePropertiesPolygonVertices.ToArray(),
+                templateDb,
+                x =>
+                {
+                    var comment = "SpellId : " + x.spellId.ToString();
+                    if ((x.AreaTriggerCreatePropertiesId & 0x80000000) != 0)
+                        comment += " CANNOT FIND PROPERTIES ID, USED SPELL ID AS KEY (NEEDS MANUAL CORRECTION)";
+
+                    return comment;
+                });
+        }
+
+        [BuilderMethod]
+        public static string AreaTriggerCreatePropertiesSplinePointData()
+        {
+            if (Storage.AreaTriggerCreatePropertiesSplinePoints.IsEmpty())
+                return string.Empty;
+
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.areatrigger_create_properties_spline_point))
+                return string.Empty;
+
+            var templateDb = SQLDatabase.Get(Storage.AreaTriggerCreatePropertiesSplinePoints);
+
+            foreach (var splinePoint in Storage.AreaTriggerCreatePropertiesSplinePoints)
+            {
+                var spellAreaTriggerTuple = Storage.Objects.Where(obj => obj.Key == splinePoint.Item1.areatriggerGuid).First();
+                AreaTriggerCreateProperties areaTrigger = (AreaTriggerCreateProperties)spellAreaTriggerTuple.Value.Item1;
+
+                splinePoint.Item1.spellId = areaTrigger.spellId;
+                splinePoint.Item1.AreaTriggerCreatePropertiesId = areaTrigger.AreaTriggerCreatePropertiesId;
+
+                // convert points to offsets
+                splinePoint.Item1.X -= areaTrigger.Movement.Position.X;
+                splinePoint.Item1.Y -= areaTrigger.Movement.Position.Y;
+                splinePoint.Item1.Z -= areaTrigger.Movement.Position.Z;
+
+                float areaTriggerO = areaTrigger.Movement.Orientation;
+                float inx = splinePoint.Item1.X.Value;
+                float iny = splinePoint.Item1.Y.Value;
+
+                splinePoint.Item1.X = (float)((inx + iny * Math.Tan(areaTriggerO)) / (Math.Cos(areaTriggerO) + Math.Sin(areaTriggerO) * Math.Tan(areaTriggerO)));
+                splinePoint.Item1.Y = (float)((iny - inx * Math.Tan(areaTriggerO)) / (Math.Cos(areaTriggerO) + Math.Sin(areaTriggerO) * Math.Tan(areaTriggerO)));
+            }
+
+            return SQLUtil.Compare(Settings.SQLOrderByKey ? Storage.AreaTriggerCreatePropertiesSplinePoints.OrderBy(x => x.Item1.AreaTriggerCreatePropertiesId).ToArray() : Storage.AreaTriggerCreatePropertiesSplinePoints.ToArray(),
+                templateDb,
+                x =>
+                {
+                    var comment = "SpellId : " + x.spellId.ToString();
+                    if ((x.AreaTriggerCreatePropertiesId & 0x80000000) != 0)
+                        comment += " CANNOT FIND PROPERTIES ID, USED SPELL ID AS KEY (NEEDS MANUAL CORRECTION)";
+
+                    return comment;
+                });
         }
     }
 }

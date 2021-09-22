@@ -76,7 +76,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                     obj = new Player();
                     break;
                 case ObjectType.AreaTrigger:
-                    obj = new SpellAreaTrigger();
+                    obj = new AreaTriggerCreateProperties();
                     break;
                 default:
                     obj = new WoWObject();
@@ -358,14 +358,14 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                 }
             }
 
-            if (hasAreaTrigger && obj is SpellAreaTrigger)
+            if (hasAreaTrigger && obj is AreaTriggerCreateProperties)
             {
                 AreaTriggerTemplate areaTriggerTemplate = new AreaTriggerTemplate
                 {
                     Id = guid.GetEntry()
                 };
 
-                SpellAreaTrigger spellAreaTrigger = (SpellAreaTrigger)obj;
+                AreaTriggerCreateProperties spellAreaTrigger = (AreaTriggerCreateProperties)obj;
                 spellAreaTrigger.AreaTriggerId = guid.GetEntry();
 
                 packet.ResetBitReader();
@@ -481,14 +481,14 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                     var verticesCount = packet.ReadInt32("VerticesCount", index);
                     var verticesTargetCount = packet.ReadInt32("VerticesTargetCount", index);
 
-                    List<SpellAreatriggerVertices> verticesList = new List<SpellAreatriggerVertices>();
+                    List<AreaTriggerCreatePropertiesPolygonVertex> verticesList = new List<AreaTriggerCreatePropertiesPolygonVertex>();
 
                     areaTriggerTemplate.Data[0] = packet.ReadSingle("Height", index);
                     areaTriggerTemplate.Data[1] = packet.ReadSingle("HeightTarget", index);
 
                     for (uint i = 0; i < verticesCount; ++i)
                     {
-                        SpellAreatriggerVertices areaTriggerTemplateVertices = new SpellAreatriggerVertices
+                        AreaTriggerCreatePropertiesPolygonVertex areaTriggerTemplateVertices = new AreaTriggerCreatePropertiesPolygonVertex
                         {
                             areatriggerGuid = guid,
                             Idx = i
@@ -510,8 +510,8 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
                         verticesList[i].VerticeTargetY = verticesTarget.Y;
                     }
 
-                    foreach (SpellAreatriggerVertices vertice in verticesList)
-                        Storage.SpellAreaTriggerVertices.Add(vertice);
+                    foreach (AreaTriggerCreatePropertiesPolygonVertex vertice in verticesList)
+                        Storage.AreaTriggerCreatePropertiesPolygonVertices.Add(vertice);
                 }
 
                 if (areaTriggerTemplate.Type == (byte)AreaTriggerType.Cylinder)

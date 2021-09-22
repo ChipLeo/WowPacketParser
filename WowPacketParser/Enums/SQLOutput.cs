@@ -3,6 +3,10 @@
     public enum SQLOutput
     {
         // ReSharper disable InconsistentNaming
+        areatrigger_create_properties,
+        areatrigger_create_properties_orbit,
+        areatrigger_create_properties_polygon_vertex,
+        areatrigger_create_properties_spline_point,
         areatrigger_template,
         broadcast_text,
         broadcast_text_locale,
@@ -46,8 +50,6 @@
         scene_template,
         scenario_poi,
         spell_target_position,
-        spell_areatrigger,
-        spell_areatrigger_vertices,
         SniffData,
         SniffDataOpcodes,
         trainer,

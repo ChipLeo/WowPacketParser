@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
@@ -157,7 +158,7 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                     obj = new Player();
                     break;
                 case ObjectType.AreaTrigger:
-                    obj = new SpellAreaTrigger();
+                    obj = new AreaTriggerCreateProperties();
                     break;
                 case ObjectType.Conversation:
                     obj = new ConversationTemplate();
@@ -167,7 +168,16 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                     break;
             }
 
-            var moves = ReadMovementUpdateBlock(packet, createObject, guid, obj, index);
+            obj.Guid = guid;
+            obj.Type = objType;
+            obj.Map = map;
+            obj.Area = CoreParsers.WorldStateHandler.CurrentAreaId;
+            obj.Zone = CoreParsers.WorldStateHandler.CurrentZoneId;
+            obj.PhaseMask = (uint)CoreParsers.MovementHandler.CurrentPhaseMask;
+            obj.Phases = new HashSet<ushort>(CoreParsers.MovementHandler.ActivePhases.Keys);
+            obj.DifficultyID = CoreParsers.MovementHandler.CurrentDifficultyID;
+            obj.Movement = ReadMovementUpdateBlock(packet, createObject, guid, obj, index);
+
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V8_1_0_28724))
             {
                 var updatefieldSize = packet.ReadUInt32();
@@ -215,7 +225,7 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                             handler.ReadCreateCorpseData(fieldsData, flags, index);
                             break;
                         case ObjectType.AreaTrigger:
-                            (obj as SpellAreaTrigger).AreaTriggerData = handler.ReadCreateAreaTriggerData(fieldsData, flags, index);
+                            (obj as AreaTriggerCreateProperties).AreaTriggerData = handler.ReadCreateAreaTriggerData(fieldsData, flags, index);
                             break;
                         case ObjectType.SceneObject:
                             handler.ReadCreateSceneObjectData(fieldsData, flags, index);
@@ -228,22 +238,9 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             }
             else
             {
-                var updates = CoreParsers.UpdateHandler.ReadValuesUpdateBlockOnCreate(packet, createObject.Values, objType, index);
-                var dynamicUpdates = CoreParsers.UpdateHandler.ReadDynamicValuesUpdateBlockOnCreate(packet, objType, index);
-
-                obj.UpdateFields = updates;
-                obj.DynamicUpdateFields = dynamicUpdates;
+                obj.UpdateFields = CoreParsers.UpdateHandler.ReadValuesUpdateBlockOnCreate(packet, createObject.Values, objType, index);
+                obj.DynamicUpdateFields = CoreParsers.UpdateHandler.ReadDynamicValuesUpdateBlockOnCreate(packet, objType, index);
             }
-
-            obj.Guid = guid;
-            obj.Type = objType;
-            obj.Movement = moves;
-            obj.Map = map;
-            obj.Area = CoreParsers.WorldStateHandler.CurrentAreaId;
-            obj.Zone = CoreParsers.WorldStateHandler.CurrentZoneId;
-            obj.PhaseMask = (uint)CoreParsers.MovementHandler.CurrentPhaseMask;
-            obj.Phases = new HashSet<ushort>(CoreParsers.MovementHandler.ActivePhases.Keys);
-            obj.DifficultyID = CoreParsers.MovementHandler.CurrentDifficultyID;
 
             // If this is the second time we see the same object (same guid,
             // same position) update its phasemask
@@ -556,14 +553,14 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             if (hasMovementTransport)
                 createObject.Transport = ReadTransportData(moveInfo, guid, packet, index);
 
-            if (hasAreaTrigger && obj is SpellAreaTrigger)
+            if (hasAreaTrigger && obj is AreaTriggerCreateProperties)
             {
                 AreaTriggerTemplate areaTriggerTemplate = new AreaTriggerTemplate
                 {
                     Id = guid.GetEntry()
                 };
 
-                SpellAreaTrigger spellAreaTrigger = (SpellAreaTrigger)obj;
+                AreaTriggerCreateProperties spellAreaTrigger = (AreaTriggerCreateProperties)obj;
                 spellAreaTrigger.AreaTriggerId = guid.GetEntry();
 
                 packet.ResetBitReader();
@@ -637,7 +634,8 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                     packet.ReadBit();
 
                 if (hasAreaTriggerSpline)
-                    AreaTriggerHandler.ReadAreaTriggerSpline(packet, index);
+                    foreach (var splinePoint in AreaTriggerHandler.ReadAreaTriggerSpline(spellAreaTrigger, packet, index, "AreaTriggerSpline"))
+                        Storage.AreaTriggerCreatePropertiesSplinePoints.Add(splinePoint);
 
                 if ((areaTriggerTemplate.Flags & (uint)AreaTriggerFlags.HasTargetRollPitchYaw) != 0)
                     packet.ReadVector3("TargetRollPitchYaw", index);
@@ -688,14 +686,14 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                     var verticesCount = packet.ReadUInt32("VerticesCount", index);
                     var verticesTargetCount = packet.ReadUInt32("VerticesTargetCount", index);
 
-                    List<SpellAreatriggerVertices> verticesList = new List<SpellAreatriggerVertices>();
+                    List<AreaTriggerCreatePropertiesPolygonVertex> verticesList = new List<AreaTriggerCreatePropertiesPolygonVertex>();
 
                     areaTriggerTemplate.Data[0] = packet.ReadSingle("Height", index);
                     areaTriggerTemplate.Data[1] = packet.ReadSingle("HeightTarget", index);
 
                     for (uint i = 0; i < verticesCount; ++i)
                     {
-                        SpellAreatriggerVertices spellAreatriggerVertices = new SpellAreatriggerVertices
+                        AreaTriggerCreatePropertiesPolygonVertex spellAreatriggerVertices = new AreaTriggerCreatePropertiesPolygonVertex
                         {
                             areatriggerGuid = guid,
                             Idx = i
@@ -717,8 +715,8 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                         verticesList[i].VerticeTargetY = verticesTarget.Y;
                     }
 
-                    foreach (SpellAreatriggerVertices vertice in verticesList)
-                        Storage.SpellAreaTriggerVertices.Add(vertice);
+                    foreach (AreaTriggerCreatePropertiesPolygonVertex vertice in verticesList)
+                        Storage.AreaTriggerCreatePropertiesPolygonVertices.Add(vertice);
                 }
 
                 if (areaTriggerTemplate.Type == (byte)AreaTriggerType.Cylinder)
@@ -738,7 +736,10 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 }
 
                 if ((areaTriggerTemplate.Flags & (uint)AreaTriggerFlags.HasOrbit) != 0)
-                    AreaTriggerHandler.ReadAreaTriggerOrbit(packet, index, "Orbit");
+                    Storage.AreaTriggerCreatePropertiesOrbits.Add(AreaTriggerHandler.ReadAreaTriggerOrbit(guid, packet, index, "AreaTriggerOrbit"));
+
+                spellAreaTrigger.Shape = areaTriggerTemplate.Type;
+                Array.Copy(areaTriggerTemplate.Data, spellAreaTrigger.ShapeData, Math.Min(areaTriggerTemplate.Data.Length, spellAreaTrigger.ShapeData.Length));
 
                 Storage.AreaTriggerTemplates.Add(areaTriggerTemplate);
             }
