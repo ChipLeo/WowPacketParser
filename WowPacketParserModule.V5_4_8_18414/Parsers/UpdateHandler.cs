@@ -57,7 +57,8 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_UPDATE_OBJECT)]
         public static void HandleUpdateObject(Packet packet)
         {
-            uint map = packet.ReadUInt16<MapId>("MapID");
+            var updateObject = packet.Holder.UpdateObject = new();
+            uint map = updateObject.MapId = packet.ReadUInt16<MapId>("MapID");
             var count = packet.ReadUInt32("Count");
             //var type = packet.ReadByte();
             //var typeString = ((UpdateType2)type).ToString();
@@ -81,6 +82,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                         var guid = packet.ReadPackedGuid("GUID", i);
                         var updateValues = new UpdateValues();
                         CoreParsers.UpdateHandler.ReadValuesUpdateBlock(packet, updateValues, guid, i);
+                        updateObject.Updated.Add(new UpdateObject { Guid = guid, Values = updateValues });
                         break;
                     }
                     case "CreateObject1":
@@ -89,11 +91,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                         var guid = packet.ReadPackedGuid("GUID", i);
                         var createObject = new CreateObject() { Guid = guid, Values = new() };
                         ReadCreateObjectBlock(packet, createObject, guid, map, i);
+                        updateObject.Created.Add(createObject);
                         break;
                     }
                     case "DestroyObjects":
                     {
-                        CoreParsers.UpdateHandler.ReadObjectsBlock(packet, i);
+                        CoreParsers.UpdateHandler.ReadDestroyObjectsBlock(packet, i);
                         break;
                     }
                 }
@@ -800,7 +803,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadSingle("Swim Speed", index); // 180
                 moveInfo.Position.Z = packet.ReadSingle(); // 36
 
-                packet.WriteLine("[{0}] GUID 1: {1}", index, new WowGuid64(BitConverter.ToUInt64(guid1, 0)));
+                packet.WriteGuid("GUID 1", guid1, index);
                 packet.WriteLine("[{0}] Position: {1}", index, moveInfo.Position);
                 packet.WriteLine("[{0}] Orientation: {1}", index, moveInfo.Orientation);
             }
@@ -882,7 +885,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadXORByte(goTransportGuid, 7); // 383
 
                 moveInfo.TransportGuid = new WowGuid64(BitConverter.ToUInt64(goTransportGuid, 0));
-                packet.WriteLine("[{0}] GO Transport GUID {1}", index, moveInfo.TransportGuid);
+                packet.WriteGuid("GO Transport GUID", goTransportGuid, index);
                 packet.WriteLine("[{0}] GO Transport Position: {1}", index, moveInfo.TransportOffset);
             }
 

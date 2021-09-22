@@ -490,7 +490,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 quest.LogDescription = packet.ReadWoWString("QuestObjectives", questObjectivesLen); // +158
                 packet.ReadUInt32("RewArenaPoints"); // +1790
                 packet.ReadUInt32("Reward Choice ItemID 6"); // +2983
-                packet.ReadUInt32("Suggested Players"); // +13
+                quest.SuggestedGroupNum = packet.ReadUInt32("Suggested Players"); // +13
                 packet.ReadUInt32("RepObjectiveFaction"); // +6
                 packet.ReadUInt32("Required Source Item ID 2"); // +2961
                 packet.ReadUInt32("Reward ItemID 2"); // +2953
@@ -516,14 +516,14 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ReadUInt32("Required Source Item ID 3"); // +2962
                 packet.ReadUInt32("RewSkillPoints"); // +1792
                 quest.LogTitle = packet.ReadWoWString("QuestTitle", questTitleLen); // +30
-                var type = packet.ReadInt32E<QuestType>("Type"); // +12
+                quest.QuestInfoID = packet.ReadInt32E<QuestInfo>("Type"); // +12
                 packet.ReadUInt32("RepObjectiveValue2"); // +15
                 packet.ReadUInt32("unk11"); // +2982
                 packet.ReadUInt32("PlayersSlain"); // +1788
                 packet.ReadUInt32("PointMapId"); // +26
                 packet.ReadUInt32("NextQuestInChain"); // +14
                 packet.ReadUInt32("Reward Choice ItemID 1"); // +2968
-                var QuestGiverTargetName = packet.ReadWoWString("QuestGiverTargetName", questGiverTargetNameLen); // +2049
+                quest.QuestGiverTargetName = packet.ReadWoWString("QuestGiverTargetName", questGiverTargetNameLen); // +2049
                 packet.ReadUInt32("dword2E8C"); // +2979
                 packet.ReadUInt32("Required Source Item ID 4"); // +2963
                 packet.ReadSingle("Point X"); // +27
@@ -689,11 +689,12 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.SMSG_QUEST_GIVER_QUEST_COMPLETE)]
         public static void HandleQuestCompleted510(Packet packet)
         {
+            var questComplete = packet.Holder.QuestGiverQuestComplete = new();
             packet.ReadBit("Unk Bit 2"); // 17
             packet.ReadBit("Unk Bit 1"); // 16 if true EVENT_QUEST_FINISHED is fired, target cleared and gossip window is open
             packet.ReadInt32("BonusTalents"); // 28
             packet.ReadInt32("Money"); // 32
-            packet.ReadInt32<QuestId>("Quest ID"); // 24
+            questComplete.QuestId = (uint)packet.ReadInt32<QuestId>("Quest ID");
             packet.ReadInt32("RewSkillId"); // 40
             packet.ReadInt32("XP"); // 36
             packet.ReadInt32("RewSkillPoints"); // 20
