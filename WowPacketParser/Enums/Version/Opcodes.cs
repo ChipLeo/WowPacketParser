@@ -552,6 +552,8 @@ namespace WowPacketParser.Enums.Version
         {
             switch (GetOpcodeDefiningBuild(build))
             {
+                case ClientVersionBuild.V1_12_1_5875:
+                    return Opcodes_2_4_3.Opcodes(direction);
                 case ClientVersionBuild.V3_3_5a_12340:
                     return Opcodes_3_3_5.Opcodes(direction);
                 case ClientVersionBuild.V4_0_3_13329:
@@ -592,6 +594,8 @@ namespace WowPacketParser.Enums.Version
                     return Opcodes_5_4_7.Opcodes(direction);
                 case ClientVersionBuild.V5_4_8_18291:
                     return Opcodes_5_4_8.Opcodes(direction);
+                case ClientVersionBuild.V5_4_8_18414:
+                    return Opcodes_5_4_8a.Opcodes(direction);
                 case ClientVersionBuild.V6_0_2_19033:
                     return Opcodes_6_0_2.Opcodes(direction);
                 case ClientVersionBuild.V6_0_3_19103:
