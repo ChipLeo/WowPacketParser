@@ -470,7 +470,9 @@ namespace WowPacketParser.Parsing.Parsers
             PacketGossipSelect packetGossip = packet.Holder.GossipSelect = new();
 
             packetGossip.GossipUnit = packet.ReadGuid("GUID");
-            var menuEntry = packetGossip.MenuId = packet.ReadUInt32("Menu Id");
+            uint menuEntry = 0;
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_3_8606))
+                menuEntry = packetGossip.MenuId = packet.ReadUInt32("Menu Id");
             var gossipId = packetGossip.OptionId = packet.ReadUInt32("GossipMenu Id");
 
             if (packet.CanRead()) // if ( byte_F3777C[v3] & 1 )
