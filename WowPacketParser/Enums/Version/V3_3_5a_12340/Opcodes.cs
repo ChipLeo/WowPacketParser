@@ -429,6 +429,7 @@ namespace WowPacketParser.Enums.Version.V3_3_5a_12340
             {Opcode.CMSG_LFG_LFR_LEAVE, 0x35F},
             {Opcode.CMSG_LFG_PROPOSAL_RESULT, 0x362},
             {Opcode.CMSG_CLEAR_LOOKING_FOR_GROUP, 0x363},
+            {Opcode.CMSG_SET_LOOKING_FOR_MORE, 0x365},
             {Opcode.CMSG_LFG_SET_COMMENT, 0x366},
             {Opcode.CMSG_LFG_SET_ROLES, 0x36A},
             {Opcode.CMSG_LFG_SET_NEEDS, 0x36B},
