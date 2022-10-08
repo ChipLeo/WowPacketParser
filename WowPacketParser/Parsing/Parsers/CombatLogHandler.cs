@@ -240,7 +240,7 @@ namespace WowPacketParser.Parsing.Parsers
                         {
                                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
                                     packet.ReadPackedGuid("Target", index, i, j);
-                                else packet.ReadGuid("Target", index, i, j);
+                                else if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_3_2_7741)) packet.ReadGuid("Target", index, i, j); // for V2_3_0_7561
                                 break;
                         }
                         case SpellEffect.Resurrect:
