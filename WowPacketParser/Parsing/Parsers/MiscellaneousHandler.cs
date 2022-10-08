@@ -266,8 +266,16 @@ namespace WowPacketParser.Parsing.Parsers
             packet.ReadGuid("GUID");
             packet.ReadUInt32("Name length");
             packet.ReadCString("Resurrector Name");
-            packet.ReadBool("Resurrection Sickness");
-            packet.ReadBool("Use Timer");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_3_5a_12340))
+            {
+                packet.ReadBool("Resurrection Sickness");
+                packet.ReadBool("Use Timer");
+            }
+            else
+            {
+                packet.ReadByte("Resurrection Sickness");
+                packet.ReadByte("Use Timer");
+            }
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_0_6a_13623))
                 packet.ReadInt32<SpellId>("Spell ID");   // Used only for: <if (Spell ID == 83968 && Unit_HasAura(95223) return 1;>
         }
