@@ -6,6 +6,12 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
 {
     public static class TokenHandler
     {
+        [Parser(Opcode.CMSG_CONSUMABLE_TOKEN_CAN_VETERAN_BUY)]
+        public static void HandleTokenCanVeteranBuy(Packet packet)
+        {
+            packet.ReadInt32("UnkInt32");
+        }
+
         [Parser(Opcode.SMSG_UPDATE_WOW_TOKEN_COUNT_RESPONSE)]
         public static void HandleTokenUpdateTokenCountResponse(Packet packet)
         {
