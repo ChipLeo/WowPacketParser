@@ -1116,10 +1116,11 @@ namespace WowPacketParser.Parsing.Parsers
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_2_9056))
                 packet.ReadByte("Cast count");
             packet.ReadUInt32<SpellId>("Spell ID");
-            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_2_9056))
-                packet.ReadByteE<SpellCastFailureReason>("Reason");
-            else if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_1_0_9767))
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_3_9183))
                 packet.ReadInt32E<SpellCastFailureReason>("Reason");
+            else if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_2_9056))
+                packet.ReadByteE<SpellCastFailureReason>("Reason");
+
         }
 
         [Parser(Opcode.SMSG_SPELL_INSTAKILL_LOG)]
