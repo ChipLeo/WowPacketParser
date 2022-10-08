@@ -170,7 +170,7 @@ namespace WowPacketParser.Parsing.Parsers
                             case HighGuidType.Transport:
                             case HighGuidType.DynamicObject:
                             case HighGuidType.BattlePet:
-                            //case HighGuidType.Pet:
+                            case HighGuidType.Pet:
                             case HighGuidType.Dragonkin:
                                 packet.ReadInt32("Receiver Name Length");
                                 text.ReceiverName = packet.ReadCString("Receiver Name");
