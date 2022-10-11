@@ -215,7 +215,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 gossipMenuOption.OptionID = packet.ReadUInt32("OptionID", i);
                 gossipMenuOption.BoxCoded = packet.ReadBool("Box", i);
                 gossipMenuOption.OptionText = packet.ReadWoWString("Text", optionTextLen[i], i);
-                gossipMenuOption.OptionIcon = packet.ReadByteE<GossipOptionIcon>("Icon", i);
+                gossipMenuOption.OptionNpc = packet.ReadByteE<GossipOptionNpc>("OptionNPC", i);
 
                 if (!string.IsNullOrEmpty(boxText))
                     gossipMenuOption.BoxText = boxText;
@@ -225,7 +225,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packetGossip.Options.Add(new GossipMessageOption()
                 {
                     OptionIndex = gossipMenuOption.OptionID.Value,
-                    OptionIcon = (int)gossipMenuOption.OptionIcon,
+                    OptionNpc = (int)gossipMenuOption.OptionNpc,
                     BoxCoded = gossipMenuOption.BoxCoded.Value,
                     BoxCost = gossipMenuOption.BoxMoney.Value,
                     Text = gossipMenuOption.OptionText,
