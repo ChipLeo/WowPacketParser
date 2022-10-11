@@ -19,7 +19,7 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
             };
 
             gossipOption.OptionID = (uint)packet.ReadInt32("ClientOption", idx);
-            gossipOption.OptionIcon = (GossipOptionIcon?)packet.ReadByte("OptionNPC", idx);
+            gossipOption.OptionNpc = (GossipOptionNpc?)packet.ReadByte("OptionNPC", idx);
             gossipOption.BoxCoded = packet.ReadByte("OptionFlags", idx) != 0;
             gossipOption.BoxMoney = (uint)packet.ReadInt32("OptionCost", idx);
 
