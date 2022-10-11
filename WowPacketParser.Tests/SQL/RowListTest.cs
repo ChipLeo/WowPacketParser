@@ -50,11 +50,11 @@ namespace WowPacketParser.Tests.SQL
             _condList.Add(new TestDataModel());
             Assert.AreEqual(2, _condList.Count);
 
-            _condList.Add(new TestDataModel {ID = 3, TestInt1 = 5});
-            _condList.Add(new TestDataModel {ID = 4, TestInt1 = 6});
+            _condList.Add(new TestDataModel { ID = 3, TestInt1 = 5 });
+            _condList.Add(new TestDataModel { ID = 4, TestInt1 = 6 });
             Assert.AreEqual(4, _condList.Count);
 
-            _condList.Add(new TestDataModel {ID = 3, TestInt1 = 5});
+            _condList.Add(new TestDataModel { ID = 3, TestInt1 = 5 });
             Assert.AreEqual(4, _condList.Count);
         }
 

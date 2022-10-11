@@ -105,7 +105,7 @@ namespace WowPacketParser.Tests.Misc
 
             Assert.IsFalse(guid1.Equals(guid2));
             Assert.IsTrue(guid2.Equals(guid25));
-            Assert.IsTrue(guid2.Equals((object) guid25));
+            Assert.IsTrue(guid2.Equals((object)guid25));
             Assert.IsFalse(guid2.Equals(new object()));
             Assert.IsTrue(guid3.Equals(guid3));
         }

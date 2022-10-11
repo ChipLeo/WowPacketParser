@@ -1,9 +1,9 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using NUnit.Framework;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 
@@ -32,12 +32,12 @@ namespace WowPacketParser.Tests.Misc
         public void TestHexStringToBinary()
         {
             Assert.AreEqual(new byte[0], Utilities.HexStringToBinary(string.Empty));
-            Assert.AreEqual(new byte[] {1, 2, 3, 4}, Utilities.HexStringToBinary("01020304"));
-            Assert.AreEqual(new byte[] {255, 0}, Utilities.HexStringToBinary("FF00"));
+            Assert.AreEqual(new byte[] { 1, 2, 3, 4 }, Utilities.HexStringToBinary("01020304"));
+            Assert.AreEqual(new byte[] { 255, 0 }, Utilities.HexStringToBinary("FF00"));
 
             Assert.Throws<ArgumentOutOfRangeException>(() => Utilities.HexStringToBinary("B"));
         }
-        
+
         [Test]
         public void TestGetDateTimeFromGameTime()
         {

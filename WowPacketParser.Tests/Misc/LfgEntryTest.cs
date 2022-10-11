@@ -62,7 +62,7 @@ namespace WowPacketParser.Tests.Misc
             var lfg2 = new LfgEntry(0);
 
             Assert.IsFalse(lfg1.Equals(lfg2));
-            Assert.IsTrue(lfg1.Equals((object) lfg15));
+            Assert.IsTrue(lfg1.Equals((object)lfg15));
             Assert.IsTrue(lfg1.Equals(lfg1));
             Assert.IsTrue(lfg1.Equals(lfg15));
         }

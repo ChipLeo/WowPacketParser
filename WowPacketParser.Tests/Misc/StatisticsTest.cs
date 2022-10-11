@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using NUnit.Framework;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 
@@ -140,7 +140,7 @@ namespace WowPacketParser.Tests.Misc
             packet2.Status = ParsedStatus.NotParsed;
             packet3.Status = ParsedStatus.NoStructure;
 
-            var packets = new List<Packet> {packet1, packet2, packet3};
+            var packets = new List<Packet> { packet1, packet2, packet3 };
 
             var stats = Statistics.BuildStats(packets);
 

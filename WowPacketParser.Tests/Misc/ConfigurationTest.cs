@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Configuration;
+using NUnit.Framework;
 using Configuration = WowPacketParser.Misc.Configuration;
 
 namespace WowPacketParser.Tests.Misc
@@ -44,10 +44,10 @@ namespace WowPacketParser.Tests.Misc
         [Test]
         public void TestGetString()
         {
-            Assert.AreEqual("salsa",      _config.GetString("tequilla", string.Empty));
+            Assert.AreEqual("salsa", _config.GetString("tequilla", string.Empty));
             Assert.AreEqual(string.Empty, _config.GetString("gringo", "test"));
-            Assert.AreEqual("1",          _config.GetString("mariachi", string.Empty));
-            Assert.AreEqual("test",       _config.GetString("si", "test"));
+            Assert.AreEqual("1", _config.GetString("mariachi", string.Empty));
+            Assert.AreEqual("test", _config.GetString("si", "test"));
         }
 
         [Test]

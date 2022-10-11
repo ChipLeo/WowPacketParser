@@ -1,17 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFramework>net6.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
 
-    <Authors>TrinityCore</Authors>
-
-    <Copyright>Copyright © 2013-2020</Copyright>
-
     <PackageProjectUrl>https://www.trinitycore.org/</PackageProjectUrl>
-
-    <RepositoryUrl>https://github.com/TrinityCore/WowPacketParser</RepositoryUrl>
 
     <RepositoryType>GitHub</RepositoryType>
 
@@ -45,6 +40,21 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WowPacketParser\WowPacketParser.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
