@@ -78,7 +78,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
                 packet.ParseBitStream(guid64[i], 3);
 
                 unkv42 = packet.ReadInt32("unkv42", i); // 42
-                packet.WriteLine("[{0}] {1}", i, Utilities.ByteArrayToHexString(packet.ReadBytes(unkv42)));
+                packet.WriteLine("[{0}] {1}", i, Utilities.ByteArrayToHexTable(packet.ReadBytes(unkv42)));
                 for (var j = 0; j < enchCount[i]; j++)
                 {
                     packet.ReadInt32("unk100", i, j); // 100

@@ -808,7 +808,6 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
         [Parser(Opcode.CMSG_QUERY_BATTLEFIELD_STATE)]
         [Parser(Opcode.CMSG_REQUEST_PVP_REWARDS)]
         [Parser(Opcode.CMSG_REQUEST_RATED_BG_STATS)]
-        [Parser(Opcode.CMSG_REQUEST_RATED_INFO)]
         public static void HandleBattlegroundNull(Packet packet)
         {
         }

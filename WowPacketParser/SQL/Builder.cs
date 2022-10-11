@@ -63,38 +63,12 @@ namespace WowPacketParser.SQL
             }
         }
 
-        public static void DumpSQL(string prefix, string fileName, string header)
+        public static void DumpFile(string prefix, string fileName, string header, List<MethodInfo> builderMethods, Dictionary<WowGuid, Unit> units, Dictionary<WowGuid, GameObject> gameObjects)
         {
             var startTime = DateTime.Now;
-
-            LoadNames();
-
-            var units = Storage.Objects.IsEmpty()
-                ? new Dictionary<WowGuid, Unit>()                                                               // empty dict if there are no objects
-                : Storage.Objects.Where(
-                    obj =>
-                        obj.Value.Item1.Type == ObjectType.Unit && obj.Key.GetHighType() != HighGuidType.Pet && // remove pets
-                        !obj.Value.Item1.IsTemporarySpawn())                                                    // remove temporary spawns
-                    .OrderBy(pair => pair.Value.Item2)                                                          // order by spawn time
-                    .ToDictionary(obj => obj.Key, obj => obj.Value.Item1 as Unit);
-
-            var gameObjects = Storage.Objects.IsEmpty()
-                ? new Dictionary<WowGuid, GameObject>()                                                         // empty dict if there are no objects
-                : Storage.Objects.Where(obj => obj.Value.Item1.Type == ObjectType.GameObject)
-                    .OrderBy(pair => pair.Value.Item2)                                                          // order by spawn time
-                    .ToDictionary(obj => obj.Key, obj => obj.Value.Item1 as GameObject);
-
-            foreach (var obj in Storage.Objects)
-                obj.Value.Item1.LoadValuesFromUpdateFields();
-
             using (var store = new SQLFile(fileName))
             {
-                var builderMethods = Assembly.GetExecutingAssembly()
-                    .GetTypes()
-                    .Where(type => type.GetCustomAttributes(typeof (BuilderClassAttribute), true).Length > 0)
-                    .SelectMany(x => x.GetMethods())
-                    .Where(y => y.GetCustomAttributes().OfType<BuilderMethodAttribute>().Any())
-                    .ToList();
+                store.WriteData(UnitMisc.CreatureEquip(units)); // ensure this is run before spawns
 
                 for (int i = 1; i <= builderMethods.Count; i++)
                 {
@@ -103,32 +77,7 @@ namespace WowPacketParser.SQL
 
                     if (attr.CheckVersionMismatch)
                     {
-                        if (!((ClientVersion.Expansion == ClientType.TheBurningCrusade &&
-                               Settings.TargetedDatabase == TargetedDatabase.TheBurningCrusade)
-                              ||
-                              (ClientVersion.Expansion == ClientType.WrathOfTheLichKing &&
-                               Settings.TargetedDatabase == TargetedDatabase.WrathOfTheLichKing)
-                              ||
-                              (ClientVersion.Expansion == ClientType.Cataclysm &&
-                               Settings.TargetedDatabase == TargetedDatabase.Cataclysm)
-                              ||
-                              (ClientVersion.Expansion == ClientType.MistsOfPandaria &&
-                               Settings.TargetedDatabase == TargetedDatabase.MistsOfPandaria)
-                              ||
-                              (ClientVersion.Expansion == ClientType.WarlordsOfDraenor &&
-                               Settings.TargetedDatabase == TargetedDatabase.WarlordsOfDraenor)
-                              ||
-                              (ClientVersion.Expansion == ClientType.Legion &&
-                               Settings.TargetedDatabase == TargetedDatabase.Legion)
-                              ||
-                              (ClientVersion.Expansion == ClientType.BattleForAzeroth &&
-                               Settings.TargetedDatabase == TargetedDatabase.BattleForAzeroth)
-                              ||
-                              (ClientVersion.Expansion == ClientType.Shadowlands &&
-                               Settings.TargetedDatabase == TargetedDatabase.Shadowlands)
-                              ||
-                              (ClientVersion.Expansion == ClientType.Classic &&
-                               Settings.TargetedDatabase == TargetedDatabase.Classic)))
+                        if (!GetExpectedTargetDatabasesForExpansion(ClientVersion.Expansion).Contains(Settings.TargetedDatabase))
                         {
                             Trace.WriteLine(
                                 $"{i}/{builderMethods.Count} - Error: Couldn't generate SQL output of {method.Name} since the targeted database and the sniff version don't match.");
@@ -161,7 +110,80 @@ namespace WowPacketParser.SQL
                     : "No SQL files created -- empty.");
                 var endTime = DateTime.Now;
                 var span = endTime.Subtract(startTime);
-                Trace.WriteLine($"Finished SQL file in {span.ToFormattedString()}.");
+                Trace.WriteLine($"Finished SQL file {fileName} in {span.ToFormattedString()}.");
+            }
+        }
+
+        public static void DumpSQL(string prefix, string fileName, string header)
+        {
+            var startTime = DateTime.Now;
+
+            LoadNames();
+
+            var units = Storage.Objects.IsEmpty()
+                ? new Dictionary<WowGuid, Unit>()                                                               // empty dict if there are no objects
+                : Storage.Objects.Where(
+                    obj =>
+                        obj.Value.Item1.Type == ObjectType.Unit && obj.Key.GetHighType() != HighGuidType.Pet && // remove pets
+                        !obj.Value.Item1.IsTemporarySpawn())                                                    // remove temporary spawns
+                    .OrderBy(pair => pair.Value.Item2)                                                          // order by spawn time
+                    .ToDictionary(obj => obj.Key, obj => obj.Value.Item1 as Unit);
+
+            var gameObjects = Storage.Objects.IsEmpty()
+                ? new Dictionary<WowGuid, GameObject>()                                                         // empty dict if there are no objects
+                : Storage.Objects.Where(obj => obj.Value.Item1.Type == ObjectType.GameObject)
+                    .OrderBy(pair => pair.Value.Item2)                                                          // order by spawn time
+                    .ToDictionary(obj => obj.Key, obj => obj.Value.Item1 as GameObject);
+
+            foreach (var obj in Storage.Objects)
+                obj.Value.Item1.LoadValuesFromUpdateFields();
+
+            var methods = Assembly.GetExecutingAssembly()
+                    .GetTypes()
+                    .Where(type => type.GetCustomAttributes(typeof(BuilderClassAttribute), true).Length > 0)
+                    .SelectMany(x => x.GetMethods());
+            var allMethods = methods.Select(y => new { Method = y, Attributes = y.GetCustomAttributes().OfType<BuilderMethodAttribute>()}).Where(y => y.Attributes.Any()).ToList();
+
+            if (Settings.SplitSQLFile)
+            {
+                fileName = System.IO.Path.ChangeExtension(fileName, null); // remove .sql
+
+                var hotfixMethods = allMethods.Where(x => x.Attributes.First().Database == TargetSQLDatabase.Hotfixes).Select(x => x.Method).ToList();
+                DumpFile(prefix, $"{fileName}_hotfixes.sql", header, hotfixMethods, units, gameObjects);
+
+                var worldMethods = allMethods.Where(x => x.Attributes.First().Database == TargetSQLDatabase.World).Select(x => x.Method).ToList();
+                DumpFile(prefix, $"{fileName}_world.sql", header, worldMethods, units, gameObjects);
+
+                var wppMethods = allMethods.Where(x => x.Attributes.First().Database == TargetSQLDatabase.WPP).Select(x => x.Method).ToList();
+                DumpFile(prefix, $"{fileName}_wpp.sql", header, wppMethods, units, gameObjects);
+            }
+            else
+            {
+                var builderMethods = allMethods.Select(x => x.Method).ToList();
+                DumpFile(prefix, fileName, header, builderMethods, units, gameObjects);
+            }
+        }
+
+        private static List<TargetedDatabase> GetExpectedTargetDatabasesForExpansion(ClientType expansion)
+        {
+            switch (expansion)
+            {
+                case ClientType.TheBurningCrusade:
+                    return new List<TargetedDatabase> { TargetedDatabase.TheBurningCrusade };
+                case ClientType.WrathOfTheLichKing:
+                    return new List<TargetedDatabase> { TargetedDatabase.WrathOfTheLichKing };
+                case ClientType.Cataclysm:
+                    return new List<TargetedDatabase> { TargetedDatabase.Cataclysm };
+                case ClientType.WarlordsOfDraenor:
+                    return new List<TargetedDatabase> { TargetedDatabase.WarlordsOfDraenor };
+                case ClientType.Legion:
+                    return new List<TargetedDatabase> { TargetedDatabase.Legion };
+                case ClientType.BattleForAzeroth: // == ClientType.Classic
+                    return new List<TargetedDatabase> { TargetedDatabase.BattleForAzeroth, TargetedDatabase.Classic };
+                case ClientType.Shadowlands: // == ClientType.BurningCrusadeClassic
+                    return new List<TargetedDatabase> { TargetedDatabase.Shadowlands, TargetedDatabase.Classic };
+                default:
+                    return new List<TargetedDatabase>();
             }
         }
     }

@@ -4,7 +4,7 @@ namespace WowPacketParser.Proto.Processing
 {
     public abstract class PacketProcessor<T> : IPacketProcessor<T>
     {
-        public T? Process(PacketHolder packet)
+        public virtual T? Process(PacketHolder packet)
         {
             switch (packet.KindCase)
             {
@@ -80,6 +80,24 @@ namespace WowPacketParser.Proto.Processing
                     return Process(packet.BaseData, packet.QuestAddKillCredit);
                 case PacketHolder.KindOneofCase.ClientUseItem:
                     return Process(packet.BaseData, packet.ClientUseItem);
+                case PacketHolder.KindOneofCase.ClientQuestGiverChooseReward:
+                    return Process(packet.BaseData, packet.ClientQuestGiverChooseReward);
+                case PacketHolder.KindOneofCase.ClientMove:
+                    return Process(packet.BaseData, packet.ClientMove);
+                case PacketHolder.KindOneofCase.ClientUseGameObject:
+                    return Process(packet.BaseData, packet.ClientUseGameObject);
+                case PacketHolder.KindOneofCase.GossipPoi:
+                    return Process(packet.BaseData, packet.GossipPoi);
+                case PacketHolder.KindOneofCase.GameObjectCustomAnim:
+                    return Process(packet.BaseData, packet.GameObjectCustomAnim);
+                case PacketHolder.KindOneofCase.SpellCastFailed:
+                    return Process(packet.BaseData, packet.SpellCastFailed);
+                case PacketHolder.KindOneofCase.SpellFailure:
+                    return Process(packet.BaseData, packet.SpellFailure);
+                case PacketHolder.KindOneofCase.LoginSetTimeSpeed:
+                    return Process(packet.BaseData, packet.LoginSetTimeSpeed);
+                case PacketHolder.KindOneofCase.AuraUpdateAll:
+                    return Process(packet.BaseData, packet.AuraUpdateAll);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -115,10 +133,19 @@ namespace WowPacketParser.Proto.Processing
         protected virtual T? Process(PacketBase basePacket, PacketNpcTextOld packet) => default;
         protected virtual T? Process(PacketBase basePacket, PacketDbReply packet) => default;
         protected virtual T? Process(PacketBase basePacket, PacketUpdateObject packet) => default;
-        protected virtual T? Process(PacketBase basePacket, PacketQueryPlayerNameResponse packet) => default;
+        protected virtual T? Process(PacketBase basePacket, PacketQueryPlayerNameResponseWrapper packet) => default;
         protected virtual T? Process(PacketBase basePacket, PacketQuestComplete packet) => default;
         protected virtual T? Process(PacketBase basePacket, PacketQuestFailed packet) => default;
         protected virtual T? Process(PacketBase basePacket, PacketQuestAddKillCredit packet) => default;
         protected virtual T? Process(PacketBase basePacket, PacketClientUseItem packet) => default;
+        protected virtual T? Process(PacketBase basePacket, PacketClientQuestGiverChooseReward packet) => default;
+        protected virtual T? Process(PacketBase basePacket, PacketClientMove packet) => default;
+        protected virtual T? Process(PacketBase basePacket, PacketClientUseGameObject packet) => default;
+        protected virtual T? Process(PacketBase basePacket, PacketGossipPoi packet) => default;
+        protected virtual T? Process(PacketBase basePacket, PacketGameObjectCustomAnim packet) => default;
+        protected virtual T? Process(PacketBase basePacket, PacketSpellCastFailed packet) => default;
+        protected virtual T? Process(PacketBase basePacket, PacketSpellFailure packet) => default;
+        protected virtual T? Process(PacketBase basePacket, PacketLoginSetTimeSpeed packet) => default;
+        protected virtual T? Process(PacketBase basePacket, PacketAuraUpdateAll packet) => default;
     }
 }

@@ -6,7 +6,7 @@ using WowPacketParser.Store.Objects.UpdateFields.LegacyImplementation;
 
 namespace WowPacketParser.Store.Objects
 {
-    public class WoWObject
+    public record WoWObject
     {
         public WowGuid Guid;
         public ObjectType Type;
@@ -42,7 +42,7 @@ namespace WowPacketParser.Store.Objects
 
         public bool IsOnTransport()
         {
-            return Movement.TransportGuid != null && !Movement.TransportGuid.IsEmpty();
+            return Movement.Transport != null && !Movement.Transport.Guid.IsEmpty();
         }
 
         public int GetDefaultSpawnTime(uint difficultyID)

@@ -17,6 +17,8 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ReadPackedGuid128("PartyGUID");
             packet.ReadInt32("SequenceNum");
             packet.ReadPackedGuid128("LeaderGUID");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_2_7_45114))
+                packet.ReadByte("LeaderFactionGroup");
 
             var playerCount = packet.ReadUInt32("PlayerListCount");
             var hasLFG = packet.ReadBit("HasLfgInfo");
@@ -28,16 +30,21 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 packet.ResetBitReader();
                 var playerNameLength = packet.ReadBits(6);
                 var voiceStateLength = packet.ReadBits(6);
-                packet.ReadBit("FromSocialQueue", i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_2_7_45114))
+                    packet.ReadBit("Connected", i);
                 packet.ReadBit("VoiceChatSilenced", i);
+                packet.ReadBit("FromSocialQueue", i);
 
                 packet.ReadPackedGuid128("Guid", i);
 
-                packet.ReadByte("Status", i);
+                if (ClientVersion.RemovedInVersion(ClientVersionBuild.V9_2_7_45114))
+                    packet.ReadByte("Status", i);
                 packet.ReadByte("Subgroup", i);
                 packet.ReadByte("Flags", i);
                 packet.ReadByte("RolesAssigned", i);
                 packet.ReadByteE<Class>("Class", i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_2_5_43903))
+                    packet.ReadByte("FactionGroup", i);
 
                 packet.ReadWoWString("Name", playerNameLength, i);
                 packet.ReadDynamicString("VoiceStateID", voiceStateLength, i);

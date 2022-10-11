@@ -24,6 +24,11 @@ namespace WowPacketParser.SQL.Builders
             if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.creature_template_addon))
                 return string.Empty;
 
+            CreatureTemplateAddon templateAddonDefault = null;
+            if (Settings.DBEnabled && Settings.SkipRowsWithFallbackValues)
+                templateAddonDefault = SQLUtil.GetDefaultObject<CreatureTemplateAddon>();
+
+            var dbFields = SQLUtil.GetDBFields<CreatureTemplateAddon>(false);
             var addons = new DataBag<CreatureTemplateAddon>();
             foreach (var unit in units)
             {
@@ -65,9 +70,13 @@ namespace WowPacketParser.SQL.Builders
                     AIAnimKit = npc.AIAnimKit.GetValueOrDefault(0),
                     MovementAnimKit = npc.MovementAnimKit.GetValueOrDefault(0),
                     MeleeAnimKit = npc.MeleeAnimKit.GetValueOrDefault(0),
+                    VisibilityDistanceType = npc.VisibilityDistanceType,
                     Auras = auras,
                     CommentAuras = commentAuras
                 };
+
+                if (templateAddonDefault != null && SQLUtil.AreDBFieldsEqual(addon, templateAddonDefault, dbFields))
+                    continue;
 
                 if (addons.ContainsKey(addon))
                     continue;
@@ -97,9 +106,9 @@ namespace WowPacketParser.SQL.Builders
             foreach (var pair in entries.SelectMany(entry => entry))
             {
                 if (list.ContainsKey(pair.Key.GetEntry()))
-                    list[pair.Key.GetEntry()].Add(pair.Value.UnitData.ScalingLevelDelta);
+                    list[pair.Key.GetEntry()].Add(pair.Value.UnitData.ScalingLevelDelta ?? 0);
                 else
-                    list.Add(pair.Key.GetEntry(), new List<int> { pair.Value.UnitData.ScalingLevelDelta });
+                    list.Add(pair.Key.GetEntry(), new List<int> { pair.Value.UnitData.ScalingLevelDelta ?? 0 });
             }
 
             var result = list.ToDictionary(pair => pair.Key, pair => Tuple.Create(pair.Value.Min(), pair.Value.Max()));
@@ -195,6 +204,20 @@ namespace WowPacketParser.SQL.Builders
         }
 
         [BuilderMethod]
+        public static string CreatureTemplateSpells()
+        {
+            if (Storage.CreatureTemplateSpells.IsEmpty())
+                return string.Empty;
+
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.creature_template))
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.CreatureTemplateSpells);
+
+            return SQLUtil.Compare(Storage.CreatureTemplateSpells, templatesDb, StoreNameType.Unit);
+        }
+
+        [BuilderMethod]
         public static string NpcTrainer()
         {
             if (Storage.NpcTrainers.IsEmpty())
@@ -266,7 +289,17 @@ namespace WowPacketParser.SQL.Builders
                 vendor => StoreGetters.GetName(vendor.Type <= 1 ? StoreNameType.Item : StoreNameType.Currency, vendor.Item.GetValueOrDefault(), false));
         }
 
-        [BuilderMethod(Units = true)]
+        public static CreatureEquipment GetDuplicateEquipFromList(CreatureEquipment newEquip, List<CreatureEquipment> equipList)
+        {
+            for (int i = 0; i < equipList.Count; i++)
+            {
+                if (equipList[i].EquipEqual(newEquip))
+                    return equipList[i];
+            }
+            return null;
+        }
+
+        // [BuilderMethod(Units = true)] // this method has to be run before generating creature spawns, with this attribute the order isn't ensured
         public static string CreatureEquip(Dictionary<WowGuid, Unit> units)
         {
             if (units.Count == 0)
@@ -276,6 +309,8 @@ namespace WowPacketParser.SQL.Builders
                 return string.Empty;
 
             var equips = new DataBag<CreatureEquipment>();
+            var equipsDb = new RowList<CreatureEquipment>();
+            var newEntriesDict = new Dictionary<uint? /*CreatureID*/, List<CreatureEquipment>>();
             foreach (var npc in units)
             {
                 if (Settings.AreaFilters.Length > 0)
@@ -286,45 +321,48 @@ namespace WowPacketParser.SQL.Builders
                     if (!(npc.Value.Map.ToString(CultureInfo.InvariantCulture).MatchesFilters(Settings.MapFilters)))
                         continue;
 
-                var equipment = npc.Value.UnitData.VirtualItems;
-                if (equipment.Length != 3)
+                var equip = npc.Value.GetEquipment();
+                if (equip == null)
                     continue;
 
-                if (equipment[0].ItemID == 0 && equipment[1].ItemID == 0 && equipment[2].ItemID == 0)
-                    continue;
-
-                var equip = new CreatureEquipment
+                if (SQLDatabase.CreatureEquipments.TryGetValue(npc.Key.GetEntry(), out var equipListDB))
                 {
-                    CreatureID = npc.Key.GetEntry(),
-                    ItemID1 = (uint)equipment[0].ItemID,
-                    ItemID2 = (uint)equipment[1].ItemID,
-                    ItemID3 = (uint)equipment[2].ItemID,
+                    var equipDB = GetDuplicateEquipFromList(equip, equipListDB);
+                    if (equipDB != null)
+                    {
+                        if (equipDB.VerifiedBuild >= equip.VerifiedBuild)
+                            continue;
 
-                    AppearanceModID1 = equipment[0].ItemAppearanceModID,
-                    AppearanceModID2 = equipment[1].ItemAppearanceModID,
-                    AppearanceModID3 = equipment[2].ItemAppearanceModID,
-
-                    ItemVisual1 = equipment[0].ItemVisual,
-                    ItemVisual2 = equipment[1].ItemVisual,
-                    ItemVisual3 = equipment[2].ItemVisual
-                };
-
-
-                if (equips.Contains(equip))
-                    continue;
-
-                for (uint i = 1;; i++)
+                        equip.ID = equipDB.ID;
+                        equipsDb.Add(equipDB); // add to entries to compare to
+                    }
+                    else
+                    {
+                        equip.ID = (uint)equipListDB.Count + 1;
+                        equipListDB.Add(equip);
+                    }
+                }
+                else
                 {
-                    equip.ID = i;
-                    if (!equips.ContainsKey(equip))
-                        break;
+                    if (newEntriesDict.TryGetValue(equip.CreatureID, out var equipList))
+                    {
+                        if (GetDuplicateEquipFromList(equip, equipList) != null)
+                            continue;
+
+                        equip.ID = (uint)equipList.Count + 1;
+                        equipList.Add(equip);
+                    }
+                    else
+                    {
+                        equip.ID = 1;
+                        newEntriesDict.Add(equip.CreatureID, new List<CreatureEquipment>() { equip });
+                    }
                 }
 
                 equips.Add(equip);
             }
 
-            var equipsDb = SQLDatabase.Get(equips);
-            return SQLUtil.Compare(equips, equipsDb, StoreNameType.Unit);
+            return SQLUtil.Compare(Settings.SQLOrderByKey ? equips.OrderBy(x => x.Item1.CreatureID).ThenBy(y => y.Item1.ID) : equips, equipsDb, StoreNameType.Unit);
         }
 
         [BuilderMethod]
@@ -380,24 +418,79 @@ namespace WowPacketParser.SQL.Builders
         }
 
         [BuilderMethod]
-        public static string Gossip()
+        public static string Gossip925()
         {
-            if (Storage.Gossips.IsEmpty() && Storage.GossipMenuOptions.IsEmpty())
+            if (Storage.GossipToNpcTextMap.IsEmpty() || Settings.TargetedDatabase < TargetedDatabase.Shadowlands)
                 return string.Empty;
 
+            var count = 0;
+            var textRows = new RowList<NpcText925>();
+            var gossipRows = new RowList<GossipMenu925>();
+            foreach (var entry in Storage.GossipToNpcTextMap)
+            {
+                var npcText = entry.Value.Item1;
+                npcText.ConvertToDBStruct();
+                npcText.ID = $"@NPCTEXTID+{count}";
+
+                string comment = "";
+                if (npcText.ObjectType == ObjectType.GameObject)
+                    comment = StoreGetters.GetName(StoreNameType.GameObject, (int)npcText.ObjectEntry);
+                else if (npcText.ObjectType == ObjectType.Unit)
+                    comment = StoreGetters.GetName(StoreNameType.Unit, (int)npcText.ObjectEntry);
+
+                var npcTextRow = new Row<NpcText925>();
+                npcTextRow.Data = npcText;
+                npcTextRow.Comment = comment;
+                textRows.Add(npcTextRow);
+
+                var gossip = new Row<GossipMenu925>();
+                gossip.Data.MenuID = entry.Key;
+                gossip.Data.TextID = npcText.ID;
+                gossip.Comment = comment;
+
+                gossipRows.Add(gossip);
+
+                count++;
+            }
+
+            StringBuilder result = new StringBuilder();
+            var textDelete = new SQLDelete<NpcText925>(Tuple.Create("@NPCTEXTID+0", "@NPCTEXTID+" + (count - 1)));
+            result.Append(textDelete.Build());
+            var textInsert = new SQLInsert<NpcText925>(textRows, false);
+            result.Append(textInsert.Build());
+            result.Append('\n');
+            var gossipDelete = new SQLDelete<GossipMenu925>(gossipRows);
+            result.Append(gossipDelete.Build());
+            var gossipInsert = new SQLInsert<GossipMenu925>(gossipRows, false);
+            result.Append(gossipInsert.Build());
+
+            return result.ToString();
+        }
+
+        [BuilderMethod]
+        public static string Gossip()
+        {
             var result = "";
 
             // `gossip_menu`
-            if (Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.gossip_menu))
+            if (!Storage.Gossips.IsEmpty() && Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.gossip_menu))
+            {
                 result += SQLUtil.Compare(Storage.Gossips, SQLDatabase.Get(Storage.Gossips),
-                    t => StoreGetters.GetName(StoreNameType.Unit, (int)t.ObjectEntry)); // BUG: GOs can send gossips too
+                    t => StoreGetters.GetName((t.ObjectType == ObjectType.GameObject ? StoreNameType.GameObject : StoreNameType.Unit), (int)t.ObjectEntry));
+            }
+
+            // `gossip_menu_addon`
+            if (Settings.TargetedDatabase > TargetedDatabase.Cataclysm && !Storage.GossipMenuAddons.IsEmpty() && Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.gossip_menu_addon))
+            {
+                result += '\n' + SQLUtil.Compare(Storage.GossipMenuAddons, SQLDatabase.Get(Storage.GossipMenuAddons),
+                    t => StoreGetters.GetName((t.ObjectType == ObjectType.GameObject ? StoreNameType.GameObject : StoreNameType.Unit), (int)t.ObjectEntry));
+            }
 
             // `gossip_menu_option`
-            if (Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.gossip_menu_option))
+            if (!Storage.GossipMenuOptions.IsEmpty() && Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.gossip_menu_option))
             {
-                result += SQLUtil.Compare(Storage.GossipMenuOptions, SQLDatabase.Get(Storage.GossipMenuOptions), t => t.BroadcastTextIDHelper);
-                result += SQLUtil.Compare(Storage.GossipMenuOptionActions, SQLDatabase.Get(Storage.GossipMenuOptionActions), StoreNameType.None);
-                result += SQLUtil.Compare(Storage.GossipMenuOptionBoxes, SQLDatabase.Get(Storage.GossipMenuOptionBoxes), t => t.BroadcastTextIdHelper);
+                var store = Settings.SQLOrderByKey ? Storage.GossipMenuOptions.Values.OrderBy(x => x.Item1.MenuID).ThenBy(y => y.Item1.OptionID).ToArray() : Storage.GossipMenuOptions.Values;
+                result += SQLUtil.Compare(store, SQLDatabase.Get(Storage.GossipMenuOptions.Values), t => t.BroadcastTextIDHelper);
             }
 
             return result;
@@ -415,9 +508,9 @@ namespace WowPacketParser.SQL.Builders
             foreach (var pair in entries.SelectMany(entry => entry))
             {
                 if (list.ContainsKey(pair.Key.GetEntry()))
-                    list[pair.Key.GetEntry()].Add(pair.Value.UnitData.Level);
+                    list[pair.Key.GetEntry()].Add(pair.Value.UnitData.Level ?? 0);
                 else
-                    list.Add(pair.Key.GetEntry(), new List<int> { pair.Value.UnitData.Level });
+                    list.Add(pair.Key.GetEntry(), new List<int> { pair.Value.UnitData.Level ?? 0 });
             }
 
             var result = list.ToDictionary(pair => pair.Key, pair => ValueTuple.Create(pair.Value.Min(), pair.Value.Max()));
@@ -541,11 +634,11 @@ namespace WowPacketParser.SQL.Builders
                 var template = new CreatureTemplateNonWDB
                 {
                     Entry = unit.Key.GetEntry(),
-                    GossipMenuId = npc.GossipId,
+                    GossipMenuId = Storage.CreatureDefaultGossips.GetValueOrDefault(unit.Key.GetEntry()),
                     MinLevel = minMaxLevel.MinLevel,
                     MaxLevel = minMaxLevel.MaxLevel,
                     Faction = (uint)npc.UnitData.FactionTemplate,
-                    NpcFlag = (NPCFlags)Utilities.MAKE_PAIR64(npc.UnitData.NpcFlags[0], npc.UnitData.NpcFlags[1]),
+                    NpcFlag = (NPCFlags)Utilities.MAKE_PAIR64(npc.UnitData.NpcFlags[0] ?? 0, npc.UnitData.NpcFlags[1] ?? 0),
                     SpeedRun = npc.Movement.RunSpeed,
                     SpeedWalk = npc.Movement.WalkSpeed,
                     BaseAttackTime = npc.UnitData.AttackRoundBaseTime[0],
@@ -607,11 +700,8 @@ namespace WowPacketParser.SQL.Builders
                     if (Storage.CreatureTemplates.TryGetValue(unit.Key.GetEntry(), out entry))
                     {
                         var sub = entry.SubName;
-                        if (sub.Length > 0)
-                        {
+                        if (sub != null && sub.Length > 0)
                             template.NpcFlag |= ProcessNpcFlags(sub);
-                            Trace.WriteLine($"Entry: { unit.Key.GetEntry() } NpcFlag: { template.NpcFlag }");
-                        }
                         else // If the SubName doesn't exist or is cached, fall back to DB method
                             template.NpcFlag |= ProcessNpcFlags(subname);
                     }
@@ -837,10 +927,8 @@ namespace WowPacketParser.SQL.Builders
 
             foreach (var unit in units)
             {
-                var row = new Row<NpcSpellClick>();
-
                 var npc = unit.Value;
-                if (npc.UnitData.InteractSpellID == 0)
+                if (npc.UnitData.InteractSpellID == null || npc.UnitData.InteractSpellID == 0)
                     continue;
 
                 if (Settings.AreaFilters.Length > 0)
@@ -851,6 +939,7 @@ namespace WowPacketParser.SQL.Builders
                     if (!npc.Map.ToString(CultureInfo.InvariantCulture).MatchesFilters(Settings.MapFilters))
                         continue;
 
+                var row = new Row<NpcSpellClick>();
                 row.Data.Entry = unit.Key.GetEntry();
                 row.Data.SpellID = (uint)npc.UnitData.InteractSpellID;
 

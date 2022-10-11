@@ -4,13 +4,13 @@ using WowPacketParser.SQL;
 namespace WowPacketParser.Store.Objects
 {
     [DBTableName("quest_offer_reward")]
-    public sealed class QuestOfferReward : IDataModel
+    public sealed record QuestOfferReward : IDataModel
     {
         [DBFieldName("ID", true)]
         public uint? ID;
 
         [DBFieldName("Emote", 4)]
-        public uint?[] Emote;
+        public int?[] Emote;
 
         [DBFieldName("EmoteDelay", 4)]
         public uint?[] EmoteDelay;

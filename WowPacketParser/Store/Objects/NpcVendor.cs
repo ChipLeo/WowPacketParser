@@ -4,7 +4,8 @@ using WowPacketParser.SQL;
 
 namespace WowPacketParser.Store.Objects
 {
-    public sealed class NpcVendor : IDataModel
+    [DBTableName("npc_vendor")]
+    public sealed record NpcVendor : IDataModel
     {
         [DBFieldName("entry", true)]
         public uint? Entry;

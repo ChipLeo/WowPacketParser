@@ -1,4 +1,3 @@
-﻿using System.Collections.Generic;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.PacketStructures;
@@ -7,6 +6,8 @@ using WowPacketParser.Proto;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 using CoreParsers = WowPacketParser.Parsing.Parsers;
+using MovementFlag = WowPacketParser.Enums.v4.MovementFlag;
+using MovementFlag2 = WowPacketParser.Enums.v4.MovementFlag2;
 
 namespace WowPacketParserModule.V6_0_2_19033.Parsers
 {
@@ -31,41 +32,42 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 {
                     var partWriter = new StringBuilderProtoPart(packet.Writer);
                     var guid = packet.ReadPackedGuid128("ObjectGUID", "Destroyed", i);
-                    updateObject.Destroyed.Add(new DestroyedObject(){Guid = guid, Text = partWriter.Text });
+                    updateObject.Destroyed.Add(new DestroyedObject(){Guid = guid, TextStartOffset = partWriter.StartOffset, TextLength = partWriter.Length, Text = partWriter.Text });
                 }
                 for (var i = 0; i < outOfRangeObjCount; i++)
                 {
                     var partWriter = new StringBuilderProtoPart(packet.Writer);
                     var guid = packet.ReadPackedGuid128("ObjectGUID", "OutOfRange", i);
-                    updateObject.OutOfRange.Add(new DestroyedObject(){Guid = guid, Text = partWriter.Text });
+                    updateObject.OutOfRange.Add(new DestroyedObject(){Guid = guid, TextStartOffset = partWriter.StartOffset, TextLength = partWriter.Length, Text = partWriter.Text });
                 }
             }
             packet.ReadUInt32("Data size");
 
             for (var i = 0; i < count; i++)
             {
-                var type = packet.ReadByte();
-                var typeString = ((UpdateTypeCataclysm)type).ToString();
+                var type = (UpdateTypeCataclysm)packet.ReadByte();
 
                 var partWriter = new StringBuilderProtoPart(packet.Writer);
-                packet.AddValue("UpdateType", typeString, i);
-                switch (typeString)
+                packet.AddValue("UpdateType", type.ToString(), i);
+                switch (type)
                 {
-                    case "Values":
+                    case UpdateTypeCataclysm.Values:
                     {
                         var guid = packet.ReadPackedGuid128("Object Guid", i);
-                        var updateValues = new UpdateValues();
-                        CoreParsers.UpdateHandler.ReadValuesUpdateBlock(packet, updateValues, guid, i);
-                        updateObject.Updated.Add(new UpdateObject{Guid = guid, Values = updateValues, Text = partWriter.Text});
+                        var updateValues = new UpdateValues(){Legacy = new()};
+                        CoreParsers.UpdateHandler.ReadValuesUpdateBlock(packet, updateValues.Legacy, guid, i);
+                        updateObject.Updated.Add(new UpdateObject{Guid = guid, Values = updateValues, TextStartOffset = partWriter.StartOffset, TextLength = partWriter.Length, Text = partWriter.Text});
                         break;
                     }
-                    case "CreateObject1":
-                    case "CreateObject2": // Might != CreateObject1 on Cata
+                    case UpdateTypeCataclysm.CreateObject1:
+                    case UpdateTypeCataclysm.CreateObject2: // Might != CreateObject1 on Cata
                     {
                         var guid = packet.ReadPackedGuid128("Object Guid", i);
-                        var createObject = new CreateObject() { Guid = guid, Values = new()};
+                        var createObject = new CreateObject() { Guid = guid, Values = new(){Legacy = new()}, CreateType = type.ToCreateObjectType() };
                         ReadCreateObjectBlock(packet, createObject, guid, map, i);
                         createObject.Text = partWriter.Text;
+                        createObject.TextStartOffset = partWriter.StartOffset;
+                        createObject.TextLength = partWriter.Length;
                         updateObject.Created.Add(createObject);
                         break;
                     }
@@ -76,34 +78,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         private static void ReadCreateObjectBlock(Packet packet, CreateObject createObject, WowGuid guid, uint map, object index)
         {
             ObjectType objType = ObjectTypeConverter.Convert(packet.ReadByteE<ObjectTypeLegacy>("Object Type", index));
-            WoWObject obj;
-            switch (objType)
-            {
-                case ObjectType.Unit:
-                    obj = new Unit();
-                    break;
-                case ObjectType.GameObject:
-                    obj = new GameObject();
-                    break;
-                case ObjectType.Player:
-                    obj = new Player();
-                    break;
-                default:
-                    obj = new WoWObject();
-                    break;
-            }
-
-            obj.Guid = guid;
-            obj.Type = objType;
-            obj.Map = map;
-            obj.Area = CoreParsers.WorldStateHandler.CurrentAreaId;
-            obj.Zone = CoreParsers.WorldStateHandler.CurrentZoneId;
-            obj.PhaseMask = (uint)CoreParsers.MovementHandler.CurrentPhaseMask;
-            obj.Phases = new HashSet<ushort>(CoreParsers.MovementHandler.ActivePhases.Keys);
-            obj.DifficultyID = CoreParsers.MovementHandler.CurrentDifficultyID;
+            WoWObject obj = CoreParsers.UpdateHandler.CreateObject(objType, guid, map);
 
             obj.Movement = ReadMovementUpdateBlock(packet, createObject, guid, index);
-            obj.UpdateFields = CoreParsers.UpdateHandler.ReadValuesUpdateBlockOnCreate(packet, createObject.Values, objType, index);
+            obj.UpdateFields = CoreParsers.UpdateHandler.ReadValuesUpdateBlockOnCreate(packet, createObject.Values.Legacy, objType, index);
             obj.DynamicUpdateFields = CoreParsers.UpdateHandler.ReadDynamicValuesUpdateBlockOnCreate(packet, objType, index);
 
             // If this is the second time we see the same object (same guid,
@@ -253,9 +231,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             if (hasMovementTransport) // 456
             {
+                moveInfo.Transport = new MovementInfo.TransportInfo();
                 var transport = createObject.Transport = new();
-                transport.TransportGuid = moveInfo.TransportGuid = packet.ReadPackedGuid128("TransportGUID", index);
-                transport.Position = moveInfo.TransportOffset = packet.ReadVector4("TransportPosition", index);
+                transport.TransportGuid = moveInfo.Transport.Guid = packet.ReadPackedGuid128("TransportGUID", index);
+                transport.Position = moveInfo.Transport.Offset = packet.ReadVector4("TransportPosition", index);
                 var seat = packet.ReadByte("VehicleSeatIndex", index);
                 transport.Seat = seat;
                 transport.MoveTime = packet.ReadUInt32("MoveTime", index);
@@ -271,12 +250,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 if (hasVehicleRecID)
                     transport.VehicleId = packet.ReadInt32("VehicleRecID", index);
 
-                if (moveInfo.TransportGuid.HasEntry() && moveInfo.TransportGuid.GetHighType() == HighGuidType.Vehicle &&
+                if (moveInfo.Transport.Guid.HasEntry() && moveInfo.Transport.Guid.GetHighType() == HighGuidType.Vehicle &&
                     guid.HasEntry() && guid.GetHighType() == HighGuidType.Creature)
                 {
                     VehicleTemplateAccessory vehicleAccessory = new VehicleTemplateAccessory
                     {
-                        Entry = moveInfo.TransportGuid.GetEntry(),
+                        Entry = moveInfo.Transport.Guid.GetEntry(),
                         AccessoryEntry = guid.GetEntry(),
                         SeatId = seat
                     };
@@ -466,8 +445,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             packet.ResetBitReader();
 
-            moveInfo.Flags = (MovementFlag)packet.ReadBitsE<Enums.MovementFlag>("Movement Flags", 30, index);
-            moveInfo.FlagsExtra = packet.ReadBitsE<MovementFlagExtra>("Extra Movement Flags", ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173) ? 16 : 15, index);
+            moveInfo.Flags = (uint)packet.ReadBitsE<MovementFlag>("Movement Flags", 30, index);
+            moveInfo.Flags2 = (uint)packet.ReadBitsE<MovementFlag2>("Extra Movement Flags", ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173) ? 16 : 15, index);
 
             var hasTransport = packet.ReadBit("Has Transport Data", index);
             var hasFall = packet.ReadBit("Has Fall Data", index);

@@ -400,7 +400,9 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.SMSG_TRIGGER_MOVIE)]
         public static void HandleTriggerSequence(Packet packet)
         {
-            packet.ReadInt32("Sequence Id");
+            packet.ReadInt32("CinematicID");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_5_40772))
+                packet.ReadPackedGuid128("ConversationGuid");
         }
 
         [Parser(Opcode.SMSG_PLAY_SOUND)]
@@ -948,13 +950,13 @@ namespace WowPacketParser.Parsing.Parsers
             }
 
             if (hasMovementFlags)
-                packet.ReadBitsE<MovementFlag>("Movement Flags", 30);
+                packet.ReadBitsE<Enums.v4.MovementFlag>("Movement Flags", 30);
 
             if (hasFallData)
                 hasFallDirection = packet.ReadBit();
 
             if (hasMovementFlags2)
-                packet.ReadBitsE<MovementFlagExtra>("Extra Movement Flags", 12);
+                packet.ReadBitsE<Enums.v4.MovementFlag2>("Extra Movement Flags", 12);
 
             packet.ReadXORByte(guid, 5);
             packet.ReadXORByte(guid, 3);

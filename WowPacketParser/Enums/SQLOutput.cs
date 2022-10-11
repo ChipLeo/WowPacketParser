@@ -18,6 +18,8 @@
         creature_addon,
         creature_equip_template,
         creature_model_info,
+        creature_queststarter,
+        creature_questender,
         creature_template,
         creature_template_addon,
         creature_template_locale,
@@ -25,9 +27,12 @@
         creature_text,
         gameobject,
         gameobject_addon,
+        gameobject_queststarter,
+        gameobject_questender,
         gameobject_template,
         gameobject_template_addon,
         gossip_menu,
+        gossip_menu_addon,
         gossip_menu_option,
         item_template,
         locales_quest,
@@ -57,7 +62,8 @@
         weather_updates,
 
         hotfix_data,
-        hotfix_blob
+        hotfix_blob,
+        hotfix_optional_data
         // ReSharper restore InconsistentNaming
     }
 }

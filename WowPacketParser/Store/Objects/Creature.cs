@@ -5,7 +5,7 @@ using WowPacketParser.SQL;
 namespace WowPacketParser.Store.Objects
 {
     [DBTableName("creature")]
-    public sealed class Creature : IDataModel
+    public sealed record Creature : IDataModel
     {
         [DBFieldName("guid", true, true)]
         public string GUID;
@@ -34,7 +34,7 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("PhaseId", TargetedDatabase.Cataclysm)]
         public string PhaseID;
 
-        [DBFieldName("PhaseGroup")]
+        [DBFieldName("PhaseGroup", TargetedDatabase.Cataclysm)]
         public int? PhaseGroup;
 
         [DBFieldName("modelid")]
@@ -58,8 +58,8 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("spawntimesecs")]
         public int? SpawnTimeSecs;
 
-        [DBFieldName("spawndist")]
-        public float? SpawnDist;
+        [DBFieldName("wander_distance")]
+        public float? WanderDistance;
 
         [DBFieldName("currentwaypoint")]
         public uint? CurrentWaypoint;

@@ -91,6 +91,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void HandleBattlefieldPort(Packet packet)
         {
             LfgHandler.ReadCliRideTicket(packet);
+            packet.ResetBitReader();
             packet.ReadBit("AcceptedInvite");
         }
 
@@ -316,6 +317,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             ReadBattlefieldStatus_Header(packet);
             packet.ReadInt32("AverageWaitTime");
             packet.ReadInt32("WaitTime");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_2_0_42423))
+                packet.ReadInt32("Unused920");
 
             packet.ResetBitReader();
 

@@ -3,18 +3,18 @@
 namespace WowPacketParser.Store.Objects
 {
     [DBTableName("creature_trainer")]
-    public class CreatureTrainer : IDataModel
+    public sealed record CreatureTrainer : IDataModel
     {
-        [DBFieldName("CreatureId", true)]
-        public uint? CreatureId;
+        [DBFieldName("CreatureID", true)]
+        public uint? CreatureID;
 
-        [DBFieldName("TrainerId")]
-        public uint? TrainerId;
+        [DBFieldName("TrainerID")]
+        public uint? TrainerID;
 
         [DBFieldName("MenuID", true)]
         public uint? MenuID;
 
-        [DBFieldName("OptionIndex", true)]
-        public uint? OptionIndex;
+        [DBFieldName("OptionID", true)]
+        public uint? OptionID;
     }
 }

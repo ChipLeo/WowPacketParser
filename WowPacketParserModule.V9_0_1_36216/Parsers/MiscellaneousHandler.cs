@@ -9,6 +9,12 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
 {
     public static class MiscellaneousHandler
     {
+        public static void ReadGameRuleValuePair(Packet packet, params object[] indexes)
+        {
+            packet.ReadInt32("Rule", indexes);
+            packet.ReadInt32("Value", indexes);
+        }
+
         [Parser(Opcode.SMSG_FEATURE_SYSTEM_STATUS)]
         public static void HandleFeatureSystemStatus(Packet packet)
         {
@@ -30,6 +36,19 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
             packet.ReadUInt32("BpayStoreProductDeliveryDelay");
             packet.ReadUInt32("ClubsPresenceUpdateTimer");
             packet.ReadUInt32("HiddenUIClubsPresenceUpdateTimer");
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_2_0_42423))
+            {
+                packet.ReadInt32("GameRuleUnknown1");
+                var gameRuleValuesCount = packet.ReadUInt32("GameRuleValuesCount");
+                packet.ReadInt16("MaxPlayerNameQueriesPerPacket");
+
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_2_7_45114))
+                    packet.ReadInt16("PlayerNameQueryTelemetryInterval");
+
+                for (var i = 0; i < gameRuleValuesCount; ++i)
+                    ReadGameRuleValuePair(packet, "GameRuleValues");
+            }
 
             packet.ResetBitReader();
             packet.ReadBit("VoiceEnabled");
@@ -64,6 +83,14 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
             packet.ReadBit("IsMuted");
             packet.ReadBit("ClubFinderEnabled");
             packet.ReadBit("Unknown901CheckoutRelated");
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_5_40772))
+            {
+                packet.ReadBit("TextToSpeechFeatureEnabled");
+                packet.ReadBit("ChatDisabledByDefault");
+                packet.ReadBit("ChatDisabledByPlayer");
+                packet.ReadBit("LFGListCustomRequiresAuthenticator");
+            }
 
             {
                 packet.ResetBitReader();
@@ -148,8 +175,23 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
             packet.ReadInt32("MinimumExpansionLevel");
             packet.ReadInt32("MaximumExpansionLevel");
 
+            var gameRuleValuesCount = 0u;
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_2_0_42423))
+            {
+                packet.ReadInt32("GameRuleUnknown1");
+                gameRuleValuesCount = packet.ReadUInt32("GameRuleValuesCount");
+                packet.ReadInt16("MaxPlayerNameQueriesPerPacket");
+
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_2_7_45114))
+                    packet.ReadInt16("PlayerNameQueryTelemetryInterval");
+            }
+
             for (int i = 0; i < liveRegionCharacterCopySourceRegionsCount; i++)
                 packet.ReadUInt32("LiveRegionCharacterCopySourceRegion", i);
+
+            for (var i = 0; i < gameRuleValuesCount; ++i)
+                ReadGameRuleValuePair(packet, "GameRuleValues");
         }
 
         [Parser(Opcode.SMSG_SET_ALL_TASK_PROGRESS)]
@@ -189,7 +231,10 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
         public static void HandleWorldServerInfo(Packet packet)
         {
             CoreParsers.MovementHandler.CurrentDifficultyID = packet.ReadUInt32<DifficultyId>("DifficultyID");
-            packet.ReadByte("IsTournamentRealm");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_2_7_45114))
+                packet.ReadBit("IsTournamentRealm");
+            else
+                packet.ReadByte("IsTournamentRealm");
 
             packet.ReadBit("XRealmPvpAlert");
             packet.ReadBit("BlockExitingLoadingScreen");
@@ -205,6 +250,17 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
 
             if (hasInstanceGroupSize)
                 packet.ReadUInt32("InstanceGroupSize");
+        }
+
+        [Parser(Opcode.SMSG_PLAY_SOUND)]
+        public static void HandlePlaySound(Packet packet)
+        {
+            PacketPlaySound packetPlaySound = packet.Holder.PlaySound = new PacketPlaySound();
+            var sound = packetPlaySound.Sound = (uint)packet.ReadInt32<SoundId>("SoundKitID");
+            packetPlaySound.Source = packet.ReadPackedGuid128("SourceObjectGUID").ToUniversalGuid();
+            packetPlaySound.BroadcastTextId = (uint)packet.ReadInt32("BroadcastTextID");
+
+            Storage.Sounds.Add(sound, packet.TimeSpan);
         }
     }
 }

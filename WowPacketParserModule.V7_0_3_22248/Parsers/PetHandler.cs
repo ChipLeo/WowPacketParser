@@ -1,6 +1,8 @@
 ﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
+using WowPacketParser.Store;
+using WowPacketParser.Store.Objects;
 
 namespace WowPacketParserModule.V7_0_3_22248.Parsers
 {
@@ -52,7 +54,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         [Parser(Opcode.SMSG_PET_SPELLS_MESSAGE)]
         public static void HandlePetSpells(Packet packet)
         {
-            packet.ReadPackedGuid128("PetGUID");
+            var petGuid = packet.ReadPackedGuid128("PetGUID");
             packet.ReadInt16("CreatureFamily");
             packet.ReadInt16("Specialization");
             packet.ReadInt32("TimeLimit");
@@ -61,7 +63,23 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
 
             const int maxCreatureSpells = 10;
             for (var i = 0; i < maxCreatureSpells; i++) // Read pet / vehicle spell ids
-                V6_0_2_19033.Parsers.PetHandler.ReadPetAction(packet, "ActionButtons", i);
+            {
+                var (slot, spellId) = V6_0_2_19033.Parsers.PetHandler.ReadPetAction(packet, "ActionButtons", i);
+
+                if (i == 0)
+                    continue;
+
+                if (spellId == 0)
+                    continue;
+
+                var creatureTemplateSpell = new CreatureTemplateSpell
+                {
+                    CreatureID = petGuid.GetEntry(),
+                    Index = (byte)(i - 1),
+                    Spell = spellId
+                };
+                Storage.CreatureTemplateSpells.Add(creatureTemplateSpell);
+            }
 
             var actionsCount = packet.ReadInt32("ActionsCount");
             var cooldownsCount = packet.ReadUInt32("CooldownsCount");

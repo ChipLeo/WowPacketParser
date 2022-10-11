@@ -53,7 +53,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_AUTO_EQUIP_ITEM,                          0x025F}, //++
             {Opcode.CMSG_AUTO_STORE_BAG_ITEM,                      0x067C}, //+-
             {Opcode.CMSG_BANKER_ACTIVATE,                          0x02E9}, //+-
-            {Opcode.CMSG_BATTLEFIELD_JOIN_RATED,                   0x0674}, //---
             {Opcode.CMSG_BATTLEFIELD_LEAVE,                        0x0257}, //+-
             {Opcode.CMSG_BATTLEFIELD_LIST,                         0x1C41}, //+-
             {Opcode.CMSG_BATTLEFIELD_PORT,                         0x1379}, //+-
@@ -429,7 +428,7 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_REQUEST_PLAYED_TIME,                      0x03F6}, //++
             {Opcode.CMSG_REQUEST_PVP_REWARDS,                      0x0375}, //+-
             {Opcode.CMSG_REQUEST_RAID_INFO,                        0x0A87}, //+-
-            {Opcode.CMSG_REQUEST_RATED_INFO,                       0x0826}, //+-
+            {Opcode.CMSG_REQUEST_RATED_BG_INFO,                    0x0826}, //+-
             {Opcode.CMSG_REQUEST_RESEARCH_HISTORY,                 0x15E2}, //++
             {Opcode.CMSG_REQUEST_VEHICLE_EXIT,                     0x1DC3}, //+-
             {Opcode.CMSG_REQUEST_VEHICLE_NEXT_SEAT,                0x0141}, //+--

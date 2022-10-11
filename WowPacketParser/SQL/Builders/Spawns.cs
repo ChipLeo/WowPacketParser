@@ -17,8 +17,14 @@ namespace WowPacketParser.SQL.Builders
         {
             mapId = -1;
 
+            if (@object.Movement.Transport == null)
+                return false;
+
             WoWObject transport;
-            if (!Storage.Objects.TryGetValue(@object.Movement.TransportGuid, out transport))
+            if (!Storage.Objects.TryGetValue(@object.Movement.Transport.Guid, out transport))
+                return false;
+
+            if (transport.Type != ObjectType.GameObject)
                 return false;
 
             if (SQLConnector.Enabled)
@@ -43,8 +49,13 @@ namespace WowPacketParser.SQL.Builders
                 return string.Empty;
 
             uint count = 0;
+            CreatureAddon addonDefault = null;
+            if (Settings.DBEnabled && Settings.SkipRowsWithFallbackValues)
+                addonDefault = SQLUtil.GetDefaultObject<CreatureAddon>();
+            var dbFields = SQLUtil.GetDBFields<CreatureAddon>(false);
             var rows = new RowList<Creature>();
             var addonRows = new RowList<CreatureAddon>();
+
             foreach (var unit in units)
             {
                 Row<Creature> row = new Row<Creature>();
@@ -65,14 +76,14 @@ namespace WowPacketParser.SQL.Builders
                     continue;   // broken entry, nothing to spawn
 
                 uint movementType = 0;
-                int spawnDist = 0;
+                int wanderDistance = 0;
                 row.Data.AreaID = 0;
                 row.Data.ZoneID = 0;
 
                 if (creature.Movement.HasWpsOrRandMov)
                 {
                     movementType = 1;
-                    spawnDist = 10;
+                    wanderDistance = 10;
                 }
 
                 row.Data.GUID = "@CGUID+" + count;
@@ -113,8 +124,18 @@ namespace WowPacketParser.SQL.Builders
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_3_4_15595) && creature.Phases != null)
                 {
                     string data = string.Join(" - ", creature.Phases);
-                    if (!string.IsNullOrEmpty(data))
-                        row.Data.PhaseID = data;
+
+                    if (string.IsNullOrEmpty(data) || Settings.ForcePhaseZero)
+                        data = "0";
+
+                    row.Data.PhaseID = data;
+                }
+
+                if (SQLDatabase.CreatureEquipments.TryGetValue(entry, out var equipList))
+                {
+                    var equip = equipList.FirstOrDefault(x => x.EquipEqual(creature.UnitData.VirtualItems));
+                    if (equip != null) // in case creature_equip_template parsing is disabled this is null for new equips
+                        row.Data.EquipmentID = (int)equip.ID;
                 }
 
                 if (!creature.IsOnTransport())
@@ -126,14 +147,20 @@ namespace WowPacketParser.SQL.Builders
                 }
                 else
                 {
-                    row.Data.PositionX = creature.Movement.TransportOffset.X;
-                    row.Data.PositionY = creature.Movement.TransportOffset.Y;
-                    row.Data.PositionZ = creature.Movement.TransportOffset.Z;
-                    row.Data.Orientation = creature.Movement.TransportOffset.O;
+                    row.Data.PositionX = creature.Movement.Transport.Offset.X;
+                    row.Data.PositionY = creature.Movement.Transport.Offset.Y;
+                    row.Data.PositionZ = creature.Movement.Transport.Offset.Z;
+                    row.Data.Orientation = creature.Movement.Transport.Offset.O;
                 }
 
+                // Recalculate PositionZ if creature is hovering
+                if (creature.UnitData.HoverHeight > 0)
+                    if ((ClientVersion.Expansion == ClientType.WrathOfTheLichKing && creature.Movement.Flags.HasAnyFlag(MovementFlag.Hover)) ||
+                        (ClientVersion.Expansion >= ClientType.Cataclysm && creature.Movement.Flags.HasAnyFlag(Enums.v4.MovementFlag.Hover)))
+                        row.Data.PositionZ -= creature.UnitData.HoverHeight;
+
                 row.Data.SpawnTimeSecs = creature.GetDefaultSpawnTime(creature.DifficultyID);
-                row.Data.SpawnDist = spawnDist;
+                row.Data.WanderDistance = wanderDistance;
                 row.Data.MovementType = movementType;
 
                 // set some defaults
@@ -176,7 +203,6 @@ namespace WowPacketParser.SQL.Builders
                 var addonRow = new Row<CreatureAddon>();
                 if (Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.creature_addon))
                 {
-                    addonRow.Data.GUID = "@CGUID+" + count;
                     addonRow.Data.PathID = 0;
                     addonRow.Data.Mount = (uint)creature.UnitData.MountDisplayID;
                     addonRow.Data.Bytes1 = creature.Bytes1;
@@ -186,10 +212,16 @@ namespace WowPacketParser.SQL.Builders
                     addonRow.Data.AIAnimKit = creature.AIAnimKit.GetValueOrDefault(0);
                     addonRow.Data.MovementAnimKit = creature.MovementAnimKit.GetValueOrDefault(0);
                     addonRow.Data.MeleeAnimKit = creature.MeleeAnimKit.GetValueOrDefault(0);
-                    addonRow.Comment += StoreGetters.GetName(StoreNameType.Unit, (int)unit.Key.GetEntry(), false);
-                    if (!string.IsNullOrWhiteSpace(auras))
-                        addonRow.Comment += " - " + commentAuras;
-                    addonRows.Add(addonRow);
+                    addonRow.Data.VisibilityDistanceType = creature.VisibilityDistanceType;
+
+                    if (addonDefault == null || !SQLUtil.AreDBFieldsEqual(addonDefault, addonRow.Data, dbFields))
+                    {
+                        addonRow.Data.GUID = $"@CGUID+{count}";
+                        addonRow.Comment += StoreGetters.GetName(StoreNameType.Unit, (int)unit.Key.GetEntry(), false);
+                        if (!string.IsNullOrWhiteSpace(auras))
+                            addonRow.Comment += $" - {commentAuras}";
+                        addonRows.Add(addonRow);
+                    }
                 }
 
                 if (creature.IsTemporarySpawn() && !Settings.SaveTempSpawns)
@@ -212,8 +244,7 @@ namespace WowPacketParser.SQL.Builders
                         addonRow.Comment += " - !!! on transport - transport template not found !!!";
                     }
                 }
-                else
-                    ++count;
+                ++count;
 
                 if (creature.Movement.HasWpsOrRandMov)
                     row.Comment += " (possible waypoints or random movement)";
@@ -313,7 +344,13 @@ namespace WowPacketParser.SQL.Builders
 
                 row.Data.PhaseID = "0";
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_3_4_15595) && go.Phases != null)
-                    row.Data.PhaseID = string.Join(" - ", go.Phases);
+                {
+                    string data = string.Join(" - ", go.Phases);
+                    if (string.IsNullOrEmpty(data) || Settings.ForcePhaseZero)
+                        data = "0";
+
+                    row.Data.PhaseID = data;
+                }
 
                 if (!go.IsOnTransport())
                 {
@@ -324,10 +361,10 @@ namespace WowPacketParser.SQL.Builders
                 }
                 else
                 {
-                    row.Data.PositionX = go.Movement.TransportOffset.X;
-                    row.Data.PositionY = go.Movement.TransportOffset.Y;
-                    row.Data.PositionZ = go.Movement.TransportOffset.Z;
-                    row.Data.Orientation = go.Movement.TransportOffset.O;
+                    row.Data.PositionX = go.Movement.Transport.Offset.X;
+                    row.Data.PositionY = go.Movement.Transport.Offset.Y;
+                    row.Data.PositionZ = go.Movement.Transport.Offset.Z;
+                    row.Data.Orientation = go.Movement.Transport.Offset.O;
                 }
 
                 var rotation = go.GetStaticRotation();

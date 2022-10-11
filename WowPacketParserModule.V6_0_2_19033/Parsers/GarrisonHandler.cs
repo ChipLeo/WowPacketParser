@@ -732,5 +732,17 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             }
             packet.ReadBit("unk3");
         }
+
+        [Parser(Opcode.SMSG_GARRISON_OPEN_TALENT_NPC)]
+        public static void HandleGarrisonOpenTalentNPC(Packet packet)
+        {
+            packet.ReadPackedGuid128("NpcGUID");
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_2_5_24330))
+            {
+                packet.ReadInt32("GarrTalentTreeID");
+                packet.ReadInt32("FriendshipFactionID");
+            }
+        }
     }
 }

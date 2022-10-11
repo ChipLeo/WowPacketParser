@@ -32,7 +32,8 @@ namespace WowPacketParser.SQL.Builders
 
             if (Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_poi))
             {
-                var poiDb = SQLDatabase.Get(Storage.QuestPOIs);
+                // pass empty list, because we want to select the whole db table (faster than select only needed columns)
+                var poiDb = SQLDatabase.Get(new RowList<QuestPOI>());
 
                 sql = SQLUtil.Compare(Storage.QuestPOIs, poiDb, StoreNameType.Quest);
             }
@@ -41,7 +42,8 @@ namespace WowPacketParser.SQL.Builders
             {
                 if (!Storage.QuestPOIPoints.IsEmpty())
                 {
-                    var poiDb = SQLDatabase.Get(Storage.QuestPOIPoints);
+                    // pass empty list, because we want to select the whole db table (faster than select only needed columns)
+                    var poiDb = SQLDatabase.Get(new RowList<QuestPOIPoint>());
 
                     sql += SQLUtil.Compare(Storage.QuestPOIPoints, poiDb, StoreNameType.Quest);
                 }
@@ -122,6 +124,70 @@ namespace WowPacketParser.SQL.Builders
             var templatesDb = SQLDatabase.Get(Storage.QuestRequestItems);
 
             return SQLUtil.Compare(Storage.QuestRequestItems, templatesDb, StoreNameType.Quest);
+        }
+
+        [BuilderMethod]
+        public static string CreatureQuestStarters()
+        {
+            if (Storage.CreatureQuestStarters.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.CreatureQuestStarters);
+
+            return SQLUtil.Compare(Storage.CreatureQuestStarters, templatesDb, x =>
+            {
+                string creatureName = StoreGetters.GetName(StoreNameType.Unit, (int)x.CreatureID, false);
+                string questName = StoreGetters.GetName(StoreNameType.Quest, (int)x.QuestID, false);
+                return $"{questName} offered {creatureName}";
+            });
+        }
+
+        [BuilderMethod]
+        public static string CreatureQuestEnders()
+        {
+            if (Storage.CreatureQuestEnders.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.CreatureQuestEnders);
+
+            return SQLUtil.Compare(Storage.CreatureQuestEnders, templatesDb, x =>
+            {
+                string creatureName = StoreGetters.GetName(StoreNameType.Unit, (int)x.CreatureID, false);
+                string questName = StoreGetters.GetName(StoreNameType.Quest, (int)x.QuestID, false);
+                return $"{questName} ended by {creatureName}";
+            });
+        }
+
+        [BuilderMethod]
+        public static string GameObjectQuestStarters()
+        {
+            if (Storage.GameObjectQuestStarters.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.GameObjectQuestStarters);
+
+            return SQLUtil.Compare(Storage.GameObjectQuestStarters, templatesDb, x =>
+            {
+                string gobName = StoreGetters.GetName(StoreNameType.GameObject, (int)x.GameObjectID, false);
+                string questName = StoreGetters.GetName(StoreNameType.Quest, (int)x.QuestID, false);
+                return $"{questName} offered by {gobName}";
+            });
+        }
+
+        [BuilderMethod]
+        public static string GameObjectQuestEnders()
+        {
+            if (Storage.GameObjectQuestEnders.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.GameObjectQuestEnders);
+
+            return SQLUtil.Compare(Storage.GameObjectQuestEnders, templatesDb, x =>
+            {
+                string gobName = StoreGetters.GetName(StoreNameType.GameObject, (int)x.GameObjectID, false);
+                string questName = StoreGetters.GetName(StoreNameType.Quest, (int)x.QuestID, false);
+                return $"{questName} ended by {gobName}";
+            });
         }
     }
 }

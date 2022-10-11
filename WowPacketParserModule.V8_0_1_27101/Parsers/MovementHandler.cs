@@ -82,13 +82,14 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             var hasSplineFilter = packet.ReadBit("HasSplineFilter", indexes);
             var hasSpellEffectExtraData = packet.ReadBit("HasSpellEffectExtraData", indexes);
             var hasJumpExtraData = packet.ReadBit("HasJumpExtraData", indexes);
+
             var hasAnimTier = false;
-            var hasUnk901 = false;
             if (ClientVersion.AddedInVersion(ClientType.Shadowlands))
-            {
                 hasAnimTier = packet.ReadBit("HasAnimTierTransition", indexes);
-                hasUnk901 = packet.ReadBit("HasUnknown", indexes);
-            }
+
+            var hasUnk901 = false;
+            if (ClientVersion.AddedInVersion(ClientType.Shadowlands) && !ClientVersion.IsClassicClientVersionBuild(ClientVersion.Build))
+                hasUnk901 = packet.ReadBit("HasUnknown901", indexes);
 
             if (hasSplineFilter)
                 ReadMonsterSplineFilter(packet, indexes, "MonsterSplineFilter");
@@ -141,8 +142,8 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             if (hasAnimTier)
             {
                 packet.ReadInt32("TierTransitionID", indexes);
-                packet.ReadInt32("StartTime", indexes);
-                packet.ReadInt32("EndTime", indexes);
+                packet.ReadUInt32("StartTime", indexes);
+                packet.ReadUInt32("EndTime", indexes);
                 packet.ReadByte("AnimTier", indexes);
             }
 
@@ -220,10 +221,10 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 
                 if (Settings.UseDBC && DBC.Phase.ContainsKey(id))
                 {
-                    packet.WriteLine($"[{i}] ID: {id} ({(DBCPhaseFlags)DBC.Phase[id].Flags})");
+                    packet.WriteLine($"[{i}] ID: {id} ({StoreGetters.GetName(StoreNameType.PhaseId, id, false)}) Flags: {(DBCPhaseFlags)DBC.Phase[id].Flags}");
                 }
                 else
-                    packet.AddValue("ID", id, i);
+                    packet.AddValue($"{StoreGetters.GetName(StoreNameType.PhaseId, id)}", id, i);
 
                 CoreParsers.MovementHandler.ActivePhases.Add(id, true);
             }

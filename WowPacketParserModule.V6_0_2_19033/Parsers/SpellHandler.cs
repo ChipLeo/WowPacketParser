@@ -1,4 +1,3 @@
-#nullable enable
 using System.Collections.Generic;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
@@ -36,7 +35,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 packet.ReadSingle("Float7", idx);
         }
 
-        public static void ReadSpellTargetData(Packet packet, PacketSpellData? spellData, params object[] idx)
+        public static void ReadSpellTargetData(Packet packet, PacketSpellData spellData, params object[] idx)
         {
             packet.ResetBitReader();
 
@@ -243,7 +242,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
                     if (hasMaxDuration)
                         auraEntry.Remaining = aura.MaxDuration;
-                    
+
                     auras.Add(aura);
                     packet.AddSniffData(StoreNameType.Spell, (int)aura.SpellId, "AURA_UPDATE");
                 }
@@ -557,40 +556,43 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_PET_CAST_FAILED)]
         public static void HandleCastFailed(Packet packet)
         {
-            packet.ReadInt32<SpellId>("SpellID");
-            packet.ReadInt32("Reason");
+            var spellFail = packet.Holder.SpellCastFailed = new();
+            spellFail.Spell = (uint)packet.ReadInt32<SpellId>("SpellID");
+            spellFail.Success = packet.ReadInt32("Reason") == 0;
             packet.ReadInt32("FailedArg1");
             packet.ReadInt32("FailedArg2");
 
-            packet.ReadByte("Cast count");
+            spellFail.CastId = packet.ReadByte("Cast count");
         }
 
         [Parser(Opcode.SMSG_SPELL_FAILURE)]
         public static void HandleSpellFailure(Packet packet)
         {
-            packet.ReadPackedGuid128("CasterUnit");
-            packet.ReadByte("CastID");
-            packet.ReadUInt32<SpellId>("SpellID");
+            var spellFail = packet.Holder.SpellFailure = new();
+            spellFail.Caster = packet.ReadPackedGuid128("CasterUnit");
+            spellFail.CastId = packet.ReadByte("CastID");
+            spellFail.Spell = packet.ReadUInt32<SpellId>("SpellID");
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173))
                 packet.ReadInt32("SpellXSpellVisualID");
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_1_0_19678))
-                packet.ReadInt16E<SpellCastFailureReason>("Reason");
+                spellFail.Success = packet.ReadInt16E<SpellCastFailureReason>("Reason") == SpellCastFailureReason.Success;
             else
-                packet.ReadByteE<SpellCastFailureReason>("Reason");
+                spellFail.Success = packet.ReadByteE<SpellCastFailureReason>("Reason") == SpellCastFailureReason.Success;
         }
 
         [Parser(Opcode.SMSG_SPELL_FAILED_OTHER)]
         public static void HandleSpellFailedOther(Packet packet)
         {
-            packet.ReadPackedGuid128("CasterUnit");
-            packet.ReadByte("CastID");
-            packet.ReadUInt32<SpellId>("SpellID");
+            var spellFail = packet.Holder.SpellFailure = new();
+            spellFail.Caster = packet.ReadPackedGuid128("CasterUnit");
+            spellFail.CastId = packet.ReadByte("CastID");
+            spellFail.Spell = packet.ReadUInt32<SpellId>("SpellID");
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V6_1_0_19678))
-                packet.ReadByteE<SpellCastFailureReason>("Reason");
+                spellFail.Success = packet.ReadByteE<SpellCastFailureReason>("Reason") == SpellCastFailureReason.Success;
             else
-                packet.ReadInt16E<SpellCastFailureReason>("Reason");
+                spellFail.Success = packet.ReadInt16E<SpellCastFailureReason>("Reason") == SpellCastFailureReason.Success;
         }
 
         [Parser(Opcode.SMSG_REFRESH_SPELL_HISTORY)]
@@ -1133,6 +1135,25 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void HandleCancelModSpeedNoControlAuras(Packet packet)
         {
             packet.ReadPackedGuid128("TargetGUID");
+        }
+
+        [Parser(Opcode.CMSG_UPDATE_MISSILE_TRAJECTORY)]
+        public static void HandleUpdateMissileTrajectory(Packet packet)
+        {
+            packet.ReadPackedGuid128("Guid");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_5_40772))
+                packet.ReadPackedGuid128("CastID");
+            packet.ReadUInt16("MoveMsgID");
+            packet.ReadInt32("SpellID");
+            packet.ReadSingle("Pitch");
+            packet.ReadSingle("Speed");
+            packet.ReadVector3("FirePos");
+            packet.ReadVector3("ImpactPos");
+
+            packet.ResetBitReader();
+            var hasStatus = packet.ReadBit("HasStatus");
+            if (hasStatus)
+                MovementHandler.ReadMovementStats(packet, "Status");
         }
     }
 }

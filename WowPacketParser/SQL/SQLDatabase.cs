@@ -7,6 +7,7 @@ using System.Linq;
 using WowPacketParser.DBC.Structures.Shadowlands;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
+using WowPacketParser.Store.Objects;
 
 namespace WowPacketParser.SQL
 {
@@ -24,6 +25,9 @@ namespace WowPacketParser.SQL
 
         public static Dictionary<string, List<int>> BroadcastTexts { get; } = new Dictionary<string, List<int>>();
         public static Dictionary<string, List<int>> BroadcastText1s { get; } = new Dictionary<string, List<int>>();
+        public static Dictionary<uint? /*CreatureId*/, List<CreatureEquipment>> CreatureEquipments { get; } = new();
+        public static Dictionary<uint /*broadcastText*/, List<uint> /*npc_text ids*/> BroadcastToNPCTexts { get; } = new();
+        public static Dictionary<int /*menuID*/, List<uint> /*npc_text ids*/> GossipMenuToNPCTexts { get; } = new();
         public static List<POIData> POIs { get; } = new List<POIData>();
 
         private static readonly StoreNameType[] ObjectTypes =
@@ -63,8 +67,32 @@ namespace WowPacketParser.SQL
                 throw new DataException("Cannot get DB data without an active DB connection.");
 
             foreach (var objectType in ObjectTypes)
-                NameStores.Add(objectType, GetDict<int, string>(
-                    $"SELECT `Id`, `Name` FROM `object_names` WHERE `ObjectType`='{objectType}';"));
+            {
+                using (var command = SQLConnector.CreateCommand($"SELECT `Id`, `Name` FROM `object_names` WHERE `ObjectType`='{objectType}';"))
+                {
+                    if (command == null)
+                        return;
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int ID = Convert.ToInt32(reader.GetValue(0));
+                            string Name = Convert.ToString(reader.GetValue(1));
+
+                            Dictionary<int, string> names;
+                            if (!NameStores.TryGetValue(objectType, out names))
+                            {
+                                names = new Dictionary<int, string>();
+                                NameStores.Add(objectType, names);
+                            }
+
+                            if (!names.ContainsKey(ID))
+                                names.Add(ID, Name);
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -79,6 +107,10 @@ namespace WowPacketParser.SQL
 
             LoadBroadcastText();
             LoadPointsOfinterest();
+            LoadCreatureEquipment();
+            LoadNPCTexts();
+            LoadGossipMenuNPCTexts();
+            LoadNameData();
 
             var endTime = DateTime.Now;
             var span = DateTime.Now.Subtract(startTime);
@@ -90,8 +122,9 @@ namespace WowPacketParser.SQL
         /// </summary>
         private static void LoadBroadcastText()
         {
+            var soundFieldName = Settings.TargetedDatabase >= TargetedDatabase.Shadowlands ? "Kit" : "Entries";
             string query =
-                "SELECT ID, Text, Text1, EmoteID1, EmoteID2, EmoteID3, EmoteDelay1, EmoteDelay2, EmoteDelay3, EmotesID, LanguageID, Flags, ConditionID, SoundEntriesID1, SoundEntriesID2 " +
+                $"SELECT ID, Text, Text1, EmoteID1, EmoteID2, EmoteID3, EmoteDelay1, EmoteDelay2, EmoteDelay3, EmotesID, LanguageID, Flags, ConditionID, Sound{soundFieldName}ID1, Sound{soundFieldName}ID2 " +
                 $"FROM {Settings.HotfixesDatabase}.broadcast_text;";
 
             if (Settings.TargetedDatabase == TargetedDatabase.WrathOfTheLichKing || Settings.TargetedDatabase == TargetedDatabase.Cataclysm)
@@ -150,8 +183,8 @@ namespace WowPacketParser.SQL
                         {
                             broadcastText.ConditionID = Convert.ToUInt32(reader["ConditionID"]);
                             broadcastText.SoundEntriesID = new uint[2];
-                            broadcastText.SoundEntriesID[0] = Convert.ToUInt32(reader["SoundEntriesID1"]);
-                            broadcastText.SoundEntriesID[1] = Convert.ToUInt32(reader["SoundEntriesID2"]);
+                            broadcastText.SoundEntriesID[0] = Convert.ToUInt32(reader[$"Sound{soundFieldName}ID1"]);
+                            broadcastText.SoundEntriesID[1] = Convert.ToUInt32(reader[$"Sound{soundFieldName}ID2"]);
                         }
 
                         if (!DBC.DBC.BroadcastText.ContainsKey(id))
@@ -193,6 +226,133 @@ namespace WowPacketParser.SQL
             }
         }
 
+        private static void LoadCreatureEquipment()
+        {
+            string columns = "CreatureID, ID, ItemID1, ItemID2, ItemID3, VerifiedBuild";
+            if (Settings.TargetedDatabase >= TargetedDatabase.Legion)
+                columns += ", AppearanceModID1, ItemVisual1, AppearanceModID2, ItemVisual2, AppearanceModID3, ItemVisual3";
+            string query = $"SELECT {columns} FROM {Settings.TDBDatabase}.creature_equip_template";
+
+            using (var command = SQLConnector.CreateCommand(query))
+            {
+                if (command == null)
+                    return;
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var equip = new CreatureEquipment
+                        {
+                            CreatureID = reader.GetUInt32("CreatureID"),
+                            ID = reader.GetUInt32("ID"),
+                            ItemID1 = reader.GetUInt32("ItemID1"),
+                            ItemID2 = reader.GetUInt32("ItemID2"),
+                            ItemID3 = reader.GetUInt32("ItemID3"),
+                            VerifiedBuild = reader.GetInt32("VerifiedBuild")
+                        };
+
+                        if (Settings.TargetedDatabase >= TargetedDatabase.Legion)
+                        {
+                            equip.AppearanceModID1 = reader.GetUInt16("AppearanceModID1");
+                            equip.ItemVisual1 = reader.GetUInt16("ItemVisual1");
+                            equip.AppearanceModID2 = reader.GetUInt16("AppearanceModID2");
+                            equip.ItemVisual2 = reader.GetUInt16("ItemVisual2");
+                            equip.AppearanceModID3 = reader.GetUInt16("AppearanceModID3");
+                            equip.ItemVisual3 = reader.GetUInt16("ItemVisual3");
+                        }
+
+                        // CreatureID never null
+                        if (CreatureEquipments.TryGetValue(equip.CreatureID, out var equipList))
+                        {
+                            equipList.Add(equip);
+                            continue;
+                        }
+                        CreatureEquipments.Add(equip.CreatureID, new List<CreatureEquipment>() { equip });
+                    }
+                }
+            }
+        }
+
+        private static void LoadNPCTexts()
+        {
+            string columns = "ID, BroadcastTextID0, BroadcastTextID1, BroadcastTextID2, BroadcastTextID3, BroadcastTextID4, BroadcastTextID5, BroadcastTextID6, BroadcastTextID7";
+            string query = $"SELECT {columns} FROM {Settings.TDBDatabase}.npc_text";
+
+            using (var command = SQLConnector.CreateCommand(query))
+            {
+                if (command == null)
+                    return;
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var npcTextId = reader.GetUInt32(0);
+                        for (int i = 1; i < 9; i++)
+                        {
+                            var broadcastTextId = reader.GetUInt32(i);
+                            if (BroadcastToNPCTexts.TryGetValue(broadcastTextId, out var npcTextList))
+                                npcTextList.Add(npcTextId);
+                            else
+                                BroadcastToNPCTexts.Add(broadcastTextId, new List<uint> { npcTextId });
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void LoadGossipMenuNPCTexts()
+        {
+            string columns = "MenuID, TextID";
+            string query = $"SELECT {columns} FROM {Settings.TDBDatabase}.gossip_menu";
+
+            using (var command = SQLConnector.CreateCommand(query))
+            {
+                if (command == null)
+                    return;
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var menuId = reader.GetInt32(0);
+                        var npcTextId = reader.GetUInt32(1);
+                        if (GossipMenuToNPCTexts.TryGetValue(menuId, out var list))
+                            list.Add(npcTextId);
+                        else
+                            GossipMenuToNPCTexts.Add(menuId, new List<uint> { npcTextId });
+                    }
+                }
+            }
+        }
+
+        private static void LoadNameData()
+        {
+            // Unit
+            NameStores.Add(StoreNameType.Unit, GetDict<int, string>(
+                    $"SELECT `entry`, `name` FROM {Settings.TDBDatabase}.creature_template;"));
+
+            // GameObject
+            NameStores.Add(StoreNameType.GameObject, GetDict<int, string>(
+                    $"SELECT `entry`, `name` FROM {Settings.TDBDatabase}.gameobject_template;"));
+
+            // Quest
+            NameStores.Add(StoreNameType.Quest, GetDict<int, string>(
+                    $"SELECT `ID`, `LogTitle` FROM {Settings.TDBDatabase}.quest_template;"));
+
+            // Item - Cataclysm and above have ItemSparse.db2
+            if (Settings.TargetedDatabase <= TargetedDatabase.WrathOfTheLichKing)
+            {
+                NameStores.Add(StoreNameType.Item, GetDict<int, string>(
+                    $"SELECT `entry`, `name` FROM {Settings.TDBDatabase}.item_template;"));
+            }
+
+            // Phase - Before Cataclysm there was phasemask system
+            if (Settings.TargetedDatabase >= TargetedDatabase.Cataclysm)
+            {
+                NameStores.Add(StoreNameType.PhaseId, GetDict<int, string>(
+                    $"SELECT `ID`, `Name` FROM {Settings.TDBDatabase}.phase_name;"));
+            }
+        }
+
         // Returns a dictionary from a DB query with two parameters (e.g <creature_entry, creature_name>)
         // TODO: Drop this and use the GetDict<T, TK> method below
         public static Dictionary<T, TK> GetDict<T, TK>(string query)
@@ -207,7 +367,7 @@ namespace WowPacketParser.SQL
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
-                        dict.Add((T)reader.GetValue(0), (TK)reader.GetValue(1));
+                        dict.Add((T)Convert.ChangeType(reader.GetValue(0), typeof(T)), (TK)Convert.ChangeType(reader.GetValue(1), typeof(TK)));
                 }
 
                 return dict;
@@ -239,6 +399,9 @@ namespace WowPacketParser.SQL
             if (!SQLConnector.Enabled)
                 return null;
 
+            if (!SQLUtil.IsTableVisible<T>())
+                return null;
+
             var result = new RowList<T>();
 
             using (var command = SQLConnector.CreateCommand(new SQLSelect<T>(rowList, database).Build()))
@@ -258,47 +421,7 @@ namespace WowPacketParser.SQL
                         var i = 0;
                         foreach (var field in fields)
                         {
-                            if (values[i] is DBNull)
-                            {
-                                if (field.Item2.FieldType == typeof(string))
-                                    field.Item2.SetValue(instance, string.Empty);
-                                else if (field.Item3.Any(a => a.Nullable))
-                                    field.Item2.SetValue(instance, null);
-                            }
-                            else if (field.Item2.FieldType.BaseType == typeof(Enum))
-                                field.Item2.SetValue(instance, Enum.Parse(field.Item2.FieldType, values[i].ToString()));
-                            else if (field.Item2.FieldType.BaseType == typeof(Array))
-                            {
-                                var arr = Array.CreateInstance(field.Item2.FieldType.GetElementType(), field.Item3.First().Count);
-
-                                for (var j = 0; j < arr.Length; j++)
-                                {
-                                    var elemType = arr.GetType().GetElementType();
-
-                                    if (elemType.IsEnum)
-                                        arr.SetValue(Enum.Parse(elemType, values[i + j].ToString()), j);
-                                    else if (Nullable.GetUnderlyingType(elemType) != null) //is nullable
-                                        arr.SetValue(Convert.ChangeType(values[i + j], Nullable.GetUnderlyingType(elemType)), j);
-                                    else
-                                        arr.SetValue(Convert.ChangeType(values[i + j], elemType), j);
-                                }
-                                field.Item2.SetValue(instance, arr);
-                            }
-                            else if (field.Item2.FieldType == typeof(bool))
-                                field.Item2.SetValue(instance, Convert.ToBoolean(values[i]));
-                            else if (Nullable.GetUnderlyingType(field.Item2.FieldType) != null) // is nullable
-                            {
-                                var uType = Nullable.GetUnderlyingType(field.Item2.FieldType);
-                                field.Item2.SetValue(instance,
-                                    uType.IsEnum
-                                        ? Enum.Parse(uType, values[i].ToString())
-                                        : Convert.ChangeType(values[i], uType));
-                            }
-                            else if (field.Item2.FieldType == typeof(Blob))
-                                field.Item2.SetValue(instance, new Blob(values[i] as byte[]));
-                            else
-                                field.Item2.SetValue(instance, values[i]);
-
+                            SQLUtil.SetFieldValueByDB(instance, field, values, i);
                             i += field.Item3.First().Count;
                         }
 
@@ -308,6 +431,16 @@ namespace WowPacketParser.SQL
             }
 
             return result;
+        }
+
+        public static uint GetNPCTextIDByMenuIDAndBroadcastText(int menuId, uint broadcastTextID)
+        {
+            if (!BroadcastToNPCTexts.TryGetValue(broadcastTextID, out var npcTextsByBroadcast))
+                return 0;
+            if (!GossipMenuToNPCTexts.TryGetValue(menuId, out var npcTextsByMenuId))
+                return npcTextsByBroadcast[0];
+
+            return npcTextsByBroadcast.FirstOrDefault(n => npcTextsByMenuId.Contains(n));
         }
     }
 }

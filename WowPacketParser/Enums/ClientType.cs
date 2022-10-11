@@ -12,6 +12,9 @@
         Legion             = 6,
         BattleForAzeroth   = 7,
         Classic            = 7,
-        Shadowlands        = 8
+        Shadowlands        = 8,
+        ClassicSoM         = 8,
+        BurningCrusadeClassic = 8,
+        WotLKClassic       = 8,
     }
 }

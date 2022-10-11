@@ -63,7 +63,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             packet.ReadBit("Unk bit");
             var size = (int)packet.ReadBits("Size", 11);
             packet.WriteLine("Account name: {0}", Encoding.UTF8.GetString(packet.ReadBytes(size)));
-            packet.WriteLine("Proof SHA-1 Hash: " + Utilities.ByteArrayToHexString(sha));
+            packet.WriteLine("Proof SHA-1 Hash: " + Utilities.ByteArrayToHexTable(sha));
         }
 
         [Parser(Opcode.CMSG_PLAYER_LOGIN)]
@@ -107,7 +107,7 @@ namespace WowPacketParserModule.V5_4_8_18414.Parsers
             sha[19] = packet.ReadByte();
             sha[10] = packet.ReadByte();
 
-            packet.WriteLine("SHA-1 Hash: " + Utilities.ByteArrayToHexString(sha));
+            packet.WriteLine("SHA-1 Hash: " + Utilities.ByteArrayToHexTable(sha));
         }
 
         [Parser(Opcode.SMSG_AUTH_CHALLENGE)]

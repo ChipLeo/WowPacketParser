@@ -127,8 +127,6 @@ namespace WowPacketParserModule.V5_4_0_17359.Parsers
 
             packet.AddSniffData(StoreNameType.Unit, entry.Key, "QUERY_RESPONSE");
 
-            Storage.CreatureTemplates.Add(creature.Entry.Value, creature, packet.TimeSpan);
-
             if (ClientLocale.PacketLocale != LocaleConstant.enUS)
             {
                 CreatureTemplateLocale localesCreature = new CreatureTemplateLocale
@@ -142,6 +140,8 @@ namespace WowPacketParserModule.V5_4_0_17359.Parsers
 
                 Storage.LocalesCreatures.Add(localesCreature, packet.TimeSpan);
             }
+            else
+                Storage.CreatureTemplates.Add(creature.Entry.Value, creature, packet.TimeSpan);
 
             ObjectName objectName = new ObjectName
             {
@@ -277,7 +277,9 @@ namespace WowPacketParserModule.V5_4_0_17359.Parsers
         [Parser(Opcode.SMSG_QUERY_PLAYER_NAME_RESPONSE)]
         public static void HandleNameQueryResponse(Packet packet)
         {
-            PacketQueryPlayerNameResponse response = packet.Holder.QueryPlayerNameResponse = new();
+            PacketQueryPlayerNameResponseWrapper responses = packet.Holder.QueryPlayerNameResponse = new();
+            PacketQueryPlayerNameResponse response = new();
+            responses.Responses.Add(response);
             var guid = new byte[8];
             var guid1 = new byte[8];
             var guid2 = new byte[8];

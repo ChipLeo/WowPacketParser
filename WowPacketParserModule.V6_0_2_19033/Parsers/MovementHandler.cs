@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Google.Protobuf.WellKnownTypes;
 using WowPacketParser.DBC;
 using WowPacketParser.Enums;
 using WowPacketParser.Enums.Version;
@@ -10,19 +11,23 @@ using WowPacketParser.Proto;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 using CoreParsers = WowPacketParser.Parsing.Parsers;
-using MovementFlag = WowPacketParserModule.V6_0_2_19033.Enums.MovementFlag;
+using MovementFlag = WowPacketParser.Enums.v4.MovementFlag;
+using MovementFlag2 = WowPacketParser.Enums.v4.MovementFlag2;
 using SplineFacingType = WowPacketParserModule.V6_0_2_19033.Enums.SplineFacingType;
 
 namespace WowPacketParserModule.V6_0_2_19033.Parsers
 {
     public static class MovementHandler
     {
-        public static void ReadMovementStats(Packet packet, params object[] idx)
+        public static MovementInfo ReadMovementStats(Packet packet, params object[] idx)
         {
-            packet.ReadPackedGuid128("MoverGUID", idx);
+            MovementInfo info = new();
+            info.MoverGuid = packet.ReadPackedGuid128("MoverGUID", idx);
 
             packet.ReadUInt32("MoveIndex", idx);
-            packet.ReadVector4("Position", idx);
+            var position = packet.ReadVector4("Position", idx);
+            info.Position = new Vector3 { X = position.X, Y = position.Y, Z = position.Z };
+            info.Orientation = position.O;
 
             packet.ReadSingle("Pitch", idx);
             packet.ReadSingle("StepUpStartElevation", idx);
@@ -35,8 +40,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             packet.ResetBitReader();
 
-            packet.ReadBitsE<MovementFlag>("Movement Flags", 30, idx);
-            packet.ReadBitsE<MovementFlagExtra>("Extra Movement Flags", ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173) ? 16 : 15, idx);
+            info.Flags = (uint)packet.ReadBitsE<MovementFlag>("Movement Flags", 30, idx);
+            info.Flags2 = (uint)packet.ReadBitsE<MovementFlag2>("Extra Movement Flags", ClientVersion.AddedInVersion(ClientVersionBuild.V6_2_0_20173) ? 16 : 15, idx);
 
             var hasTransport = packet.ReadBit("Has Transport Data", idx);
             var hasFall = packet.ReadBit("Has Fall Data", idx);
@@ -45,16 +50,19 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadBit("RemoteTimeValid", idx);
 
             if (hasTransport)
-                ReadTransportData(packet, idx, "TransportData");
+                info.Transport = ReadTransportData(packet, idx, "TransportData");
 
             if (hasFall)
                 ReadFallData(packet, idx, "FallData");
+            return info;
         }
 
-        public static void ReadTransportData(Packet packet, params object[] idx)
+        public static MovementInfo.TransportInfo ReadTransportData(Packet packet, params object[] idx)
         {
-            packet.ReadPackedGuid128("TransportGuid", idx);
-            packet.ReadVector4("TransportPosition", idx);
+            var transportInfo = new MovementInfo.TransportInfo();
+
+            transportInfo.Guid = packet.ReadPackedGuid128("TransportGuid", idx);
+            transportInfo.Offset = packet.ReadVector4("TransportPosition", idx);
             packet.ReadByte("TransportSeat", idx);
             packet.ReadInt32("TransportMoveTime", idx);
 
@@ -68,6 +76,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             if (hasVehicleRecID)
                 packet.ReadUInt32("VehicleRecID", idx);
+
+            return transportInfo;
         }
 
         public static void ReadFallData(Packet packet, params object[] idx)
@@ -85,10 +95,11 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             }
         }
 
-        public static void ReadMovementAck(Packet packet)
+        public static MovementInfo ReadMovementAck(Packet packet)
         {
-            ReadMovementStats(packet);
+            var stats = ReadMovementStats(packet);
             packet.ReadInt32("AckIndex");
+            return stats;
         }
 
         public static void ReadMovementForce(Packet packet, params object[] idx)
@@ -120,7 +131,9 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             var hasVehicle = packet.ReadBit("HasVehicle", idx);
             var hasCollisionHeight = packet.ReadBit("HasCollisionHeight", idx);
             var hasMovementForce = packet.ReadBit("HasMovementForce", idx);
-            var hasMoverGUID = packet.ReadBit("HasMoverGUID", idx);
+            var hasMovementForceGUID = packet.ReadBit("HasMovementForceGUID", idx);
+            var hasMovementInertiaGUID = packet.ReadBit("HasMovementInertiaGUID", idx);
+            var hasMovementInertiaLifetimeMs = packet.ReadBit("HasMovementInertiaLifetimeMs", idx);
 
             if (hasSpeed)
                 packet.ReadSingle("Speed", idx);
@@ -145,8 +158,14 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             if (hasMovementForce)
                 ReadMovementForce(packet, "MovementForce", idx);
 
-            if (hasMoverGUID)
-                packet.ReadPackedGuid128("MoverGUID", idx);
+            if (hasMovementForceGUID)
+                packet.ReadPackedGuid128("MovementForceGUID", idx);
+
+            if (hasMovementInertiaGUID)
+                packet.ReadPackedGuid128("MovementInertiaGUID", idx);
+
+            if (hasMovementInertiaLifetimeMs)
+                packet.ReadUInt32("MovementInertiaLifetimeMs", idx);
         }
 
         [Parser(Opcode.CMSG_WORLD_PORT_RESPONSE)]
@@ -176,11 +195,12 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_LOGIN_SET_TIME_SPEED)]
         public static void HandleLoginSetTimeSpeed(Packet packet)
         {
-            packet.ReadPackedTime("ServerTime");
-            packet.ReadPackedTime("GameTime");
-            packet.ReadSingle("NewSpeed");
-            packet.ReadInt32("ServerTimeHolidayOffset");
-            packet.ReadInt32("GameTimeHolidayOffset");
+            PacketLoginSetTimeSpeed setTime = packet.Holder.LoginSetTimeSpeed = new();
+            setTime.ServerTime = packet.ReadPackedTime("ServerTime").ToUniversalTime().ToTimestamp();
+            setTime.GameTime = packet.ReadPackedTime("GameTime").ToUniversalTime().ToTimestamp();
+            setTime.NewSpeed = packet.ReadSingle("NewSpeed");
+            setTime.ServerTimeHolidayOffset = packet.ReadInt32("ServerTimeHolidayOffset");
+            setTime.GameTimeHolidayOffset = packet.ReadInt32("GameTimeHolidayOffset");
         }
 
         [Parser(Opcode.SMSG_GAME_TIME_UPDATE)]
@@ -207,6 +227,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_MOVE_JUMP)]
         [Parser(Opcode.CMSG_MOVE_REMOVE_MOVEMENT_FORCES)]
         [Parser(Opcode.CMSG_MOVE_SET_FACING)]
+        [Parser(Opcode.CMSG_MOVE_SET_FACING_HEARTBEAT)]
         [Parser(Opcode.CMSG_MOVE_SET_FLY)]
         [Parser(Opcode.CMSG_MOVE_SET_PITCH)]
         [Parser(Opcode.CMSG_MOVE_SET_RUN_MODE)]
@@ -228,6 +249,13 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_MOVE_STOP_STRAFE)]
         [Parser(Opcode.CMSG_MOVE_STOP_SWIM)]
         [Parser(Opcode.CMSG_MOVE_STOP_TURN)]
+        public static void HandleClientPlayerMove(Packet packet)
+        {
+            var stats = ReadMovementStats(packet);
+            packet.Holder.ClientMove = new() { Mover = stats.MoverGuid, Position = stats.PositionAsVector4 };
+        }
+
+
         [Parser(Opcode.SMSG_MOVE_UPDATE_KNOCK_BACK)]
         [Parser(Opcode.SMSG_MOVE_UPDATE)]
         public static void HandlePlayerMove(Packet packet)
@@ -641,7 +669,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_MOVE_SET_CAN_TURN_WHILE_FALLING_ACK)]
         public static void HandleMovementAck(Packet packet)
         {
-            ReadMovementAck(packet);
+            var stats = ReadMovementAck(packet);
+            packet.Holder.ClientMove = new() { Mover = stats.MoverGuid, Position = stats.PositionAsVector4 };
         }
 
         [Parser(Opcode.CMSG_MOVE_FORCE_FLIGHT_SPEED_CHANGE_ACK)]
@@ -652,21 +681,24 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_MOVE_SET_MOD_MOVEMENT_FORCE_MAGNITUDE_ACK)]
         public static void HandleMovementSpeedAck(Packet packet)
         {
-            ReadMovementAck(packet);
+            var stats = ReadMovementAck(packet);
+            packet.Holder.ClientMove = new() { Mover = stats.MoverGuid, Position = stats.PositionAsVector4 };
             packet.ReadSingle("Speed");
         }
 
         [Parser(Opcode.CMSG_MOVE_REMOVE_MOVEMENT_FORCE_ACK)]
         public static void HandleMoveRemoveMovementForceAck(Packet packet)
         {
-            ReadMovementAck(packet);
+            var stats = ReadMovementAck(packet);
+            packet.Holder.ClientMove = new() { Mover = stats.MoverGuid, Position = stats.PositionAsVector4 };
             packet.ReadPackedGuid128("TriggerGUID");
         }
 
         [Parser(Opcode.CMSG_MOVE_SET_VEHICLE_REC_ID_ACK)]
         public static void HandleMoveSetVehicleRecIdAck(Packet packet)
         {
-            ReadMovementAck(packet);
+            var stats = ReadMovementAck(packet);
+            packet.Holder.ClientMove = new() { Mover = stats.MoverGuid, Position = stats.PositionAsVector4 };
             packet.ReadInt32("VehicleRecID");
         }
 
@@ -688,7 +720,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_MOVE_APPLY_MOVEMENT_FORCE_ACK)]
         public static void HandleMoveApplyMovementForceAck(Packet packet)
         {
-            ReadMovementAck(packet);
+            var stats = ReadMovementAck(packet);
+            packet.Holder.ClientMove = new() { Mover = stats.MoverGuid, Position = stats.PositionAsVector4 };
             ReadMovementForce(packet, "MovementForce");
         }
 
@@ -711,7 +744,8 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_MOVE_SET_COLLISION_HEIGHT_ACK)]
         public static void HandleMoveSetCollisionHeightAck(Packet packet)
         {
-            ReadMovementAck(packet);
+            var stats = ReadMovementAck(packet);
+            packet.Holder.ClientMove = new() { Mover = stats.MoverGuid, Position = stats.PositionAsVector4 };
             packet.ReadSingle("Height");
             packet.ReadInt32("MountDisplayID");
 

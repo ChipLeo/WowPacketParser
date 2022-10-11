@@ -5,7 +5,7 @@ using WowPacketParser.SQL;
 namespace WowPacketParser.Store.Objects
 {
     [DBTableName("playercreateinfo")]
-    public class PlayerCreateInfo : IDataModel
+    public sealed record PlayerCreateInfo : IDataModel
     {
         [DBFieldName("race", true)]
         public Race? Race;
@@ -16,7 +16,7 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("map")]
         public uint? Map;
 
-        [DBFieldName("zone")]
+        [DBFieldName("zone", TargetedDatabase.Zero, TargetedDatabase.Shadowlands)]
         public uint? Zone;
 
         [DBFieldName("position_x")]

@@ -1,6 +1,7 @@
 syntax = "proto3";
 package wpp;
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 option csharp_namespace = "WowPacketParser.Proto";
 
 /*
@@ -11,11 +12,15 @@ option csharp_namespace = "WowPacketParser.Proto";
 
 message PacketsVersion {
   uint64 version = 1;
+  uint64 gameVersion = 2;
+  uint32 dumpType = 3;
 }
 
 message Packets {
   uint64 version = 1;
-  repeated PacketHolder packets = 2;
+  uint64 gameVersion = 2;
+  uint32 dumpType = 3;
+  repeated PacketHolder packets = 4;
 }
 
 message PacketBase {
@@ -23,6 +28,8 @@ message PacketBase {
   string opcode = 2;
   google.protobuf.Timestamp time = 3;
   string stringData = 4;
+  google.protobuf.Int64Value textStartOffset = 5;
+  google.protobuf.Int32Value textLength = 6;
 }
 
 message PacketHolder {
@@ -58,11 +65,20 @@ message PacketHolder {
       PacketUpdateObject updateObject = 29;
       PacketQueryGameObjectResponse queryGameObjectResponse = 30;
       PacketClientAreaTrigger clientAreaTrigger = 31;
-      PacketQueryPlayerNameResponse queryPlayerNameResponse = 32;
+      PacketQueryPlayerNameResponseWrapper queryPlayerNameResponse = 32;
       PacketQuestComplete questComplete = 33;
       PacketQuestFailed questFailed = 34;
       PacketQuestAddKillCredit questAddKillCredit = 35;
       PacketClientUseItem clientUseItem = 36;
+      PacketClientQuestGiverChooseReward clientQuestGiverChooseReward = 37;
+      PacketClientMove clientMove = 38;
+      PacketClientUseGameObject clientUseGameObject = 39;
+      PacketGossipPoi gossipPoi = 40;
+      PacketGameObjectCustomAnim gameObjectCustomAnim = 41;
+      PacketSpellCastFailed spellCastFailed = 42;
+      PacketSpellFailure spellFailure = 43;
+      PacketLoginSetTimeSpeed loginSetTimeSpeed = 44;
+      PacketAuraUpdateAll auraUpdateAll = 45;
   }
 }
 
@@ -154,6 +170,7 @@ message PacketEmote {
 message PacketPlaySound {
   uint32 sound = 1;
   UniversalGuid source = 2;
+  uint32 broadcastTextId = 3;
 }
 
 message PacketPlayObjectSound {
@@ -201,6 +218,11 @@ message PacketGossipSelect {
 
 message PacketGossipClose {
   UniversalGuid gossipSource = 1;
+}
+
+message Vec2 {
+  float x = 1;
+  float y = 2;
 }
 
 message Vec3 {
@@ -276,6 +298,11 @@ message PacketAuraUpdateEntry {
 }
 
 message PacketAuraUpdate {
+  UniversalGuid unit = 1;
+  repeated PacketAuraUpdateEntry updates = 2;
+}
+
+message PacketAuraUpdateAll {
   UniversalGuid unit = 1;
   repeated PacketAuraUpdateEntry updates = 2;
 }
@@ -393,11 +420,37 @@ message PacketQuestGiverQuestComplete {
   uint32 questId = 1;
 }
 
+message Currency {
+  uint32 id = 1;
+  uint32 count = 2;
+}
+
+message QuestCollect {
+  int32 id = 1;
+  int32 count = 2;
+  google.protobuf.UInt32Value flags = 3;
+}
+
 message PacketQuestGiverRequestItems {
   uint32 questId = 1;
-  string requestItemsText = 2;
-  UniversalGuid questGiver = 3;
-  uint32 questGiverEntry = 4;
+  UniversalGuid questGiver = 2;
+  uint32 questGiverEntry = 3;
+  int32 emoteDelay = 4;
+  int32 emoteType = 5;
+  uint32 questFlags = 6;
+  uint32 questFlags2 = 7;
+  int32 suggestedPartyMembers = 8;
+  int32 moneyToGet = 9;
+  uint32 CollectCount = 10;
+  uint32 CurrencyCount = 11;
+  PacketQuestStatusFlags statusFlags = 12;
+  bool autoLaunched = 13;
+  google.protobuf.BoolValue canIgnoreQuest = 14;
+  google.protobuf.BoolValue isQuestIgnored = 15;
+  string questTitle = 16;
+  string completionText = 17;
+  repeated Currency currencies = 18;
+  repeated QuestCollect collect = 19;
 }
 
 message PacketNpcTextEntry {
@@ -459,11 +512,116 @@ message PacketDbReply {
   };
 }
 
-message UpdateValues {
+message UpdateValuesLegacy {
   map<string, int64> ints = 1;
   map<string, float> floats = 2;
   map<string, UniversalGuid> guids = 3;
   map<string, Quat> quaternions = 4;
+}
+
+message VisibleItemFields {
+  int32 itemID = 1;
+  uint32 itemAppearanceModID = 2;
+  uint32 itemVisual = 3;
+}
+
+message UInt32ValueWrapper {
+  google.protobuf.UInt32Value value = 1;
+}
+
+message Int32ValueWrapper {
+  google.protobuf.Int32Value value = 1;
+}
+
+message UpdateValuesUnitDataFields {
+  google.protobuf.Int32Value displayID = 1;
+  repeated UInt32ValueWrapper npcFlags = 2;
+  optional UniversalGuid summonedBy = 3;
+  optional UniversalGuid createdBy = 4;
+  google.protobuf.UInt32Value classId = 5;
+  google.protobuf.UInt32Value sex = 6;
+  google.protobuf.Int64Value health = 7;
+  repeated Int32ValueWrapper power = 8;
+  repeated Int32ValueWrapper maxPower = 9;
+  google.protobuf.Int64Value maxHealth = 10;
+  google.protobuf.Int32Value level = 11;
+  google.protobuf.Int32Value contentTuningID = 12;
+  google.protobuf.Int32Value scalingLevelMin = 13;
+  google.protobuf.Int32Value scalingLevelMax = 14;
+  google.protobuf.Int32Value scalingLevelDelta = 15;
+  google.protobuf.Int32Value factionTemplate = 16;
+  repeated VisibleItemFields virtualItems = 17;
+  google.protobuf.UInt32Value flags = 18;
+  google.protobuf.UInt32Value flags2 = 19;
+  google.protobuf.UInt32Value flags3 = 20;
+  repeated UInt32ValueWrapper attackRoundBaseTime = 21;
+  google.protobuf.UInt32Value rangedAttackRoundBaseTime = 22;
+  google.protobuf.FloatValue boundingRadius = 23;
+  google.protobuf.FloatValue combatReach = 24;
+  google.protobuf.Int32Value mountDisplayID = 25;
+  google.protobuf.UInt32Value standState = 26;
+  google.protobuf.UInt32Value petTalentPoints = 27;
+  google.protobuf.UInt32Value visFlags = 28;
+  google.protobuf.UInt32Value animTier = 29;
+  google.protobuf.Int32Value createdBySpell = 30;
+  google.protobuf.Int32Value emoteState = 31;
+  google.protobuf.UInt32Value sheatheState = 32;
+  google.protobuf.UInt32Value pvpFlags = 33;
+  google.protobuf.UInt32Value petFlags = 34;
+  google.protobuf.UInt32Value shapeshiftForm = 35;
+  google.protobuf.FloatValue hoverHeight = 36;
+  google.protobuf.Int32Value interactSpellID = 37;
+  google.protobuf.UInt32Value stateSpellVisualID = 38;
+  google.protobuf.UInt32Value stateAnimID = 39;
+  google.protobuf.UInt32Value stateAnimKitID = 40;
+  optional UniversalGuid charm = 41;
+  optional UniversalGuid summon = 42;
+  optional UniversalGuid critter = 43;
+  optional UniversalGuid demonCreator = 44;
+  optional UniversalGuid lookAtControllerTarget = 45;
+  optional UniversalGuid target = 46;
+  google.protobuf.UInt32Value race = 47;
+  google.protobuf.UInt32Value displayPower = 48;
+  google.protobuf.Int32Value effectiveLevel = 49;
+  google.protobuf.UInt32Value auraState = 50;
+  google.protobuf.FloatValue displayScale = 51;
+  google.protobuf.Int32Value creatureFamily = 52;
+  google.protobuf.Int32Value creatureType = 53;
+  google.protobuf.Int32Value nativeDisplayID = 54;
+  google.protobuf.FloatValue nativeXDisplayScale = 55;
+  repeated Int32ValueWrapper resistances = 56;
+  google.protobuf.Int32Value baseMana = 57;
+  google.protobuf.Int32Value baseHealth = 58;
+  optional UniversalGuid charmedBy = 59;
+}
+ 
+message UpdateValuesGameObjectDataFields
+{
+  optional UniversalGuid createdBy = 1;
+  google.protobuf.UInt32Value flags = 2;
+  optional Quat parentRotation = 3;
+  google.protobuf.Int32Value factionTemplate = 4;
+  google.protobuf.Int32Value state = 5;
+  google.protobuf.Int32Value typeID = 6;
+  google.protobuf.UInt32Value percentHealth = 7;
+  google.protobuf.Int32Value displayID = 8;
+  google.protobuf.UInt32Value artKit = 9;
+  google.protobuf.Int32Value level = 10;
+}
+  
+message UpdateValuesObjectDataFields {
+  google.protobuf.Int32Value entryID = 1;
+  google.protobuf.UInt32Value dynamicFlags = 2;
+  google.protobuf.FloatValue scale = 3;
+  optional UpdateValuesUnitDataFields unit = 4;
+  optional UpdateValuesGameObjectDataFields gameobject = 5;
+}
+
+message UpdateValues {
+  oneof values {
+    UpdateValuesLegacy legacy = 1;
+    UpdateValuesObjectDataFields fields = 2;
+  }
 }
 
 message MovementUpdateTransport {
@@ -522,26 +680,39 @@ message VehicleCreate {
   float initialRawFacing = 2;
 }
 
+enum CreateObjectType {
+  CreateObjectEmpty = 0;
+  InRange = 1;
+  Spawn = 2;
+}
+
 message CreateObject {
   UniversalGuid guid = 1;
   UpdateValues values = 2;
-  optional MovementUpdate movement = 3;
-  optional MovementUpdateTransport transport = 4;
-  optional StationaryPositionData stationary = 5;
-  optional VehicleCreate vehicle = 6;
-  optional Quat rotation = 7;
-  optional string text = 8;
+  CreateObjectType createType = 3;
+  optional MovementUpdate movement = 4;
+  optional MovementUpdateTransport transport = 5;
+  optional StationaryPositionData stationary = 6;
+  optional VehicleCreate vehicle = 7;
+  optional Quat rotation = 8;
+  google.protobuf.Int32Value textStartOffset = 9;
+  google.protobuf.Int32Value textLength = 10;
+  optional string text = 11;
 }
 
 message UpdateObject {
   UniversalGuid guid = 1;
   UpdateValues values = 2;
-  optional string text = 3;
+  google.protobuf.Int32Value textStartOffset = 3;
+  google.protobuf.Int32Value textLength = 4;
+  optional string text = 5;
 }
 
 message DestroyedObject {
   UniversalGuid guid = 1;
-  optional string text = 2;
+  google.protobuf.Int32Value textStartOffset = 2;
+  google.protobuf.Int32Value textLength = 3;
+  optional string text = 4;
 }
 
 message PacketUpdateObject {
@@ -608,6 +779,10 @@ message PacketQueryPlayerNameResponse {
   uint32 level = 7;
 }
 
+message PacketQueryPlayerNameResponseWrapper {
+  repeated PacketQueryPlayerNameResponse responses = 1;
+}
+
 message PacketQuestComplete {
   uint32 questId = 1;
 }
@@ -630,4 +805,72 @@ message PacketClientUseItem {
   int32 itemSlot = 2;
   UniversalGuid castItem = 3;
   uint32 spellId = 4;
+}
+
+message PacketClientQuestGiverChooseReward {
+  UniversalGuid questGiver = 1;
+  uint32 questId = 2;
+  optional uint32 item = 3;
+  optional uint32 rewardIndex = 4;
+}
+
+message PacketClientMove {
+  UniversalGuid mover = 1;
+  Vec4 position = 2;
+}
+
+message PacketClientUseGameObject {
+  UniversalGuid gameObject = 1;
+  bool report = 2;
+}
+
+message PacketGossipPoi {
+  Vec2 coordinates = 1;
+  uint32 flags = 2;
+  uint32 icon = 3;
+  uint32 importance = 4;
+  string name = 5;
+  optional int32 id = 6;
+  optional float height = 7;
+}
+
+message PacketGameObjectCustomAnim {
+  UniversalGuid gameObject = 1;
+  int32 anim = 2;
+  optional bool playAsDespawn = 3;
+}
+
+enum PacketQuestStatusFlags {
+  QuestStatusNone = 0;
+  QuestStatusUnk1 = 0x01;
+  KillCreditComplete = 0x02;
+  CollectableComplete = 0x04;
+  QuestStatusUnk8 = 0x08;
+  QuestStatusUnk16 = 0x10;
+  NoRequestOnComplete = 0x20;
+  QuestStatusUnk64 = 0x40;
+  QuestStatusUnk128 = 0x80;
+}
+
+message PacketSpellCastFailed {
+  optional UniversalGuid castGuid = 1;
+  uint32 spell = 2;
+  google.protobuf.UInt32Value castId = 3;
+  bool success = 4;
+}
+
+message PacketSpellFailure {
+  optional UniversalGuid castGuid = 1;
+  uint32 spell = 2;
+  google.protobuf.UInt32Value castId = 3;
+  bool success = 4;
+  UniversalGuid caster = 5;
+}
+
+message PacketLoginSetTimeSpeed {
+  google.protobuf.Timestamp serverTime = 1;
+  google.protobuf.Timestamp gameTime = 2;
+  float newSpeed = 3;
+  int32 serverTimeHolidayOffset = 4;
+  int32 gameTimeHolidayOffset = 5;
 }

@@ -47,7 +47,7 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
             text.ReceiverName = packet.ReadWoWString("Receiver Name", receiverNameLen);
             packet.ReadWoWString("Addon Message Prefix", prefixLen);
             packet.ReadWoWString("Channel Name", channelLen);
-            
+
             chatPacket.Text = text.Text = packet.ReadWoWString("Text", textLen);
             chatPacket.Sender = text.SenderGUID.ToUniversalGuid();
             chatPacket.Target = text.ReceiverGUID.ToUniversalGuid();
@@ -81,6 +81,9 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_0_5_37503))
             {
                 var count = packet.ReadUInt32("SpellVisualKitCount");
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_2_0_42423))
+                    packet.ReadInt32("SequenceVariation");
+
                 for (var i = 0; i < count; ++i)
                     packet.ReadUInt32("SpellVisualKitID", i);
             }
@@ -90,6 +93,29 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
 
             packetEmote.Emote = (int) emote;
             packetEmote.Sender = guid.ToUniversalGuid();
+        }
+
+        [Parser(Opcode.CMSG_SEND_TEXT_EMOTE)]
+        public static void HandleSendTextEmote(Packet packet)
+        {
+            packet.ReadPackedGuid128("Target");
+            packet.ReadInt32E<EmoteTextType>("EmoteID");
+            packet.ReadInt32("SoundIndex");
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_0_5_37503) ||
+                ClientVersion.IsBurningCrusadeClassicClientVersionBuild(ClientVersion.Build) ||
+                ClientVersion.IsWotLKClientVersionBuild(ClientVersion.Build))
+            {
+                var count = packet.ReadUInt32("SpellVisualKitCount");
+                if (ClientVersion.AddedInVersion(ClientBranch.Retail, ClientVersionBuild.V9_2_0_42423) ||
+                    ClientVersion.AddedInVersion(ClientBranch.Classic, ClientVersionBuild.V1_14_2_42065) ||
+                    ClientVersion.AddedInVersion(ClientBranch.TBC, ClientVersionBuild.V2_5_3_41812) ||
+                    ClientVersion.AddedInVersion(ClientBranch.WotLK, ClientVersionBuild.V3_4_0_45166))
+                    packet.ReadInt32("SequenceVariation");
+
+                for (var i = 0; i < count; ++i)
+                    packet.ReadUInt32("SpellVisualKitID", i);
+            }
         }
     }
 }

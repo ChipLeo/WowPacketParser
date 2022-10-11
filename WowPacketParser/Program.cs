@@ -15,6 +15,7 @@ namespace WowPacketParser
     {
         private static void Main(string[] args)
         {
+            SetUpWindowTitle();
             SetUpConsole();
 
             var files = args.ToList();
@@ -57,6 +58,7 @@ namespace WowPacketParser
 
             SQLConnector.ReadDB();
 
+            var processStartTime = DateTime.Now;
             var count = 0;
             foreach (var file in files)
             {
@@ -75,11 +77,13 @@ namespace WowPacketParser
                 {
                     Console.WriteLine($"Can't process {file}. Skipping. Message: {ex.Message}");
                 }
-
             }
 
             if (!string.IsNullOrWhiteSpace(Settings.SQLFileName) && Settings.DumpFormatWithSQL())
                 Builder.DumpSQL("Dumping global sql", Settings.SQLFileName, SniffFile.GetHeader("multi"));
+
+            var processTime = DateTime.Now.Subtract(processStartTime);
+            Trace.WriteLine($"Processing {files.Count} sniffs took { processTime.ToFormattedString() }.");
 
             SQLConnector.Disconnect();
             SSHTunnel.Disconnect();
@@ -113,9 +117,13 @@ namespace WowPacketParser
             EndPrompt(true);
         }
 
-        private static void SetUpConsole()
+        private static void SetUpWindowTitle()
         {
             Console.Title = "WowPacketParser";
+        }
+
+        public static void SetUpConsole()
+        {
 
             Trace.Listeners.Clear();
 

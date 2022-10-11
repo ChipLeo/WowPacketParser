@@ -8,7 +8,11 @@ namespace WowPacketParserModule.Substructures
         public static void ReadDungeonScoreMapSummary(Packet packet, params object[] indexes)
         {
             packet.ReadInt32("ChallengeModeID", indexes);
-            packet.ReadInt32("MapScore", indexes);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_5_40772))
+                packet.ReadSingle("MapScore", indexes);
+            else
+                packet.ReadInt32("MapScore", indexes);
+
             packet.ReadInt32("BestRunLevel", indexes);
             packet.ReadInt32("BestRunDurationMS", indexes);
 
@@ -18,7 +22,14 @@ namespace WowPacketParserModule.Substructures
 
         public static void ReadDungeonScoreSummary(Packet packet, params object[] indexes)
         {
-            packet.ReadInt32("CurrentSeasonScore", indexes);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_5_40772))
+                packet.ReadSingle("CurrentSeasonScore", indexes);
+            else
+                packet.ReadInt32("CurrentSeasonScore", indexes);
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_2_0_42423))
+                packet.ReadSingle("LifetimeBestSeasonScore", indexes);
+
             var runCount = packet.ReadUInt32("RunCount", indexes);
             for (var i = 0u; i < runCount; ++i)
                 ReadDungeonScoreMapSummary(packet, indexes, i, "Run");
@@ -32,7 +43,11 @@ namespace WowPacketParserModule.Substructures
             packet.ReadPackedGuid128("GuildGUID", indexes);
             packet.ReadUInt32("NativeRealmAddress", indexes);
             packet.ReadUInt32("VirtualRealmAddress", indexes);
-            packet.ReadInt16("ChrSpecializationID", indexes);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_2_0_42423))
+                packet.ReadInt32("ChrSpecializationID", indexes);
+            else
+                packet.ReadInt16("ChrSpecializationID", indexes);
+
             packet.ReadInt16E<Race>("RaceID", indexes);
             packet.ReadInt32("ItemLevel", indexes);
             packet.ReadInt32("CovenantID", indexes);
@@ -51,7 +66,11 @@ namespace WowPacketParserModule.Substructures
                 packet.ReadInt32("KeystoneAffixIDs", indexes, i);
 
             var memberCount = packet.ReadUInt32("MemberCount", indexes);
-            packet.ReadInt32("RunScore", indexes);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_5_40772))
+                packet.ReadSingle("RunScore", indexes);
+            else
+                packet.ReadInt32("RunScore", indexes);
+
             for (var i = 0u; i < memberCount; ++i)
                 ReadMythicPlusMember(packet, indexes, i, "Member");
 
@@ -62,7 +81,11 @@ namespace WowPacketParserModule.Substructures
         public static void ReadDungeonScoreBestRunForAffix(Packet packet, params object[] indexes)
         {
             packet.ReadInt32("KeystoneAffixID", indexes);
-            packet.ReadInt32("Score", indexes);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_5_40772))
+                packet.ReadSingle("Score", indexes);
+            else
+                packet.ReadInt32("Score", indexes);
+
             ReadMythicPlusRun(packet, indexes, "Run");
         }
 
@@ -70,7 +93,11 @@ namespace WowPacketParserModule.Substructures
         {
             packet.ReadInt32("MapChallengeModeID", indexes);
             var runCount = packet.ReadUInt32("BestRunCount", indexes);
-            packet.ReadInt32("OverAllScore", indexes);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_5_40772))
+                packet.ReadSingle("OverAllScore", indexes);
+            else
+                packet.ReadInt32("OverAllScore", indexes);
+
             for (var i = 0u; i < runCount; ++i)
                 ReadDungeonScoreBestRunForAffix(packet, indexes, i, "BestRun");
         }
@@ -79,9 +106,23 @@ namespace WowPacketParserModule.Substructures
         {
             packet.ReadInt32("Season", indexes);
             var runCount = packet.ReadUInt32("MapCount", indexes);
-            packet.ReadInt32("SeasonScore", indexes);
+            var runCount2 = 0u;
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_2_0_42423))
+                runCount2 = packet.ReadUInt32("Unknown920_MapCount", indexes);
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_5_40772))
+                packet.ReadSingle("SeasonScore", indexes);
+            else
+                packet.ReadInt32("SeasonScore", indexes);
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_2_0_42423))
+                packet.ReadSingle("Unknown920_1", indexes);
+
             for (var i = 0u; i < runCount; ++i)
                 ReadDungeonScoreMapData(packet, indexes, i, "Map");
+
+            for (var i = 0u; i < runCount2; ++i)
+                ReadDungeonScoreMapData(packet, indexes, i, "Unknown920_Map");
         }
 
         public static void ReadDungeonScoreData(Packet packet, params object[] indexes)

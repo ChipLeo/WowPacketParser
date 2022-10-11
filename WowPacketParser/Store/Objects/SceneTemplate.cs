@@ -4,7 +4,7 @@ using WowPacketParser.SQL;
 namespace WowPacketParser.Store.Objects
 {
     [DBTableName("scene_template")]
-    public sealed class SceneTemplate : IDataModel
+    public sealed record SceneTemplate : IDataModel
     {
         [DBFieldName("SceneId", true)]
         public uint? SceneID;
@@ -12,7 +12,7 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("Flags")]
         public uint? Flags;
 
-        [DBFieldName("ScriptPackageID", true)]
+        [DBFieldName("ScriptPackageID")]
         public uint? ScriptPackageID;
 
         [DBFieldName("Encrypted", TargetedDatabase.Shadowlands)]

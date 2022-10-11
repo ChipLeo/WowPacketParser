@@ -3,6 +3,7 @@ using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
+using CoreParsers = WowPacketParser.Parsing.Parsers;
 
 namespace WowPacketParserModule.V1_13_2_31446.Parsers
 {
@@ -67,7 +68,7 @@ namespace WowPacketParserModule.V1_13_2_31446.Parsers
         [Parser(Opcode.SMSG_QUEST_GIVER_QUEST_DETAILS)]
         public static void HandleQuestGiverQuestDetails(Packet packet)
         {
-            packet.ReadPackedGuid128("QuestGiverGUID");
+            var questgiverGUID = packet.ReadPackedGuid128("QuestGiverGUID");
             packet.ReadPackedGuid128("InformUnit");
 
             int id = packet.ReadInt32("QuestID");
@@ -75,6 +76,8 @@ namespace WowPacketParserModule.V1_13_2_31446.Parsers
             {
                 ID = (uint)id
             };
+
+            CoreParsers.QuestHandler.AddQuestStarter(questgiverGUID, (uint)id);
 
             packet.ReadInt32("QuestPackageID");
             packet.ReadInt32("PortraitGiver");
@@ -140,7 +143,7 @@ namespace WowPacketParserModule.V1_13_2_31446.Parsers
         [Parser(Opcode.SMSG_QUEST_GIVER_OFFER_REWARD_MESSAGE)]
         public static void QuestGiverOfferReward(Packet packet)
         {
-            packet.ReadPackedGuid128("QuestGiverGUID");
+            var questgiverGUID = packet.ReadPackedGuid128("QuestGiverGUID");
 
             packet.ReadInt32("QuestGiverCreatureID");
             int id = packet.ReadInt32("QuestID");
@@ -149,6 +152,7 @@ namespace WowPacketParserModule.V1_13_2_31446.Parsers
             {
                 ID = (uint)id
             };
+            CoreParsers.QuestHandler.AddQuestEnder(questgiverGUID, (uint)id);
 
             for (int i = 0; i < 2; i++)
                 packet.ReadInt32("QuestFlags", i);
@@ -158,11 +162,11 @@ namespace WowPacketParserModule.V1_13_2_31446.Parsers
             var emotesCount = packet.ReadUInt32("EmotesCount");
 
             // QuestDescEmote
-            questOfferReward.Emote = new uint?[] { 0, 0, 0, 0 };
+            questOfferReward.Emote = new int?[] { 0, 0, 0, 0 };
             questOfferReward.EmoteDelay = new uint?[] { 0, 0, 0, 0 };
             for (var i = 0; i < emotesCount; i++)
             {
-                questOfferReward.Emote[i] = (uint)packet.ReadInt32("Type");
+                questOfferReward.Emote[i] = packet.ReadInt32("Type");
                 questOfferReward.EmoteDelay[i] = packet.ReadUInt32("Delay");
             }
 

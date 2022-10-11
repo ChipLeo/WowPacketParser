@@ -4,7 +4,8 @@ using WowPacketParser.SQL;
 
 namespace WowPacketParser.Store.Objects
 {
-    public sealed class PlayerCreateInfoAction : IDataModel
+    [DBTableName("playercreateinfo_action")]
+    public sealed record PlayerCreateInfoAction : IDataModel
     {
         [DBFieldName("race", true)]
         public Race? Race;

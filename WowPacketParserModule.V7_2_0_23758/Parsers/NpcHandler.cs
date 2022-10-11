@@ -15,25 +15,21 @@ namespace WowPacketParserModule.V7_2_0_23758.Parsers
         {
             GossipMenuOption gossipOption = new GossipMenuOption
             {
-                MenuId = menuId
-            };
-            GossipMenuOptionBox gossipMenuOptionBox = new GossipMenuOptionBox
-            {
-                MenuId = menuId
+                MenuID = menuId
             };
 
-            gossipOption.OptionIndex = gossipMenuOptionBox.OptionIndex = (uint)packet.ReadInt32("ClientOption", idx);
+            gossipOption.OptionID = (uint)packet.ReadInt32("ClientOption", idx);
             gossipOption.OptionIcon = (GossipOptionIcon?)packet.ReadByte("OptionNPC", idx);
-            gossipMenuOptionBox.BoxCoded = packet.ReadByte("OptionFlags", idx) != 0;
-            gossipMenuOptionBox.BoxMoney = (uint)packet.ReadInt32("OptionCost", idx);
+            gossipOption.BoxCoded = packet.ReadByte("OptionFlags", idx) != 0;
+            gossipOption.BoxMoney = (uint)packet.ReadInt32("OptionCost", idx);
 
             uint textLen = packet.ReadBits(12);
             uint confirmLen = packet.ReadBits(12);
 
             gossipOption.OptionText = packet.ReadWoWString("Text", textLen, idx);
-            gossipMenuOptionBox.BoxText = packet.ReadWoWString("Confirm", confirmLen, idx);
+            gossipOption.BoxText = packet.ReadWoWString("Confirm", confirmLen, idx);
 
-            Storage.GossipMenuOptions.Add(gossipOption, packet.TimeSpan);
+            Storage.GossipMenuOptions.Add((gossipOption.MenuID, gossipOption.OptionID), gossipOption, packet.TimeSpan);
         }
 
         public static void ReadGossipQuestTextData(Packet packet, params object[] idx)

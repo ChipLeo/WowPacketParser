@@ -21,6 +21,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19793
 
         private static readonly BiDictionary<Opcode, int> ClientOpcodes = new BiDictionary<Opcode, int>
         {
+            {Opcode.CMSG_ACCEPT_WARGAME_INVITE, 0x0E3F},                   // Unconfirmed
             {Opcode.CMSG_ADD_FRIEND, 0x039E},
             {Opcode.CMSG_ADD_IGNORE, 0x16A0},
             {Opcode.CMSG_AREA_TRIGGER, 0x0BDB},
@@ -41,7 +42,6 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19793
             {Opcode.CMSG_BATTLE_PET_REQUEST_JOURNAL, 0x0F37},
             {Opcode.CMSG_BATTLE_PET_SUMMON, 0x0A9D},
             {Opcode.CMSG_BATTLEFIELD_JOIN, 0x1D36},
-            {Opcode.CMSG_BATTLEFIELD_JOIN_RATED, 0x01AA},             // Unconfirmed
             {Opcode.CMSG_BATTLEFIELD_LEAVE, 0x0272},                  // Unconfirmed
             {Opcode.CMSG_BATTLEFIELD_PORT, 0x1D32},                   // Unconfirmed
             {Opcode.CMSG_BINDER_ACTIVATE, 0x1C71},
@@ -114,7 +114,8 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19793
             {Opcode.CMSG_REQUEST_GUILD_PARTY_STATE, 0x0B5B},
             {Opcode.CMSG_GUILD_SET_ACHIEVEMENT_TRACKING, 0x1977},
             {Opcode.CMSG_INSPECT, 0x1C21},
-            {Opcode.CMSG_JOIN_ARENA, 0x0865},                         // Unconfirmed
+            {Opcode.CMSG_JOIN_RATED_BATTLEGROUND, 0x01AA},             // Unconfirmed
+            {Opcode.CMSG_BATTLEMASTER_JOIN_ARENA, 0x0865},                         // Unconfirmed
             {Opcode.CMSG_BATTLEMASTER_JOIN_ARENA_SKIRMISH, 0x1E01},
             {Opcode.CMSG_CHAT_JOIN_CHANNEL, 0x152A},
             {Opcode.CMSG_LEARN_TALENTS, 0x0AAA},
@@ -215,7 +216,7 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19793
             {Opcode.CMSG_GET_PVP_OPTIONS_ENABLED, 0x029E},            // Unconfirmed
             {Opcode.CMSG_REQUEST_PVP_REWARDS, 0x06DC},                // Unconfirmed
             {Opcode.CMSG_REQUEST_RAID_INFO, 0x0A96},                  // Unconfirmed
-            {Opcode.CMSG_REQUEST_RATED_INFO, 0x0A40},                 // Unconfirmed
+            {Opcode.CMSG_REQUEST_RATED_BATTLEFIELD_INFO, 0x0A40},                 // Unconfirmed
             {Opcode.CMSG_REQUEST_STABLED_PETS, 0x01CA},
             {Opcode.CMSG_REQUEST_VEHICLE_EXIT, 0x054D},
             {Opcode.CMSG_RIDE_VEHICLE_INTERACT, 0x1ED0},
@@ -279,7 +280,6 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19793
             {Opcode.CMSG_VOID_STORAGE_TRANSFER, 0x0E07},
             {Opcode.CMSG_UNLOCK_VOID_STORAGE, 0x0AA1},
             {Opcode.CMSG_WARDEN_DATA, 0x02B8},
-            {Opcode.CMSG_WARGAME_RESPONSE, 0x0E3F},                   // Unconfirmed
             {Opcode.CMSG_WHO, 0x079E},
         };
 
@@ -663,7 +663,6 @@ namespace WowPacketParser.Enums.Version.V6_1_2_19793
             {Opcode.SMSG_SPELL_DELAYED, 0x14FD},
             {Opcode.SMSG_SPELL_DISPELL_LOG, 0x10FD},
             {Opcode.SMSG_SPELL_ENERGIZE_LOG, 0x1C8D},
-            {Opcode.SMSG_SPELL_ENERGIZE_LOG2, 0x1C3D},
             {Opcode.SMSG_SPELL_EXECUTE_LOG, 0x1D9A},
             {Opcode.SMSG_SPELL_FAILED_OTHER, 0x10CE},
             {Opcode.SMSG_SPELL_FAILURE, 0x1CAD},

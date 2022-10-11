@@ -42,11 +42,6 @@ namespace WowPacketParser.Misc
             return bytes.ToArray();
         }
 
-        public static string ByteArrayToHexString(byte[] data)
-        {
-            return data.Aggregate(String.Empty, (current, t) => current + t.ToString("X2", CultureInfo.InvariantCulture));
-        }
-
         public static string ByteArrayToHexTable(byte[] data, bool sh0rt = false, int offset = 0, bool noOffsetFirstLine = true)
         {
             var n = Environment.NewLine;
@@ -300,7 +295,7 @@ namespace WowPacketParser.Misc
             return dict;
         }
 
-        public static List<T> GetAttributes<T>(FieldInfo field) where T : Attribute
+        public static List<T> GetAttributes<T>(MemberInfo field) where T : Attribute
         {
             var list = new List<T>();
 

@@ -5,7 +5,7 @@ using WowPacketParser.SQL;
 namespace WowPacketParser.Store.Objects
 {
     [DBTableName("quest_template")]
-    public sealed class QuestTemplate : IDataModel
+    public sealed record QuestTemplate : IDataModel
     {
         [DBFieldName("ID", true)]
         public uint? ID;
@@ -67,7 +67,7 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("RewardXPMultiplier", TargetedDatabase.WarlordsOfDraenor)]
         public float? RewardXPMultiplier;
 
-        [DBFieldName("RewardMoney")]
+        [DBFieldName("RewardMoney", TargetedDatabase.Zero, TargetedDatabase.Shadowlands)]
         public int? RewardMoney;
 
         [DBFieldName("RewardMoneyDifficulty", TargetedDatabase.WarlordsOfDraenor)]

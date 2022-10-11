@@ -9,7 +9,7 @@ namespace WowPacketParser.Store.Objects
 {
     [DBTableName("spell_areatrigger", TargetedDatabase.Zero, TargetedDatabase.Shadowlands)]
     [DBTableName("areatrigger_create_properties", TargetedDatabase.Shadowlands)]
-    public sealed class AreaTriggerCreateProperties : WoWObject, IDataModel
+    public sealed record AreaTriggerCreateProperties : WoWObject, IDataModel
     {
         [DBFieldName("SpellMiscId", TargetedDatabase.Zero, TargetedDatabase.Shadowlands, true)]
         [DBFieldName("Id", TargetedDatabase.Shadowlands, true)]
@@ -31,25 +31,25 @@ namespace WowPacketParser.Store.Objects
         public int? FacingCurveId = 0;
 
         [DBFieldName("AnimId")]
-        public int? AnimId = 0;
+        public int? AnimId = ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_5_40772) ? -1 : 0;
 
         [DBFieldName("AnimKitId")]
         public int? AnimKitId = 0;
 
         [DBFieldName("DecalPropertiesId")]
-        public uint DecalPropertiesId = 0;
+        public uint? DecalPropertiesId = 0;
 
         [DBFieldName("TimeToTarget")]
-        public uint TimeToTarget = 0;
+        public uint? TimeToTarget = 0;
 
         [DBFieldName("TimeToTargetScale")]
-        public uint TimeToTargetScale = 0;
+        public uint? TimeToTargetScale = 0;
 
         [DBFieldName("Shape", TargetedDatabase.Shadowlands)]
         public byte? Shape;
 
-        [DBFieldName("ShapeData", TargetedDatabase.Shadowlands, 6, true)]
-        public float?[] ShapeData = { 0, 0, 0, 0, 0, 0 };
+        [DBFieldName("ShapeData", TargetedDatabase.Shadowlands, 8, true)]
+        public float?[] ShapeData = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
         [DBFieldName("VerifiedBuild")]
         public int? VerifiedBuild = ClientVersion.BuildInt;
@@ -75,6 +75,18 @@ namespace WowPacketParser.Store.Objects
             {
                 // this is a hack to allow generating statements
                 AreaTriggerCreatePropertiesId = 0x80000000 | spellId;
+            }
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_5_40772))
+            {
+                if (AreaTriggerData.VisualAnim != null)
+                {
+                    if (AreaTriggerData.VisualAnim.AnimationDataID != 0 && AreaTriggerData.VisualAnim.AnimationDataID != uint.MaxValue)
+                        AnimId = (int)AreaTriggerData.VisualAnim.AnimationDataID;
+
+                    if (AreaTriggerData.VisualAnim.AnimKitID != 0)
+                        AnimKitId = (int)AreaTriggerData.VisualAnim.AnimKitID;
+                }
             }
         }
 
