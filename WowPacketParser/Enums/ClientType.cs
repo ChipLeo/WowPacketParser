@@ -16,5 +16,6 @@
         ClassicSoM         = 8,
         BurningCrusadeClassic = 8,
         WotLKClassic       = 8,
+        Dragonflight       = 9,
     }
 }

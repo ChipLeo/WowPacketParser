@@ -92,18 +92,23 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
         {
             var monsterMove = packet.Holder.MonsterMove = new();
             var pos = new Vector3();
+            var dest = new Vector3();
 
             var ownerGUID = new byte[8];
             var guid2 = new byte[8];
             var factingTargetGUID = new byte[8];
 
-            packet.ReadSingle("Float30");
-            packet.ReadInt32("Int28");
-            packet.ReadSingle("Float34");
-            packet.ReadSingle("Float2C");
+            dest.Y = packet.ReadSingle();
+            packet.ReadInt32("SplineID");
+            dest.Z = packet.ReadSingle();
+            dest.X = packet.ReadSingle();
             pos.X = packet.ReadSingle();
             pos.Y = packet.ReadSingle();
             pos.Z = packet.ReadSingle();
+
+            packet.AddValue("Position", pos);
+            packet.AddValue("Destination", dest);
+
             ownerGUID[3] = packet.ReadBit();
             var bit40 = !packet.ReadBit();
             ownerGUID[6] = packet.ReadBit();
@@ -143,7 +148,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             if (bitB0)
             {
                 bits8C = packet.ReadBits(22);
-                packet.ReadBits("bits9C", 2);
+                packet.ReadBits("SplineFilterFlags", 2);
             }
 
             var bit38 = packet.ReadBit();
@@ -162,35 +167,35 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
 
             if (bitB0)
             {
-                packet.ReadSingle("FloatA0");
+                packet.ReadSingle("SplineFilterBaseSpeed");
 
                 for (var i = 0; i < bits8C; ++i)
                 {
-                    packet.ReadInt16("short74+2", i);
-                    packet.ReadInt16("short74+0", i);
+                    packet.ReadUInt16("FilterSpeed", i);
+                    packet.ReadInt16("FilterIdx", i);
                 }
 
-                packet.ReadSingle("FloatA8");
-                packet.ReadInt16("IntA4");
-                packet.ReadInt16("IntAC");
+                packet.ReadSingle("DistToPrevFilterKey");
+                packet.ReadInt16("FilterStartOffset");
+                packet.ReadInt16("FilterAddedToStart");
             }
 
             if (bit6D)
-                packet.ReadByte("Byte6D");
+                packet.ReadByte("VehicleExitVoluntary");
 
             if (splineType == 4)
                 monsterMove.LookOrientation = packet.ReadSingle("Facing Angle");
 
             if (bit40)
-                packet.ReadInt32("Int40");
+                packet.ReadInt32("Flags");
 
             packet.ReadXORByte(ownerGUID, 7);
             if (bit78)
-                packet.ReadByte("Byte78");
+                packet.ReadByte("VehicleSeat");
             if (bit4C)
-                packet.ReadInt32("Int4C");
+                packet.ReadInt32("Elapsed");
             if (bit45)
-                packet.ReadByte("Byte45");
+                packet.ReadByte("AnimTier");
 
             var waypoints = new Vector3[waypointCount];
             for (var i = 0; i < waypointCount; ++i)
@@ -206,7 +211,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.ReadXORByte(ownerGUID, 2);
 
             if (bit48)
-                packet.ReadInt32("Int48");
+                packet.ReadInt32("TierTransStartTime");
 
             Vector3 endpos = new Vector3();
             for (var i = 0; i < splineCount; ++i)
@@ -230,7 +235,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.ReadXORByte(ownerGUID, 6);
 
             if (bit50)
-                packet.ReadInt32("Int50");
+                packet.ReadInt32("MoveTime");
 
             if (splineType == 2)
             {
@@ -238,15 +243,15 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             }
 
             if (bit54)
-                packet.ReadSingle("Float54");
+                packet.ReadSingle("JumpGravity");
 
             if (bit6C)
-                packet.ReadByte("Byte6C");
+                packet.ReadByte("Mode");
 
             packet.ReadXORByte(ownerGUID, 0);
 
             if (bit58)
-                packet.ReadInt32("Int58");
+                packet.ReadInt32("SpecialTime");
 
             packet.ReadXORByte(ownerGUID, 4);
 
@@ -268,8 +273,26 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             }
 
             monsterMove.Mover = packet.WriteGuid("Owner GUID", ownerGUID);
-            packet.WriteGuid("Guid2", guid2);
+            packet.WriteGuid("Transport GUID", guid2);
             monsterMove.Position = pos;
+        }
+
+        [Parser(Opcode.SMSG_CONTROL_UPDATE)]
+        public static void HandleClientControlUpdate(Packet packet)
+        {
+            packet.ReadBit("AllowMove");
+
+            var guid = packet.StartBitStream(7, 1, 6, 3, 2, 4, 5, 0);
+            packet.ParseBitStream(guid, 0, 5, 3, 2, 4, 7, 6, 1);
+            packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_MOVE_SET_ACTIVE_MOVER)]
+        public static void HandleMoveSetActiveMover(Packet packet)
+        {
+            var guid = packet.StartBitStream(1, 2, 4, 5, 3, 0, 7, 6);
+            packet.ParseBitStream(guid, 4, 1, 5, 7, 3, 2, 0, 6);
+            packet.WriteGuid("Guid", guid);
         }
 
         [Parser(Opcode.SMSG_MOVE_UPDATE)]
@@ -406,7 +429,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
         public static void HandlePhaseShift(Packet packet)
         {
             var phaseShift = packet.Holder.PhaseShift = new PacketPhaseShift();
-            CoreParsers.MovementHandler.ActivePhases.Clear();
+            CoreParsers.MovementHandler.ClearPhases();
 
             packet.ReadUInt32("UInt32 1");
 
@@ -438,6 +461,8 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.ParseBitStream(guid, 0, 4, 7, 6, 3, 5, 1, 2);
 
             phaseShift.Client = packet.WriteGuid("GUID", guid);
+
+            CoreParsers.MovementHandler.WritePhaseChanges(packet);
         }
 
         [Parser(Opcode.SMSG_FLIGHT_SPLINE_SYNC)]
@@ -3092,6 +3117,25 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             packet.WriteGuid("Guid", guid);
         }
 
+        [Parser(Opcode.SMSG_MOVE_UNROOT)]
+        public static void HandleMoveUnroot(Packet packet)
+        {
+            var guid = new byte[8];
+
+            packet.StartBitStream(guid, 0, 6, 4, 1, 2, 3, 7, 5);
+            packet.ReadXORByte(guid, 1);
+            packet.ReadXORByte(guid, 0);
+            packet.ReadXORByte(guid, 3);
+            packet.ReadXORByte(guid, 6);
+            packet.ReadXORByte(guid, 4);
+            packet.ReadUInt32("SequenceIndex");
+            packet.ReadXORByte(guid, 5);
+            packet.ReadXORByte(guid, 7);
+            packet.ReadXORByte(guid, 2);
+
+            packet.WriteGuid("Guid", guid);
+        }
+
         [Parser(Opcode.CMSG_MOVE_TIME_SKIPPED)]
         public static void HandleMoveTimeSkipped(Packet packet)
         {
@@ -3882,6 +3926,109 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             var guid = packet.StartBitStream(0, 7, 6, 2, 5, 1, 4, 3);
             packet.ParseBitStream(guid, 5, 4, 0, 1, 3, 7, 6, 2);
             packet.WriteGuid("Guid", guid);
+        }
+
+        [Parser(Opcode.SMSG_MOVE_APPLY_MOVEMENT_FORCE)]
+        public static void HandleMoveApplyMovementForce(Packet packet)
+        {
+            var pos = new Vector3();
+            var guid = new byte[8];
+
+            guid[5] = packet.ReadBit();
+            guid[4] = packet.ReadBit();
+            packet.ReadBits("Type", 2);
+            guid[6] = packet.ReadBit();
+            guid[1] = packet.ReadBit();
+            guid[2] = packet.ReadBit();
+            guid[3] = packet.ReadBit();
+            guid[0] = packet.ReadBit();
+            guid[7] = packet.ReadBit();
+
+            pos.Z = packet.ReadSingle();
+            packet.ReadSingle("Magnitude");
+            packet.ReadXORByte(guid, 4);
+            packet.ReadUInt32("SequenceIndex");
+            packet.ReadXORByte(guid, 5);
+            packet.ReadXORByte(guid, 7);
+            pos.X = packet.ReadSingle();
+            packet.ReadXORByte(guid, 6);
+            packet.ReadXORByte(guid, 3);
+            packet.ReadUInt32("ID");
+            pos.Y = packet.ReadSingle();
+            packet.ReadXORByte(guid, 2);
+            packet.ReadUInt32("TransportID");
+            packet.ReadXORByte(guid, 1);
+            packet.ReadXORByte(guid, 0);
+
+            packet.WriteGuid("Guid", guid);
+            packet.AddValue("Direction", pos);
+        }
+
+        [Parser(Opcode.SMSG_MOVE_TELEPORT)]
+        public static void HandleMoveTeleport548(Packet packet)
+        {
+            var moverGUID = new byte[8];
+            var transportGUID = new byte[8];
+
+            Vector3 pos = new Vector3
+            {
+                X = packet.ReadSingle(),
+                Z = packet.ReadSingle(),
+                Y = packet.ReadSingle()
+            };
+
+            packet.WriteLine($"Destination: X: {pos.X}, Y: {pos.Y}, Z: {pos.Z}");
+            packet.ReadUInt32("SequenceIndex");
+            packet.ReadSingle("Facing");
+
+            moverGUID[5] = packet.ReadBit();
+            moverGUID[4] = packet.ReadBit();
+            moverGUID[6] = packet.ReadBit();
+            moverGUID[7] = packet.ReadBit();
+            moverGUID[3] = packet.ReadBit();
+            moverGUID[0] = packet.ReadBit();
+
+            bool hasTransportGuid = packet.ReadBit("HasTransport");
+
+            if (hasTransportGuid)
+            {
+                transportGUID = packet.StartBitStream(6, 4, 2, 5, 3, 0, 7, 1);
+            }
+
+            bool hasVehicle = packet.ReadBit("Has Vehicle");
+            moverGUID[1] = packet.ReadBit();
+
+            if (hasVehicle)
+            {
+                packet.ReadBit("VehicleExitTeleport");
+                packet.ReadBit("VehicleExitVoluntary");
+            }
+
+            moverGUID[2] = packet.ReadBit();
+
+            packet.ReadXORByte(moverGUID, 2);
+            packet.ReadXORByte(moverGUID, 5);
+
+            if (hasTransportGuid)
+            {
+                packet.ParseBitStream(transportGUID, 2, 1, 4, 0, 6, 5, 7, 3);
+            }
+
+            packet.ReadXORByte(moverGUID, 0);
+            packet.ReadXORByte(moverGUID, 4);
+
+            if (hasVehicle)
+                packet.ReadByte("VehicleSeatIndex");
+
+            packet.ReadXORByte(moverGUID, 3);
+            packet.ReadXORByte(moverGUID, 6);
+            packet.ReadXORByte(moverGUID, 1);
+            packet.ReadXORByte(moverGUID, 7);
+
+            packet.WriteGuid("MoverGUID", moverGUID);
+
+            if (hasTransportGuid)
+                packet.WriteGuid("TransportGUID", transportGUID);
         }
     }
 }

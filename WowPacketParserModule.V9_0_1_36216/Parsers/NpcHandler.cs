@@ -32,6 +32,9 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
 
             gossipPOI.ID = protoPoi.Id = packet.ReadInt32("ID");
 
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_7_48676))
+                gossipPOI.Flags = protoPoi.Flags = (uint)packet.ReadInt32("Flags");
+
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_0_39185))
             {
                 Vector3 pos = packet.ReadVector3("Coordinates");
@@ -54,10 +57,11 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
             protoPoi.Icon = (uint)gossipPOI.Icon;
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_0_5_37503))
-                gossipPOI.Unknown905 = packet.ReadInt32("Unknown905");
+                gossipPOI.WMOGroupID = packet.ReadInt32("WMOGroupID");
 
             packet.ResetBitReader();
-            gossipPOI.Flags = gossipPOI.Flags = packet.ReadBits("Flags", 14);
+            if (ClientVersion.RemovedInVersion(ClientVersionBuild.V10_0_7_48676))
+                gossipPOI.Flags = protoPoi.Flags = packet.ReadBits("Flags", 14);
             uint bit84 = packet.ReadBits(6);
             gossipPOI.Name = protoPoi.Name = packet.ReadWoWString("Name", bit84);
 
@@ -120,7 +124,29 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
             int friendshipFactionID = packet.ReadInt32("FriendshipFactionID");
             CoreParsers.NpcHandler.AddGossipAddon(packetGossip.MenuId, friendshipFactionID, guid, packet.TimeSpan);
 
-            var broadcastTextID = (uint)packet.ReadInt32("BroadcastTextID");
+            uint broadcastTextID = 0;
+            if (ClientVersion.RemovedInVersion(ClientVersionBuild.V10_0_0_46181))
+                broadcastTextID = packet.ReadUInt32("BroadcastTextID");
+
+            int optionsCount = packet.ReadInt32("GossipOptionsCount");
+            int questsCount = packet.ReadInt32("GossipQuestsCount");
+
+            bool hasBroadcastTextID = false;
+            bool hasBroadcastTextID2 = false;
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_0_46181))
+            {
+                hasBroadcastTextID = packet.ReadBit("HasBroadcastTextID");
+                hasBroadcastTextID2 = packet.ReadBit("HasBroadcastTextID2");
+            }
+
+            for (int i = 0; i < optionsCount; ++i)
+                packetGossip.Options.Add(V6_0_2_19033.Parsers.NpcHandler.ReadGossipOptionsData((uint)menuId, guid, packet, i, "GossipOptions"));
+
+            if (hasBroadcastTextID)
+                broadcastTextID = (uint)packet.ReadInt32("BroadcastTextID");
+
+            if (hasBroadcastTextID2)
+                broadcastTextID = (uint)packet.ReadInt32("BroadcastTextID2");
 
             var npcTextId = SQLDatabase.GetNPCTextIDByMenuIDAndBroadcastText(menuId, broadcastTextID);
             if (npcTextId != 0)
@@ -135,19 +161,18 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
             else
                 AddBroadcastTextToGossip(packetGossip.MenuId, broadcastTextID, guid);
 
-            int optionsCount = packet.ReadInt32("GossipOptionsCount");
-            int questsCount = packet.ReadInt32("GossipQuestsCount");
-
-            for (int i = 0; i < optionsCount; ++i)
-                packetGossip.Options.Add(V6_0_2_19033.Parsers.NpcHandler.ReadGossipOptionsData((uint)menuId, guid, packet, i, "GossipOptions"));
-
             for (int i = 0; i < questsCount; ++i)
                 packetGossip.Quests.Add(V7_0_3_22248.Parsers.NpcHandler.ReadGossipQuestTextData(packet, i, "GossipQuests"));
 
             if (guid.GetObjectType() == ObjectType.Unit)
             {
-                if (!Storage.CreatureDefaultGossips.ContainsKey(guid.GetEntry()))
-                    Storage.CreatureDefaultGossips.Add(guid.GetEntry(), (uint)menuId);
+                CreatureTemplateGossip creatureTemplateGossip = new()
+                {
+                    CreatureID = guid.GetEntry(),
+                    MenuID = (uint)menuId
+                };
+                Storage.CreatureTemplateGossips.Add(creatureTemplateGossip);
+                Storage.CreatureDefaultGossips.Add(guid.GetEntry(), (uint)menuId);
             }
 
             CoreParsers.NpcHandler.UpdateLastGossipOptionActionMessage(packet.TimeSpan, (uint)menuId);

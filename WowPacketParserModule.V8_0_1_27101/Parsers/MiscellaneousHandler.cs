@@ -9,6 +9,7 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
     {
         public static void ReadVoiceChatManagerSettings(Packet packet, params object[] idx)
         {
+            packet.ResetBitReader();
             packet.ReadBit("IsSquelched", idx);
             packet.ReadPackedGuid128("BnetAccountID", idx);
             packet.ReadPackedGuid128("GuildGUID", idx);
@@ -137,7 +138,6 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                     packet.ReadByte("RaceClassExpansionLevels", i);
             }
 
-            packet.ResetBitReader();
             ReadVoiceChatManagerSettings(packet, "VoiceChatManagerSettings");
 
             if (hasEuropaTicketSystemStatus)
@@ -291,15 +291,28 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             var hasWeeklyQuantity = packet.ReadBit("HasWeeklyQuantity");
             var hasTrackedQuantity = packet.ReadBit("HasTrackedQuantity");
             var hasMaxQuantity = packet.ReadBit("HasMaxQuantity");
+            var hasTotalEarned = false;
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_0_1_36216))
+                hasTotalEarned = packet.ReadBit("HasTotalEarned");
             packet.ReadBit("SuppressChatLog");
             var hasQuantityChange = false;
             var hasQuantityGainSource = false;
             var hasQuantityLostSource = false;
+            var hasFirstCraftOperationID = false;
+            var hasNextRechargeTime = false;
+            var hasRechargeCyclicStartTime = false;
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V8_1_5_29683))
             {
                 hasQuantityChange = packet.ReadBit("HasQuantityChange");
-                hasQuantityGainSource = packet.ReadBit("HasQuantityGainSource");
                 hasQuantityLostSource = packet.ReadBit("HasQuantityLostSource");
+                hasQuantityGainSource = packet.ReadBit("HasQuantityGainSource");
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_2_46479))
+                {
+                    hasFirstCraftOperationID = packet.ReadBit("HasFirstCraftOperationID");
+                    hasNextRechargeTime = packet.ReadBit("HasNextRechargeTime");
+                }
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_1_0_49407))
+                    hasRechargeCyclicStartTime = packet.ReadBit("HasRechargeCyclicStartTime");
             }
 
             if (hasWeeklyQuantity)
@@ -311,16 +324,30 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             if (hasMaxQuantity)
                 packet.ReadInt32("MaxQuantity");
 
+            if (hasTotalEarned)
+                packet.ReadInt32("TotalEarned");
+
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V8_1_5_29683))
             {
                 if (hasQuantityChange)
                     packet.ReadInt32("QuantityChange");
 
-                if (hasQuantityGainSource)
-                    packet.ReadInt32("QuantityGainSource");
-
                 if (hasQuantityLostSource)
                     packet.ReadInt32("QuantityLostSource");
+
+                if (hasQuantityGainSource)
+                    packet.ReadInt32("QuantityGainSource");
+            }
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_2_46479))
+            {
+                if (hasFirstCraftOperationID)
+                    packet.ReadUInt32("FirstCraftOperationID");
+
+                if (hasNextRechargeTime)
+                    packet.ReadTime64("NextRechargeTime");
+
+                if (hasRechargeCyclicStartTime)
+                    packet.ReadTime64("RechargeCyclicStartTime");
             }
         }
 

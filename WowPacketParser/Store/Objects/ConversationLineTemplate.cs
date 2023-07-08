@@ -10,7 +10,7 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("Id", true)]
         public uint? Id;
 
-        [DBFieldName("StartTime", TargetedDatabase.Zero, TargetedDatabase.Shadowlands)]
+        [DBFieldName("StartTime", TargetedDatabaseFlag.TillBattleForAzeroth)]
         public uint? StartTime;
 
         [DBFieldName("UiCameraID")]
@@ -21,6 +21,9 @@ namespace WowPacketParser.Store.Objects
 
         [DBFieldName("Flags")]
         public byte? Flags;
+
+        [DBFieldName("ChatType", TargetedDatabaseFlag.SinceShadowlands)]
+        public byte? ChatType;
 
         [DBFieldName("VerifiedBuild")]
         public int? VerifiedBuild = ClientVersion.BuildInt;

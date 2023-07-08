@@ -48,6 +48,16 @@ namespace WowPacketParser.Parsing.Parsers
         public static GossipOptionSelection LastGossipOption = new GossipOptionSelection();
         public static GossipOptionSelection TempGossipOptionPOI = new GossipOptionSelection();
 
+        public static void AddGossipNpcOption(int gossipNpcOptionId, TimeSpan timeSpan, bool checkDelay = false)
+        {
+            if (LastGossipOption.HasSelection)
+                if (!checkDelay || (timeSpan - LastGossipOption.TimeSpan).Duration() <= TimeSpan.FromMilliseconds(2500))
+                    Storage.GossipMenuOptions[(LastGossipOption.MenuId, LastGossipOption.OptionIndex)].Item1.GossipNpcOptionID = gossipNpcOptionId;
+
+            LastGossipOption.Reset();
+            TempGossipOptionPOI.Reset();
+        }
+
         public static void AddToCreatureTrainers(uint? trainerId, TimeSpan timeSpan, bool checkDelay = false)
         {
             if (LastGossipOption.HasSelection)
@@ -75,11 +85,9 @@ namespace WowPacketParser.Parsing.Parsers
 
             if ((timeSpan - TempGossipOptionPOI.TimeSpan).Duration() <= TimeSpan.FromMilliseconds(2500))
             {
-                if (TempGossipOptionPOI.ActionMenuId == null)
-                    return;
-
-                Storage.GossipMenuOptions[(TempGossipOptionPOI.MenuId, TempGossipOptionPOI.OptionIndex)].Item1.ActionMenuID = TempGossipOptionPOI.ActionMenuId.GetValueOrDefault();
+                Storage.GossipMenuOptions[(TempGossipOptionPOI.MenuId, TempGossipOptionPOI.OptionIndex)].Item1.ActionMenuID = TempGossipOptionPOI.ActionMenuId.GetValueOrDefault(0);
                 Storage.GossipMenuOptions[(TempGossipOptionPOI.MenuId, TempGossipOptionPOI.OptionIndex)].Item1.ActionPoiID = gossipPOIID;
+
                 //clear temp
                 TempGossipOptionPOI.Reset();
             }
@@ -131,6 +139,17 @@ namespace WowPacketParser.Parsing.Parsers
                 gossipMenuAddon.ObjectEntry = guid.GetEntry();
                 Storage.GossipMenuAddons.Add(gossipMenuAddon, timeSpan);
             }
+        }
+
+        public static void AddGossipOptionAddon(int? garrTalentTreeID, TimeSpan timeSpan, bool checkDelay = false)
+        {
+            if (garrTalentTreeID != 0)
+                if (LastGossipOption.HasSelection)
+                    if (!checkDelay || (timeSpan - LastGossipOption.TimeSpan).Duration() <= TimeSpan.FromMilliseconds(2500))
+                        Storage.GossipMenuOptionAddons.Add(new GossipMenuOptionAddon { MenuID = LastGossipOption.MenuId, OptionID = LastGossipOption.OptionIndex, GarrTalentTreeID = garrTalentTreeID }, timeSpan);
+
+            LastGossipOption.Reset();
+            TempGossipOptionPOI.Reset();
         }
 
         [Parser(Opcode.SMSG_GOSSIP_POI)]
@@ -432,82 +451,6 @@ namespace WowPacketParser.Parsing.Parsers
             TempGossipOptionPOI.Reset();
         }
 
-        [Parser(Opcode.SMSG_VENDOR_INVENTORY, ClientVersionBuild.V4_3_4_15595)]
-        public static void HandleVendorInventoryList434(Packet packet)
-        {
-            var guidBytes = new byte[8];
-
-            guidBytes[1] = packet.ReadBit();
-            guidBytes[0] = packet.ReadBit();
-
-            uint count = packet.ReadBits("Item Count", 21);
-
-            guidBytes[3] = packet.ReadBit();
-            guidBytes[6] = packet.ReadBit();
-            guidBytes[5] = packet.ReadBit();
-            guidBytes[2] = packet.ReadBit();
-            guidBytes[7] = packet.ReadBit();
-
-            var hasExtendedCost = new bool[count];
-            var hasCondition = new bool[count];
-            for (int i = 0; i < count; ++i)
-            {
-                hasExtendedCost[i] = !packet.ReadBit();
-                hasCondition[i] = !packet.ReadBit();
-            }
-
-            guidBytes[4] = packet.ReadBit();
-
-            var tempList = new List<NpcVendor>();
-            for (int i = 0; i < count; ++i)
-            {
-                NpcVendor npcVendor = new NpcVendor
-                {
-                    Slot = packet.ReadInt32("Item Position", i)
-                };
-
-                packet.ReadInt32("Max Durability", i);
-                if (hasExtendedCost[i])
-                    npcVendor.ExtendedCost = packet.ReadUInt32("Extended Cost", i);
-                npcVendor.Item = packet.ReadInt32<ItemId>("Item ID", i);
-                npcVendor.Type = packet.ReadUInt32("Type", i); // 1 - item, 2 - currency
-                packet.ReadInt32("Price", i);
-                packet.ReadInt32("Display ID", i);
-                if (hasCondition[i])
-                    packet.ReadInt32("Row ID", i);
-                int maxCount = packet.ReadInt32("Max Count", i);
-                npcVendor.MaxCount = maxCount == -1 ? 0 : (uint)maxCount; // TDB
-                uint buyCount = packet.ReadUInt32("Buy Count", i);
-
-                if (npcVendor.Type == 2)
-                    npcVendor.MaxCount = buyCount;
-
-                tempList.Add(npcVendor);
-            }
-
-            packet.ReadXORByte(guidBytes, 5);
-            packet.ReadXORByte(guidBytes, 4);
-            packet.ReadXORByte(guidBytes, 1);
-            packet.ReadXORByte(guidBytes, 0);
-            packet.ReadXORByte(guidBytes, 6);
-
-            packet.ReadByte("Unk Byte");
-
-            packet.ReadXORByte(guidBytes, 2);
-            packet.ReadXORByte(guidBytes, 3);
-            packet.ReadXORByte(guidBytes, 7);
-
-            uint entry = packet.WriteGuid("GUID", guidBytes).GetEntry();
-            tempList.ForEach(v =>
-            {
-                v.Entry = entry;
-                Storage.NpcVendors.Add(v, packet.TimeSpan);
-            });
-
-            LastGossipOption.Reset();
-            TempGossipOptionPOI.Reset();
-        }
-
         [Parser(Opcode.CMSG_GOSSIP_HELLO)]
         [Parser(Opcode.CMSG_TRAINER_LIST)]
         [Parser(Opcode.CMSG_LIST_INVENTORY)]
@@ -655,8 +598,13 @@ namespace WowPacketParser.Parsing.Parsers
 
             if (guid.GetObjectType() == ObjectType.Unit)
             {
-                if (!Storage.CreatureDefaultGossips.ContainsKey(guid.GetEntry()))
-                    Storage.CreatureDefaultGossips.Add(guid.GetEntry(), menuId);
+                CreatureTemplateGossip creatureTemplateGossip = new()
+                {
+                    CreatureID = guid.GetEntry(),
+                    MenuID = menuId
+                };
+                Storage.CreatureTemplateGossips.Add(creatureTemplateGossip);
+                Storage.CreatureDefaultGossips.Add(guid.GetEntry(), menuId);
             }
 
             Storage.Gossips.Add(gossip, packet.TimeSpan);

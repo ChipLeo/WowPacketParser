@@ -42,15 +42,21 @@ namespace WowPacketParser.SQL.Builders
                     if (!(npc.Map.ToString(CultureInfo.InvariantCulture).MatchesFilters(Settings.MapFilters)))
                         continue;
 
+                if (!Filters.CheckFilter(npc.Guid))
+                    continue;
+
                 var auras = string.Empty;
                 var commentAuras = string.Empty;
                 if (npc.Auras != null && npc.Auras.Count != 0)
                 {
-                    foreach (var aura in npc.Auras.Where(aura =>
+                    var auraList = npc.Auras.Where(aura =>
                         aura != null &&
                         (ClientVersion.AddedInVersion(ClientType.MistsOfPandaria) ?
                             aura.AuraFlags.HasAnyFlag(AuraFlagMoP.NoCaster) :
-                            aura.AuraFlags.HasAnyFlag(AuraFlag.NotCaster))))
+                            aura.AuraFlags.HasAnyFlag(AuraFlag.NotCaster)) &&
+                        aura.Duration <= 0);
+
+                    foreach (var aura in auraList)
                     {
                         auras += aura.SpellId + " ";
                         commentAuras += StoreGetters.GetName(StoreNameType.Spell, (int) aura.SpellId, false) + ", ";
@@ -64,8 +70,11 @@ namespace WowPacketParser.SQL.Builders
                     Entry = unit.Key.GetEntry(),
                     PathID = 0,
                     MountID = (uint)npc.UnitData.MountDisplayID,
-                    Bytes1 = npc.Bytes1,
-                    Bytes2 = npc.Bytes2,
+                    StandState = npc.UnitData.StandState ?? 0,
+                    AnimTier = npc.UnitData.AnimTier ?? 0,
+                    VisFlags = npc.UnitData.VisFlags ?? 0,
+                    SheathState = npc.UnitData.SheatheState ?? 0,
+                    PvpFlags = npc.UnitData.PvpFlags ?? 0,
                     Emote = 0,
                     AIAnimKit = npc.AIAnimKit.GetValueOrDefault(0),
                     MovementAnimKit = npc.MovementAnimKit.GetValueOrDefault(0),
@@ -122,14 +131,14 @@ namespace WowPacketParser.SQL.Builders
             if (units.Count == 0)
                 return string.Empty;
 
-            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.creature_template_scaling))
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.creature_template_difficulty))
                 return string.Empty;
 
             var scalingdeltalevels = GetScalingDeltaLevels(units);
 
             foreach (var unit in units)
             {
-                if (Storage.CreatureTemplateScalings.Any(creature => creature.Item1.Entry == unit.Key.GetEntry()))
+                if (Storage.CreatureTemplateDifficulties.Any(creature => creature.Item1.Entry == unit.Key.GetEntry()))
                     continue;
 
                 var npc = unit.Value;
@@ -140,7 +149,7 @@ namespace WowPacketParser.SQL.Builders
 
                 if (minLevel != 0 || maxLevel != 0 || contentTuningID != 0)
                 {
-                    Storage.CreatureTemplateScalings.Add(new CreatureTemplateScaling
+                    CreatureTemplateDifficulty creatureDifficulty = new CreatureTemplateDifficulty
                     {
                         Entry = unit.Key.GetEntry(),
                         DifficultyID = npc.DifficultyID,
@@ -149,13 +158,26 @@ namespace WowPacketParser.SQL.Builders
                         LevelScalingDeltaMin = scalingdeltalevels[unit.Key.GetEntry()].Item1,
                         LevelScalingDeltaMax = scalingdeltalevels[unit.Key.GetEntry()].Item2,
                         ContentTuningID = contentTuningID
-                    });
+                    };
+
+                    CreatureTemplate template;
+                    if (Storage.CreatureTemplates.TryGetValue(unit.Key.GetEntry(), out template))
+                    {
+                        creatureDifficulty.HealthScalingExpansion = template.HealthScalingExpansion;
+                        creatureDifficulty.HealthModifier = template.HealthModifier;
+                        creatureDifficulty.ManaModifier = template.ManaModifier;
+                        creatureDifficulty.CreatureDifficultyID = template.CreatureDifficultyID;
+                        creatureDifficulty.TypeFlags = template.TypeFlags;
+                        creatureDifficulty.TypeFlags2 = template.TypeFlags2;
+                    }
+
+                    Storage.CreatureTemplateDifficulties.Add(creatureDifficulty);
                 }
             }
 
-            var templatesDb = SQLDatabase.Get(Storage.CreatureTemplateScalings);
+            var templatesDb = SQLDatabase.Get(Storage.CreatureTemplateDifficulties);
 
-            return SQLUtil.Compare(Settings.SQLOrderByKey ? Storage.CreatureTemplateScalings.OrderBy(x => x.Item1.Entry).ToArray() : Storage.CreatureTemplateScalings.ToArray(), templatesDb, x => string.Empty);
+            return SQLUtil.Compare(Settings.SQLOrderByKey ? Storage.CreatureTemplateDifficulties.OrderBy(x => x.Item1.Entry).ToArray() : Storage.CreatureTemplateDifficulties.ToArray(), templatesDb, x => string.Empty);
         }
 
         [BuilderMethod(Units = true)]
@@ -178,6 +200,13 @@ namespace WowPacketParser.SQL.Builders
                     if (!(npc.Map.ToString(CultureInfo.InvariantCulture).MatchesFilters(Settings.MapFilters)))
                         continue;
 
+                if (!Filters.CheckFilter(npc.Guid))
+                    continue;
+
+                // Ignore pets
+                if (npc.Guid.GetHighType() == HighGuidType.Pet)
+                    continue;
+
                 uint modelId = (uint)npc.UnitData.DisplayID;
                 if (modelId == 0)
                     continue;
@@ -192,8 +221,9 @@ namespace WowPacketParser.SQL.Builders
                     continue;
 
                 var scale = npc.ObjectData.Scale;
-                model.BoundingRadius = npc.UnitData.BoundingRadius / scale;
-                model.CombatReach = npc.UnitData.CombatReach / scale;
+                var displayScale = npc.UnitData.DisplayScale;
+                model.BoundingRadius = (npc.UnitData.BoundingRadius / scale) / displayScale;
+                model.CombatReach = (npc.UnitData.CombatReach / scale) / displayScale;
                 model.Gender = (Gender)npc.UnitData.Sex;
 
                 models.Add(model);
@@ -215,6 +245,20 @@ namespace WowPacketParser.SQL.Builders
             var templatesDb = SQLDatabase.Get(Storage.CreatureTemplateSpells);
 
             return SQLUtil.Compare(Storage.CreatureTemplateSpells, templatesDb, StoreNameType.Unit);
+        }
+
+        [BuilderMethod]
+        public static string CreatureTemplateGossip()
+        {
+            if (Storage.CreatureTemplateGossips.IsEmpty())
+                return string.Empty;
+
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.creature_template_gossip))
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.CreatureTemplateGossips);
+
+            return SQLUtil.Compare(Settings.SQLOrderByKey ? Storage.CreatureTemplateGossips.OrderBy(x => x.Item1.CreatureID).ThenBy(y => y.Item1.MenuID) : Storage.CreatureTemplateGossips, templatesDb, StoreNameType.Unit);
         }
 
         [BuilderMethod]
@@ -320,6 +364,9 @@ namespace WowPacketParser.SQL.Builders
                 if (Settings.MapFilters.Length > 0)
                     if (!(npc.Value.Map.ToString(CultureInfo.InvariantCulture).MatchesFilters(Settings.MapFilters)))
                         continue;
+
+                if (!Filters.CheckFilter(npc.Value.Guid))
+                    continue;
 
                 var equip = npc.Value.GetEquipment();
                 if (equip == null)
@@ -493,6 +540,12 @@ namespace WowPacketParser.SQL.Builders
                 result += SQLUtil.Compare(store, SQLDatabase.Get(Storage.GossipMenuOptions.Values), t => t.BroadcastTextIDHelper);
             }
 
+            // `gossip_menu_option_addon`
+            if (!Storage.GossipMenuOptionAddons.IsEmpty() && Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.gossip_menu_option))
+            {
+                result += SQLUtil.Compare(Settings.SQLOrderByKey ? Storage.GossipMenuOptionAddons.OrderBy(x => x.Item1.MenuID).ToArray() : Storage.GossipMenuOptionAddons.ToArray(), SQLDatabase.Get(Storage.GossipMenuOptionAddons), x => string.Empty);
+            }
+
             return result;
         }
 
@@ -593,7 +646,7 @@ namespace WowPacketParser.SQL.Builders
             var levels = GetLevels(units);
             var usesCurrentExpansionLevels = new Dictionary<uint, long>();
             var expansionBaseLevel = 0;
-            if (Settings.TargetedDatabase >= TargetedDatabase.WarlordsOfDraenor && Settings.DBEnabled)
+            if (Settings.TargetedDatabase >= TargetedDatabase.WarlordsOfDraenor && Settings.TargetedDatabase != TargetedDatabase.Dragonflight && Settings.DBEnabled)
             {
                 usesCurrentExpansionLevels = SQLDatabase.GetDict<uint, long>($"SELECT entry, 1 FROM {Settings.TDBDatabase}.creature_template WHERE HealthScalingExpansion = -1");
                 switch (Settings.TargetedDatabase)
@@ -609,6 +662,9 @@ namespace WowPacketParser.SQL.Builders
                         break;
                     case TargetedDatabase.Shadowlands:
                         expansionBaseLevel = 60;
+                        break;
+                    case TargetedDatabase.Dragonflight:
+                        expansionBaseLevel = 70;
                         break;
                 }
             }
@@ -631,10 +687,13 @@ namespace WowPacketParser.SQL.Builders
                 var npc = unit.Value;
                 var minMaxLevel = getLevel(unit.Key.GetEntry());
 
+                uint gossipMenuId = 0;
+                Storage.CreatureDefaultGossips.TryGetValue(unit.Key.GetEntry(), out gossipMenuId);
+
                 var template = new CreatureTemplateNonWDB
                 {
                     Entry = unit.Key.GetEntry(),
-                    GossipMenuId = Storage.CreatureDefaultGossips.GetValueOrDefault(unit.Key.GetEntry()),
+                    GossipMenuId = gossipMenuId,
                     MinLevel = minMaxLevel.MinLevel,
                     MaxLevel = minMaxLevel.MaxLevel,
                     Faction = (uint)npc.UnitData.FactionTemplate,
@@ -647,8 +706,8 @@ namespace WowPacketParser.SQL.Builders
                     UnitFlags = (UnitFlags)npc.UnitData.Flags,
                     UnitFlags2 = (UnitFlags2)npc.UnitData.Flags2,
                     UnitFlags3 = (UnitFlags3)npc.UnitData.Flags3,
-                    DynamicFlags = (uint)npc.DynamicFlags.GetValueOrDefault(UnitDynamicFlags.None),
-                    DynamicFlagsWod = (uint)npc.DynamicFlagsWod.GetValueOrDefault(UnitDynamicFlagsWOD.None),
+                    DynamicFlags = npc.DynamicFlags.GetValueOrDefault(UnitDynamicFlags.None),
+                    DynamicFlagsWod = npc.DynamicFlagsWod.GetValueOrDefault(UnitDynamicFlagsWOD.None),
                     VehicleID = npc.Movement.VehicleId,
                     HoverHeight = npc.UnitData.HoverHeight
                 };
@@ -677,17 +736,17 @@ namespace WowPacketParser.SQL.Builders
 
                 if (!ClientVersion.AddedInVersion(ClientType.WarlordsOfDraenor))
                 {
-                    template.DynamicFlags &= ~(uint)UnitDynamicFlags.Lootable;
-                    template.DynamicFlags &= ~(uint)UnitDynamicFlags.Tapped;
-                    template.DynamicFlags &= ~(uint)UnitDynamicFlags.TappedByPlayer;
-                    template.DynamicFlags &= ~(uint)UnitDynamicFlags.TappedByAllThreatList;
+                    template.DynamicFlags &= ~UnitDynamicFlags.Lootable;
+                    template.DynamicFlags &= ~UnitDynamicFlags.Tapped;
+                    template.DynamicFlags &= ~UnitDynamicFlags.TappedByPlayer;
+                    template.DynamicFlags &= ~UnitDynamicFlags.TappedByAllThreatList;
                 }
                 else
                 {
-                    template.DynamicFlagsWod &= ~(uint)UnitDynamicFlagsWOD.Lootable;
-                    template.DynamicFlagsWod &= ~(uint)UnitDynamicFlagsWOD.Tapped;
-                    template.DynamicFlagsWod &= ~(uint)UnitDynamicFlagsWOD.TappedByPlayer;
-                    template.DynamicFlagsWod &= ~(uint)UnitDynamicFlagsWOD.TappedByAllThreatList;
+                    template.DynamicFlagsWod &= ~UnitDynamicFlagsWOD.Lootable;
+                    template.DynamicFlagsWod &= ~UnitDynamicFlagsWOD.Tapped;
+                    template.DynamicFlagsWod &= ~UnitDynamicFlagsWOD.TappedByPlayer;
+                    template.DynamicFlagsWod &= ~UnitDynamicFlagsWOD.TappedByAllThreatList;
                 }
 
                 // has trainer flag but doesn't have prof nor class trainer flag
@@ -879,7 +938,14 @@ namespace WowPacketParser.SQL.Builders
                 rows.Add(row);
             }
 
-            return new SQLInsert<VehicleTemplateAccessory>(rows, false).Build();
+            StringBuilder result = new StringBuilder();
+            var delete = new SQLDelete<VehicleTemplateAccessory>(rows);
+            result.Append(delete.Build());
+
+            var insert = new SQLInsert<VehicleTemplateAccessory>(rows, false);
+            result.Append(insert.Build());
+
+            return result.ToString();
         }
 
         [BuilderMethod]
@@ -938,6 +1004,9 @@ namespace WowPacketParser.SQL.Builders
                 if (Settings.MapFilters.Length > 0)
                     if (!npc.Map.ToString(CultureInfo.InvariantCulture).MatchesFilters(Settings.MapFilters))
                         continue;
+
+                if (!Filters.CheckFilter(npc.Guid))
+                    continue;
 
                 var row = new Row<NpcSpellClick>();
                 row.Data.Entry = unit.Key.GetEntry();

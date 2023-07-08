@@ -169,7 +169,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void HandleBattlePetSetFlags(Packet packet)
         {
             packet.ReadPackedGuid128("BattlePetGUID");
-            packet.ReadInt32("Flags");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_1_0_49407))
+                packet.ReadUInt16("Flags");
+            else
+                packet.ReadUInt32("Flags");
             packet.ReadBits("ControlType", 2);
         }
 
@@ -206,11 +209,11 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt16("BreedQuality", idx);
             packet.ReadInt16("StatusFlags", idx);
 
-            packet.ReadByte("Slot", idx);
+            packet.ReadSByte("Slot", idx);
 
-            var abilitiesCount = packet.ReadInt32("AbilitiesCount", idx);
-            var aurasCount = packet.ReadInt32("AurasCount", idx);
-            var statesCount = packet.ReadInt32("StatesCount", idx);
+            var abilitiesCount = packet.ReadUInt32("AbilitiesCount", idx);
+            var aurasCount = packet.ReadUInt32("AurasCount", idx);
+            var statesCount = packet.ReadUInt32("StatesCount", idx);
 
             for (var i = 0; i < abilitiesCount; ++i)
                 ReadPetBattleActiveAbility(packet, idx, "Abilities", i);
@@ -234,7 +237,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("TrapAbilityID", idx);
             packet.ReadInt32("TrapStatus", idx);
 
-            packet.ReadInt16("RoundTimeSecs", idx);
+            packet.ReadUInt16("RoundTimeSecs", idx);
 
             packet.ReadSByte("FrontPet", idx);
             packet.ReadByte("InputFlags", idx);
@@ -249,7 +252,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
         public static void ReadPetBattleActiveState(Packet packet, params object[] idx)
         {
-            packet.ReadInt32("StateID", idx);
+            packet.ReadUInt32("StateID", idx);
             packet.ReadInt32("StateValue", idx);
         }
 
@@ -258,14 +261,14 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("AbilityID", idx);
             packet.ReadInt16("CooldownRemaining", idx);
             packet.ReadInt16("LockdownRemaining", idx);
-            packet.ReadByte("AbilityIndex", idx);
+            packet.ReadSByte("AbilityIndex", idx);
             packet.ReadByte("Pboid", idx);
         }
 
         public static void ReadPetBattleActiveAura(Packet packet, params object[] idx)
         {
             packet.ReadInt32("AbilityID", idx);
-            packet.ReadInt32("InstanceID", idx);
+            packet.ReadUInt32("InstanceID", idx);
             packet.ReadInt32("RoundsRemaining", idx);
             packet.ReadInt32("CurrentRound", idx);
             packet.ReadByte("CasterPBOID", idx);
@@ -295,10 +298,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt16("PvpMaxRoundTime", idx);
 
             packet.ReadInt32("CurRound", idx);
-            packet.ReadInt32("NpcCreatureID", idx);
-            packet.ReadInt32("NpcDisplayID", idx);
+            packet.ReadUInt32("NpcCreatureID", idx);
+            packet.ReadUInt32("NpcDisplayID", idx);
 
-            packet.ReadByte("CurPetBattleState", idx);
+            packet.ReadSByte("CurPetBattleState", idx);
             packet.ReadByte("ForfeitPenalty", idx);
 
             packet.ReadPackedGuid128("InitialWildPetGUID", idx);

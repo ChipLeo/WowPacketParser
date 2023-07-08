@@ -19,10 +19,8 @@ namespace WowPacketParser.Store.Objects
         public ushort? MeleeAnimKit;
 
         // Fields from UPDATE_FIELDS
-        public uint Bytes1;
         public UnitDynamicFlags? DynamicFlags;
         public UnitDynamicFlagsWOD? DynamicFlagsWod;
-        public uint Bytes2;
 
         public IUnitData UnitData;
 
@@ -38,13 +36,11 @@ namespace WowPacketParser.Store.Objects
 
             // If our unit got any of the following update fields set,
             // it's probably a temporary spawn
-            return !UnitData.SummonedBy.IsEmpty() || !UnitData.CreatedBy.IsEmpty() || UnitData.CreatedBySpell != 0;
+            return !UnitData.SummonedBy.IsEmpty() || !UnitData.CreatedBy.IsEmpty() || UnitData.CreatedBySpell != 0 || !UnitData.DemonCreator.IsEmpty();
         }
 
         public override void LoadValuesFromUpdateFields()
         {
-            Bytes1 = BitConverter.ToUInt32(new byte[] { UnitData.StandState ?? 0, UnitData.PetTalentPoints ?? 0, UnitData.VisFlags ?? 0, UnitData.AnimTier  ?? 0}, 0);
-            Bytes2 = BitConverter.ToUInt32(new byte[] { UnitData.SheatheState ?? 0, UnitData.PvpFlags ?? 0, UnitData.PetFlags ?? 0, UnitData.ShapeshiftForm  ?? 0}, 0);
             if (ClientVersion.AddedInVersion(ClientType.WarlordsOfDraenor))
                 DynamicFlagsWod = (UnitDynamicFlagsWOD)ObjectData.DynamicFlags;
             else

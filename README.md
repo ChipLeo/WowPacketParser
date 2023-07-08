@@ -7,7 +7,7 @@ WowPacketParser (WPP)
 Usage
 -----
 
-* Compile WowPacketParser using Visual Studio 2022 (with .NET 6.0 SDK) or .NET 6.0 SDK (Linux/OSX).
+* Compile WowPacketParser using Visual Studio 2022 (with .NET 7.0 SDK) or .NET 7.0 SDK (Linux/OSX).
   Alternatively you can download compiled binaries from the links [below](#nightly-builds).
 * Edit `WowPacketParser.dll.config` to fit your needs.
 * Drag one or more files (.pkt or .bin) to `WowPacketParser.exe`.
@@ -39,9 +39,9 @@ and `wpp_data_objectnames.sql` has some data to fill the database.
 
 Nightly Builds
 --------------
-.NET 6.0 SDK (6.0.102 or higher) or .NET 6.0 Runtime(6.0.102 or higher) is needed!
+.NET 7.0 SDK or .NET 7.0 Runtime is needed!
 
-[Download .NET 6.0 here!](https://dotnet.microsoft.com/download/dotnet/6.0)
+[Download .NET 7.0 here!](https://dotnet.microsoft.com/download/dotnet/7.0)
 
 ##### Windows
 - Visual Studio 2022
@@ -53,10 +53,22 @@ Nightly Builds
 Docker (experimental)
 ---------------------
 
-It is possible run WPP on Docker using the `trinitycore/wpp` image:
+It is possible run WPP on Docker using the `trinitycore/wpp` image.
+
+To build image:
+```
+DOCKER_BUILDKIT=1 docker build . -t trinitycore/wpp
+```
+
+To configure:
+
+Copy WowPacketParser/App.config as template and edit as your needs.
+
+
+To run:
 
 ```
-docker run -v /place/where/sniffs/are/kept:/usr/src/app/build/sniffs trinitycore/wpp sniffs/sniffname.pkt
+docker run -it --rm -v /place/where/sniffs/are/kept:/sniffs -v /full/path/App.config:/app/WowPacketParser.dll.config trinitycore/wpp /sniffs/sniffname.pkt
 ```
 
 */place/where/sniffs/are/kept* should your local directory containing the .pkt file and *sniffname.pkt* the file to be parsed.

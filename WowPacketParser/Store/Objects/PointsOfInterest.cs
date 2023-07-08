@@ -16,7 +16,7 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("PositionY")]
         public float? PositionY;
 
-        [DBFieldName("PositionZ", TargetedDatabase.Shadowlands)]
+        [DBFieldName("PositionZ", TargetedDatabaseFlag.SinceShadowlands)]
         public float? PositionZ;
 
         [DBFieldName("Icon")]
@@ -31,8 +31,8 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("Name")]
         public string Name;
 
-        [DBFieldName("Unknown905", TargetedDatabase.Shadowlands)]
-        public int? Unknown905;
+        [DBFieldName("WMOGroupID", TargetedDatabaseFlag.SinceShadowlands)]
+        public int? WMOGroupID;
 
         [DBFieldName("VerifiedBuild")]
         public int? VerifiedBuild = ClientVersion.BuildInt;

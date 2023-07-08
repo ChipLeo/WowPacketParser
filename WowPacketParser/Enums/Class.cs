@@ -14,6 +14,7 @@
         Warlock     = 9,
         Monk        = 10,
         Druid       = 11,
-        DemonHunter = 12
+        DemonHunter = 12,
+        Evoker      = 13
     }
 }

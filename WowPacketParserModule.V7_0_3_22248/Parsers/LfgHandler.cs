@@ -686,6 +686,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadByte("ResultId");
             packet.ReadByte("Unk1"); // always 0
             ReadLfgListSearchResult(packet, "LFGListEntry");
+            packet.ResetBitReader();
             packet.ReadBitsE<LfgListApplicationStatus>("Status", 4);
         }
 
@@ -715,6 +716,17 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             }
         }
 
+        [Parser(Opcode.SMSG_LFG_LIST_UPDATE_EXPIRATION)]
+        public static void HandleLfgListUpdateExpiration(Packet packet)
+        {
+            V6_0_2_19033.Parsers.LfgHandler.ReadCliRideTicket(packet, "Ticket");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_0_5_37503))
+                packet.ReadTime64("TimeoutTime");
+            else
+                packet.ReadTime("TimeoutTime");
+            packet.ReadByte("Status");
+        }
+
         [Parser(Opcode.SMSG_LFG_LIST_APPLICATION_STATUS_UPDATE)]
         public static void HandleLfgListApplicationUpdate(Packet packet)
         {
@@ -724,6 +736,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32("Unk");
             packet.ReadByte("ResultId");
             packet.ReadByteE<LfgRoleFlag>("Role");
+            packet.ResetBitReader();
             packet.ReadBitsE<LfgListApplicationStatus>("Status", 4);
         }
 

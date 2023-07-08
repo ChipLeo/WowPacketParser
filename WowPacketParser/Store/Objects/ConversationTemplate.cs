@@ -16,10 +16,10 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("FirstLineID")]
         public uint? FirstLineID;
 
-        [DBFieldName("LastLineEndTime", TargetedDatabase.Zero, TargetedDatabase.Shadowlands)]
+        [DBFieldName("LastLineEndTime", TargetedDatabaseFlag.TillBattleForAzeroth)]
         public uint? LastLineEndTime;
 
-        [DBFieldName("TextureKitId", TargetedDatabase.BattleForAzeroth)]
+        [DBFieldName("TextureKitId", TargetedDatabaseFlag.SinceBattleForAzeroth)]
         public uint? TextureKitId;
 
         [DBFieldName("VerifiedBuild")]
@@ -73,7 +73,8 @@ namespace WowPacketParser.Store.Objects
                     StartTime = lines[i].StartTime,
                     UiCameraID = (uint)lines[i].UiCameraID,
                     ActorIdx = lines[i].ActorIndex,
-                    Flags = lines[i].Flags
+                    Flags = lines[i].Flags,
+                    ChatType = lines[i].ChatType
                 };
 
                 if (i == 0)

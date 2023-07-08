@@ -1,6 +1,7 @@
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
+using CoreParsers = WowPacketParser.Parsing.Parsers;
 
 namespace WowPacketParserModule.V6_0_2_19033.Parsers
 {
@@ -736,13 +737,16 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_GARRISON_OPEN_TALENT_NPC)]
         public static void HandleGarrisonOpenTalentNPC(Packet packet)
         {
+            int garrTalentTreeID = 0;
             packet.ReadPackedGuid128("NpcGUID");
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_2_5_24330))
             {
-                packet.ReadInt32("GarrTalentTreeID");
+                garrTalentTreeID = packet.ReadInt32("GarrTalentTreeID");
                 packet.ReadInt32("FriendshipFactionID");
             }
+
+            CoreParsers.NpcHandler.AddGossipOptionAddon(garrTalentTreeID, packet.TimeSpan, true);
         }
     }
 }

@@ -63,7 +63,7 @@ namespace WowPacketParserModule.V3_4_0_45166.Parsers
             V8_0_1_27101.Parsers.SpellHandler.ReadSpellTargetData(packet, null, spellId, idx, "Target");
 
             if (hasMoveUpdate)
-                V7_0_3_22248.Parsers.MovementHandler.ReadMovementStats(packet, idx, "MoveUpdate");
+                Substructures.MovementHandler.ReadMovementStats(packet, idx, "MoveUpdate");
 
             for (var i = 0; i < weightCount; ++i)
                 V6_0_2_19033.Parsers.SpellHandler.ReadSpellWeight(packet, idx, "Weight", i);
@@ -207,6 +207,47 @@ namespace WowPacketParserModule.V3_4_0_45166.Parsers
 
             if (hasHealPrediction)
                 V6_0_2_19033.Parsers.SpellHandler.ReadSpellTargetedHealPrediction(packet, "HealPrediction");
+        }
+
+        public static void ReadTalentInfoUpdate(Packet packet, params object[] idx)
+        {
+            packet.ReadUInt32("UnspentTalentPoints", idx);
+
+            // This is always 0 or 1 (index)
+            // Random values if IsPetTalents (probably uninitialized on serverside)
+            packet.ReadByte("ActiveSpecGroup", idx);
+            var specCount = packet.ReadUInt32("SpecCount", idx);
+
+            for (var i = 0; i < specCount; ++i)
+            {
+                packet.ReadByte("TalentCount", idx, i);                     // Blizzard doing blizzard things
+                var talentCount = packet.ReadUInt32("TalentCount", idx, i); // Blizzard doing blizzard things
+                packet.ReadByte("GlyphCount", idx, i);                      // Blizzard doing blizzard things - Random values if IsPetTalents (probably uninitialized on serverside)
+                var glyphCount = packet.ReadUInt32("GlyphCount", idx, i);   // Blizzard doing blizzard things
+                // This is 0 (without dualspec learnt) and 1 or 2 with dualspec learnt
+                // SpecID 0 and 1 = Index 0 (SpecGroup)
+                // SpecID 2 = Index 1 (SpecGroup)
+                packet.ReadByte("SpecID", idx, i);
+
+                for (var j = 0; j < talentCount; ++j)
+                {
+                    packet.ReadUInt32("TalentID", idx, i, "TalentInfo", j);
+                    packet.ReadByte("Rank", idx, i, "TalentInfo", j);
+                }
+
+                for (var k = 0; k < glyphCount; ++k)
+                {
+                    packet.ReadUInt16("Glyph", idx, i, "GlyphInfo", k);
+                }
+            }
+
+            packet.ReadBit("IsPetTalents", idx);
+        }
+
+        [Parser(Opcode.SMSG_UPDATE_TALENT_DATA)]
+        public static void ReadUpdateTalentData(Packet packet)
+        {
+            ReadTalentInfoUpdate(packet);
         }
     }
 }

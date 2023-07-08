@@ -22,8 +22,9 @@
         creature_questender,
         creature_template,
         creature_template_addon,
+        creature_template_difficulty,
+        creature_template_gossip,
         creature_template_locale,
-        creature_template_scaling,
         creature_text,
         gameobject,
         gameobject_addon,
@@ -63,7 +64,8 @@
 
         hotfix_data,
         hotfix_blob,
-        hotfix_optional_data
+        hotfix_optional_data,
+        hotfixes
         // ReSharper restore InconsistentNaming
     }
 }

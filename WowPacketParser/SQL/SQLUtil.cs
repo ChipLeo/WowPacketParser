@@ -174,7 +174,7 @@ namespace WowPacketParser.SQL
             return (from field in Utilities.GetFieldsAndAttributes<T, DBFieldNameAttribute>()
                     where field.Value.Any(f => f.IsVisible())
                     let fieldName = field.Value.Single(f => f.IsVisible()).ToString()
-                    let fieldValue = field.Value.FindAll(f => f.IsVisible())
+                    let fieldValue = field.Value.FindAll(f => f.IsVisible()).Cast<DBFieldNameAttribute>().ToList()
                     select new Tuple<string, FieldInfo, List<DBFieldNameAttribute>>(fieldName, field.Key, fieldValue)).ToList();
         }
 
@@ -186,6 +186,11 @@ namespace WowPacketParser.SQL
         public static bool IsPrimaryKey(FieldInfo field)
         {
             return Utilities.GetAttributes<DBFieldNameAttribute>(field).Any(a => a.IsPrimaryKey);
+        }
+
+        public static bool IsHotfixTable<T>() where T : IDataModel
+        {
+            return Attribute.IsDefined(typeof(T), typeof(HotfixAttribute));
         }
 
         /// <param name="storeList"><see cref="DataBag{T}"/> with items form sniff.</param>
@@ -837,7 +842,7 @@ namespace WowPacketParser.SQL
         {
             return Utilities.GetFieldsAndAttributes<T, DBFieldNameAttribute>()
                 .Where(field => field.Value.Any(f => f.IsVisible() && (!f.IsPrimaryKey || (includePrimaryKeys && f.IsPrimaryKey))))
-                .Select(field => new Tuple<FieldInfo, DBFieldNameAttribute>(field.Key, field.Value.First()))
+                .Select(field => new Tuple<FieldInfo, DBFieldNameAttribute>(field.Key, (DBFieldNameAttribute)field.Value.First()))
                 .ToList();
         }
 

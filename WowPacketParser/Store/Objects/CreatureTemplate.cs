@@ -1,4 +1,4 @@
-﻿using WowPacketParser.Enums;
+using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.SQL;
 
@@ -10,46 +10,49 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("entry", true)]
         public uint? Entry;
 
+        [DBFieldName("Civilian", TargetedDatabaseFlag.AnyClassic)]
+        public bool? Civilian;
+
         [DBFieldName("KillCredit", 2)]
         public uint?[] KillCredits;
 
-        [DBFieldName("modelid", TargetedDatabase.Zero, TargetedDatabase.BattleForAzeroth, 4)]
+        [DBFieldName("modelid", TargetedDatabaseFlag.TillWarlordsOfDraenor, 4)]
         public uint?[] ModelIDs;
 
         [DBFieldName("name", nullable: true)]
         public string Name;
 
-        [DBFieldName("femaleName", TargetedDatabase.Cataclysm)]
+        [DBFieldName("femaleName", TargetedDatabaseFlag.SinceCataclysm | TargetedDatabaseFlag.AnyClassic)]
         public string FemaleName;
 
         [DBFieldName("subname", nullable: true)]
         public string SubName;
 
-        [DBFieldName("TitleAlt", TargetedDatabase.WarlordsOfDraenor /*Mists of Pandaria*/, nullable: true)]
+        [DBFieldName("TitleAlt", TargetedDatabaseFlag.SinceWarlordsOfDraenor /*Mists of Pandaria*/ | TargetedDatabaseFlag.AnyClassic, nullable: true)]
         public string TitleAlt;
 
         [DBFieldName("IconName", nullable: true)]
         public string IconName;
 
-        [DBFieldName("HealthScalingExpansion", TargetedDatabase.WarlordsOfDraenor)]
+        [DBFieldName("HealthScalingExpansion", TargetedDatabaseFlag.SinceWarlordsOfDraenorTillShadowLands | TargetedDatabaseFlag.AnyClassic)]
         public ClientType? HealthScalingExpansion;
 
-        [DBFieldName("RequiredExpansion", TargetedDatabase.Cataclysm)]
+        [DBFieldName("RequiredExpansion", TargetedDatabaseFlag.SinceCataclysm | TargetedDatabaseFlag.AnyClassic)]
         public ClientType? RequiredExpansion;
 
-        [DBFieldName("VignetteID", TargetedDatabase.Legion)]
+        [DBFieldName("VignetteID", TargetedDatabaseFlag.SinceLegion | TargetedDatabaseFlag.AnyClassic)]
         public uint? VignetteID;
 
-        [DBFieldName("unit_class", TargetedDatabase.BattleForAzeroth)]
+        [DBFieldName("unit_class", TargetedDatabaseFlag.SinceBattleForAzeroth | TargetedDatabaseFlag.AnyClassic)]
         public uint? UnitClass;
 
-        [DBFieldName("FadeRegionRadius", TargetedDatabase.BattleForAzeroth, TargetedDatabase.Shadowlands)]
+        [DBFieldName("FadeRegionRadius", TargetedDatabaseFlag.BattleForAzeroth)]
         public float? FadeRegionRadius;
 
-        [DBFieldName("WidgetSetID", TargetedDatabase.BattleForAzeroth)]
+        [DBFieldName("WidgetSetID", TargetedDatabaseFlag.SinceBattleForAzeroth | TargetedDatabaseFlag.AnyClassic)]
         public int? WidgetSetID;
 
-        [DBFieldName("WidgetSetUnitConditionID", TargetedDatabase.BattleForAzeroth)]
+        [DBFieldName("WidgetSetUnitConditionID", TargetedDatabaseFlag.SinceBattleForAzeroth | TargetedDatabaseFlag.AnyClassic)]
         public int? WidgetSetUnitConditionID;
 
         [DBFieldName("rank")]
@@ -61,19 +64,19 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("type")]
         public CreatureType? Type;
 
-        [DBFieldName("type_flags")]
+        [DBFieldName("type_flags", TargetedDatabaseFlag.TillShadowlands)]
         public CreatureTypeFlag? TypeFlags;
 
-        [DBFieldName("type_flags2", TargetedDatabase.Cataclysm)]
+        [DBFieldName("type_flags2", TargetedDatabaseFlag.Cataclysm | TargetedDatabaseFlag.SinceWarlordsOfDraenorTillShadowLands)]
         public uint? TypeFlags2;
 
-        [DBFieldName("PetSpellDataId", TargetedDatabase.Zero, TargetedDatabase.Cataclysm)]
+        [DBFieldName("PetSpellDataId", TargetedDatabaseFlag.TillWrathOfTheLichKing | TargetedDatabaseFlag.AnyClassic)]
         public uint? PetSpellDataID;
 
-        [DBFieldName("HealthModifier")]
+        [DBFieldName("HealthModifier", TargetedDatabaseFlag.TillShadowlands)]
         public float? HealthModifier;
 
-        [DBFieldName("ManaModifier")]
+        [DBFieldName("ManaModifier", TargetedDatabaseFlag.TillShadowlands)]
         public float? ManaModifier;
 
         [DBFieldName("RacialLeader")]
@@ -82,7 +85,7 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("movementId")]
         public uint? MovementID;
 
-        [DBFieldName("CreatureDifficultyID", TargetedDatabase.Shadowlands)]
+        [DBFieldName("CreatureDifficultyID", TargetedDatabaseFlag.Shadowlands | TargetedDatabaseFlag.AnyClassic)]
         public int? CreatureDifficultyID;
 
         [DBFieldName("VerifiedBuild")]
@@ -95,13 +98,13 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("entry", true)]
         public uint? Entry;
 
-        [DBFieldName("gossip_menu_id")]
+        [DBFieldName("gossip_menu_id", TargetedDatabaseFlag.TillShadowlands)]
         public uint? GossipMenuId;
 
-        [DBFieldName("minlevel")]
+        [DBFieldName("minlevel", TargetedDatabaseFlag.TillShadowlands)]
         public int? MinLevel;
 
-        [DBFieldName("maxlevel")]
+        [DBFieldName("maxlevel", TargetedDatabaseFlag.TillShadowlands)]
         public int? MaxLevel;
 
         [DBFieldName("faction")]
@@ -122,7 +125,7 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("RangeAttackTime")]
         public uint? RangedAttackTime;
 
-        [DBFieldName("unit_class", TargetedDatabase.Zero, TargetedDatabase.BattleForAzeroth)]
+        [DBFieldName("unit_class", TargetedDatabaseFlag.TillWarlordsOfDraenor)]
         public uint? UnitClass;
 
         [DBFieldName("unit_flags")]
@@ -131,19 +134,19 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("unit_flags2")]
         public UnitFlags2? UnitFlags2;
 
-        [DBFieldName("unit_flags3", TargetedDatabase.Legion)]
+        [DBFieldName("unit_flags3", TargetedDatabaseFlag.SinceLegion | TargetedDatabaseFlag.AnyClassic)]
         public UnitFlags3? UnitFlags3;
 
-        [DBFieldName("dynamicflags", TargetedDatabase.Zero, TargetedDatabase.WarlordsOfDraenor)]
-        public uint DynamicFlags;
+        [DBFieldName("dynamicflags", TargetedDatabaseFlag.TillCataclysm)]
+        public UnitDynamicFlags? DynamicFlags;
 
-        [DBFieldName("dynamicflags", TargetedDatabase.WarlordsOfDraenor)]
-        public uint DynamicFlagsWod;
+        [DBFieldName("dynamicflags", TargetedDatabaseFlag.SinceWarlordsOfDraenorTillShadowLands | TargetedDatabaseFlag.AnyClassic)]
+        public UnitDynamicFlagsWOD? DynamicFlagsWod;
 
         [DBFieldName("VehicleId")]
         public uint? VehicleID;
 
-        [DBFieldName("HoverHeight")]
+        [DBFieldName("HoverHeight", TargetedDatabaseFlag.TillShadowlands)]
         public float? HoverHeight;
 
     }
@@ -154,13 +157,16 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("CreatureEntry", true)]
         public uint? CreatureEntry;
 
+        [DBFieldName("DifficultyID", TargetedDatabaseFlag.SinceDragonflight, true)]
+        public uint? DifficultyID;
+
         [DBFieldName("Idx", true)]
         public uint? Idx;
 
         [DBFieldName("ItemId")]
         public uint? ItemId;
 
-        [DBFieldName("VerifiedBuild", TargetedDatabase.WarlordsOfDraenor)]
+        [DBFieldName("VerifiedBuild", TargetedDatabaseFlag.SinceWarlordsOfDraenor)]
         public int? VerifiedBuild = ClientVersion.BuildInt;
     }
 

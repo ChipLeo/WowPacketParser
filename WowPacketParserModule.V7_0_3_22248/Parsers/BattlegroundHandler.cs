@@ -219,6 +219,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             packet.ReadInt32("Unused2", idx); // equal to SeasonWon
             packet.ReadInt32("WeeklyPlayed", idx);
             packet.ReadInt32("WeeklyWon", idx);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_2_46479))
+            {
+                packet.ReadInt32("RoundsSeasonPlayed", idx);
+                packet.ReadInt32("RoundsSeasonWon", idx);
+                packet.ReadInt32("RoundsWeeklyPlayed", idx);
+                packet.ReadInt32("RoundsWeeklyWon", idx);
+            }
             packet.ReadInt32("BestWeeklyRating", idx);
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_1_0_22900))
                 packet.ReadInt32("LastWeeksBestRating", idx);
@@ -230,12 +237,13 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V8_3_7_35249))
                 {
                     packet.ReadInt32("Unused3", idx);
-                    packet.ReadInt32("WeeklyBestWinPvpTierID", idx);
+                    if (ClientVersion.RemovedInVersion(ClientVersionBuild.V10_0_2_46479))
+                        packet.ReadInt32("WeeklyBestWinPvpTierID", idx);
                 }
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_5_40772))
                 {
-                    packet.ReadInt32("Unused4");
-                    packet.ReadInt32("Rank");
+                    packet.ReadInt32("Unused4", idx);
+                    packet.ReadInt32("Rank", idx);
                 }
                 packet.ResetBitReader();
                 packet.ReadBit("Disqualified", idx);
@@ -246,7 +254,11 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
         [Parser(Opcode.SMSG_RATED_PVP_INFO)]
         public static void HandleRatedBattlefieldInfo(Packet packet)
         {
-            for (int i = 0; i < 6; i++)
+            var bracketNum = 6;
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_0_46181))
+                bracketNum = 7;
+
+            for (int i = 0; i < bracketNum; i++)
                 ReadRatedPvpBracketInfo(packet, i);
         }
 

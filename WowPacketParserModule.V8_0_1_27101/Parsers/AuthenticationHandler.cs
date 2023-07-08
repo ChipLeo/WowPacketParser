@@ -35,6 +35,8 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 packet.ReadUInt32("TimeRested");
                 packet.ReadByte("ActiveExpansionLevel");
                 packet.ReadByte("AccountExpansionLevel");
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_2_46479))
+                    packet.ReadByte("MinActiveExpansionLevel");
                 packet.ReadUInt32("TimeSecondsUntilPCKick");
                 var classes = packet.ReadUInt32("AvailableClasses");
                 var templates = packet.ReadUInt32("Templates");
@@ -57,6 +59,8 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                             packet.ReadByteE<Class>("ClassID", "AvailableClasses", i, "Classes", j);
                             packet.ReadByteE<ClientType>("ActiveExpansionLevel", "AvailableClasses", i, "Classes", j);
                             packet.ReadByteE<ClientType>("AccountExpansionLevel", "AvailableClasses", i, "Classes", j);
+                            if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_2_46479))
+                                packet.ReadByte("MinActiveExpansionLevel", "AvailableClasses", i, "Classes", j);
                         }
                     }
                 }
@@ -92,7 +96,12 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                     packet.ReadUInt16("NumPlayersAlliance");
 
                 if (trialExpiration)
-                    packet.ReadInt32("ExpansionTrialExpiration");
+                {
+                    if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_2_46479))
+                        packet.ReadInt64("ExpansionTrialExpiration");
+                    else
+                        packet.ReadInt32("ExpansionTrialExpiration");
+                }
 
                 for (var i = 0; i < realms; ++i)
                 {

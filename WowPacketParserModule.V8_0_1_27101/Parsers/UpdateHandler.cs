@@ -149,8 +149,9 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                     case UpdateTypeCataclysm.CreateObject2:
                     {
                         var guid = packet.ReadPackedGuid128("Object Guid", i);
-                        var createObject = new CreateObject() { Guid = guid, Values = new(){}, CreateType = type.ToCreateObjectType() };
-                        ReadCreateObjectBlock(packet, createObject, guid, map, i);
+                        var createType = type.ToCreateObjectType();
+                        var createObject = new CreateObject() { Guid = guid, Values = new(){}, CreateType = createType };
+                        ReadCreateObjectBlock(packet, createObject, guid, map, createType, i);
                         createObject.Text = partWriter.Text;
                         createObject.TextStartOffset = partWriter.StartOffset;
                         createObject.TextLength = partWriter.Length;
@@ -161,7 +162,7 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             }
         }
 
-        private static void ReadCreateObjectBlock(Packet packet, CreateObject createObject, WowGuid guid, uint map, object index)
+        private static void ReadCreateObjectBlock(Packet packet, CreateObject createObject, WowGuid guid, uint map, CreateObjectType createType, object index)
         {
             ObjectType objType = ObjectTypeConverter.Convert(packet.ReadByteE<ObjectType801>("Object Type", index));
             if (ClientVersion.RemovedInVersion(ClientVersionBuild.V8_1_0_28724))
@@ -169,6 +170,7 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
 
             WoWObject obj = CoreParsers.UpdateHandler.CreateObject(objType, guid, map);
 
+            obj.CreateType = createType;
             obj.Movement = ReadMovementUpdateBlock(packet, createObject, guid, obj, index);
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V8_1_0_28724))
@@ -353,21 +355,37 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                     moveInfo.Flags2 = (uint)packet.ReadBitsE<MovementFlag2>("Extra Movement Flags", 18, index);
                 }
 
+                var hasStandingOnGameObjectGUID = false;
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_1_0_49407))
+                    hasStandingOnGameObjectGUID = packet.ReadBit("HasStandingOnGameObjectGUID", index);
                 var hasTransport = packet.ReadBit("Has Transport Data", index);
                 var hasFall = packet.ReadBit("Has Fall Data", index);
                 packet.ReadBit("HasSpline", index);
                 packet.ReadBit("HeightChangeFailed", index);
                 packet.ReadBit("RemoteTimeValid", index);
                 var hasInertia = ClientVersion.AddedInVersion(ClientVersionBuild.V9_2_0_42423) && packet.ReadBit("HasInertia", index);
+                var hasAdvFlying = ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_0_46181) && packet.ReadBit("HasAdvFlying", index);
 
                 if (hasTransport)
                     movementUpdate.Transport = ReadTransportData(moveInfo, guid, packet, index);
 
+                if (hasStandingOnGameObjectGUID)
+                    packet.ReadPackedGuid128("StandingOnGameObjectGUID", index);
+
                 if (hasInertia)
                 {
-                    packet.ReadPackedGuid128("GUID", index, "Inertia");
+                    if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_0_46181))
+                        packet.ReadInt32("ID", "Inertia");
+                    else
+                        packet.ReadPackedGuid128("GUID", index, "Inertia");
                     packet.ReadVector3("Force", index, "Inertia");
                     packet.ReadUInt32("Lifetime", index, "Inertia");
+                }
+
+                if (hasAdvFlying)
+                {
+                    packet.ReadSingle("ForwardVelocity", index, "AdvFlying");
+                    packet.ReadSingle("UpVelocity", index, "AdvFlying");
                 }
 
                 if (hasFall)
@@ -399,8 +417,28 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 if (ClientVersion.AddedInVersion(ClientVersionBuild.V8_1_0_28724))
                     packet.ReadSingle("MovementForcesModMagnitude", index);
 
-                packet.ResetBitReader();
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_0_46181))
+                {
+                    packet.ReadSingle("AdvFlyingAirFriction", index);
+                    packet.ReadSingle("AdvFlyingMaxVel", index);
+                    packet.ReadSingle("AdvFlyingLiftCoefficient", index);
+                    packet.ReadSingle("AdvFlyingDoubleJumpVelMod", index);
+                    packet.ReadSingle("AdvFlyingGlideStartMinHeight", index);
+                    packet.ReadSingle("AdvFlyingAddImpulseMaxSpeed", index);
+                    packet.ReadSingle("AdvFlyingMinBankingRate", index);
+                    packet.ReadSingle("AdvFlyingMaxBankingRate", index);
+                    packet.ReadSingle("AdvFlyingMinPitchingRateDown", index);
+                    packet.ReadSingle("AdvFlyingMaxPitchingRateDown", index);
+                    packet.ReadSingle("AdvFlyingMinPitchingRateUp", index);
+                    packet.ReadSingle("AdvFlyingMaxPitchingRateUp", index);
+                    packet.ReadSingle("AdvFlyingMinTurnVelocityThreshold", index);
+                    packet.ReadSingle("AdvFlyingMaxTurnVelocityThreshold", index);
+                    packet.ReadSingle("AdvFlyingSurfaceFriction", index);
+                    packet.ReadSingle("AdvFlyingOverMaxDeceleration", index);
+                    packet.ReadSingle("AdvFlyingLaunchSpeedCoefficient", index);
+                }
 
+                packet.ResetBitReader();
                 moveInfo.HasSplineData = packet.ReadBit("HasMovementSpline", index);
 
                 for (var i = 0; i < movementForceCount; ++i)
@@ -411,9 +449,11 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                     packet.ReadVector3("Direction", index);
                     packet.ReadUInt32("TransportID", index);
                     packet.ReadSingle("Magnitude", index);
+                    if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_2_5_43903))
+                        packet.ReadInt32("Unused910");
                     packet.ReadBits("Type", 2, index);
 
-                    if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_0_39185))
+                    if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_0_39185) && ClientVersion.RemovedInVersion(ClientVersionBuild.V9_2_5_43903))
                     {
                         var unused910 = packet.ReadBit();
                         if (unused910)
@@ -611,6 +651,9 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 if (packet.ReadBit("Unk bit WoD62x", index))
                     areaTriggerTemplate.Flags |= (uint)AreaTriggerFlags.Unk1;
 
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_0_46181) && ClientVersion.RemovedInVersion(ClientVersionBuild.V10_1_0_49407))
+                    packet.ReadBit("Unk1000", index);
+
                 if (packet.ReadBit("HasTargetRollPitchYaw", index))
                     areaTriggerTemplate.Flags |= (uint)AreaTriggerFlags.HasTargetRollPitchYaw;
 
@@ -650,6 +693,10 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                     if (packet.ReadBit("HasAreaTriggerDisk", index))
                         areaTriggerTemplate.Type = (byte)AreaTriggerType.Disk;
 
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_0_46181))
+                    if (packet.ReadBit("HasAreaTriggerBoundedPlane", index))
+                        areaTriggerTemplate.Type = (byte)AreaTriggerType.BoundedPlane;
+
                 bool hasAreaTriggerSpline = packet.ReadBit("HasAreaTriggerSpline", index);
 
                 if (packet.ReadBit("HasAreaTriggerOrbit", index))
@@ -659,8 +706,11 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                     if (packet.ReadBit("HasAreaTriggerMovementScript", index)) // seen with spellid 343597
                         areaTriggerTemplate.Flags |= (uint)AreaTriggerFlags.HasMovementScript;
 
-                if ((areaTriggerTemplate.Flags & (uint)AreaTriggerFlags.Unk3) != 0)
-                    packet.ReadBit();
+                if (ClientVersion.RemovedInVersion(ClientVersionBuild.V10_0_0_46181))
+                {
+                    if ((areaTriggerTemplate.Flags & (uint)AreaTriggerFlags.Unk3) != 0)
+                        packet.ReadBit();
+                }
 
                 if (hasAreaTriggerSpline)
                     foreach (var splinePoint in AreaTriggerHandler.ReadAreaTriggerSpline(spellAreaTrigger, packet, index, "AreaTriggerSpline"))
@@ -768,6 +818,17 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                     areaTriggerTemplate.Data[5] = packet.ReadSingle("HeightTarget", index);
                     areaTriggerTemplate.Data[6] = packet.ReadSingle("LocationZOffset", index);
                     areaTriggerTemplate.Data[7] = packet.ReadSingle("LocationZOffsetTarget", index);
+                }
+
+                if (areaTriggerTemplate.Type == (byte)AreaTriggerType.BoundedPlane)
+                {
+                    Vector2 extents = packet.ReadVector2("Extents", index);
+                    Vector2 extentsTarget = packet.ReadVector2("ExtentsTarget", index);
+
+                    areaTriggerTemplate.Data[0] = extents.X;
+                    areaTriggerTemplate.Data[1] = extents.Y;
+                    areaTriggerTemplate.Data[2] = extentsTarget.X;
+                    areaTriggerTemplate.Data[3] = extentsTarget.Y;
                 }
 
                 if ((areaTriggerTemplate.Flags & (uint)AreaTriggerFlags.HasMovementScript) != 0)
