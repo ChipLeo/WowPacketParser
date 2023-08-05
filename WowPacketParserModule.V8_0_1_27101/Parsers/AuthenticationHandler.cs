@@ -1,4 +1,5 @@
-﻿using WowPacketParser.Enums;
+﻿using System.Text;
+using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 
@@ -35,8 +36,6 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 packet.ReadUInt32("TimeRested");
                 packet.ReadByte("ActiveExpansionLevel");
                 packet.ReadByte("AccountExpansionLevel");
-                if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_2_46479))
-                    packet.ReadByte("MinActiveExpansionLevel");
                 packet.ReadUInt32("TimeSecondsUntilPCKick");
                 var classes = packet.ReadUInt32("AvailableClasses");
                 var templates = packet.ReadUInt32("Templates");
@@ -79,6 +78,9 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 var horde = packet.ReadBit(); // NumPlayersHorde
                 var alliance = packet.ReadBit(); // NumPlayersAlliance
                 var trialExpiration = packet.ReadBit(); // ExpansionTrialExpiration
+                var hasNewBuildKeys = false;
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_1_5_50232))
+                    hasNewBuildKeys = packet.ReadBit();
 
                 packet.ResetBitReader();
                 packet.ReadUInt32("BillingPlan");
@@ -101,6 +103,19 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                         packet.ReadInt64("ExpansionTrialExpiration");
                     else
                         packet.ReadInt32("ExpansionTrialExpiration");
+                }
+
+                if (hasNewBuildKeys)
+                {
+                    var newBuildKey = new byte[16];
+                    var someKey = new byte[16];
+                    for (var i = 0; i < 16; i++)
+                    {
+                        newBuildKey[i] = packet.ReadByte();
+                        someKey[i] = packet.ReadByte();
+                    }
+                    packet.AddValue("NewBuildKey", Encoding.UTF8.GetString(newBuildKey));
+                    packet.AddValue("SomeKey", Encoding.UTF8.GetString(someKey));
                 }
 
                 for (var i = 0; i < realms; ++i)

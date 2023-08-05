@@ -479,6 +479,12 @@ namespace WowPacketParser.Misc
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V10_1_0_50000, new DateTime(2023, 06, 12)),
 
             new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V10_1_5_50401, new DateTime(2023, 07, 11)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V10_1_5_50438, new DateTime(2023, 07, 13)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V10_1_5_50469, new DateTime(2023, 07, 14)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V10_1_5_50504, new DateTime(2023, 07, 19)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V10_1_5_50585, new DateTime(2023, 07, 22)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V10_1_5_50622, new DateTime(2023, 07, 28)),
+            new KeyValuePair<ClientVersionBuild, DateTime>(ClientVersionBuild.V10_1_5_50747, new DateTime(2023, 08, 03)),
 
             // no classic info, pkt contain build in header
         };
@@ -958,6 +964,12 @@ namespace WowPacketParser.Misc
                 case ClientVersionBuild.V10_1_5_50355:
                 case ClientVersionBuild.V10_1_5_50379:
                 case ClientVersionBuild.V10_1_5_50401:
+                case ClientVersionBuild.V10_1_5_50438:
+                case ClientVersionBuild.V10_1_5_50469:
+                case ClientVersionBuild.V10_1_5_50504:
+                case ClientVersionBuild.V10_1_5_50585:
+                case ClientVersionBuild.V10_1_5_50622:
+                case ClientVersionBuild.V10_1_5_50747:
                     return ClientVersionBuild.V10_0_0_46181;
                 //Classic
                 case ClientVersionBuild.V1_13_2_31446:

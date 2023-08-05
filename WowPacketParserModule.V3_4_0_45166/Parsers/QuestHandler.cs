@@ -137,7 +137,7 @@ namespace WowPacketParserModule.V3_4_0_45166.Parsers
             quest.SoundAccept = (uint)packet.ReadInt32("AcceptedSoundKitID");
             quest.SoundTurnIn = (uint)packet.ReadInt32("CompleteSoundKitID");
             quest.AreaGroupID = (uint)packet.ReadInt32("AreaGroupID");
-            quest.TimeAllowed = (uint)packet.ReadInt32("TimeAllowed");
+            quest.TimeAllowed = packet.ReadInt32("TimeAllowed");
             uint objectiveCount = packet.ReadUInt32("ObjectiveCount");
             quest.AllowableRacesWod = packet.ReadUInt64("AllowableRaces");
             quest.QuestRewardID = packet.ReadInt32("TreasurePickerID");
@@ -216,6 +216,14 @@ namespace WowPacketParserModule.V3_4_0_45166.Parsers
             quest.QuestTurnTextWindow = packet.ReadWoWString("PortraitTurnInText", questTurnTextWindowLen);
             quest.QuestTurnTargetName = packet.ReadWoWString("PortraitTurnInName", questTurnTargetNameLen);
             quest.QuestCompletionLog = packet.ReadWoWString("QuestCompletionLog", questCompletionLogLen);
+
+            ObjectName objectName = new ObjectName
+            {
+                ObjectType = StoreNameType.Quest,
+                ID = (int?)quest.ID,
+                Name = quest.LogTitle
+            };
+            Storage.ObjectNames.Add(objectName, packet.TimeSpan);
 
             if (ClientLocale.PacketLocale != LocaleConstant.enUS)
             {

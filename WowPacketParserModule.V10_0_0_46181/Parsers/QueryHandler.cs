@@ -141,7 +141,10 @@ namespace WowPacketParserModule.V10_0_0_46181.Parsers
             quest.SoundTurnIn = (uint)packet.ReadInt32("CompleteSoundKitID");
 
             quest.AreaGroupID = (uint)packet.ReadInt32("AreaGroupID");
-            quest.TimeAllowed = (uint)packet.ReadInt32("TimeAllowed");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_1_5_50232))
+                quest.TimeAllowed = packet.ReadInt64("TimeAllowed");
+            else
+                quest.TimeAllowed = packet.ReadInt32("TimeAllowed");
 
             var objectiveCount = packet.ReadUInt32("ObjectiveCount");
             quest.AllowableRacesWod = packet.ReadUInt64("AllowableRaces");
@@ -237,6 +240,14 @@ namespace WowPacketParserModule.V10_0_0_46181.Parsers
 
             for (int i = 0; i < conditionalQuestCompletionLogCount; i++)
                 QuestHandler.ReadConditionalQuestText(packet, "ConditionalQuestCompletionLog", i);
+
+            ObjectName objectName = new ObjectName
+            {
+                ObjectType = StoreNameType.Quest,
+                ID = (int?)quest.ID,
+                Name = quest.LogTitle
+            };
+            Storage.ObjectNames.Add(objectName, packet.TimeSpan);
 
             if (ClientLocale.PacketLocale != LocaleConstant.enUS)
             {

@@ -280,7 +280,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             quest.SoundAccept = packet.ReadUInt32<SoundId>("AcceptedSoundKitID");
             quest.SoundTurnIn = packet.ReadUInt32<SoundId>("CompleteSoundKitID");
             quest.AreaGroupID = packet.ReadUInt32("AreaGroupID");
-            quest.TimeAllowed = packet.ReadUInt32("TimeAllowed");
+            quest.TimeAllowed = packet.ReadInt32("TimeAllowed");
             uint int2946 = packet.ReadUInt32("CliQuestInfoObjective");
             quest.AllowableRacesWod = (uint)packet.ReadUInt32E<RaceMask>("Allowed Races");
 
@@ -355,6 +355,14 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             quest.QuestTurnTextWindow = packet.ReadWoWString("PortraitTurnInText", bits2109);
             quest.QuestTurnTargetName = packet.ReadWoWString("PortraitTurnInName", bits2365);
             quest.QuestCompletionLog = packet.ReadWoWString("QuestCompletionLog", bits2429);
+
+            ObjectName objectName = new ObjectName
+            {
+                ObjectType = StoreNameType.Quest,
+                ID = (int?)quest.ID,
+                Name = quest.LogTitle
+            };
+            Storage.ObjectNames.Add(objectName, packet.TimeSpan);
 
             if (ClientLocale.PacketLocale != LocaleConstant.enUS)
             {
@@ -470,7 +478,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void HandleQuestgiverStatus(Packet packet)
         {
             packet.ReadPackedGuid128("QuestGiverGUID");
-            packet.ReadUInt32E<QuestGiverStatus4x>("StatusFlags");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_1_5_50232))
+                packet.ReadUInt64E<QuestGiverStatus4x>("Status");
+            else
+                packet.ReadUInt32E<QuestGiverStatus4x>("Status");
         }
 
         [Parser(Opcode.SMSG_QUEST_GIVER_STATUS_MULTIPLE)]
@@ -479,8 +490,11 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             var int16 = packet.ReadInt32("QuestGiverStatusCount");
             for (var i = 0; i < int16; ++i)
             {
-                packet.ReadPackedGuid128("Guid");
-                packet.ReadUInt32E<QuestGiverStatus4x>("Status");
+                packet.ReadPackedGuid128("Guid", i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_1_5_50232))
+                    packet.ReadUInt64E<QuestGiverStatus4x>("Status", i);
+                else
+                    packet.ReadUInt32E<QuestGiverStatus4x>("Status", i);
             }
         }
 
