@@ -445,7 +445,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_SEARCH_LFG_LEAVE,                         0x00E3}, //--+
             {Opcode.CMSG_SELL_ITEM,                                0x1358}, //+-
             {Opcode.CMSG_SEND_MAIL,                                0x1DBA}, //++
-            {Opcode.CMSG_SEND_QUEST_CHOISE_RESPONSE,               0x0447}, //--+
             {Opcode.CMSG_SEND_TEXT_EMOTE,                          0x07E9}, //++
             {Opcode.CMSG_SET_ACTION_BAR_TOGGLES,                   0x0672}, //++
             {Opcode.CMSG_SET_ACTION_BUTTON,                        0x1F8C}, //++
