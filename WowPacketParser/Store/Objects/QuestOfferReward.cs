@@ -1,4 +1,5 @@
-﻿using WowPacketParser.Misc;
+using WowPacketParser.Enums;
+using WowPacketParser.Misc;
 using WowPacketParser.SQL;
 
 namespace WowPacketParser.Store.Objects
@@ -15,7 +16,7 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("EmoteDelay", 4)]
         public uint?[] EmoteDelay;
 
-        [DBFieldName("RewardText")]
+        [DBFieldName("RewardText", LocaleConstant.enUS)]
         public string RewardText;
 
         [DBFieldName("VerifiedBuild")]
