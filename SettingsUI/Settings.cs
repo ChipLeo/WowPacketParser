@@ -10,7 +10,7 @@ namespace SettingsUI
         public Settings()
         {
             var fileMap = new ExeConfigurationFileMap();
-            fileMap.ExeConfigFilename = @"WowPacketParser.exe.config";
+            fileMap.ExeConfigFilename = @"WowPacketParser.dll.config";
             _config = ConfigurationManager.OpenMappedExeConfiguration(fileMap,
                 ConfigurationUserLevel.None);
 

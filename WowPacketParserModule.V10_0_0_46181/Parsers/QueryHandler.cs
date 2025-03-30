@@ -148,7 +148,16 @@ namespace WowPacketParserModule.V10_0_0_46181.Parsers
 
             var objectiveCount = packet.ReadUInt32("ObjectiveCount");
             quest.AllowableRacesWod = packet.ReadUInt64("AllowableRaces");
-            quest.QuestRewardID = packet.ReadInt32("TreasurePickerID");
+            var treasurePickerCount = 0u;
+            var treasurePickerCount2 = 0u;
+            if (ClientVersion.RemovedInVersion(ClientType.TheWarWithin))
+                quest.QuestRewardID = packet.ReadInt32("TreasurePickerID");
+            else
+            {
+                treasurePickerCount = packet.ReadUInt32();
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V11_0_2_55959))
+                    treasurePickerCount2 = packet.ReadUInt32();
+            }
             quest.Expansion = packet.ReadInt32("Expansion");
             quest.ManagedWorldStateID = packet.ReadInt32("ManagedWorldStateID");
             quest.QuestSessionBonus = packet.ReadInt32("QuestSessionBonus");
@@ -160,6 +169,29 @@ namespace WowPacketParserModule.V10_0_0_46181.Parsers
             for (uint i = 0; i < rewardDisplaySpellCount; ++i)
                 ReadQuestCompleteDisplaySpell(packet, (uint)id.Key, i, i, "RewardDisplaySpell");
 
+            for (uint i = 0; i < treasurePickerCount; ++i)
+            {
+                var treasurePickerID = packet.ReadInt32("TreasurePickerID");
+                QuestTreasurePickers pickers = new()
+                {
+                    QuestID = quest.ID,
+                    TreasurePickerID = treasurePickerID,
+                    OrderIndex = (int)i
+                };
+                Storage.QuestTreasurePickersStorage.Add(pickers);
+            }
+
+            for (uint i = 0; i < treasurePickerCount2; ++i)
+            {
+                var treasurePickerID = packet.ReadInt32("TreasurePickerID2");
+                //QuestTreasurePickers pickers = new()
+                //{
+                //    QuestID = quest.ID,
+                //    TreasurePickerID = treasurePickerID,
+                //    OrderIndex = (int)i
+                //};
+                //Storage.QuestTreasurePickersStorage.Add(pickers);
+            }
             packet.ResetBitReader();
 
             uint logTitleLen = packet.ReadBits("logTitleLen", 9);
@@ -172,6 +204,8 @@ namespace WowPacketParserModule.V10_0_0_46181.Parsers
             uint questTurnTargetNameLen = packet.ReadBits("questTurnTargetNameLen", 8);
             uint questCompletionLogLen = packet.ReadBits("questCompletionLogLen", 11);
             packet.ReadBit("ReadyForTranslation");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V11_0_0_55666))
+                packet.ReadBit("ResetByScheduler");
 
             for (uint i = 0; i < objectiveCount; ++i)
             {
@@ -182,7 +216,12 @@ namespace WowPacketParserModule.V10_0_0_46181.Parsers
                     ID = (uint)objectiveId.Key,
                     QuestID = (uint)id.Key
                 };
-                questInfoObjective.Type = packet.ReadByteE<QuestRequirementType>("Quest Requirement Type", i);
+
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V11_0_0_55666))
+                    questInfoObjective.Type = packet.ReadUInt32E<QuestRequirementType>("QuestRequirementType", i);
+                else
+                    questInfoObjective.Type = packet.ReadByteE<QuestRequirementType>("QuestRequirementType", i);
+
                 questInfoObjective.StorageIndex = packet.ReadSByte("StorageIndex", i);
                 questInfoObjective.Order = i;
                 questInfoObjective.ObjectID = packet.ReadInt32("ObjectID", i);
@@ -222,7 +261,7 @@ namespace WowPacketParserModule.V10_0_0_46181.Parsers
                     Storage.LocalesQuestObjectives.Add(localesQuestObjectives, packet.TimeSpan);
                 }
 
-                Storage.QuestObjectives.Add(questInfoObjective, packet.TimeSpan);
+                Storage.QuestObjectives.Add((uint)questInfoObjective.ID, questInfoObjective, packet.TimeSpan);
             }
 
             quest.LogTitle = packet.ReadWoWString("LogTitle", logTitleLen);
@@ -236,10 +275,10 @@ namespace WowPacketParserModule.V10_0_0_46181.Parsers
             quest.QuestCompletionLog = packet.ReadWoWString("QuestCompletionLog", questCompletionLogLen);
 
             for (int i = 0; i < conditionalQuestDescriptionCount; i++)
-                QuestHandler.ReadConditionalQuestText(packet, "ConditionalQuestDescription", i);
+                QuestHandler.ReadConditionalQuestText(packet, id.Key, i, QuestHandler.ConditionalTextType.Description, i, "ConditionalDescriptionText");
 
             for (int i = 0; i < conditionalQuestCompletionLogCount; i++)
-                QuestHandler.ReadConditionalQuestText(packet, "ConditionalQuestCompletionLog", i);
+                QuestHandler.ReadConditionalQuestText(packet, id.Key, i, QuestHandler.ConditionalTextType.CompletionLog, i, "ConditionalCompletionLogText");
 
             ObjectName objectName = new ObjectName
             {

@@ -52,16 +52,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                 }
 
                 for (var i = 0; i < realms; ++i)
-                {
-                    packet.ReadUInt32("VirtualRealmAddress", i);
-                    packet.ResetBitReader();
-                    packet.ReadBit("IsLocal", i);
-                    packet.ReadBit("unk", i);
-                    var nameLen1 = packet.ReadBits(8);
-                    var nameLen2 = packet.ReadBits(8);
-                    packet.ReadWoWString("RealmNameActual", nameLen1, i);
-                    packet.ReadWoWString("RealmNameNormalized", nameLen2, i);
-                }
+                    ReadVirtualRealmInfo(packet, "VirtualRealms", i);
 
                 for (var i = 0; i < races; ++i)
                 {
@@ -293,6 +284,23 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadInt32("VirtualRealmAddress");
         }
 
+        public static void ReadVirtualRealmNameInfo(Packet packet, params object[] indexes)
+        {
+            packet.ResetBitReader();
+            packet.ReadBit("IsLocal", indexes);
+            packet.ReadBit("IsHiddenFromPlayers", indexes);
+            var actualNameLength = packet.ReadBits(8);
+            var normalizedNameLength = packet.ReadBits(8);
+            packet.ReadWoWString("RealmNameActual", actualNameLength, indexes);
+            packet.ReadWoWString("RealmNameNormalized", normalizedNameLength, indexes);
+        }
+
+        public static void ReadVirtualRealmInfo(Packet packet, params object[] indexes)
+        {
+            packet.ReadUInt32("RealmAddress", indexes);
+            ReadVirtualRealmNameInfo(packet, indexes, "RealmNameInfo");
+        }
+
         [Parser(Opcode.SMSG_REALM_QUERY_RESPONSE)]
         public static void HandleRealmQueryResponse(Packet packet)
         {
@@ -300,19 +308,7 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
 
             var state = packet.ReadByte("LookupState");
             if (state == 0)
-            {
-                packet.ResetBitReader();
-
-                packet.ReadBit("IsLocal");
-                packet.ReadBit("Unk bit");
-
-                var bits2 = packet.ReadBits(8);
-                var bits258 = packet.ReadBits(8);
-                packet.ReadBit();
-
-                packet.ReadWoWString("RealmNameActual", bits2);
-                packet.ReadWoWString("RealmNameNormalized", bits258);
-            }
+                ReadVirtualRealmNameInfo(packet, "NameInfo");
         }
 
         [Parser(Opcode.SMSG_QUERY_TIME_RESPONSE)]
@@ -325,8 +321,13 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.CMSG_CONNECT_TO_FAILED)]
         public static void HandleRedirectFailed(Packet packet)
         {
-            packet.ReadUInt32("Serial");
+            if (ClientVersion.RemovedInVersion(ClientType.TheWarWithin))
+                packet.ReadUInt32("Serial");
+
             packet.ReadSByte("Con");
+
+            if (ClientVersion.AddedInVersion(ClientType.TheWarWithin))
+                packet.ReadUInt32("Serial");
         }
 
         [Parser(Opcode.CMSG_SUSPEND_TOKEN_RESPONSE)]
@@ -375,41 +376,6 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         {
             packet.ReadUInt32("Token");
             packet.ReadBit("Timeout");
-        }
-
-        public static void ReadMethodCall(Packet packet, params object[] idx)
-        {
-            packet.ReadUInt64("Type", idx);
-            packet.ReadUInt64("ObjectId", idx);
-            packet.ReadUInt32("Token", idx);
-        }
-
-        [Parser(Opcode.CMSG_BATTLENET_REQUEST)]
-        public static void HandleBattlenetRequest(Packet packet)
-        {
-            ReadMethodCall(packet, "Method");
-
-            int protoSize = packet.ReadInt32();
-            packet.ReadBytesTable("Data", protoSize);
-        }
-
-        [Parser(Opcode.SMSG_BATTLENET_NOTIFICATION)]
-        public static void HandleBattlenetNotification(Packet packet)
-        {
-            ReadMethodCall(packet, "Method");
-
-            int protoSize = packet.ReadInt32();
-            packet.ReadBytesTable("Data", protoSize);
-        }
-
-        [Parser(Opcode.SMSG_BATTLENET_RESPONSE)]
-        public static void HandleBattlenetResponse(Packet packet)
-        {
-            packet.ReadInt32E<BattlenetRpcErrorCode>("BnetStatus");
-            ReadMethodCall(packet, "Method");
-
-            int protoSize = packet.ReadInt32();
-            packet.ReadBytesTable("Data", protoSize);
         }
 
         [Parser(Opcode.SMSG_BATTLE_NET_CONNECTION_STATUS)]

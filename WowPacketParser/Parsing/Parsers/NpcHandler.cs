@@ -77,9 +77,6 @@ namespace WowPacketParser.Parsing.Parsers
             LastGossipOption.ActionPoiId = gossipPOIID;
             TempGossipOptionPOI.ActionPoiId = gossipPOIID;
 
-            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.gossip_menu_option))
-                return;
-
             if (!TempGossipOptionPOI.HasSelection)
                 return;
 
@@ -98,15 +95,21 @@ namespace WowPacketParser.Parsing.Parsers
             }
         }
 
+        public static bool HasLastGossipOption(TimeSpan timeSpan, uint? menuId)
+        {
+            if (LastGossipOption.HasSelection)
+                if ((timeSpan - LastGossipOption.TimeSpan).Duration() <= TimeSpan.FromMilliseconds(2500))
+                    return true;
+
+            return false;
+        }
+
         public static void UpdateLastGossipOptionActionMessage(TimeSpan timeSpan, uint? menuId)
         {
-            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.gossip_menu_option))
-                return;
-
             if (!LastGossipOption.HasSelection)
                 return;
 
-            if ((timeSpan - LastGossipOption.TimeSpan).Duration() <= TimeSpan.FromMilliseconds(2500))
+            if (HasLastGossipOption(timeSpan, menuId))
             {
                 Storage.GossipMenuOptions[(LastGossipOption.MenuId, LastGossipOption.OptionIndex)].Item1.ActionMenuID = menuId;
                 Storage.GossipMenuOptions[(LastGossipOption.MenuId, LastGossipOption.OptionIndex)].Item1.ActionPoiID = LastGossipOption.ActionPoiId ?? 0;
@@ -128,17 +131,18 @@ namespace WowPacketParser.Parsing.Parsers
             }
         }
 
-        public static void AddGossipAddon(uint menuID, int friendshipFactionID, WowGuid guid, TimeSpan timeSpan)
+        public static void AddGossipAddon(uint menuID, int friendshipFactionID, int lfgDungeonsID, WowGuid guid, TimeSpan timeSpan)
         {
-            if (friendshipFactionID > 0)
-            {
-                GossipMenuAddon gossipMenuAddon = new();
-                gossipMenuAddon.MenuID = menuID;
-                gossipMenuAddon.FriendshipFactionID = friendshipFactionID;
-                gossipMenuAddon.ObjectType = guid.GetObjectType();
-                gossipMenuAddon.ObjectEntry = guid.GetEntry();
-                Storage.GossipMenuAddons.Add(gossipMenuAddon, timeSpan);
-            }
+            if (friendshipFactionID <= 0 && lfgDungeonsID <= 0)
+                return;
+
+            GossipMenuAddon gossipMenuAddon = new();
+            gossipMenuAddon.MenuID = menuID;
+            gossipMenuAddon.FriendshipFactionID = friendshipFactionID;
+            gossipMenuAddon.LfgDungeonsID = lfgDungeonsID;
+            gossipMenuAddon.ObjectType = guid.GetObjectType();
+            gossipMenuAddon.ObjectEntry = guid.GetEntry();
+            Storage.GossipMenuAddons.Add(gossipMenuAddon, timeSpan);
         }
 
         public static void AddGossipOptionAddon(int? garrTalentTreeID, TimeSpan timeSpan, bool checkDelay = false)
@@ -542,9 +546,8 @@ namespace WowPacketParser.Parsing.Parsers
 
             if (ClientVersion.AddedInVersion(ClientType.MistsOfPandaria))
             {
-                uint friendshipFactionID = packet.ReadUInt32("Friendship Faction");
-                AddGossipAddon(packetGossip.MenuId, (int)friendshipFactionID, guid, packet.TimeSpan);
-
+                var friendshipFactionID = packet.ReadInt32("Friendship Faction");
+                AddGossipAddon(packetGossip.MenuId, friendshipFactionID, 0, guid, packet.TimeSpan);
             }
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V2_4_0_8089))
@@ -584,7 +587,7 @@ namespace WowPacketParser.Parsing.Parsers
                     OptionIndex = gossipOption.OptionID.Value,
                     OptionNpc = (int)gossipOption.OptionNpc,
                     BoxCoded = gossipOption.BoxCoded.Value,
-                    BoxCost = gossipOption.BoxMoney.Value,
+                    BoxCost = (uint)gossipOption.BoxMoney.Value,
                     Text = gossipOption.OptionText,
                     BoxText = gossipOption.BoxText
                 });
@@ -596,7 +599,7 @@ namespace WowPacketParser.Parsing.Parsers
             for (int i = 0; i < questsCount; i++)
                 ReadGossipQuestTextData(packet, i, "GossipQuests");
 
-            if (guid.GetObjectType() == ObjectType.Unit)
+            if (guid.GetObjectType() == ObjectType.Unit && !HasLastGossipOption(packet.TimeSpan, (uint)menuId))
             {
                 CreatureTemplateGossip creatureTemplateGossip = new()
                 {

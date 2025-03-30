@@ -14,8 +14,12 @@
         Classic            = 7,
         Shadowlands        = 8,
         ClassicSoM         = 8,
+        ClassicHardcore    = 8,
+        ClassicSoD         = 8,
         BurningCrusadeClassic = 8,
         WotLKClassic       = 8,
         Dragonflight       = 9,
+        CataClassic        = 9,
+        TheWarWithin       = 10,
     }
 }

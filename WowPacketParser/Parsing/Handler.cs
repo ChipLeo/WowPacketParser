@@ -14,11 +14,9 @@ namespace WowPacketParser.Parsing
     {
         public static Dictionary<KeyValuePair<ClientVersionBuild, Opcode>, Action<Packet>> LoadDefaultHandlers()
         {
-            var handlers = new Dictionary<KeyValuePair<ClientVersionBuild, Opcode>, Action<Packet>>(1000);
+            LoadHandlersInto(VersionHandlers, Assembly.GetExecutingAssembly(), ClientVersionBuild.Zero);
 
-            LoadHandlersInto(handlers, Assembly.GetExecutingAssembly(), ClientVersionBuild.Zero);
-
-            return handlers;
+            return VersionHandlers;
         }
 
         // TEMPORARY HACK
@@ -28,7 +26,6 @@ namespace WowPacketParser.Parsing
         public static void ResetHandlers()
         {
             VersionHandlers.Clear();
-            LoadHandlersInto(VersionHandlers, Assembly.GetExecutingAssembly(), ClientVersionBuild.Zero);
         }
 
         public static Dictionary<KeyValuePair<ClientVersionBuild, Opcode>, Action<Packet>> LoadHandlers(Assembly asm, ClientVersionBuild build)
@@ -75,19 +72,13 @@ namespace WowPacketParser.Parsing
 
                         var del = (Action<Packet>)Delegate.CreateDelegate(typeof(Action<Packet>), method);
 
-                        if (handlers.ContainsKey(key))
+                        if (handlers.TryGetValue(key, out var existingHandler))
                         {
-                            // @TODO This is a hack to keep things easy regarding declaration of opcodes.
-                            // Ideally, we would split the opcodes into three different enums:
-                            // ClientOpcodes, ServerOpcodes, BidirectionalOpcodes
-                            // The first two are obvious as to what they would contain.
-                            // The last one would be MSG_, UMSG_, TEST_, etc... opcodes
-                            // However that's just too much pain to do considering the mess Blizzard does
-                            // by naming their opcodes sometimes without following their own rules.
                             Direction direction = attr.Opcode.ToString()[0] == 'S' ? Direction.ServerToClient : Direction.ClientToServer;
-                            // ReSharper disable once UseStringInterpolation
-                            Trace.WriteLine(string.Format("Error: (Build: {0}) tried to overwrite delegate for opcode {1} ({2}); new handler: {3}; old handler: {4}",
-                                ClientVersion.Build, Opcodes.GetOpcode(attr.Opcode, direction), attr.Opcode, del.Method, handlers[key].Method));
+                            Trace.WriteLine(
+                                $"Error: (Build: {ClientVersion.Build}) tried to overwrite delegate for opcode {Opcodes.GetOpcode(attr.Opcode, direction)} ({attr.Opcode});"
+                                + $" new handler: {del.Method.DeclaringType}.{del.Method.Name};"
+                                + $" old handler: {existingHandler.Method.DeclaringType}.{existingHandler.Method.Name}");
                             continue;
                         }
 
@@ -97,7 +88,7 @@ namespace WowPacketParser.Parsing
             }
         }
 
-        private static readonly Dictionary<KeyValuePair<ClientVersionBuild, Opcode>, Action<Packet>> VersionHandlers = LoadDefaultHandlers();
+        private static readonly Dictionary<KeyValuePair<ClientVersionBuild, Opcode>, Action<Packet>> VersionHandlers = new Dictionary<KeyValuePair<ClientVersionBuild, Opcode>, Action<Packet>>(1000);
 
         public static void Parse(Packet packet, bool isMultiple = false)
         {
@@ -115,7 +106,7 @@ namespace WowPacketParser.Parsing
             var hasHandler = VersionHandlers.TryGetValue(key, out handler);
 
             ClientVersionBuild tmpFallback = ClientVersion.VersionDefiningBuild;
-            while (!hasHandler && tmpFallback != ClientVersionBuild.Zero)
+            while (ClientVersion.HasFallback(tmpFallback) && !hasHandler && tmpFallback != ClientVersionBuild.Zero)
             {
                 // If no handler was found, try to find a handler
                 key = new KeyValuePair<ClientVersionBuild, Opcode>(tmpFallback, opcode);

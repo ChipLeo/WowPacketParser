@@ -53,7 +53,11 @@ namespace WowPacketParser.SQL.Builders
             {
                 // CreateProperties from spells
                 if (createProperties.Value.IsCustom == 0)
+                {
+                    if (createProperties.Value.SpellForVisuals > 0 && createProperties.Value.SpellForVisuals == createProperties.Value.spellId)
+                        createProperties.Value.SpellForVisuals = null;
                     createPropertiesData.Add(createProperties.Value);
+                }
                 else
                 {
                     createPropertiesList[createProperties.Key].CustomId = $"@ATPROPERTIESID+{customRows.Count}";
@@ -66,8 +70,16 @@ namespace WowPacketParser.SQL.Builders
                     row.Data.AnimId = createProperties.Value.AnimId;
                     row.Data.AnimKitId = createProperties.Value.AnimKitId;
                     row.Data.DecalPropertiesId = createProperties.Value.DecalPropertiesId;
+                    row.Data.SpellForVisuals = createProperties.Value.SpellForVisuals;
+                    row.Data.TimeToTarget = createProperties.Value.TimeToTarget;
+                    row.Data.TimeToTargetScale = createProperties.Value.TimeToTargetScale;
+                    row.Data.Speed = createProperties.Value.Speed;
                     row.Data.Shape = createProperties.Value.Shape;
                     row.Data.ShapeData = createProperties.Value.ShapeData;
+
+                    if (row.Data.SpellForVisuals > 0)
+                        row.Comment = $"SpellForVisuals: {StoreGetters.GetName(StoreNameType.Spell, (int)row.Data.SpellForVisuals)}";
+
                     customRows.Add(row);
                 }
             }
@@ -86,6 +98,8 @@ namespace WowPacketParser.SQL.Builders
                 x =>
                 {
                     var comment = $"Spell: {StoreGetters.GetName(StoreNameType.Spell, (int)x.spellId)}";
+                    if (x.SpellForVisuals > 0 && x.spellId != x.SpellForVisuals)
+                        comment += $" SpellForVisuals: {StoreGetters.GetName(StoreNameType.Spell, (int)x.SpellForVisuals)}";
                     return comment;
                 });
         }
@@ -101,8 +115,7 @@ namespace WowPacketParser.SQL.Builders
 
             foreach (var orbit in Storage.AreaTriggerCreatePropertiesOrbits)
             {
-                var spellAreaTriggerTuple = Storage.Objects.Where(obj => obj.Key == orbit.Item1.areatriggerGuid).First();
-                AreaTriggerCreateProperties areaTrigger = (AreaTriggerCreateProperties)spellAreaTriggerTuple.Value.Item1;
+                AreaTriggerCreateProperties areaTrigger = orbit.Item1.CreateProperties;
 
                 orbit.Item1.spellId = areaTrigger.spellId;
                 orbit.Item1.AreaTriggerCreatePropertiesId = areaTrigger.AreaTriggerCreatePropertiesId;
@@ -282,6 +295,12 @@ namespace WowPacketParser.SQL.Builders
                     row.Data.Orientation = at.Movement.Transport.Offset.O;
                 }
 
+                string difficulties = string.Join(",", at.GetDefaultSpawnDifficulties());
+                if (string.IsNullOrEmpty(difficulties))
+                    difficulties = "0";
+
+                row.Data.SpawnDifficulties = difficulties;
+
                 string phaseData = string.Join(" - ", at.Phases);
                 if (string.IsNullOrEmpty(phaseData) || Settings.ForcePhaseZero)
                     phaseData = "0";
@@ -295,9 +314,8 @@ namespace WowPacketParser.SQL.Builders
                     row.Data.SpellForVisuals = at.SpellForVisuals;
 
                 row.Data.Comment = "";
-                row.Comment = StoreGetters.GetName(StoreNameType.Spell, (int)at.SpellForVisuals, true);
-                row.Comment += " (Area: " + StoreGetters.GetName(StoreNameType.Area, at.Area, false) + " - ";
-                row.Comment += "Difficulty: " + StoreGetters.GetName(StoreNameType.Difficulty, (int)at.DifficultyID, false) + ")";
+                row.Comment += $"(Area: {StoreGetters.GetName(StoreNameType.Area, at.Area, false)} - ";
+                row.Comment += $"Difficulty: {StoreGetters.GetName(StoreNameType.Difficulty, (int)at.DifficultyID, false)})";
 
                 rows.Add(row);
 

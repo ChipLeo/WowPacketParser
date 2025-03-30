@@ -1,12 +1,12 @@
-﻿using System;
+﻿using DBFileReaderLib;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using DBFileReaderLib;
-using WowPacketParser.DBC.Structures.Dragonflight;
+using WowPacketParser.DBC.Structures.TheWarWithin;
 using WowPacketParser.Misc;
 
 namespace WowPacketParser.DBC
@@ -15,6 +15,7 @@ namespace WowPacketParser.DBC
     {
         public static Storage<AreaTableEntry> AreaTable { get; set; }
         public static Storage<AchievementEntry> Achievement { get; set; }
+        public static Storage<AnimationDataEntry> AnimationData { get; set; }
         public static Storage<BroadcastTextEntry> BroadcastText { get; set; }
         public static Storage<CreatureEntry> Creature { get; set; }
         public static Storage<CreatureDifficultyEntry> CreatureDifficulty { get; set; }
@@ -29,6 +30,7 @@ namespace WowPacketParser.DBC
         public static Storage<ItemSparseEntry> ItemSparse { get; set; }
         public static Storage<MapEntry> Map { get; set; }
         public static Storage<MapDifficultyEntry> MapDifficulty { get; set; }
+        public static Storage<QuestLineXQuestEntry> QuestLineXQuest { get; set; }
         public static Storage<PhaseEntry> Phase { get; set; }
         public static Storage<PhaseXPhaseGroupEntry> PhaseXPhaseGroup { get; set; }
         public static Storage<SpellEffectEntry> SpellEffect { get; set; }
@@ -200,29 +202,33 @@ namespace WowPacketParser.DBC
             }));
         }
 
-        public static HashSet<ushort> GetPhaseGroups(ICollection<ushort> phases)
+        public static HashSet<int> GetPhaseGroups(ICollection<ushort> phases)
         {
             if (!phases.Any())
-                return new HashSet<ushort>();
+                return new HashSet<int>();
 
-            HashSet<ushort> phaseGroups = new HashSet<ushort>();
+            HashSet<int> phaseGroups = new HashSet<int>();
 
             foreach (var phaseGroup in Phases)
             {
-                bool valid = true;
-
                 foreach (var phase in phaseGroup.Value)
                 {
-                    if (!phases.Contains(phase))
-                        valid = false;
+                    if (phases.Contains(phase))
+                    {
+                        phaseGroups.Add(phaseGroup.Key);
+                        break;
+                    }
                 }
-
-                if (valid)
-                    phaseGroups.Add(phaseGroup.Key);
-
             }
 
             return phaseGroups;
+        }
+
+        public static uint GetEmptyAnimStateID()
+        {
+            if (AnimationData != null)
+                return (uint)AnimationData.Count;
+            return 0;
         }
 
         public static readonly Dictionary<uint, string> Zones = new Dictionary<uint, string>();
@@ -231,6 +237,6 @@ namespace WowPacketParser.DBC
         public static readonly Dictionary<ushort, string> CriteriaStores = new Dictionary<ushort, string>();
         public static readonly Dictionary<uint, FactionEntry> FactionStores = new Dictionary<uint, FactionEntry>();
         public static readonly Dictionary<Tuple<uint, uint>, SpellEffectEntry> SpellEffectStores = new Dictionary<Tuple<uint, uint>, SpellEffectEntry>();
-        public static readonly Dictionary<ushort, List<ushort>> Phases = new Dictionary<ushort, List<ushort>>();
+        public static readonly Dictionary<int, List<ushort>> Phases = new Dictionary<int, List<ushort>>();
     }
 }

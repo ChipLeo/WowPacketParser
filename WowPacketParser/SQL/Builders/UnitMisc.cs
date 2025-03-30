@@ -136,10 +136,10 @@ namespace WowPacketParser.SQL.Builders
 
             foreach (var pair in entries.SelectMany(entry => entry))
             {
-                if (list.ContainsKey((pair.Key.GetEntry(), pair.Value.DifficultyID)))
-                    list[(pair.Key.GetEntry(), pair.Value.DifficultyID)].Add(pair.Value.UnitData.Level ?? 0);
+                if (list.ContainsKey((pair.Key.GetEntry(), pair.Value.DifficultyID ?? 0)))
+                    list[(pair.Key.GetEntry(), pair.Value.DifficultyID ?? 0)].Add(pair.Value.UnitData.Level ?? 0);
                 else
-                    list.Add((pair.Key.GetEntry(), pair.Value.DifficultyID), new List<int> { pair.Value.UnitData.Level ?? 0 });
+                    list.Add((pair.Key.GetEntry(), pair.Value.DifficultyID ?? 0), new List<int> { pair.Value.UnitData.Level ?? 0 });
             }
 
             var result = list.ToDictionary(pair => pair.Key, pair => ValueTuple.Create(pair.Value.Min(), pair.Value.Max()));
@@ -156,6 +156,28 @@ namespace WowPacketParser.SQL.Builders
             var templatesDb = SQLDatabase.Get(Storage.CreatureTemplateDifficultiesWDB);
 
             return SQLUtil.Compare(Settings.SQLOrderByKey ? Storage.CreatureTemplateDifficultiesWDB.OrderBy(x => x.Item1.Entry).ToArray() : Storage.CreatureTemplateDifficultiesWDB.ToArray(), templatesDb, StoreNameType.Unit);
+        }
+
+        public static void UpdateCreatureStaticFlags(ref Unit npc, ref CreatureTemplateDifficulty creatureDifficulty)
+        {
+            if ((npc.UnitData.Flags & (uint)UnitFlags.CanSwim) != 0)
+                creatureDifficulty.StaticFlags1 |= CreatureStaticFlags.CanSwim;
+            if ((npc.UnitData.Flags & (uint)UnitFlags.CantSwim) != 0)
+                creatureDifficulty.StaticFlags3 |= CreatureStaticFlags3.CannotSwim;
+
+            if ((npc.UnitData.Flags2 & (uint)UnitFlags2.CannotTurn) != 0)
+                creatureDifficulty.StaticFlags3 |= CreatureStaticFlags3.CannotTurn;
+
+            if ((npc.UnitData.Flags3 & (uint)UnitFlags3.AllowInteractionWhileInCombat) != 0)
+                creatureDifficulty.StaticFlags3 |= CreatureStaticFlags3.AllowInteractionWhileInCombat;
+
+            if ((ClientVersion.Expansion == ClientType.WrathOfTheLichKing && npc.Movement.Flags.HasAnyFlag(MovementFlag.DisableGravity)) ||
+                (ClientVersion.Expansion >= ClientType.Cataclysm && npc.Movement.Flags.HasAnyFlag(Enums.v4.MovementFlag.DisableGravity)))
+                creatureDifficulty.StaticFlags1 |= CreatureStaticFlags.Floating; // Not 100% reliable
+
+            if ((ClientVersion.Expansion == ClientType.WrathOfTheLichKing && npc.Movement.Flags.HasAnyFlag(MovementFlag.Root)) ||
+                (ClientVersion.Expansion >= ClientType.Cataclysm && npc.Movement.Flags.HasAnyFlag(Enums.v4.MovementFlag.Root)))
+                creatureDifficulty.StaticFlags1 |= CreatureStaticFlags.Sessile; // Not 100% reliable
         }
 
         [BuilderMethod(true, Units = true)]
@@ -195,6 +217,8 @@ namespace WowPacketParser.SQL.Builders
                             LevelScalingDeltaMax = scalingdeltalevels[unit.Key.GetEntry()].Item2,
                             ContentTuningID = contentTuningID
                         };
+                        UpdateCreatureStaticFlags(ref npc, ref creatureDifficulty);
+                        WowPacketParser.SQL.SQLDatabase.CheckCreatureTemplateDifficultyNonWDBFallbacks(ref creatureDifficulty, creatureDifficulty.DifficultyID.Value);
                         Storage.CreatureTemplateDifficulties.Add(creatureDifficulty);
                     }
                 }
@@ -204,16 +228,44 @@ namespace WowPacketParser.SQL.Builders
                     {
                         Entry = unit.Key.GetEntry(),
                         DifficultyID = npc.DifficultyID,
-                        MinLevel = difficultyLevels[(unit.Key.GetEntry(), npc.DifficultyID)].Item1,
-                        MaxLevel = difficultyLevels[(unit.Key.GetEntry(), npc.DifficultyID)].Item2,
+                        MinLevel = difficultyLevels[(unit.Key.GetEntry(), npc.DifficultyID ?? 0)].Item1,
+                        MaxLevel = difficultyLevels[(unit.Key.GetEntry(), npc.DifficultyID ?? 0)].Item2,
                     };
+                    UpdateCreatureStaticFlags(ref npc, ref creatureDifficulty);
+                    WowPacketParser.SQL.SQLDatabase.CheckCreatureTemplateDifficultyNonWDBFallbacks(ref creatureDifficulty, creatureDifficulty.DifficultyID.Value);
                     Storage.CreatureTemplateDifficulties.Add(creatureDifficulty);
                 }
             }
 
             var templatesDb = SQLDatabase.Get(Storage.CreatureTemplateDifficulties);
 
-            return SQLUtil.Compare(Settings.SQLOrderByKey ? Storage.CreatureTemplateDifficulties.OrderBy(x => x.Item1.Entry).ToArray() : Storage.CreatureTemplateDifficulties.ToArray(), templatesDb, StoreNameType.Unit);
+            return SQLUtil.Compare(Settings.SQLOrderByKey ? Storage.CreatureTemplateDifficulties.OrderBy(x => x.Item1.Entry).ToArray() : Storage.CreatureTemplateDifficulties.ToArray(),
+                templatesDb,
+                x =>
+                {
+                    StringBuilder sb = new();
+                    if (x.StaticFlags1 != 0)
+                        sb.Append($"{x.StaticFlags1} - ");
+                    if (x.StaticFlags2 != 0)
+                        sb.Append($"{x.StaticFlags2} - ");
+                    if (x.StaticFlags3 != 0)
+                        sb.Append($"{x.StaticFlags3} - ");
+                    if (x.StaticFlags4 != 0)
+                        sb.Append($"{x.StaticFlags4} - ");
+                    if (x.StaticFlags5 != 0)
+                        sb.Append($"{x.StaticFlags5} - ");
+                    if (x.StaticFlags6 != 0)
+                        sb.Append($"{x.StaticFlags6} - ");
+                    if (x.StaticFlags7 != 0)
+                        sb.Append($"{x.StaticFlags7} - ");
+                    if (x.StaticFlags8 != 0)
+                        sb.Append($"{x.StaticFlags8} - ");
+
+                    if (sb.Length >= 3)
+                        sb.Remove(sb.Length - 3, 3);
+
+                    return $"{StoreGetters.GetName(StoreNameType.Unit, (int)x.Entry)} - {sb}";
+                });
         }
 
         [BuilderMethod(Units = true)]
@@ -281,6 +333,92 @@ namespace WowPacketParser.SQL.Builders
             var templatesDb = SQLDatabase.Get(Storage.CreatureTemplateSpells);
 
             return SQLUtil.Compare(Storage.CreatureTemplateSpells, templatesDb, StoreNameType.Unit);
+        }
+
+        [BuilderMethod]
+        public static string CreatureSpellLists()
+        {
+            if (Storage.CreatureSpellLists.IsEmpty())
+                return string.Empty;
+
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.creature_spell_list))
+                return string.Empty;
+
+            // TODO: Implement spell lists in TC and add support for this there
+            var templatesDb = SQLDatabase.Get(Storage.CreatureSpellLists);
+            if (Settings.TargetedProject == TargetedProject.Cmangos)
+            {
+                if (Settings.TargetedDatabase == TargetedDatabase.TheBurningCrusade)
+                {
+                    var creatureTemplatesDb = SQLDatabase.Get<CreatureTemplateCmangosTbc>();
+                    foreach (var spellList in Storage.CreatureSpellLists)
+                    {
+                        if (spellList.Item1.Id % 10 == 6)
+                        {
+                            var creatureTemplate = creatureTemplatesDb.Where(p => p.Data.Entry == (spellList.Item1.Id / 100)).SingleOrDefault();
+                            if (creatureTemplate != null && creatureTemplate.Data.DifficultyEntry1 != 0)
+                            {
+                                spellList.Item1.Id = (int)creatureTemplate.Data.DifficultyEntry1 * 100 + 5;
+                                var split = spellList.Item1.Comments.Split('-');
+                                spellList.Item1.Comments = split[0] + "(Heroic)" + " - " + split[1];
+                            }
+                        }
+                        else if (spellList.Item1.Id % 10 == 4)
+                        {
+                            spellList.Item1.Comments = "(UNK DIFFICULTY) - " + spellList.Item1.Comments;
+                        }
+                    }
+                }
+                else if (Settings.TargetedDatabase == TargetedDatabase.WrathOfTheLichKing)
+                {
+                    var creatureTemplatesDb = SQLDatabase.Get<CreatureTemplateCmangosWotlk>();
+                    foreach (var spellList in Storage.CreatureSpellLists)
+                    {
+                        var modulo = spellList.Item1.Id % 10;
+                        if (modulo > 5)
+                        {
+                            var creatureTemplate = creatureTemplatesDb.Where(p => p.Data.Entry == (spellList.Item1.Id / 100)).SingleOrDefault();
+                            if (creatureTemplate == null)
+                                continue;
+                            var difficultyEntry = 0;
+                            var stringAddition = "";
+                            switch (modulo)
+                            {
+                                case 6:
+                                    if (creatureTemplate.Data.DifficultyEntry1 == 0)
+                                        continue;
+                                    difficultyEntry = (int)creatureTemplate.Data.DifficultyEntry1 * 100 + 5;
+                                    stringAddition = "(Heroic)";
+                                    break;
+                                case 7:
+                                    if (creatureTemplate.Data.DifficultyEntry2 == 0)
+                                        continue;
+                                    difficultyEntry = (int)creatureTemplate.Data.DifficultyEntry2 * 100 + 5;
+                                    stringAddition = "(Heroic(10))";
+                                    break;
+                                case 8:
+                                    if (creatureTemplate.Data.DifficultyEntry3 == 0)
+                                        continue;
+                                    difficultyEntry = (int)creatureTemplate.Data.DifficultyEntry3 * 100 + 5;
+                                    stringAddition = "(Heroic(25))";
+                                    break;
+                            }
+                            if (difficultyEntry > 0)
+                            {
+                                spellList.Item1.Id = (int)creatureTemplate.Data.DifficultyEntry1 * 100 + 5;
+                                var split = spellList.Item1.Comments.Split('-');
+                                spellList.Item1.Comments = split[0] + stringAddition + " - " + split[1];
+                            }
+                        }
+                        else if (modulo == 4)
+                        {
+                            spellList.Item1.Comments = "(UNK DIFFICULTY) - " + spellList.Item1.Comments;
+                        }
+                    }
+                }
+            }
+
+            return SQLUtil.Compare(Storage.CreatureSpellLists, templatesDb, StoreNameType.None);
         }
 
         [BuilderMethod]
@@ -682,7 +820,8 @@ namespace WowPacketParser.SQL.Builders
             var levels = GetLevels(units);
             var usesCurrentExpansionLevels = new Dictionary<uint, long>();
             var expansionBaseLevel = 0;
-            if (Settings.TargetedDatabase >= TargetedDatabase.WarlordsOfDraenor && Settings.TargetedDatabase != TargetedDatabase.Dragonflight && Settings.TargetedDatabase != TargetedDatabase.WotlkClassic && Settings.DBEnabled)
+            if (Settings.DBEnabled && ((Settings.TargetedDatabase >= TargetedDatabase.WarlordsOfDraenor && Settings.TargetedDatabase < TargetedDatabase.Dragonflight) ||
+                Settings.TargetedDatabase == TargetedDatabase.Classic))
             {
                 usesCurrentExpansionLevels = SQLDatabase.GetDict<uint, long>($"SELECT entry, 1 FROM {Settings.TDBDatabase}.creature_template WHERE HealthScalingExpansion = -1");
                 switch (Settings.TargetedDatabase)
@@ -701,6 +840,9 @@ namespace WowPacketParser.SQL.Builders
                         break;
                     case TargetedDatabase.Dragonflight:
                         expansionBaseLevel = 70;
+                        break;
+                    case TargetedDatabase.TheWarWithin:
+                        expansionBaseLevel = 80;
                         break;
                 }
             }
@@ -764,11 +906,16 @@ namespace WowPacketParser.SQL.Builders
                     template.Faction == 2395 || template.Faction == 2401 || template.Faction == 2402) // player factions
                     template.Faction = 35;
 
-                template.UnitFlags &= ~UnitFlags.IsInCombat;
-                template.UnitFlags &= ~UnitFlags.PetIsAttackingTarget;
-                template.UnitFlags &= ~UnitFlags.PlayerControlled;
-                template.UnitFlags &= ~UnitFlags.Silenced;
-                template.UnitFlags &= ~UnitFlags.PossessedByPlayer;
+                if (ClientVersion.AddedInVersion(ClientType.Shadowlands))
+                    template.UnitFlags &= ~UnitFlags.DisallowedShadowlands;
+                else
+                    template.UnitFlags &= ~UnitFlags.Disallowed;
+
+                if (ClientVersion.AddedInVersion(ClientType.Cataclysm))
+                    template.UnitFlags2 &= ~UnitFlags2.Disallowed;
+
+                if (ClientVersion.AddedInVersion(ClientType.Legion))
+                    template.UnitFlags3 &= ~UnitFlags3.Disallowed;
 
                 if (!ClientVersion.AddedInVersion(ClientType.WarlordsOfDraenor))
                 {

@@ -63,7 +63,11 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
             for (uint j = 0; j < 2; ++j)
                 packet.ReadInt32("ProfessionIDs", idx, j);
 
-            for (uint j = 0; j < 35; ++j)
+            var visualItemCount = 19;
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_0_46181) && ClientVersion.RemovedInVersion(ClientVersionBuild.V10_2_7_55261))
+                visualItemCount = 35;
+
+            for (var j = 0; j < visualItemCount; ++j)
                 ReadVisualItemInfo(packet, idx, j);
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_0_5_37503))
@@ -72,15 +76,18 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
                 packet.ReadTime("LastPlayedTime", idx);
 
             packet.ReadInt16("SpecID", idx);
-            packet.ReadInt32("Unknown703", idx);
+            packet.ReadInt32("SaveVersion", idx);
             packet.ReadInt32("LastLoginVersion", idx);
-            packet.ReadUInt32("Flags4", idx);
+            packet.ReadUInt32("RestrictionFlags", idx);
             var mailSenderLengths = new uint[packet.ReadUInt32()];
             var mailSenderTypes = ClientVersion.AddedInVersion(ClientVersionBuild.V9_0_2_36639) ? new uint[packet.ReadUInt32()] : Array.Empty<uint>();
             packet.ReadUInt32("OverrideSelectScreenFileDataID", idx);
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_2_0_52038))
-                ReadCustomTabardInfo(packet, "PersonalTabard", idx);
+                ReadCustomTabardInfo(packet, idx, "PersonalTabard");
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_2_7_54577))
+                packet.ReadInt32("TimerunningSeasonID");
 
             for (var j = 0u; j < customizationCount; ++j)
                 ReadChrCustomizationChoice(packet, idx, "Customizations", j);
@@ -93,7 +100,7 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
             var nameLength = packet.ReadBits("Character Name Length", 6, idx);
             var firstLogin = packet.ReadBit("FirstLogin", idx);
             packet.ReadBit("BoostInProgress", idx);
-            packet.ReadBits("UnkWod61x", 5, idx);
+            packet.ReadBits("CantLoginReason", 5, idx);
 
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_1_5_50232))
             {
@@ -260,12 +267,17 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
             var hasTemplateSet = packet.ReadBit("HasTemplateSet");
             packet.ReadBit("IsTrialBoost");
             packet.ReadBit("UseNPE");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_2_6_53840))
+                packet.ReadBit("Unused1026");
 
             packet.ReadByteE<Race>("RaceID");
             packet.ReadByteE<Class>("ClassID");
             packet.ReadByteE<Gender>("SexID");
 
             var customizationCount = packet.ReadUInt32();
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_2_7_54577))
+                packet.ReadInt32("TimerunningSeasonID");
 
             packet.ReadWoWString("Name", nameLen);
 

@@ -90,8 +90,8 @@ namespace WowPacketParserModule.V3_4_0_45166.Parsers
 
             packet.ReadBit("KioskModeEnabled");
             packet.ReadBit("IsCompetitiveModeEnabled");
+            packet.ReadBit("IsBoostEnabled");
             packet.ReadBit("TrialBoostEnabled");
-            packet.ReadBit("Unk");
             packet.ReadBit("TokenBalanceEnabled");
             packet.ReadBit("LiveRegionCharacterListEnabled");
             packet.ReadBit("LiveRegionCharacterCopyEnabled");
@@ -99,9 +99,9 @@ namespace WowPacketParserModule.V3_4_0_45166.Parsers
 
             packet.ReadBit("LiveRegionKeyBindingsCopyEnabled");
             packet.ReadBit("Unknown901CheckoutRelated");
-            packet.ReadBit("Unused");
+            packet.ReadBit("SoftTargetEnabled");
             var europaTicket = packet.ReadBit("IsEuropaTicketSystemStatusEnabled");
-            packet.ReadBit("NameReservationOnly");
+            packet.ReadBit("IsNameReservationEnabled");
             bool launchETA = packet.ReadBit("IsLaunchETA");
             packet.ReadBit("AddonsDisabled");
             packet.ReadBit("Unk");
@@ -111,8 +111,7 @@ namespace WowPacketParserModule.V3_4_0_45166.Parsers
             packet.ReadBit("AccountSaveDataExportEnabled");
             packet.ReadBit("AccountLockedByExport");
             packet.ReadBit("Unk");
-            bool realmHiddenAlert = packet.ReadBit("IsRealmHiddenAlert");
-
+            var realmHiddenAlert = packet.ReadBit("IsRealmHiddenAlert");
             if (realmHiddenAlert)
                 packet.ReadBits("RealmHiddenAlert", 11);
 
@@ -305,13 +304,13 @@ namespace WowPacketParserModule.V3_4_0_45166.Parsers
             packet.ReadUInt32("ClubsPresenceUpdateTimer");
             packet.ReadUInt32("HiddenUIClubsPresenceUpdateTimer");
             packet.ReadInt32("ActiveSeason");
-            
+
             var gameRuleValuesCount = packet.ReadUInt32("GameRuleValuesCount");
-            
+
             packet.ReadInt16("MaxPlayerNameQueriesPerPacket");
             packet.ReadInt16("PlayerNameQueryTelemetryInterval");
             packet.ReadUInt32("PlayerNameQueryInterval");
-            
+
             for (var i = 0; i < gameRuleValuesCount; ++i)
                 ReadGameRuleValuePair(packet, "GameRuleValues");
 
@@ -363,9 +362,8 @@ namespace WowPacketParserModule.V3_4_0_45166.Parsers
 
             packet.ReadBit("IsGroupFinderEnabled");
             packet.ReadBit("IsLFDEnabled");
-            packet.ReadBit("IsPremadeGroupEnabled");
             packet.ReadBit("IsLFREnabled");
-
+            packet.ReadBit("IsPremadeGroupEnabled");
             {
                 packet.ResetBitReader();
                 packet.ReadBit("ToastsDisabled", "QuickJoinConfig");

@@ -6,6 +6,8 @@ using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
 using WowPacketParser.Proto;
+using WowPacketParser.Store;
+using WowPacketParserModule.V6_0_2_19033.Parsers;
 using WowPacketParserModule.V7_0_3_22248.Enums;
 using CoreParsers = WowPacketParser.Parsing.Parsers;
 using SplineFacingType = WowPacketParserModule.V6_0_2_19033.Enums.SplineFacingType;
@@ -54,7 +56,9 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
         public static void ReadMovementSpline(Packet packet, Vector3 pos, params object[] indexes)
         {
             PacketMonsterMove monsterMove = packet.Holder.MonsterMove;
-            monsterMove.Flags = packet.ReadUInt32E<SplineFlag>("Flags", indexes).ToUniversal();
+            var splineFlag = packet.ReadUInt32E<SplineFlag>("Flags", indexes);
+            monsterMove.Flags = splineFlag.ToUniversal();
+
             if (ClientVersion.RemovedInVersion(ClientType.Shadowlands))
             {
                 packet.ReadByte("AnimTier", indexes);
@@ -113,38 +117,51 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                     break;
             }
 
-            Vector3 endpos = new Vector3();
-
-            double overallDist = 0.0f;
-            for (int i = 0; i < pointsCount; i++)
+            var endpos = new Vector3();
+            double distance = 0.0f;
+            if (pointsCount > 0)
             {
-                var spot = packet.ReadVector3();
+                var prevpos = pos;
+                for (var i = 0; i < pointsCount; ++i)
+                {
+                    var spot = packet.ReadVector3("Points", indexes, i);
+                    monsterMove.Points.Add(spot);
+                    distance += Vector3.GetDistance(prevpos, spot);
+                    prevpos = spot;
 
-                // euclidean distance
-                overallDist += Math.Sqrt(Math.Pow(spot.X - pos.X, 2) + Math.Pow(spot.Y - pos.Y, 2) + Math.Pow(spot.Z - pos.Z, 2));
-
-                // client always taking first point
-                if (i == 0)
-                    endpos = spot;
-
-                monsterMove.Points.Add(spot);
-                packet.AddValue("Points", spot, indexes, i);
+                    // client always taking first point
+                    if (i == 0)
+                        endpos = spot;
+                }
             }
 
-            var waypoints = new Vector3[packedDeltasCount];
-            for (int i = 0; i < packedDeltasCount; i++)
+            if (packedDeltasCount > 0)
             {
-                var packedDeltas = packet.ReadPackedVector3();
-                waypoints[i].X = packedDeltas.X;
-                waypoints[i].Y = packedDeltas.Y;
-                waypoints[i].Z = packedDeltas.Z;
+                // Calculate mid pos
+                var mid = (pos + endpos) * 0.5f;
+
+                // ignore distance set by Points array if packed deltas are used
+                distance = 0;
+
+                var prevpos = pos;
+                for (var i = 0; i < packedDeltasCount; ++i)
+                {
+                    var vec = mid - packet.ReadPackedVector3();
+                    packet.AddValue("WayPoints", vec, indexes, i);
+                    monsterMove.PackedPoints.Add(vec);
+                    distance += Vector3.GetDistance(prevpos, vec);
+                    prevpos = vec;
+                }
+                distance += Vector3.GetDistance(prevpos, endpos);
             }
 
             if (hasSpellEffectExtraData)
                 ReadMonsterSplineSpellEffectExtraData(packet, indexes, "MonsterSplineSpellEffectExtra");
 
             if (hasJumpExtraData)
+            {
                 monsterMove.Jump = ReadMonsterSplineJumpExtraData(packet, indexes, "MonsterSplineJumpExtraData");
+            }
 
             if (hasAnimTier)
             {
@@ -165,37 +182,22 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 }
             }
 
-            // Calculate mid pos
-            var mid = new Vector3
+            if (endpos.X != 0 && endpos.Y != 0 && endpos.Z != 0)
             {
-                X = (pos.X + endpos.X) * 0.5f,
-                Y = (pos.Y + endpos.Y) * 0.5f,
-                Z = (pos.Z + endpos.Z) * 0.5f
-            };
-
-            for (var i = 0; i < packedDeltasCount; ++i)
-            {
-                var vec = new Vector3
-                {
-                    X = mid.X - waypoints[i].X,
-                    Y = mid.Y - waypoints[i].Y,
-                    Z = mid.Z - waypoints[i].Z
-                };
-                monsterMove.PackedPoints.Add(vec);
-                packet.AddValue("WayPoints", vec, indexes, i);
+                packet.AddValue("Computed Distance", distance, indexes);
+                packet.AddValue("Computed Speed", (distance / monsterMove.MoveTime) * 1000, indexes);
             }
-
-            float moveTimeInSec = (float)monsterMove.MoveTime / 1000;
-            float speedXY = (float)overallDist / moveTimeInSec;
-            packet.AddValue("CalculatedSpeedXY", speedXY, indexes);
         }
 
-        public static void ReadMovementMonsterSpline(Packet packet, Vector3 pos, params object[] indexes)
+        public static void ReadMovementMonsterSpline(Packet packet, Vector3 pos, WowGuid guid, params object[] indexes)
         {
             PacketMonsterMove monsterMove = packet.Holder.MonsterMove;
             monsterMove.Id = packet.ReadUInt32("Id", indexes);
-            if (ClientVersion.RemovedInVersion(ClientVersionBuild.V10_2_0_52038))
-                monsterMove.Destination = packet.ReadVector3("Destination", indexes);
+            if (ClientVersion.RemovedInVersion(ClientBranch.Retail, ClientVersionBuild.V10_2_0_52038) || ClientVersion.Branch != ClientBranch.Retail)
+            {
+                var destination = packet.ReadVector3("Destination", indexes);
+                monsterMove.Destination = destination;
+            }
 
             packet.ResetBitReader();
 
@@ -209,10 +211,11 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
         public static void HandleOnMonsterMove(Packet packet)
         {
             PacketMonsterMove monsterMove = packet.Holder.MonsterMove = new();
-            monsterMove.Mover = packet.ReadPackedGuid128("MoverGUID");
+            var moverGuid = packet.ReadPackedGuid128("MoverGUID");
+            monsterMove.Mover = moverGuid;
             Vector3 pos = monsterMove.Position = packet.ReadVector3("Position");
 
-            ReadMovementMonsterSpline(packet, pos, "MovementMonsterSpline");
+            ReadMovementMonsterSpline(packet, pos, moverGuid, "MovementMonsterSpline");
         }
 
         [Parser(Opcode.SMSG_PHASE_SHIFT_CHANGE)]

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using WowPacketParser.DBC.Structures.Dragonflight;
+using WowPacketParser.DBC.Structures.TheWarWithin;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Store.Objects;
@@ -29,6 +29,7 @@ namespace WowPacketParser.SQL
         public static Dictionary<uint /*broadcastText*/, List<uint> /*npc_text ids*/> BroadcastToNPCTexts { get; } = new();
         public static Dictionary<int /*menuID*/, List<uint> /*npc_text ids*/> GossipMenuToNPCTexts { get; } = new();
         public static Dictionary<int /*worldStateID*/, string> WorldStateNames { get; } = new();
+        public static Dictionary<(uint /*CreatureId*/, uint /*DifficultyID*/), CreatureTemplateDifficultyWDB> CreatureTemplateDifficultyWDBData = new();
         public static List<POIData> POIs { get; } = new List<POIData>();
 
         private static readonly StoreNameType[] ObjectTypes =
@@ -109,6 +110,7 @@ namespace WowPacketParser.SQL
             LoadBroadcastText();
             LoadPointsOfinterest();
             LoadCreatureEquipment();
+            LoadCreatureTemplateDifficultyWDBData();
             LoadNPCTexts();
             LoadGossipMenuNPCTexts();
             LoadWorldStates();
@@ -133,7 +135,7 @@ namespace WowPacketParser.SQL
                 query = "SELECT ID, LanguageID, Text, Text1, EmoteID1, EmoteID2, EmoteID3, EmoteDelay1, EmoteDelay2, EmoteDelay3, SoundEntriesID, EmotesID, Flags " +
                 $"FROM {Settings.TDBDatabase}.broadcast_text;";
 
-            if (Settings.TargetedDatabase == TargetedDatabase.TheBurningCrusade)
+            if (Settings.TargetedProject == TargetedProject.Cmangos)
                 return;
 
             using (var command = SQLConnector.CreateCommand(query))
@@ -176,20 +178,21 @@ namespace WowPacketParser.SQL
                         broadcastText.EmoteDelay[2] = Convert.ToUInt16(reader["EmoteDelay3"]);
                         broadcastText.EmotesID = Convert.ToUInt16(reader["EmotesID"]);
                         broadcastText.LanguageID = Convert.ToInt32(reader["LanguageID"]);
-                        broadcastText.Flags = Convert.ToByte(reader["Flags"]);
+                        broadcastText.Flags = Convert.ToUInt16(reader["Flags"]);
+
                         if (Settings.TargetedDatabase == TargetedDatabase.WrathOfTheLichKing || Settings.TargetedDatabase == TargetedDatabase.Cataclysm)
                         {
                             broadcastText.ConditionID = 0;
-                            broadcastText.SoundEntriesID = new uint[2];
-                            broadcastText.SoundEntriesID[0] = Convert.ToUInt32(reader["SoundEntriesID"]);
-                            broadcastText.SoundEntriesID[1] = 0;
+                            broadcastText.SoundKitID = new uint[2];
+                            broadcastText.SoundKitID[0] = Convert.ToUInt32(reader["SoundKitID"]);
+                            broadcastText.SoundKitID[1] = 0;
                         }
                         else
                         {
                             broadcastText.ConditionID = Convert.ToInt32(reader["ConditionID"]);
-                            broadcastText.SoundEntriesID = new uint[2];
-                            broadcastText.SoundEntriesID[0] = Convert.ToUInt32(reader[$"Sound{soundFieldName}ID1"]);
-                            broadcastText.SoundEntriesID[1] = Convert.ToUInt32(reader[$"Sound{soundFieldName}ID2"]);
+                            broadcastText.SoundKitID = new uint[2];
+                            broadcastText.SoundKitID[0] = Convert.ToUInt32(reader[$"Sound{soundFieldName}ID1"]);
+                            broadcastText.SoundKitID[1] = Convert.ToUInt32(reader[$"Sound{soundFieldName}ID2"]);
                         }
 
                         if (!DBC.DBC.BroadcastText.ContainsKey(id))
@@ -207,7 +210,7 @@ namespace WowPacketParser.SQL
                 "SELECT ID, PositionX, PositionY, Icon, Flags, Importance, Name " +
                 $"FROM {Settings.TDBDatabase}.points_of_interest ORDER BY ID;";
 
-            if (Settings.TargetedDatabase == TargetedDatabase.TheBurningCrusade)
+            if (Settings.TargetedProject == TargetedProject.Cmangos)
                 query = $"SELECT entry AS ID, x AS PositionX, y AS PositionY, icon AS Icon, flags AS Flags, data AS Importance, icon_name AS Name FROM {Settings.TDBDatabase}.points_of_interest ORDER BY entry;";
 
             using (var command = SQLConnector.CreateCommand(query))
@@ -237,7 +240,7 @@ namespace WowPacketParser.SQL
 
         private static void LoadCreatureEquipment()
         {
-            if (Settings.TargetedDatabase == TargetedDatabase.TheBurningCrusade)
+            if (Settings.TargetedProject == TargetedProject.Cmangos)
                 return;
 
             string columns = "CreatureID, ID, ItemID1, ItemID2, ItemID3, VerifiedBuild";
@@ -285,9 +288,99 @@ namespace WowPacketParser.SQL
             }
         }
 
+        private static void LoadCreatureTemplateDifficultyWDBData()
+        {
+            if (Settings.TargetedDatabase < TargetedDatabase.Dragonflight || !Settings.DBEnabled)
+                return;
+
+            string columns = "Entry, DifficultyID, HealthScalingExpansion, HealthModifier, ManaModifier, CreatureDifficultyID, TypeFlags, TypeFlags2";
+            string query = $"SELECT {columns} FROM {Settings.TDBDatabase}.creature_template_difficulty";
+
+            using (var command = SQLConnector.CreateCommand(query))
+            {
+                if (command == null)
+                    return;
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var data = new CreatureTemplateDifficultyWDB
+                        {
+                            Entry = reader.GetUInt32("Entry"),
+                            DifficultyID = reader.GetUInt32("DifficultyID"),
+                            HealthScalingExpansion = (ClientType)reader.GetInt32("HealthScalingExpansion"),
+                            HealthModifier = reader.GetFloat("HealthModifier"),
+                            ManaModifier = reader.GetFloat("ManaModifier"),
+                            CreatureDifficultyID = reader.GetInt32("CreatureDifficultyID"),
+                            TypeFlags = (CreatureTypeFlag)reader.GetUInt32("TypeFlags"),
+                            TypeFlags2 = reader.GetUInt32("TypeFlags2")
+                        };
+                        CreatureTemplateDifficultyWDBData.Add((data.Entry.Value, data.DifficultyID.Value), data);
+                    }
+                }
+            }
+        }
+
+        public static CreatureTemplateDifficultyWDB CheckCreatureTemplateDifficultyWDBFallbacks(CreatureTemplateDifficultyWDB sniffData, uint? difficulty)
+        {
+            // if db disabled/empty or difficulty information is not known simply return sniff data
+            if (CreatureTemplateDifficultyWDBData.Count == 0 || difficulty == null)
+                return sniffData;
+
+            // entry with same difficulty already exists
+            if (CreatureTemplateDifficultyWDBData.TryGetValue((sniffData.Entry.Value, difficulty.Value), out var dbData))
+            {
+                // data is equal, return sniffData to update
+                if (sniffData.WDBEqualsSkipDifficultySkipHealthScalingExpansion(dbData))
+                {
+                    sniffData.DifficultyID = dbData.DifficultyID;
+                    return sniffData;
+                }
+
+                // data is not equal, insert new row
+                return sniffData;
+            }
+            // entry with same difficulty does not exist, check fallback difficulties recursively
+            else
+            {
+                if (!Settings.UseDBC || DBC.DBC.Difficulty == null)
+                    return sniffData;
+
+                if (DBC.DBC.Difficulty.TryGetValue((int)difficulty, out var difficultyEntry))
+                    return CheckCreatureTemplateDifficultyWDBFallbacks(sniffData, difficultyEntry.FallbackDifficultyID);
+            }
+            return sniffData;
+        }
+
+        public static void CheckCreatureTemplateDifficultyNonWDBFallbacks(ref CreatureTemplateDifficulty sniffData, uint difficulty)
+        {
+            // if db disabled/empty simply return sniff data
+            if (CreatureTemplateDifficultyWDBData.Count == 0)
+                return;
+
+            // entry with same difficulty already exists (wdb)
+            if (CreatureTemplateDifficultyWDBData.TryGetValue((sniffData.Entry.Value, difficulty), out var dbData))
+                sniffData.DifficultyID = dbData.DifficultyID;
+            // entry with same difficulty does not exist, check fallback difficulties recursively
+            else
+            {
+                if (!Settings.UseDBC || DBC.DBC.Difficulty == null)
+                    return;
+
+                if (DBC.DBC.Difficulty.TryGetValue((int)difficulty, out var difficultyEntry))
+                {
+                    // only allow fallbacks for FallbackDifficultyID = 0
+                    if (difficultyEntry.FallbackDifficultyID != 0)
+                        return;
+
+                    CheckCreatureTemplateDifficultyNonWDBFallbacks(ref sniffData, difficultyEntry.FallbackDifficultyID);
+                }
+            }
+        }
+
         private static void LoadNPCTexts()
         {
-            if (Settings.TargetedDatabase == TargetedDatabase.TheBurningCrusade)
+            if (Settings.TargetedProject == TargetedProject.Cmangos)
                 return;
 
             string columns = "ID, BroadcastTextID0, BroadcastTextID1, BroadcastTextID2, BroadcastTextID3, BroadcastTextID4, BroadcastTextID5, BroadcastTextID6, BroadcastTextID7";
@@ -317,7 +410,7 @@ namespace WowPacketParser.SQL
 
         private static void LoadGossipMenuNPCTexts()
         {
-            if (Settings.TargetedDatabase == TargetedDatabase.TheBurningCrusade)
+            if (Settings.TargetedProject == TargetedProject.Cmangos)
                 return;
 
             string columns = "MenuID, TextID";
@@ -376,7 +469,7 @@ namespace WowPacketParser.SQL
         private static void LoadNameData()
         {
             string questQuery = $"SELECT `ID`, `LogTitle` FROM {Settings.TDBDatabase}.quest_template;";
-            if (Settings.TargetedDatabase == TargetedDatabase.TheBurningCrusade)
+            if (Settings.TargetedProject == TargetedProject.Cmangos)
             {
                 questQuery = $"SELECT `entry`, `Title` FROM {Settings.TDBDatabase}.quest_template;";
             }

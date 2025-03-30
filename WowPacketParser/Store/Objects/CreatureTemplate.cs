@@ -56,7 +56,7 @@ namespace WowPacketParser.Store.Objects
         public int? WidgetSetUnitConditionID;
 
         [DBFieldName("rank", TargetedDatabaseFlag.TillShadowlands)]
-        [DBFieldName("Classification", TargetedDatabaseFlag.Dragonflight)]
+        [DBFieldName("Classification", TargetedDatabaseFlag.Dragonflight | TargetedDatabaseFlag.CataClassic)]
         public CreatureRank? Rank;
 
         [DBFieldName("family")]
@@ -158,7 +158,7 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("CreatureEntry", true)]
         public uint? CreatureEntry;
 
-        [DBFieldName("DifficultyID", TargetedDatabaseFlag.SinceDragonflight, true)]
+        [DBFieldName("DifficultyID", TargetedDatabaseFlag.SinceDragonflight | TargetedDatabaseFlag.CataClassic, true)]
         public uint? DifficultyID;
 
         [DBFieldName("Idx", true)]
@@ -167,7 +167,20 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("ItemId")]
         public uint? ItemId;
 
-        [DBFieldName("VerifiedBuild", TargetedDatabaseFlag.SinceWarlordsOfDraenor)]
+        [DBFieldName("VerifiedBuild", TargetedDatabaseFlag.SinceWarlordsOfDraenor | TargetedDatabaseFlag.CataClassic)]
+        public int? VerifiedBuild = ClientVersion.BuildInt;
+    }
+
+    [DBTableName("creature_quest_currency")]
+    public sealed record CreatureTemplateQuestCurrency : IDataModel
+    {
+        [DBFieldName("CreatureId", true)]
+        public uint? CreatureId;
+
+        [DBFieldName("CurrencyId", true)]
+        public int? CurrencyId;
+
+        [DBFieldName("VerifiedBuild")]
         public int? VerifiedBuild = ClientVersion.BuildInt;
     }
 
@@ -245,5 +258,27 @@ namespace WowPacketParser.Store.Objects
 
         [DBFieldName("VerifiedBuild")]
         public int? VerifiedBuild = ClientVersion.BuildInt;
+    }
+
+    [DBTableName("creature_template")]
+    public sealed record CreatureTemplateCmangosWotlk : IDataModel
+    {
+        [DBFieldName("Entry", true)]
+        public uint? Entry;
+        [DBFieldName("DifficultyEntry1")]
+        public uint? DifficultyEntry1;
+        [DBFieldName("DifficultyEntry2")]
+        public uint? DifficultyEntry2;
+        [DBFieldName("DifficultyEntry3")]
+        public uint? DifficultyEntry3;
+    }
+
+    [DBTableName("creature_template")]
+    public sealed record CreatureTemplateCmangosTbc : IDataModel
+    {
+        [DBFieldName("Entry", true)]
+        public uint Entry;
+        [DBFieldName("HeroicEntry")]
+        public uint DifficultyEntry1;
     }
 }

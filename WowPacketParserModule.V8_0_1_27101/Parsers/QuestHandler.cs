@@ -362,7 +362,7 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                     Storage.LocalesQuestObjectives.Add(localesQuestObjectives, packet.TimeSpan);
                 }
 
-                Storage.QuestObjectives.Add(questInfoObjective, packet.TimeSpan);
+                Storage.QuestObjectives.Add((uint)questInfoObjective.ID, questInfoObjective, packet.TimeSpan);
             }
 
             quest.LogTitle = packet.ReadWoWString("LogTitle", logTitleLen);
@@ -518,6 +518,8 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                     questPoi.AlwaysAllowMergingBlobs = packet.ReadBit("AlwaysAllowMergingBlobs", i, j);
 
                     Storage.QuestPOIs.Add(questPoi, packet.TimeSpan);
+
+                    CoreParsers.QuestHandler.AddSpawnTrackingData(questPoi, packet.TimeSpan);
                 }
             }
         }
@@ -599,6 +601,17 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ReadWoWString("PortraitTurnInName", portraitTurnInNameLen);
 
             Storage.QuestOfferRewards.Add(questOfferReward, packet.TimeSpan);
+
+            if (ClientLocale.PacketLocale != LocaleConstant.enUS && questOfferReward.RewardText != string.Empty)
+            {
+                QuestOfferRewardLocale localesQuestOfferReward = new QuestOfferRewardLocale
+                {
+                    ID = questOfferReward.ID,
+                    RewardText = questOfferReward.RewardText
+                };
+
+                Storage.LocalesQuestOfferRewards.Add(localesQuestOfferReward, packet.TimeSpan);
+            }
         }
 
         [Parser(Opcode.SMSG_DISPLAY_PLAYER_CHOICE)]

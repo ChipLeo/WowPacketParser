@@ -51,17 +51,21 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             packet.ReadPackedGuid128("Item", idx);
 
             if (hasSrcLoc)
-                ReadLocation(packet, "SrcLocation");
+                ReadLocation(packet, idx, "SrcLocation");
 
             if (hasDstLoc)
             {
-                var dstLocation = ReadLocation(packet, "DstLocation");
+                var dstLocation = ReadLocation(packet, idx, "DstLocation");
                 if (spellData != null)
                     spellData.DstLocation = dstLocation;
             }
 
             if (hasOrient)
-                packet.ReadSingle("Orientation", idx);
+            {
+                var orientation = packet.ReadSingle("Orientation", idx);
+                if (spellData != null)
+                    spellData.DstOrientation = orientation;
+            }
 
             packet.ReadWoWString("Name", nameLength, idx);
         }
@@ -646,7 +650,11 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         public static void HandleAuraPointsDepleted(Packet packet)
         {
             packet.ReadPackedGuid128("Unit");
-            packet.ReadByte("Slot");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V11_1_0_59347))
+                packet.ReadUInt16("Slot");
+            else
+                packet.ReadByte("Slot");
+
             packet.ReadByte("EffectIndex");
         }
 
@@ -783,13 +791,13 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_LOSS_OF_CONTROL_AURA_UPDATE)]
         public static void HandleLossOfControlAuraUpdate(Packet packet)
         {
-            var count = packet.ReadInt32("LossOfControlInfoCount");
+            var count = packet.ReadInt32();
             for (int i = 0; i < count; i++)
             {
                 packet.ReadByte("AuraSlot", i);
                 packet.ReadByte("EffectIndex", i);
-                packet.ReadBits("Type", 8, i);
-                packet.ReadBits("Mechanic", 8, i);
+                packet.ReadBitsE<LossOfControlType>("LocType", 8, i);
+                packet.ReadBitsE<SpellMechanic>("Mechanic", 8, i);
             }
         }
 
@@ -854,14 +862,15 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
         [Parser(Opcode.SMSG_SPELL_COOLDOWN)]
         public static void HandleSpellCooldown(Packet packet)
         {
-            packet.ReadPackedGuid128("Caster");
+            var guid = packet.ReadPackedGuid128("Caster");
             packet.ReadByte("Flags");
 
             var count = packet.ReadInt32("SpellCooldownsCount");
             for (int i = 0; i < count; i++)
             {
-                packet.ReadInt32("SrecID", i);
-                packet.ReadInt32("ForcedCooldown", i);
+                var spellId = packet.ReadInt32("SrecID", i);
+                var time = packet.ReadInt32("ForcedCooldown", i);
+                WowPacketParser.Parsing.Parsers.SpellHandler.FillSpellListCooldown((uint)spellId, time, guid.GetEntry());
             }
         }
 

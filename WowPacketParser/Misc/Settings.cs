@@ -17,8 +17,9 @@ namespace WowPacketParser.Misc
         public static readonly ClientVersionBuild ClientBuild = Conf.GetEnum("ClientBuild", ClientVersionBuild.Zero);
         public static readonly LocaleConstant ClientLocale = Conf.GetEnum("ClientLocale", LocaleConstant.enUS);
         public static readonly TargetedDatabase TargetedDatabase = Conf.GetEnum("TargetedDatabase", TargetedDatabase.WrathOfTheLichKing);
+        public static readonly TargetedProject TargetedProject = Conf.GetEnum("TargetedProject", TargetedProject.TrinityCore);
         public static readonly DumpFormatType DumpFormat = Conf.GetEnum("DumpFormat", DumpFormatType.Text);
-        public static readonly ulong SQLOutputFlag = GetSQLOutputFlag();
+        public static readonly UInt128 SQLOutputFlag = GetSQLOutputFlag();
         public static readonly bool SQLOrderByKey = Conf.GetBoolean("SqlOrderByKey", false);
         public static readonly bool SaveTempSpawns = Conf.GetBoolean("SaveTempSpawns", false);
         public static readonly bool SaveExistingSpawns = Conf.GetBoolean("SaveExistingSpawns", false);
@@ -26,10 +27,12 @@ namespace WowPacketParser.Misc
         public static readonly bool SkipRowsWithFallbackValues = Conf.GetBoolean("SkipRowsWithFallbackValues", true);
         public static readonly bool IgnoreZeroValues = Conf.GetBoolean("IgnoreZeroValues", false);
         public static readonly bool ForceInsertQueries = Conf.GetBoolean("ForceInsertQueries", false);
+        public static readonly int MaximumConditionsPerStatement = Conf.GetInt("MaximumConditionsPerStatement", 5000);
         public static readonly bool RecalcDiscount = Conf.GetBoolean("RecalcDiscount", false);
         public static readonly bool ForcePhaseZero = Conf.GetBoolean("ForcePhaseZero", false);
         public static readonly bool GenerateCreateObject2SpawnsOnly = Conf.GetBoolean("GenerateCreateObject2SpawnsOnly", false);
         public static readonly bool SkipDuplicateSpawns = Conf.GetBoolean("SkipDuplicateSpawns", false);
+        public static readonly bool SkipIntermediatePoints = Conf.GetBoolean("SkipIntermediatePoints", false);
         public static readonly string SQLFileName = Conf.GetString("SQLFileName", string.Empty);
         public static readonly bool SplitSQLFile = Conf.GetBoolean("SplitSQLFile", false);
         public static readonly bool ShowEndPrompt = Conf.GetBoolean("ShowEndPrompt", false);
@@ -67,17 +70,17 @@ namespace WowPacketParser.Misc
         public static readonly bool UseDBC = Conf.GetBoolean("UseDBC", false);
         public static readonly bool ParseSpellInfos = Conf.GetBoolean("ParseSpellInfos", false);
 
-        private static ulong GetSQLOutputFlag()
+        private static UInt128 GetSQLOutputFlag()
         {
             var names = Enum.GetNames(typeof(SQLOutput));
             var values = Enum.GetValues(typeof(SQLOutput));
 
-            var result = 0ul;
+            UInt128 result = 0;
 
             for (var i = 0; i < names.Length; ++i)
             {
                 if (Conf.GetBoolean(names[i], false))
-                    result += (1ul << (int)values.GetValue(i));
+                    result += (((UInt128)1) << (int)values.GetValue(i));
             }
 
             return result;

@@ -37,9 +37,9 @@ namespace WowPacketParser.SQL.Builders
             if (Storage.QuestObjectives.IsEmpty())
                 return string.Empty;
 
-            var templatesDb = SQLDatabase.Get(Storage.QuestObjectives);
+            var templatesDb = SQLDatabase.Get(Storage.QuestObjectives.Values);
 
-            return SQLUtil.Compare(Storage.QuestObjectives, templatesDb, StoreNameType.QuestObjective);
+            return SQLUtil.Compare(Storage.QuestObjectives.Values, templatesDb, StoreNameType.QuestObjective);
         }
 
         [BuilderMethod(true)]
@@ -75,6 +75,23 @@ namespace WowPacketParser.SQL.Builders
             var templatesDb = SQLDatabase.Get(Storage.QuestRewardDisplaySpells);
 
             return SQLUtil.Compare(Storage.QuestRewardDisplaySpells, templatesDb, StoreNameType.None);
+        }
+
+        [BuilderMethod(true)]
+        public static string QuestTreasurePickers()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
+                return string.Empty;
+
+            if (Settings.TargetedDatabase < TargetedDatabase.TheWarWithin)
+                return string.Empty;
+
+            if (Storage.QuestTreasurePickersStorage.IsEmpty())
+                return string.Empty;
+
+            var templateDb = SQLDatabase.Get(Storage.QuestTreasurePickersStorage);
+
+            return SQLUtil.Compare(Storage.QuestTreasurePickersStorage, templateDb, StoreNameType.Quest);
         }
 
         [BuilderMethod(true, Units = true)]
@@ -130,6 +147,25 @@ namespace WowPacketParser.SQL.Builders
             var templatesDb = SQLDatabase.Get(Storage.CreatureTemplateQuestItems);
 
             return SQLUtil.Compare(Storage.CreatureTemplateQuestItems, templatesDb, StoreNameType.Unit);
+        }
+
+        [BuilderMethod(true)]
+        public static string CreatureTemplateQuestCurrencies()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.creature_template))
+                return string.Empty;
+
+            if (Storage.CreatureTemplateQuestCurrencies.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.CreatureTemplateQuestCurrencies);
+
+            return SQLUtil.Compare(Settings.SQLOrderByKey ? Storage.CreatureTemplateQuestCurrencies.OrderBy(x => x.Item1.CreatureId).ThenBy(y => y.Item1.CurrencyId) : Storage.CreatureTemplateQuestCurrencies, templatesDb, x =>
+            {
+                string creatureName = StoreGetters.GetName(StoreNameType.Unit, (int)x.CreatureId, false);
+                string currencyName = StoreGetters.GetName(StoreNameType.Currency, (int)x.CurrencyId, false);
+                return $"{creatureName} - {currencyName}";
+            });
         }
 
         [BuilderMethod(true, Gameobjects = true)]

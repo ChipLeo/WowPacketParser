@@ -61,9 +61,19 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
             response.TypeFlags = (uint?)creature.TypeFlags ?? 0;
             creature.TypeFlags2 = response.TypeFlags2 = packet.ReadUInt32("Creature Type Flags 2");
 
-            creature.Type = packet.ReadInt32E<CreatureType>("CreatureType");
-            creature.Family = packet.ReadInt32E<CreatureFamily>("CreatureFamily");
-            creature.Rank = packet.ReadInt32E<CreatureRank>("Classification");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V11_1_0_59347))
+            {
+                creature.Type = packet.ReadByteE<CreatureType>("CreatureType");
+                creature.Family = packet.ReadInt32E<CreatureFamily>("CreatureFamily");
+                creature.Rank = packet.ReadSByteE<CreatureRank>("Classification");
+            }
+            else
+            {
+                creature.Type = packet.ReadInt32E<CreatureType>("CreatureType");
+                creature.Family = packet.ReadInt32E<CreatureFamily>("CreatureFamily");
+                creature.Rank = packet.ReadInt32E<CreatureRank>("Classification");
+            }
+
             response.Type = (int?)creature.Type ?? 0;
             response.Family = (int?)creature.Family ?? 0;
             response.Rank = (int?)creature.Rank ?? 0;
@@ -98,6 +108,9 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
             creature.ManaModifier = response.ManaMod = packet.ReadSingle("EnergyMulti");
 
             uint questItems = packet.ReadUInt32("QuestItems");
+            uint questCurrencies = 0;
+            if (ClientVersion.AddedInVersion(ClientBranch.Retail, ClientVersionBuild.V10_2_5_52902))
+                questCurrencies = packet.ReadUInt32("QuestCurrencies");
             creature.MovementID = response.MovementId = (uint)packet.ReadInt32("CreatureMovementInfoID");
             creature.HealthScalingExpansion = packet.ReadInt32E<ClientType>("HealthScalingExpansion");
             response.HpScalingExp = (uint?) creature.HealthScalingExpansion ?? 0;
@@ -134,6 +147,18 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
                 response.QuestItems.Add(questItem.ItemId ?? 0);
             }
 
+            for (uint i = 0; i < questCurrencies; ++i)
+            {
+                CreatureTemplateQuestCurrency questCurrency = new CreatureTemplateQuestCurrency
+                {
+                    CreatureId = (uint)entry.Key,
+                    CurrencyId = packet.ReadInt32<CurrencyId>("QuestCurrency", i)
+                };
+
+                Storage.CreatureTemplateQuestCurrencies.Add(questCurrency, packet.TimeSpan);
+                response.QuestCurrencies.Add(questCurrency.CurrencyId ?? 0);
+            }
+
             packet.AddSniffData(StoreNameType.Unit, entry.Key, "QUERY_RESPONSE");
 
             if (ClientLocale.PacketLocale != LocaleConstant.enUS)
@@ -163,6 +188,7 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
                 TypeFlags = creature.TypeFlags,
                 TypeFlags2 = creature.TypeFlags2
             };
+            creatureTemplateDifficultyWDB = WowPacketParser.SQL.SQLDatabase.CheckCreatureTemplateDifficultyWDBFallbacks(creatureTemplateDifficultyWDB, creatureTemplateDifficultyWDB.DifficultyID);
             Storage.CreatureTemplateDifficultiesWDB.Add(creatureTemplateDifficultyWDB);
 
             ObjectName objectName = new ObjectName
