@@ -491,8 +491,6 @@ namespace WowPacketParser.Enums.Version.V4_0_6_13596
             {Opcode.CMSG_RUN_SCRIPT, 0x100DF}, //UnknownopcodeID
             {Opcode.CMSG_SAVE_DANCE, 0x101C3}, //UnknownopcodeID
             {Opcode.CMSG_SAVE_PLAYER, 0x1005C}, //UnknownopcodeID
-            //{Opcode.CMSG_SEARCH_LFG_JOIN, 0x061CC},
-            //{Opcode.CMSG_SEARCH_LFG_LEAVE, 0x0847D}, //4.0.3a13329-403
             {Opcode.CMSG_SELF_RES, 0x0AEC4},
             {Opcode.CMSG_SELL_ITEM, 0x063A4},
             {Opcode.CMSG_SEND_COMBAT_TRIGGER, 0x1015C}, //UnknownopcodeID
@@ -861,7 +859,6 @@ namespace WowPacketParser.Enums.Version.V4_0_6_13596
             {Opcode.SMSG_GUILD_TRADESKILL_UPDATE, 0x0454E},
             //{Opcode.SMSG_GUILD_UPDATE_PARTY_STATE, 0x0450C},
             //{Opcode.SMSG_GUILD_XP_LIMIT, 0x0441C},
-            //{Opcode.SMSG_GUILD_XP_UPDATE, 0x0440E},
             {Opcode.SMSG_GUILD_XP, 0x0440E},
             {Opcode.SMSG_HEALTH_UPDATE, 0x02AA8},
             {Opcode.SMSG_HIGHEST_THREAT_UPDATE, 0x03F7E}, //4.0.3a13329-403

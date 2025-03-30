@@ -20,7 +20,7 @@ namespace WowPacketParser.Store.Objects
         public int? MapID;
 
         [DBFieldName("WorldMapAreaId", TargetedDatabaseFlag.TillLegion)]
-        [DBFieldName("UiMapID", TargetedDatabaseFlag.SinceBattleForAzeroth)]
+        [DBFieldName("UiMapID", TargetedDatabaseFlag.SinceBattleForAzeroth | TargetedDatabaseFlag.CataClassic)]
         public int? WorldMapAreaId;
 
         [DBFieldName("Floor", TargetedDatabaseFlag.TillLegion)]
@@ -37,6 +37,9 @@ namespace WowPacketParser.Store.Objects
 
         [DBFieldName("PlayerConditionID")]
         public int? PlayerConditionID;
+
+        [DBFieldName("NavigationPlayerConditionID")]
+        public int? NavigationPlayerConditionID;
 
         [DBFieldName("VerifiedBuild")]
         public int? VerifiedBuild = ClientVersion.BuildInt;

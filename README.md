@@ -7,7 +7,7 @@ WowPacketParser (WPP)
 Usage
 -----
 
-* Compile WowPacketParser using Visual Studio 2022 (with .NET 7.0 SDK) or .NET 7.0 SDK (Linux/OSX).
+* Compile WowPacketParser using Visual Studio 2022 (with .NET 9.0 SDK) or .NET 9.0 SDK.
   Alternatively you can download compiled binaries from the links [below](#nightly-builds).
 * Edit `WowPacketParser.dll.config` to fit your needs.
 * Drag one or more files (.pkt or .bin) to `WowPacketParser.exe`.
@@ -39,17 +39,16 @@ and `wpp_data_objectnames.sql` has some data to fill the database.
 
 Nightly Builds
 --------------
-.NET 7.0 SDK or .NET 7.0 Runtime is needed!
+.NET 9.0 SDK or .NET 9.0 Runtime is needed!
 
-[Download .NET 7.0 here!](https://dotnet.microsoft.com/download/dotnet/7.0)
+[Download .NET 9.0 here!](https://dotnet.microsoft.com/download/dotnet/9.0)
 
 ##### Windows
 - Visual Studio 2022
+
 - [Debug 32/64 Bits](https://ci.appveyor.com/project/ChipLeo/wowpacketparser) -> `Configuration: Debug` -> `ARTIFACTS` -> `WPP.zip`
 - [Release 32/64 Bits](https://ci.appveyor.com/project/ChipLeo/wowpacketparser) -> `Configuration: Release` -> `ARTIFACTS` -> `WPP.zip`
-
-##### macOS (currently not supported)
-  
+ 
 Docker (experimental)
 ---------------------
 

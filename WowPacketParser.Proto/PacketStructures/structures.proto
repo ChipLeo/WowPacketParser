@@ -80,6 +80,8 @@ message PacketHolder {
       PacketLoginSetTimeSpeed loginSetTimeSpeed = 44;
       PacketAuraUpdateAll auraUpdateAll = 45;
       PacketAIReaction aiReaction = 46;
+      PacketInitWorldStates initWorldStates = 47;
+      PacketUpdateWorldState updateWorldState = 48;
   }
 }
 
@@ -264,6 +266,7 @@ message PacketSpellData {
   repeated Vec3 targetPoints = 13;
   optional uint32 ammoInventoryType = 14;
   optional uint32 castCount = 15;
+  optional float dstOrientation = 16;
 }
 
 message PacketSpellStart {
@@ -360,6 +363,7 @@ message PacketMonsterMove {
   repeated Vec3 points = 13;
   repeated Vec3 packedPoints = 14;
   optional SplineJump jump = 15;
+  bool creationSpline = 16;
 }
 
 message SplineJump {
@@ -757,6 +761,7 @@ message PacketQueryCreatureResponse {
   float hpMod = 13;
   float manaMod = 14;
   repeated uint32 questItems = 115;
+  repeated int32 questCurrencies = 122;
   uint32 movementId = 16;
   uint32 hpScalingExp = 17;
   uint32 expansion = 18;
@@ -887,4 +892,21 @@ enum AIReaction {
 message PacketAIReaction {
     UniversalGuid unitGuid = 1;
     AIReaction reaction = 2;
+}
+
+message PacketInitWorldStates {
+  int32 mapId = 1;
+  int32 zoneId = 2;
+  int32 areaId = 3;
+  repeated WorldState worldStates = 4;
+}
+
+message PacketUpdateWorldState {
+  WorldState worldState = 1;
+  bool hidden = 2;
+}
+
+message WorldState {
+  int32 id = 1;
+  int32 value = 2;
 }

@@ -5,7 +5,7 @@
         <IsPackable>false</IsPackable>
 		<UseWPF>true</UseWPF>
         <UseWindowsForms>true</UseWindowsForms>
-		<TargetFramework>net7.0-windows</TargetFramework>
+		<TargetFramework>net9.0-windows10.0.26100.0</TargetFramework>
 	    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
         <ProductVersion>8.0.30703</ProductVersion>
@@ -31,6 +31,15 @@
         <IsWebBootstrapper>false</IsWebBootstrapper>
         <UseApplicationTrust>false</UseApplicationTrust>
         <BootstrapperEnabled>true</BootstrapperEnabled>
+        <Company />
+        <Title>TrinityCore</Title>
+		<GenerateProgramFile>false</GenerateProgramFile>
+		<BaseOutputPath></BaseOutputPath>
+		<ErrorReport>prompt</ErrorReport>
+		<Authors>TrinityCore, ChipLeo</Authors>
+		<Copyright>Copyright © 2010-2025</Copyright>
+		<RepositoryUrl>https://github.com/ChipLeo/WowPacketParser</RepositoryUrl>
+		<RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
     </PropertyGroup>
 
     <ItemGroup>

@@ -321,7 +321,10 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             var playerCount = packet.ReadUInt32("PlayersCount");
             for (int i = 0; i < playerCount; i++)
             {
-                packet.ReadInt32("Roles", i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_1_7_51187))
+                    packet.ReadByteE<LfgRoleFlag>("Roles", i);
+                else
+                    packet.ReadUInt32E<LfgRoleFlag>("Roles", i);
 
                 packet.ResetBitReader();
 
@@ -367,7 +370,7 @@ namespace WowPacketParserModule.V7_0_3_22248.Parsers
             if (ClientVersion.RemovedInVersion(ClientVersionBuild.V7_1_5_23360))
                 commentLength = packet.ReadBits("UnkBits8", 8);
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V7_1_5_23360))
-                packet.ReadBit("unk");
+                packet.ReadBit("Mercenary");
             packet.ResetBitReader();
 
             packet.ReadByte("PartyIndex");

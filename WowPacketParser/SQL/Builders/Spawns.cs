@@ -10,6 +10,7 @@ using WowPacketParser.Store;
 using WowPacketParser.Store.Objects;
 using WowPacketParser.Store.Objects.Comparer;
 using WowPacketParser.Store.Objects.UpdateFields.LegacyImplementation;
+using static Google.Protobuf.Compiler.CodeGeneratorResponse.Types;
 
 namespace WowPacketParser.SQL.Builders
 {
@@ -47,6 +48,70 @@ namespace WowPacketParser.SQL.Builders
             return true;
         }
 
+        private static void AddSpawnTrackingData(RowList<SpawnTracking> spawnTrackingRows, RowList<SpawnTrackingState> spawnTrackingStateRows, uint spawnCount, WoWObject worldObject)
+        {
+            var objectType = worldObject.Type;
+            if (objectType != ObjectType.Unit && objectType != ObjectType.GameObject)
+                return;
+
+            var spawnType = objectType == ObjectType.Unit ? "CGUID" : "OGUID";
+            StoreNameType storeNameType = objectType == ObjectType.Unit ? StoreNameType.Unit : StoreNameType.GameObject;
+            var unitData = objectType == ObjectType.Unit ? (worldObject as Unit).UnitData : null;
+            var gameObjectData = objectType == ObjectType.GameObject ? (worldObject as GameObject).GameObjectData : null;
+
+            // spawn_tracking
+            var spawnTrackingRow = new Row<SpawnTracking>();
+            spawnTrackingRow.Data.SpawnId = $"@{spawnType}+{spawnCount}";
+            spawnTrackingRow.Data.SpawnType = (byte)(objectType == ObjectType.Unit ? 0 : 1);
+            spawnTrackingRow.Data.QuestObjectiveId = unitData is not null ? unitData.StateWorldEffectsQuestObjectiveID : gameObjectData.StateWorldEffectsQuestObjectiveID;
+            spawnTrackingRow.Comment += StoreGetters.GetName(storeNameType, (int)worldObject.ObjectData.EntryID, false);
+
+            spawnTrackingRows.Add(spawnTrackingRow);
+
+            // spawn_tracking_state
+            var spawnTrackingStateRow = new Row<SpawnTrackingState>();
+            spawnTrackingStateRow.Data.SpawnId = $"@{spawnType}+{spawnCount}";
+            spawnTrackingStateRow.Data.SpawnType = (byte)(objectType == ObjectType.Unit ? 0 : 1);
+            spawnTrackingStateRow.Data.Visible = true;
+            spawnTrackingStateRow.Data.StateSpellVisualId = unitData is not null ? unitData.StateSpellVisualID : gameObjectData.StateSpellVisualID;
+            spawnTrackingStateRow.Data.StateAnimId = unitData is not null ? unitData.StateAnimID : gameObjectData.SpawnTrackingStateAnimID;
+            spawnTrackingStateRow.Data.StateAnimKitId = unitData is not null ? unitData.StateAnimKitID : gameObjectData.SpawnTrackingStateAnimKitID;
+            spawnTrackingStateRow.Data.StateWorldEffects = null;
+
+            if (spawnTrackingStateRow.Data.StateSpellVisualId <= 0)
+                spawnTrackingStateRow.Data.StateSpellVisualId = null;
+
+            uint emptyAnimId = DBC.DBC.GetEmptyAnimStateID();
+            if (emptyAnimId == 0 || spawnTrackingStateRow.Data.StateAnimId == emptyAnimId)
+                spawnTrackingStateRow.Data.StateAnimId = null;
+
+            if (spawnTrackingStateRow.Data.StateAnimKitId <= 0)
+                spawnTrackingStateRow.Data.StateAnimKitId = null;
+
+            string stateWorldEffects = string.Empty;
+            uint?[] stateWorldEffectIDs = unitData is not null ? unitData.StateWorldEffectIDs : gameObjectData.StateWorldEffectIDs;
+            if (stateWorldEffectIDs != null && stateWorldEffectIDs.Length != 0)
+            {
+                foreach (uint? worldEffectId in stateWorldEffectIDs)
+                {
+                    if (worldEffectId == 0)
+                        continue;
+
+                    stateWorldEffects += $"{worldEffectId} ";
+                }
+
+                stateWorldEffects = stateWorldEffects.TrimEnd(' ');
+            }
+            if (!string.IsNullOrEmpty(stateWorldEffects))
+                spawnTrackingStateRow.Data.StateWorldEffects = stateWorldEffects;
+
+            spawnTrackingStateRow.Comment += StoreGetters.GetName(storeNameType, (int)worldObject.ObjectData.EntryID, false);
+
+            if (spawnTrackingStateRow.Data.StateSpellVisualId != null || spawnTrackingStateRow.Data.StateAnimId != null
+                || spawnTrackingStateRow.Data.StateAnimKitId != null || spawnTrackingStateRow.Data.StateWorldEffects != null)
+                spawnTrackingStateRows.Add(spawnTrackingStateRow);
+        }
+
         [BuilderMethod(Units = true)]
         public static string Creature(Dictionary<WowGuid, Unit> units)
         {
@@ -63,6 +128,8 @@ namespace WowPacketParser.SQL.Builders
             var dbFields = SQLUtil.GetDBFields<CreatureAddon>(false);
             var rows = new RowList<Creature>();
             var addonRows = new RowList<CreatureAddon>();
+            var spawnTrackingRows = new RowList<SpawnTracking>();
+            var spawnTrackingStateRows = new RowList<SpawnTrackingState>();
 
             var unitList = Settings.SkipDuplicateSpawns
                 ? units.Values.GroupBy(u => u, new SpawnComparer()).Select(x => x.First())
@@ -79,8 +146,7 @@ namespace WowPacketParser.SQL.Builders
                         && p.Data.Map == creature.Map
                         && FloatComparison((float)p.Data.PosX, creature.Movement.Position.X, precision)
                         && FloatComparison((float)p.Data.PosY, creature.Movement.Position.Y, precision)
-                        && FloatComparison((float)p.Data.PosZ, creature.Movement.Position.Z, precision)
-                        && FloatComparison((float)p.Data.Orientation, creature.Movement.Orientation, precision)).FirstOrDefault();
+                        && FloatComparison((float)p.Data.PosZ, creature.Movement.Position.Z, precision)).FirstOrDefault();
 
                     if (existingCreature != null)
                         creature.ExistingDatabaseSpawn = true;
@@ -197,7 +263,7 @@ namespace WowPacketParser.SQL.Builders
                         (ClientVersion.Expansion >= ClientType.Cataclysm && creature.Movement.Flags.HasAnyFlag(Enums.v4.MovementFlag.Hover)))
                         row.Data.PositionZ -= creature.UnitData.HoverHeight;
 
-                row.Data.SpawnTimeSecs = creature.GetDefaultSpawnTime(creature.DifficultyID);
+                row.Data.SpawnTimeSecs = creature.GetDefaultSpawnTime(creature.DifficultyID ?? 0);
                 row.Data.WanderDistance = wanderDistance;
                 row.Data.MovementType = movementType;
 
@@ -206,6 +272,7 @@ namespace WowPacketParser.SQL.Builders
                 row.Data.ModelID = 0;
                 row.Data.CurrentWaypoint = 0;
                 row.Data.CurHealth = (uint)creature.UnitData.MaxHealth;
+                row.Data.CurHealthPct = 100;
                 row.Data.CurMana = (uint)creature.UnitData.MaxPower[0];
                 row.Data.NpcFlag = null;
                 row.Data.UnitFlags = null;
@@ -213,9 +280,12 @@ namespace WowPacketParser.SQL.Builders
                 row.Data.UnitFlags3 = null;
                 row.Data.DynamicFlag = 0;
 
+                if (creature.UnitData.Health > 1 && (creature.UnitData.Flags & (uint)UnitFlags.IsInCombat) == 0)
+                    row.Data.CurHealthPct = (uint)(creature.UnitData.Health / creature.UnitData.MaxHealth * 100);
+
                 row.Comment = StoreGetters.GetName(StoreNameType.Unit, (int)entry, false);
                 row.Comment += " (Area: " + StoreGetters.GetName(StoreNameType.Area, creature.Area, false) + " - ";
-                row.Comment += "Difficulty: " + StoreGetters.GetName(StoreNameType.Difficulty, (int)creature.DifficultyID, false) + ")";
+                row.Comment += "Difficulty: " + StoreGetters.GetName(StoreNameType.Difficulty, ((int?)creature.DifficultyID) ?? 0, false) + ")";
                 row.Comment += creature.CreateType == CreateObjectType.Spawn ? " CreateObject2" : " CreateObject1";
 
                 string auras = string.Empty;
@@ -271,6 +341,9 @@ namespace WowPacketParser.SQL.Builders
                         addonRows.Add(addonRow);
                     }
                 }
+
+                if (ClientVersion.AddedInVersion(ClientType.WarlordsOfDraenor) && creature.UnitData.StateWorldEffectsQuestObjectiveID > 0)
+                    AddSpawnTrackingData(spawnTrackingRows, spawnTrackingStateRows, count, creature);
 
                 if (creature.Guid.GetHighType() == HighGuidType.Pet || (creature.IsTemporarySpawn() && !Settings.SaveTempSpawns))
                 {
@@ -331,7 +404,29 @@ namespace WowPacketParser.SQL.Builders
                 result.Append(addonSql.Build());
             }
 
+            if (ClientVersion.AddedInVersion(ClientType.WarlordsOfDraenor) && Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
+            {
+                result.Append(Environment.NewLine);
+                var spawnTrackingDelete = new SQLDelete<SpawnTracking>(spawnTrackingRows);
+                result.Append(spawnTrackingDelete.Build());
+                var spawnTrackingSql = new SQLInsert<SpawnTracking>(spawnTrackingRows, false);
+                result.Append(spawnTrackingSql.Build());
+                result.Append(Environment.NewLine);
+                var spawnTrackingStateDelete = new SQLDelete<SpawnTrackingState>(spawnTrackingStateRows);
+                result.Append(spawnTrackingStateDelete.Build());
+                var spawnTrackingStateSql = new SQLInsert<SpawnTrackingState>(spawnTrackingStateRows, false);
+                result.Append(spawnTrackingStateSql.Build());
+            }
+
             return result.ToString();
+        }
+
+        private static float NormalizeOrientation(float originalOri)
+        {
+            if (originalOri > Math.PI) // later expansions used 0-2PI interval, whereas earlier used -PI-PI interval
+                return (float)(originalOri - 2 * Math.PI);
+
+            return originalOri;
         }
 
         [BuilderMethod(Gameobjects = true)]
@@ -346,6 +441,8 @@ namespace WowPacketParser.SQL.Builders
             uint count = 0;
             var rows = new RowList<GameObjectModel>();
             var addonRows = new RowList<GameObjectAddon>();
+            var spawnTrackingRows = new RowList<SpawnTracking>();
+            var spawnTrackingStateRows = new RowList<SpawnTrackingState>();
 
             var gobList = Settings.SkipDuplicateSpawns
                 ? gameObjects.Values.GroupBy(g => g, new SpawnComparer()).Select(x => x.First())
@@ -364,7 +461,7 @@ namespace WowPacketParser.SQL.Builders
                         && FloatComparison((float)p.Data.PosX, go.Movement.Position.X, precision)
                         && FloatComparison((float)p.Data.PosY, go.Movement.Position.Y, precision)
                         && FloatComparison((float)p.Data.PosZ, go.Movement.Position.Z, precision)
-                        && FloatComparison((float)p.Data.Orientation, go.Movement.Orientation, precision)
+                        && FloatComparison(NormalizeOrientation((float)p.Data.Orientation), NormalizeOrientation(go.Movement.Orientation), precision)
                         && FloatComparison((float)p.Data.Rot0, staticRot.X, precision)
                         && FloatComparison((float)p.Data.Rot1, staticRot.Y, precision)
                         && (FloatComparison((float)p.Data.Rot2, staticRot.Z, precision) || FloatComparison((float)p.Data.Rot2, -staticRot.Z, precision))
@@ -497,7 +594,10 @@ namespace WowPacketParser.SQL.Builders
                         addonRows.Add(addonRow);
                 }
 
-                row.Data.SpawnTimeSecs = go.GetDefaultSpawnTime(go.DifficultyID);
+                if (ClientVersion.AddedInVersion(ClientType.WarlordsOfDraenor) && go.GameObjectData.StateWorldEffectsQuestObjectiveID > 0)
+                    AddSpawnTrackingData(spawnTrackingRows, spawnTrackingStateRows, count, go);
+
+                row.Data.SpawnTimeSecs = go.GetDefaultSpawnTime(go.DifficultyID ?? 0);
                 row.Data.AnimProgress = go.GameObjectData.PercentHealth;
                 row.Data.State = (uint)go.GameObjectData.State;
 
@@ -506,7 +606,7 @@ namespace WowPacketParser.SQL.Builders
 
                 row.Comment = StoreGetters.GetName(StoreNameType.GameObject, (int)entry, false);
                 row.Comment += " (Area: " + StoreGetters.GetName(StoreNameType.Area, go.Area, false) + " - ";
-                row.Comment += "Difficulty: " + StoreGetters.GetName(StoreNameType.Difficulty, (int)go.DifficultyID, false) + ")";
+                row.Comment += "Difficulty: " + StoreGetters.GetName(StoreNameType.Difficulty, ((int?)go.DifficultyID) ?? 0, false) + ")";
                 row.Comment += go.CreateType == CreateObjectType.Spawn ? " CreateObject2" : " CreateObject1";
 
                 if (go.IsTemporarySpawn() && !Settings.SaveTempSpawns)
@@ -571,6 +671,20 @@ namespace WowPacketParser.SQL.Builders
                 result.Append(addonDelete.Build());
                 var addonSql = new SQLInsert<GameObjectAddon>(addonRows, false);
                 result.Append(addonSql.Build());
+            }
+
+            if (ClientVersion.AddedInVersion(ClientType.WarlordsOfDraenor) && Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
+            {
+                result.Append(Environment.NewLine);
+                var spawnTrackingDelete = new SQLDelete<SpawnTracking>(spawnTrackingRows);
+                result.Append(spawnTrackingDelete.Build());
+                var spawnTrackingSql = new SQLInsert<SpawnTracking>(spawnTrackingRows, false);
+                result.Append(spawnTrackingSql.Build());
+                result.Append(Environment.NewLine);
+                var spawnTrackingStateDelete = new SQLDelete<SpawnTrackingState>(spawnTrackingStateRows);
+                result.Append(spawnTrackingStateDelete.Build());
+                var spawnTrackingStateSql = new SQLInsert<SpawnTrackingState>(spawnTrackingStateRows, false);
+                result.Append(spawnTrackingStateSql.Build());
             }
 
             return result.ToString();

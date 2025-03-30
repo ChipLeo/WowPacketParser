@@ -124,6 +124,9 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V9_1_5_40772))
                 packet.ReadByte("Unused915", idx);
 
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_2_7_54577))
+                packet.ReadInt32("TimerunningSeasonID", idx);
+
             data.Name = packet.ReadWoWString("Name", bits15, idx);
 
             return data;
@@ -199,9 +202,9 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ReadTime("LastPlayedTime", idx);
 
             packet.ReadInt16("SpecID", idx);
-            packet.ReadInt32("Unknown703", idx);
+            packet.ReadInt32("SaveVersion", idx);
             packet.ReadInt32("InterfaceVersion", idx);
-            packet.ReadUInt32("Flags4", idx);
+            packet.ReadUInt32("RestrictionFlags", idx);
             var mailSenderLengths = new uint[packet.ReadUInt32()];
 
             packet.ResetBitReader();
@@ -209,7 +212,7 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             var nameLength = packet.ReadBits("Character Name Length", 6, idx);
             var firstLogin = packet.ReadBit("FirstLogin", idx);
             packet.ReadBit("BoostInProgress", idx);
-            packet.ReadBits("UnkWod61x", 5, idx);
+            packet.ReadBits("CantLoginReason", 5, idx);
 
             for (var j = 0; j < mailSenderLengths.Length; ++j)
                 mailSenderLengths[j] = packet.ReadBits(6);

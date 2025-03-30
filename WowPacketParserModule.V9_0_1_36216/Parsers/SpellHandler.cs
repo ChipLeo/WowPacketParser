@@ -53,6 +53,9 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_1_0_49407))
                 removedModificationsCount = packet.ReadUInt32("RemovedModificationsCount", idx);
 
+            if (ClientVersion.AddedInVersion(ClientType.TheWarWithin))
+                packet.ReadByte("CraftingFlags", idx);
+
             for (var j = 0; j < optionalCurrenciesCount; ++j)
                 ReadOptionalCurrency(packet, idx, "OptionalCurrency", j);
 
@@ -196,7 +199,10 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
                 packetAuraUpdate.Updates.Add(auraEntry);
                 var aura = new Aura();
 
-                auraEntry.Slot = packet.ReadByte("Slot", i);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V11_1_0_59347))
+                    auraEntry.Slot = packet.ReadUInt16("Slot", i);
+                else
+                    auraEntry.Slot = packet.ReadByte("Slot", i);
 
                 packet.ResetBitReader();
                 var hasAura = packet.ReadBit("HasAura", i);
@@ -213,6 +219,8 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
                     aura.Level = packet.ReadUInt16("CastLevel", i);
                     aura.Charges = packet.ReadByte("Applications", i);
                     packet.ReadInt32("ContentTuningID", i);
+                    if (ClientVersion.AddedInVersion(ClientVersionBuild.V11_1_0_59347))
+                        packet.ReadVector3("DstLocation", i);
 
                     packet.ResetBitReader();
 
@@ -359,7 +367,15 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
             playSpellVisualKit.KitRecId = packet.ReadInt32("KitRecID");
             playSpellVisualKit.KitType = packet.ReadInt32("KitType");
             playSpellVisualKit.Duration = packet.ReadUInt32("Duration");
-            packet.ReadBit("MountedVisual");
+            packet.ReadBit("SetMountAnim");
+        }
+
+        [Parser(Opcode.SMSG_CANCEL_SPELL_VISUAL_KIT)]
+        public static void HandleCancelSpellVisualKit(Packet packet)
+        {
+            packet.ReadPackedGuid128("Source");
+            packet.ReadInt32("SpellVisualKitID");
+            packet.ReadBit("SetMountAnim");
         }
 
         [Parser(Opcode.CMSG_UPDATE_SPELL_VISUAL)]
@@ -439,7 +455,10 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
         [Parser(Opcode.SMSG_INTERRUPT_POWER_REGEN)]
         public static void HandleInterruptPowerRegen(Packet packet)
         {
-            packet.ReadUInt32E<PowerType>("PowerType");
+            if (ClientVersion.RemovedInVersion(ClientType.TheWarWithin))
+                packet.ReadUInt32E<PowerType>("PowerType");
+            else
+                packet.ReadByteE<PowerType>("PowerType");
         }
 
         [Parser(Opcode.SMSG_SPELL_HEAL_ABSORB_LOG)]

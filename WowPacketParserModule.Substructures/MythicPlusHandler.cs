@@ -16,6 +16,9 @@ namespace WowPacketParserModule.Substructures
             packet.ReadInt32("BestRunLevel", indexes);
             packet.ReadInt32("BestRunDurationMS", indexes);
 
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V11_1_0_59347))
+                packet.ReadByte("Unknown1110", indexes);
+
             packet.ResetBitReader();
             packet.ReadBit("FinishedSuccess", indexes);
         }
@@ -48,7 +51,11 @@ namespace WowPacketParserModule.Substructures
             else
                 packet.ReadInt16("ChrSpecializationID", indexes);
 
-            packet.ReadInt16E<Race>("RaceID", indexes);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V11_1_0_59347))
+                packet.ReadSByteE<Race>("RaceID", indexes);
+            else
+                packet.ReadInt16E<Race>("RaceID", indexes);
+
             packet.ReadInt32("ItemLevel", indexes);
             packet.ReadInt32("CovenantID", indexes);
             packet.ReadInt32("SoulbindID", indexes);

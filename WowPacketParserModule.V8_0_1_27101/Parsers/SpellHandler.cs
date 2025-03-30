@@ -38,18 +38,22 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ReadPackedGuid128("Item", idx);
 
             if (hasSrcLoc)
-                V6_0_2_19033.Parsers.SpellHandler.ReadLocation(packet, "SrcLocation");
+                V6_0_2_19033.Parsers.SpellHandler.ReadLocation(packet, idx, "SrcLocation");
 
             Vector3? dstLocation = null;
             if (hasDstLoc)
             {
-                dstLocation = V6_0_2_19033.Parsers.SpellHandler.ReadLocation(packet, "DstLocation");
+                dstLocation = V6_0_2_19033.Parsers.SpellHandler.ReadLocation(packet, idx, "DstLocation");
                 if (packetSpellData != null)
                     packetSpellData.DstLocation = dstLocation;
             }
 
             if (hasOrient)
-                packet.ReadSingle("Orientation", idx);
+            {
+                var orientation = packet.ReadSingle("Orientation", idx);
+                if (packetSpellData != null)
+                    packetSpellData.DstOrientation = orientation;
+            }
 
             int mapID = -1;
             if (hasMapID)
@@ -63,9 +67,19 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                     if (DBC.SpellEffectStores.ContainsKey(tuple))
                     {
                         var effect = DBC.SpellEffectStores[tuple];
-                        if ((Targets)effect.ImplicitTarget[0] == Targets.TARGET_DEST_DB || (Targets)effect.ImplicitTarget[1] == Targets.TARGET_DEST_DB)
+                        var isValidDBTarget = (short[] implicitTargets, Targets type) =>
                         {
-                            string effectHelper = $"Spell: { StoreGetters.GetName(StoreNameType.Spell, (int)spellID) } Efffect: { effect.Effect } ({ (SpellEffects)effect.Effect })";
+                            foreach (var implicitTarget in implicitTargets)
+                                if ((Targets)implicitTarget == type)
+                                    return true;
+
+                            return false;
+                        };
+                        var isSingleDBTarget = isValidDBTarget(effect.ImplicitTarget, Targets.TARGET_DEST_DB);
+                        var isMultipleDBTarget = isValidDBTarget(effect.ImplicitTarget, Targets.TARGET_DEST_NEARBY_DB);
+                        if (isSingleDBTarget || isMultipleDBTarget)
+                        {
+                            string effectHelper = $"Spell: { StoreGetters.GetName(StoreNameType.Spell, (int)spellID) } Effect {effect.EffectIndex}: { effect.Effect } ({ (SpellEffects)effect.Effect })";
 
                             var spellTargetPosition = new SpellTargetPosition
                             {
@@ -78,8 +92,16 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                                 EffectHelper = effectHelper
                             };
 
-                            if (!Storage.SpellTargetPositions.ContainsKey(spellTargetPosition))
-                                Storage.SpellTargetPositions.Add(spellTargetPosition);
+                            if (isSingleDBTarget)
+                            {
+                                if (!Storage.SpellTargetPositions.ContainsKey(spellTargetPosition))
+                                {
+                                    spellTargetPosition.OrderIndex = "0";
+                                    Storage.SpellTargetPositions.Add(spellTargetPosition);
+                                }
+                            }
+                            else
+                                Storage.SpellTargetMultiplePositions.Add(spellID, spellTargetPosition, packet.TimeSpan);
                         }
                     }
                 }
@@ -193,6 +215,11 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ReadInt32("AttackPower", idx);
             packet.ReadInt32("SpellPower", idx);
             packet.ReadInt32("Armor", idx);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V11_0_5_57171))
+            {
+                packet.ReadInt32("Unknown_1105_1", idx);
+                packet.ReadInt32("Unknown_1105_2", idx);
+            }
 
             packet.ResetBitReader();
 
@@ -201,7 +228,10 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             // SpellLogPowerData
             for (var i = 0; i < spellLogPowerDataCount; ++i)
             {
-                packet.ReadInt32("PowerType", idx, i);
+                if (ClientVersion.RemovedInVersion(ClientType.TheWarWithin))
+                    packet.ReadInt32E<PowerType>("PowerType", idx, i);
+                else
+                    packet.ReadByteE<PowerType>("PowerType", idx, i);
                 packet.ReadInt32("Amount", idx, i);
                 packet.ReadInt32("Cost", idx, i);
             }
@@ -369,9 +399,11 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
         public static void HandlePlayOrphanSpellVisual(Packet packet)
         {
             packet.ReadVector3("SourceLocation");
-            packet.ReadVector3("SourceOrientation");
+            packet.ReadVector3("SourceRotation");
             packet.ReadVector3("TargetLocation");
             packet.ReadPackedGuid128("Target");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V11_0_0_55666))
+                packet.ReadPackedGuid128("TargetTransport");
             packet.ReadInt32("SpellVisualID");
             packet.ReadSingle("TravelSpeed");
             packet.ReadSingle("LaunchDelay");

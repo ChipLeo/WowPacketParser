@@ -144,7 +144,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
                     OptionIndex = gossipMenuOption.OptionID.Value,
                     OptionNpc = (int)gossipMenuOption.OptionNpc,
                     BoxCoded = gossipMenuOption.BoxCoded.Value,
-                    BoxCost = gossipMenuOption.BoxMoney.Value,
+                    BoxCost = (uint)gossipMenuOption.BoxMoney.Value,
                     Text = gossipMenuOption.OptionText,
                     BoxText = gossipMenuOption.BoxText
                 });
@@ -177,7 +177,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
             gossip.ObjectType = guid.GetObjectType();
             gossip.ObjectEntry = guid.GetEntry();
 
-            if (guid.GetObjectType() == ObjectType.Unit)
+            if (guid.GetObjectType() == ObjectType.Unit && !CoreParsers.NpcHandler.HasLastGossipOption(packet.TimeSpan, (uint)menuId))
             {
                 CreatureTemplateGossip creatureTemplateGossip = new()
                 {
@@ -201,7 +201,7 @@ namespace WowPacketParserModule.V5_4_7_17898.Parsers
 
             Storage.Gossips.Add(gossip, packet.TimeSpan);
 
-            CoreParsers.NpcHandler.AddGossipAddon(packetGossip.MenuId, (int)friendshipFactionID, guid, packet.TimeSpan);
+            CoreParsers.NpcHandler.AddGossipAddon(packetGossip.MenuId, (int)friendshipFactionID, 0, guid, packet.TimeSpan);
 
             CoreParsers.NpcHandler.UpdateLastGossipOptionActionMessage(packet.TimeSpan, gossip.MenuID);
 

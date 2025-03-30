@@ -1,6 +1,5 @@
 ﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
-using WowPacketParser.Store.Objects;
 
 namespace WowPacketParserModule.Substructures
 {
@@ -45,8 +44,15 @@ namespace WowPacketParserModule.Substructures
 
         public static void ReadInertiaData(Packet packet, params object[] idx)
         {
-            packet.ReadPackedGuid128("GUID", idx);
-            packet.ReadVector4("Force", idx);
+            if (ClientVersion.RemovedInVersion(ClientBranch.Retail, ClientVersionBuild.V10_0_0_46181)
+                || ClientVersion.RemovedInVersion(ClientBranch.Classic, ClientVersionBuild.V1_14_4_51146)
+                || ClientVersion.RemovedInVersion(ClientBranch.WotLK, ClientVersionBuild.V3_4_1_47014)
+                || ClientVersion.Branch == ClientBranch.TBC)
+                packet.ReadPackedGuid128("GUID", idx);
+            else
+                packet.ReadInt32("ID", idx);
+
+            packet.ReadVector3("Force", idx);
             packet.ReadUInt32("Lifetime", idx);
         }
 
@@ -54,6 +60,15 @@ namespace WowPacketParserModule.Substructures
         {
             packet.ReadSingle("ForwardVelocity", idx);
             packet.ReadSingle("UpVelocity", idx);
+        }
+
+        public static void ReadDriveStatusData(Packet packet, params object[] idx)
+        {
+            packet.ResetBitReader();
+            packet.ReadBit("Accelerating", idx);
+            packet.ReadBit("Drifting", idx);
+            packet.ReadSingle("Speed", idx);
+            packet.ReadSingle("MovementAngle", idx);
         }
 
         public static MovementInfo ReadMovementStats602(Packet packet, params object[] idx)
@@ -151,6 +166,10 @@ namespace WowPacketParserModule.Substructures
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_0_0_46181))
                 hasAdvFlying = packet.ReadBit("HasAdvFlying", idx);
 
+            var hasDriveStatus = false;
+            if (ClientVersion.AddedInVersion(ClientBranch.Retail, ClientVersionBuild.V11_1_0_59347))
+                hasDriveStatus = packet.ReadBit("HasDriveStatus", idx);
+
             if (hasTransport)
                 info.Transport = ReadTransportData(packet, idx, "TransportData");
 
@@ -165,6 +184,10 @@ namespace WowPacketParserModule.Substructures
 
             if (hasFall)
                 ReadFallData(packet, idx, "FallData");
+
+            if (hasDriveStatus)
+                ReadDriveStatusData(packet, idx, "DriveStatus");
+
             return info;
         }
 

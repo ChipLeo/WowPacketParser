@@ -127,6 +127,93 @@ namespace WowPacketParser.SQL.Builders
         }
 
         [BuilderMethod]
+        public static string QuestDescriptionConditional()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
+                return string.Empty;
+
+            if (Storage.QuestDescriptionConditional.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.QuestDescriptionConditional);
+
+            return SQLUtil.Compare(Storage.QuestDescriptionConditional, templatesDb, StoreNameType.Quest);
+        }
+
+        [BuilderMethod]
+        public static string QuestCompletionLogConditional()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
+                return string.Empty;
+
+            if (Storage.QuestCompletionLogConditional.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.QuestCompletionLogConditional);
+
+            return SQLUtil.Compare(Storage.QuestCompletionLogConditional, templatesDb, StoreNameType.Quest);
+        }
+
+        [BuilderMethod]
+        public static string QuestOfferRewardConditional()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
+                return string.Empty;
+
+            if (Storage.QuestOfferRewardConditional.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.QuestOfferRewardConditional);
+
+            return SQLUtil.Compare(Storage.QuestOfferRewardConditional, templatesDb, StoreNameType.Quest);
+        }
+
+        [BuilderMethod]
+        public static string QuestRequestItemsConditional()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
+                return string.Empty;
+
+            if (Storage.QuestRequestItemsConditional.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.QuestRequestItemsConditional);
+
+            return SQLUtil.Compare(Storage.QuestRequestItemsConditional, templatesDb, StoreNameType.Quest);
+        }
+
+        [BuilderMethod]
+        public static string UIMapQuestLines()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
+                return string.Empty;
+
+            if (Storage.UIMapQuestLines.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.UIMapQuestLines);
+
+            return SQLUtil.Compare(Storage.UIMapQuestLines, templatesDb, StoreNameType.None);
+        }
+
+        [BuilderMethod]
+        public static string UIMapQuests()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
+                return string.Empty;
+
+            if (Storage.UIMapQuests.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.UIMapQuests);
+
+            return SQLUtil.Compare(Storage.UIMapQuests, templatesDb, x =>
+            {
+                return $"{StoreGetters.GetName(StoreNameType.Quest, (int)x.QuestId, false)}";
+            });
+        }
+
+        [BuilderMethod]
         public static string CreatureQuestStarters()
         {
             if (Storage.CreatureQuestStarters.IsEmpty())
@@ -188,6 +275,61 @@ namespace WowPacketParser.SQL.Builders
                 string questName = StoreGetters.GetName(StoreNameType.Quest, (int)x.QuestID, false);
                 return $"{questName} ended by {gobName}";
             });
+        }
+
+        [BuilderMethod]
+        public static string SpawnTrackingTemplates()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
+                return string.Empty;
+
+            if (Storage.SpawnTrackingTemplates.IsEmpty())
+                return string.Empty;
+
+            if (Settings.UseDBC)
+            {
+                foreach (var spawnTracking in Storage.SpawnTrackingTemplates)
+                {
+                    if (Storage.SpawnTrackingMaps.TryGetValue((uint)spawnTracking.Item1.SpawnTrackingId, out int mapId) && DBC.DBC.Map.ContainsKey(mapId))
+                    {
+                        var map = DBC.DBC.Map[mapId];
+                        while (map.ParentMapID != -1 || map.CosmeticParentMapID != -1)
+                        {
+                            int parentMapId = map.ParentMapID != -1 ? map.ParentMapID : map.CosmeticParentMapID;
+                            if (!DBC.DBC.Map.ContainsKey(parentMapId))
+                                break;
+
+                            map = DBC.DBC.Map[parentMapId];
+                            mapId = parentMapId;
+                        }
+
+                        spawnTracking.Item1.MapId = (uint)mapId;
+                    }
+                }
+            }
+
+            var templatesDb = SQLDatabase.Get(Storage.SpawnTrackingTemplates);
+
+            return SQLUtil.Compare(Storage.SpawnTrackingTemplates, templatesDb, x =>
+            {
+                string phase = StoreGetters.GetName(StoreNameType.PhaseId, (int)x.PhaseId, true);
+                string map = StoreGetters.GetName(StoreNameType.Map, (int)x.MapId, true);
+                return $"Map: {map} - Phase: {phase}";
+            });
+        }
+
+        [BuilderMethod]
+        public static string SpawnTrackingQuestObjectives()
+        {
+            if (!Settings.SQLOutputFlag.HasAnyFlagBit(SQLOutput.quest_template))
+                return string.Empty;
+
+            if (Storage.SpawnTrackingQuestObjectives.IsEmpty())
+                return string.Empty;
+
+            var templatesDb = SQLDatabase.Get(Storage.SpawnTrackingQuestObjectives);
+
+            return SQLUtil.Compare(Storage.SpawnTrackingQuestObjectives, templatesDb, StoreNameType.QuestObjective);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using WowPacketParser.Enums;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing;
+using CoreParsers = WowPacketParser.Parsing.Parsers;
 
 namespace WowPacketParserModule.V9_0_1_36216.Parsers
 {
@@ -10,60 +11,66 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
         [Parser(Opcode.SMSG_NEW_WORLD)]
         public static void HandleNewWorld(Packet packet)
         {
-            WowPacketParser.Parsing.Parsers.MovementHandler.CurrentMapId = (uint)packet.ReadInt32<MapId>("Map");
+            CoreParsers.MovementHandler.CurrentMapId = (uint)packet.ReadInt32<MapId>("Map");
             packet.ReadVector4("Position");
             packet.ReadInt32("Unused901_1");
             packet.ReadInt32("Unused901_2");
             packet.ReadUInt32("Reason");
             packet.ReadVector3("MovementOffset");
+            if (ClientVersion.AddedInVersion(ClientType.TheWarWithin))
+                packet.ReadInt32("Counter");
 
-            packet.AddSniffData(StoreNameType.Map, (int)WowPacketParser.Parsing.Parsers.MovementHandler.CurrentMapId, "NEW_WORLD");
+            packet.AddSniffData(StoreNameType.Map, (int)CoreParsers.MovementHandler.CurrentMapId, "NEW_WORLD");
+        }
+
+        public static void ReadVignetteData(Packet packet, params object[] idx)
+        {
+            packet.ReadVector3("Position", idx);
+            packet.ReadPackedGuid128("ObjGUID", idx);
+            packet.ReadInt32("VignetteID", idx);
+            packet.ReadUInt32<AreaId>("ZoneID", idx);
+            packet.ReadUInt32("WMOGroupID", idx);
+            packet.ReadUInt32("WMODoodadPlacementID", idx);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V11_0_7_58123))
+            {
+                packet.ReadSingle("HealthPercent", idx);
+                packet.ReadUInt16("RecommendedGroupSizeMin", idx);
+                packet.ReadUInt16("RecommendedGroupSizeMax", idx);
+            }
+        }
+
+        public static void ReadVignetteDataSet(Packet packet, params object[] idx)
+        {
+            var idCount = packet.ReadUInt32();
+            var dataCount = 0u;
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V10_1_5_50232))
+                dataCount = packet.ReadUInt32();
+
+            for (var i = 0u; i < idCount; ++i)
+                packet.ReadPackedGuid128("IDs", idx, i);
+
+            // Added VignetteClientData
+            if (ClientVersion.RemovedInVersion(ClientVersionBuild.V10_1_5_50232))
+                dataCount = packet.ReadUInt32();
+
+            for (var i = 0u; i < dataCount; ++i)
+                ReadVignetteData(packet, idx, "Data", i);
         }
 
         [Parser(Opcode.SMSG_VIGNETTE_UPDATE)]
         public static void HandleVignetteUpdate(Packet packet)
         {
             packet.ReadBit("ForceUpdate");
-            packet.ReadBit("Unk_Bit_901");
+            packet.ReadBit("InFogOfWar");
 
-            // VignetteInstanceIDList
-            var int1 = packet.ReadUInt32("RemovedCount");
-            for (var i = 0; i < int1; ++i)
-                packet.ReadPackedGuid128("IDs", i);
+            var removedCount = packet.ReadUInt32();
 
             // Added
-            var int2 = packet.ReadUInt32("AddedCount");
-            for (var i = 0; i < int2; ++i)
-                packet.ReadPackedGuid128("IDs", i);
+            ReadVignetteDataSet(packet, "Added");
+            ReadVignetteDataSet(packet, "Updated");
 
-            // Added VignetteClientData
-            var int3 = packet.ReadUInt32("VignetteClientDataCount");
-            for (var i = 0; i < int3; ++i)
-            {
-                packet.ReadVector3("Position", i);
-                packet.ReadPackedGuid128("ObjGUID", i);
-                packet.ReadInt32("VignetteID", i);
-                packet.ReadUInt32<AreaId>("AreaID", i);
-                packet.ReadUInt32("Unk901_1", i);
-                packet.ReadUInt32("Unk901_2", i);
-            }
-
-            // Updated
-            var int4 = packet.ReadUInt32("UpdatedCount");
-            for (var i = 0; i < int4; ++i)
-                packet.ReadPackedGuid128("IDs", i);
-
-            // Updated VignetteClientData
-            var int5 = packet.ReadUInt32("VignetteClientDataCount");
-            for (var i = 0; i < int5; ++i)
-            {
-                packet.ReadVector3("Position", i);
-                packet.ReadPackedGuid128("ObjGUID", i);
-                packet.ReadInt32("VignetteID", i);
-                packet.ReadUInt32<AreaId>("AreaID", i);
-                packet.ReadUInt32("Unk901_1", i);
-                packet.ReadUInt32("Unk901_2", i);
-            }
+            for (var i = 0; i < removedCount; ++i)
+                packet.ReadPackedGuid128("IDs", i, "Removed");
         }
 
         [Parser(Opcode.SMSG_MOVE_SET_COLLISION_HEIGHT)]
@@ -85,6 +92,64 @@ namespace WowPacketParserModule.V9_0_1_36216.Parsers
             packet.ReadSingle("Height");
             packet.ReadInt32("MountDisplayID");
             packet.ReadByte("Reason");
+        }
+
+        private static void ReadInertiaId(Packet packet)
+        {
+            if (ClientVersion.RemovedInVersion(ClientBranch.Retail, ClientVersionBuild.V10_0_0_46181)
+                || ClientVersion.RemovedInVersion(ClientBranch.Classic, ClientVersionBuild.V1_14_4_51146)
+                || ClientVersion.RemovedInVersion(ClientBranch.WotLK, ClientVersionBuild.V3_4_1_47014)
+                || ClientVersion.Branch == ClientBranch.TBC)
+                packet.ReadPackedGuid128("InertiaGUID");
+            else
+                packet.ReadInt32("InertiaID");
+        }
+
+        [Parser(Opcode.SMSG_MOVE_APPLY_INERTIA)]
+        public static void HandleMoveApplyMovementInertia(Packet packet)
+        {
+            packet.ReadPackedGuid128("MoverGUID");
+            packet.ReadUInt32("SequenceIndex");
+            ReadInertiaId(packet);
+            packet.ReadUInt32("InertiaLifetimeMs");
+        }
+
+        [Parser(Opcode.SMSG_MOVE_REMOVE_INERTIA)]
+        public static void HandleMoveRemoveMovementInertia(Packet packet)
+        {
+            packet.ReadPackedGuid128("MoverGUID");
+            packet.ReadUInt32("SequenceIndex");
+            ReadInertiaId(packet);
+        }
+
+        [Parser(Opcode.CMSG_MOVE_APPLY_INERTIA_ACK)]
+        public static void HandleMoveApplyMovementInertiaAck(Packet packet)
+        {
+            V6_0_2_19033.Parsers.MovementHandler.ReadMovementAck(packet, "Data");
+            ReadInertiaId(packet);
+            packet.ReadUInt32("InertiaLifetimeMs");
+        }
+
+        [Parser(Opcode.CMSG_MOVE_REMOVE_INERTIA_ACK)]
+        public static void HandleMoveRemoveMovementInertiaAck(Packet packet)
+        {
+            V6_0_2_19033.Parsers.MovementHandler.ReadMovementAck(packet, "Data");
+            ReadInertiaId(packet);
+        }
+
+        [Parser(Opcode.SMSG_MOVE_UPDATE_APPLY_INERTIA)]
+        public static void HandleMoveUpdateApplyMovementInertia(Packet packet)
+        {
+            Substructures.MovementHandler.ReadMovementStats(packet, "Status");
+            ReadInertiaId(packet);
+            packet.ReadUInt32("InertiaInitialLifetimeMs");
+        }
+
+        [Parser(Opcode.SMSG_MOVE_UPDATE_REMOVE_INERTIA)]
+        public static void HandleMoveUpdateRemoveMovementInertia(Packet packet)
+        {
+            Substructures.MovementHandler.ReadMovementStats(packet, "Status");
+            ReadInertiaId(packet);
         }
     }
 }

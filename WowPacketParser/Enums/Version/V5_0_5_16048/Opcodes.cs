@@ -456,8 +456,6 @@ namespace WowPacketParser.Enums.Version.V5_0_5_16048
             {Opcode.CMSG_ROLE_POLL_BEGIN, 0x0104},
             {Opcode.CMSG_SAVE_CUF_PROFILES, 0x0633},
             //{Opcode.CMSG_SAVE_PLAYER, 0x0000}, // Not found in 4.3.4
-            //{Opcode.CMSG_SEARCH_LFG_JOIN, 0x0000}, // Not found in 4.3.4
-            //{Opcode.CMSG_SEARCH_LFG_LEAVE, 0x0000}, // Not found in 4.3.4
             {Opcode.CMSG_SELECT_FACTION, 0x07DD},
             {Opcode.CMSG_SELF_RES, 0x0974},
             {Opcode.CMSG_SELL_ITEM, 0x0997},
@@ -864,7 +862,6 @@ namespace WowPacketParser.Enums.Version.V5_0_5_16048
             {Opcode.SMSG_GUILD_ROSTER_UPDATE, 0x0BE4},
             {Opcode.SMSG_GUILD_XP, 0x0E7D},
             {Opcode.SMSG_GUILD_XP_GAIN, 0x0EF8},
-            //{Opcode.SMSG_GUILD_XP_UPDATE, 0x0}, // Not found in 4.3.4
             {Opcode.SMSG_HEALTH_UPDATE, 0x0841},
             {Opcode.SMSG_HIGHEST_THREAT_UPDATE, 0x0D1A},
             {Opcode.SMSG_HOTFIX_MESSAGE, 0x0F86},
