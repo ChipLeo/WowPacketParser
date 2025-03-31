@@ -40,7 +40,7 @@
 		<Copyright>Copyright © 2010-2025</Copyright>
 		<RepositoryUrl>https://github.com/ChipLeo/WowPacketParser</RepositoryUrl>
 		<RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
-    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+        <EnableWindowsTargeting>true</EnableWindowsTargeting>
     </PropertyGroup>
 
     <ItemGroup>
