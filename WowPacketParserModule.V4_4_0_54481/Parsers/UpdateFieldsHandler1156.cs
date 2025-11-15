@@ -727,7 +727,7 @@ namespace WowPacketParserModule.V4_4_0_54481.UpdateFields.V1_15_6_58797
             var data = new UnitChannel();
             packet.ResetBitReader();
             data.SpellID = packet.ReadInt32("SpellID", indexes);
-            data.SpellVisual = ReadUpdateSpellCastVisual(packet, indexes, "SpellVisual");
+            packet.ReadInt32("SpellXSpellVisualID", indexes);
             return data;
         }
 
@@ -862,7 +862,7 @@ namespace WowPacketParserModule.V4_4_0_54481.UpdateFields.V1_15_6_58797
             data.Flags = packet.ReadUInt32("Flags", indexes);
             data.Flags2 = packet.ReadUInt32("Flags2", indexes);
             data.Flags3 = packet.ReadUInt32("Flags3", indexes);
-            packet.ReadUInt32("UNK", indexes); // Maybe flags 4?
+            data.Flags4 = packet.ReadUInt32("Flags4", indexes);
             data.AuraState = packet.ReadUInt32("AuraState", indexes);
             for (var i = 0; i < 3; ++i)
             {
@@ -1840,7 +1840,6 @@ namespace WowPacketParserModule.V4_4_0_54481.UpdateFields.V1_15_6_58797
             {
                 data.Name[i] = new string('*', (int)packet.ReadBits(10));
             }
-            packet.ResetBitReader();
             for (var i = 0; i < 5; ++i)
             {
                 data.Name[i] = packet.ReadWoWString("Name", data.Name[i].Length, indexes, i);
@@ -1860,7 +1859,6 @@ namespace WowPacketParserModule.V4_4_0_54481.UpdateFields.V1_15_6_58797
                 rawChangesMask[0] = (int)packet.ReadBits(32);
             var changesMask = new BitArray(rawChangesMask);
 
-            packet.ResetBitReader();
             if (changesMask[0])
             {
                 for (var i = 0; i < 5; ++i)
@@ -3877,7 +3875,6 @@ namespace WowPacketParserModule.V4_4_0_54481.UpdateFields.V1_15_6_58797
             rawChangesMask[0] = (int)packet.ReadBits(4);
             var changesMask = new BitArray(rawChangesMask);
 
-            packet.ResetBitReader();
             if (changesMask[0])
             {
                 data.Name = new string('*', (int)packet.ReadBits(7));
@@ -3890,6 +3887,7 @@ namespace WowPacketParserModule.V4_4_0_54481.UpdateFields.V1_15_6_58797
             {
                 data.Description = new string('*', (int)packet.ReadBits(14));
             }
+            packet.ResetBitReader();
             if (changesMask[3])
             {
                 data.DepositFlags = packet.ReadInt32("DepositFlags", indexes);
@@ -4792,11 +4790,16 @@ namespace WowPacketParserModule.V4_4_0_54481.UpdateFields.V1_15_6_58797
                         }
                     }
                 }
+            }
+            packet.ResetBitReader();
+            if (changesMask[32])
+            {
                 if (changesMask[39])
                 {
                     data.AccountBankTabSettings.ReadUpdateMask(packet, 3);
                 }
             }
+            packet.ResetBitReader();
             if (changesMask[0])
             {
                 if (changesMask[8])
@@ -5670,7 +5673,6 @@ namespace WowPacketParserModule.V4_4_0_54481.UpdateFields.V1_15_6_58797
             data.Customizations.Resize(packet.ReadUInt32());
             data.Flags = packet.ReadUInt32("Flags", indexes);
             data.FactionTemplate = packet.ReadInt32("FactionTemplate", indexes);
-            data.StateSpellVisualKitID = packet.ReadUInt32("StateSpellVisualKitID", indexes);
             for (var i = 0; i < data.Customizations.Count; ++i)
             {
                 data.Customizations[i] = ReadCreateChrCustomizationChoice(packet, indexes, "Customizations", i);

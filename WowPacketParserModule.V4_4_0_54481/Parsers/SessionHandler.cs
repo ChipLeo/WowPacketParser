@@ -12,7 +12,10 @@ namespace WowPacketParserModule.V4_4_0_54481.Parsers
         {
             for (uint i = 0; i < 8; ++i)
                 packet.ReadUInt32("DosChallenge", i);
-            packet.ReadBytes("Challenge", 16);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_4_2_59185))
+                packet.ReadBytes("Challenge", 32);
+            else
+                packet.ReadBytes("Challenge", 16);
             packet.ReadByte("DosZeroBits");
         }
 
@@ -23,7 +26,12 @@ namespace WowPacketParserModule.V4_4_0_54481.Parsers
             packet.ReadUInt32("RegionID");
             packet.ReadUInt32("BattlegroupID");
             packet.ReadUInt32("RealmID");
-            packet.ReadBytes("LocalChallenge", 16);
+
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_4_2_59185))
+                packet.ReadBytes("LocalChallenge", 32);
+            else
+                packet.ReadBytes("LocalChallenge", 16);
+
             packet.ReadBytes("Digest", 24);
             packet.ReadBit("UseIPv6");
 
@@ -229,7 +237,10 @@ namespace WowPacketParserModule.V4_4_0_54481.Parsers
         {
             packet.ReadInt64("DosResponse");
             packet.ReadInt64("Key");
-            packet.ReadBytes("LocalChallenge", 16);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_4_2_59185))
+                packet.ReadBytes("LocalChallenge", 32);
+            else
+                packet.ReadBytes("LocalChallenge", 16);
             packet.ReadBytes("Digest", 24);
         }
 

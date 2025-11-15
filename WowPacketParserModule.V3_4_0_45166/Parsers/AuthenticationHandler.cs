@@ -111,5 +111,25 @@ namespace WowPacketParserModule.V3_4_0_45166.Parsers
                 packet.ReadBit("HasFCM");
             }
         }
+
+        [Parser(Opcode.SMSG_ENTER_ENCRYPTED_MODE, ClientVersionBuild.V3_4_4_59817)]
+        public static void HandleEnterEncryptedMode(Packet packet)
+        {
+            packet.ReadBytes("Signature (ED25519)", 64);
+            packet.ReadInt32("RegionGroup");
+            packet.ReadBit("Enabled");
+        }
+
+        [Parser(Opcode.CMSG_AUTH_CONTINUED_SESSION)]
+        public static void HandleRedirectAuthProof(Packet packet)
+        {
+            packet.ReadInt64("DosResponse");
+            packet.ReadInt64("Key");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_4_4_59817))
+                packet.ReadBytes("LocalChallenge", 32);
+            else
+                packet.ReadBytes("LocalChallenge", 16);
+            packet.ReadBytes("Digest", 24);
+        }
     }
 }

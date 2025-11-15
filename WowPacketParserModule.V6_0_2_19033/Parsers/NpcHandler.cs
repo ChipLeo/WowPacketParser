@@ -42,7 +42,9 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
             else
                 gossipOption.GossipOptionID = packet.ReadInt32("GossipOptionID", idx);
 
-            gossipOption.OptionNpc = (GossipOptionNpc?)packet.ReadByte("OptionNPC", idx);
+            gossipOption.OptionNpc = ClientVersion.AddedInVersion(ClientVersionBuild.V11_2_5_63506)
+                ? packet.ReadUInt32E<GossipOptionNpc>("OptionNPC", idx)
+                : packet.ReadByteE<GossipOptionNpc>("OptionNPC", idx);
             gossipMessageOption.OptionNpc = (int) gossipOption.OptionNpc;
             gossipOption.BoxCoded = gossipMessageOption.BoxCoded = packet.ReadByte("OptionFlags", idx) != 0;
 
@@ -424,7 +426,10 @@ namespace WowPacketParserModule.V6_0_2_19033.Parsers
                     }
                 }
 
-            trainer.Type = packet.ReadInt32E<TrainerType>("TrainerType");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V11_2_5_63704))
+                trainer.Type = packet.ReadByteE<TrainerType>("TrainerType");
+            else
+                trainer.Type = packet.ReadInt32E<TrainerType>("TrainerType");
             trainer.Id = packet.ReadUInt32("TrainerID");
 
             var count = packet.ReadUInt32("Spells");

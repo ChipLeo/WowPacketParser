@@ -25,7 +25,11 @@ namespace WowPacketParserModule.V11_0_0_55666.Parsers
         {
             var playerGuid = packet.ReadPackedGuid128("Guid", idx);
             packet.ReadUInt32("VirtualRealmAddress", idx);
-            packet.ReadByte("ListPosition", idx);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V11_1_5_60392))
+                packet.ReadUInt16("ListPosition", idx);
+            else
+                packet.ReadByte("ListPosition", idx);
+
             var race = packet.ReadByteE<Race>("RaceID", idx);
             packet.ReadByteE<Gender>("SexID", idx);
             var @class = packet.ReadByteE<Class>("ClassID", idx);
@@ -51,6 +55,8 @@ namespace WowPacketParserModule.V11_0_0_55666.Parsers
                 ReadVisualItemInfo(packet, idx, "VisualItems", j);
 
             packet.ReadInt32("SaveVersion", idx);
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V11_2_5_63506))
+                packet.ReadTime64("CreateTime", idx);
             packet.ReadTime64("LastPlayedTime", idx);
             packet.ReadInt32("LastLoginVersion", idx);
 
@@ -250,6 +256,14 @@ namespace WowPacketParserModule.V11_0_0_55666.Parsers
             var count = packet.ReadUInt32("CurrencyCount");
             for (var i = 0; i < count; ++i)
                 packet.ReadInt32<CurrencyId>("CurrencyID", i);
+        }
+
+        [Parser(Opcode.SMSG_UNDELETE_COOLDOWN_STATUS_RESPONSE, ClientVersionBuild.V11_1_7_61491)]
+        public static void HandleUndeleteCooldownStatusResponse(Packet packet)
+        {
+            packet.ReadUInt32("MaxCooldown");
+            packet.ReadUInt32("CurrentCooldown");
+            packet.ReadBit("OnCooldown");
         }
     }
 }

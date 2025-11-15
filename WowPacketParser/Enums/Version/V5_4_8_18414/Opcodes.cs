@@ -242,7 +242,6 @@ namespace WowPacketParser.Enums.Version.V5_4_8_18414
             {Opcode.CMSG_GUILD_QUERY_RECIPES,                      0x0478}, //--- QueryGuildRecipes
             {Opcode.CMSG_GUILD_REPLACE_GUILD_MASTER,               0x0CD0}, //--
             {Opcode.CMSG_GUILD_REQUEST_CHALLENGE_UPDATE,           0x147A}, //+-
-            {Opcode.CMSG_GUILD_ROSTER_SEND_SOR,                    0x04DB}, //--- GuildRosterSendSoR
             {Opcode.CMSG_GUILD_SET_ACHIEVEMENT_TRACKING,           0x0CF0}, //++
             {Opcode.CMSG_GUILD_SET_GUILD_MASTER,                   0x1A83}, //+-
             {Opcode.CMSG_GUILD_SET_NOTE,                           0x05DA}, //+-

@@ -15,23 +15,26 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("DifficultyID", true)]
         public uint? DifficultyID;
 
-        [DBFieldName("HealthScalingExpansion", TargetedDatabaseFlag.SinceDragonflight | TargetedDatabaseFlag.WotlkClassic | TargetedDatabaseFlag.CataClassic)]
+        [DBFieldName("HealthScalingExpansion", TargetedDatabaseFlag.SinceDragonflight | TargetedDatabaseFlag.WotlkClassic | TargetedDatabaseFlag.SinceCataClassic)]
         public ClientType? HealthScalingExpansion;
 
-        [DBFieldName("HealthModifier", TargetedDatabaseFlag.SinceDragonflight | TargetedDatabaseFlag.WotlkClassic | TargetedDatabaseFlag.CataClassic)]
+        [DBFieldName("HealthModifier", TargetedDatabaseFlag.SinceDragonflight | TargetedDatabaseFlag.WotlkClassic | TargetedDatabaseFlag.SinceCataClassic)]
         public float? HealthModifier;
 
-        [DBFieldName("ManaModifier", TargetedDatabaseFlag.SinceDragonflight | TargetedDatabaseFlag.WotlkClassic | TargetedDatabaseFlag.CataClassic)]
+        [DBFieldName("ManaModifier", TargetedDatabaseFlag.SinceDragonflight | TargetedDatabaseFlag.WotlkClassic | TargetedDatabaseFlag.SinceCataClassic)]
         public float? ManaModifier;
 
-        [DBFieldName("CreatureDifficultyID", TargetedDatabaseFlag.SinceDragonflight | TargetedDatabaseFlag.WotlkClassic | TargetedDatabaseFlag.CataClassic)]
+        [DBFieldName("CreatureDifficultyID", TargetedDatabaseFlag.SinceDragonflight | TargetedDatabaseFlag.WotlkClassic | TargetedDatabaseFlag.SinceCataClassic)]
         public int? CreatureDifficultyID;
 
-        [DBFieldName("TypeFlags", TargetedDatabaseFlag.SinceDragonflight | TargetedDatabaseFlag.WotlkClassic | TargetedDatabaseFlag.CataClassic)]
+        [DBFieldName("TypeFlags", TargetedDatabaseFlag.SinceDragonflight | TargetedDatabaseFlag.WotlkClassic | TargetedDatabaseFlag.SinceCataClassic)]
         public CreatureTypeFlag? TypeFlags;
 
-        [DBFieldName("TypeFlags2", TargetedDatabaseFlag.SinceDragonflight | TargetedDatabaseFlag.WotlkClassic | TargetedDatabaseFlag.CataClassic)]
+        [DBFieldName("TypeFlags2", TargetedDatabaseFlag.SinceDragonflight | TargetedDatabaseFlag.WotlkClassic | TargetedDatabaseFlag.SinceCataClassic)]
         public uint? TypeFlags2;
+
+        [DBFieldName("TypeFlags3", TargetedDatabaseFlag.SinceTheWarWithin)]
+        public uint? TypeFlags3;
 
         public bool WDBEqualsSkipDifficultySkipHealthScalingExpansion(CreatureTemplateDifficultyWDB rhs)
         {
@@ -43,7 +46,8 @@ namespace WowPacketParser.Store.Objects
                 Math.Abs(ManaModifier.Value - rhs.ManaModifier.Value) < 0.01f &&
                 CreatureDifficultyID == rhs.CreatureDifficultyID &&
                 TypeFlags == rhs.TypeFlags &&
-                TypeFlags2 == rhs.TypeFlags2;
+                TypeFlags2 == rhs.TypeFlags2 &&
+                TypeFlags3 == rhs.TypeFlags3;
         }
     }
 

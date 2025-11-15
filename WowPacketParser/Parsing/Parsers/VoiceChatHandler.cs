@@ -77,7 +77,7 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_SET_ACTIVE_VOICE_CHANNEL)]
         public static void HandleSetActiveVoiceChannel(Packet packet)
         {
-            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_2_9056)) // 243- 303+
+            //if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_2_9056)) // 243- 303+
                 packet.ReadInt32("Channel ID");
             packet.ReadCString("Channel Name");
         }

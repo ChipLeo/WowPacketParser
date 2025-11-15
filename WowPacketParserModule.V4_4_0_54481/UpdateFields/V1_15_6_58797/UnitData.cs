@@ -59,6 +59,7 @@ namespace WowPacketParserModule.V4_4_0_54481.UpdateFields.V1_15_6_58797
         public System.Nullable<uint> Flags { get; set; }
         public System.Nullable<uint> Flags2 { get; set; }
         public System.Nullable<uint> Flags3 { get; set; }
+        public System.Nullable<uint> Flags4 { get; set; }
         public System.Nullable<uint> AuraState { get; set; }
         public System.Nullable<uint>[] AttackRoundBaseTime { get; } = new System.Nullable<uint>[3];
         public System.Nullable<uint> RangedAttackRoundBaseTime { get; set; }

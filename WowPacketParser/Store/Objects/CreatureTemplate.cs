@@ -71,6 +71,8 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("type_flags2", TargetedDatabaseFlag.Cataclysm | TargetedDatabaseFlag.SinceWarlordsOfDraenorTillShadowLands)]
         public uint? TypeFlags2;
 
+        public uint? TypeFlags3;
+
         [DBFieldName("PetSpellDataId", TargetedDatabaseFlag.TillWrathOfTheLichKing | TargetedDatabaseFlag.AnyClassic)]
         public uint? PetSpellDataID;
 
@@ -158,7 +160,7 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("CreatureEntry", true)]
         public uint? CreatureEntry;
 
-        [DBFieldName("DifficultyID", TargetedDatabaseFlag.SinceDragonflight | TargetedDatabaseFlag.CataClassic, true)]
+        [DBFieldName("DifficultyID", TargetedDatabaseFlag.SinceDragonflight | TargetedDatabaseFlag.SinceCataClassic, true)]
         public uint? DifficultyID;
 
         [DBFieldName("Idx", true)]
@@ -167,7 +169,7 @@ namespace WowPacketParser.Store.Objects
         [DBFieldName("ItemId")]
         public uint? ItemId;
 
-        [DBFieldName("VerifiedBuild", TargetedDatabaseFlag.SinceWarlordsOfDraenor | TargetedDatabaseFlag.CataClassic)]
+        [DBFieldName("VerifiedBuild", TargetedDatabaseFlag.SinceWarlordsOfDraenor | TargetedDatabaseFlag.SinceCataClassic)]
         public int? VerifiedBuild = ClientVersion.BuildInt;
     }
 

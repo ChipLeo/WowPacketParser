@@ -351,7 +351,7 @@ namespace WowPacketParserModule.V2_5_1_38707.Parsers
                                   ClientVersion.AddedInVersion(ClientBranch.WotLK, ClientVersionBuild.V3_4_0_45166)) &&
                                   packet.ReadBit("Has Inertia", index);
 
-                var hasAdvFlying = ClientVersion.AddedInVersion(ClientVersionBuild.V3_4_1_47014) && packet.ReadBit("HasAdvFlying", index);
+                var hasAdvFlying = ClientVersion.AddedInVersion(ClientBranch.WotLK, ClientVersionBuild.V3_4_1_47014) && packet.ReadBit("HasAdvFlying", index);
 
                 if (hasTransport)
                     V8_0_1_27101.Parsers.UpdateHandler.ReadTransportData(moveInfo, guid, packet, index);
@@ -404,7 +404,7 @@ namespace WowPacketParserModule.V2_5_1_38707.Parsers
 
                 packet.ReadSingle("MovementForcesModMagnitude", index);
 
-                if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_4_1_47014))
+                if (ClientVersion.AddedInVersion(ClientBranch.WotLK, ClientVersionBuild.V3_4_1_47014))
                 {
                     packet.ReadSingle("AdvFlyingAirFriction", index);
                     packet.ReadSingle("AdvFlyingMaxVel", index);
@@ -675,8 +675,8 @@ namespace WowPacketParserModule.V2_5_1_38707.Parsers
                 if (packet.ReadBit("HasAnimKitID", index))
                     areaTriggerTemplate.Flags |= (uint)AreaTriggerCreatePropertiesFlags.HasAnimKitId;
 
-                if (packet.ReadBit("unkbit50", index))
-                    areaTriggerTemplate.Flags |= (uint)AreaTriggerCreatePropertiesFlags.Unk3;
+                if (packet.ReadBit("HasVisualAnimIsDecay", index))
+                    areaTriggerTemplate.Flags |= (uint)AreaTriggerCreatePropertiesFlags.VisualAnimIsDecay;
 
                 hasAnimProgress = packet.ReadBit("HasAnimProgress", index);
 
@@ -709,8 +709,9 @@ namespace WowPacketParserModule.V2_5_1_38707.Parsers
                 if (packet.ReadBit("HasAreaTriggerMovementScript", index))
                     areaTriggerTemplate.Flags |= (uint)AreaTriggerCreatePropertiesFlags.HasMovementScript;
 
-                if ((areaTriggerTemplate.Flags & (uint)AreaTriggerCreatePropertiesFlags.Unk3) != 0)
-                    packet.ReadBit();
+                if ((areaTriggerTemplate.Flags & (uint)AreaTriggerCreatePropertiesFlags.VisualAnimIsDecay) != 0)
+                    if (!packet.ReadBit("VisualAnimIsDecay", index))
+                        areaTriggerTemplate.Flags &= ~(uint)AreaTriggerCreatePropertiesFlags.VisualAnimIsDecay;
 
                 if (hasAreaTriggerSpline)
                     V7_0_3_22248.Parsers.AreaTriggerHandler.ReadAreaTriggerSpline(spellAreaTrigger, packet, index);
@@ -888,7 +889,7 @@ namespace WowPacketParserModule.V2_5_1_38707.Parsers
 
                 if (hasActionButtons)
                 {
-                    var actionButtonCount = (ClientVersion.AddedInVersion(ClientVersionBuild.V3_4_2_50063) ? 180 : 132);
+                    var actionButtonCount = (ClientVersion.AddedInVersion(ClientBranch.WotLK, ClientVersionBuild.V3_4_1_47014) ? 180 : 132);
                     for (int i = 0; i < actionButtonCount; i++)
                         packet.ReadInt32("Action", index, i);
                 }

@@ -263,7 +263,6 @@ namespace WowPacketParser.Enums.Version.V5_0_5_16048
             {Opcode.CMSG_GUILD_REQUEST_CHALLENGE_UPDATE, 0x0322},
             {Opcode.CMSG_GUILD_REQUEST_MAX_DAILY_XP, 0x0310},
             //{Opcode.CMSG_GUILD_REQUEST_PARTY_STATE, 0x0}, // 0x3900 4.3.4
-            {Opcode.CMSG_GUILD_ROSTER_SEND_SOR, 0x0222},
             {Opcode.CMSG_GUILD_SET_ACHIEVEMENT_TRACKING, 0x02E7},
             {Opcode.CMSG_GUILD_SET_GUILD_MASTER, 0x012B},
             {Opcode.CMSG_GUILD_SET_NOTE, 0x0226},

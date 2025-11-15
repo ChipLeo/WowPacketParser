@@ -1169,7 +1169,8 @@ namespace WowPacketParser.Parsing.Parsers
         [Parser(Opcode.CMSG_GET_MIRROR_IMAGE_DATA)]
         public static void HandleGetMirrorImageData(Packet packet)
         {
-            packet.ReadGuid("GUID");
+            if (ClientVersion.AddedInVersion(ClientVersionBuild.V3_0_2_9056))
+                packet.ReadGuid("GUID");
             if (ClientVersion.AddedInVersion(ClientVersionBuild.V4_3_0_15005))
                 packet.ReadUInt32("Display Id");
         }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
+using WowPacketParser.Hotfix;
 using WowPacketParser.Loading;
 using WowPacketParser.Misc;
 using WowPacketParser.Parsing.Parsers;
@@ -79,6 +80,8 @@ namespace WowPacketParser
 
             SQLConnector.ReadDB();
 
+            HotfixSettings.Instance.LoadHashes();
+
             List<Packets> parserPacketsList = new();
 
             var processStartTime = DateTime.Now;
@@ -94,7 +97,9 @@ namespace WowPacketParser
                 try
                 {
                     var sf = new SniffFile(file, Settings.DumpFormat, Tuple.Create(++count, files.Count));
-                    parserPacketsList.Add(sf.ProcessFile());
+                    var packets = sf.ProcessFile();
+                    if (packets != null)
+                        parserPacketsList.Add(packets);
                 }
                 catch (IOException ex)
                 {

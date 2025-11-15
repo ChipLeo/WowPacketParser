@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Reflection;
 using WowPacketParser.DBC;
 using WowPacketParser.Enums;
 using WowPacketParser.Misc;
@@ -53,6 +54,13 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             return jump;
         }
 
+        public static void ReadMonsterSplineTurnData(Packet packet, params object[] indexes)
+        {
+            packet.ReadSingle("StartFacing", indexes);
+            packet.ReadSingle("TotalTurnRads", indexes);
+            packet.ReadSingle("RadsPerSec", indexes);
+        }
+
         public static void ReadMovementSpline(Packet packet, Vector3 pos, params object[] indexes)
         {
             PacketMonsterMove monsterMove = packet.Holder.MonsterMove;
@@ -88,7 +96,7 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             var hasSplineFilter = packet.ReadBit("HasSplineFilter", indexes);
             var hasSpellEffectExtraData = packet.ReadBit("HasSpellEffectExtraData", indexes);
             var hasJumpExtraData = packet.ReadBit("HasJumpExtraData", indexes);
-
+            var hasTurnData = ClientVersion.AddedInVersion(ClientVersionBuild.V11_1_7_61491) && packet.ReadBit("HasTurnData", indexes);
             var hasAnimTier = false;
             if (ClientVersion.AddedInVersion(ClientType.Shadowlands))
                 hasAnimTier = packet.ReadBit("HasAnimTierTransition", indexes);
@@ -159,16 +167,20 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
                 ReadMonsterSplineSpellEffectExtraData(packet, indexes, "MonsterSplineSpellEffectExtra");
 
             if (hasJumpExtraData)
-            {
                 monsterMove.Jump = ReadMonsterSplineJumpExtraData(packet, indexes, "MonsterSplineJumpExtraData");
-            }
+
+            if (hasTurnData)
+                ReadMonsterSplineTurnData(packet, indexes, "MonsterSplineTurnData");
 
             if (hasAnimTier)
             {
                 packet.ReadInt32("TierTransitionID", indexes);
+                if (ClientVersion.AddedInVersion(ClientVersionBuild.V11_2_0_62213))
+                    packet.ReadByte("AnimTier", indexes);
                 packet.ReadUInt32("StartTime", indexes);
                 packet.ReadUInt32("EndTime", indexes);
-                packet.ReadByte("AnimTier", indexes);
+                if (ClientVersion.RemovedInVersion(ClientVersionBuild.V11_2_0_62213))
+                    packet.ReadByte("AnimTier", indexes);
             }
 
             if (hasUnk901)
@@ -202,6 +214,8 @@ namespace WowPacketParserModule.V8_0_1_27101.Parsers
             packet.ResetBitReader();
 
             packet.ReadBit("CrzTeleport", indexes);
+            if (ClientVersion.AddedInVersion(ClientBranch.Retail, ClientVersionBuild.V11_1_7_61491))
+                packet.ReadBit("StopUseFaceDirection", indexes);
             packet.ReadBits("StopDistanceTolerance", 3, indexes);
 
             ReadMovementSpline(packet, pos, indexes, "MovementSpline");
